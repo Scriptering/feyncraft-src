@@ -97,7 +97,7 @@ func sort_quark_groups(quark_groups: Array) -> Array:
 	return quark_groups
 
 func get_connected_lines() -> Array[ParticleLine]:
-	var connected_lines: Array = []
+	var connected_lines: Array[ParticleLine] = []
 	for line in get_tree().get_nodes_in_group("lines"):
 		if line.get_on_state_line() == state or line.get_on_state_line() == StateType.Both:
 			connected_lines.append(line)

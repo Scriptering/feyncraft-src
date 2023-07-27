@@ -9,7 +9,7 @@ z_index = 10
 texture = ExtResource("1")
 offset = Vector2(8, 22)
 script = ExtResource("2")
-Scale = 0.4
+Scale = 0.6
 
 [node name="ScrollTimer" type="Timer" parent="."]
 

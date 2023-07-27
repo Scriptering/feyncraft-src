@@ -5,7 +5,8 @@ extends Sprite2D
 
 @export var Scale : float = 1.0
 
-var angry := false: set = set_angry
+var angry := false
+var glowing := false: set = _set_glowing
 var playing := false
 var current_cursor := -1
 var override = false
@@ -17,7 +18,6 @@ var connected_sliders := []
 var scrolling : bool = false
 var deleting : bool = false
 var scroll_hovering := false
-var glowing := false: set = set_glowing
 
 var scal = 1.2
 
@@ -43,30 +43,28 @@ func _ready():
 	
 	change_cursor(GLOBALS.CURSOR.point)
 	
-	visible = GLOBALS.isOnBuild
-	Input.mouse_mode = int(GLOBALS.isOnBuild) as Input.MouseMode
-	
-func set_glowing(new_value : bool) -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventKey:
+		if check_love(event):
+			self.glowing = !glowing
+		if check_anger(event):
+			self.angry = !angry
+			change_cursor(GLOBALS.CURSOR.default)
+
+func check_anger(_event: InputEventKey) -> bool:
+	return Input.is_action_just_pressed("F") and Input.is_action_just_pressed("U") and Input.is_action_just_pressed("C") and Input.is_action_just_pressed("K")
+
+func check_love(_event: InputEventKey) -> bool:
+	return Input.is_action_just_pressed("L") and Input.is_action_just_pressed("O") and Input.is_action_just_pressed("V") and Input.is_action_just_pressed("E")
+
+func _set_glowing(new_value : bool) -> void:
 	glowing = new_value
+	Heart.visible = new_value
 
 func _process(_delta):
-	if scroll_hovering and Input.is_action_pressed('click') and Level.mode != 'editing':
-		start_scrolling()
-	if Level.mode == 'deleting' and Input.is_action_pressed('click'):
-		start_deleting()
-	if Input.is_action_just_released('click'):
-		end_mouse_hold()
-	
-	if GLOBALS.isOnBuild:
-		position = get_global_mouse_position()
-	
-	Heart.visible = glowing and current_cursor != GLOBALS.CURSOR.disabled
-	
-	handle_UI()
-
-func set_angry(anger):
-	angry = anger
-
+	position = get_global_mouse_position()
 
 func change_cursor(cursor : int):
 	if cursor == GLOBALS.CURSOR.default:
@@ -77,11 +75,10 @@ func change_cursor(cursor : int):
 		else:
 			cursor = GLOBALS.CURSOR.point
 	
-	if !playing or (current_cursor == GLOBALS.CURSOR.press and Input.is_action_pressed('click')):
-		if cursor != current_cursor:
-			texture = cursors[cursor]
-			Input.set_custom_mouse_cursor(cursors[cursor], Input.CURSOR_ARROW, Vector2(12, 6))
-			current_cursor = cursor
+	if cursor != current_cursor:
+		texture = cursors[cursor]
+		Input.set_custom_mouse_cursor(cursors[cursor], Input.CURSOR_ARROW, Vector2(12, 6))
+		current_cursor = cursor
 
 func hovering_disabled_button() -> bool:
 	var buttons = get_tree().get_nodes_in_group('UIbuttons')
@@ -91,50 +88,3 @@ func hovering_disabled_button() -> bool:
 			return true
 	
 	return false
-
-func change_override(bo) -> void:
-	override = bo
-
-func start_deleting() -> void:
-	deleting = true
-	change_cursor(GLOBALS.CURSOR.snipped)
-
-func end_mouse_hold() -> void:
-	deleting = false
-	scrolling = false
-
-func start_scrolling() -> void:
-	scrolling = true
-	change_cursor(GLOBALS.CURSOR.hold)
-
-func change_scroll_hover(value : bool) -> void:
-	scroll_hovering = value
-
-func handle_UI():
-	var buttons = get_tree().get_nodes_in_group('UIbuttons')
-	var scrollcontainers = get_tree().get_nodes_in_group('scrollcontainers')
-	var sliders = get_tree().get_nodes_in_group('sliders')
-
-	for button in buttons:
-		if !button in connected_buttons:
-			button.get_node('Button').connect('button_down', Callable(self, 'change_cursor').bind(GLOBALS.CURSOR.press))
-			button.get_node('Button').connect('button_up', Callable(self, 'change_cursor').bind(GLOBALS.CURSOR.default))
-			button.connect('update_cursor', Callable(self, 'level_state_changed'))
-			
-			connected_buttons.append(button)
-	
-	for container in scrollcontainers:
-		if !container in connected_scrollcontainers:
-			container.get_v_scroll_bar().connect('mouse_entered', Callable(self, 'change_scroll_hover').bind(true))
-			container.get_h_scroll_bar().connect('mouse_entered', Callable(self, 'change_scroll_hover').bind(true))
-			container.get_v_scroll_bar().connect('mouse_exited', Callable(self, 'change_scroll_hover').bind(false))
-			container.get_h_scroll_bar().connect('mouse_exited', Callable(self, 'change_scroll_hover').bind(false))
-			
-			connected_scrollcontainers.append(container)
-	
-	for slider in sliders:
-		if !slider in connected_sliders:
-			slider.connect('drag_started', Callable(self, 'change_cursor').bind(GLOBALS.CURSOR.hold))
-			slider.connect('drag_ended', Callable(self, 'slider_drag_ended'))
-			
-			connected_sliders.append(slider)

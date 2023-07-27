@@ -26,7 +26,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ue1rd"]
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_thk4u"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_kfw0s"]
 resource_name = "ParticleButtons"
 allow_unpress = true
 
@@ -71,7 +71,7 @@ offset_right = 211.0
 offset_bottom = 241.0
 grow_horizontal = 2
 size_flags_horizontal = 4
-particle_button_group = SubResource("ButtonGroup_thk4u")
+particle_button_group = SubResource("ButtonGroup_kfw0s")
 
 [node name="GridTiles" type="TextureRect" parent="."]
 use_parent_material = true
