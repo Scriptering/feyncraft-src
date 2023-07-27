@@ -1,5 +1,7 @@
 extends Node2D
 
+#hello world!
+
 @export var grid_size: int = 16
 
 @onready var Interaction = preload("res://Scenes and Scripts/Diagram/interaction.tscn")

@@ -18,7 +18,7 @@ func get_selected_particle() -> GLOBALS.Particle:
 func delete_line(line: ParticleLine) -> void:
 	line.queue_free()
 	line.deconstructor()
-	for interaction in line.get_connected_interactions():
+	for interaction in line.connected_interactions:
 		if interaction.connected_lines.size() == 0:
 			interaction.queue_free()
 
@@ -26,7 +26,7 @@ func delete_interaction(interaction: Interaction) -> void:
 	interaction.queue_free()
 	var connected_lines := interaction.connected_lines.duplicate()
 	for line in connected_lines:
-		for connected_interaction in line.get_connected_interactions():
+		for connected_interaction in line.connected_interactions:
 			if connected_interaction.connected_lines.size() == 1:
 				connected_interaction.queue_free()
 		delete_line(line)
