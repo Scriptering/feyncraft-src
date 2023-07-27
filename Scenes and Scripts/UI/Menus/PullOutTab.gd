@@ -25,8 +25,6 @@ func _tab_button_pressed() -> void:
 		pull_out()
 	else:
 		push_in()
-	
-	return
 
 func pull_out() -> void:
 	var tween = get_tree().create_tween()
