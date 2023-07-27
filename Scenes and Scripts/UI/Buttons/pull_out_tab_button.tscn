@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3 uid="uid://d0norbmf3nrh4"]
+
+[ext_resource type="Theme" uid="uid://blqrcgdkw42vw" path="res://Resources/Themes/pull_out_tab.tres" id="1_80b40"]
+[ext_resource type="Texture2D" uid="uid://bryamn5jwtk0u" path="res://Textures/Buttons/Tabs/arrow_right.png" id="2_6gcmn"]
+
+[node name="Tab" type="MarginContainer"]
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/margin_left = -3
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="TabButton" type="Button" parent="."]
+custom_minimum_size = Vector2(15, 15)
+layout_mode = 2
+size_flags_vertical = 4
+theme = ExtResource("1_80b40")
+action_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_right = 3
+
+[node name="Arrow" type="TextureRect" parent="VBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+texture = ExtResource("2_6gcmn")
+stretch_mode = 2

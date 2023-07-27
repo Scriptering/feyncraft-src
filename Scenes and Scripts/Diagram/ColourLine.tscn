@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://b3xgargkd7vm7"]
+
+[ext_resource type="Texture2D" uid="uid://bupttyjy0niqp" path="res://Textures/ParticlesAndLines/colour_lines/colour_arrow.png" id="1"]
+[ext_resource type="Script" path="res://Scenes and Scripts/Diagram/ColourLine.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://dl3di4h0rs4ww" path="res://Textures/ParticlesAndLines/colour_lines/line_white.png" id="4"]
+
+[node name="ColourLine" type="Line2D"]
+visible = false
+z_index = 1
+points = PackedVector2Array(0, 0, 10, 10)
+width = 4.0
+texture = ExtResource("4")
+texture_mode = 1
+script = ExtResource("2")
+
+[node name="Arrow" type="Sprite2D" parent="."]
+texture = ExtResource("1")

@@ -1,0 +1,15 @@
+[gd_resource type="Theme" load_steps=4 format=3 uid="uid://duhvmk3yjw76c"]
+
+[ext_resource type="Texture2D" uid="uid://dfh2bwspbmrs3" path="res://Textures/UI/Information/sliderH/slider.png" id="1"]
+
+[sub_resource type="StyleBoxTexture" id="1"]
+texture = ExtResource("1")
+region_rect = Rect2(0, 2, 17, 6)
+
+[sub_resource type="StyleBoxEmpty" id="2"]
+content_margin_left = 2.0
+content_margin_right = 2.0
+
+[resource]
+Panel/styles/panel = SubResource("1")
+PanelContainer/styles/panel = SubResource("2")

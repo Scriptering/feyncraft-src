@@ -1,0 +1,150 @@
+[gd_scene load_steps=11 format=3 uid="uid://ck5rjkmd3el41"]
+
+[ext_resource type="Texture2D" uid="uid://cym2rn34oj5s3" path="res://Textures/UI/Information/box.png" id="1"]
+[ext_resource type="Theme" uid="uid://6d80ndd154hq" path="res://Scenes and Scripts/UI/Info/Info.tres" id="1_essfe"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/Info/Info.gd" id="3"]
+[ext_resource type="Texture2D" uid="uid://ck5o52ujllrn4" path="res://Textures/UI/Information/x_press.png" id="4"]
+[ext_resource type="Theme" uid="uid://dil4mrtu23acn" path="res://Themes/Info.tres" id="5"]
+[ext_resource type="Texture2D" uid="uid://chram1ocf6b2u" path="res://Textures/UI/Information/x.png" id="6"]
+[ext_resource type="Texture2D" uid="uid://dekbnn7ftw4qk" path="res://Textures/UI/Information/x_hovering.png" id="7"]
+[ext_resource type="FontFile" uid="uid://cq27s0444iwkg" path="res://Textures/Fonts/ConnectionIi-2wj8.otf" id="8"]
+
+[sub_resource type="StyleBoxFlat" id="1"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="FontFile" id="2"]
+fallbacks = Array[Font]([ExtResource("8")])
+face_index = null
+embolden = null
+transform = null
+cache/0/7/0/ascent = 0.0
+cache/0/7/0/descent = 0.0
+cache/0/7/0/underline_position = 0.0
+cache/0/7/0/underline_thickness = 0.0
+cache/0/7/0/scale = 1.0
+cache/0/7/0/kerning_overrides/7/0 = Vector2(0, 0)
+cache/0/7/0/kerning_overrides/16/0 = Vector2(0, 0)
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/16/0/kerning_overrides/7/0 = Vector2(0, 0)
+cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
+
+[node name="Info" type="Control" groups=["info_boxes"]]
+layout_mode = 3
+anchors_preset = 0
+theme = ExtResource("1_essfe")
+script = ExtResource("3")
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="Box" type="PanelContainer" parent="."]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = -7.0
+offset_top = -7.0
+offset_right = 105.0
+offset_bottom = 67.0
+mouse_filter = 2
+
+[node name="shadow" type="MarginContainer" parent="Box"]
+modulate = Color(1, 1, 1, 0.462745)
+layout_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="Box/shadow"]
+layout_mode = 2
+color = Color(0, 0, 0, 1)
+
+[node name="NineRect" type="NinePatchRect" parent="Box"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1")
+region_rect = Rect2(0, 0, 32, 32)
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Box"]
+layout_mode = 2
+
+[node name="TabContainer" type="TabContainer" parent="Box/MarginContainer"]
+layout_mode = 2
+theme = ExtResource("5")
+theme_override_styles/panel = SubResource("1")
+all_tabs_in_front = true
+
+[node name="Q Nums" type="MarginContainer" parent="Box/MarginContainer/TabContainer"]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Box/MarginContainer/TabContainer/Q Nums" groups=["scrollcontainers"]]
+custom_minimum_size = Vector2(80, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("5")
+follow_focus = true
+
+[node name="MarginContainer" type="MarginContainer" parent="Box/MarginContainer/TabContainer/Q Nums/ScrollContainer"]
+custom_minimum_size = Vector2(92, 0)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Box/MarginContainer/TabContainer/Q Nums/ScrollContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = -1
+
+[node name="Other" type="MarginContainer" parent="Box/MarginContainer/TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Box/MarginContainer/TabContainer/Other" groups=["scrollcontainers"]]
+custom_minimum_size = Vector2(80, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme = ExtResource("5")
+follow_focus = true
+
+[node name="MarginContainer" type="MarginContainer" parent="Box/MarginContainer/TabContainer/Other/ScrollContainer"]
+custom_minimum_size = Vector2(92, 0)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Box/MarginContainer/TabContainer/Other/ScrollContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = -1
+
+[node name="X_container" type="MarginContainer" parent="Box/MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureButton" type="TextureButton" parent="Box/MarginContainer/X_container"]
+layout_mode = 2
+size_flags_vertical = 0
+action_mode = 0
+texture_normal = ExtResource("6")
+texture_pressed = ExtResource("4")
+texture_hover = ExtResource("7")
+
+[node name="NumberContainer" type="MarginContainer" parent="Box/MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme = ExtResource("5")
+
+[node name="Label" type="Label" parent="Box/MarginContainer/NumberContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.219608, 0.223529, 0.188235, 1)
+theme_override_colors/font_outline_color = Color(0.882353, 0.796078, 0.627451, 1)
+theme_override_fonts/font = SubResource("2")
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="mouse_entered" from="Box/MarginContainer" to="." method="_on_MarginContainer_mouse_entered"]
+[connection signal="mouse_exited" from="Box/MarginContainer" to="." method="_on_MarginContainer_mouse_exited"]
+[connection signal="tab_selected" from="Box/MarginContainer/TabContainer" to="." method="_on_TabContainer_tab_selected"]
+[connection signal="pressed" from="Box/MarginContainer/X_container/TextureButton" to="." method="_on_TextureButton_pressed"]

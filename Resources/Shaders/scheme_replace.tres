@@ -1,0 +1,52 @@
+[gd_resource type="Shader" format=3 uid="uid://c7jn3d0jn5vvt"]
+
+[resource]
+code = "shader_type canvas_item;
+
+uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_linear_mipmap;
+
+const int NOT_FOUND = -1;
+const int N_COLOURS = 6;
+
+uniform vec4 BASE_COLOUR0 : source_color = vec4(0.4,0.741,0.592, 1.0);
+uniform vec4 BASE_COLOUR1 : source_color = vec4(0.82,0.741,0.592, 1.0);
+uniform vec4 BASE_COLOUR2 : source_color = vec4(0.22,0.224,0.188, 1.0);
+uniform vec4 BASE_COLOUR3 : source_color = vec4(0.89,0.827,0.753, 1.0);
+uniform vec4 BASE_COLOUR4 : source_color = vec4(0.757,0.243,0.243, 1.0);
+uniform vec4 BASE_COLOUR5 : source_color = vec4(0.816,0.424,0.424, 1.0);
+
+uniform vec4 REPLACEMENT_COLOUR0 : source_color = vec4(0.882,0.796,0.627, 1.0);
+uniform vec4 REPLACEMENT_COLOUR1 : source_color = vec4(0.82,0.741,0.592, 1.0);
+uniform vec4 REPLACEMENT_COLOUR2 : source_color = vec4(0.22,0.224,0.188, 1.0);
+uniform vec4 REPLACEMENT_COLOUR3 : source_color = vec4(0.89,0.827,0.753, 1.0);
+uniform vec4 REPLACEMENT_COLOUR4 : source_color = vec4(0.757,0.243,0.243, 1.0);
+uniform vec4 REPLACEMENT_COLOUR5 : source_color = vec4(0.816,0.424,0.424, 1.0);
+
+const float PRECISION = 0.05;
+
+int get_replacement_index(vec3 colour){
+	vec3 BASE_COLOURS[6] = { BASE_COLOUR0.rgb, BASE_COLOUR1.rgb, BASE_COLOUR2.rgb,
+	BASE_COLOUR3.rgb, BASE_COLOUR4.rgb, BASE_COLOUR5.rgb};
+	
+	for (int i = 0; i < N_COLOURS; i++) {
+		if (distance(colour, BASE_COLOURS[i].rgb) <= PRECISION){
+			return i;
+		}
+	}
+	return NOT_FOUND;
+}
+
+void fragment(){
+	vec3 REPLACEMENT_COLOURS[6] = { REPLACEMENT_COLOUR0.rgb, REPLACEMENT_COLOUR1.rgb, REPLACEMENT_COLOUR2.rgb,
+	REPLACEMENT_COLOUR3.rgb, REPLACEMENT_COLOUR4.rgb, REPLACEMENT_COLOUR5.rgb};
+	
+	
+	COLOR = texture(SCREEN_TEXTURE, SCREEN_UV);
+	vec3 colour = COLOR.rgb;
+	
+	int replacement_index = get_replacement_index(colour);
+	
+	if (replacement_index != NOT_FOUND){
+		COLOR.rgb = REPLACEMENT_COLOURS[replacement_index];
+	}
+}"

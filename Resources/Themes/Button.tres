@@ -1,0 +1,62 @@
+[gd_resource type="Theme" load_steps=11 format=3 uid="uid://cs1gimklve0cr"]
+
+[ext_resource type="FontFile" uid="uid://cq27s0444iwkg" path="res://Textures/Fonts/ConnectionIi-2wj8.otf" id="1_mk1qh"]
+[ext_resource type="Texture2D" uid="uid://s14bo7fcdam0" path="res://Textures/Buttons/square_normal.png" id="2_dqf2m"]
+[ext_resource type="Texture2D" uid="uid://bcwpdy0lmenue" path="res://Textures/Buttons/square_disabled.png" id="2_fx4p6"]
+[ext_resource type="Texture2D" uid="uid://bo1u07jlygktr" path="res://Textures/Buttons/square_hover.png" id="2_otn0t"]
+[ext_resource type="Texture2D" uid="uid://brb0ytbpqclrn" path="res://Textures/Buttons/square_pressed.png" id="3_dy2ie"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_h5eo7"]
+content_margin_left = 5.0
+content_margin_top = 3.0
+content_margin_right = 5.0
+content_margin_bottom = 7.0
+texture = ExtResource("2_fx4p6")
+texture_margin_left = 3.0
+texture_margin_top = 1.0
+texture_margin_right = 3.0
+texture_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_omkbf"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7c8t3"]
+content_margin_left = 5.0
+content_margin_top = 3.0
+content_margin_right = 5.0
+content_margin_bottom = 7.0
+texture = ExtResource("2_otn0t")
+texture_margin_left = 3.0
+texture_margin_top = 1.0
+texture_margin_right = 3.0
+texture_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wilyh"]
+content_margin_left = 5.0
+content_margin_top = 3.0
+content_margin_right = 5.0
+content_margin_bottom = 7.0
+texture = ExtResource("2_dqf2m")
+texture_margin_left = 3.0
+texture_margin_top = 1.0
+texture_margin_right = 3.0
+texture_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jp703"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+texture = ExtResource("3_dy2ie")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+
+[resource]
+default_font_size = 8
+Button/fonts/font = ExtResource("1_mk1qh")
+Button/styles/disabled = SubResource("StyleBoxTexture_h5eo7")
+Button/styles/focus = SubResource("StyleBoxEmpty_omkbf")
+Button/styles/hover = SubResource("StyleBoxTexture_7c8t3")
+Button/styles/normal = SubResource("StyleBoxTexture_wilyh")
+Button/styles/pressed = SubResource("StyleBoxTexture_jp703")

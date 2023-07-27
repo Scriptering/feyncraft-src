@@ -1,0 +1,50 @@
+[gd_scene load_steps=6 format=3 uid="uid://pgnduadnvgfx"]
+
+[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="1_7byww"]
+[ext_resource type="Script" path="res://Scenes and Scripts/Diagram/StateLine.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://ck7f7rh13bebq" path="res://Textures/Background/state_line_top.png" id="2_g0kfo"]
+[ext_resource type="Texture2D" uid="uid://b27ksgsygiqmd" path="res://Textures/Background/state_line_tile.png" id="2_p12ey"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rrm4r"]
+shader = ExtResource("1_7byww")
+
+[node name="StateLine" type="Node2D" groups=["state_lines"]]
+material = SubResource("ShaderMaterial_rrm4r")
+script = ExtResource("2")
+
+[node name="Line" type="VBoxContainer" parent="."]
+use_parent_material = true
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -4.0
+offset_right = 4.0
+offset_bottom = 58.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Top" type="TextureRect" parent="Line"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("2_g0kfo")
+stretch_mode = 2
+
+[node name="Middle" type="TextureRect" parent="Line"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("2_p12ey")
+stretch_mode = 1
+
+[node name="Top2" type="TextureRect" parent="Line"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("2_g0kfo")
+stretch_mode = 2
+flip_h = true
+flip_v = true

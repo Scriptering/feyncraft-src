@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://c338whou4al23"]
+
+[ext_resource type="Theme" uid="uid://dil4mrtu23acn" path="res://Resources/Themes/Info.tres" id="1"]
+[ext_resource type="Texture2D" uid="uid://dvqoqr6r6f3bj" path="res://Textures/UI/Information/checkbox/check_box.png" id="2"]
+
+[sub_resource type="StyleBoxTexture" id="1"]
+texture = ExtResource("2")
+region_rect = Rect2(0, 0, 9, 9)
+
+[node name="Tooltip" type="PanelContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("1")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+theme = ExtResource("1")

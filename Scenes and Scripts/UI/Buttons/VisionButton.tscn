@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://dv7axc60nf7xm"]
+
+[ext_resource type="PackedScene" uid="uid://lpbermjlr4kj" path="res://Scenes and Scripts/UI/Buttons/ButtonBase.tscn" id="1"]
+[ext_resource type="Texture2D" uid="uid://d16opu3dyhri7" path="res://Textures/Buttons/eye/eye_open.png" id="2"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/Buttons/VisionButton.gd" id="5"]
+
+[node name="VisionButton" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("5")
+
+[node name="Button" parent="." instance=ExtResource("1")]
+layout_mode = 0
+Icon = ExtResource("2")

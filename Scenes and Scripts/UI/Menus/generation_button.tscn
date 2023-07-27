@@ -1,0 +1,213 @@
+[gd_scene load_steps=32 format=3 uid="uid://bgvo11j4kfjdc"]
+
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_h3eo1"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/generation_button.gd" id="2_plgpl"]
+[ext_resource type="StyleBox" uid="uid://dvu7f5h7snggp" path="res://Scenes and Scripts/UI/Menus/panelContainer.tres" id="3_36ota"]
+[ext_resource type="Texture2D" uid="uid://q7kyu3yv27sv" path="res://Textures/Buttons/icons/hammer.png" id="4_xnawx"]
+[ext_resource type="PackedScene" uid="uid://bug3v1xlp1gfr" path="res://Scenes and Scripts/UI/Buttons/pull_out_tab_button_right.tscn" id="6_7e8c8"]
+[ext_resource type="PackedScene" uid="uid://dq8wkl0j51p8p" path="res://Scenes and Scripts/UI/RangeSlider.tscn" id="6_rq3ry"]
+[ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="8_ihypl"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ac3qj"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qt5tk"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7cbwi"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f4k0u"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c2ten"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pycte"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7ic36"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vu27k"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_br74h"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_22hx1"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_n4fv1"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dyjfl"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_uyoh7"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_k4mmt"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f767v"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qymg5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_i7p3q"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1wsh3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7itak"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qwtrr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kn1ef"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ncmaa"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_58h3g"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kpwo5"]
+
+[node name="GenerationButton" type="Control" node_paths=PackedStringArray("ContentContainer", "TabButton", "MovingContainer")]
+material = ExtResource("1_h3eo1")
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("2_plgpl")
+min_degree = 1
+max_degree = 10
+ContentContainer = NodePath("MovingContainer/PanelContainer")
+TabButton = NodePath("MovingContainer/Tab")
+MovingContainer = NodePath("MovingContainer")
+move_direction = 2
+
+[node name="MovingContainer" type="HBoxContainer" parent="."]
+material = ExtResource("1_h3eo1")
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = 0
+
+[node name="PanelContainer" type="PanelContainer" parent="MovingContainer"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 1
+theme_override_styles/panel = ExtResource("3_36ota")
+
+[node name="MouseTrap" type="Panel" parent="MovingContainer/PanelContainer"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Popupcontainer" type="MarginContainer" parent="MovingContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="Text" type="Label" parent="MovingContainer/PanelContainer/Popupcontainer"]
+layout_mode = 2
+size_flags_vertical = 0
+mouse_filter = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MovingContainer/PanelContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 0
+alignment = 2
+
+[node name="Save" parent="MovingContainer/PanelContainer/VBoxContainer" instance=ExtResource("8_ihypl")]
+layout_mode = 2
+text = "Save States"
+
+[node name="Saved State" type="Label" parent="MovingContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Saved State:"
+
+[node name="EquationHolder" type="HBoxContainer" parent="MovingContainer/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+
+[node name="OptionsContainer" type="VBoxContainer" parent="MovingContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = -1
+
+[node name="DegreeSlider" type="VBoxContainer" parent="MovingContainer/PanelContainer/VBoxContainer/OptionsContainer"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/DegreeSlider"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/DegreeSlider/VBoxContainer"]
+layout_mode = 2
+text = "Degree range"
+
+[node name="RangeSlider" parent="MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/DegreeSlider/VBoxContainer" instance=ExtResource("6_rq3ry")]
+custom_minimum_size = Vector2(70, 2.08165e-12)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = null
+tickCount = 7
+
+[node name="GridContainer" type="GridContainer" parent="MovingContainer/PanelContainer/VBoxContainer/OptionsContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = -1
+theme_override_constants/v_separation = -3
+columns = 2
+
+[node name="em" type="CheckBox" parent="MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer"]
+layout_mode = 2
+focus_mode = 0
+mouse_filter = 1
+theme_override_font_sizes/font_size = 6
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ac3qj")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_qt5tk")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_7cbwi")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_f4k0u")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_c2ten")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_pycte")
+action_mode = 0
+text = "EM"
+
+[node name="strong" type="CheckBox" parent="MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer"]
+layout_mode = 2
+focus_mode = 0
+mouse_filter = 1
+theme_override_font_sizes/font_size = 6
+theme_override_styles/normal = SubResource("StyleBoxEmpty_7ic36")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_vu27k")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_br74h")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_22hx1")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_n4fv1")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_dyjfl")
+action_mode = 0
+text = "Strong"
+
+[node name="weak" type="CheckBox" parent="MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer"]
+layout_mode = 2
+focus_mode = 0
+mouse_filter = 1
+theme_override_font_sizes/font_size = 6
+theme_override_styles/normal = SubResource("StyleBoxEmpty_uyoh7")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_k4mmt")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_f767v")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_qymg5")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_i7p3q")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1wsh3")
+action_mode = 0
+text = "Weak"
+
+[node name="electroweak" type="CheckBox" parent="MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer"]
+layout_mode = 2
+focus_mode = 0
+mouse_filter = 1
+theme_override_font_sizes/font_size = 6
+theme_override_styles/normal = SubResource("StyleBoxEmpty_7itak")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_qwtrr")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_kn1ef")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_ncmaa")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_58h3g")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_kpwo5")
+action_mode = 0
+text = "E. Weak"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MovingContainer/PanelContainer/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+alignment = 1
+
+[node name="Generate" parent="MovingContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("8_ihypl")]
+layout_mode = 2
+text = "Generate"
+
+[node name="Tab" parent="MovingContainer" instance=ExtResource("6_7e8c8")]
+layout_mode = 2
+TabIcon = ExtResource("4_xnawx")

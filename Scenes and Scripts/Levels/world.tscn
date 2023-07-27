@@ -1,0 +1,222 @@
+[gd_scene load_steps=26 format=3 uid="uid://c7n4o6dbkwilh"]
+
+[ext_resource type="Script" path="res://Scenes and Scripts/Levels/World.gd" id="1"]
+[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="1_ovngh"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/ShaderControl.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://besym8haj5qo4" path="res://Scenes and Scripts/UI/Crosshair.tscn" id="3"]
+[ext_resource type="Texture2D" uid="uid://dvmhtrrnuhqrj" path="res://Textures/UI/grid_outline.png" id="3_fi1kg"]
+[ext_resource type="PackedScene" uid="uid://cv6hlxtiukmtc" path="res://Scenes and Scripts/UI/VisionButtons/vision_buttons.tscn" id="3_hqsoq"]
+[ext_resource type="PackedScene" uid="uid://pgnduadnvgfx" path="res://Scenes and Scripts/Diagram/StateLine.tscn" id="4"]
+[ext_resource type="Texture2D" uid="uid://c2myqhjupqo25" path="res://Textures/Background/tile.png" id="4_k4tjo"]
+[ext_resource type="Texture2D" uid="uid://c3cqabe0p66kd" path="res://Textures/UI/clear_control.png" id="7"]
+[ext_resource type="Texture2D" uid="uid://d1e2fabmfhkx7" path="res://Textures/UI/drag_control.png" id="9"]
+[ext_resource type="PackedScene" uid="uid://brd5auomhnn6l" path="res://Scenes and Scripts/UI/Cursor.tscn" id="10"]
+[ext_resource type="PackedScene" path="res://Scenes and Scripts/Algorithms/PathFinding.tscn" id="13"]
+[ext_resource type="Script" path="res://Scenes and Scripts/Diagram/diagram_actions.gd" id="17_23v64"]
+[ext_resource type="PackedScene" uid="uid://nuajmillcsir" path="res://Scenes and Scripts/Algorithms/Generation.tscn" id="18"]
+[ext_resource type="PackedScene" path="res://Scenes and Scripts/UI/Equations/EquationPanel.tscn" id="21"]
+[ext_resource type="Texture2D" uid="uid://dhfjdunke4k7k" path="res://Textures/UI/delete_control.png" id="22"]
+[ext_resource type="PackedScene" uid="uid://cc28vwhkixh8t" path="res://Scenes and Scripts/UI/Buttons/pallette_buttons.tscn" id="22_kt0hd"]
+[ext_resource type="PackedScene" uid="uid://bgvo11j4kfjdc" path="res://Scenes and Scripts/UI/Menus/generation_button.tscn" id="22_u64s1"]
+[ext_resource type="Texture2D" uid="uid://bvc8sakoqg037" path="res://Textures/Background/background_border.png" id="23_ebvm0"]
+[ext_resource type="PackedScene" uid="uid://cv3ttwhplgav" path="res://Scenes and Scripts/States/state_manager.tscn" id="23_kpp6c"]
+[ext_resource type="Texture2D" uid="uid://bawoay3wxiy7j" path="res://Textures/Background/full_background.png" id="24_ci6n5"]
+[ext_resource type="PackedScene" uid="uid://ds2iet11sv3ty" path="res://Scenes and Scripts/UI/Buttons/particle_buttons.tscn" id="24_lunb1"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ue1rd"]
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_thk4u"]
+resource_name = "ParticleButtons"
+allow_unpress = true
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2v8fu"]
+texture = ExtResource("3_fi1kg")
+texture_margin_left = 14.0
+texture_margin_top = 14.0
+texture_margin_right = 14.0
+texture_margin_bottom = 14.0
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+
+[node name="World" type="Node2D" groups=["level"]]
+material = SubResource("ShaderMaterial_ue1rd")
+script = ExtResource("1")
+
+[node name="Background" type="TextureRect" parent="."]
+z_index = -5
+use_parent_material = true
+offset_right = 640.0
+offset_bottom = 360.0
+mouse_filter = 2
+texture = ExtResource("24_ci6n5")
+expand_mode = 2
+metadata/_edit_lock_ = true
+
+[node name="VisionButton" parent="." instance=ExtResource("3_hqsoq")]
+offset_left = 615.0
+offset_top = 60.0
+offset_right = 637.0
+offset_bottom = 120.0
+
+[node name="ParticleButtons" parent="." instance=ExtResource("24_lunb1")]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 211.0
+offset_top = 241.0
+offset_right = 211.0
+offset_bottom = 241.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+particle_button_group = SubResource("ButtonGroup_thk4u")
+
+[node name="GridTiles" type="TextureRect" parent="."]
+use_parent_material = true
+offset_left = 96.0
+offset_top = 48.0
+offset_right = 546.0
+offset_bottom = 288.0
+texture = ExtResource("4_k4tjo")
+stretch_mode = 1
+
+[node name="GridArea" type="Panel" parent="."]
+use_parent_material = true
+offset_left = 97.0
+offset_top = 49.0
+offset_right = 545.0
+offset_bottom = 289.0
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_2v8fu")
+
+[node name="Interactions" type="Control" parent="GridArea"]
+anchors_preset = 0
+offset_left = -97.0
+offset_top = -49.0
+offset_right = -97.0
+offset_bottom = -49.0
+mouse_filter = 1
+
+[node name="ParticleLines" type="Control" parent="GridArea"]
+anchors_preset = 0
+offset_left = -97.0
+offset_top = -49.0
+offset_right = -97.0
+offset_bottom = -49.0
+mouse_filter = 1
+
+[node name="GenerationButton" parent="." instance=ExtResource("22_u64s1")]
+offset_left = -79.0
+offset_top = 57.0
+offset_right = -79.0
+offset_bottom = 57.0
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+z_index = 1
+use_parent_material = true
+offset_right = 640.0
+offset_bottom = 360.0
+texture = ExtResource("23_ebvm0")
+patch_margin_left = 15
+patch_margin_top = 15
+patch_margin_right = 15
+patch_margin_bottom = 15
+
+[node name="Crosshair" parent="." instance=ExtResource("3")]
+z_index = 1
+grid_margin = 0
+
+[node name="Equation" parent="." groups=["equation"] instance=ExtResource("21")]
+visible = false
+offset_left = 160.0
+offset_top = 16.0
+offset_right = 480.0
+offset_bottom = 46.0
+scale = Vector2(0.55, 0.55)
+
+[node name="VBoxContainer" parent="Equation" index="0"]
+layout_mode = 2
+
+[node name="EquationContainer" parent="Equation/VBoxContainer" index="0"]
+layout_mode = 2
+
+[node name="InitialScrollContainer" parent="Equation/VBoxContainer/EquationContainer" index="0"]
+layout_mode = 2
+
+[node name="Arrow" parent="Equation/VBoxContainer/EquationContainer" index="1"]
+layout_mode = 2
+expand_mode = 1
+
+[node name="FinalScrollContainer" parent="Equation/VBoxContainer/EquationContainer" index="2"]
+layout_mode = 2
+
+[node name="Generation" parent="." instance=ExtResource("18")]
+
+[node name="PathFinding" parent="." instance=ExtResource("13")]
+
+[node name="Initial" parent="." instance=ExtResource("4")]
+position = Vector2(161, 43)
+state = 1
+
+[node name="Line" parent="Initial" index="0"]
+offset_bottom = 252.0
+
+[node name="Final" parent="." instance=ExtResource("4")]
+position = Vector2(481, 43)
+state = 2
+
+[node name="Line" parent="Final" index="0"]
+offset_bottom = 252.0
+
+[node name="Cursor" parent="." instance=ExtResource("10")]
+
+[node name="Controls" type="Node2D" parent="."]
+visible = false
+position = Vector2(101, -224)
+
+[node name="drag" type="Sprite2D" parent="Controls"]
+position = Vector2(378, 272)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("9")
+
+[node name="delete" type="Sprite2D" parent="Controls"]
+position = Vector2(382, 287)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("22")
+
+[node name="ClearControl" type="Sprite2D" parent="Controls"]
+position = Vector2(372, 299)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("7")
+
+[node name="FPS" type="Label" parent="."]
+visible = false
+offset_right = 40.0
+offset_bottom = 14.0
+
+[node name="ShaderControl" type="Node" parent="."]
+script = ExtResource("2")
+
+[node name="state_manager" parent="." instance=ExtResource("23_kpp6c")]
+
+[node name="diagram_actions" type="Node" parent="."]
+script = ExtResource("17_23v64")
+
+[node name="vision_manager" type="Node" parent="."]
+
+[node name="PalletteButtons" parent="." instance=ExtResource("22_kt0hd")]
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="."]
+offset_left = 43.0
+offset_top = 44.0
+offset_right = 51.0
+offset_bottom = 52.0
+
+[editable path="Equation"]
+[editable path="Equation/VBoxContainer/EquationContainer/InitialScrollContainer"]
+[editable path="Equation/VBoxContainer/EquationContainer/FinalScrollContainer"]
+[editable path="Generation"]
+[editable path="Initial"]
+[editable path="Final"]

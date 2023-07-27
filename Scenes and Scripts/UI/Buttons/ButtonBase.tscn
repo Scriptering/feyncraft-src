@@ -1,0 +1,87 @@
+[gd_scene load_steps=7 format=3 uid="uid://lpbermjlr4kj"]
+
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/Buttons/ButtonBase.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://s5p52s3xmb4l" path="res://Textures/Buttons/centre.png" id="3"]
+[ext_resource type="Theme" uid="uid://csgjunw6mjyuf" path="res://Themes/ButtonBase.tres" id="4"]
+[ext_resource type="Texture2D" uid="uid://du0j082dujf0x" path="res://Textures/Buttons/centre_presse.png" id="6"]
+
+[sub_resource type="StyleBoxEmpty" id="2"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxEmpty" id="3"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+
+[node name="ButtonBase" type="PanelContainer" groups=["UIbuttons", "buttons", "no_place"]]
+self_modulate = Color(1, 1, 1, 0)
+offset_right = 20.0
+offset_bottom = 20.0
+mouse_filter = 1
+theme = ExtResource("4")
+script = ExtResource("2")
+
+[node name="NormalCentre" type="NinePatchRect" parent="."]
+modulate = Color(0.882353, 0.796078, 0.627451, 1)
+layout_mode = 2
+mouse_filter = 1
+texture = ExtResource("3")
+patch_margin_left = 3
+patch_margin_top = 1
+patch_margin_right = 3
+patch_margin_bottom = 5
+
+[node name="PressedCentre" type="NinePatchRect" parent="."]
+visible = false
+modulate = Color(0.819608, 0.741176, 0.592157, 1)
+layout_mode = 2
+mouse_filter = 1
+texture = ExtResource("6")
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="NormalContainer" type="PanelContainer" parent="."]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("2")
+
+[node name="NormalIcon" type="TextureRect" parent="NormalContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+expand_mode = 1
+stretch_mode = 6
+
+[node name="PressedContainer" type="PanelContainer" parent="."]
+visible = false
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("3")
+
+[node name="PressedIcon" type="TextureRect" parent="PressedContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+mouse_filter = 1
+action_mode = 0
+icon_alignment = 1
+expand_icon = true
+
+[connection signal="mouse_entered" from="Button" to="." method="_on_Button_mouse_entered"]
+[connection signal="mouse_exited" from="Button" to="." method="_on_Button_mouse_exited"]
+[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]

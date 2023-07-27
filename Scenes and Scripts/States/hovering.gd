@@ -1,0 +1,36 @@
+extends BaseState
+
+var start_placing := false
+
+func enter() -> void:
+	super.enter()
+	connect_grabbable()
+
+func exit() -> void:
+	super.exit()
+	disconnect_grabbable()
+
+func input(_event: InputEvent) -> State:
+	if Input.is_action_just_released("editing"):
+		return State.Idle
+
+	return State.Null
+
+func process(_delta: float) -> State:
+	if start_placing:
+		start_placing = false
+		return State.Placing
+	return State.Null
+
+func connect_grabbable() -> void:
+	for object in get_tree().get_nodes_in_group("grabbable"):
+		object.connect("grab_area_clicked", Callable(self, "_grabbable_object_clicked"))
+
+func disconnect_grabbable() -> void:
+	for object in get_tree().get_nodes_in_group("grabbable"):
+		object.disconnect("grab_area_clicked", Callable(self, "_grabbable_object_clicked"))
+
+func _grabbable_object_clicked(object: Node) -> void:
+	start_placing = true
+	if object.can_be_grabbed():
+		object.pick_up()

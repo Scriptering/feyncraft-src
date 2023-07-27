@@ -1,0 +1,70 @@
+[gd_scene load_steps=5 format=3 uid="uid://pd2xxsb4ydml"]
+
+[ext_resource type="Texture2D" uid="uid://tql14gtq05lf" path="res://Textures/UI/Information/invalid.png" id="1"]
+[ext_resource type="FontFile" uid="uid://cq27s0444iwkg" path="res://Textures/Fonts/ConnectionIi-2wj8.otf" id="2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_e234q"]
+
+[sub_resource type="FontFile" id="1"]
+fallbacks = Array[Font]([ExtResource("2")])
+face_index = null
+embolden = null
+transform = null
+cache/0/7/0/ascent = 0.0
+cache/0/7/0/descent = 0.0
+cache/0/7/0/underline_position = 0.0
+cache/0/7/0/underline_thickness = 0.0
+cache/0/7/0/scale = 1.0
+cache/0/7/0/kerning_overrides/7/0 = Vector2(0, 0)
+cache/0/7/0/kerning_overrides/16/0 = Vector2(0, 0)
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/16/0/kerning_overrides/7/0 = Vector2(0, 0)
+cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
+
+[node name="InfoRow" type="Panel"]
+self_modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(0, 10)
+offset_left = 2.0
+offset_right = 78.0
+offset_bottom = 10.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_e234q")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 2.0
+offset_right = 76.0
+offset_bottom = 12.0
+mouse_filter = 2
+theme_override_constants/separation = 1
+
+[node name="name" type="Label" parent="HBoxContainer"]
+custom_minimum_size = Vector2(45, 8)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.219608, 0.223529, 0.188235, 1)
+theme_override_fonts/font = SubResource("1")
+
+[node name="label1" type="Label" parent="HBoxContainer"]
+custom_minimum_size = Vector2(21, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.219608, 0.223529, 0.188235, 1)
+theme_override_fonts/font = SubResource("1")
+text = "BEFORE"
+
+[node name="label2" type="Label" parent="HBoxContainer"]
+custom_minimum_size = Vector2(18, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.219608, 0.223529, 0.188235, 1)
+theme_override_fonts/font = SubResource("1")
+text = "AFTER"
+
+[node name="invalid" type="TextureRect" parent="HBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(6, 0)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("1")

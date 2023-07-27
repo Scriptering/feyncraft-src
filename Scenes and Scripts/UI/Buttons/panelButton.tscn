@@ -1,0 +1,66 @@
+[gd_scene load_steps=6 format=3 uid="uid://c4lyyfxwvqyfk"]
+
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_e0w4o"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/Buttons/panelButton.gd" id="2_ns04d"]
+[ext_resource type="AudioStream" uid="uid://didhgrsrk4wj7" path="res://Resources/Audio/switch27.ogg" id="4_0s1i3"]
+[ext_resource type="AudioStream" uid="uid://duhj8peqer73i" path="res://Resources/Audio/switch28.ogg" id="4_u0ab0"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4oa4s"]
+
+[node name="Button" type="PanelContainer"]
+material = ExtResource("1_e0w4o")
+custom_minimum_size = Vector2(5, 5)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -620.0
+offset_bottom = -340.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxEmpty_4oa4s")
+script = ExtResource("2_ns04d")
+
+[node name="Button" type="Button" parent="."]
+use_parent_material = true
+layout_mode = 2
+action_mode = 0
+
+[node name="ContentContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 6
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ContentContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="ButtonText" type="Label" parent="ContentContainer/HBoxContainer"]
+visible = false
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ButtonIcon" type="TextureRect" parent="ContentContainer/HBoxContainer"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+stretch_mode = 3
+
+[node name="ButtonDown" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_u0ab0")
+
+[node name="ButtonUp" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_0s1i3")
+
+[connection signal="button_down" from="Button" to="." method="_on_button_button_down"]
+[connection signal="button_up" from="Button" to="." method="_on_button_button_up"]
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="theme_changed" from="Button" to="." method="_on_button_theme_changed"]
+[connection signal="toggled" from="Button" to="." method="_on_button_toggled"]

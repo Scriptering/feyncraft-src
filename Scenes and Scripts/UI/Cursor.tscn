@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://brd5auomhnn6l"]
+
+[ext_resource type="Texture2D" uid="uid://cijtfk2524cte" path="res://Textures/Cursors/cursor_point.png" id="1"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/Cursor.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://cane64owm0oof" path="res://Textures/Cursors/heart.png" id="3"]
+
+[node name="Cursor" type="Sprite2D" groups=["cursor"]]
+z_index = 10
+texture = ExtResource("1")
+offset = Vector2(8, 22)
+script = ExtResource("2")
+Scale = 0.4
+
+[node name="ScrollTimer" type="Timer" parent="."]
+
+[node name="Heart" type="Sprite2D" parent="."]
+visible = false
+texture = ExtResource("3")
+offset = Vector2(9, 26)

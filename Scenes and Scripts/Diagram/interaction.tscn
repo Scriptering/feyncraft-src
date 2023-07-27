@@ -1,0 +1,148 @@
+[gd_scene load_steps=22 format=3 uid="uid://bhi4xq3qdbt4d"]
+
+[ext_resource type="Texture2D" uid="uid://dujsq82ocy6bp" path="res://Textures/Interactions/Interaction.png" id="1"]
+[ext_resource type="Shader" path="res://Resources/Shaders/interaction_shader.gdshader" id="1_2fxik"]
+[ext_resource type="Script" path="res://Scenes and Scripts/Diagram/interaction.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://dn576br5tkdbc" path="res://Textures/Interactions/interaction_invalid.png" id="3"]
+[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="3_vtri8"]
+[ext_resource type="Texture2D" uid="uid://cb746tuycm36s" path="res://Textures/Interactions/dot.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://cj4e63vquy3u6" path="res://Textures/Interactions/interaction_background.png" id="4_0yoxg"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_a466d"]
+resource_local_to_scene = true
+shader = ExtResource("1_2fxik")
+shader_parameter/interaction_strength_alpha = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_iwh4e"]
+shader = ExtResource("3_vtri8")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5bmnj"]
+atlas = ExtResource("3")
+region = Rect2(0, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8ipuw"]
+atlas = ExtResource("3")
+region = Rect2(10, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i3tg5"]
+atlas = ExtResource("1")
+region = Rect2(0, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u8e0n"]
+atlas = ExtResource("1")
+region = Rect2(10, 0, 10, 10)
+
+[sub_resource type="SpriteFrames" id="3"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5bmnj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8ipuw")
+}],
+"loop": true,
+"name": &"invalid",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i3tg5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u8e0n")
+}],
+"loop": true,
+"name": &"valid",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="9"]
+atlas = ExtResource("4")
+region = Rect2(0, 0, 12, 12)
+
+[sub_resource type="AtlasTexture" id="10"]
+atlas = ExtResource("4")
+region = Rect2(12, 0, 12, 12)
+
+[sub_resource type="SpriteFrames" id="11"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("9")
+}, {
+"duration": 1.0,
+"texture": SubResource("10")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_usurp"]
+size = Vector2(12, 12)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_38m1t"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p04yt"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lgs61"]
+
+[node name="Interaction" type="Node2D" node_paths=PackedStringArray("GrabArea") groups=["grabbable", "interactions"]]
+z_index = 4
+material = SubResource("ShaderMaterial_a466d")
+script = ExtResource("2")
+information_box_offset = Vector2(-60, -75)
+GrabArea = NodePath("InformationButton")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_iwh4e")
+offset_left = -5.0
+offset_top = -5.0
+offset_right = 5.0
+offset_bottom = 5.0
+mouse_filter = 2
+texture = ExtResource("4_0yoxg")
+
+[node name="Ball" type="AnimatedSprite2D" parent="."]
+use_parent_material = true
+sprite_frames = SubResource("3")
+animation = &"valid"
+frame = 1
+
+[node name="Dot" type="AnimatedSprite2D" parent="."]
+z_index = 2
+use_parent_material = true
+sprite_frames = SubResource("11")
+
+[node name="InfoNumberLabel" type="Label" parent="."]
+offset_left = 7.0
+offset_top = -4.0
+offset_right = 47.0
+offset_bottom = 12.0
+theme_override_colors/font_color = Color(0.219608, 0.223529, 0.188235, 1)
+theme_override_font_sizes/font_size = 9
+
+[node name="GrabArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GrabArea"]
+visible = false
+shape = SubResource("RectangleShape2D_usurp")
+
+[node name="InformationButton" type="Button" parent="."]
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 6.0
+offset_bottom = 6.0
+mouse_filter = 1
+theme_override_styles/normal = SubResource("StyleBoxEmpty_38m1t")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_p04yt")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_lgs61")
+
+[connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
+[connection signal="pressed" from="InformationButton" to="." method="_on_information_button_pressed"]

@@ -1,0 +1,48 @@
+[gd_scene load_steps=7 format=3 uid="uid://bd4to2gpnr8yj"]
+
+[ext_resource type="Texture2D" uid="uid://42ll0xr2w8xr" path="res://Textures/UI/main menu/main_menu_background.png" id="1_fk0s2"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/Buttons/BaseButton.gd" id="2_mriib"]
+[ext_resource type="Texture2D" uid="uid://dpx0ebqyihc40" path="res://Textures/Buttons/icons/cog.png" id="3_giplx"]
+[ext_resource type="Theme" uid="uid://bydsqvc46xxb" path="res://Themes/MainMenu.tres" id="3_hxg0n"]
+[ext_resource type="Texture2D" uid="uid://b43wsnxvfiscc" path="res://Textures/Buttons/icons/play.png" id="3_sxwb0"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_s3h0y"]
+texture = ExtResource("1_fk0s2")
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="Background" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 360.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_s3h0y")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Background"]
+layout_mode = 2
+alignment = 1
+
+[node name="MenuButtons" type="VBoxContainer" parent="Background/HBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Play" type="Button" parent="Background/HBoxContainer/MenuButtons"]
+custom_minimum_size = Vector2(110, 2.08165e-12)
+layout_mode = 2
+theme = ExtResource("3_hxg0n")
+text = "play
+"
+icon = ExtResource("3_sxwb0")
+icon_alignment = 2
+script = ExtResource("2_mriib")
+
+[node name="Options" type="Button" parent="Background/HBoxContainer/MenuButtons"]
+custom_minimum_size = Vector2(110, 2.08165e-12)
+layout_mode = 2
+theme = ExtResource("3_hxg0n")
+text = "options"
+icon = ExtResource("3_giplx")
+icon_alignment = 2
+expand_icon = true
+script = ExtResource("2_mriib")

@@ -1,0 +1,44 @@
+[gd_scene load_steps=8 format=3 uid="uid://cc28vwhkixh8t"]
+
+[ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="1_ad78p"]
+[ext_resource type="Theme" uid="uid://cfmbhoq8cuoge" path="res://Themes/ProjectTheme.tres" id="1_qs2e8"]
+[ext_resource type="Texture2D" uid="uid://cndll3xmq2gic" path="res://Resources/Palettes/default_square_palette.png" id="2_2i5lq"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/Buttons/pallette_buttons.gd" id="2_qmvk0"]
+[ext_resource type="Texture2D" uid="uid://e3qvwokexeij" path="res://Resources/Palettes/seafoam_square_palette.png" id="4_vyvn0"]
+[ext_resource type="Texture2D" uid="uid://cx81d8e23g4f8" path="res://Resources/Palettes/professional_square_palette.png" id="5_ebrex"]
+[ext_resource type="Texture2D" uid="uid://bub8jxgewrfm" path="res://Resources/Palettes/picker_square_palette.png" id="7_ssyte"]
+
+[node name="PalletteButtons" type="HBoxContainer"]
+offset_right = 58.0
+offset_bottom = 20.0
+theme = ExtResource("1_qs2e8")
+theme_override_constants/separation = -1
+script = ExtResource("2_qmvk0")
+
+[node name="TeaStain" parent="." instance=ExtResource("1_ad78p")]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+icon = ExtResource("2_2i5lq")
+toggle_mode = true
+expand_icon = true
+
+[node name="SeaFoam" parent="." instance=ExtResource("1_ad78p")]
+layout_mode = 2
+icon = ExtResource("4_vyvn0")
+minimum_size = Vector2(20, 20)
+toggle_mode = true
+expand_icon = true
+
+[node name="Professional" parent="." instance=ExtResource("1_ad78p")]
+layout_mode = 2
+icon = ExtResource("5_ebrex")
+minimum_size = Vector2(20, 20)
+toggle_mode = true
+expand_icon = true
+
+[node name="Picker" parent="." instance=ExtResource("1_ad78p")]
+layout_mode = 2
+icon = ExtResource("7_ssyte")
+minimum_size = Vector2(20, 20)
+toggle_mode = true
+expand_icon = true

@@ -1,0 +1,77 @@
+[gd_scene load_steps=11 format=3 uid="uid://80bi27me1iqr"]
+
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_a1brg"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/Buttons/pull_out_tab_button.gd" id="1_g32rq"]
+[ext_resource type="Texture2D" uid="uid://bw8jm82sn5nmq" path="res://Textures/Buttons/Tabs/tab_down.png" id="2_pu2xi"]
+[ext_resource type="Texture2D" uid="uid://drw6s2h3fn501" path="res://Textures/Buttons/Tabs/arrow_up.png" id="3_fm075"]
+[ext_resource type="Texture2D" uid="uid://djfkh4k2lcuyg" path="res://Textures/Buttons/Tabs/tab_down_highlight.png" id="3_r8spm"]
+[ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="5_7o77k"]
+[ext_resource type="Texture2D" uid="uid://dwh7e30xi8v07" path="res://Textures/Buttons/Tabs/arrow_down.png" id="5_ifewe"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_loeqa"]
+content_margin_left = 4.0
+content_margin_top = 5.0
+content_margin_right = 4.0
+content_margin_bottom = 7.0
+texture = ExtResource("3_r8spm")
+texture_margin_left = 6.0
+texture_margin_top = 3.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xwugc"]
+content_margin_left = 4.0
+content_margin_top = 5.0
+content_margin_right = 4.0
+content_margin_bottom = 7.0
+texture = ExtResource("2_pu2xi")
+texture_margin_left = 6.0
+texture_margin_top = 3.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+
+[sub_resource type="Theme" id="Theme_op7t8"]
+Button/styles/hover = SubResource("StyleBoxTexture_loeqa")
+Button/styles/normal = SubResource("StyleBoxTexture_xwugc")
+Button/styles/pressed = SubResource("StyleBoxTexture_xwugc")
+Label/font_sizes/font_size = 10
+Label/fonts/font = null
+
+[node name="PullOutTabButtonDown" type="MarginContainer"]
+z_index = 1
+material = ExtResource("1_a1brg")
+use_parent_material = true
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme = SubResource("Theme_op7t8")
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = -3
+theme_override_constants/margin_right = 6
+script = ExtResource("1_g32rq")
+ArrowIn = ExtResource("5_ifewe")
+ArrowOut = ExtResource("3_fm075")
+TabMinimumSize = Vector2(15, 15)
+
+[node name="TabButton" parent="." instance=ExtResource("5_7o77k")]
+layout_mode = 2
+minimum_size = Vector2(15, 14)
+
+[node name="VBoxContainer" type="HBoxContainer" parent="."]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_bottom = 3
+
+[node name="Arrow" type="TextureRect" parent="VBoxContainer/MarginContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_vertical = 8
+mouse_filter = 2
+texture = ExtResource("5_ifewe")
+stretch_mode = 2

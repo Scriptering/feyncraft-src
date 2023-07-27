@@ -1,0 +1,64 @@
+[gd_scene load_steps=7 format=3 uid="uid://be3c30uk2tf1g"]
+
+[ext_resource type="PackedScene" uid="uid://lpbermjlr4kj" path="res://Scenes and Scripts/UI/Buttons/ButtonBase.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://dumex72ems5r" path="res://Scenes and Scripts/UI/Menus/GenerationUI.tscn" id="2"]
+[ext_resource type="Texture2D" uid="uid://q7kyu3yv27sv" path="res://Textures/Buttons/icons/hammer.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://chtsqpcvqnou3" path="res://Textures/Buttons/icons/puzzle.png" id="4"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/Buttons/GenerationButton.gd" id="5"]
+[ext_resource type="PackedScene" uid="uid://deuhqxgq1bveq" path="res://Scenes and Scripts/UI/Menus/PuzzleUI.tscn" id="6"]
+
+[node name="GenerationButton" type="Node2D"]
+z_index = 2
+script = ExtResource("5")
+
+[node name="PuzzleButton" parent="." instance=ExtResource("1")]
+offset_left = 8.0
+offset_right = 28.0
+Icon = ExtResource("4")
+
+[node name="GenerationButton" parent="." instance=ExtResource("1")]
+offset_left = -10.0
+offset_right = 10.0
+Icon = ExtResource("3")
+
+[node name="NormalIcon" parent="GenerationButton/NormalContainer" index="0"]
+texture = ExtResource("3")
+
+[node name="PressedIcon" parent="GenerationButton/PressedContainer" index="0"]
+texture = ExtResource("3")
+
+[node name="GenerationUI" parent="." instance=ExtResource("2")]
+offset_left = 9.0
+offset_top = -6.0
+offset_right = 9.0
+offset_bottom = -6.0
+
+[node name="VBoxContainer" parent="GenerationUI" index="0"]
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 80.0
+offset_bottom = 146.0
+
+[node name="Equation" parent="GenerationUI" index="1"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 240.0
+offset_bottom = 24.0
+
+[node name="PuzzleUI" parent="." instance=ExtResource("6")]
+visible = false
+offset_top = -18.0
+offset_right = 18.0
+
+[connection signal="pressed" from="PuzzleButton" to="." method="_on_PuzzleButton_pressed"]
+[connection signal="pressed" from="GenerationButton" to="." method="_on_GenerationButton_pressed"]
+
+[editable path="GenerationButton"]
+[editable path="GenerationUI"]
+[editable path="GenerationUI/Equation"]
+[editable path="GenerationUI/Equation/VBoxContainer/EquationContainer/InitialScrollContainer"]
+[editable path="GenerationUI/Equation/VBoxContainer/EquationContainer/FinalScrollContainer"]

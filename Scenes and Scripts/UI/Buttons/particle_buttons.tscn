@@ -1,0 +1,452 @@
+[gd_scene load_steps=55 format=3 uid="uid://ds2iet11sv3ty"]
+
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_kba7r"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/Buttons/particle_buttons.gd" id="1_magdw"]
+[ext_resource type="ButtonGroup" uid="uid://ct8rqk7pojop1" path="res://Scenes and Scripts/UI/Buttons/particles.tres" id="2_0vjci"]
+[ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="4_1s6pp"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/PullOutTab.gd" id="5_hlykg"]
+[ext_resource type="PackedScene" uid="uid://80bi27me1iqr" path="res://Scenes and Scripts/UI/Buttons/pull_out_tab_button_down.tscn" id="6_ejy6e"]
+[ext_resource type="PackedScene" uid="uid://diro6a1arcmc0" path="res://Scenes and Scripts/UI/Buttons/ParticleButtons/ParticleButton.tscn" id="7_omtgh"]
+[ext_resource type="Texture2D" uid="uid://bbcpi0csb1w4" path="res://Textures/Buttons/icons/Particles/electron.png" id="8_67c1b"]
+[ext_resource type="Texture2D" uid="uid://pkad4lple88f" path="res://Textures/Buttons/icons/Particles/muon.png" id="9_2eilt"]
+[ext_resource type="Theme" uid="uid://cfmbhoq8cuoge" path="res://Themes/ProjectTheme.tres" id="10_i5sk4"]
+[ext_resource type="Texture2D" uid="uid://dahehom80el0l" path="res://Textures/Buttons/icons/Particles/tau.png" id="10_sfd4m"]
+[ext_resource type="Texture2D" uid="uid://bmpdc76qeiktv" path="res://Textures/Buttons/icons/Particles/electron_neutrino.png" id="11_lvtjt"]
+[ext_resource type="Texture2D" uid="uid://c8dt0yi25ikvr" path="res://Textures/Buttons/icons/Particles/muon_neutrino.png" id="12_a0utd"]
+[ext_resource type="Texture2D" uid="uid://djuy5p44a12di" path="res://Textures/Buttons/icons/Particles/tau_neutrino.png" id="13_s46ou"]
+[ext_resource type="Texture2D" uid="uid://c0fv0drhuu6cf" path="res://Textures/Buttons/icons/Particles/photon.png" id="16_yvhx5"]
+[ext_resource type="Texture2D" uid="uid://dibw2wrvs7yqv" path="res://Textures/Buttons/icons/Particles/gluon.png" id="17_h03t5"]
+[ext_resource type="Texture2D" uid="uid://ba4s7btayo8o5" path="res://Textures/Buttons/icons/Particles/W.png" id="18_qblna"]
+[ext_resource type="Texture2D" uid="uid://bo2ht1pncufjh" path="res://Textures/Buttons/icons/Particles/Z.png" id="18_vqhce"]
+[ext_resource type="Texture2D" uid="uid://2xby1xcpcbua" path="res://Textures/Buttons/icons/Particles/higgs.png" id="19_p5w2o"]
+[ext_resource type="Texture2D" uid="uid://c6mken3m1pn70" path="res://Textures/Buttons/icons/Particles/up.png" id="20_6f0nv"]
+[ext_resource type="Texture2D" uid="uid://djfkh4k2lcuyg" path="res://Textures/Buttons/Tabs/tab_down_highlight.png" id="20_8w4iq"]
+[ext_resource type="Texture2D" uid="uid://b1v6dja587r1p" path="res://Textures/Buttons/icons/Particles/charm.png" id="21_0ad65"]
+[ext_resource type="Texture2D" uid="uid://bw8jm82sn5nmq" path="res://Textures/Buttons/Tabs/tab_down.png" id="21_c8fe8"]
+[ext_resource type="Texture2D" uid="uid://bqhdd536qbn0u" path="res://Textures/Buttons/icons/Particles/top.png" id="22_cx8b1"]
+[ext_resource type="FontFile" uid="uid://dohkbu7ekkfx8" path="res://Textures/Fonts/pixeltype/Pixeltype.ttf" id="22_o7wrf"]
+[ext_resource type="Texture2D" uid="uid://dawr6hhu4cqu4" path="res://Textures/Buttons/icons/Particles/down.png" id="23_vb17d"]
+[ext_resource type="Texture2D" uid="uid://dshm4k8uwjopv" path="res://Textures/Buttons/icons/Particles/strange.png" id="24_4efsy"]
+[ext_resource type="Texture2D" uid="uid://dv4g6vsjrh8qx" path="res://Textures/Buttons/icons/Particles/bottom.png" id="25_e3fe6"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4juqm"]
+texture = ExtResource("4_1s6pp")
+texture_margin_left = 6.0
+texture_margin_top = 6.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+expand_margin_top = 10.0
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_61joa"]
+resource_name = "ParticleButtons"
+allow_unpress = true
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_c3d16"]
+resource_name = "ParticleButtons"
+allow_unpress = true
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_647hl"]
+resource_name = "ParticleButtons"
+allow_unpress = true
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_aoips"]
+resource_name = "ParticleButtons"
+allow_unpress = true
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_hq5df"]
+resource_name = "ParticleButtons"
+allow_unpress = true
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_5nspk"]
+resource_name = "ParticleButtons"
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_loeqa"]
+content_margin_left = 4.0
+content_margin_top = 5.0
+content_margin_right = 4.0
+content_margin_bottom = 7.0
+texture = ExtResource("20_8w4iq")
+texture_margin_left = 6.0
+texture_margin_top = 3.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xwugc"]
+content_margin_left = 4.0
+content_margin_top = 5.0
+content_margin_right = 4.0
+content_margin_bottom = 7.0
+texture = ExtResource("21_c8fe8")
+texture_margin_left = 6.0
+texture_margin_top = 3.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+
+[sub_resource type="FontVariation" id="FontVariation_iht02"]
+base_font = ExtResource("22_o7wrf")
+spacing_top = 2
+spacing_bottom = -3
+
+[sub_resource type="Theme" id="Theme_sv8n6"]
+Button/styles/hover = SubResource("StyleBoxTexture_loeqa")
+Button/styles/normal = SubResource("StyleBoxTexture_xwugc")
+Button/styles/pressed = SubResource("StyleBoxTexture_xwugc")
+Label/font_sizes/font_size = 16
+Label/fonts/font = SubResource("FontVariation_iht02")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_c0jye"]
+texture = ExtResource("4_1s6pp")
+texture_margin_left = 6.0
+texture_margin_top = 6.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+expand_margin_top = 10.0
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_ap8lc"]
+resource_name = "ParticleButtons"
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_dprlb"]
+resource_name = "ParticleButtons"
+allow_unpress = true
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_pf7io"]
+resource_name = "ParticleButtons"
+allow_unpress = true
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_gu7rd"]
+resource_name = "ParticleButtons"
+allow_unpress = true
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_16a5r"]
+resource_name = "ParticleButtons"
+allow_unpress = true
+
+[sub_resource type="Theme" id="Theme_nl1g0"]
+Button/styles/hover = SubResource("StyleBoxTexture_loeqa")
+Button/styles/normal = SubResource("StyleBoxTexture_xwugc")
+Button/styles/pressed = SubResource("StyleBoxTexture_xwugc")
+Label/font_sizes/font_size = 16
+Label/fonts/font = SubResource("FontVariation_iht02")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_41ns2"]
+texture = ExtResource("4_1s6pp")
+texture_margin_left = 6.0
+texture_margin_top = 6.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+expand_margin_top = 10.0
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_ubj5a"]
+resource_name = "ParticleButtons"
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_3o72a"]
+resource_name = "ParticleButtons"
+allow_unpress = true
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_4kaqt"]
+resource_name = "ParticleButtons"
+allow_unpress = true
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_16rhn"]
+resource_name = "ParticleButtons"
+allow_unpress = true
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_rjrwq"]
+resource_name = "ParticleButtons"
+allow_unpress = true
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_q1skb"]
+resource_name = "ParticleButtons"
+
+[sub_resource type="Theme" id="Theme_4kguc"]
+Button/styles/hover = SubResource("StyleBoxTexture_loeqa")
+Button/styles/normal = SubResource("StyleBoxTexture_xwugc")
+Button/styles/pressed = SubResource("StyleBoxTexture_xwugc")
+Label/font_sizes/font_size = 16
+Label/fonts/font = SubResource("FontVariation_iht02")
+
+[node name="ParticleButtons" type="Control"]
+material = ExtResource("1_kba7r")
+layout_mode = 3
+anchors_preset = 0
+theme = ExtResource("10_i5sk4")
+script = ExtResource("1_magdw")
+particle_button_group = ExtResource("2_0vjci")
+
+[node name="Leptons" type="Control" parent="." node_paths=PackedStringArray("ContentContainer", "TabButton", "MovingContainer")]
+use_parent_material = true
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 32.0
+offset_top = 70.0
+offset_right = 32.0
+offset_bottom = 70.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("5_hlykg")
+ContentContainer = NodePath("MovingContainer/Tab/Leptons")
+TabButton = NodePath("MovingContainer/PullOutTabButtonDown")
+MovingContainer = NodePath("MovingContainer")
+moving_container_margins = Vector2(2.08165e-12, 10)
+move_direction = 3
+
+[node name="MovingContainer" type="VBoxContainer" parent="Leptons"]
+use_parent_material = true
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -72.0
+offset_right = 32.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 0
+alignment = 2
+
+[node name="Tab" type="PanelContainer" parent="Leptons/MovingContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxTexture_4juqm")
+
+[node name="Leptons" type="HFlowContainer" parent="Leptons/MovingContainer/Tab"]
+layout_mode = 2
+theme_override_constants/h_separation = -1
+theme_override_constants/v_separation = -2
+alignment = 1
+
+[node name="electron" parent="Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
+layout_mode = 2
+particle = 5
+icon = ExtResource("8_67c1b")
+button_group = SubResource("ButtonGroup_61joa")
+
+[node name="muon" parent="Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
+layout_mode = 2
+particle = 6
+icon = ExtResource("9_2eilt")
+button_group = SubResource("ButtonGroup_c3d16")
+
+[node name="tau" parent="Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
+layout_mode = 2
+particle = 7
+icon = ExtResource("10_sfd4m")
+button_group = SubResource("ButtonGroup_647hl")
+
+[node name="electron_neutrino" parent="Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
+layout_mode = 2
+particle = 8
+icon = ExtResource("11_lvtjt")
+button_group = SubResource("ButtonGroup_aoips")
+
+[node name="muon_neutrino" parent="Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
+layout_mode = 2
+particle = 9
+icon = ExtResource("12_a0utd")
+button_group = SubResource("ButtonGroup_hq5df")
+
+[node name="tau_neutrino" parent="Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
+layout_mode = 2
+particle = 10
+icon = ExtResource("13_s46ou")
+button_group = SubResource("ButtonGroup_5nspk")
+
+[node name="PullOutTabButtonDown" parent="Leptons/MovingContainer" instance=ExtResource("6_ejy6e")]
+z_index = 0
+layout_mode = 2
+size_flags_horizontal = 4
+theme = SubResource("Theme_sv8n6")
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_right = 0
+TabText = "LEPTONS"
+TabMinimumSize = Vector2(55, 0)
+
+[node name="TabButton" parent="Leptons/MovingContainer/PullOutTabButtonDown" index="0"]
+text = "LEPTONS"
+minimum_size = Vector2(55, 0)
+
+[node name="Bosons" type="Control" parent="." node_paths=PackedStringArray("ContentContainer", "TabButton", "MovingContainer")]
+use_parent_material = true
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 66.0
+offset_top = -1.0
+offset_right = 66.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 0
+pivot_offset = Vector2(31, 71)
+script = ExtResource("5_hlykg")
+ContentContainer = NodePath("MovingContainer/Tab/Bosons")
+TabButton = NodePath("MovingContainer/PullOutTabButtonDown")
+MovingContainer = NodePath("MovingContainer")
+moving_container_margins = Vector2(0, 10)
+move_direction = 3
+
+[node name="MovingContainer" type="VBoxContainer" parent="Bosons"]
+use_parent_material = true
+layout_mode = 2
+offset_right = 64.0
+offset_bottom = 49.0
+theme_override_constants/separation = 0
+alignment = 2
+
+[node name="Tab" type="PanelContainer" parent="Bosons/MovingContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_c0jye")
+
+[node name="Bosons" type="HFlowContainer" parent="Bosons/MovingContainer/Tab"]
+layout_mode = 2
+theme_override_constants/h_separation = -1
+theme_override_constants/v_separation = -2
+alignment = 1
+
+[node name="photon" parent="Bosons/MovingContainer/Tab/Bosons" instance=ExtResource("7_omtgh")]
+layout_mode = 2
+icon = ExtResource("16_yvhx5")
+button_group = SubResource("ButtonGroup_ap8lc")
+
+[node name="gluon" parent="Bosons/MovingContainer/Tab/Bosons" instance=ExtResource("7_omtgh")]
+layout_mode = 2
+particle = 1
+icon = ExtResource("17_h03t5")
+button_group = SubResource("ButtonGroup_dprlb")
+
+[node name="W" parent="Bosons/MovingContainer/Tab/Bosons" instance=ExtResource("7_omtgh")]
+layout_mode = 2
+particle = 4
+icon = ExtResource("18_qblna")
+button_group = SubResource("ButtonGroup_pf7io")
+
+[node name="Z" parent="Bosons/MovingContainer/Tab/Bosons" instance=ExtResource("7_omtgh")]
+layout_mode = 2
+particle = 2
+icon = ExtResource("18_vqhce")
+button_group = SubResource("ButtonGroup_gu7rd")
+
+[node name="H" parent="Bosons/MovingContainer/Tab/Bosons" instance=ExtResource("7_omtgh")]
+layout_mode = 2
+particle = 3
+icon = ExtResource("19_p5w2o")
+button_group = SubResource("ButtonGroup_16a5r")
+
+[node name="PullOutTabButtonDown" parent="Bosons/MovingContainer" instance=ExtResource("6_ejy6e")]
+z_index = 0
+layout_mode = 2
+size_flags_horizontal = 4
+theme = SubResource("Theme_nl1g0")
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_right = 0
+TabText = "BOSONS"
+TabMinimumSize = Vector2(55, 0)
+
+[node name="TabButton" parent="Bosons/MovingContainer/PullOutTabButtonDown" index="0"]
+custom_minimum_size = Vector2(48, 2.08165e-12)
+text = "BOSONS"
+minimum_size = Vector2(55, 0)
+
+[node name="Quarks" type="Control" parent="." node_paths=PackedStringArray("ContentContainer", "TabButton", "MovingContainer")]
+use_parent_material = true
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 132.0
+offset_top = -1.0
+offset_right = 132.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 0
+pivot_offset = Vector2(31, 71)
+script = ExtResource("5_hlykg")
+ContentContainer = NodePath("MovingContainer/Tab/Quarks")
+TabButton = NodePath("MovingContainer/PullOutTabButtonDown")
+MovingContainer = NodePath("MovingContainer")
+moving_container_margins = Vector2(0, 10)
+move_direction = 3
+
+[node name="MovingContainer" type="VBoxContainer" parent="Quarks"]
+use_parent_material = true
+layout_mode = 2
+offset_right = 64.0
+offset_bottom = 49.0
+theme_override_constants/separation = 0
+alignment = 2
+
+[node name="Tab" type="PanelContainer" parent="Quarks/MovingContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_41ns2")
+
+[node name="Quarks" type="HFlowContainer" parent="Quarks/MovingContainer/Tab"]
+layout_mode = 2
+theme_override_constants/h_separation = -1
+theme_override_constants/v_separation = -2
+alignment = 1
+
+[node name="up" parent="Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
+layout_mode = 2
+particle = 11
+icon = ExtResource("20_6f0nv")
+button_group = SubResource("ButtonGroup_ubj5a")
+
+[node name="charm" parent="Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
+layout_mode = 2
+particle = 13
+icon = ExtResource("21_0ad65")
+button_group = SubResource("ButtonGroup_3o72a")
+
+[node name="top" parent="Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
+layout_mode = 2
+particle = 15
+icon = ExtResource("22_cx8b1")
+button_group = SubResource("ButtonGroup_4kaqt")
+
+[node name="down" parent="Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
+layout_mode = 2
+particle = 12
+icon = ExtResource("23_vb17d")
+button_group = SubResource("ButtonGroup_16rhn")
+
+[node name="strange" parent="Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
+layout_mode = 2
+particle = 14
+icon = ExtResource("24_4efsy")
+button_group = SubResource("ButtonGroup_rjrwq")
+
+[node name="bottom" parent="Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
+layout_mode = 2
+particle = 16
+icon = ExtResource("25_e3fe6")
+button_group = SubResource("ButtonGroup_q1skb")
+
+[node name="PullOutTabButtonDown" parent="Quarks/MovingContainer" instance=ExtResource("6_ejy6e")]
+z_index = 0
+layout_mode = 2
+size_flags_horizontal = 4
+theme = SubResource("Theme_4kguc")
+TabText = "QUARKS"
+TabMinimumSize = Vector2(55, 2.08165e-12)
+
+[node name="TabButton" parent="Quarks/MovingContainer/PullOutTabButtonDown" index="0"]
+custom_minimum_size = Vector2(48, 2.08165e-12)
+text = "QUARKS"
+minimum_size = Vector2(55, 2.08165e-12)
+
+[editable path="Leptons/MovingContainer/PullOutTabButtonDown"]
+[editable path="Bosons/MovingContainer/PullOutTabButtonDown"]
+[editable path="Quarks/MovingContainer/PullOutTabButtonDown"]

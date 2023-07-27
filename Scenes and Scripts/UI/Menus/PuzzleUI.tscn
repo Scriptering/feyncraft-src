@@ -1,0 +1,294 @@
+[gd_scene load_steps=24 format=3 uid="uid://deuhqxgq1bveq"]
+
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/PuzzleUI.gd" id="1_0a0xk"]
+[ext_resource type="Theme" uid="uid://dil4mrtu23acn" path="res://Resources/Themes/Info.tres" id="2_8obiu"]
+[ext_resource type="Texture2D" uid="uid://cym2rn34oj5s3" path="res://Textures/UI/Information/box.png" id="3_whs2u"]
+[ext_resource type="PackedScene" uid="uid://dq8wkl0j51p8p" path="res://Scenes and Scripts/UI/RangeSlider.tscn" id="4_6rx6l"]
+[ext_resource type="PackedScene" uid="uid://lpbermjlr4kj" path="res://Scenes and Scripts/UI/Buttons/ButtonBase.tscn" id="5_ltga0"]
+[ext_resource type="Texture2D" uid="uid://bkeq4psmxa4g5" path="res://Textures/Buttons/cog.png" id="6_tr3r0"]
+[ext_resource type="Texture2D" uid="uid://uuymrv72pyyc" path="res://Textures/Buttons/icons/shuffle.png" id="7_u58pw"]
+[ext_resource type="Texture2D" uid="uid://b7i5pfnd47348" path="res://Textures/Buttons/icons/solution.png" id="8_wjcog"]
+[ext_resource type="Texture2D" uid="uid://bcu6ptkd3fwfe" path="res://Textures/Buttons/icons/submit.png" id="9_o72n7"]
+[ext_resource type="PackedScene" path="res://Scenes and Scripts/UI/Equations/EquationPanel.tscn" id="10_t8bno"]
+
+[sub_resource type="StyleBoxTexture" id="17"]
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+texture = ExtResource("3_whs2u")
+region_rect = Rect2(0, 0, 32, 32)
+
+[sub_resource type="StyleBoxEmpty" id="6"]
+
+[sub_resource type="StyleBoxEmpty" id="2"]
+
+[sub_resource type="StyleBoxEmpty" id="4"]
+
+[sub_resource type="StyleBoxTexture" id="1"]
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+texture = ExtResource("3_whs2u")
+region_rect = Rect2(0, 0, 32, 32)
+
+[sub_resource type="StyleBoxEmpty" id="5"]
+
+[sub_resource type="StyleBoxEmpty" id="3"]
+
+[sub_resource type="StyleBoxEmpty" id="12"]
+
+[sub_resource type="StyleBoxEmpty" id="8"]
+
+[sub_resource type="StyleBoxEmpty" id="10"]
+
+[sub_resource type="StyleBoxEmpty" id="7"]
+
+[sub_resource type="StyleBoxEmpty" id="11"]
+
+[sub_resource type="StyleBoxEmpty" id="9"]
+
+[node name="PuzzleUI" type="Control" groups=["buttons", "no_place"]]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_0a0xk")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(80, 130)
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -140.0
+offset_right = 40.0
+alignment = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+mouse_filter = 1
+theme = ExtResource("2_8obiu")
+theme_override_styles/panel = SubResource("17")
+
+[node name="MouseTrap" type="Panel" parent="VBoxContainer/PanelContainer"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Popupcontainer" type="MarginContainer" parent="VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="Text" type="Label" parent="VBoxContainer/PanelContainer/Popupcontainer"]
+layout_mode = 2
+size_flags_vertical = 0
+mouse_filter = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 0
+alignment = 2
+
+[node name="Goal" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "Goal:"
+
+[node name="EquationHolder" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+
+[node name="OptionsContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = -1
+
+[node name="HadronSlider" type="VBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer"]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/HadronSlider"]
+layout_mode = 2
+mouse_filter = 1
+text = "Hadron problems?"
+
+[node name="HSlider" type="HSlider" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/HadronSlider" groups=["sliders"]]
+layout_mode = 2
+mouse_filter = 1
+theme = ExtResource("2_8obiu")
+max_value = 2.0
+value = 1.0
+tick_count = 3
+ticks_on_borders = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/HadronSlider"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Yes" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/HadronSlider/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Yes"
+
+[node name="Randomly" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/HadronSlider/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Randomly"
+
+[node name="No" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/HadronSlider/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "No"
+
+[node name="DegreeSlider" type="VBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/DegreeSlider"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/DegreeSlider/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+text = "No. state particles"
+
+[node name="RangeSlider" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/DegreeSlider/VBoxContainer" instance=ExtResource("4_6rx6l")]
+layout_mode = 2
+minRange = 2
+minValue = 2
+tickCount = 9
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer"]
+layout_mode = 2
+theme_override_constants/v_separation = -2
+columns = 2
+
+[node name="em" type="CheckBox" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer"]
+layout_mode = 2
+focus_mode = 0
+mouse_filter = 1
+theme_override_styles/normal = SubResource("6")
+theme_override_styles/pressed = SubResource("2")
+theme_override_styles/disabled = SubResource("4")
+theme_override_styles/hover = SubResource("1")
+theme_override_styles/hover_pressed = SubResource("5")
+theme_override_styles/focus = SubResource("3")
+action_mode = 0
+text = "EM"
+
+[node name="strong" type="CheckBox" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer"]
+layout_mode = 2
+focus_mode = 0
+mouse_filter = 1
+theme_override_styles/normal = SubResource("12")
+theme_override_styles/pressed = SubResource("8")
+theme_override_styles/disabled = SubResource("10")
+theme_override_styles/hover = SubResource("7")
+theme_override_styles/hover_pressed = SubResource("11")
+theme_override_styles/focus = SubResource("9")
+action_mode = 0
+text = "Strong"
+
+[node name="weak" type="CheckBox" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer"]
+layout_mode = 2
+focus_mode = 0
+mouse_filter = 1
+theme_override_styles/normal = SubResource("12")
+theme_override_styles/pressed = SubResource("8")
+theme_override_styles/disabled = SubResource("10")
+theme_override_styles/hover = SubResource("7")
+theme_override_styles/hover_pressed = SubResource("11")
+theme_override_styles/focus = SubResource("9")
+action_mode = 0
+text = "Weak"
+
+[node name="electroweak" type="CheckBox" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer"]
+layout_mode = 2
+focus_mode = 0
+mouse_filter = 1
+theme_override_styles/normal = SubResource("12")
+theme_override_styles/pressed = SubResource("8")
+theme_override_styles/disabled = SubResource("10")
+theme_override_styles/hover = SubResource("7")
+theme_override_styles/hover_pressed = SubResource("11")
+theme_override_styles/focus = SubResource("9")
+action_mode = 0
+text = "E. Weak"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = -1
+
+[node name="Options" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("5_ltga0")]
+custom_minimum_size = Vector2(17, 17)
+layout_mode = 2
+Icon = ExtResource("6_tr3r0")
+
+[node name="Shuffle" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("5_ltga0")]
+custom_minimum_size = Vector2(19, 17)
+layout_mode = 2
+Icon = ExtResource("7_u58pw")
+
+[node name="Solution" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("5_ltga0")]
+custom_minimum_size = Vector2(19, 17)
+layout_mode = 2
+Icon = ExtResource("8_wjcog")
+
+[node name="Submit" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("5_ltga0")]
+custom_minimum_size = Vector2(19, 17)
+layout_mode = 2
+Icon = ExtResource("9_o72n7")
+active = true
+
+[node name="Equation" parent="." instance=ExtResource("10_t8bno")]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 28.0
+offset_right = 244.0
+offset_bottom = 52.0
+scale = Vector2(0.3, 0.3)
+mouse_filter = 1
+
+[node name="VBoxContainer" parent="Equation" index="0"]
+layout_mode = 2
+
+[node name="EquationContainer" parent="Equation/VBoxContainer" index="0"]
+layout_mode = 2
+
+[node name="InitialScrollContainer" parent="Equation/VBoxContainer/EquationContainer" index="0"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="HBoxContainer" parent="Equation/VBoxContainer/EquationContainer/InitialScrollContainer" index="0"]
+layout_mode = 2
+
+[node name="StateContainer" parent="Equation/VBoxContainer/EquationContainer/InitialScrollContainer/HBoxContainer" index="0"]
+layout_mode = 2
+
+[node name="Arrow" parent="Equation/VBoxContainer/EquationContainer" index="1"]
+layout_mode = 2
+expand_mode = 1
+
+[node name="FinalScrollContainer" parent="Equation/VBoxContainer/EquationContainer" index="2"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="HBoxContainer" parent="Equation/VBoxContainer/EquationContainer/FinalScrollContainer" index="0"]
+layout_mode = 2
+
+[node name="StateContainer" parent="Equation/VBoxContainer/EquationContainer/FinalScrollContainer/HBoxContainer" index="0"]
+layout_mode = 2
+
+[connection signal="mouse_entered" from="VBoxContainer/PanelContainer" to="." method="_on_PanelContainer_mouse_entered"]
+[connection signal="mouse_exited" from="VBoxContainer/PanelContainer" to="." method="_on_PanelContainer_mouse_exited"]
+[connection signal="mouse_entered" from="VBoxContainer/PanelContainer/MouseTrap" to="." method="_on_MouseTrap_mouse_entered"]
+[connection signal="mouse_exited" from="VBoxContainer/PanelContainer/MouseTrap" to="." method="_on_MouseTrap_mouse_exited"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/em" to="." method="_on_electroweaktype_pressed"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/strong" to="." method="_on_strong_pressed"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/weak" to="." method="_on_electroweaktype_pressed"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/electroweak" to="." method="_on_electroweak_pressed"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Options" to="." method="_on_Options_pressed"]
+
+[editable path="Equation"]
+[editable path="Equation/VBoxContainer/EquationContainer/InitialScrollContainer"]
+[editable path="Equation/VBoxContainer/EquationContainer/FinalScrollContainer"]
