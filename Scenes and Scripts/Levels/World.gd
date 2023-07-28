@@ -54,6 +54,7 @@ func _ready():
 	States.init(Cursor, Crosshair, $diagram_actions)
 	$diagram_actions.init($GridArea/Interactions, $GridArea/ParticleLines, $ParticleButtons)
 	$ShaderControl.init($PalletteButtons)
+	$Generation.init($GenerationButton)
 	
 	Generation.connect('draw_diagram', Callable(self, 'draw_diagram'))
 	
@@ -61,18 +62,6 @@ func _ready():
 	
 func _process(_delta):
 	FPS.text = str(Engine.get_frames_per_second())
-	
-	if Input.is_action_pressed('F') and Input.is_action_pressed('U') and Input.is_action_pressed('C') and Input.is_action_pressed('K') and !just_changed:
-		Cursor.angry = !Cursor.angry
-		just_changed = true
-		await get_tree().create_timer(1).timeout
-		just_changed = false
-	
-	if Input.is_action_pressed('L') and Input.is_action_pressed('O') and Input.is_action_pressed('V') and Input.is_action_pressed('E') and !just_changed:
-		Cursor.glowing = !Cursor.glowing
-		just_changed = true
-		await get_tree().create_timer(1).timeout
-		just_changed = false
 
 func colourful() -> void:
 	Pathfinding.colourful(true)

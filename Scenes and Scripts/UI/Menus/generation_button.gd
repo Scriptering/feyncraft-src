@@ -25,8 +25,6 @@ var can_generate : bool = false : set = _set_can_generate
 func _ready():
 	super._ready()
 	
-	self.connect('generate', Callable(Level, 'generate'))
-	
 	can_generate = !(InitialState == [] and FinalState == [])
 	
 	self.can_generate = can_generate
@@ -38,16 +36,6 @@ func _ready():
 func _set_can_generate(new_value: bool) -> void:
 	can_generate = new_value
 	GenerateButton.disabled = new_value
-	
-func _on_Save_pressed() -> void:
-	InitialState = get_state_interactions(Initial)
-	FinalState = get_state_interactions(Final)
-	
-	if InitialState.size() == 0 and FinalState.size() == 0:
-		self.can_generate = false
-	else:
-		self.can_generate = true
-		set_checks(Initial.connections + Final.connections)
 
 func get_state_interactions(state_line: StateLine) -> Array[Array]:
 	var state_interactions : Array[Array] = []
@@ -59,12 +47,6 @@ func get_state_interactions(state_line: StateLine) -> Array[Array]:
 		state_interactions.append(hadron.quarks)
 		
 	return state_interactions
-
-func _on_Generate_pressed() -> void:
-	if !can_generate: return
-	
-	emit_signal('generate', InitialState, FinalState, DegreeRange.minValue, DegreeRange.maxValue,
-	[EM_check.pressed, strong_check.pressed, weak_check.pressed, electroweak_check.pressed])
 
 func set_checks(state_interactions : Array):
 	var particles : Array[GLOBALS.Particle] = []
@@ -102,3 +84,19 @@ func _on_em_toggled(button_pressed: bool) -> void:
 
 func _on_weak_toggled(button_pressed: bool) -> void:
 	electroweak_type_button_pressed(button_pressed)
+
+func _on_generate_pressed() -> void:
+	if !can_generate: return
+	
+	emit_signal('generate', InitialState, FinalState, DegreeRange.minValue, DegreeRange.maxValue,
+	[EM_check.pressed, strong_check.pressed, weak_check.pressed, electroweak_check.pressed])
+
+func _on_save_pressed() -> void:
+	InitialState = get_state_interactions(Initial)
+	FinalState = get_state_interactions(Final)
+	
+	if InitialState.size() == 0 and FinalState.size() == 0:
+		self.can_generate = false
+	else:
+		self.can_generate = true
+		set_checks(InitialState + FinalState)

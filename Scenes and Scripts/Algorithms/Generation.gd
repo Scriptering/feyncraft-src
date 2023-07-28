@@ -44,6 +44,14 @@ var Interaction_checks : Array
 
 @onready var Line = preload("res://Scenes and Scripts/Diagram/line.tscn")
 
+func _generation_button_pressed(
+	initial_state: Array, final_state: Array, minDegree: int, maxDegree: int, interaction_checks: Array[bool]
+) -> void:
+	generate_diagram(initial_state, final_state, minDegree, maxDegree, interaction_checks)
+	
+func init(GenerationButton: Control) -> void:
+	GenerationButton.connect("generate", Callable(self, "_generation_button_pressed"))
+
 func generate_diagram(initial_state_original: Array, final_state_original: Array, minDegree: int, maxDegree: int, interaction_checks: Array):
 	start_time = Time.get_ticks_usec()
 	

@@ -46,7 +46,7 @@ script = ExtResource("1_hjucs")
 ContentContainer = NodePath("MovingContainer/Tab/MovingContainer")
 TabButton = NodePath("MovingContainer/TabButton")
 MovingContainer = NodePath("MovingContainer")
-moving_container_margins = Vector2(8, 2.08165e-12)
+moving_container_margins = Vector2(6, 2.08165e-12)
 
 [node name="MovingContainer" type="HBoxContainer" parent="."]
 use_parent_material = true
