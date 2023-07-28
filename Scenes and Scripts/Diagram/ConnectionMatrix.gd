@@ -3,14 +3,25 @@ class_name ConnectionMatrix
 signal interaction_added(point_id)
 signal interaction_removed(point_id)
 
-enum InteractionState {None, Initial, Final}
+enum InteractionState {None = -1, Initial, Final, Both}
 enum {INVALID}
 
-var matrix : Array[Array] = [[[]]]:
+const States : Array[InteractionState] = [InteractionState.Initial, InteractionState.Final]
+
+var matrix : Array = []:
 	set(_new_value):
 		pass
 
-var state_count: Array[int] = [0, 0, 0]
+var state_count: Array[int] = [0, 0]
+
+func init(new_size : int = 0, new_state_count: Array[int] = [0, 0]) -> void:
+	if new_size < new_state_count[InteractionState.Initial] + new_state_count[InteractionState.Final]:
+		push_error("Matrix size initiated less than state count.")
+	
+	state_count = new_state_count
+	
+	for i in range(new_size):
+		add_interaction()
 
 func connect_interactions(
 	connect_from_id: int, connect_to_id: int,
@@ -57,7 +68,8 @@ func add_interaction(interaction_state: InteractionState = InteractionState.None
 	for row in range(matrix.size()):
 		matrix[row].insert(id, [])
 	
-	state_count[interaction_state] += 1
+	if interaction_state == InteractionState.Initial or interaction_state == InteractionState.Final:
+		state_count[interaction_state] += 1
 
 func calculate_new_interaction_id(interaction_state: InteractionState) -> int:
 	match interaction_state:
@@ -116,27 +128,7 @@ func reach_ids(id: int, reached_ids: Array[int], bidirectional: bool) -> Array[i
 func size() -> int:
 	return matrix.size()
 
-#func get_state_interaction_count() -> int:
-#	pass
-#
-#func get_initial_interaction_count() -> int:
-#	pass
-#
-#func get_final_interaction_count() -> int:
-#	pass
-#
-#func get_state_interactions() -> Array:
-#	pass
-#
-#func get_initial_interactions() -> Array:
-#	pass
-#
-#func get_final_interactions() -> Array:
-#	pass
-
-
-
-
-
-
-
+func get_state_interaction_count(state: InteractionState) -> int:
+	if state == InteractionState.None:
+		return size()
+	return state_count[state]

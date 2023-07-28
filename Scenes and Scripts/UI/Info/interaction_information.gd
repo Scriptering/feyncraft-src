@@ -26,9 +26,6 @@ var property_names = [['charge', 'lepton num.', 'electron num.', 'muon num.', 't
 func _ready():
 	super._ready()
 	
-	for tab in $PanelContainer/TabContainer.get_children().size():
-		print($PanelContainer/TabContainer.get_tab_control(tab))
-	
 	self.connect("closed_button_pressed", Callable(ConnectedInteraction, "close_information_box"))
 	
 	$PanelContainer/NumberContainer/Number.text = str(ID)
@@ -75,7 +72,7 @@ func fraction_to_string(fraction: float) -> String:
 
 func build_other_tab() -> void:
 	add_label(data_containers[Tab.Other], property_names[Tab.Other][OtherProperties.Dimensionality])
-	add_label(data_containers[Tab.Other], "= "+ str(ConnectedInteraction.get_dimensionality()) +
+	add_label(data_containers[Tab.Other], "= "+ str(ConnectedInteraction.dimensionality) +
 		(" ( <= 4 ) " if ConnectedInteraction.is_dimensionality_valid() else ' ( > 4 ) '))
 	add_invalid(data_containers[Tab.Other], ConnectedInteraction.is_dimensionality_valid())
 	
@@ -109,7 +106,7 @@ func get_relevant_quantum_numbers() -> Array[GLOBALS.QuantumNumber]:
 	
 	relevant_quantum_numbers.append(GLOBALS.QuantumNumber.charge)
 	
-	for base_particle in ConnectedInteraction.get_connected_base_particles():
+	for base_particle in ConnectedInteraction.connected_base_particles:
 		if base_particle in GLOBALS.LEPTONS:
 			relevant_quantum_numbers.append(GLOBALS.QuantumNumber.lepton)
 			break
@@ -132,7 +129,7 @@ func get_relevant_quantum_numbers() -> Array[GLOBALS.QuantumNumber]:
 	):
 		relevant_quantum_numbers.append(GLOBALS.QuantumNumber.tau)
 	
-	for base_particle in ConnectedInteraction.get_connected_base_particles():
+	for base_particle in ConnectedInteraction.connected_base_particles:
 		if base_particle in GLOBALS.QUARKS:
 			relevant_quantum_numbers.append(GLOBALS.QuantumNumber.quark)
 			break

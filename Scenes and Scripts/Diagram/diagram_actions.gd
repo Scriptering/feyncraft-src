@@ -4,14 +4,16 @@ extends Node
 var Interactions: Control
 var ParticleLines: Control
 var ParticleButtons: Control
+var StateLines: Array
 
 @onready var Line = preload("res://Scenes and Scripts/Diagram/line.tscn")
 @onready var InteractionInstance = preload("res://Scenes and Scripts/Diagram/interaction.tscn")
 
-func init(interactions: Control, particle_lines: Control, particle_buttons: Control) -> void:
+func init(interactions: Control, particle_lines: Control, particle_buttons: Control, state_lines: Array) -> void:
 	Interactions = interactions
 	ParticleLines = particle_lines
 	ParticleButtons = particle_buttons
+	StateLines = state_lines
 
 func get_selected_particle() -> GLOBALS.Particle:
 	return ParticleButtons.selected_particle
@@ -125,5 +127,11 @@ func place_line(start_position: Vector2, end_position: Vector2 = Vector2.ZERO,
 	line.base_particle = base_particle
 	
 	ParticleLines.add_child(line)
+
+func clear_diagram() -> void:
+	for interaction in get_tree().get_nodes_in_group("interactions"):
+		delete_interaction(interaction)
+	for state_line in StateLines:
+		state_line.clear_hadrons()
 
 

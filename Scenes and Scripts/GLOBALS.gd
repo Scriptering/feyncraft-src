@@ -298,7 +298,8 @@ var HADRON_QUARK_CONTENT : Dictionary = {
 	Hadrons.Pion0:[[Particle.down,Particle.anti_down], [Particle.up, Particle.anti_up]],
 	Hadrons.KaonPlus:[[Particle.anti_strange, Particle.up]],
 	Hadrons.KaonMinus:[[Particle.strange, Particle.anti_up]],
-	Hadrons.Kaon0:[[Particle.down, Particle.anti_strange], [Particle.anti_down, Particle.strange]]
+	Hadrons.Kaon0:[[Particle.down, Particle.anti_strange], [Particle.anti_down, Particle.strange]],
+	Hadrons.Invalid:[]
 }
 
 const HADRON_NAMES : Dictionary = {
@@ -340,11 +341,11 @@ const HADRON_NAMES : Dictionary = {
 	Hadrons.Pion0:"pion_0",
 	Hadrons.KaonPlus:"kaon_plus",
 	Hadrons.KaonMinus:"kaon_minus",
-	Hadrons.Kaon0:"kaon_0"
+	Hadrons.Kaon0:"kaon_0",
+	Hadrons.Invalid:"Invalid"
 }
 
 @onready var PARTICLE_TEXTURES = {}
-
 
 var isOnBuild := false
 

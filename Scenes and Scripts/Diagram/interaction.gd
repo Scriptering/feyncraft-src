@@ -36,6 +36,7 @@ var connected_particles: Array[GLOBALS.Particle] : get = _get_connected_particle
 var connected_base_particles: Array[GLOBALS.Particle] : get = _get_connected_base_particles
 var connected_colour_lines: Array[ParticleLine] : get = _get_connected_colour_lines
 var connected_shade_lines: Array[ParticleLine] : get = _get_connected_shade_lines
+var dimensionality: float : get = _get_dimensionality
 
 var information_visible: bool = false
 var information_box
@@ -229,7 +230,7 @@ func get_invalid_quantum_numbers() -> Array[GLOBALS.QuantumNumber]:
 	var interaction_in_list := is_interaction_in_list()
 	
 	for quantum_number in GLOBALS.QuantumNumber.values():
-		var quantum_numbers_equal := before_quantum_sum[quantum_number] == after_quantum_sum[quantum_number]
+		var quantum_numbers_equal := is_equal_approx(before_quantum_sum[quantum_number], after_quantum_sum[quantum_number])
 		
 		if !is_weak:
 			if !quantum_numbers_equal:
@@ -288,10 +289,10 @@ func get_side_quantum_sum(side: Interaction.Side) -> Array[float]:
 	return quantum_sum
 
 func is_dimensionality_valid() -> bool:
-	return get_dimensionality() <= MAXIMUM_DIMENSIONALITY
+	return self.dimensionality <= MAXIMUM_DIMENSIONALITY
 
-func get_dimensionality() -> float:
-	var dimensionality : float = 0
+func _get_dimensionality() -> float:
+	dimensionality = 0
 	for line in connected_lines:
 		dimensionality += line.dimensionality
 	return dimensionality

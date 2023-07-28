@@ -8,8 +8,8 @@ extends Node2D
 @onready var Interactions = $GridArea/Interactions
 
 @onready var Crosshair = get_node("Crosshair")
-@onready var Initial = get_node("Initial")
-@onready var Final = get_node('Final')
+@onready var Initial : StateLine = get_node("Initial")
+@onready var Final : StateLine = get_node('Final')
 @onready var FPS = get_node('FPS')
 @onready var Cursor = get_node('Cursor')
 @onready var Pathfinding = get_node('PathFinding')
@@ -51,7 +51,7 @@ var interaction_matrix := ConnectionMatrix.new()
 
 func _ready():
 	States.init(Cursor, Crosshair, $diagram_actions)
-	$diagram_actions.init($GridArea/Interactions, $GridArea/ParticleLines, $ParticleButtons)
+	$diagram_actions.init($GridArea/Interactions, $GridArea/ParticleLines, $ParticleButtons, [Initial, Final])
 	$ShaderControl.init($PalletteButtons)
 	$Generation.init($GenerationButton)
 	

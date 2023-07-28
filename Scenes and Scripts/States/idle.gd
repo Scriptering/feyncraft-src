@@ -23,8 +23,7 @@ func input(event: InputEvent) -> State:
 		elif !event.pressed and $minimum_press_timer.is_stopped():
 			cursor.change_cursor(GLOBALS.CURSOR.default)
 	elif Input.is_action_just_pressed("clear"):
-		for interaction in get_tree().get_nodes_in_group("interactions"):
-			diagram_actions.delete_interaction(interaction)
+		diagram_actions.clear_diagram()
 	
 	return State.Null
 

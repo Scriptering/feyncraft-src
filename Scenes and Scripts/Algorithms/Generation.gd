@@ -51,31 +51,36 @@ func _generation_button_pressed(
 	initial_state: Array, final_state: Array, minDegree: int, maxDegree: int, interaction_checks: Array[bool]
 ) -> void:
 	generate_diagram(initial_state, final_state, minDegree, maxDegree, interaction_checks)
-	
+
 func init(GenerationButton: Control) -> void:
 	GenerationButton.connect("generate", Callable(self, "_generation_button_pressed"))
 
 func generate_diagram(initial_state_original: Array, final_state_original: Array, minDegree: int, maxDegree: int, interaction_checks: Array):
 	start_time = Time.get_ticks_usec()
+
+	var base_connection_matrix := ConnectionMatrix.new()
 	
 	var num_state_particles := 0
-	
+
 	var initial_state := initial_state_original.duplicate(true)
 	var final_state := final_state_original.duplicate(true)
+	
+	base_connection_matrix.init(initial_state.size()+final_state.size(), [initial_state.size(), final_state.size()])
+	var base_unconnected_matrix := initial_state + final_state
 	
 	for state in [initial_state, final_state]:
 		for interaction in state:
 			for particle in interaction:
 				num_state_particles += 1
 
-	var state_interactions : Array = initial_state + final_state
+	var state_interactions: Array = initial_state + final_state
 	var weak : bool
-	
+
 	InitialState = initial_state
 	FinalState = final_state
-	
+
 	Interaction_checks = interaction_checks
-	
+
 	match compare_quantum_numbers(initial_state, final_state):
 		WEAK:
 			weak = true
@@ -84,34 +89,31 @@ func generate_diagram(initial_state_original: Array, final_state_original: Array
 		INVALID:
 			print('Initial state quantum numbers do not match final state')
 			return 0
-	
+
 	var same_hadronic_particles = get_same_hadronic_particles(initial_state, final_state)
-	
 	var interaction_matrix : Array
-	
 	var unique_matrices := []
-	
 	var degreeRange = range(minDegree, maxDegree + 1)
-	
+
 	if minDegree == maxDegree:
 		degreeRange = [minDegree]
-	
+
 	var failed : bool = false
 	for degree in degreeRange:
 		failed = false
-		
+
 		if num_state_particles % 2 != degree % 2:
 			print('Skipped degree ' + str(degree))
 			continue
-		
+
 		for attempt in range(ATTEMPTS_PER_DEGREE * (degree + 1)):
 			failed = false
 			var uniquefailed = false
 			for _attempt in range(ATTEMPTS_FOR_UNIQUE_MATRIX_PER_DEGREE):
 				uniquefailed = false
 				interaction_matrix = generate_interaction_matrix(
-					initial_state.duplicate(true), final_state.duplicate(true), degree, same_hadronic_particles, unique_matrices
-					)
+						initial_state.duplicate(true), final_state.duplicate(true), degree, same_hadronic_particles, unique_matrices
+				)
 				if interaction_matrix == [NOT_UNIQUE]:
 					uniquefailed = true
 					continue
@@ -120,18 +122,18 @@ func generate_diagram(initial_state_original: Array, final_state_original: Array
 					break
 				else:
 					break
-			
+
 			if uniquefailed:
 				print('Failed to find unique diagram')
 				failed = true
 				continue
-			
+
 			if failed:
 				print('Failed to find any diagram')
 				break
 
 			unique_matrices.append(interaction_matrix)
-			
+
 			weak = false
 			var directional := false
 			if !weak:
