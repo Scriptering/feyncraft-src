@@ -272,13 +272,12 @@ func build_colour(force):
 			if (cdiagram.get_point_connections(p) != old_diagram.get_point_connections(p)) or (cdiagram.get_point_position(p) != old_diagram.get_point_position(p)):
 				same = false
 	
-	Level.check(false)
 	var check_colourless = false
-	for i in interactions:
-		i.check_valid()
-		if !i.valid_colourless:
+	for interaction in interactions:
+		interaction.check_valid()
+		if !interaction.valid_colourless:
 			check_colourless = true
-		elif !i.valid:
+		elif !interaction.valid:
 			check_colourless = false
 
 	if prev_c_paths.size() == 0:

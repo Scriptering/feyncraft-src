@@ -232,12 +232,10 @@ func get_invalid_quantum_numbers() -> Array[GLOBALS.QuantumNumber]:
 		var quantum_numbers_equal := before_quantum_sum[quantum_number] == after_quantum_sum[quantum_number]
 		
 		if !is_weak:
-			if quantum_numbers_equal:
-				continue
-			else:
+			if !quantum_numbers_equal:
 				invalid_quantum_numbers.append(quantum_number)
 		
-		if (
+		elif (
 			(quantum_number == GLOBALS.QuantumNumber.charge or
 			quantum_number == GLOBALS.QuantumNumber.lepton or
 			quantum_number == GLOBALS.QuantumNumber.electron or

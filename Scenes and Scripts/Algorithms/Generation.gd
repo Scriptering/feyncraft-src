@@ -1,5 +1,9 @@
 extends Node
 
+@onready var Level = get_tree().get_nodes_in_group('level')[0]
+@onready var diagram_actions : DiagramActions = Level.get_node("diagram_actions")
+
+
 enum INTERACTION_TYPE {electroweak, strong, higgs, weak}
 
 enum SHADE {NONE, BRIGHT, DARK}
@@ -11,7 +15,6 @@ const INTERACTION_SIZE = 3.0
 var INTERACTIONS := GLOBALS.INTERACTIONS
 var TOTAL_INTERACTIONS : Array
 
-@onready var Level = get_tree().get_nodes_in_group('level')[0]
 
 signal draw_diagram
 
@@ -98,7 +101,7 @@ func generate_diagram(initial_state_original: Array, final_state_original: Array
 		failed = false
 		
 		if num_state_particles % 2 != degree % 2:
-			print('Skipped degree ' + String(degree))
+			print('Skipped degree ' + str(degree))
 			continue
 		
 		for attempt in range(ATTEMPTS_PER_DEGREE * (degree + 1)):
@@ -786,15 +789,11 @@ func create_particles(matrix: Array):
 		for j in range(matrix.size()):
 			var connection = matrix[i][INDEX.connected][j]
 			if connection != []:
-				var particle = connection[0]
-				var l = Line.instantiate()
-				l.points[0] = drawing_interactions[i].position
-				l.points[1] = drawing_interactions[j].position
-				l.type = particle
-				l.placed = true
-				l.visible = false
-				
-				Level.add_child(l)
+				diagram_actions.place_line(
+					drawing_interactions[i].position,
+					drawing_interactions[j].position,
+					connection[0]
+				)
 
 func get_connections(matrix: Array, index: int):
 	var connections := []
@@ -844,18 +843,13 @@ func draw_directionless_particles(matrix):
 				continue
 			var particle = remove_anti(matrix[i][INDEX.connected][j][0])
 			if !particle in GLOBALS.DIRECTIONAL_PARTICLES:
-				var l = Line.instantiate()
-				l.points[0] = drawing_interactions[i].position
-				l.points[1] = drawing_interactions[j].position
-				
-				l.placed = true
-				l.type = particle
-				
-				Level.add_child(l)
-				
+				diagram_actions.place_line(
+					drawing_interactions[i].position,
+					drawing_interactions[j].position,
+					particle
+				)
+
 		j_index += 1
-	
-	Level.colourful()
 
 func matrix_connections(matrix : Array):
 	var connections := []

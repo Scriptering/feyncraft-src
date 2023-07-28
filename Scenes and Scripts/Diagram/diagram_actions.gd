@@ -1,3 +1,4 @@
+class_name DiagramActions
 extends Node
 
 var Interactions: Control
@@ -111,10 +112,18 @@ func can_place_interaction(test_position: Vector2) -> bool:
 			return false
 	return true
 
-func place_line(start_position: Vector2) -> void:
-	var line := Line.instantiate()
+func place_line(start_position: Vector2, end_position: Vector2 = Vector2.ZERO,
+				base_particle: GLOBALS.Particle = ParticleButtons.selected_particle
+) -> void:
+	var line : ParticleLine = Line.instantiate()
 	line.points[line.Point.Start] = start_position
-	line.base_particle = ParticleButtons.selected_particle
+	
+	if end_position != Vector2.ZERO:
+		line.points[line.Point.End] = end_position
+		line.is_placed = true
+	
+	line.base_particle = base_particle
+	
 	ParticleLines.add_child(line)
 
 

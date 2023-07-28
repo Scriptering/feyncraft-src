@@ -130,7 +130,7 @@ func _set_points(new_value: PackedVector2Array) -> void:
 		connect_to_interactions()
 		Level.update_statelines()
 	
-func set_textures():
+func set_textures() -> void:
 	LineMiddle.texture = line_texture
 	Text.texture = GLOBALS.PARTICLE_TEXTURES[self.particle_name]
 	SpareText.texture = GLOBALS.PARTICLE_TEXTURES[self.particle_name]
@@ -244,7 +244,6 @@ func update_line() -> void:
 	if !is_placed:
 		points[moving_point] = Crosshair.position
 	move_line()
-	
 	set_left_and_right_points()
 	set_anti()
 	

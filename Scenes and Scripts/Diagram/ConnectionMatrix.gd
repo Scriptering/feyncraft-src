@@ -3,9 +3,14 @@ class_name ConnectionMatrix
 signal interaction_added(point_id)
 signal interaction_removed(point_id)
 
+enum InteractionState {None, Initial, Final}
+enum {INVALID}
+
 var matrix : Array[Array] = [[[]]]:
 	set(_new_value):
 		pass
+
+var state_count: Array[int] = [0, 0, 0]
 
 func connect_interactions(
 	connect_from_id: int, connect_to_id: int,
@@ -42,13 +47,27 @@ func create_empty_array(array_size: int) -> Array:
 	
 	return empty_array
 
-func add_interaction(id: int = matrix.size()) -> void:
+func add_interaction(interaction_state: InteractionState = InteractionState.None) -> void:
+	var id: int = calculate_new_interaction_id(interaction_state)
+	
 	emit_signal("interaction_added", id)
 	
 	matrix.insert(id, create_empty_array(matrix.size()))
 	
 	for row in range(matrix.size()):
 		matrix[row].insert(id, [])
+	
+	state_count[interaction_state] += 1
+
+func calculate_new_interaction_id(interaction_state: InteractionState) -> int:
+	match interaction_state:
+		InteractionState.None:
+			return matrix.size()
+		InteractionState.Initial:
+			return state_count[InteractionState.Initial]
+		InteractionState.Final:
+			return state_count[InteractionState.Initial] + state_count[InteractionState.Final]
+	return INVALID
 
 func remove_interaction(id: int) -> void:
 	emit_signal("interaction_removed", id)
@@ -96,6 +115,24 @@ func reach_ids(id: int, reached_ids: Array[int], bidirectional: bool) -> Array[i
 
 func size() -> int:
 	return matrix.size()
+
+#func get_state_interaction_count() -> int:
+#	pass
+#
+#func get_initial_interaction_count() -> int:
+#	pass
+#
+#func get_final_interaction_count() -> int:
+#	pass
+#
+#func get_state_interactions() -> Array:
+#	pass
+#
+#func get_initial_interactions() -> Array:
+#	pass
+#
+#func get_final_interactions() -> Array:
+#	pass
 
 
 
