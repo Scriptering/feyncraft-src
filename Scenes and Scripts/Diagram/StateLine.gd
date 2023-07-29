@@ -75,7 +75,7 @@ func create_hadrons(quark_groups: Array) -> void:
 	for i in range(quark_groups.size()):
 		var quark_group:Array = quark_groups[i]
 		var group_hadron : GLOBALS.Hadrons = get_quark_group_hadron(quark_group)
-		if group_hadron == NOT_FOUND:
+		if group_hadron == GLOBALS.Hadrons.Invalid:
 			continue
 		var hadron = Hadron.new()
 		hadron.init(quark_group, group_hadron)
@@ -99,7 +99,9 @@ func sort_quark_groups(quark_groups: Array) -> Array:
 func get_connected_lines() -> Array[ParticleLine]:
 	var connected_lines: Array[ParticleLine] = []
 	for line in get_tree().get_nodes_in_group("lines"):
-		if line.get_on_state_line() == state or line.get_on_state_line() == StateType.Both:
+		var line_state_line : StateType = line.get_on_state_line()
+		var on_state_line : bool = line_state_line == state or line_state_line == StateType.Both
+		if on_state_line:
 			connected_lines.append(line)
 	return connected_lines
 

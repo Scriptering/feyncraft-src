@@ -7,11 +7,11 @@
 [node name="Cursor" type="Sprite2D" groups=["cursor"]]
 z_index = 10
 texture = ExtResource("1")
-offset = Vector2(8, 22)
+offset = Vector2(8, 16)
 script = ExtResource("2")
 Scale = 0.6
-
-[node name="ScrollTimer" type="Timer" parent="."]
+normal_offset = Vector2(8, 16)
+normal_heart_offset = Vector2(8, 25)
 
 [node name="Heart" type="Sprite2D" parent="."]
 visible = false

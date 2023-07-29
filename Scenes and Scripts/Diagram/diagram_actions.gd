@@ -1,16 +1,19 @@
+class_name DiagramActions
 extends Node
 
 var Interactions: Control
 var ParticleLines: Control
 var ParticleButtons: Control
+var StateLines: Array
 
 @onready var Line = preload("res://Scenes and Scripts/Diagram/line.tscn")
 @onready var InteractionInstance = preload("res://Scenes and Scripts/Diagram/interaction.tscn")
 
-func init(interactions: Control, particle_lines: Control, particle_buttons: Control) -> void:
+func init(interactions: Control, particle_lines: Control, particle_buttons: Control, state_lines: Array) -> void:
 	Interactions = interactions
 	ParticleLines = particle_lines
 	ParticleButtons = particle_buttons
+	StateLines = state_lines
 
 func get_selected_particle() -> GLOBALS.Particle:
 	return ParticleButtons.selected_particle
@@ -111,10 +114,24 @@ func can_place_interaction(test_position: Vector2) -> bool:
 			return false
 	return true
 
-func place_line(start_position: Vector2) -> void:
-	var line := Line.instantiate()
+func place_line(start_position: Vector2, end_position: Vector2 = Vector2.ZERO,
+				base_particle: GLOBALS.Particle = ParticleButtons.selected_particle
+) -> void:
+	var line : ParticleLine = Line.instantiate()
 	line.points[line.Point.Start] = start_position
-	line.base_particle = ParticleButtons.selected_particle
+	
+	if end_position != Vector2.ZERO:
+		line.points[line.Point.End] = end_position
+		line.is_placed = true
+	
+	line.base_particle = base_particle
+	
 	ParticleLines.add_child(line)
+
+func clear_diagram() -> void:
+	for interaction in get_tree().get_nodes_in_group("interactions"):
+		delete_interaction(interaction)
+	for state_line in StateLines:
+		state_line.clear_hadrons()
 
 

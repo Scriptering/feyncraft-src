@@ -1,5 +1,9 @@
 extends Node
 
+@onready var Level = get_tree().get_nodes_in_group('level')[0]
+@onready var diagram_actions : DiagramActions = Level.get_node("diagram_actions")
+
+
 enum INTERACTION_TYPE {electroweak, strong, higgs, weak}
 
 enum SHADE {NONE, BRIGHT, DARK}
@@ -11,7 +15,6 @@ const INTERACTION_SIZE = 3.0
 var INTERACTIONS := GLOBALS.INTERACTIONS
 var TOTAL_INTERACTIONS : Array
 
-@onready var Level = get_tree().get_nodes_in_group('level')[0]
 
 signal draw_diagram
 
@@ -44,63 +47,94 @@ var Interaction_checks : Array
 
 @onready var Line = preload("res://Scenes and Scripts/Diagram/line.tscn")
 
-func generate_diagram(initial_state_original: Array, final_state_original: Array, minDegree: int, maxDegree: int, interaction_checks: Array):
+func _generation_button_pressed(
+	initial_state: Array, final_state: Array, minDegree: int, maxDegree: int, interaction_checks: Array[bool]
+) -> void:
+	generate_diagram(initial_state, final_state, minDegree, maxDegree, interaction_checks)
+
+func init(GenerationButton: Control) -> void:
+	GenerationButton.connect("generate", Callable(self, "_generation_button_pressed"))
+
+func create_base_interaction_matrix(initial_state: Array, final_state: Array) -> InteractionMatrix:
+	var base_interaction_matrix := InteractionMatrix.new()
+	for state_interaction in initial_state:
+		base_interaction_matrix.add_unconnected_interaction(state_interaction, StateLine.StateType.Initial)
+	for state_interaction in final_state:
+		base_interaction_matrix.add_unconnected_interaction(state_interaction, StateLine.StateType.Final)
+	return base_interaction_matrix
+
+func get_hadron_particles(state_interactions: Array) -> Array[GLOBALS.Particle]:
+	var hadron_particles : Array[GLOBALS.Particle] = []
+	
+	for state_interaction in state_interactions:
+		var is_hadron: bool = state_interaction.size() > 1
+		if !is_hadron:
+			continue
+		hadron_particles += state_interaction
+	
+	return hadron_particles
+
+func get_degrees_to_check(
+	min_degree: int, max_degree: int, initial_state: Array, final_state: Array, number_of_state_particles: int
+) -> Array[int]:
+	var degrees_to_check: Array = []
+	var initial_hadron_particles := get_hadron_particles(initial_state)
+	var final_hadron_particles := get_hadron_particles(final_state)
+
+	var number_of_unconnectable_particles: int = (
+		number_of_state_particles - initial_hadron_particles.size() - final_hadron_particles.size() +
+		remove_like_particles(initial_hadron_particles, final_hadron_particles).size()
+	)
+
+	min_degree = max(number_of_unconnectable_particles%3, min_degree)
+	
+	for degree in range(min_degree, max_degree+1):
+		if (number_of_state_particles - degree) % 2 == 0:
+			degrees_to_check.append(degree)
+
+	return degrees_to_check
+
+func generate_diagram(initial_state: Array, final_state: Array, min_degree: int, max_degree: int, interaction_checks: Array):
 	start_time = Time.get_ticks_usec()
 	
-	var num_state_particles := 0
+	if compare_quantum_numbers(initial_state, final_state) == INVALID:
+		print('Initial state quantum numbers do not match final state')
+		return
 	
-	var initial_state := initial_state_original.duplicate(true)
-	var final_state := final_state_original.duplicate(true)
+	var weak: bool = compare_quantum_numbers(initial_state, final_state) == WEAK
+	var base_interaction_matrix := create_base_interaction_matrix(initial_state, final_state)
 	
-	for state in [initial_state, final_state]:
-		for interaction in state:
-			for particle in interaction:
-				num_state_particles += 1
-
-	var state_interactions : Array = initial_state + final_state
-	var weak : bool
-	
+	# remove later
 	InitialState = initial_state
 	FinalState = final_state
-	
 	Interaction_checks = interaction_checks
-	
-	match compare_quantum_numbers(initial_state, final_state):
-		WEAK:
-			weak = true
-		NOT_WEAK:
-			weak = false
-		INVALID:
-			print('Initial state quantum numbers do not match final state')
-			return 0
-	
-	var same_hadronic_particles = get_same_hadronic_particles(initial_state, final_state)
-	
+
+	var same_hadron_particles := get_same_particles(get_hadron_particles(initial_state), get_hadron_particles(final_state))
+
+	var degrees_to_check = get_degrees_to_check(
+		min_degree, max_degree, initial_state, final_state,
+		base_interaction_matrix.get_state_interaction_count(StateLine.StateType.Both)
+	)
+
 	var interaction_matrix : Array
-	
 	var unique_matrices := []
 	
-	var degreeRange = range(minDegree, maxDegree + 1)
-	
-	if minDegree == maxDegree:
-		degreeRange = [minDegree]
-	
+
 	var failed : bool = false
-	for degree in degreeRange:
+	for degree in degrees_to_check:
 		failed = false
-		
-		if num_state_particles % 2 != degree % 2:
-			print('Skipped degree ' + String(degree))
-			continue
-		
+
 		for attempt in range(ATTEMPTS_PER_DEGREE * (degree + 1)):
+			
+			#var interaction_matrix := generate_unique_interaction_matrix(base_interaction_matrix, degree, unique_matrices)
+			
 			failed = false
 			var uniquefailed = false
 			for _attempt in range(ATTEMPTS_FOR_UNIQUE_MATRIX_PER_DEGREE):
 				uniquefailed = false
 				interaction_matrix = generate_interaction_matrix(
-					initial_state.duplicate(true), final_state.duplicate(true), degree, same_hadronic_particles, unique_matrices
-					)
+						initial_state.duplicate(true), final_state.duplicate(true), degree, same_hadron_particles, unique_matrices
+				)
 				if interaction_matrix == [NOT_UNIQUE]:
 					uniquefailed = true
 					continue
@@ -109,18 +143,18 @@ func generate_diagram(initial_state_original: Array, final_state_original: Array
 					break
 				else:
 					break
-			
+
 			if uniquefailed:
 				print('Failed to find unique diagram')
 				failed = true
 				continue
-			
+
 			if failed:
 				print('Failed to find any diagram')
 				break
 
 			unique_matrices.append(interaction_matrix)
-			
+
 			weak = false
 			var directional := false
 			if !weak:
@@ -140,7 +174,9 @@ func generate_diagram(initial_state_original: Array, final_state_original: Array
 				var directional_attempt_matrix = interaction_matrix.duplicate(true)
 				
 				if directional:
-					directional_attempt_matrix = connect_directional_states(directional_attempt_matrix, initial_state, final_state, state_interactions, weak)
+					directional_attempt_matrix = connect_directional_states(
+						directional_attempt_matrix, initial_state, final_state, weak
+					)
 			
 				if directional_attempt_matrix == [INVALID]:
 					continue
@@ -149,7 +185,9 @@ func generate_diagram(initial_state_original: Array, final_state_original: Array
 					var directionless_attempt_matrix = directional_attempt_matrix.duplicate(true)
 					for i in range(directionless_attempt_matrix.size()):
 						if directionless_attempt_matrix[i][INDEX.unconnected].size() != 0:
-							directionless_attempt_matrix = connect_directionless(directionless_attempt_matrix, i, state_interactions.size())
+							directionless_attempt_matrix = connect_directionless(
+								directionless_attempt_matrix, i, base_interaction_matrix.get_state_interaction_count(StateLine.StateType.Both)
+								)
 							
 							if directionless_attempt_matrix == [INVALID]:
 								break
@@ -246,27 +284,25 @@ func seperate_connections(matrix : Array, index1 : int, index2: int) -> Array:
 	
 	return matrix
 
-func get_same_hadronic_particles(initial_state_original : Array, final_state_original : Array) -> Array:
-	var initial_hadrons := []
-	var final_hadrons := []
-	var same_particles := []
-	var initial_state := initial_state_original.duplicate(true)
-	var final_state := final_state_original.duplicate(true)
+func remove_like_particles(
+	initial_particles: Array[GLOBALS.Particle], final_particles: Array[GLOBALS.Particle]
+) -> Array[GLOBALS.Particle]:
+
+	for particle in final_particles:
+		initial_particles.erase(particle)
 	
-	for interaction in initial_state:
-		if interaction.size() > 1:
-			initial_hadrons.append(interaction)
+	return initial_particles
+
+func get_same_particles(
+	initial_particles : Array[GLOBALS.Particle], final_particles : Array[GLOBALS.Particle]
+) -> Array[GLOBALS.Particle]:
+	var same_particles: Array[GLOBALS.Particle]
+	var remaining_particles := initial_particles.duplicate()
 	
-	for interaction in final_state:
-		if interaction.size() > 1:
-			final_hadrons.append(interaction)
-	
-	for i in range(initial_hadrons.size()):
-		for particle in initial_hadrons[i]:
-			for j in range(final_hadrons.size()):
-				if particle in final_hadrons[j]:
-					same_particles.append(particle)
-					final_hadrons[j].erase(particle)
+	for particle in final_particles:
+		if particle in remaining_particles:
+			remaining_particles.erase(particle)
+			same_particles.append(particle)
 	
 	return same_particles
 
@@ -298,7 +334,8 @@ func convert_state_particles(particles : Array) -> Array:
 	
 	return converted_particles
 
-func connect_directional_states(matrix : Array, initial_state : Array, final_state : Array, combined_states : Array, _weak : bool) -> Array:
+func connect_directional_states(matrix : Array, initial_state : Array, final_state : Array, _weak : bool) -> Array:
+	var combined_states : Array = initial_state + final_state
 	var extra_points := [[],[]]
 	var Break := false
 	
@@ -527,6 +564,14 @@ func connect_interactions(matrix : Array, index1 : int, index2 : int, particle :
 	
 	return matrix
 
+func generate_unique_interaction_matrix(
+	base_interaction_matrix: InteractionMatrix, degree: int, same_hadron_particles, unique_matrices
+) -> InteractionMatrix:
+	
+	
+	
+	return InteractionMatrix.new()
+
 func generate_interaction_matrix(initial_state : Array, final_state : Array, degree_strength : int,
  same_hadronic_particles : Array, unique_matrices : Array) -> Array:
 	var interaction_matrix := []
@@ -538,7 +583,7 @@ func generate_interaction_matrix(initial_state : Array, final_state : Array, deg
 		for j in range(state_interactions[i].size()):
 			state_interactions[i][j] = remove_anti(state_interactions[i][j])
 			state_particles.append(state_interactions[i][j])
-	
+
 	var possible_N_same_connections := get_possible_N_same_connections(same_hadronic_particles.size(), state_particles.size(), degree_strength)
 	possible_N_same_connections.shuffle()
 	
@@ -692,7 +737,6 @@ func connect_interaction(interaction_and_number : Array, particles : Array) -> A
 	if connection_number != interaction_size:
 		interaction.shuffle()
 
-	
 	var connection_counter := 0
 	for i in range(interaction_size):
 		var particle = interaction[i]
@@ -711,16 +755,20 @@ func possible_interaction(current_num : int, connection_number : int,
  unconnected_particles : Array, num_interactions : int, four_interaction : bool) -> bool:
 	var new_unconnected_size = (unconnected_particles.size() + (INTERACTION_SIZE + int(four_interaction) - connection_number)) - connection_number
 	var num_interactions_left = num_interactions - (current_num + int(four_interaction))
-	
+
 	if connection_number == 0 or new_unconnected_size > INTERACTION_SIZE * num_interactions_left:
 		return false
-	
+
 	if new_unconnected_size == 0 and num_interactions_left == 0:
 		return true
-	
+
 	return is_connection_number_possible(new_unconnected_size, num_interactions_left)
 
-func is_connection_number_possible(n_unconnected : int, n_interactions : int) -> bool:
+func is_connection_number_possible(unconnected_particle_count : int, interaction_count : int) -> bool:
+	return unconnected_particle_count <= interaction_count * INTERACTION_SIZE
+
+# old
+func _is_connection_number_possible(n_unconnected : int, n_interactions : int) -> bool:
 	var counter = n_interactions * INTERACTION_SIZE
 	
 	if n_interactions == 1:
@@ -741,26 +789,22 @@ func create_interaction(type : Array, size : int) -> Array:
 
 	return [type, empty_array]
 
-func compare_quantum_numbers(state1 : Array, state2 : Array) -> int:
-	for i in range(1, NUM_QUANTUM_NUMBERS):
-		var state1_quantum_sum = 0
-		var state2_quantum_sum = 0
-		
-		for interaction in state1:
-			for particle in interaction:
-				state1_quantum_sum += sign(particle) * GLOBALS.QUANTUM_NUMBERS[remove_anti(particle)][i]
-			
-		for interaction in state2:
-			for particle in interaction:
-				state2_quantum_sum += sign(particle) * GLOBALS.QUANTUM_NUMBERS[remove_anti(particle)][i]
-		
-		if !is_equal_approx(state1_quantum_sum, state2_quantum_sum):
-			if i <= 6:
+func compare_quantum_numbers(initial_state : Array, final_state : Array) -> int:
+	for quantum_number in range(GLOBALS.QuantumNumber.size()):
+		if !is_equal_approx(calculate_quantum_sum(quantum_number, initial_state), calculate_quantum_sum(quantum_number, final_state)):
+			if quantum_number <= 6:
 				return INVALID
 			else:
 				return WEAK
 		
 	return NOT_WEAK
+
+func calculate_quantum_sum(quantum_number: GLOBALS.QuantumNumber, state_interactions: Array) -> float:
+	var quantum_sum: float = 0
+	for state_interaction in state_interactions:
+		for particle in state_interaction:
+			quantum_sum += sign(particle) * GLOBALS.QUANTUM_NUMBERS[remove_anti(particle)][quantum_number]
+	return quantum_sum
 
 func is_anti(particle) -> bool:
 	return particle < 0.0
@@ -778,15 +822,11 @@ func create_particles(matrix: Array):
 		for j in range(matrix.size()):
 			var connection = matrix[i][INDEX.connected][j]
 			if connection != []:
-				var particle = connection[0]
-				var l = Line.instantiate()
-				l.points[0] = drawing_interactions[i].position
-				l.points[1] = drawing_interactions[j].position
-				l.type = particle
-				l.placed = true
-				l.visible = false
-				
-				Level.add_child(l)
+				diagram_actions.place_line(
+					drawing_interactions[i].position,
+					drawing_interactions[j].position,
+					connection[0]
+				)
 
 func get_connections(matrix: Array, index: int):
 	var connections := []
@@ -836,18 +876,13 @@ func draw_directionless_particles(matrix):
 				continue
 			var particle = remove_anti(matrix[i][INDEX.connected][j][0])
 			if !particle in GLOBALS.DIRECTIONAL_PARTICLES:
-				var l = Line.instantiate()
-				l.points[0] = drawing_interactions[i].position
-				l.points[1] = drawing_interactions[j].position
-				
-				l.placed = true
-				l.type = particle
-				
-				Level.add_child(l)
-				
+				diagram_actions.place_line(
+					drawing_interactions[i].position,
+					drawing_interactions[j].position,
+					particle
+				)
+
 		j_index += 1
-	
-	Level.colourful()
 
 func matrix_connections(matrix : Array):
 	var connections := []

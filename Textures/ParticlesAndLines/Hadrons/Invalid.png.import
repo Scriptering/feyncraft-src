@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bwxkmxqxwdceq"
-path="res://.godot/imported/vision_button_normal.png-3859c022de2b4e92290b9f9f94c13098.ctex"
+uid="uid://b2udu3ji50o7p"
+path="res://.godot/imported/Invalid.png-c2a76c2407cf2796b51336d7c5ac630e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/Buttons/vision/vision_button_normal.png"
-dest_files=["res://.godot/imported/vision_button_normal.png-3859c022de2b4e92290b9f9f94c13098.ctex"]
+source_file="res://Textures/ParticlesAndLines/Hadrons/Invalid.png"
+dest_files=["res://.godot/imported/Invalid.png-c2a76c2407cf2796b51336d7c5ac630e.ctex"]
 
 [params]
 

@@ -1,16 +1,15 @@
 extends Node2D
 
-#hello world!
-
 @export var grid_size: int = 16
 
-@onready var Interaction = preload("res://Scenes and Scripts/Diagram/interaction.tscn")
+@onready var Vertex = preload("res://Scenes and Scripts/Diagram/interaction.tscn")
 @onready var Line = preload("res://Scenes and Scripts/Diagram/line.tscn")
 @onready var Info = preload("res://Scenes and Scripts/UI/Info/Info.tscn")
+@onready var Interactions = $GridArea/Interactions
 
 @onready var Crosshair = get_node("Crosshair")
-@onready var Initial = get_node("Initial")
-@onready var Final = get_node('Final')
+@onready var Initial : StateLine = get_node("Initial")
+@onready var Final : StateLine = get_node('Final')
 @onready var FPS = get_node('FPS')
 @onready var Cursor = get_node('Cursor')
 @onready var Pathfinding = get_node('PathFinding')
@@ -52,8 +51,9 @@ var interaction_matrix := ConnectionMatrix.new()
 
 func _ready():
 	States.init(Cursor, Crosshair, $diagram_actions)
-	$diagram_actions.init($GridArea/Interactions, $GridArea/ParticleLines, $ParticleButtons)
+	$diagram_actions.init($GridArea/Interactions, $GridArea/ParticleLines, $ParticleButtons, [Initial, Final])
 	$ShaderControl.init($PalletteButtons)
+	$Generation.init($GenerationButton)
 	
 	Generation.connect('draw_diagram', Callable(self, 'draw_diagram'))
 	
@@ -61,18 +61,6 @@ func _ready():
 	
 func _process(_delta):
 	FPS.text = str(Engine.get_frames_per_second())
-	
-	if Input.is_action_pressed('F') and Input.is_action_pressed('U') and Input.is_action_pressed('C') and Input.is_action_pressed('K') and !just_changed:
-		Cursor.angry = !Cursor.angry
-		just_changed = true
-		await get_tree().create_timer(1).timeout
-		just_changed = false
-	
-	if Input.is_action_pressed('L') and Input.is_action_pressed('O') and Input.is_action_pressed('V') and Input.is_action_pressed('E') and !just_changed:
-		Cursor.glowing = !Cursor.glowing
-		just_changed = true
-		await get_tree().create_timer(1).timeout
-		just_changed = false
 
 func colourful() -> void:
 	Pathfinding.colourful(true)
@@ -142,15 +130,15 @@ func draw_diagram(matrix : Array, initial_state : Array, final_state : Array):
 		
 		for state in [GLOBALS.STATE_LINE.INITIAL, GLOBALS.STATE_LINE.FINAL]:
 			var y = state_y_start
-			for interaction in states[state]:
-				for particle in interaction:
-					var i = Interaction.instantiate()
-					i.position.x = state_lines[state].position.x
-					i.position.y = y
+			for state_interaction in states[state]:
+				for particle in state_interaction:
+					var interaction: Interaction = Vertex.instantiate()
+					interaction.position.x = state_lines[state].position.x
+					interaction.position.y = y
 					y += 16
-					i.visible = false
-					i.add_to_group('drawing_interactions')
-					add_child(i)
+					interaction.visible = false
+					interaction.add_to_group('drawing_interactions')
+					Interactions.add_child(interaction)
 			
 				y += 32
 		
@@ -166,14 +154,14 @@ func draw_diagram(matrix : Array, initial_state : Array, final_state : Array):
 			var circle_y_start = 16 * 9
 			
 			for j in range(no_state_size):
-				var i = Interaction.instantiate()
+				var interaction : Interaction = Vertex.instantiate()
 					
-				i.position.x = snapped((Initial.position.x + Final.position.x) / 2 + radius * cos(degree_pos[j]), 16)
-				i.position.y = snapped(circle_y_start +  + radius * sin(degree_pos[j]), 16)
-				i.visible = false
-				i.add_to_group('drawing_interactions')
+				interaction.position.x = snapped((Initial.position.x + Final.position.x) / 2 + radius * cos(degree_pos[j]), 16)
+				interaction.position.y = snapped(circle_y_start +  + radius * sin(degree_pos[j]), 16)
+				interaction.visible = false
+				interaction.add_to_group('drawing_interactions')
 				
-				add_child(i)
+				Interactions.add_child(interaction)
 		
 		temp_matrix = Generation.split_hadrons(temp_matrix, initial_state, final_state)
 		
@@ -184,14 +172,14 @@ func draw_diagram(matrix : Array, initial_state : Array, final_state : Array):
 		Equation.set_symbols_visible(GLOBALS.STATE_LINE.INITIAL, false)
 		Equation.set_symbols_visible(GLOBALS.STATE_LINE.FINAL, false)
 		
-		await get_tree().idle_frame
+		await get_tree().process_frame
 		get_tree().call_group('lines', 'move_text', true)
 		get_tree().call_group('lines', 'movey_text', true)
 		
 		Equation.set_symbols_visible(GLOBALS.STATE_LINE.INITIAL, false)
 		Equation.set_symbols_visible(GLOBALS.STATE_LINE.FINAL, false)
 		
-		await get_tree().idle_frame
+		await get_tree().process_frame
 		get_tree().call_group('lines', 'move_text', true)
 		get_tree().call_group('lines', 'movey_text', true)
 		
@@ -215,8 +203,6 @@ func draw_diagram(matrix : Array, initial_state : Array, final_state : Array):
 	
 	if !generation_valid:
 		Generation.print_matrix(matrix)
-		
-	colourful()
 	
 	for interaction in get_tree().get_nodes_in_group('interactions'):
 		interaction.visible = true

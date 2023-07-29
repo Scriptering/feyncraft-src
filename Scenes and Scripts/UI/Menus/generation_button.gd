@@ -13,8 +13,8 @@ signal generate
 @onready var OptionsContainer = $MovingContainer/PanelContainer/VBoxContainer/OptionsContainer
 @onready var GenerateButton := $MovingContainer/PanelContainer/VBoxContainer/HBoxContainer/Generate
 
-@export var InitialState : Array[Array]
-@export var FinalState : Array[Array]
+@export var InitialState : Array
+@export var FinalState : Array
 @export var min_degree : int = -1
 @export var max_degree : int = -1
 
@@ -24,8 +24,6 @@ var can_generate : bool = false : set = _set_can_generate
 
 func _ready():
 	super._ready()
-	
-	self.connect('generate', Callable(Level, 'generate'))
 	
 	can_generate = !(InitialState == [] and FinalState == [])
 	
@@ -37,20 +35,10 @@ func _ready():
 
 func _set_can_generate(new_value: bool) -> void:
 	can_generate = new_value
-	GenerateButton.disabled = new_value
-	
-func _on_Save_pressed() -> void:
-	InitialState = get_state_interactions(Initial)
-	FinalState = get_state_interactions(Final)
-	
-	if InitialState.size() == 0 and FinalState.size() == 0:
-		self.can_generate = false
-	else:
-		self.can_generate = true
-		set_checks(Initial.connections + Final.connections)
+	GenerateButton.disabled = !new_value
 
-func get_state_interactions(state_line: StateLine) -> Array[Array]:
-	var state_interactions : Array[Array] = []
+func get_state_interactions(state_line: StateLine) -> Array:
+	var state_interactions : Array = []
 	
 	for particle in state_line.connected_lone_particles:
 		state_interactions.append([particle])
@@ -60,14 +48,8 @@ func get_state_interactions(state_line: StateLine) -> Array[Array]:
 		
 	return state_interactions
 
-func _on_Generate_pressed() -> void:
-	if !can_generate: return
-	
-	emit_signal('generate', InitialState, FinalState, DegreeRange.minValue, DegreeRange.maxValue,
-	[EM_check.pressed, strong_check.pressed, weak_check.pressed, electroweak_check.pressed])
-
-func set_checks(state_interactions : Array):
-	var particles : Array[GLOBALS.Particle] = []
+func set_checks(state_interactions : Array) -> void:
+	var particles : Array = []
 	for state_interaction in state_interactions:
 		particles += state_interaction
 	
@@ -102,3 +84,25 @@ func _on_em_toggled(button_pressed: bool) -> void:
 
 func _on_weak_toggled(button_pressed: bool) -> void:
 	electroweak_type_button_pressed(button_pressed)
+
+func _on_generate_pressed() -> void:
+	if !can_generate: return
+	
+	var checks: Array[bool] = [
+		EM_check.button_pressed,
+		strong_check.button_pressed,
+		weak_check.button_pressed,
+		electroweak_check.button_pressed
+	]
+	
+	emit_signal('generate', InitialState, FinalState, DegreeRange.minValue, DegreeRange.maxValue, checks)
+
+func _on_save_pressed() -> void:
+	InitialState = get_state_interactions(Initial)
+	FinalState = get_state_interactions(Final)
+	
+	if InitialState.size() == 0 and FinalState.size() == 0:
+		self.can_generate = false
+	else:
+		self.can_generate = true
+		set_checks(InitialState + FinalState)
