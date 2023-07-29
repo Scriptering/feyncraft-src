@@ -2,6 +2,9 @@ extends Node2D
 
 var list = [false, false, true, false, false, true]
 
+var min = -2
+var max = 2
+
 var array = [0, 1, 0, 0, 1]
 var g = [0, 1, 2, 3, 4]
 var anti = [-1, -1, -1]
@@ -16,6 +19,8 @@ enum boo {t, h, e, q = -6, u, i, c, k}
 var clicks : int = 0
 var unclicks : int = 0
 
+func _ready() -> void:
+	print(min%2)
 
 func is_anti(particle):
 	return sign(particle)
