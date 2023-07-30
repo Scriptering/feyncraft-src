@@ -1,9 +1,11 @@
 class_name ConnectionMatrix
+extends Resource
 
 signal interaction_added(point_id)
 signal interaction_removed(point_id)
 
 enum {INVALID}
+enum Connection {from_id, to_id, particle}
 
 const States : Array[StateLine.StateType] = [StateLine.StateType.Initial, StateLine.StateType.Final]
 
@@ -12,6 +14,7 @@ var connection_matrix : Array = []:
 		pass
 
 var state_count: PackedInt32Array = [0, 0, 0]
+	
 
 func init(new_size : int = 0, new_state_count: Array[int] = [0, 0, 0]) -> void:
 	if new_size < new_state_count[StateLine.StateType.Initial] + new_state_count[StateLine.StateType.Final]:
@@ -33,6 +36,9 @@ func connect_interactions(
 	if bidirectional:
 		connection_matrix[connect_to_id][connect_from_id].append(particle)
 
+func insert_connection(connection: Array) -> void:
+	connect_interactions(connection[Connection.from_id], connection[Connection.to_id], connection[Connection.particle])
+
 func disconnect_interactions(
 	disconnect_from_id: int, disconnect_to_id: int,
 	particle: int = GLOBALS.PARTICLE.none, bidirectional: bool = false) -> void:
@@ -43,6 +49,9 @@ func disconnect_interactions(
 	
 	if bidirectional:
 		connection_matrix[disconnect_to_id][disconnect_from_id].erase(particle)
+
+func remove_connection(connection: Array) -> void:
+	disconnect_interactions(connection[Connection.from_id], connection[Connection.to_id], connection[Connection.particle])
 
 func check_bounds(ids: Array[int]) -> void:
 	for id in ids:
