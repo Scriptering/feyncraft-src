@@ -19,9 +19,19 @@ var TOTAL_INTERACTIONS : Array
 signal draw_diagram
 
 enum INDEX {unconnected, connected, ID = 0, TYPE, START = 0, END}
-enum {WEAK, NOT_WEAK}
+enum {WEAK, NOT_WEAK, UNIQUE_GENERATION_FAILED}
 
 enum STATE {final = -1, neither, initial}
+
+var state_factor : Dictionary = {
+	StateLine.StateType.Initial: +1,
+	StateLine.StateType.Final: -1
+}
+
+var states : Array[StateLine.StateType] = [
+	StateLine.StateType.Initial,
+	StateLine.StateType.Final
+]
 
 var NUM_QUANTUM_NUMBERS = GLOBALS.QUANTUM_NUMBERS[0].size() -1
 
@@ -110,6 +120,7 @@ func generate_diagram(initial_state: Array, final_state: Array, min_degree: int,
 	Interaction_checks = interaction_checks
 
 	var same_hadron_particles := get_same_particles(get_hadron_particles(initial_state), get_hadron_particles(final_state))
+	var possible_hadron_connections := get_possible_hadron_connections(base_interaction_matrix, same_hadron_particles)
 
 	var degrees_to_check = get_degrees_to_check(
 		min_degree, max_degree, initial_state, final_state,
@@ -124,16 +135,24 @@ func generate_diagram(initial_state: Array, final_state: Array, min_degree: int,
 	for degree in degrees_to_check:
 		failed = false
 
+		var possible_hadron_connection_count := get_possible_hadron_connection_count(
+			base_interaction_matrix.get_unconnected_particle_count(StateLine.StateType.Both),
+			same_hadron_particles.size(), degree
+		)
+		
+		
 		for attempt in range(ATTEMPTS_PER_DEGREE * (degree + 1)):
 			
-			#var interaction_matrix := generate_unique_interaction_matrix(base_interaction_matrix, degree, unique_matrices)
+			var unique_interaction_matrix := generate_unique_interaction_matrix(
+				base_interaction_matrix, degree, possible_hadron_connections, unique_matrices
+			)
 			
 			failed = false
 			var uniquefailed = false
 			for _attempt in range(ATTEMPTS_FOR_UNIQUE_MATRIX_PER_DEGREE):
 				uniquefailed = false
 				interaction_matrix = generate_interaction_matrix(
-						initial_state.duplicate(true), final_state.duplicate(true), degree, same_hadron_particles, unique_matrices
+						initial_state.duplicate(true), final_state.duplicate(true), degree, same_hadron_particles, possible_hadron_connection_count, unique_matrices
 				)
 				if interaction_matrix == [NOT_UNIQUE]:
 					uniquefailed = true
@@ -565,15 +584,20 @@ func connect_interactions(matrix : Array, index1 : int, index2 : int, particle :
 	return matrix
 
 func generate_unique_interaction_matrix(
-	base_interaction_matrix: InteractionMatrix, degree: int, same_hadron_particles, unique_matrices
+	base_interaction_matrix: InteractionMatrix, degree: int, possible_hadron_connections: Array, unique_matrices: Array[InteractionMatrix]
 ) -> InteractionMatrix:
 	
+	possible_hadron_connections.shuffle()
+	
+	var unique_interaction_matrix : InteractionMatrix
+#	for _attempt in range(MAX_UNIQUE_GENERATION_ATTEMPTS):
+#		unique_interaction_matrix = 
 	
 	
 	return InteractionMatrix.new()
 
 func generate_interaction_matrix(initial_state : Array, final_state : Array, degree_strength : int,
- same_hadronic_particles : Array, unique_matrices : Array) -> Array:
+ same_hadronic_particles : Array, possible_hadron_connection_count: Array[int], unique_matrices : Array) -> Array:
 	var interaction_matrix := []
 	var state_interactions := initial_state.duplicate(true) + final_state.duplicate(true)
 	var state_particles := []
@@ -633,6 +657,45 @@ func generate_interaction_matrix(initial_state : Array, final_state : Array, deg
 		return [NOT_UNIQUE]
 
 	return interaction_matrix
+
+func get_unique_instances(array: Array) -> Array:
+	var unique_instances: Array = []
+	
+	for element in array:
+		if !element in unique_instances:
+			unique_instances.append(element)
+	
+	return unique_instances
+
+func get_possible_hadron_connections(interaction_matrix: InteractionMatrix, same_hadron_particles: Array[GLOBALS.Particle]) -> Array:
+	var unique_same_hadron_particles := get_unique_instances(same_hadron_particles)
+	var possible_hadron_connections : Array = []
+	
+	for particle in unique_same_hadron_particles:
+		var connect_from_ids: Array[PackedInt32Array] = [[], []]
+		var connect_to_ids: Array[PackedInt32Array] = [[], []]
+		for state in states:
+			for id in interaction_matrix.find_weighted_unconnected_state_particle(particle, state):
+				if !interaction_matrix.is_hadron(id):
+					continue
+				if is_anti(particle*state_factor[state]):
+					connect_from_ids[state].append(id)
+				else:
+					connect_to_ids[state].append(id)
+		
+		for state in states:
+			for connect_from_id in connect_from_ids[state]:
+				for connect_to_id in connect_to_ids[(state+1)%2]:
+					possible_hadron_connections.append([connect_from_id, connect_to_id, particle])
+
+	return possible_hadron_connections
+	
+
+func get_possible_hadron_connection_count(unconnected_state_particle_count: int, same_hadron_particles_count: int, degree: int) -> PackedInt32Array:
+	return range(
+		ceil((unconnected_state_particle_count - INTERACTION_SIZE*degree)/2),
+		same_hadron_particles_count+1
+	)
 
 func get_possible_N_same_connections(max_N : int, N_state_particles : int, degree : int) -> Array:
 	var possible_N := []
@@ -766,7 +829,6 @@ func possible_interaction(current_num : int, connection_number : int,
 
 func is_connection_number_possible(unconnected_particle_count : int, interaction_count : int) -> bool:
 	return unconnected_particle_count <= interaction_count * INTERACTION_SIZE
-
 # old
 func _is_connection_number_possible(n_unconnected : int, n_interactions : int) -> bool:
 	var counter = n_interactions * INTERACTION_SIZE

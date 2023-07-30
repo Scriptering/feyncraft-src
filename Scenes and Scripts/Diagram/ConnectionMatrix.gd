@@ -11,9 +11,9 @@ var connection_matrix : Array = []:
 	set(_new_value):
 		pass
 
-var state_count: Array[int] = [0, 0]
+var state_count: PackedInt32Array = [0, 0, 0]
 
-func init(new_size : int = 0, new_state_count: Array[int] = [0, 0]) -> void:
+func init(new_size : int = 0, new_state_count: Array[int] = [0, 0, 0]) -> void:
 	if new_size < new_state_count[StateLine.StateType.Initial] + new_state_count[StateLine.StateType.Final]:
 		push_error("Matrix size initiated less than state count.")
 	
@@ -129,11 +129,32 @@ func reach_ids(id: int, reached_ids: Array[int], bidirectional: bool) -> Array[i
 func size() -> int:
 	return connection_matrix.size()
 
-func get_state_interaction_count(state: StateLine.StateType) -> int:
+func get_starting_state_id(state: StateLine.StateType) -> int:
 	match state:
-		StateLine.StateType.None:
-			return size()
+		StateLine.StateType.Initial:
+			return 0
+		StateLine.StateType.Final:
+			return state_count[StateLine.StateType.Initial]
 		StateLine.StateType.Both:
-			return state_count[StateLine.StateType.Initial] + state_count[StateLine.StateType.Final]
+			return 0
+		StateLine.StateType.None:
+			return get_state_interaction_count(StateLine.StateType.Both)
+	
+	return INVALID
+
+func get_state_from_id(id: int) -> StateLine.StateType:
+	if id >= size():
+		push_error("id is greater than matrix size")
+	
+	if id < state_count[StateLine.StateType.Initial]:
+		return StateLine.StateType.Initial
+	elif id < state_count[StateLine.StateType.Initial] + state_count[StateLine.StateType.Final]:
+		return StateLine.StateType.Final
+	
+	return StateLine.StateType.None
+
+func get_state_interaction_count(state: StateLine.StateType) -> int:
+	if state == StateLine.StateType.Both:
+		return state_count[StateLine.StateType.Initial] + state_count[StateLine.StateType.Final]
 	
 	return state_count[state]
