@@ -3,18 +3,16 @@ extends Node
 @onready var Level = get_tree().get_nodes_in_group('level')[0]
 @onready var diagram_actions : DiagramActions = Level.get_node("diagram_actions")
 
-
 enum INTERACTION_TYPE {electroweak, strong, higgs, weak}
 
-enum SHADE {NONE, BRIGHT, DARK}
+enum Shade {Bright, Dark, None}
 
-const SHADED_PARTICLES := [GLOBALS.DIRECTIONAL_PARTICLES, GLOBALS.BRIGHT_PARTICLES, GLOBALS.DARK_PARTICLES]
+const SHADED_PARTICLES := [GLOBALS.BRIGHT_PARTICLES, GLOBALS.DARK_PARTICLES, GLOBALS.DIRECTIONAL_PARTICLES]
 
 const INTERACTION_SIZE = 3.0
 
 var INTERACTIONS := GLOBALS.INTERACTIONS
 var TOTAL_INTERACTIONS : Array
-
 
 signal draw_diagram
 
@@ -24,7 +22,9 @@ enum {
 	UNIQUE_GENERATION_ATTEMPTS = 100, UNIQUE_GENERATION_FAILED,
 	INTERACTION_GENERATION_ATTEMPTS = 100, INTERACTION_GENERATION_FAILED,
 	INTERACTION_MATRIX_GENERATION_ATTEMPTS = 100,
-	CONNECTION_ATTEMPTS = 100
+	CONNECTION_ATTEMPTS = 100, CONNECTION_FAILED,
+	MAX_PATH_STEPS = 100,
+	MAX_SHADE_CONNECTION_ROTATIONS = 100
 }
 
 enum STATE {final = -1, neither, initial}
@@ -38,6 +38,16 @@ var states : Array[StateLine.StateType] = [
 	StateLine.StateType.Initial,
 	StateLine.StateType.Final
 ]
+
+var shades : Array[Shade] = [
+	Shade.Bright,
+	Shade.Dark
+]
+
+var shade_factor : Dictionary = {
+	Shade.Bright: -1,
+	Shade.Dark: +1
+}
 
 var NUM_QUANTUM_NUMBERS = GLOBALS.QUANTUM_NUMBERS[0].size() -1
 
@@ -63,10 +73,20 @@ var Interaction_checks : Array
 
 @onready var Line = preload("res://Scenes and Scripts/Diagram/line.tscn")
 
+func _ready() -> void:
+	
+	await get_tree().create_timer(1).timeout
+	var diagram := generate_diagram([[GLOBALS.Particle.electron]], [[GLOBALS.Particle.electron]], 1, 10, get_usable_interactions([true, true, true, true]))
+	
+	emit_signal('draw_diagram', diagram)
+	
+
 func _generation_button_pressed(
 	initial_state: Array, final_state: Array, minDegree: int, maxDegree: int, interaction_checks: Array[bool]
 ) -> void:
-	generate_diagram(initial_state, final_state, minDegree, maxDegree, get_usable_interactions(interaction_checks))
+	var diagram := generate_diagram(initial_state, final_state, minDegree, maxDegree, get_usable_interactions(interaction_checks))
+	
+	emit_signal('draw_diagram', diagram)
 
 func init(GenerationButton: Control) -> void:
 	GenerationButton.connect("generate", Callable(self, "_generation_button_pressed"))
@@ -79,8 +99,8 @@ func create_base_interaction_matrix(initial_state: Array, final_state: Array) ->
 		base_interaction_matrix.add_unconnected_interaction(state_interaction, StateLine.StateType.Final)
 	return base_interaction_matrix
 
-func get_hadron_particles(state_interactions: Array) -> Array[GLOBALS.Particle]:
-	var hadron_particles : Array[GLOBALS.Particle] = []
+func get_hadron_particles(state_interactions: Array) -> Array:
+	var hadron_particles : Array = []
 	
 	for state_interaction in state_interactions:
 		var is_hadron: bool = state_interaction.size() > 1
@@ -92,7 +112,7 @@ func get_hadron_particles(state_interactions: Array) -> Array[GLOBALS.Particle]:
 
 func get_degrees_to_check(
 	min_degree: int, max_degree: int, initial_state: Array, final_state: Array, number_of_state_particles: int
-) -> Array[int]:
+) -> Array:
 	var degrees_to_check: Array = []
 	var initial_hadron_particles := get_hadron_particles(initial_state)
 	var final_hadron_particles := get_hadron_particles(final_state)
@@ -110,7 +130,9 @@ func get_degrees_to_check(
 
 	return degrees_to_check
 
-func generate_diagram(initial_state: Array, final_state: Array, min_degree: int, max_degree: int, usable_interactions: Array):
+func generate_diagram(
+	initial_state: Array, final_state: Array, min_degree: int, max_degree: int, usable_interactions: Array, find_all: bool = false
+) -> ConnectionMatrix:
 	start_time = Time.get_ticks_usec()
 	
 	if compare_quantum_numbers(initial_state, final_state) == INVALID:
@@ -129,15 +151,15 @@ func generate_diagram(initial_state: Array, final_state: Array, min_degree: int,
 
 	var degrees_to_check = get_degrees_to_check(
 		min_degree, max_degree, initial_state, final_state,
-		base_interaction_matrix.get_state_interaction_count(StateLine.StateType.Both)
+		base_interaction_matrix.get_state_count(StateLine.StateType.Both)
 	)
 
 	var interaction_matrix : Array
-	var unique_matrices := []
+	var unique_matrices : Array[InteractionMatrix] = []
+	var generated_connection_matrices : Array[ConnectionMatrix]
 
 	var failed : bool = false
 	for degree in degrees_to_check:
-		failed = false
 
 		var possible_hadron_connection_count := get_possible_hadron_connection_count(
 			base_interaction_matrix.get_unconnected_particle_count(StateLine.StateType.Both),
@@ -150,116 +172,29 @@ func generate_diagram(initial_state: Array, final_state: Array, min_degree: int,
 					usable_interactions
 			)
 			if unique_interaction_matrix == null:
+				print("Unable to find unique matrix")
 				continue
 				
-			unique_matrices.append(interaction_matrix)
-			
+			unique_matrices.append(unique_interaction_matrix)
 			unique_interaction_matrix = connect_interaction_matrix(unique_interaction_matrix)
 			
-			weak = false
-			var directional := false
-			if !weak:
-				for interaction in interaction_matrix:
-					for particle in interaction[INDEX.unconnected]:
-						if particle == GLOBALS.Particle.W:
-							weak = true
-						if particle in GLOBALS.DIRECTIONAL_PARTICLES:
-							directional = true
-			
-			var failed_to_connect := true
-			var temp_matrix : Array
-			for _attempt in range(ATTEMPTS_PER_DIAGRAM_PER_DEGREE * (degree + 1)):
-				if !failed_to_connect:
-					break
-				
-				var directional_attempt_matrix = interaction_matrix.duplicate(true)
-				
-				if directional:
-					directional_attempt_matrix = connect_directional_states(
-						directional_attempt_matrix, initial_state, final_state, weak
-					)
-			
-				if directional_attempt_matrix == [INVALID]:
-					continue
-				
-				for __attempt in range(ATTEMPTS_FOR_DIRECTIONLESS_PER_ATTEMPT):
-					var directionless_attempt_matrix = directional_attempt_matrix.duplicate(true)
-					for i in range(directionless_attempt_matrix.size()):
-						if directionless_attempt_matrix[i][INDEX.unconnected].size() != 0:
-							directionless_attempt_matrix = connect_directionless(
-								directionless_attempt_matrix, i, base_interaction_matrix.get_state_interaction_count(StateLine.StateType.Both)
-								)
-							
-							if directionless_attempt_matrix == [INVALID]:
-								break
-					
-					if directionless_attempt_matrix != [INVALID]:
-						temp_matrix = directionless_attempt_matrix
-						break
-				
-				if temp_matrix == [INVALID]:
-					continue
-				
-				var is_all_connected = true
-				for interaction in temp_matrix:
-					if interaction[INDEX.unconnected].size() != 0:
-						is_all_connected = false
-						break
-				
-				if !is_all_connected:
-					continue
-
-				if !Level.get_node('PathFinding').test_non(matrix_connections(temp_matrix)):
-					continue
-				
-				failed_to_connect = false
-			
-			if failed_to_connect:
-				print('Failed to connect')
+			if unique_interaction_matrix == null:
+				print("Unable to connect matrix")
 				continue
-			else:
-				interaction_matrix = temp_matrix
 				
-			if !failed:
-				print('Success! Found at degree ', degree,' which took ', attempt, ' attempts which took ', Time.get_ticks_usec() - start_time, ' usec')
-				break
-
-		if !failed:
-			break
+			print('Success! Found at degree ', degree,' which took ', attempt, ' attempts which took ', Time.get_ticks_usec() - start_time, ' usec')
+			
+			if !find_all:
+				return unique_interaction_matrix.get_connection_matrix()
+			
+			generated_connection_matrices.append(unique_interaction_matrix.get_connection_matrix())
+				
 		
 		print('Failed to find at degree ', degree)
 	
-	if failed:
-		return INVALID
-
-	interaction_matrix = seperate_double_connections(interaction_matrix)
-	emit_signal('draw_diagram', interaction_matrix, initial_state, final_state)
-	return VALID
-
-func connect_interaction_matrix(unconnected_interaction_matrix: InteractionMatrix) -> InteractionMatrix:
-	for _attempt in range(CONNECTION_ATTEMPTS):
-		var interaction_matrix : InteractionMatrix = unconnected_interaction_matrix.duplicate(true)
-		
-		var has_directional_particles : bool = interaction_matrix.get_unconnected_base_particles().any(
-			func(particle): particle in GLOBALS.DIRECTIONAL_PARTICLES
-		)
-		
-		if has_directional_particles:
-			connect_directional_particles(interaction_matrix)
-	
+	print('Generation failed')
 	return null
 
-func connect_directional_particles(interaction_matrix: InteractionMatrix) -> InteractionMatrix:
-	return null
-
-func get_usable_interactions(interaction_checks: Array[bool]) -> Array:
-	var usable_interactions : Array = []
-	
-	for interaction_type_count in range(GLOBALS.INTERACTIONS.size()):
-		if interaction_checks[interaction_type_count]:
-			usable_interactions += GLOBALS.INTERACTIONS[interaction_type_count]
-	
-	return usable_interactions
 
 func seperate_double_connections(matrix : Array):
 	var N_interactions : int = matrix.size()
@@ -277,18 +212,406 @@ func seperate_double_connections(matrix : Array):
 				matrix = seperate_connections(matrix, i, j)
 	
 	return matrix
+	
+func connect_interaction_matrix(unconnected_interaction_matrix: InteractionMatrix) -> InteractionMatrix:
+	var entry_points := unconnected_interaction_matrix.get_entry_points()
+	unconnected_interaction_matrix.reduce_to_base_particles()
+	
+	for _attempt in range(CONNECTION_ATTEMPTS):
+		var interaction_matrix : InteractionMatrix = unconnected_interaction_matrix.duplicate()
+		
+		var has_directional_particles : bool = interaction_matrix.get_unconnected_base_particles().any(
+			func(particle): return particle in GLOBALS.DIRECTIONAL_PARTICLES
+		)
+		
+		if has_directional_particles:
+			var connection_success := connect_directional_particles(interaction_matrix, entry_points)
+			if !connection_success:
+				continue
+		
+		var has_directionless_particles: bool = interaction_matrix.get_unconnected_base_particles().any(
+			func(particle): return particle not in GLOBALS.DIRECTIONAL_PARTICLES
+		)
+		
+		if has_directionless_particles:
+			var connection_success := connect_directionless_particles(interaction_matrix)
+			if !connection_success:
+				continue
+		
+		var diagram_connected := interaction_matrix.is_fully_connected()
+		
+		if diagram_connected:
+			return interaction_matrix
+	
+	return null
+
+func connect_directionless_particles(interaction_matrix: InteractionMatrix) -> bool:
+	for connect_from_id in range(interaction_matrix.unconnected_matrix.size()):
+		for particle in interaction_matrix.unconnected_matrix[connect_from_id]:
+			var available_points := get_available_points(interaction_matrix, connect_from_id, particle, [])
+			
+			if available_points.size() == 0:
+				return false
+			
+			var connect_to_id : int = choose_random(available_points)[0]
+			interaction_matrix.connect_interactions(connect_from_id, connect_to_id, particle)
+	
+	return true
+	
+func connect_directionless(matrix, index, no_states):
+	var interaction = matrix[index]
+	
+	for particle in interaction[INDEX.unconnected]:
+		if !base_particle(particle) in GLOBALS.DIRECTIONAL_PARTICLES:
+			var available_to_connect = []
+			for j in range(no_states - 1, matrix.size()):
+				if index == j:
+					continue
+				if (particle in matrix[j][INDEX.unconnected]):
+#				 (matrix[j][INDEX.connected][index].size() + matrix[index][INDEX.connected][j].size()) != (INTERACTION_SIZE - 1)):
+					available_to_connect.append(j)
+			
+			if available_to_connect.size() == 0:
+				return [INVALID]
+				
+			var random_connect = available_to_connect[randi() % available_to_connect.size()]
+			
+			matrix = connect_interactions(matrix, index, random_connect, particle)
+	
+	return matrix
+
+func connect_directional_particles(interaction_matrix: InteractionMatrix, forbidden_points: PackedInt32Array) -> bool:
+	var path_start_points : Array = []
+	var initial_path_start_points : Array = [
+		get_shade_start_points(interaction_matrix, Shade.Bright),
+		get_shade_start_points(interaction_matrix, Shade.Dark)
+	]
+	
+	for rotation_count in range(MAX_SHADE_CONNECTION_ROTATIONS):
+		for shade in shades:
+			if rotation_count == 0:
+				path_start_points += initial_path_start_points[shade]
+				
+			if path_start_points.size() == 0:
+				continue
+				
+			path_start_points += connect_shade_paths(interaction_matrix, path_start_points, shade, forbidden_points)
+			
+				
+			var connection_failed = path_start_points[-1] == CONNECTION_FAILED
+			if connection_failed:
+				return false
+			
+		if path_start_points.size() == 0:
+			break
+	
+	for shade in shades:
+		var connection_failed = connect_shade_loops(interaction_matrix, shade)
+		
+		if connection_failed:
+			return false
+	
+	return true
+	
+func connect_shade_loops(interaction_matrix: InteractionMatrix, shade: Shade) -> bool:
+	var loop_start_points: Array = []
+
+	for i in range(
+		interaction_matrix.get_starting_state_id(StateLine.StateType.None),
+		interaction_matrix.get_ending_state_id(StateLine.StateType.None)
+	):
+		if interaction_matrix.unconnected_matrix[i].any(func(particle): return particle in GLOBALS.SHADED_PARTICLES[shade]):
+			loop_start_points.append(i)
+	
+	for start_point in loop_start_points:
+		var connection_failed = connect_shade_paths(interaction_matrix, loop_start_points, shade, []) == [CONNECTION_FAILED]
+		
+		if connection_failed:
+			return false
+	
+	return true
+
+func connect_directional_loops(matrix : Array, shade : int) -> Array:
+	var shade_points := []
+	var middle_points := []
+	
+	for i in range(matrix.size()):
+		if in_state(i, InitialState, FinalState) == STATE.neither:
+			if has_directional(matrix[i], INDEX.unconnected, shade):
+				middle_points.append(i)
+	
+	shade_points += middle_points
+	
+	for point in shade_points:
+		if has_directional(matrix[point], INDEX.unconnected, shade):
+			var matrix_connecting_extrapoints = connect_path(matrix, point, [], shade_points, shade)
+
+			if matrix_connecting_extrapoints == [INVALID]:
+				return [INVALID]
+			
+			matrix = matrix_connecting_extrapoints[0]
+			shade_points = matrix_connecting_extrapoints[1]
+	
+	return matrix
+
+func connect_shade_paths(
+	interaction_matrix: InteractionMatrix, start_points: Array, shade : Shade, forbidden_points : PackedInt32Array
+) -> Array:
+	
+	var next_start_points : Array = []
+	
+	for start_point in start_points:
+		next_start_points += connect_shade_path(interaction_matrix, start_point, shade, forbidden_points)
+		if next_start_points == [CONNECTION_FAILED]:
+			return [CONNECTION_FAILED]
+	
+	return next_start_points
+
+func connect_shade_path(
+	interaction_matrix: InteractionMatrix, start_point: int, shade : Shade, forbidden_points : PackedInt32Array
+) -> Array:
+	var extra_start_points : Array = []
+	var current_point := start_point
+	var current_particle : GLOBALS.Particle = choose_random_shade_particle(interaction_matrix, current_point, shade)
+	
+	for _step in range(MAX_PATH_STEPS):
+		var available_points := get_available_points(interaction_matrix, current_point, current_particle, forbidden_points)
+		
+		if available_points.size() == 0:
+			return [CONNECTION_FAILED]
+		
+		var next_point : int = choose_random(available_points)[0]
+		
+		current_particle = choose_random_shade_particle(interaction_matrix, current_point, shade)
+		connect_shade_points(interaction_matrix, current_point, next_point, current_particle, shade)
+		
+		if current_particle == GLOBALS.Particle.W:
+			extra_start_points.append(current_point)
+		
+		current_point = next_point
+		
+		var path_finished = interaction_matrix.unconnected_matrix[current_point].size() == 0
+		
+		if path_finished:
+			break
+		
+		current_particle = choose_random_shade_particle(interaction_matrix, current_point, shade)
+	
+	return extra_start_points
+
+func connect_shade_points(
+	interaction_matrix: InteractionMatrix, current_point: int, next_point: int, current_particle: GLOBALS.Particle, shade: Shade
+) -> void:
+	
+	if current_particle != GLOBALS.Particle.W:
+		interaction_matrix.connect_interactions(current_point, next_point, current_particle)
+		return
+	
+	match shade:
+		Shade.Bright:
+			interaction_matrix.connect_interactions(current_point, next_point, current_particle)
+		Shade.Dark:
+			interaction_matrix.connect_interactions(next_point, current_point, current_particle)
+
+func get_available_points(
+	interaction_matrix: InteractionMatrix, current_point: int, current_particle: GLOBALS.Particle, forbidden_points: PackedInt32Array
+) -> PackedInt32Array:
+	
+	var available_points := interaction_matrix.find_all_unconnected_state_particle(current_particle, StateLine.StateType.None)
+	
+	if interaction_matrix.get_state_from_id(current_point) == StateLine.StateType.None:
+		available_points += interaction_matrix.find_all_unconnected_state_particle(current_particle, StateLine.StateType.Both)
+	
+	while available_points.has(current_point):
+		available_points.remove_at(available_points.find(current_point))
+	
+	for forbidden_point in forbidden_points:
+		while available_points.has(forbidden_point):
+			available_points.remove_at(available_points.find(forbidden_point))
+	
+	return available_points
+
+func choose_random_shade_particle(interaction_matrix: InteractionMatrix, id: int, shade: Shade) -> GLOBALS.Particle:
+	return choose_random(interaction_matrix.unconnected_matrix[id].filter(func(particle): return particle in SHADED_PARTICLES[shade]))[0]
+
+func connect_path(matrix: Array, start : int, end_points : Array, connecting_points_original : Array, shade : int) -> Array:
+	var current_point := start
+	var path := [current_point]
+	var next_point : int
+	var connecting_points = connecting_points_original.duplicate()
+	var extra_start_points := []
+	var extra_end_points := []
+	
+	for _step in range(MAX_STEPS):
+		var directionals = get_directionals(matrix[current_point], INDEX.unconnected, shade)
+		
+		if directionals.size() == 0:
+			return [INVALID]
+		
+		var current_particle = directionals[randi() % directionals.size()]
+		
+		next_point = connect_step(matrix, current_particle, current_point, connecting_points, shade)
+		
+		if next_point == INVALID:
+			return [INVALID]
+			
+		if current_particle == GLOBALS.Particle.W:
+			extra_start_points.append(current_point)
+			extra_end_points.append(next_point)
+			
+			match shade:
+				Shade.Dark:
+					matrix = connect_interactions(matrix, current_point, next_point, current_particle)
+				Shade.Bright:
+					matrix = connect_interactions(matrix, next_point, current_point, current_particle)
+		else:
+			matrix = connect_interactions(matrix, current_point, next_point, current_particle)
+
+		if all_connected(matrix[current_point]):
+			connecting_points.erase(current_point)
+		
+		path.append(next_point)
+		
+		if next_point in end_points or next_point == start:
+			if !has_directional(matrix[next_point], INDEX.unconnected, Shade.None):
+				connecting_points.erase(next_point)
+			return [matrix, connecting_points, [extra_start_points, extra_end_points]]
+		
+		current_point = next_point
+
+	return [INVALID]
+
+func get_directional_paths(matrix : Array, start_points : Array, end_points : Array, shade : int) -> Array:
+	var shade_points := end_points
+	var middle_points := []
+	var extra_start_points := []
+	var extra_end_points := []
+	
+	for i in range(matrix.size()):
+		if !start_points.has(i) and !end_points.has(i):
+			if has_directional(matrix[i], INDEX.unconnected, shade):
+				middle_points.append(i)
+	
+	shade_points += middle_points
+
+	for start in start_points:
+		if has_directional(matrix[start], INDEX.unconnected, shade):
+			if matrix[start][INDEX.unconnected].size() != 0:
+				var matrix_connecting_extrapoints = connect_path(matrix, start, end_points, shade_points, shade)
+
+				if matrix_connecting_extrapoints == [INVALID]:
+						return [INVALID]
+					
+				matrix = matrix_connecting_extrapoints[0]
+				shade_points = matrix_connecting_extrapoints[1]
+				extra_start_points += matrix_connecting_extrapoints[2][0]
+				extra_end_points += matrix_connecting_extrapoints[2][1]
+
+	return [matrix, [extra_start_points, extra_end_points]]
+
+func get_shade_start_points(interaction_matrix: InteractionMatrix, shade: Shade) -> Array:
+	var start_points : Array = []
+	
+	for i in range(interaction_matrix.get_state_count(StateLine.StateType.Both)):
+		for particle in interaction_matrix.unconnected_matrix[i]:
+			if (
+				(base_particle(particle) == GLOBALS.Particle.W and shade_factor[shade] == sign(particle)) or
+				(base_particle(particle) != GLOBALS.Particle.W and base_particle(particle) not in SHADED_PARTICLES[shade])
+			):
+				continue
+			
+			if state_factor[interaction_matrix.get_state_from_id(i)] * particle >= 0:
+				start_points.append(i)
+			
+	return start_points
+
+func get_startend_points(initial_state : Array, final_state : Array, combined_states : Array, shade : int) -> Array:
+	var start_points := []
+	var end_points := []
+	
+	for i in range(combined_states.size()):
+		for j in range(combined_states[i].size()):
+			var particle = combined_states[i][j]
+			if base_particle(particle) in SHADED_PARTICLES[shade]:
+				if base_particle(particle) == GLOBALS.Particle.W:
+					match shade:
+						Shade.Bright:
+							if -1 * in_state(i, initial_state, final_state) * sign(particle) > 0:
+								start_points.append(i)
+							else:
+								end_points.append(i)
+						Shade.Dark:
+							if in_state(i, initial_state, final_state) * sign(particle) > 0:
+								start_points.append(i)
+							else:
+								end_points.append(i)
+				
+				else:
+					if in_state(i, initial_state, final_state) * sign(particle) > 0:
+						start_points.append(i)
+					else:
+						end_points.append(i)
+	
+	return [start_points, end_points]
+
+func connect_directional_states(matrix : Array, initial_state : Array, final_state : Array, _weak : bool) -> Array:
+	var combined_states : Array = initial_state + final_state
+	var extra_points := [[],[]]
+	var Break := false
+	
+	for i in range(MAX_ATTEMPTS):
+		if Break:
+			break
+		for shade in [Shade.Bright, Shade.Dark]:
+			var startend_points = [[],[]]
+			
+			if i == INDEX.START:
+				startend_points = get_startend_points(initial_state, final_state, combined_states, shade)
+			elif extra_points == [[],[]]:
+				Break = true
+				break
+			
+			var start_points = startend_points[INDEX.START] + extra_points[INDEX.START]
+			var end_points = startend_points[INDEX.END] + extra_points[INDEX.END]
+			
+			if start_points != []:
+				var matrix_extrapoints = get_directional_paths(matrix, start_points, end_points, shade)
+				
+				if matrix_extrapoints == [INVALID]:
+					return [INVALID]
+					
+				matrix = matrix_extrapoints[0]
+				extra_points = matrix_extrapoints[1]
+
+		
+	for shade in [Shade.Bright, Shade.Dark]:
+		matrix = connect_directional_loops(matrix, shade)
+
+	if matrix == [INVALID]:
+		return [INVALID]
+
+	return matrix
+
+func get_usable_interactions(interaction_checks: Array[bool]) -> Array:
+	var usable_interactions : Array = []
+	
+	for interaction_type_count in range(GLOBALS.INTERACTIONS.size()):
+		if interaction_checks[interaction_type_count]:
+			usable_interactions += GLOBALS.INTERACTIONS[interaction_type_count]
+	
+	return usable_interactions
 
 func seperate_connections(matrix : Array, index1 : int, index2: int) -> Array:
 	var seperating_particle := INVALID
 	
 	for particle in matrix[index1][INDEX.connected][index2]:
-		if !particle in SHADED_PARTICLES[SHADE.NONE]:
+		if !particle in SHADED_PARTICLES[Shade.None]:
 			seperating_particle = particle
 			break
 	
 	if seperating_particle == INVALID:
 		for particle in matrix[index2][INDEX.connected][index1]:
-			if !particle in SHADED_PARTICLES[SHADE.NONE]:
+			if !particle in SHADED_PARTICLES[Shade.None]:
 				seperating_particle = particle
 				
 				var temp_index = index1
@@ -311,10 +634,10 @@ func seperate_connections(matrix : Array, index1 : int, index2: int) -> Array:
 	return matrix
 
 func remove_shared_particles(
-	particles1: Array[GLOBALS.Particle], particles2: Array[GLOBALS.Particle]
-) -> Array[GLOBALS.Particle]:
+	particles1: Array, particles2: Array
+) -> Array:
 	
-	var remaining_particles : Array[GLOBALS.Particle] = particles1.duplicate()
+	var remaining_particles : Array = particles1.duplicate()
 
 	for particle in particles2:
 		remaining_particles.erase(particle)
@@ -322,9 +645,9 @@ func remove_shared_particles(
 	return remaining_particles
 
 func get_shared_particles(
-	initial_particles : Array[GLOBALS.Particle], final_particles : Array[GLOBALS.Particle]
-) -> Array[GLOBALS.Particle]:
-	var same_particles: Array[GLOBALS.Particle] = []
+	initial_particles : Array, final_particles : Array
+) -> Array:
+	var same_particles: Array = []
 	var remaining_particles := initial_particles.duplicate()
 	
 	for particle in final_particles:
@@ -362,73 +685,6 @@ func convert_state_particles(particles : Array) -> Array:
 	
 	return converted_particles
 
-func connect_directional_states(matrix : Array, initial_state : Array, final_state : Array, _weak : bool) -> Array:
-	var combined_states : Array = initial_state + final_state
-	var extra_points := [[],[]]
-	var Break := false
-	
-	for i in range(MAX_ATTEMPTS):
-		if Break:
-			break
-		for shade in [SHADE.BRIGHT, SHADE.DARK]:
-			var startend_points = [[],[]]
-			
-			if i == INDEX.START:
-				startend_points = get_startend_points(initial_state, final_state, combined_states, shade)
-			elif extra_points == [[],[]]:
-				Break = true
-				break
-			
-			var start_points = startend_points[INDEX.START] + extra_points[INDEX.START]
-			var end_points = startend_points[INDEX.END] + extra_points[INDEX.END]
-			
-			if start_points != []:
-				var matrix_extrapoints = get_directional_paths(matrix, start_points, end_points, shade)
-				
-				if matrix_extrapoints == [INVALID]:
-					return [INVALID]
-					
-				matrix = matrix_extrapoints[0]
-				extra_points = matrix_extrapoints[1]
-
-		
-	for shade in [SHADE.BRIGHT, SHADE.DARK]:
-		matrix = connect_directional_loops(matrix, shade)
-
-	if matrix == [INVALID]:
-		return [INVALID]
-
-	return matrix
-
-func get_startend_points(initial_state : Array, final_state : Array, combined_states : Array, shade : int) -> Array:
-	var start_points := []
-	var end_points := []
-	
-	for i in range(combined_states.size()):
-		for j in range(combined_states[i].size()):
-			var particle = combined_states[i][j]
-			if remove_anti(particle) in SHADED_PARTICLES[shade]:
-				if remove_anti(particle) == GLOBALS.Particle.W:
-					match shade:
-						SHADE.BRIGHT:
-							if -1 * in_state(i, initial_state, final_state) * sign(particle) > 0:
-								start_points.append(i)
-							else:
-								end_points.append(i)
-						SHADE.DARK:
-							if in_state(i, initial_state, final_state) * sign(particle) > 0:
-								start_points.append(i)
-							else:
-								end_points.append(i)
-				
-				else:
-					if in_state(i, initial_state, final_state) * sign(particle) > 0:
-						start_points.append(i)
-					else:
-						end_points.append(i)
-	
-	return [start_points, end_points]
-
 func in_state(i : int, initial_state : Array = InitialState, final_state : Array = FinalState) -> int:
 	if i < initial_state.size():
 		return STATE.initial
@@ -436,107 +692,6 @@ func in_state(i : int, initial_state : Array = InitialState, final_state : Array
 		return STATE.final
 	else:
 		return STATE.neither
-
-func get_directional_paths(matrix : Array, start_points : Array, end_points : Array, shade : int) -> Array:
-	var shade_points := end_points
-	var middle_points := []
-	var extra_start_points := []
-	var extra_end_points := []
-	
-	for i in range(matrix.size()):
-		if !start_points.has(i) and !end_points.has(i):
-			if has_directional(matrix[i], INDEX.unconnected, shade):
-				middle_points.append(i)
-	
-	shade_points += middle_points
-
-	for start in start_points:
-		if has_directional(matrix[start], INDEX.unconnected, shade):
-			if matrix[start][INDEX.unconnected].size() != 0:
-				var matrix_connecting_extrapoints = connect_path(matrix, start, end_points, shade_points, shade)
-
-				if matrix_connecting_extrapoints == [INVALID]:
-						return [INVALID]
-					
-				matrix = matrix_connecting_extrapoints[0]
-				shade_points = matrix_connecting_extrapoints[1]
-				extra_start_points += matrix_connecting_extrapoints[2][0]
-				extra_end_points += matrix_connecting_extrapoints[2][1]
-
-	return [matrix, [extra_start_points, extra_end_points]]
-
-func connect_directional_loops(matrix : Array, shade : int) -> Array:
-	var shade_points := []
-	var middle_points := []
-	
-	for i in range(matrix.size()):
-		if in_state(i, InitialState, FinalState) == STATE.neither:
-			if has_directional(matrix[i], INDEX.unconnected, shade):
-				middle_points.append(i)
-	
-	shade_points += middle_points
-	
-	for point in shade_points:
-		if has_directional(matrix[point], INDEX.unconnected, shade):
-			var matrix_connecting_extrapoints = connect_path(matrix, point, [], shade_points, shade)
-
-			if matrix_connecting_extrapoints == [INVALID]:
-				return [INVALID]
-			
-			matrix = matrix_connecting_extrapoints[0]
-			shade_points = matrix_connecting_extrapoints[1]
-	
-	return matrix
-
-func connect_path(matrix: Array, start : int, end_points : Array, connecting_points_original : Array, shade : int) -> Array:
-	var current_point := start
-	var path := [current_point]
-	var next_point : int
-	var connecting_points = connecting_points_original.duplicate()
-	var extra_start_points := []
-	var extra_end_points := []
-	
-	for _step in range(MAX_STEPS):
-		var directionals = get_directionals(matrix[current_point], INDEX.unconnected, shade)
-		
-		if directionals.size() == 0:
-			return [INVALID]
-		
-		var current_particle = directionals[randi() % directionals.size()]
-		
-		next_point = connect_step(matrix, current_particle, current_point, connecting_points, shade)
-		
-		if next_point == INVALID:
-			return [INVALID]
-			
-		if current_particle == GLOBALS.Particle.W:
-			extra_start_points.append(current_point)
-			extra_end_points.append(next_point)
-			
-			match shade:
-				SHADE.DARK:
-					matrix = connect_interactions(matrix, current_point, next_point, current_particle)
-				SHADE.BRIGHT:
-					matrix = connect_interactions(matrix, next_point, current_point, current_particle)
-		else:
-			matrix = connect_interactions(matrix, current_point, next_point, current_particle)
-			
-			
-			#matrix = connect_interactions(matrix, next_point, current_point, current_particle)
-
-		if all_connected(matrix[current_point]):
-			connecting_points.erase(current_point)
-		
-		path.append(next_point)
-		
-		if next_point in end_points or next_point == start:
-			if !has_directional(matrix[next_point], INDEX.unconnected, SHADE.NONE):
-				connecting_points.erase(next_point)
-			return [matrix, connecting_points, [extra_start_points, extra_end_points]]
-		
-		current_point = next_point
-
-	return [INVALID]
 
 func connect_step(matrix : Array, particle : int, current_point : int,
  connecting_points : Array, _shade : int) -> int:
@@ -561,27 +716,6 @@ func print_time():
 func all_connected(interaction : Array) -> bool:
 	return interaction[INDEX.unconnected].size() == 0
 
-func connect_directionless(matrix, index, no_states):
-	var interaction = matrix[index]
-	
-	for particle in interaction[INDEX.unconnected]:
-		if !remove_anti(particle) in GLOBALS.DIRECTIONAL_PARTICLES:
-			var available_to_connect = []
-			for j in range(no_states - 1, matrix.size()):
-				if index == j:
-					continue
-				if (particle in matrix[j][INDEX.unconnected]):
-#				 (matrix[j][INDEX.connected][index].size() + matrix[index][INDEX.connected][j].size()) != (INTERACTION_SIZE - 1)):
-					available_to_connect.append(j)
-			
-			if available_to_connect.size() == 0:
-				return [INVALID]
-				
-			var random_connect = available_to_connect[randi() % available_to_connect.size()]
-			
-			matrix = connect_interactions(matrix, index, random_connect, particle)
-	
-	return matrix
 
 func connect_interactions(matrix : Array, index1 : int, index2 : int, particle : int) -> Array:
 	
@@ -594,20 +728,19 @@ func connect_interactions(matrix : Array, index1 : int, index2 : int, particle :
 
 func generate_unique_interaction_matrix(
 	base_interaction_matrix: InteractionMatrix, degree: int, possible_hadron_connections: Array,
-	possible_hadron_connection_count: Array[int], unique_matrices: Array[InteractionMatrix], usable_interactions: Array
+	possible_hadron_connection_count: Array, unique_matrices: Array[InteractionMatrix], usable_interactions: Array
 ) -> InteractionMatrix:
 	
 	var unique_interaction_matrix : InteractionMatrix
 	
 	for _attempt in range(UNIQUE_GENERATION_ATTEMPTS):
-		for hadron_connection_count in possible_hadron_connection_count:
-			unique_interaction_matrix = generate_interaction_matrix(
-				base_interaction_matrix, degree, possible_hadron_connections, hadron_connection_count, usable_interactions
-			)
-			var generation_failed: bool = unique_interaction_matrix == null
-			
-			if generation_failed:
-				continue
+		unique_interaction_matrix = generate_interaction_matrix(
+			base_interaction_matrix, degree, possible_hadron_connections, possible_hadron_connection_count, usable_interactions
+		)
+		var generation_failed: bool = unique_interaction_matrix == null
+		
+		if generation_failed:
+			continue
 		
 		if unique_interaction_matrix in unique_matrices:
 			if _attempt == UNIQUE_GENERATION_ATTEMPTS-1:
@@ -617,16 +750,18 @@ func generate_unique_interaction_matrix(
 	return unique_interaction_matrix
 
 func generate_interaction_matrix(
-	base_interaction_matrix: InteractionMatrix, degree: int, hadron_connections: Array, possible_hadron_connection_count: int,
+	base_interaction_matrix: InteractionMatrix, degree: int, hadron_connections: Array, possible_hadron_connection_count: Array,
 	usable_interactions: Array
 ) -> InteractionMatrix:
 	
 	for _attempt in range(INTERACTION_MATRIX_GENERATION_ATTEMPTS):
 		for hadron_connection_count in possible_hadron_connection_count:
-			var interaction_matrix : InteractionMatrix = base_interaction_matrix.duplicate(true)
+			var interaction_matrix : InteractionMatrix = base_interaction_matrix.duplicate()
 			insert_random_hadron_connections(interaction_matrix, hadron_connections, hadron_connection_count)
 			
-			var interactions : Array = generate_interactions(interaction_matrix.get_unconnected_base_particles(), degree, usable_interactions)
+			var interactions : Array = generate_interactions(
+				interaction_matrix.get_unconnected_base_particles(), degree, usable_interactions
+			)
 			
 			if interactions == [INTERACTION_GENERATION_FAILED]:
 				continue
@@ -646,15 +781,15 @@ func insert_random_hadron_connections(
 		interaction_matrix.insert_connection(hadron_connections[i])
 
 func _generate_interaction_matrix(initial_state : Array, final_state : Array, degree_strength : int,
- same_hadronic_particles : Array, possible_hadron_connection_count: Array[int], unique_matrices : Array) -> Array:
+ same_hadronic_particles : Array, possible_hadron_connection_count: Array, unique_matrices : Array) -> Array:
 	var interaction_matrix := []
-	var state_interactions := initial_state.duplicate(true) + final_state.duplicate(true)
+	var state_interactions := initial_state.duplicate() + final_state.duplicate()
 	var state_particles := []
 	var connect_straight := false
 
 	for i in range(state_interactions.size()):
 		for j in range(state_interactions[i].size()):
-			state_interactions[i][j] = remove_anti(state_interactions[i][j])
+			state_interactions[i][j] = base_particle(state_interactions[i][j])
 			state_particles.append(state_interactions[i][j])
 
 	var possible_N_same_connections := get_possible_N_same_connections(same_hadronic_particles.size(), state_particles.size(), degree_strength)
@@ -672,7 +807,7 @@ func _generate_interaction_matrix(initial_state : Array, final_state : Array, de
 	
 	for _attempt in range(MAX_INTERACTION_ATTEMPTS):
 		for n in possible_N_same_connections:
-			var temp_state_particles := state_particles.duplicate(true)
+			var temp_state_particles := state_particles.duplicate()
 			
 			hadron_connect_indicies = get_hadron_connect_indicies(initial_state, final_state, same_hadronic_particles, n)
 			
@@ -680,7 +815,7 @@ func _generate_interaction_matrix(initial_state : Array, final_state : Array, de
 				hadron_connect_indicies.append([0, 1, initial_state[0][0]])
 			
 			for i in range(hadron_connect_indicies.size()):
-				var particle : GLOBALS.Particle = remove_anti(hadron_connect_indicies[i][2])
+				var particle : GLOBALS.Particle = base_particle(hadron_connect_indicies[i][2])
 				temp_state_particles.erase(particle)
 				temp_state_particles.erase(particle)
 			
@@ -716,7 +851,7 @@ func get_unique_instances(array: Array) -> Array:
 	
 	return unique_instances
 
-func get_possible_hadron_connections(interaction_matrix: InteractionMatrix, same_hadron_particles: Array[GLOBALS.Particle]) -> Array:
+func get_possible_hadron_connections(interaction_matrix: InteractionMatrix, same_hadron_particles: Array) -> Array:
 	var unique_same_hadron_particles := get_unique_instances(same_hadron_particles)
 	var possible_hadron_connections : Array = []
 	
@@ -741,10 +876,10 @@ func get_possible_hadron_connections(interaction_matrix: InteractionMatrix, same
 
 func get_possible_hadron_connection_count(
 	unconnected_state_particle_count: int, same_hadron_particles_count: int, degree: int
-) -> PackedInt32Array:
+) -> Array:
 	
 	var possible_hadron_connection_count := range(
-		ceil((unconnected_state_particle_count - INTERACTION_SIZE*degree)/2),
+		max(ceil((unconnected_state_particle_count - INTERACTION_SIZE*degree)/2), 0),
 		same_hadron_particles_count+1
 	)
 	
@@ -763,10 +898,10 @@ func get_possible_N_same_connections(max_N : int, N_state_particles : int, degre
 
 func get_hadron_connect_indicies(initial_state_original : Array, final_state_original : Array, same_particles : Array, n : int):
 	var indicies := []
-	var initial_state := initial_state_original.duplicate(true)
+	var initial_state := initial_state_original.duplicate()
 	var initial_range := range(initial_state.size())
 	initial_range.shuffle()
-	var final_state := final_state_original.duplicate(true)
+	var final_state := final_state_original.duplicate()
 	var final_range := range(final_state.size())
 	final_range.shuffle()
 	same_particles.shuffle()
@@ -783,13 +918,13 @@ func get_hadron_connect_indicies(initial_state_original : Array, final_state_ori
 				final_state[j].erase(particle)
 				
 				if is_anti(particle):
-					indicies.append([j + initial_state.size(), i, remove_anti(particle)])
+					indicies.append([j + initial_state.size(), i, base_particle(particle)])
 				else:
-					indicies.append([i, j + initial_state.size(), remove_anti(particle)])
+					indicies.append([i, j + initial_state.size(), base_particle(particle)])
 	
 	return indicies
 
-func generate_interactions(unconnected_particles: Array[GLOBALS.Particle], degree: int, usable_interactions: Array) -> Array:
+func generate_interactions(unconnected_particles: Array, degree: int, usable_interactions: Array) -> Array:
 	var interactions : Array = []
 	
 	var skip_next_interaction : bool = false
@@ -810,7 +945,10 @@ func generate_interactions(unconnected_particles: Array[GLOBALS.Particle], degre
 	
 	return interactions
 
-func choose_random(array: Array, choose_count: int) -> Array:
+func choose_random(array: Array, choose_count: int = 1) -> Array:
+	if array.size() == 0:
+		push_error("Choose random array is size 0")
+	
 	var chosen_random := []
 	var random_start_index := randi() % array.size()
 	
@@ -820,11 +958,11 @@ func choose_random(array: Array, choose_count: int) -> Array:
 	return chosen_random
 
 func add_next_interaction(
-	interactions: Array, interaction_connections: Array, unconnected_particles: Array[GLOBALS.Particle]
-) -> Array[GLOBALS.Particle]:
+	interactions: Array, interaction_connections: Array, unconnected_particles: Array
+) -> Array:
 	
 	var random_interaction_id := randi() % interaction_connections.size()
-	var random_interaction : Array[GLOBALS.Particle] = interaction_connections[random_interaction_id][INDEX.INTERACTION]
+	var random_interaction : Array = interaction_connections[random_interaction_id][INDEX.INTERACTION]
 	
 	interactions.append(random_interaction)
 	unconnected_particles = remove_shared_particles(
@@ -835,7 +973,7 @@ func add_next_interaction(
 	return random_interaction
 
 func get_possible_interaction_connections(
-	unconnected_particles: Array[GLOBALS.Particle], interaction_count: int, usable_interactions: Array
+	unconnected_particles: Array, interaction_count: int, usable_interactions: Array
 ) -> Array:
 	var possible_interaction_connections := []
 	var possible_connection_count := []
@@ -852,11 +990,11 @@ func get_possible_interaction_connections(
 
 	return possible_interaction_connections
 
-func interaction_size(interaction: Array[GLOBALS.Particle]) -> int:
+func interaction_size(interaction: Array) -> int:
 	return 1 + int(interaction.size() == 4)
 
 func is_interaction_possible(
-	interaction: Array[GLOBALS.Particle], unconnected_particles: Array[GLOBALS.Particle], interaction_count: int
+	interaction: Array, unconnected_particles: Array, interaction_count: int
 ) -> bool:
 	
 	var remaining_unconnected_particles_count := remove_shared_particles(interaction, unconnected_particles).size()
@@ -997,13 +1135,13 @@ func calculate_quantum_sum(quantum_number: GLOBALS.QuantumNumber, state_interact
 	var quantum_sum: float = 0
 	for state_interaction in state_interactions:
 		for particle in state_interaction:
-			quantum_sum += sign(particle) * GLOBALS.QUANTUM_NUMBERS[remove_anti(particle)][quantum_number]
+			quantum_sum += sign(particle) * GLOBALS.QUANTUM_NUMBERS[base_particle(particle)][quantum_number]
 	return quantum_sum
 
 func is_anti(particle) -> bool:
 	return particle < 0.0
 
-func remove_anti(particle) -> GLOBALS.Particle:
+func base_particle(particle) -> GLOBALS.Particle:
 	return abs(particle)
 
 func add_anti(particle) -> GLOBALS.Particle:
@@ -1036,10 +1174,10 @@ func has_directional(interaction : Array, connection_index : int, shade : int) -
 		match connection_index:
 			INDEX.connected:
 				for particle in connection:
-					if remove_anti(particle) in SHADED_PARTICLES[shade]:
+					if base_particle(particle) in SHADED_PARTICLES[shade]:
 						return true
 			INDEX.unconnected:
-				if remove_anti(connection) in SHADED_PARTICLES[shade]:
+				if base_particle(connection) in SHADED_PARTICLES[shade]:
 						return true
 	
 	return false
@@ -1068,7 +1206,7 @@ func draw_directionless_particles(matrix):
 		for j in range(j_index, matrix.size()):
 			if matrix[i][INDEX.connected][j] == []:
 				continue
-			var particle = remove_anti(matrix[i][INDEX.connected][j][0])
+			var particle = base_particle(matrix[i][INDEX.connected][j][0])
 			if !particle in GLOBALS.DIRECTIONAL_PARTICLES:
 				diagram_actions.place_line(
 					drawing_interactions[i].position,

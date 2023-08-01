@@ -10,6 +10,10 @@ extends Node2D
 enum {NOT_FOUND}
 
 enum StateType {Initial, Final, None, Both}
+const state_factor : Dictionary = {
+	StateType.Initial: +1,
+	StateType.Final: -1
+}
 
 var hadrons : Array[Hadron] = []
 var joints : Array[HadronJoint] = []

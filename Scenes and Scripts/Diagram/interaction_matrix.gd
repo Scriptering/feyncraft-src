@@ -4,7 +4,6 @@ extends ConnectionMatrix
 enum {UNCONNECTED, CONNECTED}
 
 var unconnected_matrix: Array = []
-var interaction_matrix : Array = [unconnected_matrix, connection_matrix]
 
 var unconnected_particle_count: PackedInt32Array = [0, 0, 0]
 
@@ -17,7 +16,7 @@ func add_interaction(
 	unconnected_matrix.insert(id, [])
 
 func add_unconnected_interaction(
-	unconnected_particles: Array[GLOBALS.Particle] = [],
+	unconnected_particles: Array = [],
 	interaction_state: StateLine.StateType = StateLine.StateType.None,
 	id : int = calculate_new_interaction_id(interaction_state)
 ) -> void:
@@ -74,7 +73,7 @@ func find_unconnected_particle(particle: GLOBALS.Particle) -> PackedInt32Array:
 
 func find_all_unconnected_state_particle(particle: GLOBALS.Particle, state: StateLine.StateType) -> PackedInt32Array:
 	var found_ids: PackedInt32Array = []
-	for id in range(get_starting_state_id(state), get_starting_state_id(state)+get_state_interaction_count(state)):
+	for id in range(get_starting_state_id(state), get_ending_state_id(state)):
 		for unconnected_particle in unconnected_matrix[id]:
 			if unconnected_particle == particle:
 				found_ids.append(id)
@@ -83,11 +82,43 @@ func find_all_unconnected_state_particle(particle: GLOBALS.Particle, state: Stat
 func is_hadron(id: int) -> bool:
 	return unconnected_matrix[id].size() > 1
 
-func get_unconnected_particles() -> Array[GLOBALS.Particle]:
-	var unconnected_particles : Array[GLOBALS.Particle] = []
+func get_unconnected_particles() -> Array:
+	var unconnected_particles : Array = []
 	for interaction in unconnected_matrix:
 		unconnected_particles += interaction
 	return unconnected_particles
 
 func get_unconnected_base_particles() -> Array:
 	return get_unconnected_particles().map(func(particle): return abs(particle))
+
+func get_unconnected_state(state: StateLine.StateType) -> Array:
+	return unconnected_matrix.slice(get_starting_state_id(state), get_ending_state_id(state))
+
+func get_entry_points() -> PackedInt32Array:
+	var entry_points : PackedInt32Array = []
+	
+	for i in range(get_state_count(StateLine.StateType.Both)):
+		if unconnected_matrix[i].any(func(particle): return state_factor[get_state_from_id(i)] * particle > 0):
+			entry_points.append(i)
+	
+	return entry_points
+
+func reduce_to_base_particles() -> void:
+	for interaction in unconnected_matrix:
+		interaction.map(func(particle): return abs(particle))
+
+func get_connection_matrix() -> ConnectionMatrix:
+	var new_connection_matrix := ConnectionMatrix.new()
+	
+	new_connection_matrix.init(size(), state_count)
+	new_connection_matrix.set_connection_matrix(connection_matrix)
+	
+	return new_connection_matrix
+
+func duplicate():
+	var new_interaction_matrix := InteractionMatrix.new()
+	new_interaction_matrix.unconnected_matrix = unconnected_matrix.duplicate(true)
+	new_interaction_matrix.connection_matrix = connection_matrix.duplicate(true)
+	new_interaction_matrix.state_count = state_count.duplicate()
+	return new_interaction_matrix
+	

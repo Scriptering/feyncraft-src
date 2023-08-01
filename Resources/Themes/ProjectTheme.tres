@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=69 format=3 uid="uid://cfmbhoq8cuoge"]
+[gd_resource type="Theme" load_steps=70 format=3 uid="uid://cfmbhoq8cuoge"]
 
 [ext_resource type="FontFile" uid="uid://cq27s0444iwkg" path="res://Textures/Fonts/ConnectionIi-2wj8.otf" id="1_s2gkm"]
 [ext_resource type="Texture2D" uid="uid://bcwpdy0lmenue" path="res://Textures/Buttons/square_disabled.png" id="2_8m3bx"]
@@ -29,6 +29,7 @@
 [ext_resource type="Texture2D" uid="uid://ytdsqf2bmt4s" path="res://Textures/UI/Information/scrollV/grabber_highlight.png" id="25_ugkfw"]
 [ext_resource type="Texture2D" uid="uid://lkb0vav81lsa" path="res://Textures/UI/Information/scrollV/grabber_grabbed.png" id="26_tvnd3"]
 [ext_resource type="Texture2D" uid="uid://bjpvqimrrjeat" path="res://Textures/UI/Information/scrollV/scroll.png" id="27_wwj8d"]
+[ext_resource type="FontFile" uid="uid://y4axnib64du5" path="res://Textures/Fonts/FandaBlack-vm6E.ttf" id="30_qrn5f"]
 
 [sub_resource type="FontFile" id="15"]
 fallbacks = Array[Font]([ExtResource("1_s2gkm")])
@@ -1480,8 +1481,8 @@ region_rect = Rect2(0, 0, 4, 15)
 [sub_resource type="StyleBoxEmpty" id="27"]
 
 [resource]
-default_font = ExtResource("1_s2gkm")
-default_font_size = 7
+default_font = ExtResource("30_qrn5f")
+default_font_size = 6
 Button/colors/font_color = Color(0.666667, 0.333333, 0, 1)
 Button/colors/font_color_disabled = Color(0.666667, 0.333333, 0, 1)
 Button/colors/font_color_focus = Color(0.666667, 0.333333, 0, 1)
