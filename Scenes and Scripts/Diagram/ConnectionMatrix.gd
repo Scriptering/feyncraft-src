@@ -104,9 +104,9 @@ func remove_interaction(id: int) -> void:
 
 func are_interactions_connected(
 	from_id: int, to_id: int,
-	bidirectional: bool = false, particle: int = GLOBALS.PARTICLE.none) -> bool:
+	bidirectional: bool = false, particle: GLOBALS.Particle = GLOBALS.Particle.none) -> bool:
 	
-	if particle == GLOBALS.PARTICLE.none:
+	if particle == GLOBALS.Particle.none:
 		return connection_matrix[from_id][to_id].size() != 0 or (bidirectional and connection_matrix[to_id][from_id].size() != 0)
 	else:
 		return particle in connection_matrix[from_id][to_id] or (bidirectional and particle in connection_matrix[to_id][from_id])
@@ -129,7 +129,7 @@ func is_fully_connected(bidirectional: bool = false) -> bool:
 func reach_ids(id: int, reached_ids: Array[int], bidirectional: bool) -> Array[int]:
 	reached_ids.push_back(id)
 	
-	for jd in connection_matrix[id]:
+	for jd in connection_matrix[id].size():
 		if jd in reached_ids:
 			continue
 		

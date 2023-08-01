@@ -34,9 +34,8 @@ func connect_interactions(
 	unconnected_matrix[connect_from_id].erase(particle)
 	unconnected_particle_count[get_state_from_id(connect_from_id)] -= 1
 	
-	if bidirectional:
-		unconnected_matrix[connect_to_id].erase(particle)
-		unconnected_particle_count[get_state_from_id(connect_to_id)] -= 1
+	unconnected_matrix[connect_to_id].erase(particle)
+	unconnected_particle_count[get_state_from_id(connect_to_id)] -= 1
 
 func insert_connection(connection: Array) -> void:
 	connect_interactions(connection[Connection.from_id], connection[Connection.to_id], connection[Connection.particle])
@@ -120,5 +119,6 @@ func duplicate():
 	new_interaction_matrix.unconnected_matrix = unconnected_matrix.duplicate(true)
 	new_interaction_matrix.connection_matrix = connection_matrix.duplicate(true)
 	new_interaction_matrix.state_count = state_count.duplicate()
+	new_interaction_matrix.unconnected_particle_count = unconnected_particle_count.duplicate()
 	return new_interaction_matrix
 	
