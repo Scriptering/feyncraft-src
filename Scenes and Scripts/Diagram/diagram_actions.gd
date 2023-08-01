@@ -102,8 +102,8 @@ func rejoin_lines(line_to_extend: ParticleLine, line_to_delete: ParticleLine) ->
 	delete_line(line_to_delete)
 	line_to_extend.update_line()
 
-func place_interaction(interaction_position: Vector2) -> void:
-	if can_place_interaction(interaction_position):
+func place_interaction(interaction_position: Vector2, bypass_can_place: bool = false) -> void:
+	if can_place_interaction(interaction_position) or bypass_can_place:
 		var interaction = InteractionInstance.instantiate()
 		interaction.position = interaction_position
 		Interactions.add_child(interaction)
@@ -114,8 +114,9 @@ func can_place_interaction(test_position: Vector2) -> bool:
 			return false
 	return true
 
-func place_line(start_position: Vector2, end_position: Vector2 = Vector2.ZERO,
-				base_particle: GLOBALS.Particle = ParticleButtons.selected_particle
+func place_line(
+	start_position: Vector2, end_position: Vector2 = Vector2.ZERO,
+	base_particle: GLOBALS.Particle = ParticleButtons.selected_particle
 ) -> void:
 	var line : ParticleLine = Line.instantiate()
 	line.points[line.Point.Start] = start_position

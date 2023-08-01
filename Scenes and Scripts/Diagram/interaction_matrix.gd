@@ -109,8 +109,8 @@ func reduce_to_base_particles() -> void:
 func get_connection_matrix() -> ConnectionMatrix:
 	var new_connection_matrix := ConnectionMatrix.new()
 	
-	new_connection_matrix.init(size(), state_count)
-	new_connection_matrix.set_connection_matrix(connection_matrix)
+	new_connection_matrix.connection_matrix = connection_matrix.duplicate(true)
+	new_connection_matrix.state_count = state_count.duplicate()
 	
 	return new_connection_matrix
 

@@ -78,7 +78,7 @@ var Interaction_checks : Array
 func _ready() -> void:
 	
 	await get_tree().create_timer(1).timeout
-	var diagram := generate_diagram([[GLOBALS.Particle.electron]], [[GLOBALS.Particle.electron]], 1, 10, get_usable_interactions([true, true, true, true]))
+	var diagram := generate_diagram([[GLOBALS.Particle.up]], [[GLOBALS.Particle.top]], 1, 10, get_usable_interactions([true, true, true, true]))
 	
 	emit_signal('draw_diagram', diagram)
 	
@@ -139,7 +139,7 @@ func generate_diagram(
 	
 	if compare_quantum_numbers(initial_state, final_state) == INVALID:
 		print('Initial state quantum numbers do not match final state')
-		return
+		return null
 	
 	var weak: bool = compare_quantum_numbers(initial_state, final_state) == WEAK
 	var base_interaction_matrix := create_base_interaction_matrix(initial_state, final_state)
@@ -404,9 +404,9 @@ func connect_shade_points(
 		return
 	
 	match shade:
-		Shade.Bright:
-			interaction_matrix.connect_interactions(current_point, next_point, current_particle)
 		Shade.Dark:
+			interaction_matrix.connect_interactions(current_point, next_point, current_particle)
+		Shade.Bright:
 			interaction_matrix.connect_interactions(next_point, current_point, current_particle)
 
 func get_available_points(
@@ -758,11 +758,11 @@ func generate_unique_interaction_matrix(
 			continue
 		
 		if unique_interaction_matrix in unique_matrices:
-			if _attempt == UNIQUE_GENERATION_ATTEMPTS-1:
-				return null
 			continue
+		
+		return unique_interaction_matrix
 
-	return unique_interaction_matrix
+	return null
 
 func generate_interaction_matrix(
 	base_interaction_matrix: InteractionMatrix, degree: int, hadron_connections: Array, possible_hadron_connection_count: Array,
@@ -1144,7 +1144,11 @@ func create_interaction(type : Array, size : int) -> Array:
 func compare_quantum_numbers(initial_state : Array, final_state : Array) -> int:
 	for quantum_number in range(GLOBALS.QuantumNumber.size()):
 		if !is_equal_approx(calculate_quantum_sum(quantum_number, initial_state), calculate_quantum_sum(quantum_number, final_state)):
-			if quantum_number <= 6:
+			if (
+				quantum_number == GLOBALS.QuantumNumber.charge or
+				quantum_number == GLOBALS.QuantumNumber.lepton or 
+				quantum_number == GLOBALS.QuantumNumber.quark
+			):
 				return INVALID
 			else:
 				return WEAK
@@ -1180,7 +1184,7 @@ func create_particles(matrix: Array):
 					connection[0]
 				)
 
-func get_connections(matrix: Array, index: int):
+func get_connection_ids(matrix: Array, index: int):
 	var connections := []
 	for connection in matrix[index][INDEX.connected]:
 		if connection != []:

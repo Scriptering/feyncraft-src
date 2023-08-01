@@ -98,59 +98,45 @@ func is_valid() -> bool:
 	return true
 
 func draw_diagram(connection_matrix : ConnectionMatrix) -> void:
-	var state_y_start = snapped(Initial.position.y, 16) + 32
-	var state_lines : Array = [Initial, Final]
 	var MAX_ATTEMPTS := 100
-	var degree_radius := 90
+	
+	if connection_matrix == null:
+		return
 	
 	var drawable_matrix : ConnectionMatrix = connection_matrix.duplicate()
 	drawable_matrix.seperate_double_connections()
 	
-	var generation_valid : bool
+	var hadron_ids : Array[int] = drawable_matrix.get_hadron_ids()
+	var hadron_sizes : Array[int] = []
 	
-	var drawing_interactions : Array[Interaction] = []
+	for hadron_id in hadron_ids:
+		hadron_sizes.append(drawable_matrix.get_connection_count(hadron_id, true))
+	
+	for hadron_size in hadron_sizes:
+		var cumulative_hadron_shift_size : int = 0
+		for i in range(hadron_ids.size()):
+			hadron_ids[i] += cumulative_hadron_shift_size
+		
+		cumulative_hadron_shift_size += hadron_size-1
+	
+	drawable_matrix.split_hadrons()
+	
+	var generation_valid : bool
 	
 	for attempt in range(MAX_ATTEMPTS):
 		var temp_matrix : ConnectionMatrix = drawable_matrix.duplicate()
 		
-		for state in [StateLine.StateType.Initial, StateLine.StateType.Final]:
-			var current_y : int = state_y_start
-			for state_id in connection_matrix.get_state_ids(state):
-				for connected_id in connection_matrix.get_connections(state_id):
-					var interaction: Interaction = Vertex.instantiate()
-					interaction.position.x = state_lines[state].position.x
-					interaction.position.y = current_y
-					current_y += 16
-					interaction.visible = false
-					drawing_interactions.append(interaction)
-			
-				current_y += 32
-		
-		if connection_matrix.get_state_count(StateLine.StateType.None) != 0:
-			var degree_pos : Array[float ]= []
-			var degree_step : float = 2 * PI / (connection_matrix.get_state_count(StateLine.StateType.None))
-			var degree_start : float = randf() * 2 * PI
-			
-			for i in range(connection_matrix.get_state_count(StateLine.StateType.None)):
-				degree_pos.append(i * degree_step + degree_start)
-				
-			var radius : float = degree_radius
-			var circle_y_start : int = 16 * 9
-			
-			for j in range(connection_matrix.get_state_count(StateLine.StateType.None)):
-				var interaction : Interaction = Vertex.instantiate()
-					
-				interaction.position.x = snapped((Initial.position.x + Final.position.x) / 2 + radius * cos(degree_pos[j]), 16)
-				interaction.position.y = snapped(circle_y_start +  + radius * sin(degree_pos[j]), 16)
-				interaction.visible = false
-				drawing_interactions.append(interaction)
-		
+		var drawing_interactions : Array[Interaction] = draw_diagram_interactions(temp_matrix, attempt, hadron_ids, hadron_sizes)
 		var drawing_particles : Array[ParticleLine] = draw_diagram_particles(temp_matrix, drawing_interactions)
 		
 		for drawing_particle in drawing_particles:
-			ParticleLines.add_child(drawing_particle)
+			$diagram_actions.place_line(
+				drawing_particle.points[ParticleLine.Point.Start],
+				drawing_particle.points[ParticleLine.Point.End],
+				drawing_particle.base_particle
+			)
 		for drawing_interaction in drawing_interactions:
-			Interactions.add_child(drawing_interaction)
+			$diagram_actions.place_interaction(drawing_interaction.position, true)
 		
 		generation_valid = true
 		for interaction in drawing_interactions:
@@ -165,26 +151,86 @@ func draw_diagram(connection_matrix : ConnectionMatrix) -> void:
 				drawing_interaction.show()
 			break
 		
-		if attempt % 10 == 0:
-			degree_radius -= 5
-		
 		if attempt != MAX_ATTEMPTS - 1:
 			clear()
 
+func draw_diagram_interactions(
+	connection_matrix: ConnectionMatrix, attempt: int, hadron_ids : Array[int], hadron_sizes : Array[int]
+) -> Array[Interaction]:
+	var drawing_interactions : Array[Interaction] = []
+	
+	for state in [StateLine.StateType.Initial, StateLine.StateType.Final]:
+		drawing_interactions += draw_state_diagram_interactions(connection_matrix, state, hadron_ids, hadron_sizes)
+	
+	var degree_radius := 90 - 5 * (attempt % 10)
+	
+	drawing_interactions += draw_middle_diagram_interactions(connection_matrix)
+	
+	return drawing_interactions
+
+func draw_middle_diagram_interactions(connection_matrix: ConnectionMatrix) -> Array[Interaction]:
+	var degree_pos : Array[float ] = []
+	var degree_step : float = 2 * PI / (connection_matrix.get_state_count(StateLine.StateType.None))
+	var degree_start : float = randf() * 2 * PI
+	
+	for i in range(connection_matrix.get_state_count(StateLine.StateType.None)):
+		degree_pos.append(i * degree_step + degree_start)
+		
+	var radius : float = 90
+	var circle_y_start : int = 16 * 9
+	
+	var drawing_middle_interactions : Array[Interaction] = []
+	
+	for j in range(connection_matrix.get_state_count(StateLine.StateType.None)):
+		var interaction : Interaction = Interaction.new()
+
+		interaction.position.x = snapped((Initial.position.x + Final.position.x) / 2 + radius * cos(degree_pos[j]), 16)
+		interaction.position.y = snapped(circle_y_start +  + radius * sin(degree_pos[j]), 16)
+		interaction.visible = false
+		drawing_middle_interactions.append(interaction)
+	
+	return drawing_middle_interactions
+
+func draw_state_diagram_interactions(
+	connection_matrix: ConnectionMatrix, state: StateLine.StateType, hadron_ids: Array[int], hadron_sizes: Array[int]
+) -> Array[Interaction]:
+	var current_y : int = snapped(Initial.position.y, 16) + 32
+	var state_lines : Array = [Initial, Final]
+	
+	var drawing_state_interactions : Array[Interaction] = []
+	
+	for state_id in connection_matrix.get_state_ids(state):
+		var interaction: Interaction = Interaction.new()
+		interaction.position.x = state_lines[state].position.x
+		interaction.position.y = current_y
+		interaction.visible = false
+		drawing_state_interactions.append(interaction)
+		
+		current_y += 32
+		
+		for hadron_id in hadron_ids:
+			if (state_id - hadron_id > 0) and (state_id - hadron_id < hadron_sizes[hadron_ids.find(hadron_id)]):
+				current_y -= 16
+
+	return drawing_state_interactions
+
 func draw_diagram_particles(connection_matrix: ConnectionMatrix, drawing_interactions: Array[Interaction]) -> Array[ParticleLine]:
 	var drawing_lines : Array[ParticleLine] = []
-	for i in range(drawing_interactions.size()):
-		var connections := connection_matrix.get_connections(i)
-		
-		for j in range(connections.size()):
-			var connection_id := connections[j]
-			var drawing_line : ParticleLine = Line.instantiate()
+	print(range(connection_matrix.size()))
+	for i in range(connection_matrix.size()):
+		for j in range(connection_matrix.size()):
+			if !connection_matrix.are_interactions_connected(i, j):
+				continue
 			
-			drawing_line.base_particle = connection_matrix.connection_matrix[i+j][connection_id][0]
+			var drawing_line : ParticleLine = ParticleLine.new()
+
+			drawing_line.base_particle = connection_matrix.connection_matrix[i][j][0]
+
+			drawing_line.points[ParticleLine.Point.Start] = drawing_interactions[i].position
+			drawing_line.points[ParticleLine.Point.End] = drawing_interactions[j].position
 			
-			drawing_line.points[ParticleLine.Point.Start] = drawing_interactions[i+j].position
-			drawing_line.points[ParticleLine.Point.End] = drawing_interactions[connection_id].position
-	
+			drawing_lines.append(drawing_line)
+
 	return drawing_lines
 
 
