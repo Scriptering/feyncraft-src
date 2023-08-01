@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://ds2iet11sv3ty"]
+[gd_scene load_steps=51 format=3 uid="uid://ds2iet11sv3ty"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_kba7r"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Buttons/particle_buttons.gd" id="1_magdw"]
@@ -9,7 +9,6 @@
 [ext_resource type="PackedScene" uid="uid://diro6a1arcmc0" path="res://Scenes and Scripts/UI/Buttons/ParticleButtons/ParticleButton.tscn" id="7_omtgh"]
 [ext_resource type="Texture2D" uid="uid://bbcpi0csb1w4" path="res://Textures/Buttons/icons/Particles/electron.png" id="8_67c1b"]
 [ext_resource type="Texture2D" uid="uid://pkad4lple88f" path="res://Textures/Buttons/icons/Particles/muon.png" id="9_2eilt"]
-[ext_resource type="Theme" uid="uid://cfmbhoq8cuoge" path="res://Themes/ProjectTheme.tres" id="10_i5sk4"]
 [ext_resource type="Texture2D" uid="uid://dahehom80el0l" path="res://Textures/Buttons/icons/Particles/tau.png" id="10_sfd4m"]
 [ext_resource type="Texture2D" uid="uid://bmpdc76qeiktv" path="res://Textures/Buttons/icons/Particles/electron_neutrino.png" id="11_lvtjt"]
 [ext_resource type="Texture2D" uid="uid://c8dt0yi25ikvr" path="res://Textures/Buttons/icons/Particles/muon_neutrino.png" id="12_a0utd"]
@@ -24,7 +23,6 @@
 [ext_resource type="Texture2D" uid="uid://b1v6dja587r1p" path="res://Textures/Buttons/icons/Particles/charm.png" id="21_0ad65"]
 [ext_resource type="Texture2D" uid="uid://bw8jm82sn5nmq" path="res://Textures/Buttons/Tabs/tab_down.png" id="21_c8fe8"]
 [ext_resource type="Texture2D" uid="uid://bqhdd536qbn0u" path="res://Textures/Buttons/icons/Particles/top.png" id="22_cx8b1"]
-[ext_resource type="FontFile" uid="uid://dohkbu7ekkfx8" path="res://Textures/Fonts/pixeltype/Pixeltype.ttf" id="22_o7wrf"]
 [ext_resource type="Texture2D" uid="uid://dawr6hhu4cqu4" path="res://Textures/Buttons/icons/Particles/down.png" id="23_vb17d"]
 [ext_resource type="Texture2D" uid="uid://dshm4k8uwjopv" path="res://Textures/Buttons/icons/Particles/strange.png" id="24_4efsy"]
 [ext_resource type="Texture2D" uid="uid://dv4g6vsjrh8qx" path="res://Textures/Buttons/icons/Particles/bottom.png" id="25_e3fe6"]
@@ -83,15 +81,19 @@ texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 
 [sub_resource type="FontVariation" id="FontVariation_iht02"]
-base_font = ExtResource("22_o7wrf")
 spacing_top = 2
 spacing_bottom = -3
 
-[sub_resource type="Theme" id="Theme_sv8n6"]
+[sub_resource type="Theme" id="Theme_nl1g0"]
 Button/styles/hover = SubResource("StyleBoxTexture_loeqa")
 Button/styles/normal = SubResource("StyleBoxTexture_xwugc")
 Button/styles/pressed = SubResource("StyleBoxTexture_xwugc")
-Label/font_sizes/font_size = 16
+Label/colors/font_color = Color(0.219608, 0.223529, 0.188235, 1)
+Label/colors/font_shadow_color = Color(0.6, 0.54902, 0.427451, 1)
+Label/constants/shadow_offset_x = 0
+Label/constants/shadow_offset_y = 1
+Label/constants/shadow_outline_size = 0
+Label/font_sizes/font_size = 10
 Label/fonts/font = SubResource("FontVariation_iht02")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_c0jye"]
@@ -120,13 +122,6 @@ allow_unpress = true
 [sub_resource type="ButtonGroup" id="ButtonGroup_16a5r"]
 resource_name = "ParticleButtons"
 allow_unpress = true
-
-[sub_resource type="Theme" id="Theme_nl1g0"]
-Button/styles/hover = SubResource("StyleBoxTexture_loeqa")
-Button/styles/normal = SubResource("StyleBoxTexture_xwugc")
-Button/styles/pressed = SubResource("StyleBoxTexture_xwugc")
-Label/font_sizes/font_size = 16
-Label/fonts/font = SubResource("FontVariation_iht02")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_41ns2"]
 texture = ExtResource("4_1s6pp")
@@ -158,18 +153,10 @@ allow_unpress = true
 [sub_resource type="ButtonGroup" id="ButtonGroup_q1skb"]
 resource_name = "ParticleButtons"
 
-[sub_resource type="Theme" id="Theme_4kguc"]
-Button/styles/hover = SubResource("StyleBoxTexture_loeqa")
-Button/styles/normal = SubResource("StyleBoxTexture_xwugc")
-Button/styles/pressed = SubResource("StyleBoxTexture_xwugc")
-Label/font_sizes/font_size = 16
-Label/fonts/font = SubResource("FontVariation_iht02")
-
 [node name="ParticleButtons" type="Control"]
 material = ExtResource("1_kba7r")
 layout_mode = 3
 anchors_preset = 0
-theme = ExtResource("10_i5sk4")
 script = ExtResource("1_magdw")
 particle_button_group = ExtResource("2_0vjci")
 
@@ -182,9 +169,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = 32.0
-offset_top = 70.0
+offset_top = 72.0
 offset_right = 32.0
-offset_bottom = 70.0
+offset_bottom = 72.0
 grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("5_hlykg")
@@ -262,9 +249,7 @@ button_group = SubResource("ButtonGroup_5nspk")
 z_index = 0
 layout_mode = 2
 size_flags_horizontal = 4
-theme = SubResource("Theme_sv8n6")
-theme_override_constants/margin_left = 0
-theme_override_constants/margin_right = 0
+theme = SubResource("Theme_nl1g0")
 TabText = "LEPTONS"
 TabMinimumSize = Vector2(55, 0)
 
@@ -296,9 +281,16 @@ move_direction = 3
 
 [node name="MovingContainer" type="VBoxContainer" parent="Bosons"]
 use_parent_material = true
-layout_mode = 2
-offset_right = 64.0
-offset_bottom = 49.0
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_right = 67.0
+offset_bottom = 73.0
+grow_horizontal = 2
+grow_vertical = 0
 theme_override_constants/separation = 0
 alignment = 2
 
@@ -347,8 +339,6 @@ z_index = 0
 layout_mode = 2
 size_flags_horizontal = 4
 theme = SubResource("Theme_nl1g0")
-theme_override_constants/margin_left = 0
-theme_override_constants/margin_right = 0
 TabText = "BOSONS"
 TabMinimumSize = Vector2(55, 0)
 
@@ -365,9 +355,9 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 132.0
+offset_left = 135.0
 offset_top = -1.0
-offset_right = 132.0
+offset_right = 135.0
 offset_bottom = -1.0
 grow_horizontal = 2
 grow_vertical = 0
@@ -381,9 +371,16 @@ move_direction = 3
 
 [node name="MovingContainer" type="VBoxContainer" parent="Quarks"]
 use_parent_material = true
-layout_mode = 2
-offset_right = 64.0
-offset_bottom = 49.0
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_right = 67.0
+offset_bottom = 73.0
+grow_horizontal = 2
+grow_vertical = 0
 theme_override_constants/separation = 0
 alignment = 2
 
@@ -438,7 +435,7 @@ button_group = SubResource("ButtonGroup_q1skb")
 z_index = 0
 layout_mode = 2
 size_flags_horizontal = 4
-theme = SubResource("Theme_4kguc")
+theme = SubResource("Theme_nl1g0")
 TabText = "QUARKS"
 TabMinimumSize = Vector2(55, 2.08165e-12)
 
