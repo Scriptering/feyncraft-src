@@ -5,7 +5,7 @@ signal request_deletion
 signal clicked_on
 
 @onready var Level = get_tree().get_first_node_in_group('level')
-@onready var DiagramActions = Level.get_node("diagram_actions")
+@onready var diagram_actions : DiagramActions = Level.get_node("diagram_actions")
 @onready var Initial = Level.get_node('Initial')
 @onready var Final = Level.get_node('Final')
 @onready var Crosshair = Level.get_node("Crosshair")
@@ -78,7 +78,7 @@ var line_texture
 
 func _ready():
 	Crosshair.connect("moved", Callable(self, "_crosshair_moved"))
-	self.connect("request_deletion", Callable(DiagramActions, "delete_line"))
+	self.connect("request_deletion", Callable(diagram_actions, "delete_line"))
 	
 	has_colour = base_particle in GLOBALS.COLOUR_PARTICLES
 	has_shade = base_particle in GLOBALS.SHADED_PARTICLES
@@ -89,6 +89,9 @@ func _ready():
 	line_texture = load('res://Textures/ParticlesAndLines/Lines/' + texture_dict[particle] + '.png')
 
 	set_textures()
+	
+	if is_placed:
+		place()
 	
 	update_line()
 
@@ -154,7 +157,7 @@ func set_dimensionality() -> void:
 		dimensionality = GLOBALS.BOSON_DIMENSIONALITY
 
 func connect_to_interactions() -> void:
-	for interaction in get_tree().get_nodes_in_group("interactions"):
+	for interaction in diagram_actions.get_interactions():
 		if interaction.position in points and !self in interaction.connected_lines:
 			interaction.connected_lines.append(self)
 		elif !interaction.position in points:
@@ -182,7 +185,7 @@ func get_on_state_line() -> StateLine.StateType:
 
 func _get_connected_interactions() -> Array[Interaction]:
 	connected_interactions.clear()
-	for interaction in get_tree().get_nodes_in_group("interactions"):
+	for interaction in diagram_actions.get_interactions():
 		if self in interaction.connected_lines:
 			connected_interactions.append(interaction)
 
@@ -244,6 +247,7 @@ func update_line() -> void:
 	if !is_placed:
 		points[moving_point] = Crosshair.position
 	move_line()
+	
 	set_left_and_right_points()
 	set_anti()
 	
@@ -347,7 +351,7 @@ func move_text() -> void:
 func set_text_texture() -> void:
 	Text.texture = GLOBALS.PARTICLE_TEXTURES[self.particle_name]
 	SpareText.texture = GLOBALS.PARTICLE_TEXTURES[self.particle_name]
-	
+
 	if points[Point.End].x == points[Point.Start].x and particle == GLOBALS.Particle.W:
 		Text.texture = GLOBALS.PARTICLE_TEXTURES['W_0']
 
@@ -375,7 +379,9 @@ func pick_up(point_index_to_pick_up: Point) -> void:
 	moving_point = point_index_to_pick_up
 	
 func is_line_copy() -> bool:
-	for line in get_tree().get_nodes_in_group('lines'):
+	for line in diagram_actions.get_particle_lines():
+		if line == self:
+			continue
 		if !line.is_placed:
 			continue
 		if (points[Point.Start] in line.points and points[Point.End] in line.points and line != self):
@@ -383,7 +389,7 @@ func is_line_copy() -> bool:
 	return false
 
 func is_line_overlapping() -> bool:
-	for line in get_tree().get_nodes_in_group('lines'):
+	for line in diagram_actions.get_particle_lines():
 		if !line.is_placed:
 			continue
 		if !points[Point.Start] in line.points:
@@ -406,6 +412,8 @@ func deconstructor():
 	for interaction in self.connected_interactions:
 		interaction.connected_lines.erase(self)
 	Level.update_statelines()
+	points[Point.Start] = Vector2.LEFT
+	points[Point.End] = Vector2.LEFT
 
 func _on_tree_exiting():
 	deconstructor()

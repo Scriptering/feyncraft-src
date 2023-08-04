@@ -26,7 +26,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ue1rd"]
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_ktpko"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_bi8am"]
 resource_name = "ParticleButtons"
 allow_unpress = true
 
@@ -56,22 +56,22 @@ expand_mode = 2
 metadata/_edit_lock_ = true
 
 [node name="VisionButton" parent="." instance=ExtResource("3_hqsoq")]
-offset_left = 615.0
+offset_left = 614.0
 offset_top = 60.0
-offset_right = 637.0
+offset_right = 636.0
 offset_bottom = 120.0
 
 [node name="ParticleButtons" parent="." instance=ExtResource("24_lunb1")]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = 211.0
-offset_top = 241.0
-offset_right = 211.0
-offset_bottom = 241.0
-grow_horizontal = 2
+anchors_preset = 7
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 253.0
+offset_top = 337.0
+offset_right = 253.0
+offset_bottom = 337.0
+grow_vertical = 0
 size_flags_horizontal = 4
-particle_button_group = SubResource("ButtonGroup_ktpko")
+particle_button_group = SubResource("ButtonGroup_bi8am")
 
 [node name="GridTiles" type="TextureRect" parent="."]
 use_parent_material = true
