@@ -10,7 +10,9 @@ func _ready() -> void:
 	$minimum_press_timer.wait_time = minimum_press_time
 
 func input(event: InputEvent) -> State:
-	if Input.is_action_just_pressed("deleting"):
+	if Input.is_action_just_pressed("draw_history"):
+		diagram_actions.draw_history()
+	elif Input.is_action_just_pressed("deleting"):
 		return State.Deleting
 	elif Input.is_action_just_pressed("editing"):
 		return State.Hovering
@@ -23,7 +25,12 @@ func input(event: InputEvent) -> State:
 		elif !event.pressed and $minimum_press_timer.is_stopped():
 			cursor.change_cursor(GLOBALS.CURSOR.default)
 	elif Input.is_action_just_pressed("clear"):
+		diagram_actions.add_diagram_to_history()
 		diagram_actions.clear_diagram()
+	elif Input.is_action_just_pressed("redo"):
+		diagram_actions.redo()
+	elif Input.is_action_just_pressed("undo"):
+		diagram_actions.undo()
 	
 	return State.Null
 

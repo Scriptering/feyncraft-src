@@ -52,10 +52,12 @@ var generated_matrix: InteractionMatrix
 func _ready() -> void:
 	await get_tree().create_timer(1).timeout
 	
-	generate_diagram(
-		[[GLOBALS.Particle.up, GLOBALS.Particle.anti_up]], [[GLOBALS.Particle.up, GLOBALS.Particle.anti_up]], 2, 2,
-		 get_usable_interactions([false, true, false, false])
+	var diagram := generate_diagram(
+		[[GLOBALS.Particle.gluon], [GLOBALS.Particle.gluon]], [[GLOBALS.Particle.H]], 3, 3,
+		 get_usable_interactions([true, true, true, true])
 	)
+	
+	emit_signal('draw_diagram', diagram, true)
 	
 func _generation_button_pressed(
 	initial_state: Array, final_state: Array, minDegree: int, maxDegree: int, interaction_checks: Array[bool]
@@ -87,11 +89,11 @@ func get_hadron_particles(state_interactions: Array) -> Array:
 	return hadron_particles
 
 func get_degrees_to_check(
-	min_degree: int, max_degree: int, initial_state: Array, final_state: Array, number_of_state_particles: int
-) -> Array:
+	min_degree: int, max_degree: int, interaction_matrix: InteractionMatrix, interactions: Array) -> Array:
 	var degrees_to_check: Array = []
-	var initial_hadron_particles := get_hadron_particles(initial_state)
-	var final_hadron_particles := get_hadron_particles(final_state)
+	var initial_hadron_particles := get_hadron_particles(interaction_matrix.get_unconnected_state(StateLine.StateType.Initial))
+	var final_hadron_particles := get_hadron_particles(interaction_matrix.get_unconnected_state(StateLine.StateType.Final))
+	var number_of_state_particles := interaction_matrix.get_unconnected_particle_count(StateLine.StateType.Both)
 
 	var number_of_unconnectable_particles: int = (
 		number_of_state_particles - initial_hadron_particles.size() - final_hadron_particles.size() +
@@ -99,6 +101,11 @@ func get_degrees_to_check(
 	)
 
 	min_degree = max(floor(number_of_unconnectable_particles/3.0)+1, min_degree)
+	
+	var unconnected_particles := interaction_matrix.get_unconnected_base_particles()
+	unconnected_particles.sort()
+	if unconnected_particles in interactions:
+		min_degree = interaction_size(unconnected_particles)
 	
 	for degree in range(min_degree, max_degree+1):
 		if (number_of_state_particles - degree) % 2 == 0:
@@ -122,8 +129,7 @@ func generate_diagram(
 	var possible_hadron_connections := get_possible_hadron_connections(base_interaction_matrix, same_hadron_particles)
 
 	var degrees_to_check = get_degrees_to_check(
-		min_degree, max_degree, initial_state, final_state,
-		base_interaction_matrix.get_state_count(StateLine.StateType.Both)
+		min_degree, max_degree, base_interaction_matrix, usable_interactions
 	)
 
 	var unique_matrices : Array[InteractionMatrix] = []
@@ -293,7 +299,7 @@ func get_initial_shade_loop_points(interaction_matrix: InteractionMatrix, shade:
 			if particle in SHADED_PARTICLES[shade]:
 				initial_loop_points.append(i)
 			
-			break
+				break
 	
 	return initial_loop_points
 	

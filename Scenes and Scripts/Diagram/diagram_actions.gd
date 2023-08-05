@@ -5,7 +5,13 @@ var Interactions: Control
 var ParticleLines: Control
 var ParticleButtons: Control
 var StateLines: Array
+
 var line_diagram_actions: bool = true
+
+const MAX_DIAGRAM_HISTORY_SIZE : int = 10
+var diagram_history: Array[DrawingMatrix] = []
+var diagram_future: Array[DrawingMatrix] = []
+var current_diagram: DrawingMatrix = null
 
 @onready var Line = preload("res://Scenes and Scripts/Diagram/line.tscn")
 @onready var InteractionInstance = preload("res://Scenes and Scripts/Diagram/interaction.tscn")
@@ -15,6 +21,10 @@ func init(interactions: Control, particle_lines: Control, particle_buttons: Cont
 	ParticleLines = particle_lines
 	ParticleButtons = particle_buttons
 	StateLines = state_lines
+
+func update_state_lines() -> void:
+	for state_line in StateLines:
+		state_line.update_stateline()
 
 func place_objects() -> void:
 	get_tree().call_group("grabbable", "drop")
@@ -178,31 +188,28 @@ func clear_diagram() -> void:
 	for state_line in StateLines:
 		state_line.clear_hadrons()
 
-var drawing_matrix: ConnectionMatrix
+var drawing_matrix: DrawingMatrix
 
 func draw_raw_diagram(connection_matrix : ConnectionMatrix, make_drawable: bool = false) -> void:
+	add_diagram_to_history()
 	
 	if connection_matrix == null:
 		return
 	
-	var drawable_matrix : ConnectionMatrix = connection_matrix.duplicate()
-	drawing_matrix = drawable_matrix
-	
-	if make_drawable:
-		drawable_matrix.seperate_double_connections()
-		drawable_matrix.split_hadrons()
+	var drawable_matrix := DrawingMatrix.new()
+	drawable_matrix.initialise_from_connection_matrix(connection_matrix)
 
 	create_diagram_interaction_positions(drawable_matrix)
 	draw_diagram(drawable_matrix)
 
-func create_diagram_interaction_positions(connection_matrix: ConnectionMatrix) -> void:
+func create_diagram_interaction_positions(connection_matrix: DrawingMatrix) -> void:
 
 	for state in [StateLine.StateType.Initial, StateLine.StateType.Final]:
 		create_state_diagram_interaction_positions(connection_matrix, state)
 	
 	create_middle_diagram_interaction_positions(connection_matrix)
 
-func create_middle_diagram_interaction_positions(connection_matrix: ConnectionMatrix) -> void:
+func create_middle_diagram_interaction_positions(connection_matrix: DrawingMatrix) -> void:
 	var degree_pos : Array[float ] = []
 	var degree_step : float = 2 * PI / (connection_matrix.get_state_count(StateLine.StateType.None))
 	var degree_start : float = randf() * 2 * PI
@@ -221,14 +228,10 @@ func create_middle_diagram_interaction_positions(connection_matrix: ConnectionMa
 			snapped(circle_y_start +  + radius * sin(degree_pos[j]), 16) + 1
 		))
 
-func create_state_diagram_interaction_positions(connection_matrix: ConnectionMatrix, state: StateLine.StateType) -> void:
-	var current_y : int = snapped(StateLines[StateLine.StateType.Initial].position.y, 16) + 32
+func create_state_diagram_interaction_positions(connection_matrix: DrawingMatrix, state: StateLine.StateType) -> void:
+	var current_y : int = snapped(StateLines[StateLine.StateType.Initial].position.y, 16) + 32 + 1
 	
 	for state_id in connection_matrix.get_state_ids(state):
-		connection_matrix.interaction_positions.append(Vector2(StateLines[state].position.x, current_y))
-		
-		current_y += 32
-		
 		if connection_matrix.get_state_from_id(state_id) == StateLine.StateType.None:
 			continue
 		
@@ -238,8 +241,12 @@ func create_state_diagram_interaction_positions(connection_matrix: ConnectionMat
 		
 			if hadron.find(state_id) != 0:
 				current_y -= 16
+				
+		current_y += 32
+		connection_matrix.interaction_positions.append(Vector2(StateLines[state].position.x, current_y))
+		
 
-func draw_diagram_particles(connection_matrix: ConnectionMatrix) -> Array[ParticleLine]:
+func draw_diagram_particles(connection_matrix: DrawingMatrix) -> Array[ParticleLine]:
 	var drawing_lines : Array[ParticleLine] = []
 	for i in range(connection_matrix.matrix_size):
 		for j in range(connection_matrix.matrix_size):
@@ -257,7 +264,7 @@ func draw_diagram_particles(connection_matrix: ConnectionMatrix) -> Array[Partic
 
 	return drawing_lines
 
-func draw_diagram(connection_matrix: ConnectionMatrix) -> void:
+func draw_diagram(connection_matrix: DrawingMatrix) -> void:
 	clear_diagram()
 	
 	line_diagram_actions = false
@@ -270,5 +277,96 @@ func draw_diagram(connection_matrix: ConnectionMatrix) -> void:
 		place_interaction(interaction_position, true)
 	
 	line_diagram_actions = true
+
+func generate_drawing_matrix_from_diagram() -> DrawingMatrix:
+	var generated_matrix := DrawingMatrix.new()
+
+	for interaction in get_interactions():
+		generated_matrix.add_interaction_with_position(interaction.position, interaction.get_on_state_line())
+
+	for line in get_particle_lines():
+		generated_matrix.connect_interactions(
+			generated_matrix.interaction_positions.find(line.points[ParticleLine.Point.Start]),
+			generated_matrix.interaction_positions.find(line.points[ParticleLine.Point.End]),
+			line.base_particle
+		)
+
+	return generated_matrix
+
+func undo() -> void:
+	move_backward_in_history()
+	
+	print("after undo:")
+	print_history_sizes()
+
+func redo() -> void:
+	move_forward_in_history()
+	
+	print("after redo:")
+	print_history_sizes()
+
+func add_diagram_to_history(clear_future: bool = true, diagram: DrawingMatrix = generate_drawing_matrix_from_diagram()) -> void:
+	print("diagram added to history")
+	print_history_sizes()
+	diagram_history.append(diagram)
+	
+	if clear_future:
+		diagram_future.clear()
+	
+	if diagram_history.size() > MAX_DIAGRAM_HISTORY_SIZE:
+		diagram_history.pop_front()
+	
+	print("after adding:")
+	print_history_sizes()
+
+func add_diagram_to_future(diagram: DrawingMatrix = generate_drawing_matrix_from_diagram()) -> void:
+	print("diagram added to future")
+	diagram_future.push_back(diagram)
+	
+func remove_last_diagram_from_history() -> void:
+	diagram_history.pop_back()
+
+func move_forward_in_history() -> void:
+	print("Moving forward")
+	print_history_sizes()
+	if diagram_future.size() == 0:
+		return
+		
+	add_diagram_to_history(false, current_diagram)
+	current_diagram = diagram_future.back()
+	diagram_future.pop_back()
+	
+	draw_diagram(current_diagram)
+
+func move_backward_in_history() -> void:
+	print("Moving backward")
+	print_history_sizes()
+	
+	if diagram_history.size() == 0:
+		return
+	elif diagram_future.size() == 0:
+		add_diagram_to_future()
+	else:
+		add_diagram_to_future(current_diagram)
+	
+	current_diagram = diagram_history.back()
+	diagram_history.pop_back()
+	draw_diagram(current_diagram)
+
+func print_history_sizes() -> void:
+	print("Diagram history size = " + str(diagram_history.size()))
+	print("Diagram future  size  = " + str(diagram_future.size()))
+
+func draw_history() -> void:
+	for diagram in diagram_history:
+		draw_diagram(diagram)
+		await get_tree().create_timer(0.5).timeout
+	
+	for diagram in diagram_future:
+		draw_diagram(diagram)
+		await get_tree().create_timer(0.5).timeout
+	
+
+	
 
 

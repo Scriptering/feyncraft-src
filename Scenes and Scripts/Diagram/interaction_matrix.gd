@@ -112,6 +112,14 @@ func reduce_to_base_particles() -> void:
 			func(particle): return abs(particle)
 		)
 	)
+	
+	connection_matrix = connection_matrix.map(
+		func(interaction): return interaction.map(
+			func(connection): return connection.map(
+				func(particle): return abs(particle)
+			)
+		)
+	)
 
 func get_connection_matrix() -> ConnectionMatrix:
 	var new_connection_matrix := ConnectionMatrix.new()

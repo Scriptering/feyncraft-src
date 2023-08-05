@@ -26,7 +26,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ue1rd"]
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_bi8am"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_71xre"]
 resource_name = "ParticleButtons"
 allow_unpress = true
 
@@ -66,12 +66,12 @@ anchors_preset = 7
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 253.0
-offset_top = 337.0
+offset_top = 338.0
 offset_right = 253.0
-offset_bottom = 337.0
+offset_bottom = 338.0
 grow_vertical = 0
 size_flags_horizontal = 4
-particle_button_group = SubResource("ButtonGroup_bi8am")
+particle_button_group = SubResource("ButtonGroup_71xre")
 
 [node name="GridTiles" type="TextureRect" parent="."]
 use_parent_material = true
@@ -108,9 +108,9 @@ offset_bottom = -49.0
 mouse_filter = 1
 
 [node name="GenerationButton" parent="." instance=ExtResource("22_u64s1")]
-offset_left = -79.0
+offset_left = -76.0
 offset_top = 57.0
-offset_right = -79.0
+offset_right = -76.0
 offset_bottom = 57.0
 
 [node name="NinePatchRect" type="NinePatchRect" parent="."]
