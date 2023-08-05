@@ -33,4 +33,5 @@ func disconnect_grabbable() -> void:
 func _grabbable_object_clicked(object: Node) -> void:
 	start_placing = true
 	if object.can_be_grabbed():
+		diagram_actions.add_diagram_to_history()
 		object.pick_up()

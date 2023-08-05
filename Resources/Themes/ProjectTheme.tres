@@ -33,9 +33,6 @@
 
 [sub_resource type="FontFile" id="15"]
 fallbacks = Array[Font]([ExtResource("1_s2gkm")])
-face_index = null
-embolden = null
-transform = null
 cache/0/16/0/ascent = 0.0
 cache/0/16/0/descent = 0.0
 cache/0/16/0/underline_position = 0.0
@@ -635,9 +632,6 @@ draw_center = false
 
 [sub_resource type="FontFile" id="14"]
 fallbacks = Array[Font]([ExtResource("1_s2gkm")])
-face_index = null
-embolden = null
-transform = null
 cache/0/16/0/ascent = 0.0
 cache/0/16/0/descent = 0.0
 cache/0/16/0/underline_position = 0.0
@@ -875,9 +869,6 @@ cache/0/12/0/kerning_overrides/12/0 = Vector2(0, 0)
 
 [sub_resource type="FontFile" id="30"]
 fallbacks = Array[Font]([ExtResource("1_s2gkm")])
-face_index = null
-embolden = null
-transform = null
 cache/0/16/0/ascent = 0.0
 cache/0/16/0/descent = 0.0
 cache/0/16/0/underline_position = 0.0
@@ -1155,9 +1146,6 @@ region_rect = Rect2(0, 0, 21, 11)
 
 [sub_resource type="FontFile" id="5"]
 fallbacks = Array[Font]([ExtResource("1_s2gkm")])
-face_index = null
-embolden = null
-transform = null
 cache/0/16/0/ascent = 0.0
 cache/0/16/0/descent = 0.0
 cache/0/16/0/underline_position = 0.0

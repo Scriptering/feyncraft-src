@@ -6,7 +6,7 @@ signal request_deletion
 
 @onready var Ball = get_node("Ball")
 @onready var Level := get_node("/root/World")
-@onready var DiagramActions := Level.get_node("diagram_actions")
+@onready var diagram_actions : DiagramActions = Level.get_node("diagram_actions")
 @onready var Crosshair = Level.get_node("Crosshair")
 @onready var Dot = get_node("Dot")
 @onready var Initial = Level.get_node('Initial')
@@ -47,16 +47,16 @@ var hovering := false : set = _set_hovering
 
 func _ready():
 	super._ready()
-	
+
 	self.connect("picked_up", Callable(Crosshair, "interaction_picked_up"))
 	self.connect("dropped", Callable(Crosshair, "interaction_placed"))
 	Crosshair.connect("moved", Callable(self, "_crosshair_moved"))
-	self.connect("request_deletion", Callable(DiagramActions, "delete_interaction"))
+	self.connect("request_deletion", Callable(diagram_actions, "delete_interaction"))
 	
+	id = interaction_matrix.calculate_new_interaction_id()
 	interaction_matrix.add_interaction()
-	id = interaction_matrix.size()-1
 	
-	for line in get_tree().get_nodes_in_group('lines'):
+	for line in diagram_actions.get_particle_lines():
 		if position in line.points and !line in connected_lines:
 			connected_lines.append(line)
 
@@ -64,7 +64,7 @@ func _ready():
 	
 	update_interaction()
 
-	DiagramActions.check_split_lines()
+	diagram_actions.check_split_lines()
 
 	Level.update_statelines()
 
@@ -262,19 +262,16 @@ func get_side_connected_lines(side: Interaction.Side) -> Array[ParticleLine]:
 		)
 		if side * unconnected_vector.x > 0:
 			side_connected_lines.append(line)
-		elif unconnected_vector.x == 0 and is_vertical_line_on_side(unconnected_point, unconnected_vector.y, side):
+		elif unconnected_vector.x == 0 and is_vertical_line_on_side(unconnected_point, side):
 			side_connected_lines.append(line)
 
-	
 	return side_connected_lines
 
-func is_vertical_line_on_side(unconnected_point: ParticleLine.Point, unconnected_vector_y: float, side: Interaction.Side) -> bool:
-	var y_sign : int = sign(unconnected_vector_y)
+func is_vertical_line_on_side(unconnected_point: ParticleLine.Point, side: Interaction.Side) -> bool:
+	if side == Side.Before:
+		return unconnected_point == ParticleLine.Point.Start
 	
-	if unconnected_point == ParticleLine.Point.Start:
-		return side*y_sign > 0
-	
-	return side*y_sign > 0
+	return unconnected_point == ParticleLine.Point.End
 
 func get_side_quantum_sum(side: Interaction.Side) -> Array[float]:
 	var quantum_sum : Array[float] = []

@@ -31,13 +31,9 @@ func input(_event: InputEvent) -> State:
 	return State.Null
 
 func line_deletion(line: ParticleLine) -> void:
+	diagram_actions.add_diagram_to_history()
 	diagram_actions.delete_line(line)
-	
-	await line.tree_exited
-	diagram_actions.check_rejoin_lines()
 
 func interaction_deletion(interaction: Interaction) -> void:
+	diagram_actions.add_diagram_to_history()
 	diagram_actions.delete_interaction(interaction)
-	
-	await interaction.tree_exited
-	diagram_actions.check_rejoin_lines()

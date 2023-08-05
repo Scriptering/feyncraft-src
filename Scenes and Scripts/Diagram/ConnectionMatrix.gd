@@ -14,8 +14,9 @@ const state_factor : Dictionary = {
 const States : Array[StateLine.StateType] = [StateLine.StateType.Initial, StateLine.StateType.Final]
 
 var connection_matrix : Array = []
-
 var state_count: PackedInt32Array = [0, 0, 0]
+var matrix_size : int = 0
+var last_added_id: int
 
 func init(new_size : int = 0, new_state_count: Array[int] = [0, 0, 0]) -> void:
 	if new_size < new_state_count[StateLine.StateType.Initial] + new_state_count[StateLine.StateType.Final]:
@@ -45,7 +46,7 @@ func insert_connection(connection: Array) -> void:
 
 func disconnect_interactions(
 	disconnect_from_id: int, disconnect_to_id: int,
-	particle: int = GLOBALS.PARTICLE.none, bidirectional: bool = false) -> void:
+	particle: int = GLOBALS.Particle.none, bidirectional: bool = false) -> void:
 	
 	check_bounds([disconnect_from_id, disconnect_to_id])
 	
@@ -59,8 +60,8 @@ func remove_connection(connection: Array) -> void:
 
 func check_bounds(ids: Array[int]) -> void:
 	for id in ids:
-		if id >= size():
-			push_error("id " + str(id) + " is out of bounds for matrix of size " + str(size()))
+		if id >= matrix_size:
+			push_error("id " + str(id) + " is out of bounds for matrix of size " + str(matrix_size))
 
 func create_empty_array(array_size: int) -> Array:
 	var empty_array: Array = []
@@ -77,17 +78,22 @@ func add_interaction(
 
 	emit_signal("interaction_added", id)
 	
-	connection_matrix.insert(id, create_empty_array(size()))
+	connection_matrix.insert(id, create_empty_array(matrix_size))
+	matrix_size += 1
 	
-	for row in range(size()):
+	for row in range(matrix_size):
 		connection_matrix[row].insert(id, [])
+	
+	last_added_id = id
 	
 	state_count[interaction_state] += 1
 
-func calculate_new_interaction_id(interaction_state: StateLine.StateType) -> int:
+func calculate_new_interaction_id(
+	interaction_state: StateLine.StateType = StateLine.StateType.None
+) -> int:
 	match interaction_state:
 		StateLine.StateType.None:
-			return size()
+			return matrix_size
 		StateLine.StateType.Initial:
 			return state_count[StateLine.StateType.Initial]
 		StateLine.StateType.Final:
@@ -99,8 +105,10 @@ func remove_interaction(id: int) -> void:
 	
 	connection_matrix.remove_at(id)
 	
-	for row in range(size()):
+	for row in range(matrix_size):
 		connection_matrix[row].remove_at(id)
+	
+	matrix_size -= 1
 
 func are_interactions_connected(
 	from_id: int, to_id: int,
@@ -111,20 +119,41 @@ func are_interactions_connected(
 	else:
 		return particle in connection_matrix[from_id][to_id] or (bidirectional and particle in connection_matrix[to_id][from_id])
 
-func get_connections(id: int, bidirectional: bool = false) -> Array[int]:
+func get_connection_size(from_id: int, to_id: int, bidirectional: bool = false) -> int:
+	return connection_matrix[from_id][to_id].size() + int(bidirectional) * connection_matrix[to_id][from_id].size()
+
+func get_connection_count(id: int, bidirectional: bool = false) -> int:
+	var connection_count : int = 0
+	
+	for connection_id in get_connection_ids(id, bidirectional):
+		connection_count += get_connection_size(id, connection_id, bidirectional)
+	
+	return connection_count
+
+func get_connection_ids(id: int, bidirectional: bool = false) -> Array[int]:
 	var connected_ids: Array[int] = []
 	
-	for jd in range(size()):
+	for jd in range(matrix_size):
 		if are_interactions_connected(id, jd, bidirectional):
 			connected_ids.push_back(jd)
 	
 	return connected_ids
 
+func get_connection_particles(from_id: int, to_id: int, bidirectional: bool = false) -> Array:
+	var connection_particles : Array = []
+	
+	connection_particles += connection_matrix[from_id][to_id]
+	
+	if bidirectional:
+		connection_particles += connection_matrix[to_id][from_id]
+	
+	return connection_particles
+
 func is_fully_connected(bidirectional: bool = false) -> bool:
 	var reached_ids : Array[int] = []
 	var start_id: int = 0
 	
-	return reach_ids(start_id, reached_ids, bidirectional).size() == size()
+	return reach_ids(start_id, reached_ids, bidirectional).size() == matrix_size
 
 func reach_ids(id: int, reached_ids: Array[int], bidirectional: bool) -> Array[int]:
 	reached_ids.push_back(id)
@@ -138,19 +167,16 @@ func reach_ids(id: int, reached_ids: Array[int], bidirectional: bool) -> Array[i
 		
 	return reached_ids
 
-func size() -> int:
-	return connection_matrix.size()
-
 func get_starting_state_id(state: StateLine.StateType) -> int:
 	match state:
+		StateLine.StateType.None:
+			return state_count[StateLine.StateType.Initial] + state_count[StateLine.StateType.Final]
 		StateLine.StateType.Initial:
 			return 0
 		StateLine.StateType.Final:
 			return state_count[StateLine.StateType.Initial]
 		StateLine.StateType.Both:
 			return 0
-		StateLine.StateType.None:
-			return get_state_count(StateLine.StateType.Both)
 	
 	return INVALID
 
@@ -158,7 +184,7 @@ func get_ending_state_id(state: StateLine.StateType) -> int:
 	return get_starting_state_id(state) + get_state_count(state)
 
 func get_state_from_id(id: int) -> StateLine.StateType:
-	if id >= size():
+	if id >= matrix_size:
 		push_error("id is greater than matrix size")
 	
 	if id < state_count[StateLine.StateType.Initial]:
@@ -174,45 +200,6 @@ func get_state_count(state: StateLine.StateType) -> int:
 	
 	return state_count[state]
 
-func seperate_double_connections() -> void:
-	for i in range(size()):
-		for j in range(size()):
-			if i == j:
-				continue
-			
-			var both_hadrons := (
-				get_state_from_id(i) != StateLine.StateType.None and
-				get_state_from_id(j) != StateLine.StateType.None
-			)
-			
-			if both_hadrons:
-				continue
-			
-			while is_double_connection(i, j):
-				divert_connection(i, j)
-
-func divert_connection(
-	divert_from_id: int, divert_to_id: int, new_id: int = calculate_new_interaction_id(get_state_from_id(divert_from_id))
-) -> void:
-	
-	var seperating_particle: GLOBALS.Particle = connection_matrix[divert_from_id][divert_to_id][0]
-	
-	disconnect_interactions(divert_from_id, divert_to_id, seperating_particle)
-	add_interaction(get_state_from_id(divert_from_id), new_id)
-	connect_interactions(divert_from_id, size(), seperating_particle)
-
-func is_double_connection(from_id: int, to_id: int, bidirectional : bool = false) -> bool:
-	if bidirectional:
-		return connection_matrix[from_id][to_id].size() + connection_matrix[from_id][to_id].size() > 1
-	
-	return (
-		(connection_matrix[from_id][to_id].size() != 0 and connection_matrix[from_id][to_id].size() != 0) or
-		connection_matrix[from_id][to_id].size() > 1
-	)
-
-func split_hadrons() -> void:
-	pass
-
 func get_states(state: StateLine.StateType) -> Array:
 	return connection_matrix.slice(get_starting_state_id(state), get_ending_state_id(state))
 
@@ -221,9 +208,11 @@ func get_state_ids(state: StateLine.StateType) -> PackedInt32Array:
 
 func duplicate():
 	var new_connection_matrix := ConnectionMatrix.new()
-	new_connection_matrix.init(size(), state_count)
+	new_connection_matrix.state_count = state_count.duplicate()
 	new_connection_matrix.connection_matrix = connection_matrix.duplicate(true)
+	new_connection_matrix.matrix_size = matrix_size
 	
 	return new_connection_matrix
+
 	
 	

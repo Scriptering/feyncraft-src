@@ -146,12 +146,15 @@ func _get_connected_lone_particles() -> Array[GLOBALS.Particle]:
 	var lone_connected_particles : Array[GLOBALS.Particle] = []
 	
 	for connected_line in connected_lines:
-		if !connected_line.particle in GLOBALS.QUARKS:
+		if !connected_line.base_particle in GLOBALS.QUARKS:
 			lone_connected_particles.append(connected_line.particle)
 			continue
-		for hadron in hadrons:
-			if connected_line in hadron.quark_lines:
-				continue
+		
+		if hadrons.any(
+			func(hadron): return connected_line in hadron.quark_lines
+		):
+			continue
+
 		lone_connected_particles.append(connected_line.particle)
 	
 	return lone_connected_particles
