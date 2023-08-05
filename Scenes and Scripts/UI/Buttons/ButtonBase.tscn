@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Buttons/ButtonBase.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://s5p52s3xmb4l" path="res://Textures/Buttons/centre.png" id="3"]
-[ext_resource type="Theme" uid="uid://csgjunw6mjyuf" path="res://Themes/ButtonBase.tres" id="4"]
+[ext_resource type="Theme" uid="uid://csgjunw6mjyuf" path="res://Resources/Themes/ButtonBase.tres" id="4"]
 [ext_resource type="Texture2D" uid="uid://du0j082dujf0x" path="res://Textures/Buttons/centre_presse.png" id="6"]
 
 [sub_resource type="StyleBoxEmpty" id="2"]

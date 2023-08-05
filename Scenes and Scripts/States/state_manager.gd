@@ -24,16 +24,17 @@ func change_state(new_state: BaseState.State) -> void:
 	state = new_state
 	current_state.enter()
 
-func init(cursor: Sprite2D, crosshair: Node2D, diagram_actions: Node) -> void:
-	crosshair.connect('moved', Callable(self, 'crosshair_moved'))
-	self.connect("state_changed", Callable(crosshair, "_state_changed"))
+func init(cursor: Sprite2D, Diagram: DiagramBase) -> void:
+	var crosshair = Diagram.get_node("Crosshair")
 	
 	for child in get_children():
 		child.cursor = cursor
-		child.crosshair = crosshair
 		child.state_manager = self
-		child.diagram_actions = diagram_actions
+		child.Diagram = Diagram
+		child.crosshair = crosshair
 		
+	crosshair.connect('moved', Callable(self, 'crosshair_moved'))
+	self.connect("state_changed", Callable(crosshair, "_state_changed"))
 	change_state(BaseState.State.Idle)
 
 func _input(event: InputEvent) -> void:

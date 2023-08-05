@@ -20,15 +20,16 @@
 [ext_resource type="PackedScene" uid="uid://bgvo11j4kfjdc" path="res://Scenes and Scripts/UI/Menus/generation_button.tscn" id="22_u64s1"]
 [ext_resource type="Texture2D" uid="uid://bvc8sakoqg037" path="res://Textures/Background/background_border.png" id="23_ebvm0"]
 [ext_resource type="PackedScene" uid="uid://cv3ttwhplgav" path="res://Scenes and Scripts/States/state_manager.tscn" id="23_kpp6c"]
-[ext_resource type="Texture2D" uid="uid://bawoay3wxiy7j" path="res://Textures/Background/full_background.png" id="24_ci6n5"]
 [ext_resource type="PackedScene" uid="uid://ds2iet11sv3ty" path="res://Scenes and Scripts/UI/Buttons/particle_buttons.tscn" id="24_lunb1"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ue1rd"]
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_71xre"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_jk5j1"]
 resource_name = "ParticleButtons"
 allow_unpress = true
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vcfy5"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2v8fu"]
 texture = ExtResource("3_fi1kg")
@@ -51,9 +52,8 @@ use_parent_material = true
 offset_right = 640.0
 offset_bottom = 360.0
 mouse_filter = 2
-texture = ExtResource("24_ci6n5")
-expand_mode = 2
-metadata/_edit_lock_ = true
+texture = ExtResource("4_k4tjo")
+stretch_mode = 1
 
 [node name="VisionButton" parent="." instance=ExtResource("3_hqsoq")]
 offset_left = 614.0
@@ -65,47 +65,65 @@ offset_bottom = 120.0
 anchors_preset = 7
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 253.0
+offset_left = 252.0
 offset_top = 338.0
-offset_right = 253.0
+offset_right = 252.0
 offset_bottom = 338.0
 grow_vertical = 0
 size_flags_horizontal = 4
-particle_button_group = SubResource("ButtonGroup_71xre")
+particle_button_group = SubResource("ButtonGroup_jk5j1")
 
-[node name="GridTiles" type="TextureRect" parent="."]
+[node name="Diagram" type="Panel" parent="."]
 use_parent_material = true
 offset_left = 96.0
 offset_top = 48.0
-offset_right = 546.0
+offset_right = 544.0
 offset_bottom = 288.0
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxEmpty_vcfy5")
+script = ExtResource("17_23v64")
+
+[node name="GridTiles" type="TextureRect" parent="Diagram"]
+use_parent_material = true
+layout_mode = 0
+offset_right = 448.0
+offset_bottom = 240.0
 texture = ExtResource("4_k4tjo")
 stretch_mode = 1
 
-[node name="GridArea" type="Panel" parent="."]
-use_parent_material = true
-offset_left = 97.0
-offset_top = 49.0
-offset_right = 545.0
-offset_bottom = 289.0
+[node name="Interactions" type="Control" parent="Diagram"]
+anchors_preset = 0
 mouse_filter = 1
+
+[node name="ParticleLines" type="Control" parent="Diagram"]
+anchors_preset = 0
+mouse_filter = 1
+
+[node name="Outline" type="Panel" parent="Diagram"]
+use_parent_material = true
+layout_mode = 0
+offset_right = 448.0
+offset_bottom = 240.0
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_2v8fu")
 
-[node name="Interactions" type="Control" parent="GridArea"]
-anchors_preset = 0
-offset_left = -97.0
-offset_top = -49.0
-offset_right = -97.0
-offset_bottom = -49.0
-mouse_filter = 1
+[node name="Initial" parent="Diagram" instance=ExtResource("4")]
+position = Vector2(64, -6)
 
-[node name="ParticleLines" type="Control" parent="GridArea"]
-anchors_preset = 0
-offset_left = -97.0
-offset_top = -49.0
-offset_right = -97.0
-offset_bottom = -49.0
-mouse_filter = 1
+[node name="Line" parent="Diagram/Initial" index="0"]
+offset_bottom = 252.0
+
+[node name="Final" parent="Diagram" instance=ExtResource("4")]
+position = Vector2(384, -6)
+state = 1
+
+[node name="Line" parent="Diagram/Final" index="0"]
+offset_bottom = 252.0
+
+[node name="Crosshair" parent="Diagram" instance=ExtResource("3")]
+z_index = 1
+position = Vector2(-96, -48)
+grid_margin = 0
 
 [node name="GenerationButton" parent="." instance=ExtResource("22_u64s1")]
 offset_left = -76.0
@@ -113,7 +131,7 @@ offset_top = 57.0
 offset_right = -76.0
 offset_bottom = 57.0
 
-[node name="NinePatchRect" type="NinePatchRect" parent="."]
+[node name="GridOutline" type="NinePatchRect" parent="."]
 z_index = 1
 use_parent_material = true
 offset_right = 640.0
@@ -123,10 +141,6 @@ patch_margin_left = 15
 patch_margin_top = 15
 patch_margin_right = 15
 patch_margin_bottom = 15
-
-[node name="Crosshair" parent="." instance=ExtResource("3")]
-z_index = 1
-grid_margin = 0
 
 [node name="Equation" parent="." groups=["equation"] instance=ExtResource("21")]
 visible = false
@@ -155,19 +169,6 @@ layout_mode = 2
 [node name="Generation" parent="." instance=ExtResource("18")]
 
 [node name="PathFinding" parent="." instance=ExtResource("13")]
-
-[node name="Initial" parent="." instance=ExtResource("4")]
-position = Vector2(161, 43)
-
-[node name="Line" parent="Initial" index="0"]
-offset_bottom = 252.0
-
-[node name="Final" parent="." instance=ExtResource("4")]
-position = Vector2(481, 43)
-state = 1
-
-[node name="Line" parent="Final" index="0"]
-offset_bottom = 252.0
 
 [node name="Cursor" parent="." instance=ExtResource("10")]
 
@@ -200,9 +201,6 @@ script = ExtResource("2")
 
 [node name="state_manager" parent="." instance=ExtResource("23_kpp6c")]
 
-[node name="diagram_actions" type="Node" parent="."]
-script = ExtResource("17_23v64")
-
 [node name="vision_manager" type="Node" parent="."]
 
 [node name="PalletteButtons" parent="." instance=ExtResource("22_kt0hd")]
@@ -213,9 +211,9 @@ offset_top = 44.0
 offset_right = 51.0
 offset_bottom = 52.0
 
+[editable path="Diagram/Initial"]
+[editable path="Diagram/Final"]
 [editable path="Equation"]
 [editable path="Equation/VBoxContainer/EquationContainer/InitialScrollContainer"]
 [editable path="Equation/VBoxContainer/EquationContainer/FinalScrollContainer"]
 [editable path="Generation"]
-[editable path="Initial"]
-[editable path="Final"]

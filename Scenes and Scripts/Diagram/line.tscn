@@ -50,7 +50,7 @@ texture_mode = 1
 
 [node name="arrow" type="Sprite2D" parent="."]
 use_parent_material = true
-position = Vector2(52, -1)
+position = Vector2(52, 2.08165e-12)
 texture = ExtResource("5_chfwe")
 offset = Vector2(-4, 0)
 

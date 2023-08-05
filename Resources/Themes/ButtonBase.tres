@@ -20,16 +20,13 @@
 [ext_resource type="Texture2D" uid="uid://1jam8wcw7bd3" path="res://Textures/UI/Information/checkbox/checked.png" id="18"]
 [ext_resource type="Texture2D" uid="uid://dvqoqr6r6f3bj" path="res://Textures/UI/Information/checkbox/check_box.png" id="19"]
 [ext_resource type="Texture2D" uid="uid://d3yddpra1btvh" path="res://Textures/UI/Information/sliderH/grabber.png" id="20"]
-[ext_resource type="Texture2D" uid="uid://cea5mj3u65016" path="res://Textures/Buttons/icons/square_pressed_active.png" id="20_k02lx"]
+[ext_resource type="Texture2D" uid="uid://cea5mj3u65016" path="res://Textures/Buttons/square_pressed_active.png" id="20_k02lx"]
 [ext_resource type="Texture2D" uid="uid://30oe2l4k7py3" path="res://Textures/UI/Information/sliderH/tick.png" id="21"]
 [ext_resource type="Texture2D" uid="uid://dfh2bwspbmrs3" path="res://Textures/UI/Information/sliderH/slider.png" id="22"]
 [ext_resource type="Texture2D" uid="uid://dne44tp1it1xy" path="res://Textures/UI/Information/sliderH/grabber_highlighted.png" id="23"]
 
 [sub_resource type="FontFile" id="15"]
 fallbacks = Array[Font]([ExtResource("4")])
-face_index = null
-embolden = null
-transform = null
 cache/0/16/0/ascent = 0.0
 cache/0/16/0/descent = 0.0
 cache/0/16/0/underline_position = 0.0
@@ -73,10 +70,10 @@ region_rect = Rect2(0, 0, 20, 20)
 draw_center = false
 
 [sub_resource type="StyleBoxTexture" id="13"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
 texture = ExtResource("10")
 texture_margin_left = 3.0
 texture_margin_top = 3.0
@@ -113,9 +110,6 @@ region_rect = Rect2(0, 0, 17, 8)
 
 [sub_resource type="FontFile" id="14"]
 fallbacks = Array[Font]([ExtResource("4")])
-face_index = null
-embolden = null
-transform = null
 cache/0/16/0/ascent = 0.0
 cache/0/16/0/descent = 0.0
 cache/0/16/0/underline_position = 0.0
@@ -125,9 +119,6 @@ cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
 
 [sub_resource type="FontFile" id="30"]
 fallbacks = Array[Font]([ExtResource("4")])
-face_index = null
-embolden = null
-transform = null
 cache/0/16/0/ascent = 0.0
 cache/0/16/0/descent = 0.0
 cache/0/16/0/underline_position = 0.0
@@ -168,9 +159,6 @@ region_rect = Rect2(0, 0, 21, 11)
 
 [sub_resource type="FontFile" id="5"]
 fallbacks = Array[Font]([ExtResource("4")])
-face_index = null
-embolden = null
-transform = null
 cache/0/16/0/ascent = 0.0
 cache/0/16/0/descent = 0.0
 cache/0/16/0/underline_position = 0.0
@@ -178,6 +166,7 @@ cache/0/16/0/underline_thickness = 0.0
 cache/0/16/0/scale = 1.0
 cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
 cache/0/16/0/kerning_overrides/8/0 = Vector2(0, 0)
+cache/0/16/0/kerning_overrides/6/0 = Vector2(0, 0)
 cache/0/8/0/ascent = 0.0
 cache/0/8/0/descent = 0.0
 cache/0/8/0/underline_position = 0.0
@@ -185,6 +174,15 @@ cache/0/8/0/underline_thickness = 0.0
 cache/0/8/0/scale = 1.0
 cache/0/8/0/kerning_overrides/16/0 = Vector2(0, 0)
 cache/0/8/0/kerning_overrides/8/0 = Vector2(0, 0)
+cache/0/8/0/kerning_overrides/6/0 = Vector2(0, 0)
+cache/0/6/0/ascent = 0.0
+cache/0/6/0/descent = 0.0
+cache/0/6/0/underline_position = 0.0
+cache/0/6/0/underline_thickness = 0.0
+cache/0/6/0/scale = 1.0
+cache/0/6/0/kerning_overrides/16/0 = Vector2(0, 0)
+cache/0/6/0/kerning_overrides/8/0 = Vector2(0, 0)
+cache/0/6/0/kerning_overrides/6/0 = Vector2(0, 0)
 
 [sub_resource type="StyleBoxTexture" id="9"]
 content_margin_left = 5.0

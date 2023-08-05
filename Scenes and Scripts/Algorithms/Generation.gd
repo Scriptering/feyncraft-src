@@ -57,14 +57,14 @@ func _ready() -> void:
 		 get_usable_interactions([true, true, true, true])
 	)
 	
-	emit_signal('draw_diagram', diagram, true)
+	emit_signal('draw_diagram', diagram)
 	
 func _generation_button_pressed(
 	initial_state: Array, final_state: Array, minDegree: int, maxDegree: int, interaction_checks: Array[bool]
 ) -> void:
 	var diagram := generate_diagram(initial_state, final_state, minDegree, maxDegree, get_usable_interactions(interaction_checks))
 	
-	emit_signal('draw_diagram', diagram, true)
+	emit_signal('draw_diagram', diagram)
 
 func init(GenerationButton: Control) -> void:
 	GenerationButton.connect("generate", Callable(self, "_generation_button_pressed"))

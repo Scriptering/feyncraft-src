@@ -52,8 +52,8 @@ texture_margin_bottom = 6.0
 
 [sub_resource type="FontVariation" id="FontVariation_bju0s"]
 base_font = ExtResource("16_bo7lx")
-spacing_top = -6
-spacing_bottom = -5
+spacing_top = -5
+spacing_bottom = -4
 
 [sub_resource type="Theme" id="Theme_nl1g0"]
 Button/styles/hover = SubResource("StyleBoxTexture_loeqa")
@@ -154,6 +154,8 @@ particle_button_group = ExtResource("2_0vjci")
 use_parent_material = true
 layout_mode = 2
 anchors_preset = 0
+offset_left = -4.0
+offset_right = -4.0
 offset_bottom = 40.0
 grow_horizontal = 2
 theme = SubResource("Theme_be46u")
@@ -177,10 +179,17 @@ grow_horizontal = 2
 theme_override_constants/separation = 0
 
 [node name="PullOutTabButtonUp" parent="Leptons/MovingContainer" instance=ExtResource("8_uancy")]
+custom_minimum_size = Vector2(55, 2.08165e-12)
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_right = 5
 TabText = "LEPTONS"
-TabMinimumSize = Vector2(55, 2.08165e-12)
+TabMinimumSize = Vector2(60, 2.08165e-12)
+
+[node name="TabButton" parent="Leptons/MovingContainer/PullOutTabButtonUp" index="0"]
+text = "LEPTONS"
+minimum_size = Vector2(60, 2.08165e-12)
 
 [node name="Tab" type="PanelContainer" parent="Leptons/MovingContainer"]
 use_parent_material = true
@@ -234,8 +243,8 @@ button_group = SubResource("ButtonGroup_5nspk")
 use_parent_material = true
 layout_mode = 2
 anchors_preset = 0
-offset_left = 69.0
-offset_right = 69.0
+offset_left = 72.0
+offset_right = 72.0
 offset_bottom = 40.0
 grow_horizontal = 2
 pivot_offset = Vector2(31, 71)
@@ -261,8 +270,10 @@ theme_override_constants/separation = 0
 [node name="PullOutTabButtonUp" parent="Bosons/MovingContainer" instance=ExtResource("8_uancy")]
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_right = 5
 TabText = "BOSONS"
-TabMinimumSize = Vector2(55, 2.08165e-12)
+TabMinimumSize = Vector2(60, 2.08165e-12)
 
 [node name="Tab" type="PanelContainer" parent="Bosons/MovingContainer"]
 use_parent_material = true
@@ -308,8 +319,8 @@ button_group = SubResource("ButtonGroup_16a5r")
 use_parent_material = true
 layout_mode = 2
 anchors_preset = 0
-offset_left = 138.0
-offset_right = 138.0
+offset_left = 148.0
+offset_right = 148.0
 offset_bottom = 40.0
 grow_horizontal = 2
 pivot_offset = Vector2(31, 71)
@@ -335,8 +346,10 @@ theme_override_constants/separation = 0
 [node name="PullOutTabButtonUp" parent="Quarks/MovingContainer" instance=ExtResource("8_uancy")]
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_right = 5
 TabText = "QUARKS"
-TabMinimumSize = Vector2(55, 2.08165e-12)
+TabMinimumSize = Vector2(60, 2.08165e-12)
 
 [node name="Tab" type="PanelContainer" parent="Quarks/MovingContainer"]
 use_parent_material = true
@@ -384,3 +397,5 @@ layout_mode = 2
 particle = 16
 icon = ExtResource("25_e3fe6")
 button_group = SubResource("ButtonGroup_q1skb")
+
+[editable path="Leptons/MovingContainer/PullOutTabButtonUp"]

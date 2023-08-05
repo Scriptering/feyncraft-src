@@ -37,9 +37,8 @@ func _set_tab_minimum_size(new_value: Vector2) -> void:
 	
 	if get_child_count() == 0: return
 	
-	if !(Engine.is_editor_hint() or TabButton): return
-	
 	$TabButton.minimum_size = new_value
+	
 
 func _on_tab_button_pressed():
 	emit_signal("pressed")

@@ -43,9 +43,9 @@ func input(_event: InputEvent) -> State:
 func start_drawing() -> void:
 	if Input.is_action_pressed("click") and !drawing:
 		drawing = true
-		diagram_actions.add_diagram_to_history()
-		diagram_actions.place_line(start_crosshair_position)
-		diagram_actions.place_interaction(start_crosshair_position)
+		Diagram.add_diagram_to_history()
+		Diagram.place_line(start_crosshair_position)
+		Diagram.place_interaction(start_crosshair_position)
 
 func crosshair_moved(current_position : Vector2, old_position : Vector2) -> void:
 	if crosshair.is_same_state_line(current_position, old_position):
@@ -64,7 +64,7 @@ func end_drawing() -> void:
 	for line in get_tree().get_nodes_in_group("lines"):
 		if !line.is_placed:
 			line.place()
-	diagram_actions.place_interaction(crosshair.position)
+	Diagram.place_interaction(crosshair.position)
 
 func is_valid_end_position() -> bool:
 	if crosshair.position == start_crosshair_position:
@@ -72,8 +72,8 @@ func is_valid_end_position() -> bool:
 	return true
 
 func cancel_placement() -> void:
-	diagram_actions.remove_last_diagram_from_history()
+	Diagram.remove_last_diagram_from_history()
 	for line in get_tree().get_nodes_in_group('lines'):
 		if !line.is_placed:
-			diagram_actions.delete_line(line)
+			Diagram.delete_line(line)
 

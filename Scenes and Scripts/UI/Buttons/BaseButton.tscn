@@ -1,11 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://nw4q5r5g0miv"]
+[gd_scene load_steps=4 format=3 uid="uid://c2ikppvu16saf"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_7u77y"]
-[ext_resource type="Theme" uid="uid://cs1gimklve0cr" path="res://Themes/Button.tres" id="1_q2pv0"]
+[ext_resource type="Theme" uid="uid://cs1gimklve0cr" path="res://Resources/Themes/Button.tres" id="1_q2pv0"]
 [ext_resource type="Texture2D" uid="uid://dpx0ebqyihc40" path="res://Textures/Buttons/icons/cog.png" id="2_fcjhx"]
-[ext_resource type="Script" path="res://Scenes and Scripts/UI/Buttons/BaseButton.gd" id="3_gmbul"]
 
-[node name="Button" type="Button"]
+[node name="Button3" type="Button"]
 material = ExtResource("1_7u77y")
 offset_right = 18.0
 offset_bottom = 17.0
@@ -13,4 +12,3 @@ theme = ExtResource("1_q2pv0")
 action_mode = 0
 keep_pressed_outside = true
 icon = ExtResource("2_fcjhx")
-script = ExtResource("3_gmbul")

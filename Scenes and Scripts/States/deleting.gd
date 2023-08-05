@@ -1,5 +1,7 @@
 extends BaseState
 
+var deleting_objects_count: int = 0
+
 func enter() -> void:
 	super.enter()
 	connect_deletable()
@@ -31,9 +33,26 @@ func input(_event: InputEvent) -> State:
 	return State.Null
 
 func line_deletion(line: ParticleLine) -> void:
-	diagram_actions.add_diagram_to_history()
-	diagram_actions.delete_line(line)
+	deleting_objects_count += 1
+	
+	if deleting_objects_count == 1:
+		Diagram.add_diagram_to_history()
+		
+	Diagram.delete_line(line)
+	
+	await get_tree().process_frame
+	
+	deleting_objects_count -= 1
+	
 
 func interaction_deletion(interaction: Interaction) -> void:
-	diagram_actions.add_diagram_to_history()
-	diagram_actions.delete_interaction(interaction)
+	deleting_objects_count += 1
+	
+	if deleting_objects_count == 1:
+		Diagram.add_diagram_to_history()
+		
+	Diagram.delete_interaction(interaction)
+	
+	await get_tree().process_frame
+	
+	deleting_objects_count -=1

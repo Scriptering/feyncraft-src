@@ -1,8 +1,9 @@
 extends Node2D
 
 @onready var Level = get_tree().get_nodes_in_group('level')[0]
-@onready var Initial = Level.get_node('Initial')
-@onready var Final = Level.get_node('Final')
+@onready var Diagram = Level.get_node("Diagram")
+@onready var Initial = Diagram.get_node('Initial')
+@onready var Final = Diagram.get_node('Final')
 @onready var ColourLine = preload("res://Scenes and Scripts/Diagram/ColourLine.tscn")
 
 const INVALID := -1

@@ -1,12 +1,11 @@
-class_name DiagramActions
-extends Node
+class_name DiagramBase
+extends Panel
 
-var Interactions: Control
-var ParticleLines: Control
 var ParticleButtons: Control
-var StateLines: Array
 
 var line_diagram_actions: bool = true
+
+@export var grid_size: int = 16
 
 const MAX_DIAGRAM_HISTORY_SIZE : int = 10
 var diagram_history: Array[DrawingMatrix] = []
@@ -16,13 +15,18 @@ var current_diagram: DrawingMatrix = null
 @onready var Line = preload("res://Scenes and Scripts/Diagram/line.tscn")
 @onready var InteractionInstance = preload("res://Scenes and Scripts/Diagram/interaction.tscn")
 
-func init(interactions: Control, particle_lines: Control, particle_buttons: Control, state_lines: Array) -> void:
-	Interactions = interactions
-	ParticleLines = particle_lines
-	ParticleButtons = particle_buttons
-	StateLines = state_lines
+@onready var StateLines: Array = [$Initial, $Final]
+@onready var Interactions: Control = $Interactions
+@onready var ParticleLines: Control = $ParticleLines
 
-func update_state_lines() -> void:
+func _ready() -> void:
+	connect("mouse_entered", Callable($Crosshair, "DiagramMouseEntered"))
+	connect("mouse_exited", Callable($Crosshair, "DiagramMouseExited"))
+
+func init(particle_buttons: Control) -> void:
+	ParticleButtons = particle_buttons
+
+func update_statelines() -> void:
 	for state_line in StateLines:
 		state_line.update_stateline()
 
@@ -124,8 +128,8 @@ func can_rejoin_lines(line1: ParticleLine, line2: ParticleLine) -> bool:
 		return false
 
 	if (
-		line1.get_line_vector().normalized() == line2.get_line_vector().normalized() or
-		line1.get_line_vector().normalized() == -line2.get_line_vector().normalized()
+		line1.line_vector.normalized() == line2.line_vector.normalized() or
+		line1.line_vector.normalized() == -line2.line_vector.normalized()
 	):
 		return true
 	
@@ -188,106 +192,105 @@ func clear_diagram() -> void:
 	for state_line in StateLines:
 		state_line.clear_hadrons()
 
-var drawing_matrix: DrawingMatrix
-
-func draw_raw_diagram(connection_matrix : ConnectionMatrix, make_drawable: bool = false) -> void:
+func draw_raw_diagram(connection_matrix : ConnectionMatrix) -> void:
 	add_diagram_to_history()
 	
 	if connection_matrix == null:
 		return
 	
 	var drawable_matrix := DrawingMatrix.new()
+	drawable_matrix.grid_size = grid_size
 	drawable_matrix.initialise_from_connection_matrix(connection_matrix)
 
 	create_diagram_interaction_positions(drawable_matrix)
 	draw_diagram(drawable_matrix)
 
-func create_diagram_interaction_positions(connection_matrix: DrawingMatrix) -> void:
+func create_diagram_interaction_positions(drawing_matrix: DrawingMatrix) -> void:
 
 	for state in [StateLine.StateType.Initial, StateLine.StateType.Final]:
-		create_state_diagram_interaction_positions(connection_matrix, state)
+		create_state_diagram_interaction_positions(drawing_matrix, state)
 	
-	create_middle_diagram_interaction_positions(connection_matrix)
+	create_middle_diagram_interaction_positions(drawing_matrix)
 
-func create_middle_diagram_interaction_positions(connection_matrix: DrawingMatrix) -> void:
-	var degree_pos : Array[float ] = []
-	var degree_step : float = 2 * PI / (connection_matrix.get_state_count(StateLine.StateType.None))
+func create_middle_diagram_interaction_positions(drawing_matrix: DrawingMatrix) -> void:
+	var degree_pos : Array[float] = []
+	var degree_step : float = 2 * PI / (drawing_matrix.get_state_count(StateLine.StateType.None))
 	var degree_start : float = randf() * 2 * PI
 	
-	for i in range(connection_matrix.get_state_count(StateLine.StateType.None)):
+	for i in range(drawing_matrix.get_state_count(StateLine.StateType.None)):
 		degree_pos.append(i * degree_step + degree_start)
 		
 	var radius : float = 90
-	var circle_y_start : int = 16 * 11
+	var circle_y_start : int = snapped(size.y/2, grid_size)
 
-	for j in range(connection_matrix.get_state_count(StateLine.StateType.None)):
-		connection_matrix.interaction_positions.append(Vector2(
+	for j in range(drawing_matrix.get_state_count(StateLine.StateType.None)):
+		drawing_matrix.add_interaction_position(Vector2(
 			snapped(
 			(StateLines[StateLine.StateType.Initial].position.x + StateLines[StateLine.StateType.Final].position.x
-			) / 2 + radius * cos(degree_pos[j]), 16) + 1,
-			snapped(circle_y_start +  + radius * sin(degree_pos[j]), 16) + 1
+			) / 2 + radius * cos(degree_pos[j]), grid_size),
+			snapped(circle_y_start +  + radius * sin(degree_pos[j]), grid_size)
 		))
 
-func create_state_diagram_interaction_positions(connection_matrix: DrawingMatrix, state: StateLine.StateType) -> void:
-	var current_y : int = snapped(StateLines[StateLine.StateType.Initial].position.y, 16) + 32 + 1
+func create_state_diagram_interaction_positions(drawing_matrix: DrawingMatrix, state: StateLine.StateType) -> void:
+	var current_y : int = 0
 	
-	for state_id in connection_matrix.get_state_ids(state):
-		if connection_matrix.get_state_from_id(state_id) == StateLine.StateType.None:
+	for state_id in drawing_matrix.get_state_ids(state):
+		if drawing_matrix.get_state_from_id(state_id) == StateLine.StateType.None:
 			continue
 		
-		for hadron in connection_matrix.split_hadron_ids:
+		for hadron in drawing_matrix.split_hadron_ids:
 			if state_id not in hadron:
 				continue
 		
 			if hadron.find(state_id) != 0:
-				current_y -= 16
+				current_y -= grid_size
 				
-		current_y += 32
-		connection_matrix.interaction_positions.append(Vector2(StateLines[state].position.x, current_y))
-		
+		current_y += 2*grid_size
+		drawing_matrix.add_interaction_position(Vector2(StateLines[state].position.x, current_y))
 
-func draw_diagram_particles(connection_matrix: DrawingMatrix) -> Array[ParticleLine]:
+func draw_diagram_particles(drawing_matrix: DrawingMatrix) -> Array[ParticleLine]:
 	var drawing_lines : Array[ParticleLine] = []
-	for i in range(connection_matrix.matrix_size):
-		for j in range(connection_matrix.matrix_size):
-			if !connection_matrix.are_interactions_connected(i, j):
+	for i in range(drawing_matrix.matrix_size):
+		for j in range(drawing_matrix.matrix_size):
+			if !drawing_matrix.are_interactions_connected(i, j):
 				continue
 			
 			var drawing_line : ParticleLine = Line.instantiate()
 
-			drawing_line.base_particle = connection_matrix.connection_matrix[i][j][0]
+			drawing_line.base_particle = drawing_matrix.connection_matrix[i][j][0]
 
-			drawing_line.points[ParticleLine.Point.Start] = connection_matrix.interaction_positions[i]
-			drawing_line.points[ParticleLine.Point.End] = connection_matrix.interaction_positions[j]
+			drawing_line.points[ParticleLine.Point.Start] = drawing_matrix.get_interaction_positions()[i]
+			drawing_line.points[ParticleLine.Point.End] = drawing_matrix.get_interaction_positions()[j]
 			
 			drawing_lines.append(drawing_line)
 
 	return drawing_lines
 
-func draw_diagram(connection_matrix: DrawingMatrix) -> void:
+func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 	clear_diagram()
 	
 	line_diagram_actions = false
 	
-	for drawing_particle in draw_diagram_particles(connection_matrix):
+	for drawing_particle in draw_diagram_particles(drawing_matrix):
 		drawing_particle.is_placed = true
 		ParticleLines.add_child(drawing_particle)
 		
-	for interaction_position in connection_matrix.interaction_positions:
+	for interaction_position in drawing_matrix.get_interaction_positions():
 		place_interaction(interaction_position, true)
 	
 	line_diagram_actions = true
 
 func generate_drawing_matrix_from_diagram() -> DrawingMatrix:
 	var generated_matrix := DrawingMatrix.new()
+	generated_matrix.grid_size = grid_size
 
 	for interaction in get_interactions():
 		generated_matrix.add_interaction_with_position(interaction.position, interaction.get_on_state_line())
 
 	for line in get_particle_lines():
 		generated_matrix.connect_interactions(
-			generated_matrix.interaction_positions.find(line.points[ParticleLine.Point.Start]),
-			generated_matrix.interaction_positions.find(line.points[ParticleLine.Point.End]),
+			generated_matrix.get_interaction_positions().find(line.points[ParticleLine.Point.Start]),
+			generated_matrix.get_interaction_positions().find(line.points[ParticleLine.Point.End]),
 			line.base_particle
 		)
 

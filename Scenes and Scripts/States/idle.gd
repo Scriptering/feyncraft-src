@@ -11,7 +11,7 @@ func _ready() -> void:
 
 func input(event: InputEvent) -> State:
 	if Input.is_action_just_pressed("draw_history"):
-		diagram_actions.draw_history()
+		Diagram.draw_history()
 	elif Input.is_action_just_pressed("deleting"):
 		return State.Deleting
 	elif Input.is_action_just_pressed("editing"):
@@ -25,19 +25,19 @@ func input(event: InputEvent) -> State:
 		elif !event.pressed and $minimum_press_timer.is_stopped():
 			cursor.change_cursor(GLOBALS.CURSOR.default)
 	elif Input.is_action_just_pressed("clear"):
-		diagram_actions.add_diagram_to_history()
-		diagram_actions.clear_diagram()
+		Diagram.add_diagram_to_history()
+		Diagram.clear_diagram()
 	elif Input.is_action_just_pressed("redo"):
-		diagram_actions.redo()
+		Diagram.redo()
 	elif Input.is_action_just_pressed("undo"):
-		diagram_actions.undo()
+		Diagram.undo()
 	
 	return State.Null
 
 func can_draw() -> bool:
 	if !crosshair.can_draw:
 		return false
-	if diagram_actions.get_selected_particle() == GLOBALS.Particle.none:
+	if Diagram.get_selected_particle() == GLOBALS.Particle.none:
 		return false
 	return true
 
