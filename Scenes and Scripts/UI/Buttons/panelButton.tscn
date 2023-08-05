@@ -7,7 +7,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4oa4s"]
 
-[node name="Button2" type="PanelContainer"]
+[node name="Button" type="PanelContainer"]
 material = ExtResource("1_e0w4o")
 custom_minimum_size = Vector2(5, 5)
 anchors_preset = 15
@@ -30,10 +30,10 @@ action_mode = 0
 [node name="ContentContainer" type="MarginContainer" parent="."]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 6
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_right = 6
-theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 7
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ContentContainer"]
 layout_mode = 2

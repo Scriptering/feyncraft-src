@@ -25,7 +25,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ue1rd"]
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_jk5j1"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_rk3cn"]
 resource_name = "ParticleButtons"
 allow_unpress = true
 
@@ -71,7 +71,7 @@ offset_right = 252.0
 offset_bottom = 338.0
 grow_vertical = 0
 size_flags_horizontal = 4
-particle_button_group = SubResource("ButtonGroup_jk5j1")
+particle_button_group = SubResource("ButtonGroup_rk3cn")
 
 [node name="Diagram" type="Panel" parent="."]
 use_parent_material = true
