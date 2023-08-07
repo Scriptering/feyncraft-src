@@ -9,9 +9,9 @@
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kubuy"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_n0u2h"]
-content_margin_left = 7.0
+content_margin_left = 6.0
 content_margin_top = 5.0
-content_margin_right = 7.0
+content_margin_right = 6.0
 content_margin_bottom = 9.0
 texture = ExtResource("2_scj6f")
 texture_margin_left = 5.0
@@ -20,9 +20,9 @@ texture_margin_right = 5.0
 texture_margin_bottom = 7.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_kxnlx"]
-content_margin_left = 7.0
+content_margin_left = 6.0
 content_margin_top = 5.0
-content_margin_right = 7.0
+content_margin_right = 6.0
 content_margin_bottom = 9.0
 texture = ExtResource("2_4su16")
 texture_margin_left = 4.0
@@ -31,9 +31,9 @@ texture_margin_right = 4.0
 texture_margin_bottom = 7.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pbk00"]
-content_margin_left = 7.0
+content_margin_left = 6.0
 content_margin_top = 7.0
-content_margin_right = 7.0
+content_margin_right = 6.0
 content_margin_bottom = 7.0
 texture = ExtResource("4_dp80q")
 texture_margin_left = 5.0
@@ -48,25 +48,30 @@ Button/styles/normal = SubResource("StyleBoxTexture_kxnlx")
 Button/styles/pressed = SubResource("StyleBoxTexture_pbk00")
 
 [node name="ParticleButton" instance=ExtResource("1_ubmeo")]
-offset_top = -1.0
-offset_right = -622.0
-offset_bottom = -341.0
+offset_left = -6.0
+offset_top = -6.0
+offset_right = -616.0
+offset_bottom = -336.0
 theme = SubResource("Theme_lglir")
 script = ExtResource("5_pltn4")
 particle = 0
+minimum_size = Vector2(23, 26)
 toggle_mode = true
+expand_icon = true
 
 [node name="Button" parent="." index="0"]
+custom_minimum_size = Vector2(23, 26)
 toggle_mode = true
 
 [node name="ContentContainer" parent="." index="1"]
-theme_override_constants/margin_left = 7
+theme_override_constants/margin_left = 6
 theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 7
+theme_override_constants/margin_right = 6
 theme_override_constants/margin_bottom = 9
 
 [node name="ButtonText" parent="ContentContainer/HBoxContainer" index="0"]
 theme_override_font_sizes/font_size = 0
 
 [node name="ButtonIcon" parent="ContentContainer/HBoxContainer" index="1"]
-stretch_mode = 2
+expand_mode = 3
+stretch_mode = 5

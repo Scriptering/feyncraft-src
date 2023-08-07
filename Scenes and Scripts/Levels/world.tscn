@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://c7n4o6dbkwilh"]
+[gd_scene load_steps=28 format=3 uid="uid://c7n4o6dbkwilh"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/Levels/World.gd" id="1"]
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="1_ovngh"]
@@ -16,18 +16,16 @@
 [ext_resource type="PackedScene" uid="uid://nuajmillcsir" path="res://Scenes and Scripts/Algorithms/Generation.tscn" id="18"]
 [ext_resource type="PackedScene" path="res://Scenes and Scripts/UI/Equations/EquationPanel.tscn" id="21"]
 [ext_resource type="Texture2D" uid="uid://dhfjdunke4k7k" path="res://Textures/UI/delete_control.png" id="22"]
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="22_8vp8u"]
 [ext_resource type="PackedScene" uid="uid://cc28vwhkixh8t" path="res://Scenes and Scripts/UI/Buttons/pallette_buttons.tscn" id="22_kt0hd"]
 [ext_resource type="PackedScene" uid="uid://bgvo11j4kfjdc" path="res://Scenes and Scripts/UI/Menus/generation_button.tscn" id="22_u64s1"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/ColourPicker/ColourPickerButton.gd" id="22_vp45o"]
 [ext_resource type="Texture2D" uid="uid://bvc8sakoqg037" path="res://Textures/Background/background_border.png" id="23_ebvm0"]
 [ext_resource type="PackedScene" uid="uid://cv3ttwhplgav" path="res://Scenes and Scripts/States/state_manager.tscn" id="23_kpp6c"]
 [ext_resource type="PackedScene" uid="uid://ds2iet11sv3ty" path="res://Scenes and Scripts/UI/Buttons/particle_buttons.tscn" id="24_lunb1"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ue1rd"]
 shader = ExtResource("1_ovngh")
-
-[sub_resource type="ButtonGroup" id="ButtonGroup_rk3cn"]
-resource_name = "ParticleButtons"
-allow_unpress = true
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vcfy5"]
 
@@ -41,6 +39,10 @@ expand_margin_left = 1.0
 expand_margin_top = 1.0
 expand_margin_right = 1.0
 expand_margin_bottom = 1.0
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_auvsd"]
+resource_name = "ParticleButtons"
+allow_unpress = true
 
 [node name="World" type="Node2D" groups=["level"]]
 material = SubResource("ShaderMaterial_ue1rd")
@@ -56,22 +58,10 @@ texture = ExtResource("4_k4tjo")
 stretch_mode = 1
 
 [node name="VisionButton" parent="." instance=ExtResource("3_hqsoq")]
-offset_left = 614.0
+offset_left = 611.0
 offset_top = 60.0
-offset_right = 636.0
+offset_right = 633.0
 offset_bottom = 120.0
-
-[node name="ParticleButtons" parent="." instance=ExtResource("24_lunb1")]
-anchors_preset = 7
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 252.0
-offset_top = 338.0
-offset_right = 252.0
-offset_bottom = 338.0
-grow_vertical = 0
-size_flags_horizontal = 4
-particle_button_group = SubResource("ButtonGroup_rk3cn")
 
 [node name="Diagram" type="Panel" parent="."]
 use_parent_material = true
@@ -125,6 +115,19 @@ z_index = 1
 position = Vector2(-96, -48)
 grid_margin = 0
 
+[node name="ParticleButtons" parent="." instance=ExtResource("24_lunb1")]
+z_index = 5
+anchors_preset = 7
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 254.0
+offset_top = 337.0
+offset_right = 254.0
+offset_bottom = 337.0
+grow_vertical = 0
+size_flags_horizontal = 4
+particle_button_group = SubResource("ButtonGroup_auvsd")
+
 [node name="GenerationButton" parent="." instance=ExtResource("22_u64s1")]
 offset_left = -76.0
 offset_top = 57.0
@@ -132,7 +135,7 @@ offset_right = -76.0
 offset_bottom = 57.0
 
 [node name="GridOutline" type="NinePatchRect" parent="."]
-z_index = 1
+z_index = 10
 use_parent_material = true
 offset_right = 640.0
 offset_bottom = 360.0
@@ -170,8 +173,6 @@ layout_mode = 2
 
 [node name="PathFinding" parent="." instance=ExtResource("13")]
 
-[node name="Cursor" parent="." instance=ExtResource("10")]
-
 [node name="Controls" type="Node2D" parent="."]
 visible = false
 position = Vector2(101, -224)
@@ -205,11 +206,14 @@ script = ExtResource("2")
 
 [node name="PalletteButtons" parent="." instance=ExtResource("22_kt0hd")]
 
-[node name="ColorPickerButton" type="ColorPickerButton" parent="."]
-offset_left = 43.0
-offset_top = 44.0
-offset_right = 51.0
-offset_bottom = 52.0
+[node name="ColorPickerButton" type="ColorPickerButton" parent="PalletteButtons"]
+material = ExtResource("22_8vp8u")
+layout_mode = 2
+color = Color(1, 1, 1, 1)
+edit_alpha = false
+script = ExtResource("22_vp45o")
+
+[node name="Cursor" parent="." instance=ExtResource("10")]
 
 [editable path="Diagram/Initial"]
 [editable path="Diagram/Final"]

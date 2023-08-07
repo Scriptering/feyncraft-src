@@ -154,8 +154,8 @@ particle_button_group = ExtResource("2_0vjci")
 use_parent_material = true
 layout_mode = 2
 anchors_preset = 0
-offset_left = -4.0
-offset_right = -4.0
+offset_left = -22.0
+offset_right = -22.0
 offset_bottom = 40.0
 grow_horizontal = 2
 theme = SubResource("Theme_be46u")
@@ -173,8 +173,8 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -41.0
-offset_right = 35.0
-offset_bottom = 98.0
+offset_right = 38.0
+offset_bottom = 110.0
 grow_horizontal = 2
 theme_override_constants/separation = 0
 
@@ -185,11 +185,12 @@ size_flags_horizontal = 4
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_right = 5
 TabText = "LEPTONS"
-TabMinimumSize = Vector2(60, 2.08165e-12)
+TabMinimumSize = Vector2(61, 2.08165e-12)
+expand_icon = null
 
 [node name="TabButton" parent="Leptons/MovingContainer/PullOutTabButtonUp" index="0"]
 text = "LEPTONS"
-minimum_size = Vector2(60, 2.08165e-12)
+minimum_size = Vector2(61, 2.08165e-12)
 
 [node name="Tab" type="PanelContainer" parent="Leptons/MovingContainer"]
 use_parent_material = true
@@ -243,8 +244,8 @@ button_group = SubResource("ButtonGroup_5nspk")
 use_parent_material = true
 layout_mode = 2
 anchors_preset = 0
-offset_left = 69.0
-offset_right = 69.0
+offset_left = 60.0
+offset_right = 60.0
 offset_bottom = 40.0
 grow_horizontal = 2
 pivot_offset = Vector2(31, 71)
@@ -262,8 +263,8 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -35.0
-offset_right = 41.0
-offset_bottom = 98.0
+offset_right = 44.0
+offset_bottom = 116.0
 grow_horizontal = 2
 theme_override_constants/separation = 0
 
@@ -273,7 +274,8 @@ size_flags_horizontal = 4
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_right = 5
 TabText = "BOSONS"
-TabMinimumSize = Vector2(60, 2.08165e-12)
+TabMinimumSize = Vector2(61, 2.08165e-12)
+expand_icon = null
 
 [node name="Tab" type="PanelContainer" parent="Bosons/MovingContainer"]
 use_parent_material = true
@@ -319,8 +321,8 @@ button_group = SubResource("ButtonGroup_16a5r")
 use_parent_material = true
 layout_mode = 2
 anchors_preset = 0
-offset_left = 148.0
-offset_right = 148.0
+offset_left = 147.0
+offset_right = 147.0
 offset_bottom = 40.0
 grow_horizontal = 2
 pivot_offset = Vector2(31, 71)
@@ -338,8 +340,8 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -35.0
-offset_right = 41.0
-offset_bottom = 98.0
+offset_right = 44.0
+offset_bottom = 116.0
 grow_horizontal = 2
 theme_override_constants/separation = 0
 
@@ -349,7 +351,8 @@ size_flags_horizontal = 4
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_right = 5
 TabText = "QUARKS"
-TabMinimumSize = Vector2(60, 2.08165e-12)
+TabMinimumSize = Vector2(61, 2.08165e-12)
+expand_icon = null
 
 [node name="Tab" type="PanelContainer" parent="Quarks/MovingContainer"]
 use_parent_material = true

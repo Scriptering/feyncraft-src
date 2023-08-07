@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://cane64owm0oof" path="res://Textures/Cursors/heart.png" id="3"]
 
 [node name="Cursor" type="Sprite2D" groups=["cursor"]]
+visible = false
 z_index = 10
 texture = ExtResource("1")
 offset = Vector2(8, 16)
