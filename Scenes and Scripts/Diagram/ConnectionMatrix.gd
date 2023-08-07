@@ -206,6 +206,20 @@ func get_states(state: StateLine.StateType) -> Array:
 func get_state_ids(state: StateLine.StateType) -> PackedInt32Array:
 	return range(get_starting_state_id(state), get_ending_state_id(state))
 
+func get_travellable_points(from_id: int) -> PackedInt32Array:
+	var travellable_points: PackedInt32Array = []
+	
+	for to_id in range(matrix_size):
+		if !are_interactions_connected(from_id, to_id):
+			continue
+			
+		if !connection_matrix[to_id].any(func(particle): return particle in GLOBALS.BOSONS):
+			continue
+		
+		travellable_points.push_back(to_id)
+	
+	return travellable_points
+
 func duplicate():
 	var new_connection_matrix := ConnectionMatrix.new()
 	new_connection_matrix.state_count = state_count.duplicate()
@@ -213,6 +227,36 @@ func duplicate():
 	new_connection_matrix.matrix_size = matrix_size
 	
 	return new_connection_matrix
+
+func is_duplicate(comparison_matrix: ConnectionMatrix) -> bool:
+	if comparison_matrix.matrix_size != matrix_size:
+		return false
+	
+	if comparison_matrix.state_count != state_count:
+		return false
+	
+	
+	
+	return false
+
+func get_state_particles(state: StateLine.StateType) -> Array:
+	var state_particles: Array = []
+	
+	for from_state_id in get_state_ids(state):
+		pass
+
+func generate_paths_from_point(current_point: int, current_path: PackedInt32Array) -> Array[PackedInt32Array]:
+	current_path.push_back(current_point)
+	
+	for point in get_travellable_points(current_point):
+		continue
+	
+	
+	
+	
+	
+	return []
+	
 
 	
 	

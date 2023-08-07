@@ -26,7 +26,6 @@ func add_interaction_with_position(
 	id : int = calculate_new_interaction_id(interaction_state)
 ) -> void:
 
-	normalised_interaction_positions.insert(id, Vector2.ZERO)
 	add_interaction(interaction_state, id)
 	add_interaction_position(interaction_position, id)
 

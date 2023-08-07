@@ -132,7 +132,6 @@ func generate_diagram(
 		min_degree, max_degree, base_interaction_matrix, usable_interactions
 	)
 
-	var unique_matrices : Array[InteractionMatrix] = []
 	var generated_connection_matrices : Array[ConnectionMatrix] = []
 
 	for degree in degrees_to_check:
@@ -141,6 +140,8 @@ func generate_diagram(
 			base_interaction_matrix.get_unconnected_particle_count(StateLine.StateType.Both),
 			same_hadron_particles.size(), degree
 		)
+		
+		var unique_matrices : Array[InteractionMatrix] = []
 
 		for attempt in range(ATTEMPTS_PER_DEGREE * (degree + 1)):
 			var unique_interaction_matrix: InteractionMatrix = generate_unique_interaction_matrix(

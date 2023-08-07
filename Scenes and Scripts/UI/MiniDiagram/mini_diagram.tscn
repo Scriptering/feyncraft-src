@@ -1,10 +1,48 @@
-[gd_scene load_steps=3 format=3 uid="uid://cktgoqxrvgsh0"]
+[gd_scene load_steps=7 format=3 uid="uid://cktgoqxrvgsh0"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_r7vxp"]
 [ext_resource type="Theme" uid="uid://cqtq1r7jcjsec" path="res://Resources/Themes/mini_diagram.tres" id="2_nuwiv"]
+[ext_resource type="Texture2D" uid="uid://cavdk0v6brl1q" path="res://Textures/UI/MiniDiagram/mini_tile.png" id="3_5t171"]
+[ext_resource type="Texture2D" uid="uid://bnokrsnuhk2qo" path="res://Textures/UI/MiniDiagram/Outline.png" id="4_xbcsr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0vhit"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_a4pjj"]
 
 [node name="MiniDiagram" type="Panel"]
 material = ExtResource("1_r7vxp")
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 224.0
+offset_bottom = 128.0
 theme = ExtResource("2_nuwiv")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_0vhit")
+
+[node name="GridContainer" type="Panel" parent="."]
+use_parent_material = true
+clip_contents = true
+layout_mode = 0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = 221.0
+offset_bottom = 125.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_a4pjj")
+
+[node name="Grid" type="TextureRect" parent="GridContainer"]
+use_parent_material = true
+layout_mode = 2
+offset_left = -3.5
+offset_top = -3.5
+offset_right = 220.5
+offset_bottom = 124.5
+texture = ExtResource("3_5t171")
+stretch_mode = 1
+
+[node name="GridOutline" type="NinePatchRect" parent="."]
+use_parent_material = true
+layout_mode = 0
+offset_right = 224.0
+offset_bottom = 128.0
+texture = ExtResource("4_xbcsr")
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6

@@ -75,7 +75,7 @@ func colourful(force):
 func build_diagram():
 	var interactions := get_tree().get_nodes_in_group('interactions')
 	var connections := []
-	
+
 	for i in interactions:
 		var temp_c := []
 		
