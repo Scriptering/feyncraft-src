@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://cktgoqxrvgsh0"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_r7vxp"]
-[ext_resource type="Theme" uid="uid://cqtq1r7jcjsec" path="res://Resources/Themes/mini_diagram.tres" id="2_nuwiv"]
+[ext_resource type="Theme" path="res://Resources/Themes/mini_diagram.tres" id="2_nuwiv"]
 [ext_resource type="Texture2D" uid="uid://cavdk0v6brl1q" path="res://Textures/UI/MiniDiagram/mini_tile.png" id="3_5t171"]
 [ext_resource type="Texture2D" uid="uid://bnokrsnuhk2qo" path="res://Textures/UI/MiniDiagram/Outline.png" id="4_xbcsr"]
 

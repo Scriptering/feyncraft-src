@@ -18,6 +18,8 @@ var state_count: PackedInt32Array = [0, 0, 0]
 var matrix_size : int = 0
 var last_added_id: int
 
+const PREVIOUS_POINT: int = -2
+
 func init(new_size : int = 0, new_state_count: Array[int] = [0, 0, 0]) -> void:
 	if new_size < new_state_count[StateLine.StateType.Initial] + new_state_count[StateLine.StateType.Final]:
 		push_error("Matrix size initiated less than state count.")
@@ -140,14 +142,10 @@ func get_connection_ids(id: int, bidirectional: bool = false) -> Array[int]:
 	return connected_ids
 
 func get_connection_particles(from_id: int, to_id: int, bidirectional: bool = false) -> Array:
-	var connection_particles : Array = []
+	if !bidirectional:
+		return connection_matrix[from_id][to_id]
 	
-	connection_particles += connection_matrix[from_id][to_id]
-	
-	if bidirectional:
-		connection_particles += connection_matrix[to_id][from_id]
-	
-	return connection_particles
+	return connection_matrix[from_id][to_id] + connection_matrix[to_id][from_id]
 
 func is_fully_connected(bidirectional: bool = false) -> bool:
 	var reached_ids : Array[int] = []
@@ -206,19 +204,21 @@ func get_states(state: StateLine.StateType) -> Array:
 func get_state_ids(state: StateLine.StateType) -> PackedInt32Array:
 	return range(get_starting_state_id(state), get_ending_state_id(state))
 
-func get_travellable_points(from_id: int) -> PackedInt32Array:
-	var travellable_points: PackedInt32Array = []
+func get_travel_matrix() -> Array[PackedInt32Array]:
+	var travel_matrix: Array[PackedInt32Array] = []
 	
-	for to_id in range(matrix_size):
-		if !are_interactions_connected(from_id, to_id):
-			continue
-			
-		if !connection_matrix[to_id].any(func(particle): return particle in GLOBALS.BOSONS):
-			continue
+	for from_id in range(matrix_size):
+		var travellable_points: PackedInt32Array = []
+		for to_id in range(matrix_size):
+			if get_connection_particles(from_id, to_id, true).any(func(particle): return particle in GLOBALS.BOSONS):
+				travellable_points.push_back(to_id)
+
+			elif are_interactions_connected(from_id, to_id):
+				travellable_points.push_back(to_id)
 		
-		travellable_points.push_back(to_id)
+		travel_matrix.push_back(travellable_points)
 	
-	return travellable_points
+	return travel_matrix
 
 func duplicate():
 	var new_connection_matrix := ConnectionMatrix.new()
@@ -228,6 +228,20 @@ func duplicate():
 	
 	return new_connection_matrix
 
+func has_same_particles(comparison_matrix: ConnectionMatrix) -> bool:
+	for state in [StateLine.StateType.Initial, StateLine.StateType.Final, StateLine.StateType.None]:
+		
+		var state_particles : Array = get_state_particles(StateLine.StateType.None)
+		state_particles.sort()
+		
+		var comparison_state_particles : Array = comparison_matrix.get_state_particles(StateLine.StateType.None)
+		comparison_state_particles.sort()
+		
+		if comparison_state_particles != state_particles:
+			return false
+	
+	return true
+
 func is_duplicate(comparison_matrix: ConnectionMatrix) -> bool:
 	if comparison_matrix.matrix_size != matrix_size:
 		return false
@@ -235,28 +249,49 @@ func is_duplicate(comparison_matrix: ConnectionMatrix) -> bool:
 	if comparison_matrix.state_count != state_count:
 		return false
 	
+	if !has_same_particles(comparison_matrix):
+		return false
 	
+	if !has_same_connection_paths(comparison_matrix):
+		return false
 	
-	return false
+	return true
 
 func get_state_particles(state: StateLine.StateType) -> Array:
 	var state_particles: Array = []
 	
 	for from_state_id in get_state_ids(state):
-		pass
+		for to_id in matrix_size:
+			state_particles += get_connection_particles(from_state_id, to_id, true)
+	
+	return state_particles
 
-func generate_paths_from_point(current_point: int, current_path: PackedInt32Array) -> Array[PackedInt32Array]:
-	current_path.push_back(current_point)
-	
-	for point in get_travellable_points(current_point):
-		continue
-	
-	
-	
-	
-	
-	return []
-	
+func has_same_connection_paths(comparison_matrix: ConnectionMatrix) -> bool:
+	return true
 
+func generate_paths_from_point(
+	current_point: int, path_to_current_point: PackedInt32Array = [],
+	travel_matrix: Array[PackedInt32Array] = get_travel_matrix()
+) -> Array[PackedInt32Array]:
 	
+	var path_finished := travel_matrix[current_point].size() == 0 or current_point in path_to_current_point
+	if path_finished:
+		return [[current_point]]
+		
+	path_to_current_point.push_back(current_point)
 	
+	var paths : Array[PackedInt32Array] = []
+	
+	for point in travel_matrix[current_point]:
+		var point_is_previous := path_to_current_point.size() > 1 and point == path_to_current_point[PREVIOUS_POINT]
+		if point_is_previous:
+			continue
+		
+		var path_from_current_point: PackedInt32Array = [current_point]
+		
+		for path_from_point in generate_paths_from_point(point, path_to_current_point.duplicate(), travel_matrix):
+			path_from_current_point.append_array(path_from_point)
+			paths.push_back(path_from_current_point)
+	
+	return paths
+

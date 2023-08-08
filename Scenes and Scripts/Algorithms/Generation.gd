@@ -57,6 +57,8 @@ func _ready() -> void:
 		 get_usable_interactions([true, true, true, true])
 	)
 	
+	print(diagram.generate_paths_from_point(0))
+	
 	emit_signal('draw_diagram', diagram)
 	
 func _generation_button_pressed(

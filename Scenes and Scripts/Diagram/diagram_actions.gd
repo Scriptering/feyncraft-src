@@ -298,19 +298,11 @@ func generate_drawing_matrix_from_diagram() -> DrawingMatrix:
 
 func undo() -> void:
 	move_backward_in_history()
-	
-	print("after undo:")
-	print_history_sizes()
 
 func redo() -> void:
 	move_forward_in_history()
-	
-	print("after redo:")
-	print_history_sizes()
 
 func add_diagram_to_history(clear_future: bool = true, diagram: DrawingMatrix = generate_drawing_matrix_from_diagram()) -> void:
-	print("diagram added to history")
-	print_history_sizes()
 	diagram_history.append(diagram)
 	
 	if clear_future:
@@ -318,20 +310,14 @@ func add_diagram_to_history(clear_future: bool = true, diagram: DrawingMatrix = 
 	
 	if diagram_history.size() > MAX_DIAGRAM_HISTORY_SIZE:
 		diagram_history.pop_front()
-	
-	print("after adding:")
-	print_history_sizes()
 
 func add_diagram_to_future(diagram: DrawingMatrix = generate_drawing_matrix_from_diagram()) -> void:
-	print("diagram added to future")
 	diagram_future.push_back(diagram)
 	
 func remove_last_diagram_from_history() -> void:
 	diagram_history.pop_back()
 
 func move_forward_in_history() -> void:
-	print("Moving forward")
-	print_history_sizes()
 	if diagram_future.size() == 0:
 		return
 		
@@ -342,9 +328,6 @@ func move_forward_in_history() -> void:
 	draw_diagram(current_diagram)
 
 func move_backward_in_history() -> void:
-	print("Moving backward")
-	print_history_sizes()
-	
 	if diagram_history.size() == 0:
 		return
 	elif diagram_future.size() == 0:
