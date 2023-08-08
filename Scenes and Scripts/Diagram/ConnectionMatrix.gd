@@ -148,15 +148,17 @@ func get_connection_particles(from_id: int, to_id: int, bidirectional: bool = fa
 	return connection_matrix[from_id][to_id] + connection_matrix[to_id][from_id]
 
 func is_fully_connected(bidirectional: bool = false) -> bool:
-	var reached_ids : Array[int] = []
+	var reached_ids : PackedInt32Array = []
 	var start_id: int = 0
 	
 	return reach_ids(start_id, reached_ids, bidirectional).size() == matrix_size
 
-func reach_ids(id: int, reached_ids: Array[int], bidirectional: bool) -> Array[int]:
+func reach_ids(
+	id: int, reached_ids: PackedInt32Array, bidirectional: bool
+) -> PackedInt32Array:
 	reached_ids.push_back(id)
 	
-	for jd in connection_matrix[id].size():
+	for jd in matrix_size:
 		if jd in reached_ids:
 			continue
 		
@@ -267,31 +269,138 @@ func get_state_particles(state: StateLine.StateType) -> Array:
 	return state_particles
 
 func has_same_connection_paths(comparison_matrix: ConnectionMatrix) -> bool:
+	var paths_matrix: Array = []
+	var comparison_paths_matrix: Array = []
+	
+	var state_ids := get_state_ids(StateLine.StateType.Both)
+	
+	for state_id in state_ids:
+		var state_paths := generate_paths_from_point(state_id)
+		var comparison_state_paths := comparison_matrix.generate_paths_from_point(state_id)
+		
+		var state_path_sizes : Array = state_paths.map(func(path): return path.size())
+		var comparison_state_path_sizes : Array = comparison_state_paths.map(func(path): return path.size())
+		
+		state_path_sizes.sort()
+		comparison_state_path_sizes.sort()
+		
+		if state_path_sizes != comparison_state_path_sizes:
+			return false
+			
+		paths_matrix.push_back(state_paths)
+		comparison_paths_matrix.push_back(state_paths)
+
+	var reindex_dictionary := generate_reindex_dictionary(paths_matrix)
+	
+	var reindexed_paths_matrix := paths_matrix.map(
+		func(state_paths): return state_paths.map(
+			func(path): return reindex_path(path, reindex_dictionary)
+		)
+	)
+	
+	var comparison_reindexed_paths_matrix := paths_matrix.map(
+		func(state_paths): return state_paths.map(
+			func(path): return reindex_path(path, reindex_dictionary)
+		)
+	)
+	
+	if !compare_paths_matrices(reindexed_paths_matrix, comparison_reindexed_paths_matrix):
+		return false
+	
 	return true
+
+func compare_paths_matrices(paths_matrix: Array, comparison_paths_matrix: Array) -> bool:
+	var flattened_paths : Array[PackedInt32Array] = []
+	var comparison_flattened_paths : Array[PackedInt32Array] = []
+	
+	for state_id in range(paths_matrix.size()):
+		for path_id in range(paths_matrix[state_id].size()):
+			flattened_paths.push_back(paths_matrix[state_id][path_id])
+			comparison_flattened_paths.push_back(comparison_paths_matrix[state_id][path_id])
+	
+	return flattened_paths.all(func(path): return path in comparison_flattened_paths)
+
+func reindex_path(path: PackedInt32Array, reindex_dict: Dictionary) -> PackedInt32Array:
+	var reindexed_path : PackedInt32Array = []
+	
+	for point in path:
+		reindexed_path.push_back(reindex_dict[point])
+	
+	return reindexed_path
+	
+func generate_reindex_dictionary(paths_matrix: Array, state_ids: PackedInt32Array = get_state_ids(StateLine.StateType.Both)) -> Dictionary:
+	var reindex_dict: Dictionary = {}
+	var state_count_both := get_state_count(StateLine.StateType.Both)
+	
+	for state_id in state_ids:
+		reindex_state_ids(reindex_dict, paths_matrix[state_id], state_id, state_count_both)
+		if reindex_dict.size() == matrix_size:
+			return reindex_dict
+	
+	for state_id in state_ids:
+		reindex_unique_state_paths(reindex_dict, paths_matrix[state_id], state_id)
+		if reindex_dict.size() == matrix_size:
+			return reindex_dict
+
+	return reindex_dict
+
+func reindex_state_ids(reindex_dict: Dictionary, state_paths: Array, state_id: int,
+	state_count_both := get_state_count(StateLine.StateType.Both),
+) -> void:
+	
+	reindex_dict[state_id] = state_id
+	
+	var first_state_connected_point : int = state_paths.front()[1]
+	
+	if first_state_connected_point not in reindex_dict.keys():
+		reindex_dict[first_state_connected_point] = state_count_both + state_id
+
+func reindex_unique_state_paths(reindex_dict: Dictionary, state_paths: Array, state_id: int) -> void:
+	var state_path_sizes : Array = state_paths.map(func(path): return path.size())
+	
+	for path_id in range(state_path_sizes.size()):
+		var is_path_size_unique: bool = state_path_sizes.count(state_path_sizes[path_id]) == 1
+		if !is_path_size_unique:
+			continue
+		
+		for point in state_paths[path_id]:
+			if point in reindex_dict.keys():
+				continue
+			
+			reindex_dict[point] = reindex_dict.size()
+			
+			if reindex_dict.size() == matrix_size:
+				return
 
 func generate_paths_from_point(
 	current_point: int, path_to_current_point: PackedInt32Array = [],
 	travel_matrix: Array[PackedInt32Array] = get_travel_matrix()
 ) -> Array[PackedInt32Array]:
 	
-	var path_finished := travel_matrix[current_point].size() == 0 or current_point in path_to_current_point
-	if path_finished:
-		return [[current_point]]
+	var base_path_from_point : PackedInt32Array = [current_point]
+	
+	var path_is_finished : bool = true
+	for point in travel_matrix[current_point]:
+		if point not in path_to_current_point:
+			path_is_finished = false
+			break
+	
+	var path_is_loop : bool = current_point in path_to_current_point
+		
+	if path_is_finished or path_is_loop:
+		return [base_path_from_point]
 		
 	path_to_current_point.push_back(current_point)
 	
-	var paths : Array[PackedInt32Array] = []
+	var paths_from_current_point : Array[PackedInt32Array] = []
 	
 	for point in travel_matrix[current_point]:
 		var point_is_previous := path_to_current_point.size() > 1 and point == path_to_current_point[PREVIOUS_POINT]
 		if point_is_previous:
 			continue
 		
-		var path_from_current_point: PackedInt32Array = [current_point]
-		
 		for path_from_point in generate_paths_from_point(point, path_to_current_point.duplicate(), travel_matrix):
-			path_from_current_point.append_array(path_from_point)
-			paths.push_back(path_from_current_point)
+			paths_from_current_point.push_back(base_path_from_point + path_from_point)
 	
-	return paths
+	return paths_from_current_point
 
