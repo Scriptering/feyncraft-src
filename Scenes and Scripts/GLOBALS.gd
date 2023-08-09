@@ -7,8 +7,8 @@ enum Particle {
 	photon, gluon, Z, H, W,
 	lepton, electron, muon, tau,
 	neutrino, electron_neutrino, muon_neutrino, tau_neutrino,
-	bright_quark, dark_quark, up, down, charm, strange, top, bottom,
-	anti_bottom = -16, anti_top, anti_strange, anti_charm, anti_down, anti_up, anti_quark_dash, anti_quark,
+	bright_quark, up, charm, top, dark_quark, down, strange, bottom,
+	anti_bottom = -20, anti_strange, anti_down, anti_dark_quark, anti_top, anti_charm, anti_up, anti_bright_quark,
 	anti_tau_neutrino, anti_muon_neutrino, anti_electron_neutrino, anti_neutrino,
 	anti_tau, anti_muon, anti_electron, anti_lepton,
 	anti_W,
@@ -52,12 +52,12 @@ const QUANTUM_NUMBERS : Array[Array] = [
 [0.0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
 [0.0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
 [2.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 0, 0],
-[-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 0, 0],
 [2.0/3, 0, 0, 0, 0, 1.0/3, 1, 0, 0, 0, 0, 0],
-[-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 1, 0, 0, 0, 0],
 [2.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 1, 0, 0, 0],
-[-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 1, 0, 0],
 [2.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 1, 0],
+[-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 0, 0],
+[-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 1, 0, 0, 0, 0],
+[-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 1, 0, 0],
 [-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 0, 1]
 ]
 

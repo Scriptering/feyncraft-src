@@ -13,13 +13,11 @@ var TOTAL_INTERACTIONS : Array
 
 signal draw_diagram
 
-enum INDEX {unconnected, connected, ID = 0, TYPE, START = 0, END, INTERACTION = 0, CONNECTION_COUNT}
+enum INDEX {unconnected, connected, ID = 0, TYPE, START = 0, END, INTERACTION = 0, CONNECTION_COUNT, CONNECTION_PARTICLES = 1}
 enum {
 	INVALID, VALID,
 	FAILED, SUCCEEDED,
 	ATTEMPTS_PER_DEGREE = 10,
-	UNIQUE_GENERATION_ATTEMPTS = 100, UNIQUE_GENERATION_FAILED,
-	INTERACTION_MATRIX_GENERATION_ATTEMPTS = 10, INTERACTION_GENERATION_FAILED,
 	UNIQUE_CONNECTION_ATTEMPTS = 100, UNIQUE_CONNECTION_FAILED,
 	CONNECTION_ATTEMPTS = 25, CONNECTION_FAILED,
 	MAX_PATH_STEPS = 100,
@@ -54,8 +52,10 @@ func _ready() -> void:
 	await get_tree().create_timer(1).timeout
 	
 	var diagrams := generate_diagram(
-		[[GLOBALS.Particle.photon], [GLOBALS.Particle.photon]], [[GLOBALS.Particle.photon], [GLOBALS.Particle.photon]], 4, 4,
-		 get_usable_interactions([true, false, false, false]), true
+		[[GLOBALS.Particle.up, GLOBALS.Particle.up, GLOBALS.Particle.up]],
+		[[GLOBALS.Particle.up, GLOBALS.Particle.up, GLOBALS.Particle.up]],
+		1, 4,
+		get_usable_interactions([true, true, true, false]), true
 	)
 	
 	emit_signal('draw_diagram', diagrams[0])
@@ -142,7 +142,6 @@ func generate_diagram(
 	var general_usable_interactions := convert_interactions_to_general(usable_interactions)
 	
 	var base_interaction_matrix := create_base_interaction_matrix(initial_state, final_state)
-	base_interaction_matrix.unconnected_matrix = base_interaction_matrix.unconnected_matrix.map(convert_interaction_to_general)
 
 	var same_hadron_particles := get_shared_elements(get_hadron_particles(initial_state), get_hadron_particles(final_state))
 	var possible_hadron_connections := get_possible_hadron_connections(base_interaction_matrix, same_hadron_particles)
@@ -163,27 +162,12 @@ func generate_diagram(
 			same_hadron_particles.size(), degree
 		)
 		
-		var unique_matrices : Array[InteractionMatrix] = []
+		var unique_interaction_matrices : Array[InteractionMatrix] = generate_unique_interaction_matrices(
+			base_interaction_matrix, degree, possible_hadron_connections, possible_hadron_connection_count, general_usable_interactions
+		)
 		var unique_connection_matrices : Array[ConnectionMatrix] = []
-
-		for attempt in range(ATTEMPTS_PER_DEGREE * (degree + 1)):
-			
-			print_time(0)
-			var unique_interaction_matrix: InteractionMatrix = generate_unique_interaction_matrix(
-				base_interaction_matrix, degree, possible_hadron_connections, possible_hadron_connection_count, unique_matrices,
-				general_usable_interactions
-			)
-			if unique_interaction_matrix == null:
-				if print_results:
-					print("Unable to find unique matrix, " + get_print_time())
-				break
-			elif print_results:
-				print("Found unique matrix, " + get_print_time())
-			
-			print_time(1)
-
-			unique_matrices.append(unique_interaction_matrix)
-			
+		
+		for unique_interaction_matrix in unique_interaction_matrices:
 			var unique_connection_matrix: ConnectionMatrix = generate_unique_connections(
 				unique_interaction_matrix, unique_connection_matrices
 			)
@@ -196,10 +180,7 @@ func generate_diagram(
 			unique_connection_matrices.push_back(unique_connection_matrix)
 			
 			if print_results:
-				print(
-					'Success! Found at degree ', degree,' which took ', attempt,
-					' attempts which took ' + get_print_time()
-				)
+				print('Success! Found at degree ', degree,' which took ' + get_print_time())
 
 			if !find_all:
 				return [unique_connection_matrix]
@@ -572,59 +553,160 @@ func print_time(count: int = -1):
 	else:
 		print(count, "Time: ", get_print_time())
 
-func generate_unique_interaction_matrix(
+func generate_unique_interaction_matrices(
 	base_interaction_matrix: InteractionMatrix, degree: int, possible_hadron_connections: Array,
-	possible_hadron_connection_count: Array, unique_matrices: Array[InteractionMatrix], usable_interactions: Array
-) -> InteractionMatrix:
+	possible_hadron_connection_count: Array, usable_interactons: Array
+) -> Array[InteractionMatrix]:
 	
-	var unique_interaction_matrix : InteractionMatrix
+	var generated_matrices : Array[InteractionMatrix] = []
 	
-	for _attempt in range(UNIQUE_GENERATION_ATTEMPTS):
-		unique_interaction_matrix = generate_interaction_matrix(
-			base_interaction_matrix, degree, possible_hadron_connections, possible_hadron_connection_count, usable_interactions
-		)
-		var generation_failed: bool = unique_interaction_matrix == null
+	for connection_count in possible_hadron_connection_count:
+		var hadron_connection_permutations : Array = get_permutations(possible_hadron_connections, connection_count)
 		
-		if generation_failed:
-			return null
-		
-		if unique_matrices.any(func(matrix): return matrix.has_same_unconnected_matrix(unique_interaction_matrix)):
-			continue
-		
-		return unique_interaction_matrix
-
-	return null
-
-func generate_interaction_matrix(
-	base_interaction_matrix: InteractionMatrix, degree: int, hadron_connections: Array, possible_hadron_connection_count: Array,
-	usable_interactions: Array
-) -> InteractionMatrix:
-	
-	for _attempt in range(INTERACTION_MATRIX_GENERATION_ATTEMPTS):
-		for hadron_connection_count in possible_hadron_connection_count:
+		for hadron_connection_permutation in hadron_connection_permutations:
 			var interaction_matrix : InteractionMatrix = base_interaction_matrix.duplicate()
-			insert_random_hadron_connections(interaction_matrix, hadron_connections, hadron_connection_count)
 			
-			var interactions : Array = generate_interactions(
-				interaction_matrix.get_unconnected_base_particles(), degree, usable_interactions
+			for hadron_connection in hadron_connection_permutation:
+				interaction_matrix.insert_connection(hadron_connection)
+			
+			interaction_matrix.unconnected_matrix = interaction_matrix.unconnected_matrix.map(convert_interaction_to_general)
+			
+			var interaction_sets = generate_interaction_sets(
+				interaction_matrix.get_unconnected_base_particles(), degree, usable_interactons
 			)
 			
-			if interactions == [INTERACTION_GENERATION_FAILED]:
+			if interaction_sets == [FAILED]:
 				continue
 			
-			for interaction in interactions:
-				interaction_matrix.add_unconnected_interaction(interaction)
-			
-			return interaction_matrix
+			add_interaction_sets(interaction_matrix, generated_matrices, interaction_sets)
 	
-	return null
+	var unique_matrices : Array[InteractionMatrix] = []
+	
+	for interaction_matrix in generated_matrices:
+		if unique_matrices.any(
+			func(unique_matrix: InteractionMatrix): return unique_matrix.has_same_unconnected_matrix(interaction_matrix)
+		):
+			continue
+		
+		unique_matrices.push_back(interaction_matrix)
 
-func insert_random_hadron_connections(
-	interaction_matrix: InteractionMatrix, hadron_connections: Array, hadron_connection_count: int
+	return unique_matrices
+
+func sum(accum: int, number: int) -> int:
+	return accum + number
+
+func add_interaction_sets(
+	base_interaction_matrix: InteractionMatrix, unique_matrices: Array[InteractionMatrix], interaction_sets: Array
 ) -> void:
-	hadron_connections.shuffle()
-	for i in range(hadron_connection_count):
-		interaction_matrix.insert_connection(hadron_connections[i])
+	
+	var unique_interaction_sets : Array = []
+	
+	for interaction_set in interaction_sets:
+		if unique_interaction_sets.any(
+			func(
+				unique_interaction_set: Array
+			): return get_shared_elements_count(interaction_set, unique_interaction_set) == interaction_set.size()
+		):
+			continue
+		
+		unique_interaction_sets.push_back(interaction_set)
+	
+	for interaction_set in unique_interaction_sets:
+		var interaction_matrix : InteractionMatrix = base_interaction_matrix.duplicate()
+		for interaction in interaction_set:
+			interaction_matrix.add_unconnected_interaction(interaction)
+		unique_matrices.push_back(interaction_matrix)
+
+func generate_interaction_sets(unconnected_particles: Array, degree: int, usable_interactions: Array) -> Array:
+	var interaction_sets : Array = []
+	
+	for interaction_connection in get_possible_interaction_connections(unconnected_particles, degree, usable_interactions):
+		var new_unconnected_particles : Array = add_next_interaction_connection(unconnected_particles, interaction_connection)
+		var new_degree : int = degree-interaction_size(interaction_connection[INDEX.INTERACTION])
+		
+		if new_degree == 0 and new_unconnected_particles.size() == 0:
+			interaction_sets.push_back([interaction_connection[INDEX.INTERACTION]])
+			continue
+		
+		if new_degree == 0 and new_unconnected_particles.size() > 0:
+			return [FAILED]
+		
+		var next_interaction_sets := generate_interaction_sets(new_unconnected_particles, new_degree, usable_interactions)
+		
+		if next_interaction_sets == [FAILED] or next_interaction_sets == []:
+			continue
+		
+		for interaction_set in next_interaction_sets:
+			var combined_set : Array = []
+			combined_set.push_back(interaction_connection[INDEX.INTERACTION])
+			combined_set += interaction_set
+			
+			interaction_sets.push_back(combined_set)
+	
+	return interaction_sets
+
+func add_next_interaction_connection(unconnected_particles: Array, interaction_connection: Array,
+	interaction = interaction_connection[INDEX.INTERACTION], connection_particles = interaction_connection[INDEX.CONNECTION_PARTICLES]
+) -> Array:
+	unconnected_particles = get_non_shared_elements(unconnected_particles, connection_particles)
+	unconnected_particles += get_non_shared_elements(interaction, connection_particles)
+	
+	return unconnected_particles
+
+func get_permutations(array: Array, count: int) -> Array:
+	var permutations : Array = []
+	
+	if count == 0:
+		return [[]]
+	
+	var index_permutations : Array = get_index_permutations(range(array.size()), count)
+	for i in range(index_permutations.size()):
+		permutations.push_back([])
+		for index in index_permutations[i]:
+			permutations[i].push_back(array[index])
+	
+	var unique_permutations : Array = []
+	for i in range(permutations.size()):
+		if permutations[i] not in unique_permutations:
+			unique_permutations.push_back(permutations[i])
+	
+	return unique_permutations
+
+func get_index_permutations(indices: PackedInt32Array, count: int) -> Array[PackedInt32Array]:
+	var permutations : Array[PackedInt32Array] = []
+	
+	for index in indices:
+		permutations += get_index_permutations_from_index(indices.duplicate(), count, index)
+	
+	var unique_permutations : Array[PackedInt32Array] = []
+	for i in range(permutations.size()):
+		permutations[i].sort()
+		if permutations[i] not in unique_permutations:
+			unique_permutations.push_back(permutations[i])
+	
+	return unique_permutations
+	
+func get_index_permutations_from_index(
+	indices: PackedInt32Array, count: int, current_index : int) -> Array[PackedInt32Array]:
+	
+	count -= 1
+	
+	if count == 0:
+		return [[current_index]]
+	
+	indices.remove_at(indices.find(current_index))
+	
+	var permutations_from_current_index : Array[PackedInt32Array] = []
+	
+	for index in indices:
+		var index_permutations: Array[PackedInt32Array] = get_index_permutations_from_index(indices.duplicate(), count, index)
+		for permutation in index_permutations:
+			var permutation_from_current_index : PackedInt32Array = [current_index]
+			permutation_from_current_index.append_array(permutation)
+			
+			permutations_from_current_index.push_back(permutation_from_current_index)
+	
+	return permutations_from_current_index
 
 func get_unique_instances(array: Array) -> Array:
 	var unique_instances: Array = []
@@ -640,21 +722,26 @@ func get_possible_hadron_connections(interaction_matrix: InteractionMatrix, same
 	var possible_hadron_connections : Array = []
 	
 	for particle in unique_same_hadron_particles:
-		var connect_from_ids: Array[PackedInt32Array] = [[], []]
-		var connect_to_ids: Array[PackedInt32Array] = [[], []]
+		var connect_from_ids: PackedInt32Array = []
+		var connect_to_ids: PackedInt32Array = []
 		for state in states:
 			for id in interaction_matrix.find_all_unconnected_state_particle(particle, state):
 				if !interaction_matrix.is_hadron(id):
 					continue
 				if sign(particle) * state_factor[state] > 0:
-					connect_from_ids[state].append(id)
+					connect_from_ids.push_back(id)
 				else:
-					connect_to_ids[state].append(id)
+					connect_to_ids.push_back(id)
 		
-		for state in states:
-			for connect_from_id in connect_from_ids[state]:
-				for connect_to_id in connect_to_ids[(state+1)%2]:
-					possible_hadron_connections.append([connect_from_id, connect_to_id, particle])
+		for connect_from_id in connect_from_ids:
+			for connect_to_id in connect_to_ids:
+				if (
+					possible_hadron_connections.count([connect_from_id, connect_to_id, particle]) >=
+					interaction_matrix.unconnected_matrix[connect_from_id].count(particle)
+				):
+					continue
+				
+				possible_hadron_connections.append([connect_from_id, connect_to_id, particle])
 
 	return possible_hadron_connections
 
@@ -674,28 +761,6 @@ func get_possible_hadron_connection_count(
 	
 	return possible_hadron_connection_count
 
-func generate_interactions(unconnected_particles: Array, degree: int, usable_interactions: Array) -> Array:
-	var interactions : Array = []
-
-	var skip_next_interaction : bool = false
-	for interaction_count in range(degree):
-		if skip_next_interaction:
-			continue
-
-		var possible_interaction_connections := get_possible_interaction_connections(
-			unconnected_particles, degree-interaction_count, usable_interactions
-		)
-
-		if possible_interaction_connections.size() == 0:
-			return [INTERACTION_GENERATION_FAILED]
-
-		var next_interaction_connection : Array = choose_random(possible_interaction_connections, 1)[0]
-		unconnected_particles = add_next_interaction(interactions, unconnected_particles, next_interaction_connection)
-
-		skip_next_interaction = interaction_size(next_interaction_connection[INDEX.INTERACTION]) == 2
-
-	return interactions
-
 func choose_random(array: Array, choose_count: int = 1) -> Array:
 	if array.size() == 0:
 		push_error("Choose random array is size 0")
@@ -708,38 +773,24 @@ func choose_random(array: Array, choose_count: int = 1) -> Array:
 	
 	return chosen_random
 
-func add_next_interaction(interactions: Array, unconnected_particles: Array, interaction_connection: Array) -> Array:
-	
-	var interaction : Array = interaction_connection[INDEX.INTERACTION]
-	interactions.append(interaction)
-	
-	var connection_particles : Array = choose_random(
-		get_shared_elements(interaction, unconnected_particles),
-		interaction_connection[INDEX.CONNECTION_COUNT]
-	)
-	
-	unconnected_particles = get_non_shared_elements(unconnected_particles, connection_particles)
-	unconnected_particles += get_non_shared_elements(interaction, connection_particles)
-	
-	return unconnected_particles
-
 func get_possible_interaction_connections(
 	unconnected_particles: Array, interaction_count: int, usable_interactions: Array
 ) -> Array:
 	var possible_interaction_connections := []
 
 	for interaction in usable_interactions:
-		var shared_particles_count := get_shared_elements_count(interaction, unconnected_particles)
+		var shared_particles := get_shared_elements(interaction, unconnected_particles)
 
-		if shared_particles_count == 0:
+		if shared_particles.size() == 0:
 			continue
 
-		for connection_number in range(1, shared_particles_count+1):
+		for connection_number in range(1, shared_particles.size()+1):
 			if is_connection_number_possible(
 				unconnected_particles.size() + interaction.size() - 2*connection_number,
 				interaction_count - interaction_size(interaction)
 			):
-				possible_interaction_connections.append([interaction, connection_number])
+				for connection_particles in get_permutations(shared_particles, connection_number):
+					possible_interaction_connections.append([interaction, connection_particles])
 
 	return possible_interaction_connections
 
