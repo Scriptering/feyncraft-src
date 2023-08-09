@@ -3,10 +3,16 @@ extends Node
 enum ColourScheme {TeaStain, SeaFoam, Professional}
 enum COLOURS {primary, secondary, pencil, primary_highlight, invalid, invalid_highlight}
 
-enum Particle {photon, gluon, Z, H, W, electron, muon, tau, electron_neutrino, muon_neutrino,
-tau_neutrino, up, down, charm, strange, top, bottom, none = 100,
-anti_bottom = -16, anti_top, anti_strange, anti_charm, anti_down, anti_up, anti_tau_neutrino,
-anti_muon_neutrino, anti_electron_neutrino, anti_tau, anti_muon, anti_electron, anti_W}
+enum Particle {
+	photon, gluon, Z, H, W,
+	lepton, electron, muon, tau,
+	neutrino, electron_neutrino, muon_neutrino, tau_neutrino,
+	bright_quark, dark_quark, up, down, charm, strange, top, bottom,
+	anti_bottom = -16, anti_top, anti_strange, anti_charm, anti_down, anti_up, anti_quark_dash, anti_quark,
+	anti_tau_neutrino, anti_muon_neutrino, anti_electron_neutrino, anti_neutrino,
+	anti_tau, anti_muon, anti_electron, anti_lepton,
+	anti_W,
+	none = 100}
 
 enum Hadrons {Proton, AntiProton, Neutron, AntiNeutron, DeltaPlusPlus, DeltaPlus, Delta0, DeltaMinus,
 AntiDeltaPlusPlus, AntiDeltaPlus, AntiDelta0, AntiDeltaMinus, Epsilon0, EpsilonMinus, AntiEpsilon0, AntiEpsilonMinus,
@@ -32,55 +38,72 @@ const COLOUR_SCHEMES : Array = [
 	[Color('FFFFFF'), Color('FFFFFF'), Color('000000'), Color('e3d3c0'), Color('df3e3e'), Color('e35959')]]
 
 const QUANTUM_NUMBERS : Array[Array] = [
-[0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-[0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[-1.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[-1.0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-[-1.0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[-1.0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0.0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0.0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0.0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[2.0/3, 0, 0, 0, 0, 1.0/3, 1, 0, 0, 0, 0, 0, 1, 0],
-[-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 1, 0, 0, 0, 0, 1],
-[2.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 1, 0, 0, 0, 0],
-[-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 1, 0, 0, 0],
-[2.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 1, 0, 0, 0],
-[-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 0, 1, 0, 0]
+[0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+[0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[-1.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[-1.0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[-1.0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+[-1.0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+[-1.0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+[0.0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0.0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0.0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+[0.0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+[2.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 0, 0],
+[-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 0, 0],
+[2.0/3, 0, 0, 0, 0, 1.0/3, 1, 0, 0, 0, 0, 0],
+[-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 1, 0, 0, 0, 0],
+[2.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 1, 0, 0, 0],
+[-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 1, 0, 0],
+[2.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 1, 0],
+[-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 0, 1]
 ]
 
 const FERMION_DIMENSIONALITY : float = 1.5
 const BOSON_DIMENSIONALITY : float = 1.0
 
-const DIRECTIONAL_PARTICLES := [Particle.electron, Particle.muon, Particle.tau, Particle.electron_neutrino,
- Particle.muon_neutrino, Particle.tau_neutrino, Particle.up, Particle.down, Particle.charm,
- Particle.strange, Particle.top, Particle.bottom, Particle.W]
+const LEPTONS := [
+	Particle.lepton, Particle.electron, Particle.muon, Particle.tau,
+	Particle.neutrino, Particle.electron_neutrino, Particle.muon_neutrino, Particle.tau_neutrino
+]
 
-const LEPTONS := [Particle.electron, Particle.muon, Particle.tau, Particle.electron_neutrino,
- Particle.muon_neutrino, Particle.tau_neutrino]
+const QUARKS := [
+	Particle.bright_quark, Particle.dark_quark, Particle.up, Particle.down, Particle.charm, Particle.strange, Particle.top, Particle.bottom
+]
 
-const QUARKS := [Particle.up, Particle.down, Particle.charm, Particle.strange, Particle.top, Particle.bottom]
-
-const FERMIONS := [Particle.electron, Particle.muon, Particle.tau, Particle.electron_neutrino,
- Particle.muon_neutrino, Particle.tau_neutrino, Particle.up, Particle.down, Particle.charm,
- Particle.strange, Particle.top, Particle.bottom]
+const FERMIONS := LEPTONS + QUARKS
 
 const BOSONS := [Particle.photon, Particle.gluon, Particle.H, Particle.W, Particle.Z]
 
-const COLOUR_PARTICLES := [Particle.gluon, Particle.up, Particle.down, Particle.charm, Particle.strange,
-Particle.top, Particle.bottom]
+const COLOUR_PARTICLES := [
+	Particle.gluon,
+	Particle.bright_quark, Particle.dark_quark, Particle.up, Particle.down, Particle.charm, Particle.strange, Particle.top, Particle.bottom
+]
 
-const SHADED_PARTICLES := [Particle.W, Particle.electron, Particle.muon, Particle.tau, Particle.electron_neutrino,
-Particle.muon_neutrino, Particle.tau_neutrino, Particle.up, Particle.down, Particle.top, Particle.bottom,
-Particle.charm, Particle.strange]
+const SHADED_PARTICLES := [
+	Particle.W,
+	Particle.lepton, Particle.electron, Particle.muon, Particle.tau,
+	Particle.neutrino, Particle.electron_neutrino, Particle.muon_neutrino, Particle.tau_neutrino,
+	Particle.bright_quark, Particle.dark_quark, Particle.up, Particle.down, Particle.top, Particle.bottom, Particle.charm, Particle.strange
+]
 
-const BRIGHT_PARTICLES := [Particle.W, Particle.up, Particle.charm, Particle.top,
-Particle.electron_neutrino, Particle.muon_neutrino, Particle.tau_neutrino]
+const BRIGHT_PARTICLES := [
+	Particle.W,
+	Particle.bright_quark, Particle.up, Particle.charm, Particle.top,
+	Particle.neutrino, Particle.electron_neutrino, Particle.muon_neutrino, Particle.tau_neutrino
+]
 
-const DARK_PARTICLES := [Particle.W, Particle.down, Particle.strange, Particle.bottom, Particle.electron,
-Particle.muon, Particle.tau]
+const DARK_PARTICLES := [
+	Particle.W,
+	Particle.dark_quark, Particle.down, Particle.strange, Particle.bottom,
+	Particle.lepton, Particle.electron, Particle.muon, Particle.tau
+]
+
+const GENERAL_PARTICLES := [
+	Particle.lepton, Particle.neutrino, Particle.bright_quark, Particle.dark_quark
+]
 
 const INVALID = -1
 
@@ -88,6 +111,62 @@ var MAXIMUM_INTERACTION_STRENGTH : float
 var MINIMUM_INTERACTION_STRENGTH : float
 
 const MINIMUM_INTERACTION_STRENGTH_ALPHA : float = 0.05
+
+const GENERAL_CONVERSION : Dictionary = {
+	Particle.photon: Particle.photon, Particle.H: Particle.H, Particle.W: Particle.W, Particle.Z: Particle.Z, Particle.gluon: Particle.gluon,
+	Particle.lepton: [Particle.electron, Particle.muon, Particle.tau],
+	Particle.neutrino: [Particle.electron_neutrino, Particle.muon_neutrino, Particle.tau_neutrino],
+	Particle.bright_quark: [Particle.up, Particle.charm, Particle.top],
+	Particle.dark_quark: [Particle.down, Particle.strange, Particle.bottom],
+	Particle.electron: Particle.lepton,
+	Particle.muon: Particle.lepton,
+	Particle.tau: Particle.lepton,
+	Particle.electron_neutrino: Particle.neutrino,
+	Particle.muon_neutrino: Particle.neutrino,
+	Particle.tau_neutrino: Particle.neutrino,
+	Particle.up: Particle.bright_quark,
+	Particle.charm: Particle.bright_quark,
+	Particle.top: Particle.bright_quark,
+	Particle.down: Particle.dark_quark,
+	Particle.strange: Particle.dark_quark,
+	Particle.bottom: Particle.dark_quark
+}
+
+var GENERAL_INTERACTIONS : Array = [
+	[
+		[Particle.lepton, Particle.lepton, Particle.photon],
+		[Particle.bright_quark, Particle.bright_quark, Particle.photon],
+		[Particle.dark_quark, Particle.dark_quark, Particle.photon]
+	],
+	[
+		[Particle.bright_quark, Particle.bright_quark, Particle.gluon],
+		[Particle.dark_quark, Particle.dark_quark, Particle.gluon]
+	],
+	[
+		[Particle.lepton, Particle.neutrino, Particle.W],
+		[Particle.bright_quark, Particle.dark_quark, Particle.W],
+		[Particle.W, Particle.W, Particle.W, Particle.W]
+	],
+	[
+		[Particle.lepton, Particle.lepton, Particle.Z],
+		[Particle.bright_quark, Particle.bright_quark, Particle.Z],
+		[Particle.dark_quark, Particle.dark_quark, Particle.Z],
+		[Particle.neutrino, Particle.neutrino, Particle.Z],
+		[Particle.W, Particle.W, Particle.Z],
+		[Particle.W, Particle.W, Particle.photon],
+		[Particle.W, Particle.W, Particle.Z, Particle.Z],
+		[Particle.W, Particle.W, Particle.photon, Particle.photon],
+		[Particle.W, Particle.W, Particle.Z, Particle.photon],
+		[Particle.lepton, Particle.lepton, Particle.H],
+		[Particle.bright_quark, Particle.bright_quark, Particle.H],
+		[Particle.dark_quark, Particle.dark_quark, Particle.H],
+		[Particle.neutrino, Particle.neutrino, Particle.H],
+		[Particle.H, Particle.Z, Particle.Z],
+		[Particle.H, Particle.H, Particle.H, Particle.H],
+		[Particle.H, Particle.H, Particle.Z, Particle.Z],
+		[Particle.H, Particle.H, Particle.W, Particle.W]
+	]
+]
 
 var INTERACTIONS : Array = [
 	[
@@ -388,6 +467,10 @@ func get_hadron_texture(hadron: Hadrons):
 
 func sort_interactions() -> void:
 	for interaction_type in INTERACTIONS:
+		for interaction in interaction_type:
+			interaction.sort()
+	
+	for interaction_type in GENERAL_INTERACTIONS:
 		for interaction in interaction_type:
 			interaction.sort()
 

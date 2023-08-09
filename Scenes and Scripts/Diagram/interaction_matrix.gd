@@ -138,4 +138,18 @@ func duplicate():
 	new_interaction_matrix.unconnected_particle_count = unconnected_particle_count.duplicate()
 	new_interaction_matrix.matrix_size = self.matrix_size
 	return new_interaction_matrix
+
+func has_same_unconnected_matrix(comparison_matrix: InteractionMatrix) -> bool:
+	if unconnected_matrix == comparison_matrix.unconnected_matrix:
+		return true
 	
+	if unconnected_matrix.size() != comparison_matrix.unconnected_matrix.size():
+		return false
+	
+	if unconnected_matrix.any(func(interaction): return interaction not in comparison_matrix.unconnected_matrix):
+		return false
+	
+	if comparison_matrix.unconnected_matrix.any(func(interaction): return interaction not in unconnected_matrix):
+		return false
+	
+	return true

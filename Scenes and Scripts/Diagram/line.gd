@@ -120,7 +120,7 @@ func _set_anti(new_value: int) -> void:
 		interaction.update_interaction()
 
 func set_anti() -> void:
-	if base_particle in GLOBALS.DIRECTIONAL_PARTICLES:
+	if base_particle in GLOBALS.SHADED_PARTICLES:
 		if points[Point.Start].x <= points[Point.End].x:
 			anti = Anti.noanti
 		else:

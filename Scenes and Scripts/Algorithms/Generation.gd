@@ -4,7 +4,7 @@ enum INTERACTION_TYPE {electroweak, strong, higgs, weak}
 
 enum Shade {Bright, Dark, None}
 
-const SHADED_PARTICLES := [GLOBALS.BRIGHT_PARTICLES, GLOBALS.DARK_PARTICLES, GLOBALS.DIRECTIONAL_PARTICLES]
+const SHADED_PARTICLES := [GLOBALS.BRIGHT_PARTICLES, GLOBALS.DARK_PARTICLES, GLOBALS.SHADED_PARTICLES]
 
 const INTERACTION_SIZE = 3.0
 
@@ -20,7 +20,8 @@ enum {
 	ATTEMPTS_PER_DEGREE = 10,
 	UNIQUE_GENERATION_ATTEMPTS = 100, UNIQUE_GENERATION_FAILED,
 	INTERACTION_MATRIX_GENERATION_ATTEMPTS = 10, INTERACTION_GENERATION_FAILED,
-	CONNECTION_ATTEMPTS = 100, CONNECTION_FAILED,
+	UNIQUE_CONNECTION_ATTEMPTS = 100, UNIQUE_CONNECTION_FAILED,
+	CONNECTION_ATTEMPTS = 25, CONNECTION_FAILED,
 	MAX_PATH_STEPS = 100,
 	MAX_SHADE_CONNECTION_ROTATIONS = 100
 }
@@ -113,6 +114,21 @@ func get_degrees_to_check(
 
 	return degrees_to_check
 
+func convert_interaction_to_general(interaction: Array) -> Array:
+	return interaction.map(
+		func(particle): return GLOBALS.GENERAL_CONVERSION[particle] if particle not in GLOBALS.GENERAL_PARTICLES else particle
+	)
+
+func convert_interactions_to_general(interactions: Array) -> Array:
+	var converted_interactions : Array = interactions.map(convert_interaction_to_general)
+	
+	var general_interactions : Array = []
+	for interaction in converted_interactions:
+		if interaction not in general_interactions:
+			general_interactions.push_back(interaction)
+
+	return general_interactions
+
 func generate_diagram(
 	initial_state: Array, final_state: Array, min_degree: int, max_degree: int, usable_interactions: Array, find_all: bool = false
 ) -> Array[ConnectionMatrix]:
@@ -123,7 +139,10 @@ func generate_diagram(
 		print('Initial state quantum numbers do not match final state')
 		return [null]
 	
+	var general_usable_interactions := convert_interactions_to_general(usable_interactions)
+	
 	var base_interaction_matrix := create_base_interaction_matrix(initial_state, final_state)
+	base_interaction_matrix.unconnected_matrix = base_interaction_matrix.unconnected_matrix.map(convert_interaction_to_general)
 
 	var same_hadron_particles := get_shared_elements(get_hadron_particles(initial_state), get_hadron_particles(final_state))
 	var possible_hadron_connections := get_possible_hadron_connections(base_interaction_matrix, same_hadron_particles)
@@ -137,7 +156,7 @@ func generate_diagram(
 	for degree in degrees_to_check:
 		
 		if print_results:
-			print("degree: " + str(degree))
+			print("degree: " + str(degree) + " " + get_print_time())
 
 		var possible_hadron_connection_count := get_possible_hadron_connection_count(
 			base_interaction_matrix.get_unconnected_particle_count(StateLine.StateType.Both),
@@ -145,45 +164,50 @@ func generate_diagram(
 		)
 		
 		var unique_matrices : Array[InteractionMatrix] = []
+		var unique_connection_matrices : Array[ConnectionMatrix] = []
 
 		for attempt in range(ATTEMPTS_PER_DEGREE * (degree + 1)):
+			
+			print_time(0)
 			var unique_interaction_matrix: InteractionMatrix = generate_unique_interaction_matrix(
-					base_interaction_matrix, degree, possible_hadron_connections, possible_hadron_connection_count, unique_matrices,
-					usable_interactions
+				base_interaction_matrix, degree, possible_hadron_connections, possible_hadron_connection_count, unique_matrices,
+				general_usable_interactions
 			)
 			if unique_interaction_matrix == null:
 				if print_results:
 					print("Unable to find unique matrix, " + get_print_time())
 				break
-				
-			unique_matrices.append(unique_interaction_matrix)
-			unique_interaction_matrix = connect_interaction_matrix(unique_interaction_matrix)
+			elif print_results:
+				print("Found unique matrix, " + get_print_time())
 			
-			if unique_interaction_matrix == null:
+			print_time(1)
+
+			unique_matrices.append(unique_interaction_matrix)
+			
+			var unique_connection_matrix: ConnectionMatrix = generate_unique_connections(
+				unique_interaction_matrix, unique_connection_matrices
+			)
+			
+			if unique_connection_matrix == null:
 				if print_results:
-					print("Unable to connect matrix, " + get_print_time())
+					print("Unable to find unique connections, " + get_print_time())
 				continue
 			
-				
-			generated_matrix = unique_interaction_matrix
-				
-			if !find_all:
-				if print_results:
-					print(
-						'Success! Found at degree ', degree,' which took ', attempt,
-						' attempts which took ' + get_print_time()
-					)
-				return [unique_interaction_matrix.get_connection_matrix()]
+			unique_connection_matrices.push_back(unique_connection_matrix)
 			
-			if is_connection_matrix_unique(generated_matrix.get_connection_matrix(), generated_connection_matrices):
-				if print_results:
-					print(
-						'Success! Found at degree ', degree,' which took ', attempt,
-						' attempts which took ' + get_print_time()
-					)
-				generated_connection_matrices.append(unique_interaction_matrix.get_connection_matrix())
+			if print_results:
+				print(
+					'Success! Found at degree ', degree,' which took ', attempt,
+					' attempts which took ' + get_print_time()
+				)
+
+			if !find_all:
+				return [unique_connection_matrix]
+
 			elif print_results:
 				print("Generated matrix is not unique, " + get_print_time())
+		
+		generated_connection_matrices.append_array(unique_connection_matrices)
 
 	if generated_connection_matrices.size() == 0:
 		if print_results:
@@ -192,6 +216,25 @@ func generate_diagram(
 		return [null]
 
 	return generated_connection_matrices
+
+func generate_unique_connections(
+	unconnected_matrix: InteractionMatrix, unique_connection_matrices: Array[ConnectionMatrix]
+) -> ConnectionMatrix:
+	
+	for unique_connection_attempt in range(UNIQUE_CONNECTION_ATTEMPTS):
+		var connected_matrix : InteractionMatrix = connect_interaction_matrix(unconnected_matrix)
+		
+		if connected_matrix == null:
+			return null
+		
+		var connection_matrix := connected_matrix.get_connection_matrix()
+		
+		if unique_connection_matrices.any(func(matrix: ConnectionMatrix): matrix.is_duplicate(connection_matrix)):
+			continue
+		
+		return connected_matrix
+	
+	return null
 
 func get_print_time() -> String:
 	return "time: " + str(Time.get_ticks_usec() - start_time) + " usec"
@@ -214,11 +257,11 @@ func connect_interaction_matrix(unconnected_interaction_matrix: InteractionMatri
 	unconnected_interaction_matrix.reduce_to_base_particles()
 	
 	var has_directional_particles : bool = unconnected_interaction_matrix.get_unconnected_base_particles().any(
-		func(particle): return particle in GLOBALS.DIRECTIONAL_PARTICLES
+		func(particle): return particle in GLOBALS.SHADED_PARTICLES
 	)
 	
 	var has_directionless_particles: bool = unconnected_interaction_matrix.get_unconnected_base_particles().any(
-		func(particle): return particle not in GLOBALS.DIRECTIONAL_PARTICLES
+		func(particle): return particle not in GLOBALS.SHADED_PARTICLES
 	)
 	
 	for _attempt in range(CONNECTION_ATTEMPTS):
@@ -523,8 +566,11 @@ func get_shared_elements_count(array1 : Array, array2 : Array) -> int:
 	
 	return min(shared_array1_count, shared_array2_count)
 
-func print_time():
-	print(Time.get_ticks_usec() - start_time)
+func print_time(count: int = -1):
+	if count == -1:
+		print("Time: " + str(Time.get_ticks_usec() - start_time))
+	else:
+		print(count, "Time: ", get_print_time())
 
 func generate_unique_interaction_matrix(
 	base_interaction_matrix: InteractionMatrix, degree: int, possible_hadron_connections: Array,
@@ -540,9 +586,9 @@ func generate_unique_interaction_matrix(
 		var generation_failed: bool = unique_interaction_matrix == null
 		
 		if generation_failed:
-			continue
+			return null
 		
-		if unique_interaction_matrix in unique_matrices:
+		if unique_matrices.any(func(matrix): return matrix.has_same_unconnected_matrix(unique_interaction_matrix)):
 			continue
 		
 		return unique_interaction_matrix
