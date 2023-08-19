@@ -5,12 +5,7 @@ extends Node2D
 @onready var Vertex = preload("res://Scenes and Scripts/Diagram/interaction.tscn")
 @onready var Line = preload("res://Scenes and Scripts/Diagram/line.tscn")
 @onready var Info = preload("res://Scenes and Scripts/UI/Info/Info.tscn")
-@onready var Interactions = $GridArea/Interactions
-@onready var ParticleLines = $GridArea/ParticleLines
 
-@onready var Crosshair = get_node("Crosshair")
-@onready var Initial : StateLine = get_node("Initial")
-@onready var Final : StateLine = get_node('Final')
 @onready var FPS = get_node('FPS')
 @onready var Cursor = get_node('Cursor')
 @onready var Pathfinding = get_node('PathFinding')
@@ -51,24 +46,20 @@ var interaction_matrix := ConnectionMatrix.new()
 @export var info_gap : int
 
 func _ready():
-	States.init(Cursor, Crosshair, $diagram_actions)
-	$diagram_actions.init($GridArea/Interactions, $GridArea/ParticleLines, $ParticleButtons, [Initial, Final])
+	States.init(Cursor, $Diagram)
+	$Diagram.init($ParticleButtons)
 	$ShaderControl.init($PalletteButtons)
 	$Generation.init($GenerationButton)
-	
-	Generation.connect('draw_diagram', Callable($diagram_actions, 'draw_raw_diagram'))
-	
+
+	Generation.connect('draw_diagram', Callable($Diagram, 'draw_raw_diagram'))
+
 	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
-	
+
 func _process(_delta):
 	FPS.text = str(Engine.get_frames_per_second())
 
 func colourful() -> void:
 	Pathfinding.colourful(true)
-
-func state_changed(state_name : String, connections : Array):
-	var particles_and_hadrons = Equation.get_particles_from_states(state_name, connections)
-	Equation.make_equation(['Initial', 'Final'].find(state_name), particles_and_hadrons[0], particles_and_hadrons[1])
 
 func is_hovering(group):
 	for i in get_tree().get_nodes_in_group(group):
@@ -76,11 +67,6 @@ func is_hovering(group):
 			return true
 
 	return false
-
-func update_statelines() -> void:
-	await get_tree().process_frame
-	Initial.update_stateline()
-	Final.update_stateline()
 
 func show_colour():
 	Pathfinding.showing_type = GLOBALS.VISION_TYPE.COLOUR
@@ -100,7 +86,7 @@ func is_valid() -> bool:
 func show_vision(state : int, is_show : bool) -> void:
 	if !is_show:
 		Pathfinding.showing_type = GLOBALS.VISION_TYPE.NONE
-	
+
 	else:
 		match state:
 			GLOBALS.VISION_TYPE.COLOUR:
@@ -110,9 +96,9 @@ func show_vision(state : int, is_show : bool) -> void:
 
 func generate(initialState : Array, finalState : Array, minDegree : int, maxDegree : int, interaction_checks : Array):
 	clear()
-	
+
 	await get_tree().create_timer(0.01).timeout
-	
+
 	match (Generation.generate_diagram(initialState, finalState, minDegree, maxDegree, interaction_checks)):
 		INVALID:
 			get_node('Buttons/GenerationButton/GenerationUI').display_text('Failed to find')

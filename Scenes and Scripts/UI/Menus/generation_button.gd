@@ -3,8 +3,9 @@ extends PullOutTab
 signal generate
 
 @onready var Level = get_tree().get_nodes_in_group('level')[0]
-@onready var Initial : StateLine = Level.get_node('Initial')
-@onready var Final : StateLine = Level.get_node('Final')
+@onready var Diagram = Level.get_node("Diagram")
+@onready var Initial : StateLine = Diagram.get_node('Initial')
+@onready var Final : StateLine = Diagram.get_node('Final')
 @onready var DegreeRange = $MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/DegreeSlider/VBoxContainer/RangeSlider
 @onready var EM_check := $MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/em
 @onready var strong_check := $MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/strong

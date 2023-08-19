@@ -58,6 +58,8 @@ theme_override_constants/separation = 0
 [node name="TabButton" parent="MovingContainer" instance=ExtResource("3_08n6d")]
 layout_mode = 2
 TabIcon = ExtResource("10_qooab")
+TabMinimumSize = Vector2(2.08165e-12, 22)
+expand_icon = true
 
 [node name="Tab" type="PanelContainer" parent="MovingContainer"]
 use_parent_material = true
@@ -74,19 +76,23 @@ theme_override_constants/separation = -3
 [node name="Colour" parent="MovingContainer/Tab/MovingContainer" instance=ExtResource("5_tinf7")]
 layout_mode = 2
 icon = ExtResource("6_v7snu")
+minimum_size = Vector2(26, 26)
 toggle_mode = true
+expand_icon = true
 
 [node name="Shade" parent="MovingContainer/Tab/MovingContainer" instance=ExtResource("5_tinf7")]
 layout_mode = 2
 icon = ExtResource("6_63enc")
-minimum_size = Vector2(20, 20)
+minimum_size = Vector2(26, 26)
 toggle_mode = true
+expand_icon = true
 
 [node name="Strength" parent="MovingContainer/Tab/MovingContainer" instance=ExtResource("5_tinf7")]
 layout_mode = 2
 icon = ExtResource("7_nx8nj")
-minimum_size = Vector2(20, 20)
+minimum_size = Vector2(26, 26)
 toggle_mode = true
+expand_icon = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

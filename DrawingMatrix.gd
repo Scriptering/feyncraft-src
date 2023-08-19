@@ -2,7 +2,8 @@ class_name DrawingMatrix
 extends ConnectionMatrix
 
 var split_hadron_ids : Array = []
-var interaction_positions : PackedVector2Array = []
+var grid_size : int = 1
+var normalised_interaction_positions : PackedVector2Array = []
 
 func initialise_from_connection_matrix(from_connection_matrix: ConnectionMatrix) -> void:
 	connection_matrix = from_connection_matrix.connection_matrix.duplicate(true)
@@ -11,15 +12,22 @@ func initialise_from_connection_matrix(from_connection_matrix: ConnectionMatrix)
 	
 	make_drawable()
 
+func get_interaction_positions() -> PackedVector2Array:
+	var interaction_positions := normalised_interaction_positions.duplicate()
+	for i in range(interaction_positions.size()):
+		interaction_positions[i] *= grid_size
+	return interaction_positions
+
+func add_interaction_position(position: Vector2, id: int = normalised_interaction_positions.size()) -> void:
+	normalised_interaction_positions.insert(id, position/grid_size)
 
 func add_interaction_with_position(
 	interaction_position: Vector2, interaction_state: StateLine.StateType = StateLine.StateType.None,
 	id : int = calculate_new_interaction_id(interaction_state)
 ) -> void:
 
-	interaction_positions.insert(id, Vector2.ZERO)
 	add_interaction(interaction_state, id)
-	interaction_positions[id] = interaction_position
+	add_interaction_position(interaction_position, id)
 
 func make_drawable() -> void:
 	split_hadrons()
@@ -66,10 +74,10 @@ func is_double_connection(from_id: int, to_id: int, bidirectional : bool = false
 		get_connection_size(from_id, to_id) >= 1 and get_connection_size(to_id, from_id) >= 1
 	)
 
-func get_hadron_ids() -> Array[int]:
-	var hadron_ids: Array[int] = []
+func get_hadron_ids() -> PackedInt32Array:
+	var hadron_ids: PackedInt32Array = []
 	for state_id in get_state_count(StateLine.StateType.Both):
-		if get_connection_count(state_id, true) > 1:
+		if get_connected_count(state_id, true) > 1:
 			hadron_ids.append(state_id)
 	
 	return hadron_ids
@@ -84,8 +92,8 @@ func split_hadron(hadron_id: int) -> void:
 	var new_interaction_id := hadron_id + 1
 	split_hadron_ids.append([hadron_id])
 	
-	while get_connection_count(hadron_id, true) > 1:
-		var connection_ids := get_connection_ids(hadron_id, true)
+	while get_connected_count(hadron_id, true) > 1:
+		var connection_ids := get_connected_ids(hadron_id, true)
 		var connection_id := connection_ids[randi() % connection_ids.size()]
 		
 		add_interaction(get_state_from_id(hadron_id), new_interaction_id)

@@ -1,7 +1,7 @@
 class_name StateLine
 extends Node2D
 
-@onready var Level = get_tree().get_first_node_in_group('level')
+@onready var Diagram = get_parent()
 @onready var HadronJoint = preload("res://Scenes and Scripts/Diagram/Hadrons/HadronJoint.tscn")
 
 @export var hadron_label_gap : int
@@ -72,7 +72,7 @@ func create_hadron_joint(hadron: Hadron) -> void:
 	joint.hadron = hadron
 	joint.state = state
 	joint.init()
-	Level.add_child(joint)
+	Diagram.add_child(joint)
 	joints.append(joint)
 
 func create_hadrons(quark_groups: Array) -> void:
@@ -102,7 +102,7 @@ func sort_quark_groups(quark_groups: Array) -> Array:
 
 func get_connected_lines() -> Array[ParticleLine]:
 	var connected_lines: Array[ParticleLine] = []
-	for line in get_tree().get_nodes_in_group("lines"):
+	for line in Diagram.get_particle_lines():
 		var line_state_line : StateType = line.get_on_state_line()
 		var on_state_line : bool = line_state_line == state or line_state_line == StateType.Both
 		if on_state_line:
@@ -126,7 +126,7 @@ func group_connected_quarks(sorted_connected_lines: Array) -> Array:
 			continue
 		if current_group.size() == 0:
 			current_group.append(line)
-		elif abs(line.get_side_point(state).y - current_y_point) == Level.grid_size:
+		elif abs(line.get_side_point(state).y - current_y_point) == Diagram.grid_size:
 			current_group.append(line)
 		else:
 			if current_group.size() > 1:

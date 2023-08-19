@@ -13,7 +13,7 @@ enum State {
 var cursor : Sprite2D
 var crosshair : Node2D
 var state_manager : Node
-var diagram_actions : DiagramActions
+var Diagram : DiagramBase
 
 @export var cursor_state : GLOBALS.CURSOR
 

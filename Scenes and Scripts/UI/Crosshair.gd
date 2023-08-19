@@ -1,16 +1,16 @@
 extends Node2D
 
-@export var grid_size: int
 @export var grid_margin: int
 
 signal moved(current_position, old_position)
 @onready var Level = get_tree().get_nodes_in_group('level')[0]
 @onready var StateManager = Level.get_node("state_manager")
-@onready var GridArea: Panel = Level.get_node('GridArea')
-@onready var Initial = Level.get_node('Initial')
-@onready var Final = Level.get_node('Final')
+@onready var Diagram : DiagramBase = get_parent()
+@onready var Initial: StateLine = Diagram.get_node('Initial')
+@onready var Final: StateLine = Diagram.get_node('Final')
 @onready var IdleCrosshair = $IdleCrosshair
 @onready var InteractionCrosshair = $InteractionCrosshair
+@onready var grid_size: int = Diagram.grid_size
 
 const Z_INDEX_IDLE := 1
 const Z_INDEX_DRAWING := 3
@@ -26,11 +26,8 @@ var on_state_line : bool
 func _ready():
 	clamp_left = Initial.position.x
 	clamp_right = Final.position.x
-	clamp_up = GridArea.position.y + grid_size
-	clamp_down = GridArea.position.y + GridArea.size.y - grid_size
-	
-	GridArea.connect("mouse_entered", Callable(self, "GridAreaMouseEntered"))
-	GridArea.connect("mouse_exited", Callable(self, "GridAreaMouseExited"))
+	clamp_up = grid_size
+	clamp_down = Diagram.size.y - grid_size
 
 func _process(_event):
 	move_crosshair()
@@ -48,7 +45,7 @@ func move_crosshair() -> void:
 		old_position = position
 
 func get_try_position() -> Vector2:
-	var mouse_position = get_global_mouse_position()
+	var mouse_position = get_parent().get_local_mouse_position()
 	var try_position = Vector2(
 		snapped(mouse_position.x-clamp_left, grid_size)+clamp_left,
 		snapped(mouse_position.y-clamp_up, grid_size)+clamp_up
@@ -135,11 +132,11 @@ func is_on_interaction(test_position: Vector2 = position) -> bool:
 			return true
 	return false
 
-func GridAreaMouseEntered():
+func DiagramMouseEntered():
 	show()
 	can_draw = true
 
-func GridAreaMouseExited():
+func DiagramMouseExited():
 	if StateManager.state != BaseState.State.Placing and StateManager.state != BaseState.State.Drawing:
 		hide()
 	can_draw = false

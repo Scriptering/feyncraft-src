@@ -8,6 +8,7 @@ signal pressed
 @export var TabIcon: Texture2D : set = _set_tab_icon
 @export var TabText: String : set = _set_tab_text
 @export var TabMinimumSize: Vector2 : set = _set_tab_minimum_size
+@export var expand_icon: bool : set = _set_expand_icon
 
 @onready var TabButton = $TabButton
 
@@ -21,6 +22,10 @@ func change_state(tab_out: bool) -> void:
 		$VBoxContainer/MarginContainer/Arrow.texture = ArrowOut
 	else:
 		$VBoxContainer/MarginContainer/Arrow.texture = ArrowIn
+
+func _set_expand_icon(new_value: bool) -> void:
+	expand_icon = new_value
+	$TabButton.expand_icon = new_value
 
 func _set_tab_icon(new_value: Texture2D) -> void:
 	TabIcon = new_value
@@ -37,9 +42,8 @@ func _set_tab_minimum_size(new_value: Vector2) -> void:
 	
 	if get_child_count() == 0: return
 	
-	if !(Engine.is_editor_hint() or TabButton): return
-	
 	$TabButton.minimum_size = new_value
+	
 
 func _on_tab_button_pressed():
 	emit_signal("pressed")

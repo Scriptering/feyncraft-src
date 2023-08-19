@@ -42,11 +42,11 @@ func _ready():
 	offset = Scale * normal_offset
 	Heart.offset = Scale * normal_heart_offset
 	
-	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+#	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 
 func _input(event: InputEvent) -> void:
-	if Input.mouse_mode != Input.MOUSE_MODE_HIDDEN:
-		Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+#	if Input.mouse_mode != Input.MOUSE_MODE_HIDDEN:
+#		Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	
 	if event is InputEventKey:
 		if check_love():

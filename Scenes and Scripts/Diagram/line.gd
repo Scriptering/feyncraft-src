@@ -5,10 +5,10 @@ signal request_deletion
 signal clicked_on
 
 @onready var Level = get_tree().get_first_node_in_group('level')
-@onready var diagram_actions : DiagramActions = Level.get_node("diagram_actions")
-@onready var Initial = Level.get_node('Initial')
-@onready var Final = Level.get_node('Final')
-@onready var Crosshair = Level.get_node("Crosshair")
+@onready var Diagram : DiagramBase = get_parent().get_parent()
+@onready var Initial = Diagram.get_node('Initial')
+@onready var Final = Diagram.get_node('Final')
+@onready var Crosshair = Diagram.get_node("Crosshair")
 @onready var Text = get_node("text")
 @onready var SpareText = get_node("spareText")
 @onready var Arrow = get_node("arrow")
@@ -31,6 +31,8 @@ enum Point {Start = 0, End = 1, Invalid = -1}
 enum PointsConnected {None, Left, Right, Both}
 
 var points := PackedVector2Array([[0, 0], [0, 0]]) : set = _set_points
+var line_vector : Vector2 = Vector2.ZERO:
+	get: return points[Point.End] - points[Point.Start]
 
 var base_particle := GLOBALS.Particle.none
 var particle := GLOBALS.Particle.none : get = _get_particle
@@ -78,7 +80,7 @@ var line_texture
 
 func _ready():
 	Crosshair.connect("moved", Callable(self, "_crosshair_moved"))
-	self.connect("request_deletion", Callable(diagram_actions, "delete_line"))
+	self.connect("request_deletion", Callable(Diagram, "delete_line"))
 	
 	has_colour = base_particle in GLOBALS.COLOUR_PARTICLES
 	has_shade = base_particle in GLOBALS.SHADED_PARTICLES
@@ -118,7 +120,7 @@ func _set_anti(new_value: int) -> void:
 		interaction.update_interaction()
 
 func set_anti() -> void:
-	if base_particle in GLOBALS.DIRECTIONAL_PARTICLES:
+	if base_particle in GLOBALS.SHADED_PARTICLES:
 		if points[Point.Start].x <= points[Point.End].x:
 			anti = Anti.noanti
 		else:
@@ -131,7 +133,7 @@ func _set_points(new_value: PackedVector2Array) -> void:
 	
 	if is_inside_tree() and !being_deleted:
 		connect_to_interactions()
-		Level.update_statelines()
+		Diagram.update_statelines()
 	
 func set_textures() -> void:
 	LineMiddle.texture = line_texture
@@ -157,7 +159,7 @@ func set_dimensionality() -> void:
 		dimensionality = GLOBALS.BOSON_DIMENSIONALITY
 
 func connect_to_interactions() -> void:
-	for interaction in diagram_actions.get_interactions():
+	for interaction in Diagram.get_interactions():
 		if interaction.position in points and !self in interaction.connected_lines:
 			interaction.connected_lines.append(self)
 		elif !interaction.position in points:
@@ -185,7 +187,7 @@ func get_on_state_line() -> StateLine.StateType:
 
 func _get_connected_interactions() -> Array[Interaction]:
 	connected_interactions.clear()
-	for interaction in diagram_actions.get_interactions():
+	for interaction in Diagram.get_interactions():
 		if self in interaction.connected_lines:
 			connected_interactions.append(interaction)
 
@@ -210,10 +212,10 @@ func is_position_on_line(test_position: Vector2) -> bool:
 	if test_position in points:
 		return false
 	
-	if split_vector.normalized() != get_line_vector().normalized():
+	if split_vector.normalized() != self.line_vector.normalized():
 		return false
 
-	if split_vector.length() >= get_line_vector().length():
+	if split_vector.length() >= self.line_vector.length():
 		return false
 	
 	return true
@@ -259,27 +261,22 @@ func update_line() -> void:
 	move_text()
 	
 	set_text_texture()
-
-func get_line_vector() -> Vector2:
-	return points[Point.End] - points[Point.Start]
 	
 func move_line() -> void:
-	var line_vector := get_line_vector()
-	
 	LineJointStart.points[Point.Start] = points[Point.Start]
 	LineJointEnd.points[Point.End] = points[Point.End]
 	
-	LineJointStart.points[Point.End] = points[Point.Start] + line_joint_start_length * line_vector.normalized() 
+	LineJointStart.points[Point.End] = points[Point.Start] + line_joint_start_length * self.line_vector.normalized() 
 	
 	if particle == GLOBALS.Particle.gluon:
-		var number_of_gluon_loops : int = floor((line_vector.length() - line_joint_start_length - line_joint_end_length) / gluon_loop_length)
+		var number_of_gluon_loops : int = floor((self.line_vector.length() - line_joint_start_length - line_joint_end_length) / gluon_loop_length)
 		
 		LineJointEnd.points[Point.Start] = (
 			LineJointStart.points[Point.End] +
-			gluon_loop_length * number_of_gluon_loops * line_vector.normalized()
+			gluon_loop_length * number_of_gluon_loops * self.line_vector.normalized()
 		)
 	else:
-		LineJointEnd.points[Point.Start] = points[Point.End] - line_joint_end_length * line_vector.normalized() 
+		LineJointEnd.points[Point.Start] = points[Point.End] - line_joint_end_length * self.line_vector.normalized() 
 	
 	LineMiddle.points[Point.Start] = LineJointStart.points[Point.End]
 	LineMiddle.points[Point.End] = LineJointEnd.points[Point.Start]
@@ -308,13 +305,13 @@ func get_arrow_visiblity() -> bool:
 	return true
 
 func move_arrow() -> void:
-	Arrow.position = points[Point.Start] + (points[Point.End] - points[Point.Start]) / 2
-	Arrow.look_at(points[Point.End])
+	Arrow.position = points[Point.Start] + self.line_vector / 2
+	Arrow.rotation = self.line_vector.angle()
 
 func move_click_area() -> void:
-	ClickAreaShape.position = (points[1] - points[0]) / 2 + points[0]
-	ClickAreaShape.look_at(points[1])
-	ClickAreaShape.shape.size.x = get_line_vector().length()
+	ClickAreaShape.position = self.line_vector / 2 + points[Point.Start]
+	ClickAreaShape.rotation = self.line_vector.angle()
+	ClickAreaShape.shape.size.x = self.line_vector.length()
 
 func move_text() -> void:
 	match get_on_state_line():
@@ -345,7 +342,7 @@ func move_text() -> void:
 	
 	Text.position = (
 		(right_point - left_point) / 2 + left_point +
-		text_gap * get_line_vector().orthogonal().normalized()
+		text_gap * self.line_vector.orthogonal().normalized()
 	)
 
 func set_text_texture() -> void:
@@ -379,7 +376,7 @@ func pick_up(point_index_to_pick_up: Point) -> void:
 	moving_point = point_index_to_pick_up
 	
 func is_line_copy() -> bool:
-	for line in diagram_actions.get_particle_lines():
+	for line in Diagram.get_particle_lines():
 		if line == self:
 			continue
 		if !line.is_placed:
@@ -389,7 +386,7 @@ func is_line_copy() -> bool:
 	return false
 
 func is_line_overlapping() -> bool:
-	for line in diagram_actions.get_particle_lines():
+	for line in Diagram.get_particle_lines():
 		if !line.is_placed:
 			continue
 		if !points[Point.Start] in line.points:
@@ -411,7 +408,7 @@ func deconstructor():
 	being_deleted = true
 	for interaction in self.connected_interactions:
 		interaction.connected_lines.erase(self)
-	Level.update_statelines()
+	Diagram.update_statelines()
 	points[Point.Start] = Vector2.LEFT
 	points[Point.End] = Vector2.LEFT
 

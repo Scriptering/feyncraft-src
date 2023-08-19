@@ -6,12 +6,12 @@ signal request_deletion
 
 @onready var Ball = get_node("Ball")
 @onready var Level := get_node("/root/World")
-@onready var diagram_actions : DiagramActions = Level.get_node("diagram_actions")
-@onready var Crosshair = Level.get_node("Crosshair")
-@onready var Dot = get_node("Dot")
-@onready var Initial = Level.get_node('Initial')
-@onready var Final = Level.get_node('Final')
 @onready var StateManager = Level.get_node('state_manager')
+@onready var Diagram: DiagramBase = get_parent().get_parent()
+@onready var Crosshair = Diagram.get_node("Crosshair")
+@onready var Dot = get_node("Dot")
+@onready var Initial = Diagram.get_node('Initial')
+@onready var Final = Diagram.get_node('Final')
 @onready var InfoNumberLabel = get_node('InfoNumberLabel')
 @onready var interaction_matrix: ConnectionMatrix = Level.interaction_matrix
 
@@ -51,12 +51,12 @@ func _ready():
 	self.connect("picked_up", Callable(Crosshair, "interaction_picked_up"))
 	self.connect("dropped", Callable(Crosshair, "interaction_placed"))
 	Crosshair.connect("moved", Callable(self, "_crosshair_moved"))
-	self.connect("request_deletion", Callable(diagram_actions, "delete_interaction"))
+	self.connect("request_deletion", Callable(Diagram, "delete_interaction"))
 	
 	id = interaction_matrix.calculate_new_interaction_id()
 	interaction_matrix.add_interaction()
 	
-	for line in diagram_actions.get_particle_lines():
+	for line in Diagram.get_particle_lines():
 		if position in line.points and !line in connected_lines:
 			connected_lines.append(line)
 
@@ -64,9 +64,8 @@ func _ready():
 	
 	update_interaction()
 
-	diagram_actions.check_split_lines()
-
-	Level.update_statelines()
+	Diagram.check_split_lines()
+	Diagram.update_statelines()
 
 func _process(_delta: float) -> void:
 	if old_connected_lines != connected_lines:
@@ -340,7 +339,7 @@ func open_information_box() -> void:
 	information_box.ConnectedInteraction = self
 	information_box.ID = information_id
 	information_box.position = position + information_box_offset
-	Level.add_child(information_box)
+	Diagram.add_child(information_box)
 	
 	InfoNumberLabel.text = str(information_id)
 	InfoNumberLabel.show()
@@ -367,12 +366,12 @@ func _on_information_button_pressed():
 func _on_tree_exiting():
 	if information_visible:
 		close_information_box()
-	Level.update_statelines()
+	Diagram.update_statelines()
 	
 func drop() -> void:
 	super.drop()
 	number_of_placing_lines = 0
-	Level.update_statelines()
+	Diagram.update_statelines()
 
 func get_interaction_index() -> Array[int]:
 	var sorted_connected_base_particles := self.connected_base_particles.duplicate(true)

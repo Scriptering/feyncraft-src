@@ -22,16 +22,17 @@ var unclicks : int = 0
 var i1 : InteractionMatrix = InteractionMatrix.new()
 var i2 : InteractionMatrix = InteractionMatrix.new()
 
+var a1 : Array = [1]
+var a2 : PackedInt32Array = [2]
+
 func _ready() -> void:
 	print(min%2)
 	
 	i1.add_unconnected_interaction([GLOBALS.Particle.gluon])
-	i2 = i1.duplicate(true)
 	
 	i2.add_unconnected_interaction([GLOBALS.Particle.photon])
 	
-	print(i1.get_unconnected_base_particles())
-	print(i2.get_unconnected_base_particles())
+	print(a1 + [a2])
 	
 
 func is_anti(particle):
