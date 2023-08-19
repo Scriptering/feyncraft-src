@@ -93,18 +93,43 @@ func get_unconnected_base_particles() -> Array:
 func get_unconnected_state(state: StateLine.StateType) -> Array:
 	return unconnected_matrix.slice(get_starting_state_id(state), get_ending_state_id(state))
 
-func get_entry_and_exit_points() -> Array[PackedInt32Array]:
-	var entry_points : PackedInt32Array = []
-	var exit_points : PackedInt32Array = []
+func get_extreme_points(entry_factor: EntryFactor) -> PackedInt32Array:
+	var extreme_points: PackedInt32Array = []
 	
-	for i in range(get_state_count(StateLine.StateType.Both)):
-		for particle in unconnected_matrix[i]:
-			if state_factor[get_state_from_id(i)] * particle > 0:
-				entry_points.append(i)
-			else:
-				exit_points.append(i)
+	for state_id in range(get_state_count(StateLine.StateType.Both)):
+		for particle in unconnected_matrix[state_id]:
+			if abs(particle) not in GLOBALS.SHADED_PARTICLES:
+				continue
+			
+			if entry_factor * state_factor[get_state_from_id(state_id)] * particle >= 0:
+				extreme_points.append(state_id)
 	
-	return [entry_points, exit_points]
+	return extreme_points
+	
+func get_entry_points() -> PackedInt32Array:
+	return get_extreme_points(EntryFactor.Entry)
+	
+
+func get_exit_points() -> PackedInt32Array:
+	return get_extreme_points(EntryFactor.Exit)
+
+func find_first_unconnected(test_function: Callable) -> int:
+	var found_ids: PackedInt32Array = []
+	
+	for id in matrix_size:
+		if unconnected_matrix[id].any(func(particle): return test_function.call(particle)):
+			return id
+	
+	return matrix_size
+
+func find_all_unconnected(test_function: Callable) -> PackedInt32Array:
+	var found_ids: PackedInt32Array = []
+	
+	for id in matrix_size:
+		if unconnected_matrix[id].any(func(particle): return test_function.call(particle)):
+			found_ids.push_back(id)
+	
+	return found_ids
 
 func reduce_to_base_particles() -> void:
 	unconnected_matrix = unconnected_matrix.map(
@@ -120,6 +145,23 @@ func reduce_to_base_particles() -> void:
 			)
 		)
 	)
+
+func get_combined_matrix(new_matrix):
+	if !new_matrix is InteractionMatrix:
+		push_error("Combining matrix of different type to interaction matrix")
+		return
+	
+	if new_matrix.matrix_size > matrix_size:
+		push_error("Combining matrix size larger than base matrix size")
+		return
+	
+	for i in new_matrix.matrix_size:
+		for j in new_matrix.matrix_size:
+			if !new_matrix.are_interactions_connected(i, j):
+				continue
+			
+			for particle in new_matrix.get_connected_particles(i, j):
+				connect_interactions(i, j, particle)
 
 func get_connection_matrix() -> ConnectionMatrix:
 	var new_connection_matrix := ConnectionMatrix.new()

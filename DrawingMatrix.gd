@@ -74,10 +74,10 @@ func is_double_connection(from_id: int, to_id: int, bidirectional : bool = false
 		get_connection_size(from_id, to_id) >= 1 and get_connection_size(to_id, from_id) >= 1
 	)
 
-func get_hadron_ids() -> Array[int]:
-	var hadron_ids: Array[int] = []
+func get_hadron_ids() -> PackedInt32Array:
+	var hadron_ids: PackedInt32Array = []
 	for state_id in get_state_count(StateLine.StateType.Both):
-		if get_connection_count(state_id, true) > 1:
+		if get_connected_count(state_id, true) > 1:
 			hadron_ids.append(state_id)
 	
 	return hadron_ids
@@ -92,8 +92,8 @@ func split_hadron(hadron_id: int) -> void:
 	var new_interaction_id := hadron_id + 1
 	split_hadron_ids.append([hadron_id])
 	
-	while get_connection_count(hadron_id, true) > 1:
-		var connection_ids := get_connection_ids(hadron_id, true)
+	while get_connected_count(hadron_id, true) > 1:
+		var connection_ids := get_connected_ids(hadron_id, true)
 		var connection_id := connection_ids[randi() % connection_ids.size()]
 		
 		add_interaction(get_state_from_id(hadron_id), new_interaction_id)

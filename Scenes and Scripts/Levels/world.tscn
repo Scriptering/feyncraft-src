@@ -40,7 +40,7 @@ expand_margin_top = 1.0
 expand_margin_right = 1.0
 expand_margin_bottom = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_rpsws"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_im6w3"]
 resource_name = "ParticleButtons"
 allow_unpress = true
 
@@ -126,7 +126,7 @@ offset_right = 254.0
 offset_bottom = 337.0
 grow_vertical = 0
 size_flags_horizontal = 4
-particle_button_group = SubResource("ButtonGroup_rpsws")
+particle_button_group = SubResource("ButtonGroup_im6w3")
 
 [node name="GenerationButton" parent="." instance=ExtResource("22_u64s1")]
 offset_left = -76.0
