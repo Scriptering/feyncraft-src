@@ -1,17 +1,13 @@
 extends Node
 
 enum INTERACTION_TYPE {electroweak, strong, higgs, weak}
-
 enum Shade {Bright, Dark, None}
 
 const SHADED_PARTICLES := [GLOBALS.BRIGHT_PARTICLES, GLOBALS.DARK_PARTICLES, GLOBALS.SHADED_PARTICLES]
-
 const INTERACTION_SIZE = 3.0
 
 var INTERACTIONS := GLOBALS.INTERACTIONS
 var TOTAL_INTERACTIONS : Array
-
-signal draw_diagram
 
 enum INDEX {unconnected, connected, ID = 0, TYPE, START = 0, END, INTERACTION = 0, CONNECTION_COUNT, CONNECTION_PARTICLES = 1}
 enum {
@@ -46,30 +42,9 @@ const shade_factor : Dictionary = {
 }
 
 var start_time : float
+var print_times := false
 
 var generated_matrix: InteractionMatrix
-
-func _ready() -> void:
-	await get_tree().create_timer(1).timeout
-	
-	var diagrams := generate_diagram(
-		[[GLOBALS.Particle.photon], [GLOBALS.Particle.photon]],
-		[[GLOBALS.Particle.photon], [GLOBALS.Particle.photon]],
-		1, 4,
-		get_usable_interactions([true, true, true, false]), true
-	)
-	
-	emit_signal('draw_diagram', diagrams[0])
-	
-func _generation_button_pressed(
-	initial_state: Array, final_state: Array, minDegree: int, maxDegree: int, interaction_checks: Array[bool]
-) -> void:
-	var diagram := generate_diagram(initial_state, final_state, minDegree, maxDegree, get_usable_interactions(interaction_checks))
-	
-	emit_signal('draw_diagram', diagram[0])
-
-func init(GenerationButton: Control) -> void:
-	GenerationButton.connect("generate", Callable(self, "_generation_button_pressed"))
 
 func create_base_interaction_matrix(initial_state: Array, final_state: Array) -> InteractionMatrix:
 	var base_interaction_matrix := InteractionMatrix.new()
@@ -134,9 +109,10 @@ func convert_interactions_to_general(interactions: Array) -> Array:
 
 	return general_interactions
 
-func generate_diagram(
+func generate_diagrams(
 	initial_state: Array, final_state: Array, min_degree: int, max_degree: int, usable_interactions: Array, find_all: bool = false
 ) -> Array[ConnectionMatrix]:
+	
 	start_time = Time.get_ticks_usec()
 	var print_results : bool = true
 	
@@ -158,7 +134,6 @@ func generate_diagram(
 	var generated_connection_matrices : Array[ConnectionMatrix] = []
 
 	for degree in degrees_to_check:
-		
 		if print_results:
 			print("degree: " + str(degree) + " " + get_print_time())
 
@@ -284,7 +259,7 @@ func generate_directionless_connections(unconnected_interaction_matrix: Interact
 
 	var unconnected_interaction_matrices : Array[InteractionMatrix] = [unconnected_interaction_matrix]
 	
-	for connection_count in range(directionless_particle_count / 2):
+	for connection_count in range(directionless_particle_count / 2.0):
 		if unconnected_interaction_matrices.size() == 0:
 			return [null]
 
@@ -828,6 +803,9 @@ func get_shared_elements_count(array1 : Array, array2 : Array) -> int:
 	return min(shared_array1_count, shared_array2_count)
 
 func print_time(count: int = -1):
+	if !print_times:
+		return
+	
 	if count == -1:
 		print("Time: " + str(Time.get_ticks_usec() - start_time))
 	else:

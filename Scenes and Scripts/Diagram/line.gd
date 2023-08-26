@@ -11,7 +11,7 @@ signal clicked_on
 @onready var Crosshair = Diagram.get_node("Crosshair")
 @onready var Text = get_node("text")
 @onready var SpareText = get_node("spareText")
-@onready var Arrow = get_node("arrow")
+@onready var Arrow = $arrow
 @onready var ClickAreaShape = $clickArea/CollisionShape2D
 @onready var LineMiddle = $line_middle
 @onready var LineJointStart = $line_joint_start
@@ -74,6 +74,10 @@ var texture_dict: Array = [
 'Particle',
 'Particle',
 'Particle',
+'Particle',
+'Particle',
+'Particle',
+'Particle',
 'Particle']
 
 var line_texture
@@ -88,7 +92,7 @@ func _ready():
 	set_dimensionality()
 	set_line_width()
 
-	line_texture = load('res://Textures/ParticlesAndLines/Lines/' + texture_dict[particle] + '.png')
+	line_texture = load('res://Textures/ParticlesAndLines/Lines/' + texture_dict[base_particle] + '.png')
 
 	set_textures()
 	
@@ -268,7 +272,7 @@ func move_line() -> void:
 	
 	LineJointStart.points[Point.End] = points[Point.Start] + line_joint_start_length * self.line_vector.normalized() 
 	
-	if particle == GLOBALS.Particle.gluon:
+	if base_particle == GLOBALS.Particle.gluon:
 		var number_of_gluon_loops : int = floor((self.line_vector.length() - line_joint_start_length - line_joint_end_length) / gluon_loop_length)
 		
 		LineJointEnd.points[Point.Start] = (
@@ -296,7 +300,7 @@ func get_arrow_visiblity() -> bool:
 	if points[Point.Start] == points[Point.End]:
 		return false
 	
-	if particle == GLOBALS.Particle.W:
+	if base_particle == GLOBALS.Particle.W:
 		return false
 	
 	if base_particle in GLOBALS.BOSONS:
@@ -349,7 +353,7 @@ func set_text_texture() -> void:
 	Text.texture = GLOBALS.PARTICLE_TEXTURES[self.particle_name]
 	SpareText.texture = GLOBALS.PARTICLE_TEXTURES[self.particle_name]
 
-	if points[Point.End].x == points[Point.Start].x and particle == GLOBALS.Particle.W:
+	if points[Point.End].x == points[Point.Start].x and base_particle == GLOBALS.Particle.W:
 		Text.texture = GLOBALS.PARTICLE_TEXTURES['W_0']
 
 func place() -> void:

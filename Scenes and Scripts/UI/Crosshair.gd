@@ -12,8 +12,8 @@ signal moved(current_position, old_position)
 @onready var InteractionCrosshair = $InteractionCrosshair
 @onready var grid_size: int = Diagram.grid_size
 
-const Z_INDEX_IDLE := 1
-const Z_INDEX_DRAWING := 3
+const Z_INDEX_IDLE := 0
+const Z_INDEX_DRAWING := 0
 
 var can_draw: bool
 var old_position: Vector2 = Vector2.ZERO
@@ -89,10 +89,9 @@ func is_placing_position_valid(try_position: Vector2) -> bool:
 	if is_crosshair_on_state_interaction(try_position):
 		return false
 	
-	if (
-		get_tree().get_first_node_in_group("interactions").number_of_placing_lines > 1 and
-		is_on_stateline(try_position)
-	):
+	var interactions := Diagram.get_interactions()
+	
+	if interactions.size() > 0 and interactions.front().number_of_placing_lines > 1 and is_on_stateline(try_position):
 		return false
 	
 	return true
@@ -117,6 +116,8 @@ func interaction_picked_up(interaction: Interaction) -> void:
 	if interaction.get_on_state_line() == StateLine.StateType.None:
 		$InteractionDot.visible = interaction.Dot.visible
 	InteractionCrosshair.animation = interaction.Ball.animation
+	
+	print($InteractionDot.visible)
 
 func interaction_placed(_interaction: Interaction) -> void:
 	IdleCrosshair.show()

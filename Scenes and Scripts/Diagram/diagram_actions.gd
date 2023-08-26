@@ -1,27 +1,24 @@
-class_name DiagramBase
-extends Panel
+class_name MainDiagram
+extends DiagramBase
+
+@onready var Crosshair := $Crosshair
 
 var ParticleButtons: Control
 
 var line_diagram_actions: bool = true
 
-@export var grid_size: int = 16
+var crosshair_above_interactions: bool = false
 
 const MAX_DIAGRAM_HISTORY_SIZE : int = 10
 var diagram_history: Array[DrawingMatrix] = []
 var diagram_future: Array[DrawingMatrix] = []
 var current_diagram: DrawingMatrix = null
 
-@onready var Line = preload("res://Scenes and Scripts/Diagram/line.tscn")
-@onready var InteractionInstance = preload("res://Scenes and Scripts/Diagram/interaction.tscn")
-
-@onready var StateLines: Array = [$Initial, $Final]
-@onready var Interactions: Control = $Interactions
-@onready var ParticleLines: Control = $ParticleLines
-
 func _ready() -> void:
-	connect("mouse_entered", Callable($Crosshair, "DiagramMouseEntered"))
-	connect("mouse_exited", Callable($Crosshair, "DiagramMouseExited"))
+	connect("mouse_entered", Callable(Crosshair, "DiagramMouseEntered"))
+	connect("mouse_exited", Callable(Crosshair, "DiagramMouseExited"))
+	EVENTBUS.connect("signal_draw_diagram", Callable(self, "draw_diagram"))
+	EVENTBUS.connect("signal_draw_raw_diagram", Callable(self, "draw_raw_diagram"))
 
 func init(particle_buttons: Control) -> void:
 	ParticleButtons = particle_buttons
@@ -40,7 +37,7 @@ func place_objects() -> void:
 
 func get_interactions() -> Array[Interaction]:
 	var interactions : Array[Interaction] = []
-	for interaction in Interactions.get_children():
+	for interaction in super.get_interactions():
 		if interaction is Interaction:
 			interactions.append(interaction)
 	
@@ -48,7 +45,7 @@ func get_interactions() -> Array[Interaction]:
 
 func get_particle_lines() -> Array[ParticleLine]:
 	var particle_lines : Array[ParticleLine] = []
-	for particle_line in ParticleLines.get_children():
+	for particle_line in super.get_particle_lines():
 		if particle_line is ParticleLine:
 			particle_lines.append(particle_line)
 	return particle_lines
@@ -155,15 +152,16 @@ func rejoin_lines(line_to_extend: ParticleLine, line_to_delete: ParticleLine) ->
 
 func place_interaction(interaction_position: Vector2, bypass_can_place: bool = false) -> void:
 	if can_place_interaction(interaction_position) or bypass_can_place:
-		var interaction = InteractionInstance.instantiate()
-		interaction.position = interaction_position
-		Interactions.add_child(interaction)
+		super.place_interaction(interaction_position)
 	
 		check_split_lines()
 		check_rejoin_lines()
 
 func can_place_interaction(test_position: Vector2) -> bool:
 	for interaction in Interactions.get_children():
+		if interaction.is_queued_for_deletion():
+			continue
+		
 		if interaction.position == test_position:
 			return false
 	return true
@@ -186,115 +184,45 @@ func place_line(
 	check_split_lines()
 	check_rejoin_lines()
 
+func draw_raw_diagram(connection_matrix : ConnectionMatrix) -> void:
+	add_diagram_to_history()
+	
+	super.draw_raw_diagram(connection_matrix)
+
 func clear_diagram() -> void:
 	for interaction in Interactions.get_children():
 		delete_interaction(interaction)
 	for state_line in StateLines:
 		state_line.clear_hadrons()
 
-func draw_raw_diagram(connection_matrix : ConnectionMatrix) -> void:
-	add_diagram_to_history()
+func draw_diagram_particles(drawing_matrix: DrawingMatrix) -> Array:
+	var drawing_lines : Array = super.draw_diagram_particles(drawing_matrix)
 	
-	if connection_matrix == null:
-		return
-	
-	var drawable_matrix := DrawingMatrix.new()
-	drawable_matrix.grid_size = grid_size
-	drawable_matrix.initialise_from_connection_matrix(connection_matrix)
-
-	create_diagram_interaction_positions(drawable_matrix)
-	draw_diagram(drawable_matrix)
-
-func create_diagram_interaction_positions(drawing_matrix: DrawingMatrix) -> void:
-
-	for state in [StateLine.StateType.Initial, StateLine.StateType.Final]:
-		create_state_diagram_interaction_positions(drawing_matrix, state)
-	
-	create_middle_diagram_interaction_positions(drawing_matrix)
-
-func create_middle_diagram_interaction_positions(drawing_matrix: DrawingMatrix) -> void:
-	var degree_pos : Array[float] = []
-	var degree_step : float = 2 * PI / (drawing_matrix.get_state_count(StateLine.StateType.None))
-	var degree_start : float = randf() * 2 * PI
-	
-	for i in range(drawing_matrix.get_state_count(StateLine.StateType.None)):
-		degree_pos.append(i * degree_step + degree_start)
-		
-	var radius : float = 90
-	var circle_y_start : int = snapped(size.y/2, grid_size)
-
-	for j in range(drawing_matrix.get_state_count(StateLine.StateType.None)):
-		drawing_matrix.add_interaction_position(Vector2(
-			snapped(
-			(StateLines[StateLine.StateType.Initial].position.x + StateLines[StateLine.StateType.Final].position.x
-			) / 2 + radius * cos(degree_pos[j]), grid_size),
-			snapped(circle_y_start +  + radius * sin(degree_pos[j]), grid_size)
-		))
-
-func create_state_diagram_interaction_positions(drawing_matrix: DrawingMatrix, state: StateLine.StateType) -> void:
-	var current_y : int = 0
-	
-	for state_id in drawing_matrix.get_state_ids(state):
-		if drawing_matrix.get_state_from_id(state_id) == StateLine.StateType.None:
-			continue
-		
-		for hadron in drawing_matrix.split_hadron_ids:
-			if state_id not in hadron:
-				continue
-		
-			if hadron.find(state_id) != 0:
-				current_y -= grid_size
-				
-		current_y += 2*grid_size
-		drawing_matrix.add_interaction_position(Vector2(StateLines[state].position.x, current_y))
-
-func draw_diagram_particles(drawing_matrix: DrawingMatrix) -> Array[ParticleLine]:
-	var drawing_lines : Array[ParticleLine] = []
-	for i in range(drawing_matrix.matrix_size):
-		for j in range(drawing_matrix.matrix_size):
-			if !drawing_matrix.are_interactions_connected(i, j):
-				continue
-			
-			var drawing_line : ParticleLine = Line.instantiate()
-
-			drawing_line.base_particle = drawing_matrix.connection_matrix[i][j][0]
-
-			drawing_line.points[ParticleLine.Point.Start] = drawing_matrix.get_interaction_positions()[i]
-			drawing_line.points[ParticleLine.Point.End] = drawing_matrix.get_interaction_positions()[j]
-			
-			drawing_lines.append(drawing_line)
+	for drawing_line in drawing_lines:
+		drawing_line.is_placed = true
 
 	return drawing_lines
 
 func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
-	clear_diagram()
-	
 	line_diagram_actions = false
 	
-	for drawing_particle in draw_diagram_particles(drawing_matrix):
-		drawing_particle.is_placed = true
-		ParticleLines.add_child(drawing_particle)
-		
-	for interaction_position in drawing_matrix.get_interaction_positions():
-		place_interaction(interaction_position, true)
-	
+	clear_diagram()
+
+	super.draw_diagram(drawing_matrix)
+
 	line_diagram_actions = true
 
-func generate_drawing_matrix_from_diagram() -> DrawingMatrix:
-	var generated_matrix := DrawingMatrix.new()
-	generated_matrix.grid_size = grid_size
-
-	for interaction in get_interactions():
-		generated_matrix.add_interaction_with_position(interaction.position, interaction.get_on_state_line())
-
-	for line in get_particle_lines():
-		generated_matrix.connect_interactions(
-			generated_matrix.get_interaction_positions().find(line.points[ParticleLine.Point.Start]),
-			generated_matrix.get_interaction_positions().find(line.points[ParticleLine.Point.End]),
-			line.base_particle
-		)
-
-	return generated_matrix
+func toggle_crosshair_above_interactions() -> void:
+	print(Crosshair.get_index())
+	
+	if crosshair_above_interactions:
+		crosshair_above_interactions = false
+		move_child(Crosshair, Crosshair.get_index() - 1)
+		return
+	
+	crosshair_above_interactions = true
+	move_child(Crosshair, Crosshair.get_index() + 1)
+	
 
 func undo() -> void:
 	move_backward_in_history()
@@ -351,8 +279,3 @@ func draw_history() -> void:
 	for diagram in diagram_future:
 		draw_diagram(diagram)
 		await get_tree().create_timer(0.5).timeout
-	
-
-	
-
-

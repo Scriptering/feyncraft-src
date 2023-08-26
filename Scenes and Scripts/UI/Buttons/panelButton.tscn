@@ -1,9 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://c4lyyfxwvqyfk"]
+[gd_scene load_steps=4 format=3 uid="uid://c4lyyfxwvqyfk"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_e0w4o"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Buttons/panelButton.gd" id="2_ns04d"]
-[ext_resource type="AudioStream" uid="uid://didhgrsrk4wj7" path="res://Resources/Audio/switch27.ogg" id="4_0s1i3"]
-[ext_resource type="AudioStream" uid="uid://duhj8peqer73i" path="res://Resources/Audio/switch28.ogg" id="4_u0ab0"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4oa4s"]
 
@@ -28,6 +26,7 @@ layout_mode = 2
 action_mode = 0
 
 [node name="ContentContainer" type="MarginContainer" parent="."]
+use_parent_material = true
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 5
@@ -36,6 +35,7 @@ theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 7
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ContentContainer"]
+use_parent_material = true
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 0
@@ -52,12 +52,6 @@ visible = false
 layout_mode = 2
 mouse_filter = 2
 stretch_mode = 3
-
-[node name="ButtonDown" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("4_u0ab0")
-
-[node name="ButtonUp" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("4_0s1i3")
 
 [connection signal="button_down" from="Button" to="." method="_on_button_button_down"]
 [connection signal="button_up" from="Button" to="." method="_on_button_button_up"]

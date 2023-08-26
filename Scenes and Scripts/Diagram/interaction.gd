@@ -7,11 +7,13 @@ signal request_deletion
 @onready var Ball = get_node("Ball")
 @onready var Level := get_node("/root/World")
 @onready var StateManager = Level.get_node('state_manager')
+
 @onready var Diagram: DiagramBase = get_parent().get_parent()
+@onready var Initial: StateLine = Diagram.StateLines[StateLine.StateType.Initial]
+@onready var Final: StateLine = Diagram.StateLines[StateLine.StateType.Final]
 @onready var Crosshair = Diagram.get_node("Crosshair")
+
 @onready var Dot = get_node("Dot")
-@onready var Initial = Diagram.get_node('Initial')
-@onready var Final = Diagram.get_node('Final')
 @onready var InfoNumberLabel = get_node('InfoNumberLabel')
 @onready var interaction_matrix: ConnectionMatrix = Level.interaction_matrix
 

@@ -106,7 +106,6 @@ animations = [{
 [node name="Crosshair" type="Node2D"]
 material = SubResource("ShaderMaterial_722ac")
 script = ExtResource("2")
-grid_size = 16
 grid_margin = 16
 
 [node name="IdleCrosshair" type="AnimatedSprite2D" parent="."]
@@ -122,13 +121,11 @@ shape = SubResource("1")
 
 [node name="InteractionCrosshair" type="AnimatedSprite2D" parent="."]
 visible = false
-z_index = 2
 use_parent_material = true
 sprite_frames = SubResource("SpriteFrames_e54ij")
 animation = &"valid"
 
 [node name="InteractionDot" type="AnimatedSprite2D" parent="."]
 visible = false
-z_index = 4
 use_parent_material = true
 sprite_frames = SubResource("SpriteFrames_7frv0")

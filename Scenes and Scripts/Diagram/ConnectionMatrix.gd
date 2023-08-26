@@ -159,7 +159,7 @@ func get_connection_particles(from_id: int, to_id: int, bidirectional: bool = fa
 	var connection_particles : Array = connection_matrix[from_id][to_id]
 	
 	if bidirectional:
-		connection_particles + connection_matrix[to_id][from_id]
+		return connection_particles + connection_matrix[to_id][from_id]
 	
 	if include_directionless:
 		var directionless_particles : Array = connection_matrix[to_id][from_id].filter(
@@ -335,9 +335,9 @@ func reindex_from_point(point: int, reindex_dictionary: Dictionary, travel_matri
 	var connected_ids : Array = travel_matrix[point]
 	
 	connected_ids = connected_ids.filter(
-		func(id): return id not in reindex_dictionary.keys()
+		func(id: int): return id not in reindex_dictionary.keys()
 	)
-	
+
 	var connected_particles : Array = []
 	for id in connected_ids:
 		connected_particles.push_back(get_sorted_connection_particles(point, id, false, true).front())
@@ -359,6 +359,8 @@ func reindex_from_point(point: int, reindex_dictionary: Dictionary, travel_matri
 	
 	for id in unique_particle_connected_ids:
 		reindex_dictionary[id] = reindex_dictionary.size()
+	
+	for id in unique_particle_connected_ids:
 		reindex_from_point(id, reindex_dictionary, travel_matrix)
 	
 	return

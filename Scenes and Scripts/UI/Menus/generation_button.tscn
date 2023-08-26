@@ -61,6 +61,8 @@ material = ExtResource("1_h3eo1")
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("2_plgpl")
+InitialState = [[6], [6]]
+FinalState = [[6], [6]]
 min_degree = 1
 max_degree = 10
 ContentContainer = NodePath("MovingContainer/PanelContainer")
@@ -208,6 +210,10 @@ alignment = 1
 layout_mode = 2
 text = "Generate"
 
+[node name="View" parent="MovingContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("8_ihypl")]
+layout_mode = 2
+text = "View"
+
 [node name="Tab" parent="MovingContainer" instance=ExtResource("6_7e8c8")]
 layout_mode = 2
 TabIcon = ExtResource("4_xnawx")
@@ -217,3 +223,4 @@ TabIcon = ExtResource("4_xnawx")
 [connection signal="toggled" from="MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/weak" to="." method="_on_weak_toggled"]
 [connection signal="toggled" from="MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/electroweak" to="." method="_on_electroweak_toggled"]
 [connection signal="pressed" from="MovingContainer/PanelContainer/VBoxContainer/HBoxContainer/Generate" to="." method="_on_generate_pressed"]
+[connection signal="pressed" from="MovingContainer/PanelContainer/VBoxContainer/HBoxContainer/View" to="." method="_on_view_pressed"]

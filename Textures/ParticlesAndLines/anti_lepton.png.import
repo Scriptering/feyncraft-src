@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://y33qegrvxjss"
-path="res://.godot/imported/tab_fg.png-845ae9c549986ed94cbd940a805fcecf.ctex"
+uid="uid://wdq1xa6n03c1"
+path="res://.godot/imported/anti_lepton.png-19fe3b676a6c85e15251f2eafcbbaa87.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/UI/Information/tab_fg.png"
-dest_files=["res://.godot/imported/tab_fg.png-845ae9c549986ed94cbd940a805fcecf.ctex"]
+source_file="res://Textures/ParticlesAndLines/anti_lepton.png"
+dest_files=["res://.godot/imported/anti_lepton.png-19fe3b676a6c85e15251f2eafcbbaa87.ctex"]
 
 [params]
 

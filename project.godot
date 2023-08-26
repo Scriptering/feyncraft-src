@@ -18,6 +18,8 @@ config/icon="res://icon.png"
 [autoload]
 
 GLOBALS="*res://Scenes and Scripts/GLOBALS.gd"
+SOUNDBUS="*res://Scenes and Scripts/sound_bus.tscn"
+EVENTBUS="*res://Scenes and Scripts/event_bus.tscn"
 
 [display]
 

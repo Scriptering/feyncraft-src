@@ -1,12 +1,10 @@
-[gd_resource type="Theme" load_steps=57 format=3 uid="uid://csgjunw6mjyuf"]
+[gd_resource type="Theme" load_steps=55 format=3 uid="uid://csgjunw6mjyuf"]
 
 [ext_resource type="Texture2D" uid="uid://ytdsqf2bmt4s" path="res://Textures/UI/Information/scrollV/grabber_highlight.png" id="1"]
 [ext_resource type="Texture2D" uid="uid://bjpvqimrrjeat" path="res://Textures/UI/Information/scrollV/scroll.png" id="2"]
 [ext_resource type="Texture2D" uid="uid://c37j3jcosixpo" path="res://Textures/UI/Information/scrollV/grabber.png" id="3"]
 [ext_resource type="FontFile" uid="uid://cq27s0444iwkg" path="res://Textures/Fonts/ConnectionIi-2wj8.otf" id="4"]
 [ext_resource type="Texture2D" uid="uid://lkb0vav81lsa" path="res://Textures/UI/Information/scrollV/grabber_grabbed.png" id="5"]
-[ext_resource type="Texture2D" uid="uid://3qrgaqnejsnj" path="res://Textures/UI/Information/tab_bg.png" id="6"]
-[ext_resource type="Texture2D" uid="uid://y33qegrvxjss" path="res://Textures/UI/Information/tab_fg.png" id="7"]
 [ext_resource type="Texture2D" uid="uid://s14bo7fcdam0" path="res://Textures/Buttons/square_normal.png" id="8"]
 [ext_resource type="Texture2D" uid="uid://bo1u07jlygktr" path="res://Textures/Buttons/square_hover.png" id="9"]
 [ext_resource type="Texture2D" uid="uid://brb0ytbpqclrn" path="res://Textures/Buttons/square_pressed.png" id="10"]
@@ -148,13 +146,11 @@ texture = ExtResource("12")
 region_rect = Rect2(0, 0, 32, 32)
 
 [sub_resource type="StyleBoxTexture" id="7"]
-texture = ExtResource("6")
 region_rect = Rect2(0, 0, 21, 10)
 
 [sub_resource type="StyleBoxTexture" id="8"]
 content_margin_left = 5.0
 content_margin_right = 5.0
-texture = ExtResource("7")
 region_rect = Rect2(0, 0, 21, 11)
 
 [sub_resource type="FontFile" id="5"]
@@ -187,13 +183,11 @@ cache/0/6/0/kerning_overrides/6/0 = Vector2(0, 0)
 [sub_resource type="StyleBoxTexture" id="9"]
 content_margin_left = 5.0
 content_margin_right = 5.0
-texture = ExtResource("6")
 region_rect = Rect2(0, 0, 21, 10)
 
 [sub_resource type="StyleBoxTexture" id="10"]
 content_margin_left = 5.0
 content_margin_right = 5.0
-texture = ExtResource("7")
 region_rect = Rect2(0, 0, 23, 11)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_k31d8"]

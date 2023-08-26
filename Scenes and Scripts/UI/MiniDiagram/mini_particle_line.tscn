@@ -1,0 +1,57 @@
+[gd_scene load_steps=8 format=3 uid="uid://bk8xjrcxummfx"]
+
+[ext_resource type="Shader" path="res://Resources/Shaders/particle_line.gdshader" id="1_70jir"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/MiniDiagram/mini_particle_line.gd" id="2_qpvw1"]
+[ext_resource type="Material" uid="uid://iitnraau4c6m" path="res://Resources/Shaders/outline0.tres" id="2_xsmhf"]
+[ext_resource type="Texture2D" uid="uid://b8glr5vnlacpl" path="res://Textures/ParticlesAndLines/gluon_end.png" id="3_q8adg"]
+[ext_resource type="Texture2D" uid="uid://0j7y2hp7whj6" path="res://Textures/ParticlesAndLines/Lines/loop.png" id="4_fqt85"]
+[ext_resource type="Texture2D" uid="uid://dya0nescxtd67" path="res://Textures/ParticlesAndLines/arrow.png" id="5_6iohf"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gw2fp"]
+shader = ExtResource("1_70jir")
+shader_parameter/start_interaction_strength_alpha = 1.0
+shader_parameter/end_interaction_strength_alpha = 1.0
+shader_parameter/line_color = Color(0, 0, 0, 1)
+shader_parameter/line_thickness = 1.0
+
+[node name="MiniParticleLine" type="Node2D"]
+material = SubResource("ShaderMaterial_gw2fp")
+script = ExtResource("2_qpvw1")
+text_gap = 9.0
+
+[node name="line_joint_start" type="Line2D" parent="."]
+material = ExtResource("2_xsmhf")
+points = PackedVector2Array(0, 0, 0, 0)
+width = 9.0
+texture = ExtResource("3_q8adg")
+texture_mode = 1
+
+[node name="line_joint_end" type="Line2D" parent="."]
+material = ExtResource("2_xsmhf")
+points = PackedVector2Array(0, 0, 0, 0)
+width = 9.0
+texture = ExtResource("3_q8adg")
+texture_mode = 1
+
+[node name="line_middle" type="Line2D" parent="."]
+texture_repeat = 2
+use_parent_material = true
+points = PackedVector2Array(0, 0, 95.1324, -2.08165e-12)
+width = 9.0
+texture = ExtResource("4_fqt85")
+texture_mode = 1
+
+[node name="arrow" type="Sprite2D" parent="."]
+use_parent_material = true
+position = Vector2(52, 2.08165e-12)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("5_6iohf")
+offset = Vector2(-4, 0)
+
+[node name="text" type="Sprite2D" parent="."]
+use_parent_material = true
+scale = Vector2(0.5, 0.5)
+
+[node name="spareText" type="Sprite2D" parent="."]
+use_parent_material = true
+scale = Vector2(0.5, 0.5)
