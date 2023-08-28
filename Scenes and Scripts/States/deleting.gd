@@ -40,6 +40,8 @@ func line_deletion(line: ParticleLine) -> void:
 		
 	Diagram.delete_line(line)
 	
+	SOUNDBUS.snip()
+	
 	await get_tree().process_frame
 	
 	deleting_objects_count -= 1

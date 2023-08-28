@@ -3,15 +3,13 @@ extends GrabbableNode2D
 
 signal clicked_on
 signal request_deletion
+signal show_information_box
 
 @onready var Ball = get_node("Ball")
 @onready var Level := get_node("/root/World")
 @onready var StateManager = Level.get_node('state_manager')
-@onready var Diagram: DiagramBase = get_parent().get_parent()
-@onready var Crosshair = Diagram.get_node("Crosshair")
+
 @onready var Dot = get_node("Dot")
-@onready var Initial = Diagram.get_node('Initial')
-@onready var Final = Diagram.get_node('Final')
 @onready var InfoNumberLabel = get_node('InfoNumberLabel')
 @onready var interaction_matrix: ConnectionMatrix = Level.interaction_matrix
 
@@ -25,6 +23,11 @@ enum Side {Before = -1, After = +1}
 const INTERACTION_SIZE_MINIMUM := 3
 const INFORMATION_ID_MAXIMUM := 99
 const MAXIMUM_DIMENSIONALITY : float = 4
+
+var Diagram: MainDiagram
+var Initial: StateLine
+var Final: StateLine
+var Crosshair: Node
 
 var InformationBox := preload("res://Scenes and Scripts/UI/Info/interaction_information.tscn")
 var information_id: int
@@ -47,11 +50,11 @@ var hovering := false : set = _set_hovering
 
 func _ready():
 	super._ready()
-
-	self.connect("picked_up", Callable(Crosshair, "interaction_picked_up"))
-	self.connect("dropped", Callable(Crosshair, "interaction_placed"))
-	Crosshair.connect("moved", Callable(self, "_crosshair_moved"))
-	self.connect("request_deletion", Callable(Diagram, "delete_interaction"))
+	
+	show_information_box.connect(EVENTBUS.add_floating_menu)
+	picked_up.connect(Crosshair.interaction_picked_up)
+	dropped.connect(Crosshair.interaction_placed)
+	request_deletion.connect(Diagram.delete_interaction)
 	
 	id = interaction_matrix.calculate_new_interaction_id()
 	interaction_matrix.add_interaction()
@@ -66,6 +69,12 @@ func _ready():
 
 	Diagram.check_split_lines()
 	Diagram.update_statelines()
+
+func init(diagram: MainDiagram) -> void:
+	Diagram = diagram
+	Initial = diagram.StateLines[StateLine.StateType.Initial]
+	Final = diagram.StateLines[StateLine.StateType.Final]
+	Crosshair = diagram.Crosshair
 
 func _process(_delta: float) -> void:
 	if old_connected_lines != connected_lines:
@@ -99,7 +108,7 @@ func _set_valid_colourless(new_valid_colourless: bool) -> void:
 	valid_colourless = new_valid_colourless
 	update_valid_visual()
 
-func _crosshair_moved(_current_position: Vector2, _old_position: Vector2):
+func crosshair_moved(_current_position: Vector2, _old_position: Vector2):
 	if grabbed:
 		update_interaction()
 
@@ -338,8 +347,8 @@ func open_information_box() -> void:
 	information_box = InformationBox.instantiate()
 	information_box.ConnectedInteraction = self
 	information_box.ID = information_id
-	information_box.position = position + information_box_offset
-	Diagram.add_child(information_box)
+	information_box.position = Diagram.position + position + information_box_offset
+	emit_signal("show_information_box", information_box)
 	
 	InfoNumberLabel.text = str(information_id)
 	InfoNumberLabel.show()
@@ -363,10 +372,13 @@ func _on_information_button_pressed():
 		else:
 			open_information_box()
 
-func _on_tree_exiting():
+func deconstructor() -> void:
 	if information_visible:
 		close_information_box()
 	Diagram.update_statelines()
+
+func _on_tree_exiting():
+	deconstructor()
 	
 func drop() -> void:
 	super.drop()
@@ -414,4 +426,3 @@ func set_shader_parameters() -> void:
 func set_connected_line_shader_parameters(interaction_strength_alpha: float) -> void:
 	for line in connected_lines:
 		line.set_point_interaction_strength_alpha(line.get_point_at_position(position), interaction_strength_alpha)
-

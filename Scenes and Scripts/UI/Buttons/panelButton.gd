@@ -14,6 +14,7 @@ signal toggled
 @export var expand_icon: bool : set = _set_expand_icon
 @export var button_pressed: bool : set = _set_button_pressed
 @export var disabled: bool = false: set = _set_button_disabled
+@export var icon_use_parent_material: bool = false: set = _set_icon_use_parent_material
 
 @onready var button = $Button
 @onready var label = $ContentContainer/HBoxContainer/ButtonText
@@ -27,6 +28,10 @@ var previous_button_pressed : bool
 func _ready() -> void:
 	previous_button_pressed = button_pressed
 	set_content_margins(ButtonState[NORMAL])
+
+func _set_icon_use_parent_material(new_value: bool) -> void:
+	icon_use_parent_material = new_value
+	$ContentContainer/HBoxContainer/ButtonIcon.use_parent_material = new_value
 
 func _set_button_pressed(new_value: bool) -> void:
 	button_pressed = new_value
@@ -134,6 +139,6 @@ func play_sound(button_pressed_state: bool) -> void:
 	previous_button_pressed = button_pressed_state
 	
 	if button_pressed_state:
-		$ButtonDown.play()
+		SOUNDBUS.button_down()
 	elif !$Button.button_group:
-		$ButtonUp.play()
+		SOUNDBUS.button_up()

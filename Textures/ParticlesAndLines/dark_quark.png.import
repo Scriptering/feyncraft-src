@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://3qrgaqnejsnj"
-path="res://.godot/imported/tab_bg.png-1685e7dacbf3fb993f3bed8aba6ea0b1.ctex"
+uid="uid://cxtqmuh4v0ljf"
+path="res://.godot/imported/dark_quark.png-17a5408ddaad5d059331010ce3e0c580.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/UI/Information/tab_bg.png"
-dest_files=["res://.godot/imported/tab_bg.png-1685e7dacbf3fb993f3bed8aba6ea0b1.ctex"]
+source_file="res://Textures/ParticlesAndLines/dark_quark.png"
+dest_files=["res://.godot/imported/dark_quark.png-17a5408ddaad5d059331010ce3e0c580.ctex"]
 
 [params]
 

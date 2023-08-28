@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c5uohdproklix"
-path="res://.godot/imported/tab.png-f8ef77507d3a1fb94c996c1c8584a073.ctex"
+uid="uid://denysnbqxm0co"
+path="res://.godot/imported/equation_arrow.png-8e5a6ba6bc954f7cc8832784d3891e4f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/UI/Information/tab.png"
-dest_files=["res://.godot/imported/tab.png-f8ef77507d3a1fb94c996c1c8584a073.ctex"]
+source_file="res://Textures/UI/Equation/equation_arrow.png"
+dest_files=["res://.godot/imported/equation_arrow.png-8e5a6ba6bc954f7cc8832784d3891e4f.ctex"]
 
 [params]
 

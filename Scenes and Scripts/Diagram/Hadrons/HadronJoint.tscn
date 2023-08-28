@@ -5,7 +5,6 @@
 [ext_resource type="Texture2D" uid="uid://h04qdshikjc6" path="res://Textures/joint.png" id="2_17flu"]
 
 [node name="HadronJoint" type="Node2D"]
-z_index = 4
 material = ExtResource("1_booui")
 script = ExtResource("1_5iwnu")
 label_seperation = 40.0

@@ -25,7 +25,7 @@ func change_state(new_state: BaseState.State) -> void:
 	current_state.enter()
 
 func init(cursor: Sprite2D, Diagram: DiagramBase) -> void:
-	var crosshair = Diagram.get_node("Crosshair")
+	var crosshair = Diagram.get_node("DiagramArea/Crosshair")
 	
 	for child in get_children():
 		child.cursor = cursor

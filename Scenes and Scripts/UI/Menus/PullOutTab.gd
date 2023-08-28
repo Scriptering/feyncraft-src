@@ -27,12 +27,16 @@ func _tab_button_pressed() -> void:
 		push_in()
 
 func pull_out() -> void:
+	SOUNDBUS.pull_out_tab()
+	
 	var tween = get_tree().create_tween()
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_SPRING)
 	tween.tween_property(MovingContainer, "position", get_pull_out_position(), time_to_pull_out)
 
 func push_in() -> void:
+	SOUNDBUS.push_in_tab()
+	
 	var tween = get_tree().create_tween()
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_SPRING)

@@ -5,13 +5,9 @@ signal request_deletion
 signal clicked_on
 
 @onready var Level = get_tree().get_first_node_in_group('level')
-@onready var Diagram : DiagramBase = get_parent().get_parent()
-@onready var Initial = Diagram.get_node('Initial')
-@onready var Final = Diagram.get_node('Final')
-@onready var Crosshair = Diagram.get_node("Crosshair")
 @onready var Text = get_node("text")
 @onready var SpareText = get_node("spareText")
-@onready var Arrow = get_node("arrow")
+@onready var Arrow = $arrow
 @onready var ClickAreaShape = $clickArea/CollisionShape2D
 @onready var LineMiddle = $line_middle
 @onready var LineJointStart = $line_joint_start
@@ -29,6 +25,11 @@ signal clicked_on
 enum Anti {anti = -1, noanti = +1}
 enum Point {Start = 0, End = 1, Invalid = -1}
 enum PointsConnected {None, Left, Right, Both}
+
+var Diagram: MainDiagram
+var Initial: StateLine
+var Final: StateLine
+var Crosshair: Node
 
 var points := PackedVector2Array([[0, 0], [0, 0]]) : set = _set_points
 var line_vector : Vector2 = Vector2.ZERO:
@@ -74,12 +75,15 @@ var texture_dict: Array = [
 'Particle',
 'Particle',
 'Particle',
+'Particle',
+'Particle',
+'Particle',
+'Particle',
 'Particle']
 
 var line_texture
 
 func _ready():
-	Crosshair.connect("moved", Callable(self, "_crosshair_moved"))
 	self.connect("request_deletion", Callable(Diagram, "delete_line"))
 	
 	has_colour = base_particle in GLOBALS.COLOUR_PARTICLES
@@ -88,7 +92,7 @@ func _ready():
 	set_dimensionality()
 	set_line_width()
 
-	line_texture = load('res://Textures/ParticlesAndLines/Lines/' + texture_dict[particle] + '.png')
+	line_texture = load('res://Textures/ParticlesAndLines/Lines/' + texture_dict[base_particle] + '.png')
 
 	set_textures()
 	
@@ -100,6 +104,12 @@ func _ready():
 	Text.visible = true
 	
 	connect_to_interactions()
+
+func init(diagram: MainDiagram) -> void:
+	Diagram = diagram
+	Initial = diagram.StateLines[StateLine.StateType.Initial]
+	Final = diagram.StateLines[StateLine.StateType.Final]
+	Crosshair = diagram.Crosshair
 
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("click") and hovering:
@@ -148,7 +158,7 @@ func get_side_point(state: StateLine.StateType) -> Vector2:
 		return left_point
 	return right_point
 
-func _crosshair_moved(_new_position: Vector2, _old_position: Vector2):
+func crosshair_moved(_new_position: Vector2, _old_position: Vector2):
 	if !is_placed:
 		update_line()
 
@@ -268,7 +278,7 @@ func move_line() -> void:
 	
 	LineJointStart.points[Point.End] = points[Point.Start] + line_joint_start_length * self.line_vector.normalized() 
 	
-	if particle == GLOBALS.Particle.gluon:
+	if base_particle == GLOBALS.Particle.gluon:
 		var number_of_gluon_loops : int = floor((self.line_vector.length() - line_joint_start_length - line_joint_end_length) / gluon_loop_length)
 		
 		LineJointEnd.points[Point.Start] = (
@@ -296,7 +306,7 @@ func get_arrow_visiblity() -> bool:
 	if points[Point.Start] == points[Point.End]:
 		return false
 	
-	if particle == GLOBALS.Particle.W:
+	if base_particle == GLOBALS.Particle.W:
 		return false
 	
 	if base_particle in GLOBALS.BOSONS:
@@ -349,7 +359,7 @@ func set_text_texture() -> void:
 	Text.texture = GLOBALS.PARTICLE_TEXTURES[self.particle_name]
 	SpareText.texture = GLOBALS.PARTICLE_TEXTURES[self.particle_name]
 
-	if points[Point.End].x == points[Point.Start].x and particle == GLOBALS.Particle.W:
+	if points[Point.End].x == points[Point.Start].x and base_particle == GLOBALS.Particle.W:
 		Text.texture = GLOBALS.PARTICLE_TEXTURES['W_0']
 
 func place() -> void:

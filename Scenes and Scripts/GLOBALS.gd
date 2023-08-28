@@ -6,7 +6,7 @@ enum COLOURS {primary, secondary, pencil, primary_highlight, invalid, invalid_hi
 enum Particle {
 	photon, gluon, Z, H, W,
 	lepton, electron, muon, tau,
-	neutrino, electron_neutrino, muon_neutrino, tau_neutrino,
+	lepton_neutrino, electron_neutrino, muon_neutrino, tau_neutrino,
 	bright_quark, up, charm, top, dark_quark, down, strange, bottom,
 	anti_bottom = -20, anti_strange, anti_down, anti_dark_quark, anti_top, anti_charm, anti_up, anti_bright_quark,
 	anti_tau_neutrino, anti_muon_neutrino, anti_electron_neutrino, anti_neutrino,
@@ -66,7 +66,7 @@ const BOSON_DIMENSIONALITY : float = 1.0
 
 const LEPTONS := [
 	Particle.lepton, Particle.electron, Particle.muon, Particle.tau,
-	Particle.neutrino, Particle.electron_neutrino, Particle.muon_neutrino, Particle.tau_neutrino
+	Particle.lepton_neutrino, Particle.electron_neutrino, Particle.muon_neutrino, Particle.tau_neutrino
 ]
 
 const QUARKS := [
@@ -85,14 +85,14 @@ const COLOUR_PARTICLES := [
 const SHADED_PARTICLES := [
 	Particle.W,
 	Particle.lepton, Particle.electron, Particle.muon, Particle.tau,
-	Particle.neutrino, Particle.electron_neutrino, Particle.muon_neutrino, Particle.tau_neutrino,
+	Particle.lepton_neutrino, Particle.electron_neutrino, Particle.muon_neutrino, Particle.tau_neutrino,
 	Particle.bright_quark, Particle.dark_quark, Particle.up, Particle.down, Particle.top, Particle.bottom, Particle.charm, Particle.strange
 ]
 
 const BRIGHT_PARTICLES := [
 	Particle.W,
 	Particle.bright_quark, Particle.up, Particle.charm, Particle.top,
-	Particle.neutrino, Particle.electron_neutrino, Particle.muon_neutrino, Particle.tau_neutrino
+	Particle.lepton_neutrino, Particle.electron_neutrino, Particle.muon_neutrino, Particle.tau_neutrino
 ]
 
 const DARK_PARTICLES := [
@@ -102,7 +102,7 @@ const DARK_PARTICLES := [
 ]
 
 const GENERAL_PARTICLES := [
-	Particle.lepton, Particle.neutrino, Particle.bright_quark, Particle.dark_quark
+	Particle.lepton, Particle.lepton_neutrino, Particle.bright_quark, Particle.dark_quark
 ]
 
 const INVALID = -1
@@ -115,15 +115,15 @@ const MINIMUM_INTERACTION_STRENGTH_ALPHA : float = 0.05
 const GENERAL_CONVERSION : Dictionary = {
 	Particle.photon: Particle.photon, Particle.H: Particle.H, Particle.W: Particle.W, Particle.Z: Particle.Z, Particle.gluon: Particle.gluon,
 	Particle.lepton: [Particle.electron, Particle.muon, Particle.tau],
-	Particle.neutrino: [Particle.electron_neutrino, Particle.muon_neutrino, Particle.tau_neutrino],
+	Particle.lepton_neutrino: [Particle.electron_neutrino, Particle.muon_neutrino, Particle.tau_neutrino],
 	Particle.bright_quark: [Particle.up, Particle.charm, Particle.top],
 	Particle.dark_quark: [Particle.down, Particle.strange, Particle.bottom],
 	Particle.electron: Particle.lepton,
 	Particle.muon: Particle.lepton,
 	Particle.tau: Particle.lepton,
-	Particle.electron_neutrino: Particle.neutrino,
-	Particle.muon_neutrino: Particle.neutrino,
-	Particle.tau_neutrino: Particle.neutrino,
+	Particle.electron_neutrino: Particle.lepton_neutrino,
+	Particle.muon_neutrino: Particle.lepton_neutrino,
+	Particle.tau_neutrino: Particle.lepton_neutrino,
 	Particle.up: Particle.bright_quark,
 	Particle.charm: Particle.bright_quark,
 	Particle.top: Particle.bright_quark,
@@ -143,7 +143,7 @@ var GENERAL_INTERACTIONS : Array = [
 		[Particle.dark_quark, Particle.dark_quark, Particle.gluon]
 	],
 	[
-		[Particle.lepton, Particle.neutrino, Particle.W],
+		[Particle.lepton, Particle.lepton_neutrino, Particle.W],
 		[Particle.bright_quark, Particle.dark_quark, Particle.W],
 		[Particle.W, Particle.W, Particle.W, Particle.W]
 	],
@@ -151,7 +151,7 @@ var GENERAL_INTERACTIONS : Array = [
 		[Particle.lepton, Particle.lepton, Particle.Z],
 		[Particle.bright_quark, Particle.bright_quark, Particle.Z],
 		[Particle.dark_quark, Particle.dark_quark, Particle.Z],
-		[Particle.neutrino, Particle.neutrino, Particle.Z],
+		[Particle.lepton_neutrino, Particle.lepton_neutrino, Particle.Z],
 		[Particle.W, Particle.W, Particle.Z],
 		[Particle.W, Particle.W, Particle.photon],
 		[Particle.W, Particle.W, Particle.Z, Particle.Z],
@@ -160,7 +160,7 @@ var GENERAL_INTERACTIONS : Array = [
 		[Particle.lepton, Particle.lepton, Particle.H],
 		[Particle.bright_quark, Particle.bright_quark, Particle.H],
 		[Particle.dark_quark, Particle.dark_quark, Particle.H],
-		[Particle.neutrino, Particle.neutrino, Particle.H],
+		[Particle.lepton_neutrino, Particle.lepton_neutrino, Particle.H],
 		[Particle.H, Particle.Z, Particle.Z],
 		[Particle.H, Particle.H, Particle.H, Particle.H],
 		[Particle.H, Particle.H, Particle.Z, Particle.Z],

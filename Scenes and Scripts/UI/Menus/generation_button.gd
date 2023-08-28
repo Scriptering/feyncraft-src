@@ -1,11 +1,10 @@
 extends PullOutTab
 
-signal generate
+var Initial: StateLine
+var Final: StateLine
+var Generation: Node
+var GeneratedDiagramViewer: MiniDiagramViewer
 
-@onready var Level = get_tree().get_nodes_in_group('level')[0]
-@onready var Diagram = Level.get_node("Diagram")
-@onready var Initial : StateLine = Diagram.get_node('Initial')
-@onready var Final : StateLine = Diagram.get_node('Final')
 @onready var DegreeRange = $MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/DegreeSlider/VBoxContainer/RangeSlider
 @onready var EM_check := $MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/em
 @onready var strong_check := $MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/strong
@@ -18,6 +17,7 @@ signal generate
 @export var FinalState : Array
 @export var min_degree : int = -1
 @export var max_degree : int = -1
+@export var generated_diagram_viewer_offset : Vector2 = Vector2.ZERO
 
 enum {INVALID}
 
@@ -33,6 +33,14 @@ func _ready():
 	if min_degree != INVALID and max_degree != INVALID:
 		DegreeRange.minValue = min_degree
 		DegreeRange.maxValue = max_degree
+
+func init(diagram: DiagramBase, generation: Node, generated_diagram_viewer: MiniDiagramViewer) -> void:
+	Initial = diagram.StateLines[StateLine.StateType.Initial]
+	Final = diagram.StateLines[StateLine.StateType.Final]
+	Generation = generation
+	GeneratedDiagramViewer = generated_diagram_viewer
+	
+	GeneratedDiagramViewer.closed.connect(toggle_diagram_viewer)
 
 func _set_can_generate(new_value: bool) -> void:
 	can_generate = new_value
@@ -80,6 +88,13 @@ func set_electroweak_check(new_value: bool) -> void:
 		EM_check.button_pressed = true
 		weak_check.button_pressed = true
 
+func generate(checks: Array[bool]) -> void:
+	GeneratedDiagramViewer.create_diagrams(
+		Generation.generate_diagrams(
+			InitialState, FinalState, DegreeRange.minValue, DegreeRange.maxValue, Generation.get_usable_interactions(checks)
+		)
+	)
+
 func _on_em_toggled(button_pressed: bool) -> void:
 	electroweak_type_button_pressed(button_pressed)
 
@@ -96,7 +111,7 @@ func _on_generate_pressed() -> void:
 		electroweak_check.button_pressed
 	]
 	
-	emit_signal('generate', InitialState, FinalState, DegreeRange.minValue, DegreeRange.maxValue, checks)
+	generate(checks)
 
 func _on_save_pressed() -> void:
 	InitialState = get_state_interactions(Initial)
@@ -107,3 +122,10 @@ func _on_save_pressed() -> void:
 	else:
 		self.can_generate = true
 		set_checks(InitialState + FinalState)
+
+func toggle_diagram_viewer() -> void:
+	GeneratedDiagramViewer.visible = !GeneratedDiagramViewer.visible
+	GeneratedDiagramViewer.position = generated_diagram_viewer_offset + position
+
+func _on_view_pressed() -> void:
+	toggle_diagram_viewer()

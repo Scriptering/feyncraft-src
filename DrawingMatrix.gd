@@ -2,8 +2,8 @@ class_name DrawingMatrix
 extends ConnectionMatrix
 
 var split_hadron_ids : Array = []
-var grid_size : int = 1
 var normalised_interaction_positions : PackedVector2Array = []
+var state_line_positions : PackedInt32Array = [0, 20]
 
 func initialise_from_connection_matrix(from_connection_matrix: ConnectionMatrix) -> void:
 	connection_matrix = from_connection_matrix.connection_matrix.duplicate(true)
@@ -13,21 +13,18 @@ func initialise_from_connection_matrix(from_connection_matrix: ConnectionMatrix)
 	make_drawable()
 
 func get_interaction_positions() -> PackedVector2Array:
-	var interaction_positions := normalised_interaction_positions.duplicate()
-	for i in range(interaction_positions.size()):
-		interaction_positions[i] *= grid_size
-	return interaction_positions
+	return normalised_interaction_positions
 
-func add_interaction_position(position: Vector2, id: int = normalised_interaction_positions.size()) -> void:
+func add_interaction_position(position: Vector2, grid_size: int, id: int = normalised_interaction_positions.size()) -> void:
 	normalised_interaction_positions.insert(id, position/grid_size)
 
 func add_interaction_with_position(
-	interaction_position: Vector2, interaction_state: StateLine.StateType = StateLine.StateType.None,
+	interaction_position: Vector2, grid_size: int, interaction_state: StateLine.StateType = StateLine.StateType.None,
 	id : int = calculate_new_interaction_id(interaction_state)
 ) -> void:
 
 	add_interaction(interaction_state, id)
-	add_interaction_position(interaction_position, id)
+	add_interaction_position(interaction_position, grid_size, id)
 
 func make_drawable() -> void:
 	split_hadrons()

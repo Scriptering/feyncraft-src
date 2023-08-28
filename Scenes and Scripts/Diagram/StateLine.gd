@@ -1,11 +1,13 @@
 class_name StateLine
-extends Node2D
+extends GrabbableControl
 
-@onready var Diagram = get_parent()
 @onready var HadronJoint = preload("res://Scenes and Scripts/Diagram/Hadrons/HadronJoint.tscn")
 
 @export var hadron_label_gap : int
 @export var state : StateType
+
+var Diagram: MainDiagram
+var Crosshair: Node
 
 enum {NOT_FOUND}
 
@@ -20,6 +22,10 @@ var joints : Array[HadronJoint] = []
 var old_quark_groups: Array = [[]]
 
 var connected_lone_particles : Array[GLOBALS.Particle] : get = _get_connected_lone_particles
+
+func init(diagram: MainDiagram) -> void:
+	Diagram = diagram
+	Crosshair = diagram.Crosshair
 
 class LineYSort:
 	static func InitialSorter(line1: ParticleLine, line2: ParticleLine):
@@ -72,7 +78,7 @@ func create_hadron_joint(hadron: Hadron) -> void:
 	joint.hadron = hadron
 	joint.state = state
 	joint.init()
-	Diagram.add_child(joint)
+	Diagram.get_node("DiagramArea").add_child(joint)
 	joints.append(joint)
 
 func create_hadrons(quark_groups: Array) -> void:
@@ -103,6 +109,9 @@ func sort_quark_groups(quark_groups: Array) -> Array:
 func get_connected_lines() -> Array[ParticleLine]:
 	var connected_lines: Array[ParticleLine] = []
 	for line in Diagram.get_particle_lines():
+		if line.is_queued_for_deletion():
+			continue
+		
 		var line_state_line : StateType = line.get_on_state_line()
 		var on_state_line : bool = line_state_line == state or line_state_line == StateType.Both
 		if on_state_line:

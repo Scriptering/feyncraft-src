@@ -5,19 +5,19 @@ var particle_buttons: Array[PanelButton] = []
 
 @export var particle_button_group: ButtonGroup
 
-@onready var Leptons = $Leptons/MovingContainer/Tab/Leptons
-@onready var Bosons = $Bosons/MovingContainer/Tab/Bosons
-@onready var Quarks = $Quarks/MovingContainer/Tab/Quarks
+@onready var Leptons = $HBoxContainer/Leptons/MovingContainer/Tab/Leptons
+@onready var Bosons = $HBoxContainer/Bosons/MovingContainer/Tab/Bosons
+@onready var Quarks = $HBoxContainer/Quarks/MovingContainer/Tab/Quarks
+@onready var General = $HBoxContainer/General/MovingContainer/Tab/General
+
+@onready var ParticleButtonCategories : Array = [
+	Leptons, Bosons, Quarks, General
+]
 
 func _ready():
-	for particle_button in Leptons.get_children():
-		particle_buttons.append(particle_button)
-		
-	for particle_button in Bosons.get_children():
-		particle_buttons.append(particle_button)
-
-	for particle_button in Quarks.get_children():
-		particle_buttons.append(particle_button)
+	for particle_button_category in ParticleButtonCategories:
+		for particle_button in particle_button_category.get_children():
+			particle_buttons.append(particle_button)
 	
 	for particle_button in particle_buttons:
 		particle_button.button_group = particle_button_group
