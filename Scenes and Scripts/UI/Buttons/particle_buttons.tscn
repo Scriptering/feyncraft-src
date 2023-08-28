@@ -195,6 +195,7 @@ theme_override_constants/margin_left = 5
 theme_override_constants/margin_right = 5
 TabText = "LEPTONS"
 TabMinimumSize = Vector2(61, 2.08165e-12)
+icon_use_parent_material = null
 
 [node name="TabButton" parent="HBoxContainer/Leptons/MovingContainer/PullOutTabButtonUp" index="0"]
 text = "LEPTONS"
@@ -278,6 +279,7 @@ theme_override_constants/margin_left = 5
 theme_override_constants/margin_right = 5
 TabText = "BOSONS"
 TabMinimumSize = Vector2(61, 2.08165e-12)
+icon_use_parent_material = null
 
 [node name="Tab" type="PanelContainer" parent="HBoxContainer/Bosons/MovingContainer"]
 use_parent_material = true
@@ -349,6 +351,7 @@ theme_override_constants/margin_left = 5
 theme_override_constants/margin_right = 5
 TabText = "QUARKS"
 TabMinimumSize = Vector2(61, 2.08165e-12)
+icon_use_parent_material = null
 
 [node name="Tab" type="PanelContainer" parent="HBoxContainer/Quarks/MovingContainer"]
 use_parent_material = true
@@ -427,6 +430,7 @@ theme_override_constants/margin_left = 5
 theme_override_constants/margin_right = 5
 TabText = "GENERAL"
 TabMinimumSize = Vector2(61, 2.08165e-12)
+icon_use_parent_material = null
 
 [node name="Tab" type="PanelContainer" parent="HBoxContainer/General/MovingContainer"]
 use_parent_material = true

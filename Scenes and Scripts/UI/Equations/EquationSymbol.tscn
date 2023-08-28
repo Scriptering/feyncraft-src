@@ -1,14 +1,24 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=5 format=3 uid="uid://bhn0iymjmye2g"]
 
 [ext_resource type="Texture2D" uid="uid://bhudxuhqjghi2" path="res://Textures/ParticlesAndLines/anti_down.png" id="1"]
+[ext_resource type="Shader" path="res://Resources/Shaders/particle_line.gdshader" id="1_778kk"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Equations/EquationSymbol.gd" id="2"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yumpo"]
+shader = ExtResource("1_778kk")
+shader_parameter/start_interaction_strength_alpha = null
+shader_parameter/end_interaction_strength_alpha = null
+shader_parameter/line_color = Color(0.494118, 0, 0, 1)
+shader_parameter/line_thickness = 1.0
+
 [node name="EquationSymbol" type="TextureRect"]
+material = SubResource("ShaderMaterial_yumpo")
 offset_right = 12.0
 offset_bottom = 28.0
-scale = Vector2( 0.2, 0.2 )
+scale = Vector2(0.2, 0.2)
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource( 1 )
-stretch_mode = 6
-script = ExtResource( 2 )
+texture = ExtResource("1")
+expand_mode = 3
+stretch_mode = 4
+script = ExtResource("2")

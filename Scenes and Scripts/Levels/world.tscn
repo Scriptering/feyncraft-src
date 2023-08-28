@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://c7n4o6dbkwilh"]
+[gd_scene load_steps=33 format=3 uid="uid://c7n4o6dbkwilh"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/Levels/World.gd" id="1"]
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="1_ovngh"]
@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" path="res://Scenes and Scripts/Algorithms/PathFinding.tscn" id="13"]
 [ext_resource type="Script" path="res://Scenes and Scripts/Diagram/diagram_actions.gd" id="17_23v64"]
 [ext_resource type="PackedScene" uid="uid://nuajmillcsir" path="res://Scenes and Scripts/Algorithms/Generation.tscn" id="18"]
+[ext_resource type="PackedScene" uid="uid://bbkvwth6ke1is" path="res://Scenes and Scripts/UI/Menus/problem_tab.tscn" id="20_uaeg6"]
 [ext_resource type="Texture2D" uid="uid://dhfjdunke4k7k" path="res://Textures/UI/delete_control.png" id="22"]
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="22_8vp8u"]
 [ext_resource type="PackedScene" uid="uid://cc28vwhkixh8t" path="res://Scenes and Scripts/UI/Buttons/pallette_buttons.tscn" id="22_kt0hd"]
@@ -26,7 +27,7 @@
 [ext_resource type="PackedScene" uid="uid://ds2iet11sv3ty" path="res://Scenes and Scripts/UI/Buttons/particle_buttons.tscn" id="24_lunb1"]
 [ext_resource type="PackedScene" uid="uid://dm0yec0rjuvwl" path="res://Scenes and Scripts/sound_bus.tscn" id="26_tlvja"]
 [ext_resource type="PackedScene" uid="uid://dcpcxfh7umytq" path="res://Scenes and Scripts/UI/MiniDiagram/mini_diagram_viewer.tscn" id="27_laye5"]
-[ext_resource type="PackedScene" uid="uid://b0cpcu52rxnii" path="res://Scenes and Scripts/event_bus.tscn" id="28_tehha"]
+[ext_resource type="PackedScene" path="res://Scenes and Scripts/event_bus.tscn" id="28_tehha"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ue1rd"]
 shader = ExtResource("1_ovngh")
@@ -44,7 +45,7 @@ expand_margin_top = 1.0
 expand_margin_right = 1.0
 expand_margin_bottom = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_ug1nr"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_atcw5"]
 resource_name = "ParticleButtons"
 allow_unpress = true
 
@@ -190,18 +191,24 @@ anchors_preset = 7
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 159.0
-offset_top = 335.0
+offset_top = 336.0
 offset_right = 159.0
-offset_bottom = 335.0
+offset_bottom = 336.0
 grow_vertical = 0
 size_flags_horizontal = 4
-particle_button_group = SubResource("ButtonGroup_ug1nr")
+particle_button_group = SubResource("ButtonGroup_atcw5")
 
 [node name="GenerationButton" parent="PullOutTabs" instance=ExtResource("22_u64s1")]
 offset_left = -76.0
 offset_top = 57.0
 offset_right = -76.0
 offset_bottom = 57.0
+
+[node name="ProblemTab" parent="PullOutTabs" instance=ExtResource("20_uaeg6")]
+offset_left = 157.0
+offset_top = -26.0
+offset_right = 157.0
+offset_bottom = -26.0
 
 [node name="FPS" type="Label" parent="."]
 visible = false

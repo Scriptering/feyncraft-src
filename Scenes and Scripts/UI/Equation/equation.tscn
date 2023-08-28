@@ -1,20 +1,47 @@
-[gd_scene load_steps=12 format=3 uid="uid://fl01bx28xqrn"]
+[gd_scene load_steps=17 format=3 uid="uid://fl01bx28xqrn"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_e0bw4"]
+[ext_resource type="Texture2D" uid="uid://c7tah165tpo1j" path="res://Textures/UI/Equation/scroll_grabber_normal.png" id="2_l4jgc"]
 [ext_resource type="StyleBox" uid="uid://dvu7f5h7snggp" path="res://Scenes and Scripts/UI/Menus/panelContainer.tres" id="2_sy1ts"]
-[ext_resource type="PackedScene" path="res://Scenes and Scripts/UI/Equations/EquationSymbol.tscn" id="3_arfro"]
-[ext_resource type="Shader" path="res://Scenes and Scripts/UI/Equations/equation_symbol.gdshader" id="4_m0qpx"]
+[ext_resource type="Texture2D" uid="uid://bviwft3lcovj6" path="res://Textures/UI/Equation/scroll_grabber_highlight.png" id="3_p8ghx"]
+[ext_resource type="Texture2D" uid="uid://c0xyku0mewhpu" path="res://Textures/UI/Equation/scroll_grabber_pressed.png" id="4_5skgd"]
 [ext_resource type="Texture2D" uid="uid://dxt3ti14uhl8s" path="res://Textures/UI/Equation/boundary.png" id="5_1nqt5"]
+[ext_resource type="Texture2D" uid="uid://cqenoy2xbqeok" path="res://Textures/UI/Equation/scrollbar.png" id="5_byqw6"]
 [ext_resource type="Texture2D" uid="uid://denysnbqxm0co" path="res://Textures/UI/Equation/equation_arrow.png" id="6_nibs3"]
 [ext_resource type="Texture2D" uid="uid://b7be8bbrdmc4v" path="res://Textures/UI/Equation/boundary_flipped.png" id="7_kdpci"]
 
-[sub_resource type="Theme" id="Theme_fbh0y"]
-PanelContainer/styles/panel = ExtResource("2_sy1ts")
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bhtjg"]
+texture = ExtResource("2_l4jgc")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 2.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_c5g1p"]
-shader = ExtResource("4_m0qpx")
-shader_parameter/line_color = null
-shader_parameter/line_thickness = 1.0
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_21goa"]
+texture = ExtResource("3_p8ghx")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jyq41"]
+texture = ExtResource("4_5skgd")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_im2l8"]
+texture = ExtResource("5_byqw6")
+texture_margin_top = 9.0
+
+[sub_resource type="Theme" id="Theme_fbh0y"]
+HScrollBar/styles/grabber = SubResource("StyleBoxTexture_bhtjg")
+HScrollBar/styles/grabber_highlight = SubResource("StyleBoxTexture_21goa")
+HScrollBar/styles/grabber_pressed = SubResource("StyleBoxTexture_jyq41")
+HScrollBar/styles/scroll = SubResource("StyleBoxTexture_im2l8")
+HScrollBar/styles/scroll_focus = null
+PanelContainer/styles/panel = ExtResource("2_sy1ts")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_s0tkh"]
 texture = ExtResource("5_1nqt5")
@@ -29,9 +56,9 @@ expand_margin_bottom = 4.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ebqp7"]
 texture = ExtResource("7_kdpci")
-texture_margin_left = 1.0
+texture_margin_left = 2.0
 texture_margin_top = 4.0
-texture_margin_right = 3.0
+texture_margin_right = 2.0
 texture_margin_bottom = 4.0
 expand_margin_left = 3.0
 expand_margin_top = 4.0
@@ -40,36 +67,46 @@ expand_margin_bottom = 4.0
 
 [node name="Equation" type="PanelContainer"]
 material = ExtResource("1_e0bw4")
-offset_right = 112.0
+custom_minimum_size = Vector2(200, 24)
+offset_right = 200.0
 offset_bottom = 24.0
 theme = SubResource("Theme_fbh0y")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 use_parent_material = true
 layout_mode = 2
+theme_override_constants/separation = 0
 alignment = 1
 
-[node name="LeftScrollContainer" type="ScrollContainer" parent="HBoxContainer"]
+[node name="LeftMarginContainer" type="MarginContainer" parent="HBoxContainer"]
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_bottom = -8
+
+[node name="LeftScrollContainer" type="ScrollContainer" parent="HBoxContainer/LeftMarginContainer"]
+use_parent_material = true
+layout_mode = 2
 vertical_scroll_mode = 0
 
-[node name="LeftEquation" type="HBoxContainer" parent="HBoxContainer/LeftScrollContainer"]
-use_parent_material = true
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/LeftMarginContainer/LeftScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 10
-size_flags_vertical = 3
+theme_override_constants/margin_bottom = -1
+
+[node name="LeftEquation" type="HBoxContainer" parent="HBoxContainer/LeftMarginContainer/LeftScrollContainer/MarginContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(2.08165e-12, 14)
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/separation = 0
 alignment = 2
 
-[node name="EquationSymbol" parent="HBoxContainer/LeftScrollContainer/LeftEquation" instance=ExtResource("3_arfro")]
-material = SubResource("ShaderMaterial_c5g1p")
-layout_mode = 2
-expand_mode = 2
-stretch_mode = 5
-
 [node name="Centre" type="HBoxContainer" parent="HBoxContainer"]
+z_index = 1
 use_parent_material = true
+custom_minimum_size = Vector2(35, 2.08165e-12)
 layout_mode = 2
 size_flags_vertical = 4
 alignment = 1
@@ -90,6 +127,29 @@ use_parent_material = true
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_ebqp7")
 
-[node name="RightScrollContainer" type="ScrollContainer" parent="HBoxContainer"]
+[node name="RightMarginContainer" type="MarginContainer" parent="HBoxContainer"]
 use_parent_material = true
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_bottom = -8
+
+[node name="RightScrollContainer" type="ScrollContainer" parent="HBoxContainer/RightMarginContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+vertical_scroll_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/RightMarginContainer/RightScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/margin_bottom = -1
+
+[node name="RightEquation" type="HBoxContainer" parent="HBoxContainer/RightMarginContainer/RightScrollContainer/MarginContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(2.08165e-12, 14)
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/separation = 0
+alignment = 2

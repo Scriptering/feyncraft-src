@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=68 format=3 uid="uid://cfmbhoq8cuoge"]
+[gd_resource type="Theme" load_steps=59 format=3 uid="uid://cfmbhoq8cuoge"]
 
 [ext_resource type="FontFile" uid="uid://cq27s0444iwkg" path="res://Textures/Fonts/ConnectionIi-2wj8.otf" id="1_s2gkm"]
 [ext_resource type="Texture2D" uid="uid://bcwpdy0lmenue" path="res://Textures/Buttons/square_disabled.png" id="2_8m3bx"]
@@ -11,10 +11,6 @@
 [ext_resource type="Texture2D" uid="uid://c3xdjv1m3l5tb" path="res://Textures/UI/Information/checkbutton/checkbutton_on.png" id="9_pnq7a"]
 [ext_resource type="Texture2D" uid="uid://dwk1sdoelypxf" path="res://Textures/UI/Information/checkbutton/button_highlight.png" id="10_a6r5o"]
 [ext_resource type="Texture2D" uid="uid://ly3mlobpku4" path="res://Textures/UI/Information/checkbutton/button.png" id="11_jhn8g"]
-[ext_resource type="Texture2D" uid="uid://cgdlpgrrr7bfr" path="res://Textures/UI/Information/scrollH/grabber.png" id="12_401k7"]
-[ext_resource type="Texture2D" uid="uid://b21qdpwxfdd7l" path="res://Textures/UI/Information/scrollH/grabber_highlight.png" id="13_fxfro"]
-[ext_resource type="Texture2D" uid="uid://bd3yvakkxn25p" path="res://Textures/UI/Information/scrollH/grabber_grabbed.png" id="14_3bgtc"]
-[ext_resource type="Texture2D" uid="uid://dngr3bsohl2ln" path="res://Textures/UI/Information/scrollH/scroll.png" id="15_oq61f"]
 [ext_resource type="Texture2D" uid="uid://d3yddpra1btvh" path="res://Textures/UI/Information/sliderH/grabber.png" id="16_tru3k"]
 [ext_resource type="Texture2D" uid="uid://dne44tp1it1xy" path="res://Textures/UI/Information/sliderH/grabber_highlighted.png" id="17_slpu5"]
 [ext_resource type="Texture2D" uid="uid://30oe2l4k7py3" path="res://Textures/UI/Information/sliderH/tick.png" id="18_rn8st"]
@@ -591,24 +587,6 @@ region_rect = Rect2(0, 0, 20, 11)
 [sub_resource type="StyleBoxTexture" id="36"]
 texture = ExtResource("11_jhn8g")
 region_rect = Rect2(0, 0, 20, 11)
-
-[sub_resource type="StyleBoxTexture" id="23"]
-texture = ExtResource("12_401k7")
-region_rect = Rect2(0, 0, 7, 6)
-
-[sub_resource type="StyleBoxTexture" id="24"]
-texture = ExtResource("13_fxfro")
-region_rect = Rect2(0, 0, 7, 6)
-
-[sub_resource type="StyleBoxTexture" id="25"]
-texture = ExtResource("14_3bgtc")
-region_rect = Rect2(0, 0, 7, 6)
-
-[sub_resource type="StyleBoxTexture" id="26"]
-texture = ExtResource("15_oq61f")
-region_rect = Rect2(0, 0, 17, 6)
-
-[sub_resource type="StyleBoxEmpty" id="22"]
 
 [sub_resource type="StyleBoxEmpty" id="38"]
 
@@ -1594,11 +1572,6 @@ CheckButton/styles/hover = SubResource("37")
 CheckButton/styles/hover_pressed = SubResource("37")
 CheckButton/styles/normal = SubResource("36")
 CheckButton/styles/pressed = SubResource("36")
-HScrollBar/styles/grabber = SubResource("23")
-HScrollBar/styles/grabber_highlight = SubResource("24")
-HScrollBar/styles/grabber_pressed = SubResource("25")
-HScrollBar/styles/scroll = SubResource("26")
-HScrollBar/styles/scroll_focus = SubResource("22")
 HSlider/constants/grabber_offset = 0
 HSlider/icons/grabber = ExtResource("16_tru3k")
 HSlider/icons/grabber_disabled = ExtResource("16_tru3k")

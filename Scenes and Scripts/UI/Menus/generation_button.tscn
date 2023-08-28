@@ -1,12 +1,22 @@
-[gd_scene load_steps=32 format=3 uid="uid://bgvo11j4kfjdc"]
+[gd_scene load_steps=33 format=3 uid="uid://bgvo11j4kfjdc"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_h3eo1"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/generation_button.gd" id="2_plgpl"]
-[ext_resource type="StyleBox" uid="uid://dvu7f5h7snggp" path="res://Scenes and Scripts/UI/Menus/panelContainer.tres" id="3_36ota"]
+[ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="3_82pmn"]
 [ext_resource type="Texture2D" uid="uid://q7kyu3yv27sv" path="res://Textures/Buttons/icons/hammer.png" id="4_xnawx"]
 [ext_resource type="PackedScene" uid="uid://bug3v1xlp1gfr" path="res://Scenes and Scripts/UI/Buttons/pull_out_tab_button_right.tscn" id="6_7e8c8"]
 [ext_resource type="PackedScene" uid="uid://dq8wkl0j51p8p" path="res://Scenes and Scripts/UI/RangeSlider.tscn" id="6_rq3ry"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="8_ihypl"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4t00w"]
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+texture = ExtResource("3_82pmn")
+texture_margin_left = 6.0
+texture_margin_top = 6.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+expand_margin_left = 15.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ac3qj"]
 
@@ -68,6 +78,7 @@ max_degree = 10
 ContentContainer = NodePath("MovingContainer/PanelContainer")
 TabButton = NodePath("MovingContainer/Tab")
 MovingContainer = NodePath("MovingContainer")
+moving_container_margins = Vector2(-4, 2.08165e-12)
 move_direction = 2
 
 [node name="MovingContainer" type="HBoxContainer" parent="."]
@@ -82,7 +93,7 @@ theme_override_constants/separation = 0
 use_parent_material = true
 layout_mode = 2
 mouse_filter = 1
-theme_override_styles/panel = ExtResource("3_36ota")
+theme_override_styles/panel = SubResource("StyleBoxTexture_4t00w")
 
 [node name="MouseTrap" type="Panel" parent="MovingContainer/PanelContainer"]
 modulate = Color(1, 1, 1, 0)
@@ -218,6 +229,7 @@ text = "View"
 [node name="Tab" parent="MovingContainer" instance=ExtResource("6_7e8c8")]
 layout_mode = 2
 TabIcon = ExtResource("4_xnawx")
+icon_use_parent_material = null
 
 [connection signal="pressed" from="MovingContainer/PanelContainer/VBoxContainer/Save" to="." method="_on_save_pressed"]
 [connection signal="toggled" from="MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/em" to="." method="_on_em_toggled"]

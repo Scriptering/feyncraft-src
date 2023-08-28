@@ -1,10 +1,22 @@
-[gd_scene load_steps=5 format=3 uid="uid://bsodhhhmgs2tp"]
+[gd_scene load_steps=20 format=3 uid="uid://bbkvwth6ke1is"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_vo33s"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/PullOutTab.gd" id="2_kmb27"]
+[ext_resource type="PackedScene" uid="uid://fl01bx28xqrn" path="res://Scenes and Scripts/UI/Equation/equation.tscn" id="3_7jee8"]
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="3_30w11"]
+[ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="4_gj1up"]
+[ext_resource type="Texture2D" uid="uid://d16opu3dyhri7" path="res://Textures/Buttons/eye/eye_open.png" id="5_15poa"]
+[ext_resource type="Texture2D" uid="uid://bdcj3gv1qc01r" path="res://Textures/Buttons/icons/rewind.png" id="5_t5pc5"]
+[ext_resource type="Texture2D" uid="uid://djfkh4k2lcuyg" path="res://Textures/Buttons/Tabs/tab_down_highlight.png" id="6_nprrx"]
+[ext_resource type="Texture2D" uid="uid://b7i5pfnd47348" path="res://Textures/Buttons/icons/solution.png" id="6_pp1px"]
+[ext_resource type="Texture2D" uid="uid://bw8jm82sn5nmq" path="res://Textures/Buttons/Tabs/tab_down.png" id="7_ed4go"]
+[ext_resource type="Texture2D" uid="uid://bcu6ptkd3fwfe" path="res://Textures/Buttons/icons/submit.png" id="8_2kr0t"]
+[ext_resource type="FontFile" uid="uid://dohkbu7ekkfx8" path="res://Textures/Fonts/pixeltype/Pixeltype.ttf" id="8_cwpoq"]
+[ext_resource type="Texture2D" uid="uid://b3diapu0ec332" path="res://Textures/Buttons/icons/puzzle_piece.png" id="9_oqp5o"]
 [ext_resource type="PackedScene" uid="uid://80bi27me1iqr" path="res://Scenes and Scripts/UI/Buttons/pull_out_tab_button_down.tscn" id="10_xn6km"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ci0m4"]
+content_margin_top = 2.0
 texture = ExtResource("3_30w11")
 texture_margin_left = 6.0
 texture_margin_top = 6.0
@@ -12,16 +24,50 @@ texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 expand_margin_top = 10.0
 
-[node name="ProblemTab" type="Control"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_loeqa"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 6.0
+texture = ExtResource("6_nprrx")
+texture_margin_left = 6.0
+texture_margin_top = 3.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xwugc"]
+content_margin_left = 4.0
+content_margin_top = 1.0
+content_margin_right = 4.0
+content_margin_bottom = 6.0
+texture = ExtResource("7_ed4go")
+texture_margin_left = 6.0
+texture_margin_top = 2.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+
+[sub_resource type="FontVariation" id="FontVariation_68meq"]
+base_font = ExtResource("8_cwpoq")
+spacing_top = -2
+spacing_bottom = -4
+
+[sub_resource type="Theme" id="Theme_d1tq1"]
+Button/styles/hover = SubResource("StyleBoxTexture_loeqa")
+Button/styles/normal = SubResource("StyleBoxTexture_xwugc")
+Button/styles/pressed = SubResource("StyleBoxTexture_xwugc")
+Label/font_sizes/font_size = 16
+Label/fonts/font = SubResource("FontVariation_68meq")
+
+[node name="ProblemTab" type="Control" node_paths=PackedStringArray("ContentContainer", "TabButton", "MovingContainer")]
 material = ExtResource("1_vo33s")
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = -640.0
-offset_bottom = -360.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0
+script = ExtResource("2_kmb27")
+ContentContainer = NodePath("MovingContainer/Tab")
+TabButton = NodePath("MovingContainer/PullOutTabButtonDown")
+MovingContainer = NodePath("MovingContainer")
+moving_container_margins = Vector2(2.08165e-12, -4)
+move_direction = 3
 
 [node name="MovingContainer" type="VBoxContainer" parent="."]
 use_parent_material = true
@@ -29,9 +75,8 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -39.5
-offset_right = 39.5
-offset_bottom = 110.0
+offset_right = 326.0
+offset_bottom = 58.0
 grow_horizontal = 2
 theme_override_constants/separation = 0
 
@@ -43,10 +88,45 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_ci0m4")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MovingContainer/Tab"]
 layout_mode = 2
+theme_override_constants/separation = 3
 alignment = 1
+
+[node name="Rewind" parent="MovingContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
+layout_mode = 2
+tooltip_text = "Skip problem"
+icon = ExtResource("5_t5pc5")
+minimum_size = Vector2(26, 24)
+expand_icon = true
+icon_use_parent_material = true
+
+[node name="Solution" parent="MovingContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
+layout_mode = 2
+tooltip_text = "Show solution"
+icon = ExtResource("6_pp1px")
+minimum_size = Vector2(25, 24)
+expand_icon = true
+icon_use_parent_material = true
+
+[node name="Equation" parent="MovingContainer/Tab/HBoxContainer" instance=ExtResource("3_7jee8")]
+layout_mode = 2
+
+[node name="ViewSubmissions" parent="MovingContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
+layout_mode = 2
+icon = ExtResource("5_15poa")
+minimum_size = Vector2(24, 24)
+expand_icon = true
+
+[node name="Submit" parent="MovingContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
+layout_mode = 2
+icon = ExtResource("8_2kr0t")
+minimum_size = Vector2(26, 24)
+expand_icon = true
+icon_use_parent_material = true
 
 [node name="PullOutTabButtonDown" parent="MovingContainer" instance=ExtResource("10_xn6km")]
 layout_mode = 2
 size_flags_horizontal = 4
-TabText = "PROBLEM"
-TabMinimumSize = Vector2(70, 15)
+theme = SubResource("Theme_d1tq1")
+TabIcon = ExtResource("9_oqp5o")
+TabMinimumSize = Vector2(33, 15)
+icon_use_parent_material = true

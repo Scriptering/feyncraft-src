@@ -9,6 +9,7 @@ signal pressed
 @export var TabText: String : set = _set_tab_text
 @export var TabMinimumSize: Vector2 : set = _set_tab_minimum_size
 @export var expand_icon: bool : set = _set_expand_icon
+@export var icon_use_parent_material: bool = false : set = _set_icon_use_parent_material
 
 @onready var TabButton = $TabButton
 
@@ -22,6 +23,10 @@ func change_state(tab_out: bool) -> void:
 		$VBoxContainer/MarginContainer/Arrow.texture = ArrowOut
 	else:
 		$VBoxContainer/MarginContainer/Arrow.texture = ArrowIn
+
+func _set_icon_use_parent_material(new_value: bool) -> void:
+	icon_use_parent_material = new_value
+	$TabButton.icon_use_parent_material = new_value
 
 func _set_expand_icon(new_value: bool) -> void:
 	expand_icon = new_value

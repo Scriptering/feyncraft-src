@@ -3,8 +3,8 @@
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="1_mrh2e"]
 
 [resource]
-content_margin_top = 4.0
-content_margin_bottom = 4.0
+content_margin_top = 5.0
+content_margin_bottom = 5.0
 texture = ExtResource("1_mrh2e")
 texture_margin_left = 6.0
 texture_margin_top = 6.0
