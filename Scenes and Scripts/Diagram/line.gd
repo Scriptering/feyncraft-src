@@ -5,10 +5,6 @@ signal request_deletion
 signal clicked_on
 
 @onready var Level = get_tree().get_first_node_in_group('level')
-@onready var Diagram : DiagramBase = get_parent().get_parent()
-@onready var Initial = Diagram.get_node('Initial')
-@onready var Final = Diagram.get_node('Final')
-@onready var Crosshair = Diagram.get_node("Crosshair")
 @onready var Text = get_node("text")
 @onready var SpareText = get_node("spareText")
 @onready var Arrow = $arrow
@@ -29,6 +25,11 @@ signal clicked_on
 enum Anti {anti = -1, noanti = +1}
 enum Point {Start = 0, End = 1, Invalid = -1}
 enum PointsConnected {None, Left, Right, Both}
+
+var Diagram: MainDiagram
+var Initial: StateLine
+var Final: StateLine
+var Crosshair: Node
 
 var points := PackedVector2Array([[0, 0], [0, 0]]) : set = _set_points
 var line_vector : Vector2 = Vector2.ZERO:
@@ -83,7 +84,6 @@ var texture_dict: Array = [
 var line_texture
 
 func _ready():
-	Crosshair.connect("moved", Callable(self, "_crosshair_moved"))
 	self.connect("request_deletion", Callable(Diagram, "delete_line"))
 	
 	has_colour = base_particle in GLOBALS.COLOUR_PARTICLES
@@ -104,6 +104,12 @@ func _ready():
 	Text.visible = true
 	
 	connect_to_interactions()
+
+func init(diagram: MainDiagram) -> void:
+	Diagram = diagram
+	Initial = diagram.StateLines[StateLine.StateType.Initial]
+	Final = diagram.StateLines[StateLine.StateType.Final]
+	Crosshair = diagram.Crosshair
 
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("click") and hovering:
@@ -152,7 +158,7 @@ func get_side_point(state: StateLine.StateType) -> Vector2:
 		return left_point
 	return right_point
 
-func _crosshair_moved(_new_position: Vector2, _old_position: Vector2):
+func crosshair_moved(_new_position: Vector2, _old_position: Vector2):
 	if !is_placed:
 		update_line()
 

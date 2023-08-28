@@ -1,7 +1,8 @@
 class_name MainDiagram
 extends DiagramBase
 
-@onready var Crosshair := $Crosshair
+@onready var Crosshair := $DiagramArea/Crosshair
+@onready var DiagramArea := $DiagramArea
 
 var ParticleButtons: Control
 
@@ -15,13 +16,82 @@ var diagram_future: Array[DrawingMatrix] = []
 var current_diagram: DrawingMatrix = null
 
 func _ready() -> void:
+	Crosshair.moved.connect(_crosshair_moved)
 	connect("mouse_entered", Callable(Crosshair, "DiagramMouseEntered"))
 	connect("mouse_exited", Callable(Crosshair, "DiagramMouseExited"))
 	EVENTBUS.connect("signal_draw_diagram", Callable(self, "draw_diagram"))
 	EVENTBUS.connect("signal_draw_raw_diagram", Callable(self, "draw_raw_diagram"))
+	
+	for state_line in StateLines:
+		state_line.init(self)
+	
+	Crosshair.init(self, StateLines, grid_size)
 
 func init(particle_buttons: Control) -> void:
 	ParticleButtons = particle_buttons
+
+func _process(_delta: float) -> void:
+	for stateline in StateLines:
+		if stateline.grabbed:
+			move_stateline(stateline)
+
+func _crosshair_moved(new_position: Vector2, old_position: Vector2) -> void:
+	for particle_line in get_particle_lines():
+		particle_line.crosshair_moved(new_position, old_position)
+	
+	for interaction in get_interactions():
+		interaction.crosshair_moved(new_position, old_position)
+	
+	update_statelines()
+
+func move_stateline(stateline: StateLine) -> void:
+	var non_state_interactions := get_interactions().filter(
+		func(interaction: Interaction):
+			return interaction.get_on_state_line() == StateLine.StateType.None
+	)
+	
+	var state_interactions : Array[Interaction] = get_interactions().filter(
+		func(interaction: Interaction):
+			return interaction.get_on_state_line() == stateline.state
+	)
+	
+	var interaction_x_positions := non_state_interactions.map(
+		func(interaction: Interaction):
+			return interaction.position.x
+	)
+	
+	stateline.position.x = get_movable_state_line_position(stateline.state, interaction_x_positions)
+	
+	for interaction in state_interactions:
+		var interaction_position: Vector2 = interaction.position
+		interaction.position.x = stateline.position.x
+		
+		for particle_line in interaction.connected_lines:
+			particle_line.points[particle_line.get_point_at_position(interaction_position)].x = stateline.position.x
+			particle_line.update_line()
+		
+		interaction.update_interaction()
+	
+
+func get_movable_state_line_position(state: StateLine.StateType, interaction_x_positions: Array) -> int:
+	var test_position : int = snapped(get_local_mouse_position().x - DiagramArea.position.x, grid_size)
+	
+	match state:
+		StateLine.StateType.Initial:
+			test_position = min(test_position, StateLines[StateLine.StateType.Final].position.x - grid_size)
+			
+			if interaction_x_positions.size() != 0:
+				test_position = min(test_position, interaction_x_positions.min() - grid_size)
+		
+		StateLine.StateType.Final:
+			test_position = max(test_position, StateLines[StateLine.StateType.Initial].position.x + grid_size)
+			
+			if interaction_x_positions.size() != 0:
+				test_position = max(test_position, interaction_x_positions.max() + grid_size)
+	
+	test_position = clamp(test_position, 0, DiagramArea.size.x)
+	
+	return test_position
 
 func update_statelines() -> void:
 	for state_line in StateLines:
@@ -74,7 +144,7 @@ func delete_interaction(interaction: Interaction) -> void:
 	check_rejoin_lines()
 
 func split_line(line_to_split: ParticleLine, split_point: Vector2) -> void:
-	var new_line = Line.instantiate()
+	var new_line := create_particle_line()
 
 	new_line.points[ParticleLine.Point.Start] = line_to_split.points[ParticleLine.Point.Start]
 	new_line.points[ParticleLine.Point.End] = split_point
@@ -170,12 +240,15 @@ func place_line(
 	start_position: Vector2, end_position: Vector2 = Vector2.ZERO,
 	base_particle: GLOBALS.Particle = ParticleButtons.selected_particle
 ) -> void:
-	var line : ParticleLine = Line.instantiate()
+	var line : ParticleLine = create_particle_line()
+	line.init(self)
+	
 	line.points[line.Point.Start] = start_position
 	
 	if end_position != Vector2.ZERO:
 		line.points[line.Point.End] = end_position
 		line.is_placed = true
+		
 	
 	line.base_particle = base_particle
 	
@@ -217,12 +290,11 @@ func toggle_crosshair_above_interactions() -> void:
 	
 	if crosshair_above_interactions:
 		crosshair_above_interactions = false
-		move_child(Crosshair, Crosshair.get_index() - 1)
+		$DiagramArea.move_child(Crosshair, Crosshair.get_index() - 1)
 		return
 	
 	crosshair_above_interactions = true
-	move_child(Crosshair, Crosshair.get_index() + 1)
-	
+	$DiagramArea.move_child(Crosshair, Crosshair.get_index() + 1)
 
 func undo() -> void:
 	move_backward_in_history()

@@ -1,11 +1,13 @@
-[gd_scene load_steps=14 format=3 uid="uid://dcpcxfh7umytq"]
+[gd_scene load_steps=16 format=3 uid="uid://dcpcxfh7umytq"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_gc6j6"]
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="2_o6xnf"]
 [ext_resource type="FontFile" uid="uid://dohkbu7ekkfx8" path="res://Textures/Fonts/pixeltype/Pixeltype.ttf" id="3_3ni5k"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/MiniDiagram/mini_diagram_viewer.gd" id="4_o6nlg"]
 [ext_resource type="Texture2D" uid="uid://b4w0nb2kv1et0" path="res://Textures/UI/Information/InfoTabFocus.png" id="4_yg0ra"]
+[ext_resource type="PackedScene" uid="uid://cktgoqxrvgsh0" path="res://Scenes and Scripts/UI/MiniDiagram/mini_diagram.tscn" id="5_tklql"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="6_r8qrn"]
+[ext_resource type="Texture2D" uid="uid://blp8o56nt6djk" path="res://Textures/Buttons/X_icon.png" id="7_t41g2"]
 [ext_resource type="Texture2D" uid="uid://bm3ag65nskhpk" path="res://Textures/UI/MiniDiagram/arrow_left.png" id="8_g4oap"]
 [ext_resource type="Texture2D" uid="uid://cb6lapmtgwimd" path="res://Textures/UI/MiniDiagram/arrow_right.png" id="9_4bpdd"]
 
@@ -26,14 +28,14 @@ default_font = SubResource("FontVariation_eel88")
 default_font_size = 16
 PanelContainer/styles/panel = SubResource("StyleBoxTexture_pkocb")
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_05qsh"]
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_mtd58"]
 texture = ExtResource("4_yg0ra")
 texture_margin_left = 7.0
 texture_margin_top = 4.0
 texture_margin_right = 7.0
 texture_margin_bottom = 3.0
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_05qsh"]
 
 [node name="MiniDiagramViewer" type="Control" node_paths=PackedStringArray("GrabArea")]
 material = ExtResource("1_gc6j6")
@@ -47,22 +49,98 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = SubResource("Theme_x8r6v")
 script = ExtResource("4_o6nlg")
-GrabArea = NodePath("VBoxContainer")
+GrabArea = NodePath("PanelContainer")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="."]
 use_parent_material = true
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-theme_override_constants/separation = -4
+layout_mode = 2
+offset_top = 16.0
+offset_right = 162.0
+offset_bottom = 183.0
+mouse_filter = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-z_index = 1
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
 use_parent_material = true
+layout_mode = 2
+
+[node name="MiniDiagramContainer" type="TabContainer" parent="PanelContainer/VBoxContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(150, 128)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_05qsh")
+tab_alignment = 1
+clip_tabs = false
+tabs_visible = false
+use_hidden_tabs_for_min_size = true
+
+[node name="MiniDiagram" parent="PanelContainer/VBoxContainer/MiniDiagramContainer" instance=ExtResource("5_tklql")]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+[node name="X_container" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="X" parent="PanelContainer/VBoxContainer/HBoxContainer/X_container" instance=ExtResource("6_r8qrn")]
+layout_mode = 2
+icon = ExtResource("7_t41g2")
+minimum_size = Vector2(18, 18)
+
+[node name="Left" parent="PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
+layout_mode = 2
+mouse_filter = 1
+icon = ExtResource("8_g4oap")
+minimum_size = Vector2(18, 2.08165e-12)
+icon_use_parent_material = true
+
+[node name="Load" parent="PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
+layout_mode = 2
+mouse_filter = 1
+text = "Load"
+minimum_size = Vector2(42, 2.08165e-12)
+
+[node name="Delete" parent="PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
+layout_mode = 2
+mouse_filter = 1
+text = "Delete"
+minimum_size = Vector2(50, 2.08165e-12)
+
+[node name="Right" parent="PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
+layout_mode = 2
+mouse_filter = 1
+icon = ExtResource("9_4bpdd")
+minimum_size = Vector2(18, 2.08165e-12)
+icon_use_parent_material = true
+
+[node name="IndexContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="IndexLabel" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/IndexContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "1/10"
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_vertical = 0
+mouse_filter = 2
+theme_override_constants/margin_top = -24
+
+[node name="Label" type="Label" parent="PanelContainer/HBoxContainer/MarginContainer"]
 use_parent_material = true
 layout_mode = 2
 mouse_filter = 1
@@ -71,62 +149,8 @@ text = "Generated Diagrams"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
-use_parent_material = true
-layout_mode = 2
-mouse_filter = 1
-
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer"]
-use_parent_material = true
-layout_mode = 2
-
-[node name="MiniDiagramContainer" type="TabContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
-use_parent_material = true
-custom_minimum_size = Vector2(224, 128)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxEmpty_05qsh")
-tab_alignment = 1
-tabs_visible = false
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-alignment = 1
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Left" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
-layout_mode = 2
-mouse_filter = 1
-icon = ExtResource("8_g4oap")
-minimum_size = Vector2(18, 2.08165e-12)
-icon_use_parent_material = true
-
-[node name="Load" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
-layout_mode = 2
-mouse_filter = 1
-text = "Load"
-minimum_size = Vector2(40, 2.08165e-12)
-
-[node name="Right" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
-layout_mode = 2
-mouse_filter = 1
-icon = ExtResource("9_4bpdd")
-minimum_size = Vector2(18, 2.08165e-12)
-icon_use_parent_material = true
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-alignment = 1
-
-[node name="IndexLabel" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "1/10"
-vertical_alignment = 1
-
-[connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Left" to="." method="_on_left_pressed"]
-[connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Load" to="." method="_on_load_pressed"]
-[connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Right" to="." method="_on_right_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer/X_container/X" to="." method="_on_x_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer/Left" to="." method="_on_left_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer/Load" to="." method="_on_load_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer/Delete" to="." method="_on_delete_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer/Right" to="." method="_on_right_pressed"]

@@ -5,12 +5,8 @@ extends Node2D
 signal moved(current_position, old_position)
 @onready var Level = get_tree().get_nodes_in_group('level')[0]
 @onready var StateManager = Level.get_node("state_manager")
-@onready var Diagram : DiagramBase = get_parent()
-@onready var Initial: StateLine = Diagram.get_node('Initial')
-@onready var Final: StateLine = Diagram.get_node('Final')
 @onready var IdleCrosshair = $IdleCrosshair
 @onready var InteractionCrosshair = $InteractionCrosshair
-@onready var grid_size: int = Diagram.grid_size
 
 const Z_INDEX_IDLE := 0
 const Z_INDEX_DRAWING := 0
@@ -23,14 +19,24 @@ var clamp_up : float
 var clamp_down : float
 var on_state_line : bool
 
-func _ready():
+var Diagram: DiagramBase
+var Initial: StateLine
+var Final: StateLine
+var grid_size: int
+
+func _process(_event):
+	move_crosshair()
+
+func init(diagram: DiagramBase, state_lines: Array, gridsize: int) -> void:
+	Diagram = diagram
+	Initial = state_lines[StateLine.StateType.Initial]
+	Final = state_lines[StateLine.StateType.Final]
+	grid_size = gridsize
+	
 	clamp_left = Initial.position.x
 	clamp_right = Final.position.x
 	clamp_up = grid_size
 	clamp_down = Diagram.size.y - grid_size
-
-func _process(_event):
-	move_crosshair()
 
 func move_crosshair() -> void:
 	var try_position: Vector2 = get_try_position()

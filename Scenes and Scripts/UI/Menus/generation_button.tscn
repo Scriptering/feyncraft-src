@@ -75,6 +75,7 @@ material = ExtResource("1_h3eo1")
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
+mouse_filter = 2
 theme_override_constants/separation = 0
 
 [node name="PanelContainer" type="PanelContainer" parent="MovingContainer"]

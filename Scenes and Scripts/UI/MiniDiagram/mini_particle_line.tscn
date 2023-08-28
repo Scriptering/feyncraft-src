@@ -17,7 +17,6 @@ shader_parameter/line_thickness = 1.0
 [node name="MiniParticleLine" type="Node2D"]
 material = SubResource("ShaderMaterial_gw2fp")
 script = ExtResource("2_qpvw1")
-text_gap = 9.0
 
 [node name="line_joint_start" type="Line2D" parent="."]
 material = ExtResource("2_xsmhf")
@@ -49,9 +48,10 @@ texture = ExtResource("5_6iohf")
 offset = Vector2(-4, 0)
 
 [node name="text" type="Sprite2D" parent="."]
+z_index = 1
 use_parent_material = true
-scale = Vector2(0.5, 0.5)
+scale = Vector2(0.375, 0.375)
 
 [node name="spareText" type="Sprite2D" parent="."]
 use_parent_material = true
-scale = Vector2(0.5, 0.5)
+scale = Vector2(0.375, 0.375)

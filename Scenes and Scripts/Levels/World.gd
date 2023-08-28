@@ -10,7 +10,6 @@ extends Node2D
 @onready var Cursor = get_node('Cursor')
 @onready var Pathfinding = get_node('PathFinding')
 @onready var Generation = get_node('Generation')
-@onready var Equation = get_node('Equation')
 
 @onready var States = $state_manager
 
@@ -46,11 +45,16 @@ var interaction_matrix := ConnectionMatrix.new()
 @export var info_gap : int
 
 func _ready():
+	EVENTBUS.signal_add_floating_menu.connect(
+		func(menu: Node): $FloatingMenus.add_child(menu)
+	)
+	
 	States.init(Cursor, $Diagram)
-	$Diagram.init($ParticleButtons)
+	$Diagram.init($PullOutTabs/ParticleButtons)
 	$ShaderControl.init($PalletteButtons)
-	$GenerationButton.init($Diagram, $Generation, $GeneratedDiagrams)
-
+	$PullOutTabs/GenerationButton.init($Diagram, $Generation, $FloatingMenus/GeneratedDiagrams)
+	$PathFinding.init($Diagram, $Diagram.StateLines)
+	
 	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
 
 func _process(_delta):

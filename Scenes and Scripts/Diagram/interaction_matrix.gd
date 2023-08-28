@@ -108,14 +108,11 @@ func get_extreme_points(entry_factor: EntryFactor) -> PackedInt32Array:
 	
 func get_entry_points() -> PackedInt32Array:
 	return get_extreme_points(EntryFactor.Entry)
-	
 
 func get_exit_points() -> PackedInt32Array:
 	return get_extreme_points(EntryFactor.Exit)
 
 func find_first_unconnected(test_function: Callable) -> int:
-	var found_ids: PackedInt32Array = []
-	
 	for id in matrix_size:
 		if unconnected_matrix[id].any(func(particle): return test_function.call(particle)):
 			return id
@@ -130,6 +127,11 @@ func find_all_unconnected(test_function: Callable) -> PackedInt32Array:
 			found_ids.push_back(id)
 	
 	return found_ids
+
+func clear_connection_matrix() -> void:
+	for i in range(matrix_size):
+		for j in range(matrix_size):
+			connection_matrix[i][j].clear()
 
 func reduce_to_base_particles() -> void:
 	unconnected_matrix = unconnected_matrix.map(

@@ -15,8 +15,8 @@
 
 [node name="MiniDiagram" type="Panel"]
 material = ExtResource("1_r7vxp")
-custom_minimum_size = Vector2(224, 128)
-offset_right = 224.0
+custom_minimum_size = Vector2(230, 128)
+offset_right = 230.0
 offset_bottom = 128.0
 mouse_filter = 2
 theme = ExtResource("2_nuwiv")
@@ -32,7 +32,7 @@ clip_contents = true
 layout_mode = 2
 offset_left = 2.0
 offset_top = 2.0
-offset_right = 221.0
+offset_right = 229.0
 offset_bottom = 126.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_a4pjj")
@@ -40,9 +40,9 @@ theme_override_styles/panel = SubResource("StyleBoxEmpty_a4pjj")
 [node name="Grid" type="TextureRect" parent="GridContainer"]
 use_parent_material = true
 layout_mode = 2
-offset_left = -2.0
+offset_left = -7.0
 offset_top = -2.0
-offset_right = 222.0
+offset_right = 233.0
 offset_bottom = 126.0
 mouse_filter = 2
 texture = ExtResource("3_5t171")
@@ -51,7 +51,7 @@ stretch_mode = 1
 [node name="GridOutline" type="NinePatchRect" parent="."]
 use_parent_material = true
 layout_mode = 2
-offset_right = 224.0
+offset_right = 230.0
 offset_bottom = 128.0
 texture = ExtResource("4_xbcsr")
 patch_margin_left = 6
@@ -59,15 +59,19 @@ patch_margin_top = 6
 patch_margin_right = 6
 patch_margin_bottom = 6
 
-[node name="Initial" type="Control" parent="."]
+[node name="DiagramArea" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 35.0
+offset_right = 75.0
+offset_bottom = 40.0
+
+[node name="Initial" type="Control" parent="DiagramArea"]
 layout_mode = 2
 anchors_preset = 0
-offset_left = 32.0
-offset_right = 32.0
 offset_bottom = 128.0
 mouse_filter = 2
 
-[node name="Line" type="VBoxContainer" parent="Initial"]
+[node name="Line" type="VBoxContainer" parent="DiagramArea/Initial"]
 use_parent_material = true
 layout_mode = 1
 anchors_preset = 5
@@ -79,7 +83,7 @@ grow_horizontal = 2
 mouse_filter = 2
 theme_override_constants/separation = 0
 
-[node name="Middle" type="TextureRect" parent="Initial/Line"]
+[node name="Middle" type="TextureRect" parent="DiagramArea/Initial/Line"]
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -88,15 +92,15 @@ mouse_filter = 2
 texture = ExtResource("5_q0inb")
 stretch_mode = 1
 
-[node name="Final" type="Control" parent="."]
+[node name="Final" type="Control" parent="DiagramArea"]
 layout_mode = 3
 anchors_preset = 0
-offset_left = 192.0
-offset_right = 192.0
+offset_left = 160.0
+offset_right = 160.0
 offset_bottom = 128.0
 mouse_filter = 2
 
-[node name="Line" type="VBoxContainer" parent="Final"]
+[node name="Line" type="VBoxContainer" parent="DiagramArea/Final"]
 use_parent_material = true
 layout_mode = 1
 anchors_preset = 5
@@ -108,7 +112,7 @@ grow_horizontal = 2
 mouse_filter = 2
 theme_override_constants/separation = 0
 
-[node name="Middle" type="TextureRect" parent="Final/Line"]
+[node name="Middle" type="TextureRect" parent="DiagramArea/Final/Line"]
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -117,12 +121,12 @@ mouse_filter = 2
 texture = ExtResource("5_q0inb")
 stretch_mode = 1
 
-[node name="ParticleLines" type="Control" parent="."]
+[node name="ParticleLines" type="Control" parent="DiagramArea"]
 layout_mode = 2
 anchors_preset = 0
 mouse_filter = 2
 
-[node name="Interactions" type="Control" parent="."]
+[node name="Interactions" type="Control" parent="DiagramArea"]
 layout_mode = 2
 anchors_preset = 0
 offset_left = -2.0
@@ -130,3 +134,6 @@ offset_top = -2.0
 offset_right = -2.0
 offset_bottom = -2.0
 mouse_filter = 2
+
+[node name="HadronJoints" type="Control" parent="DiagramArea"]
+anchors_preset = 0

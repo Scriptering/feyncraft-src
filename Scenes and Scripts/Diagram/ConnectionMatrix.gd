@@ -114,8 +114,8 @@ func remove_interaction(id: int) -> void:
 	matrix_size -= 1
 
 func are_interactions_connected(
-	from_id: int, to_id: int,
-	bidirectional: bool = false, particle: GLOBALS.Particle = GLOBALS.Particle.none) -> bool:
+	from_id: int, to_id: int, bidirectional: bool = false, particle: GLOBALS.Particle = GLOBALS.Particle.none
+) -> bool:
 	
 	if particle == GLOBALS.Particle.none:
 		return connection_matrix[from_id][to_id].size() != 0 or (bidirectional and connection_matrix[to_id][from_id].size() != 0)
@@ -133,11 +133,11 @@ func get_connected_count(id: int, bidirectional: bool = false) -> int:
 	
 	return connection_count
 
-func get_connected_ids(id: int, bidirectional: bool = false) -> PackedInt32Array:
+func get_connected_ids(id: int, bidirectional: bool = false, particle: GLOBALS.Particle = GLOBALS.Particle.none) -> PackedInt32Array:
 	var connected_ids: PackedInt32Array = []
 	
 	for jd in range(matrix_size):
-		if are_interactions_connected(id, jd, bidirectional):
+		if are_interactions_connected(id, jd, bidirectional, particle):
 			connected_ids.push_back(jd)
 	
 	return connected_ids
@@ -149,6 +149,14 @@ func get_connected_particles(id: int, bidirectional: bool = false) -> Array:
 		connected_particles += get_connection_particles(id, jd, bidirectional)
 	
 	return connected_particles
+
+func get_reverse_connected_particles(id: int, bidirectional: bool = false) -> Array:
+	var reverse_connected_particles: Array = []
+	
+	for jd in range(matrix_size):
+		reverse_connected_particles += get_connection_particles(jd, id, bidirectional)
+	
+	return reverse_connected_particles
 
 func get_sorted_connection_particles(from_id: int, to_id: int, bidirectional: bool = false, include_directionless: bool = false) -> Array:
 	var connection_particles: Array = get_connection_particles(from_id, to_id, bidirectional, include_directionless)
@@ -199,6 +207,21 @@ func get_starting_state_id(state: StateLine.StateType) -> int:
 			return 0
 	
 	return INVALID
+
+func find_all_ids(test_function: Callable) -> PackedInt32Array:
+	return range(matrix_size).filter(
+		func(id: int):
+			return test_function.call(id)
+	)
+
+func find_all_state_ids(test_function: Callable, state: StateLine.StateType) -> PackedInt32Array:
+	var valid_state_ids: PackedInt32Array = []
+	
+	for id in get_state_ids(state):
+		if test_function.call(id):
+			valid_state_ids.push_back(id)
+	
+	return valid_state_ids
 
 func get_ending_state_id(state: StateLine.StateType) -> int:
 	return get_starting_state_id(state) + get_state_count(state)
@@ -260,6 +283,23 @@ func duplicate():
 	
 	return new_connection_matrix
 
+func get_extreme_points(entry_factor: EntryFactor) -> PackedInt32Array:
+	var extreme_points: PackedInt32Array = []
+	
+	for state_id in range(get_state_count(StateLine.StateType.Both)):
+		if get_connected_count(state_id) != 0 and entry_factor == EntryFactor.Entry:
+			extreme_points.push_back(state_id)
+		elif get_connected_count(state_id, true) != 0 and entry_factor == EntryFactor.Exit:
+			extreme_points.push_back(state_id)
+	
+	return extreme_points
+
+func get_entry_points() -> PackedInt32Array:
+	return get_extreme_points(EntryFactor.Entry)
+
+func get_exit_points() -> PackedInt32Array:
+	return get_extreme_points(EntryFactor.Exit)
+
 func get_state_particles(state: StateLine.StateType) -> Array:
 	var state_particles: Array = []
 	
@@ -279,9 +319,6 @@ func get_unique(array: Array) -> Array:
 	return unique_elements
 
 func is_duplicate(comparison_matrix: ConnectionMatrix) -> bool:
-	var travel_matrix: Array[PackedInt32Array] = get_travel_matrix()
-	var comparison_travel_matrix: Array[PackedInt32Array] = comparison_matrix.get_travel_matrix()
-	
 	for i in matrix_size:
 		for j in matrix_size:
 			if get_sorted_connection_particles(i, j) != comparison_matrix.get_sorted_connection_particles(i, j):
@@ -304,7 +341,7 @@ func generate_reindex_dictionary() -> Dictionary:
 	
 	for state_id in state_ids:
 		var state_paths := generate_paths_from_point(state_id)
-		index_state_paths(reindex_dictionary, get_unique(state_paths), state_id)
+		index_state_paths(reindex_dictionary, get_unique(state_paths))
 		
 		if reindex_dictionary.size() == matrix_size:
 			return reindex_dictionary
@@ -373,12 +410,9 @@ func reindex_path(path: PackedInt32Array, reindex_dict: Dictionary) -> PackedInt
 	
 	return reindexed_path
 	
-func index_state_paths(
-	reindex_dictionary: Dictionary, state_paths: Array, state_id: int,
-	state_count: int = get_state_count(StateLine.StateType.Both)
-) -> Dictionary:
+func index_state_paths(reindex_dictionary: Dictionary, state_paths: Array) -> Dictionary:
 	
-	index_unique_paths(reindex_dictionary, state_paths, state_id)
+	index_unique_paths(reindex_dictionary, state_paths)
 
 	return reindex_dictionary
 
@@ -393,7 +427,7 @@ func index_state_ids(reindex_dict: Dictionary, state_paths: Array, state_id: int
 	if first_state_connected_point not in reindex_dict.keys():
 		reindex_dict[first_state_connected_point] = state_count_both + state_id
 
-func index_unique_paths(reindex_dictionary: Dictionary, state_paths: Array, state_id: int) -> void:
+func index_unique_paths(reindex_dictionary: Dictionary, state_paths: Array) -> void:
 	var state_path_sizes : Array = state_paths.map(func(path): return path.size())
 	
 	for path_id in range(state_path_sizes.size()):

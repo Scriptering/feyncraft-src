@@ -1,8 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://dm0yec0rjuvwl"]
+[gd_scene load_steps=7 format=3 uid="uid://dm0yec0rjuvwl"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/Levels/SoundBus.gd" id="1_f273w"]
 [ext_resource type="AudioStream" uid="uid://c2dw5epyyu3yn" path="res://Resources/Audio/Scissors-Clipping-opening-and-closing-3-www.FesliyanStudios.com.mp3" id="2_52jdr"]
+[ext_resource type="AudioStream" uid="uid://qsyrnksplr1d" path="res://Resources/Audio/drawer_opening.mp3" id="3_b57p3"]
 [ext_resource type="AudioStream" uid="uid://duhj8peqer73i" path="res://Resources/Audio/switch28.ogg" id="3_vimkw"]
+[ext_resource type="AudioStream" uid="uid://c045kpx3x2jdx" path="res://Resources/Audio/drawer_closing.mp3" id="4_eci6f"]
 [ext_resource type="AudioStream" uid="uid://didhgrsrk4wj7" path="res://Resources/Audio/switch27.ogg" id="4_iy8ax"]
 
 [node name="SoundBus" type="Node"]
@@ -12,6 +14,12 @@ script = ExtResource("1_f273w")
 
 [node name="Snip" type="AudioStreamPlayer" parent="UI"]
 stream = ExtResource("2_52jdr")
+
+[node name="PullOutTab" type="AudioStreamPlayer" parent="UI"]
+stream = ExtResource("3_b57p3")
+
+[node name="PushInTab" type="AudioStreamPlayer" parent="UI"]
+stream = ExtResource("4_eci6f")
 
 [node name="ButtonDown" type="AudioStreamPlayer" parent="UI"]
 stream = ExtResource("3_vimkw")

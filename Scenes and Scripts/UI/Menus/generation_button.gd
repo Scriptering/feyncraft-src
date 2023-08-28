@@ -22,7 +22,6 @@ var GeneratedDiagramViewer: MiniDiagramViewer
 enum {INVALID}
 
 var can_generate : bool = false : set = _set_can_generate
-var viewing_diagrams: bool = false
 
 func _ready():
 	super._ready()
@@ -41,7 +40,7 @@ func init(diagram: DiagramBase, generation: Node, generated_diagram_viewer: Mini
 	Generation = generation
 	GeneratedDiagramViewer = generated_diagram_viewer
 	
-	
+	GeneratedDiagramViewer.closed.connect(toggle_diagram_viewer)
 
 func _set_can_generate(new_value: bool) -> void:
 	can_generate = new_value
@@ -124,12 +123,9 @@ func _on_save_pressed() -> void:
 		self.can_generate = true
 		set_checks(InitialState + FinalState)
 
-func _on_view_pressed() -> void:
-	if viewing_diagrams:
-		GeneratedDiagramViewer.hide()
-		return
-	
-	GeneratedDiagramViewer.show()
+func toggle_diagram_viewer() -> void:
+	GeneratedDiagramViewer.visible = !GeneratedDiagramViewer.visible
 	GeneratedDiagramViewer.position = generated_diagram_viewer_offset + position
-	
-	viewing_diagrams = !viewing_diagrams
+
+func _on_view_pressed() -> void:
+	toggle_diagram_viewer()

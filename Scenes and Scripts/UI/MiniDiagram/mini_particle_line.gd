@@ -4,10 +4,6 @@ enum Anti {anti = -1, noanti = +1}
 enum Point {Start = 0, End = 1, Invalid = -1}
 enum PointsConnected {None, Left, Right, Both}
 
-@onready var Diagram : DiagramBase = get_parent().get_parent()
-@onready var Initial = Diagram.get_node('Initial')
-@onready var Final = Diagram.get_node('Final')
-
 @export var line_joint_start_length: float = 1.75
 @export var line_joint_end_length: float = .5
 @export var gluon_loop_length: float = 4.5
@@ -23,6 +19,10 @@ enum PointsConnected {None, Left, Right, Both}
 @onready var LineMiddle = $line_middle
 @onready var LineJointStart = $line_joint_start
 @onready var LineJointEnd = $line_joint_end
+
+var Diagram: MiniDiagram
+var Initial: Control
+var Final: Control
 
 var anti := 1 : set = _set_anti
 var base_particle := GLOBALS.Particle.none
@@ -69,6 +69,11 @@ func _ready():
 	update_line()
 
 	Text.visible = true
+
+func init(diagram: MiniDiagram) -> void:
+	Diagram = diagram
+	Initial = diagram.StateLines[StateLine.StateType.Initial]
+	Final = diagram.StateLines[StateLine.StateType.Final]
 
 func set_textures() -> void:
 	LineMiddle.texture = line_texture

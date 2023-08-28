@@ -1,8 +1,14 @@
-extends Node2D
+extends Sprite2D
 
-@onready var Diagram : MiniDiagram = get_parent().get_parent()
-@onready var Initial = Diagram.StateLines[StateLine.StateType.Initial]
-@onready var Final = Diagram.StateLines[StateLine.StateType.Final]
+var Initial: Control
+var Final: Control
+
+func init(diagram: MiniDiagram) -> void:
+	Initial = diagram.StateLines[StateLine.StateType.Initial]
+	Final = diagram.StateLines[StateLine.StateType.Final]
+	
+func show_dot() -> void:
+	$Dot.show()
 
 func get_on_state_line() -> StateLine.StateType:
 	if position.x == Initial.position.x and position.x == Final.position.x:

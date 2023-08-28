@@ -2,6 +2,7 @@ class_name MiniDiagramViewer
 extends GrabbableControl
 
 signal load_diagram
+signal closed
 
 var drag_vector_start: Vector2
 var current_diagram: MiniDiagram:
@@ -11,7 +12,7 @@ var current_diagram: MiniDiagram:
 var last_loaded_tab: int = 0
 
 @onready var Diagram := preload("res://Scenes and Scripts/UI/MiniDiagram/mini_diagram.tscn")
-@onready var DiagramContainer := $VBoxContainer/PanelContainer/VBoxContainer/MiniDiagramContainer
+@onready var DiagramContainer := $PanelContainer/VBoxContainer/MiniDiagramContainer
 
 func _ready() -> void:
 	super._ready()
@@ -52,10 +53,9 @@ func create_diagrams(matrices: Array) -> void:
 		create_diagram(matrix)
 
 func update_index_label() -> void:
-	$VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HBoxContainer/IndexLabel.text = (
-		str(DiagramContainer.current_tab) + "/" + str(DiagramContainer.get_child_count())
+	$PanelContainer/VBoxContainer/HBoxContainer/IndexContainer/IndexLabel.text = (
+		str(DiagramContainer.current_tab + 1) + "/" + str(DiagramContainer.get_child_count())
 	)
-	
 
 func create_diagram(matrix) -> void:
 	var new_diagram : MiniDiagram = Diagram.instantiate()
@@ -68,3 +68,14 @@ func create_diagram(matrix) -> void:
 		new_diagram.draw_diagram(matrix)
 
 	update_index_label()
+
+func remove_diagram(index: int = DiagramContainer.current_tab) -> void:
+	DiagramContainer.get_child(index).queue_free()
+	
+	update_index_label()
+
+func _on_delete_pressed() -> void:
+	remove_diagram()
+
+func _on_x_pressed() -> void:
+	emit_signal("closed")

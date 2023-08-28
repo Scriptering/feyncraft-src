@@ -3,6 +3,7 @@ extends ConnectionMatrix
 
 var split_hadron_ids : Array = []
 var normalised_interaction_positions : PackedVector2Array = []
+var state_line_positions : PackedInt32Array = [0, 20]
 
 func initialise_from_connection_matrix(from_connection_matrix: ConnectionMatrix) -> void:
 	connection_matrix = from_connection_matrix.connection_matrix.duplicate(true)
@@ -12,10 +13,7 @@ func initialise_from_connection_matrix(from_connection_matrix: ConnectionMatrix)
 	make_drawable()
 
 func get_interaction_positions() -> PackedVector2Array:
-	var interaction_positions := normalised_interaction_positions.duplicate()
-	for i in range(interaction_positions.size()):
-		interaction_positions[i]
-	return interaction_positions
+	return normalised_interaction_positions
 
 func add_interaction_position(position: Vector2, grid_size: int, id: int = normalised_interaction_positions.size()) -> void:
 	normalised_interaction_positions.insert(id, position/grid_size)
