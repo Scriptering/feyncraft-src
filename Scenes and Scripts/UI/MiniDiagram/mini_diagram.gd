@@ -38,7 +38,7 @@ func find_hadron(quarks: Array) -> GLOBALS.Hadrons:
 		if quarks in GLOBALS.HADRON_QUARK_CONTENT[hadron]:
 			return hadron
 	
-	return 0
+	return GLOBALS.Hadrons.Proton
 
 func create_hadron_joint(drawing_matrix: DrawingMatrix, hadron_ids: PackedInt32Array) -> void:
 	var interaction_ys: PackedInt32Array = []

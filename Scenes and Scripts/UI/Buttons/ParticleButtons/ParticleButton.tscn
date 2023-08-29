@@ -58,6 +58,7 @@ particle = 0
 minimum_size = Vector2(23, 26)
 toggle_mode = true
 expand_icon = true
+tooltip = null
 
 [node name="Button" parent="." index="0"]
 custom_minimum_size = Vector2(23, 26)

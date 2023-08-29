@@ -118,6 +118,7 @@ alignment = 2
 [node name="Save" parent="MovingContainer/PanelContainer/VBoxContainer" instance=ExtResource("8_ihypl")]
 layout_mode = 2
 text = "Save States"
+tooltip = ""
 
 [node name="Saved State" type="Label" parent="MovingContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
@@ -221,15 +222,16 @@ alignment = 1
 [node name="Generate" parent="MovingContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("8_ihypl")]
 layout_mode = 2
 text = "Generate"
+tooltip = ""
 
 [node name="View" parent="MovingContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("8_ihypl")]
 layout_mode = 2
 text = "View"
+tooltip = ""
 
 [node name="Tab" parent="MovingContainer" instance=ExtResource("6_7e8c8")]
 layout_mode = 2
 TabIcon = ExtResource("4_xnawx")
-icon_use_parent_material = null
 
 [connection signal="pressed" from="MovingContainer/PanelContainer/VBoxContainer/Save" to="." method="_on_save_pressed"]
 [connection signal="toggled" from="MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/em" to="." method="_on_em_toggled"]

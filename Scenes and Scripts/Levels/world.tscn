@@ -45,7 +45,7 @@ expand_margin_top = 1.0
 expand_margin_right = 1.0
 expand_margin_bottom = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_atcw5"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_6c5l5"]
 resource_name = "ParticleButtons"
 allow_unpress = true
 
@@ -130,8 +130,6 @@ mouse_filter = 1
 
 [node name="HadronJoints" type="Control" parent="Diagram/DiagramArea"]
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
 
 [node name="GridOutline" type="NinePatchRect" parent="."]
 z_index = 10
@@ -196,7 +194,7 @@ offset_right = 159.0
 offset_bottom = 336.0
 grow_vertical = 0
 size_flags_horizontal = 4
-particle_button_group = SubResource("ButtonGroup_atcw5")
+particle_button_group = SubResource("ButtonGroup_6c5l5")
 
 [node name="GenerationButton" parent="PullOutTabs" instance=ExtResource("22_u64s1")]
 offset_left = -76.0

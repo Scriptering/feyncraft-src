@@ -56,6 +56,7 @@ icon_use_parent_material = null
 [node name="TabButton" parent="." instance=ExtResource("5_7o77k")]
 layout_mode = 2
 minimum_size = Vector2(15, 14)
+tooltip = null
 
 [node name="VBoxContainer" type="HBoxContainer" parent="."]
 use_parent_material = true

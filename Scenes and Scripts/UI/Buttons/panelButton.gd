@@ -28,6 +28,9 @@ var previous_button_pressed : bool
 func _ready() -> void:
 	previous_button_pressed = button_pressed
 	set_content_margins(ButtonState[NORMAL])
+	
+	$Button.mouse_entered.connect(func(): emit_signal("mouse_entered"))
+	$Button.mouse_exited.connect(func(): emit_signal("mouse_exited"))
 
 func _set_icon_use_parent_material(new_value: bool) -> void:
 	icon_use_parent_material = new_value
