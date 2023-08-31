@@ -29,4 +29,6 @@ func is_submission_solution(submission: DrawingMatrix) -> bool:
 		func(solution: DrawingMatrix):
 			return solution.is_duplicate(submission)
 	)
-	
+
+func submit_diagram(submission: DrawingMatrix) -> void:
+	submitted_diagrams.append(submission)

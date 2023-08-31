@@ -1,13 +1,15 @@
-[gd_scene load_steps=23 format=3 uid="uid://bbkvwth6ke1is"]
+[gd_scene load_steps=27 format=3 uid="uid://bbkvwth6ke1is"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_vo33s"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/PullOutTab.gd" id="2_kmb27"]
 [ext_resource type="StyleBox" uid="uid://dvu7f5h7snggp" path="res://Scenes and Scripts/UI/Menus/panelContainer.tres" id="2_r3neh"]
 [ext_resource type="PackedScene" uid="uid://fl01bx28xqrn" path="res://Scenes and Scripts/UI/Equation/equation.tscn" id="3_7jee8"]
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="3_30w11"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/problem_tab.gd" id="3_kka6b"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="4_gj1up"]
 [ext_resource type="Texture2D" uid="uid://d16opu3dyhri7" path="res://Textures/Buttons/eye/eye_open.png" id="5_15poa"]
 [ext_resource type="Texture2D" uid="uid://bdcj3gv1qc01r" path="res://Textures/Buttons/icons/rewind.png" id="5_t5pc5"]
+[ext_resource type="Texture2D" uid="uid://tql14gtq05lf" path="res://Textures/UI/Information/invalid.png" id="6_8a0lv"]
 [ext_resource type="Texture2D" uid="uid://djfkh4k2lcuyg" path="res://Textures/Buttons/Tabs/tab_down_highlight.png" id="6_nprrx"]
 [ext_resource type="Texture2D" uid="uid://b7i5pfnd47348" path="res://Textures/Buttons/icons/solution.png" id="6_pp1px"]
 [ext_resource type="Texture2D" uid="uid://bw8jm82sn5nmq" path="res://Textures/Buttons/Tabs/tab_down.png" id="7_ed4go"]
@@ -19,6 +21,16 @@
 
 [sub_resource type="Theme" id="Theme_rwvfw"]
 TooltipPanel/styles/panel = ExtResource("2_r3neh")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u6ude"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4dng6"]
+texture = ExtResource("3_30w11")
+texture_margin_left = 6.0
+texture_margin_top = 6.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+expand_margin_top = 10.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ci0m4"]
 content_margin_top = 2.0
@@ -68,14 +80,112 @@ material = ExtResource("1_vo33s")
 layout_mode = 3
 anchors_preset = 0
 theme = SubResource("Theme_rwvfw")
-script = ExtResource("2_kmb27")
-ContentContainer = NodePath("MovingContainer/Tab")
-TabButton = NodePath("MovingContainer/PullOutTabButtonDown")
+script = ExtResource("3_kka6b")
+ContentContainer = NodePath("MovingContainer/VBoxContainer/Tab")
+TabButton = NodePath("MovingContainer/VBoxContainer/PullOutTabButtonDown")
 MovingContainer = NodePath("MovingContainer")
 moving_container_margins = Vector2(2.08165e-12, -3)
 move_direction = 3
 
-[node name="MovingContainer" type="VBoxContainer" parent="."]
+[node name="MovingContainer" type="Control" parent="."]
+use_parent_material = true
+anchors_preset = 0
+
+[node name="SubmitFeedback" type="Control" parent="MovingContainer" node_paths=PackedStringArray("ContentContainer", "MovingContainer")]
+use_parent_material = true
+anchors_preset = 0
+offset_left = 183.0
+offset_top = -40.0
+offset_right = 183.0
+offset_bottom = -40.0
+script = ExtResource("2_kmb27")
+ContentContainer = NodePath("MovingContainer")
+MovingContainer = NodePath("MovingContainer")
+move_direction = 3
+stay_out_time = 2.0
+
+[node name="MovingContainer" type="PanelContainer" parent="MovingContainer/SubmitFeedback"]
+use_parent_material = true
+custom_minimum_size = Vector2(2.08165e-12, 60)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_u6ude")
+
+[node name="PanelContainer" type="PanelContainer" parent="MovingContainer/SubmitFeedback/MovingContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxTexture_4dng6")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_constants/separation = 0
+
+[node name="DiagramNotValid" type="HBoxContainer" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/DiagramNotValid"]
+layout_mode = 2
+texture = ExtResource("6_8a0lv")
+stretch_mode = 2
+
+[node name="Label" type="Label" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/DiagramNotValid"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Diagram is not valid"
+
+[node name="DiagramNotConnected" type="HBoxContainer" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/DiagramNotConnected"]
+layout_mode = 2
+texture = ExtResource("6_8a0lv")
+stretch_mode = 2
+
+[node name="Label" type="Label" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/DiagramNotConnected"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Diagram is not connected"
+
+[node name="DuplicateDiagram" type="HBoxContainer" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/DuplicateDiagram"]
+layout_mode = 2
+texture = ExtResource("6_8a0lv")
+stretch_mode = 2
+
+[node name="Label" type="Label" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/DuplicateDiagram"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Diagram already submitted"
+
+[node name="DiagramNotSolution" type="HBoxContainer" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/DiagramNotSolution"]
+layout_mode = 2
+texture = ExtResource("6_8a0lv")
+stretch_mode = 2
+
+[node name="Label" type="Label" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/DiagramNotSolution"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Diagram is incorrect"
+
+[node name="DiagramSubmitted" type="HBoxContainer" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/DiagramSubmitted"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Diagram submitted"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MovingContainer"]
 use_parent_material = true
 layout_mode = 1
 anchors_preset = 5
@@ -87,28 +197,28 @@ grow_horizontal = 2
 mouse_filter = 2
 theme_override_constants/separation = 0
 
-[node name="Tab" type="PanelContainer" parent="MovingContainer"]
+[node name="Tab" type="PanelContainer" parent="MovingContainer/VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_styles/panel = SubResource("StyleBoxTexture_ci0m4")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MovingContainer/Tab"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MovingContainer/VBoxContainer/Tab"]
 layout_mode = 2
 theme_override_constants/separation = 3
 alignment = 1
 
-[node name="Rewind" parent="MovingContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
+[node name="Rewind" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
 layout_mode = 2
 icon = ExtResource("5_t5pc5")
 minimum_size = Vector2(26, 24)
 expand_icon = true
 icon_use_parent_material = true
 
-[node name="Tooltip" parent="MovingContainer/Tab/HBoxContainer/Rewind" instance=ExtResource("7_itf5n")]
+[node name="Tooltip" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer/Rewind" instance=ExtResource("7_itf5n")]
 tooltip = "Load previous problem"
 
-[node name="Solution" parent="MovingContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
+[node name="Solution" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
 layout_mode = 2
 tooltip_text = "Show solution"
 icon = ExtResource("6_pp1px")
@@ -116,23 +226,24 @@ minimum_size = Vector2(25, 24)
 expand_icon = true
 icon_use_parent_material = true
 
-[node name="Tooltip" parent="MovingContainer/Tab/HBoxContainer/Solution" instance=ExtResource("7_itf5n")]
+[node name="Tooltip" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer/Solution" instance=ExtResource("7_itf5n")]
 tooltip = "Show solution"
 
-[node name="Equation" parent="MovingContainer/Tab/HBoxContainer" instance=ExtResource("3_7jee8")]
+[node name="Equation" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("3_7jee8")]
 layout_mode = 2
 
-[node name="ViewSubmissions" parent="MovingContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
+[node name="ViewSubmissions" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
 layout_mode = 2
 tooltip_text = "View submissions"
 icon = ExtResource("5_15poa")
 minimum_size = Vector2(24, 24)
 expand_icon = true
+disabled = true
 
-[node name="Tooltip" parent="MovingContainer/Tab/HBoxContainer/ViewSubmissions" instance=ExtResource("7_itf5n")]
+[node name="Tooltip" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer/ViewSubmissions" instance=ExtResource("7_itf5n")]
 tooltip = "View submissions"
 
-[node name="Submit" parent="MovingContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
+[node name="Submit" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
 layout_mode = 2
 tooltip_text = "Submit solution"
 icon = ExtResource("8_2kr0t")
@@ -140,13 +251,16 @@ minimum_size = Vector2(26, 24)
 expand_icon = true
 icon_use_parent_material = true
 
-[node name="Tooltip" parent="MovingContainer/Tab/HBoxContainer/Submit" instance=ExtResource("7_itf5n")]
+[node name="Tooltip" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer/Submit" instance=ExtResource("7_itf5n")]
 tooltip = "Submit solution"
 
-[node name="PullOutTabButtonDown" parent="MovingContainer" instance=ExtResource("10_xn6km")]
+[node name="PullOutTabButtonDown" parent="MovingContainer/VBoxContainer" instance=ExtResource("10_xn6km")]
 layout_mode = 2
 size_flags_horizontal = 4
 theme = SubResource("Theme_d1tq1")
 TabIcon = ExtResource("9_oqp5o")
 TabMinimumSize = Vector2(33, 15)
 icon_use_parent_material = true
+
+[connection signal="pressed" from="MovingContainer/VBoxContainer/Tab/HBoxContainer/ViewSubmissions" to="." method="_on_view_submissions_pressed"]
+[connection signal="pressed" from="MovingContainer/VBoxContainer/Tab/HBoxContainer/Submit" to="." method="_on_submit_pressed"]

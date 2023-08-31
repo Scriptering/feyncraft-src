@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dhxdq4avffvb8"]
+
+[ext_resource type="Script" path="res://Scenes and Scripts/Diagram/GrabArea.gd" id="1_oq5dm"]
+
+[node name="GrabArea" type="Node" node_paths=PackedStringArray("Areas")]
+script = ExtResource("1_oq5dm")
+Areas = [null, null]

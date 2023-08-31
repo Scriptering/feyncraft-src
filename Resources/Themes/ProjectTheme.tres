@@ -528,18 +528,16 @@ cache/0/19/0/kerning_overrides/17/0 = Vector2(0, 0)
 cache/0/19/0/kerning_overrides/18/0 = Vector2(0, 0)
 cache/0/19/0/kerning_overrides/19/0 = Vector2(0, 0)
 
-[sub_resource type="StyleBoxTexture" id="16"]
-content_margin_left = 4.0
-content_margin_top = 2.0
-content_margin_right = 4.0
-content_margin_bottom = 6.0
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dxm4o"]
+content_margin_left = 5.0
+content_margin_top = 3.0
+content_margin_right = 5.0
+content_margin_bottom = 7.0
 texture = ExtResource("2_8m3bx")
-texture_margin_left = 3.0
-texture_margin_top = 1.0
-texture_margin_right = 3.0
-texture_margin_bottom = 5.0
-region_rect = Rect2(0, 0, 20, 20)
-draw_center = false
+texture_margin_left = 5.0
+texture_margin_top = 6.0
+texture_margin_right = 5.0
+texture_margin_bottom = 7.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rmh60"]
 
@@ -1544,7 +1542,7 @@ Button/colors/font_color_focus = Color(0.666667, 0.333333, 0, 1)
 Button/colors/font_color_hover = Color(0.666667, 0.333333, 0, 1)
 Button/colors/font_color_pressed = Color(0.666667, 0.333333, 0, 1)
 Button/fonts/font = SubResource("15")
-Button/styles/disabled = SubResource("16")
+Button/styles/disabled = SubResource("StyleBoxTexture_dxm4o")
 Button/styles/focus = SubResource("StyleBoxEmpty_rmh60")
 Button/styles/hover = SubResource("StyleBoxTexture_g7eks")
 Button/styles/normal = SubResource("StyleBoxTexture_5xekb")

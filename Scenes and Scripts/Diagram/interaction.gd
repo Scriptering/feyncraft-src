@@ -16,7 +16,6 @@ signal show_information_box
 @export var information_box_offset := Vector2(0, 0)
 
 static var used_information_numbers: Array[int] = []
-static var number_of_placing_lines: int = 0
 
 enum {HIGHLIGHT, NORMAL}
 enum Side {Before = -1, After = +1}
@@ -52,8 +51,6 @@ func _ready():
 	super._ready()
 	
 	show_information_box.connect(EVENTBUS.add_floating_menu)
-	picked_up.connect(Crosshair.interaction_picked_up)
-	dropped.connect(Crosshair.interaction_placed)
 	request_deletion.connect(Diagram.delete_interaction)
 	
 	id = interaction_matrix.calculate_new_interaction_id()
@@ -119,10 +116,11 @@ func update_valid_visual() -> void:
 		Ball.animation = 'invalid'
 
 func update_dot_visual() -> void:
-	if connected_lines.size() >= INTERACTION_SIZE_MINIMUM:
-		Dot.visible = true
-	else:
-		Dot.visible = false
+	if !grabbed:
+		if connected_lines.size() >= INTERACTION_SIZE_MINIMUM:
+			Dot.visible = true
+		else:
+			Dot.visible = false
 	
 	if get_on_state_line() != StateLine.StateType.None:
 		Dot.frame = 1
@@ -330,7 +328,7 @@ func is_hovered() -> bool:
 
 func pick_up() -> void:
 	super.pick_up()
-	number_of_placing_lines += connected_lines.size()
+	
 	for line in connected_lines:
 		line.pick_up(line.get_point_at_position(position))
 
@@ -382,7 +380,8 @@ func _on_tree_exiting():
 	
 func drop() -> void:
 	super.drop()
-	number_of_placing_lines = 0
+	
+	update_dot_visual()
 	Diagram.update_statelines()
 
 func get_interaction_index() -> Array[int]:

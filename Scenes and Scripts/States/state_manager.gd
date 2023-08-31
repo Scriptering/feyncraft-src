@@ -33,8 +33,8 @@ func init(cursor: Sprite2D, Diagram: DiagramBase) -> void:
 		child.Diagram = Diagram
 		child.crosshair = crosshair
 		
-	crosshair.connect('moved', Callable(self, 'crosshair_moved'))
-	self.connect("state_changed", Callable(crosshair, "_state_changed"))
+	crosshair.moved.connect(crosshair_moved)
+	self.state_changed.connect(Callable(crosshair, "_state_changed"))
 	change_state(BaseState.State.Idle)
 
 func _input(event: InputEvent) -> void:

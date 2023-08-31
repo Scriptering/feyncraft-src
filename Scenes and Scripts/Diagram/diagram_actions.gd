@@ -285,17 +285,6 @@ func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 
 	line_diagram_actions = true
 
-func toggle_crosshair_above_interactions() -> void:
-	print(Crosshair.get_index())
-	
-	if crosshair_above_interactions:
-		crosshair_above_interactions = false
-		$DiagramArea.move_child(Crosshair, Crosshair.get_index() - 1)
-		return
-	
-	crosshair_above_interactions = true
-	$DiagramArea.move_child(Crosshair, Crosshair.get_index() + 1)
-
 func undo() -> void:
 	move_backward_in_history()
 
@@ -351,3 +340,9 @@ func draw_history() -> void:
 	for diagram in diagram_future:
 		draw_diagram(diagram)
 		await get_tree().create_timer(0.5).timeout
+
+func is_valid() -> bool:
+	return get_interactions().all(func(interaction: Interaction): return interaction.valid)
+
+func is_fully_connected(bidirectional: bool) -> bool:
+	return generate_drawing_matrix_from_diagram().is_fully_connected(bidirectional)

@@ -45,7 +45,7 @@ expand_margin_top = 1.0
 expand_margin_right = 1.0
 expand_margin_bottom = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_6c5l5"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_0e34q"]
 resource_name = "ParticleButtons"
 allow_unpress = true
 
@@ -102,7 +102,7 @@ layout_mode = 2
 offset_top = -12.0
 offset_bottom = 28.0
 
-[node name="Line" parent="Diagram/DiagramArea/Initial" index="1"]
+[node name="Line" parent="Diagram/DiagramArea/Initial" index="0"]
 offset_bottom = 280.0
 
 [node name="Final" parent="Diagram/DiagramArea" instance=ExtResource("4")]
@@ -113,7 +113,7 @@ offset_right = 320.0
 offset_bottom = -12.0
 state = 1
 
-[node name="Line" parent="Diagram/DiagramArea/Final" index="1"]
+[node name="Line" parent="Diagram/DiagramArea/Final" index="0"]
 offset_bottom = 280.0
 
 [node name="ParticleLines" type="Control" parent="Diagram/DiagramArea"]
@@ -174,6 +174,15 @@ offset_left = 177.0
 offset_top = 51.0
 offset_right = 177.0
 offset_bottom = 51.0
+title = "Generated Diagrams"
+
+[node name="SubmittedDiagrams" parent="FloatingMenus" instance=ExtResource("27_laye5")]
+visible = false
+offset_left = 177.0
+offset_top = 51.0
+offset_right = 177.0
+offset_bottom = 51.0
+title = "Submitted Diagrams"
 
 [node name="PullOutTabs" type="Node2D" parent="."]
 z_index = 3
@@ -194,7 +203,7 @@ offset_right = 159.0
 offset_bottom = 336.0
 grow_vertical = 0
 size_flags_horizontal = 4
-particle_button_group = SubResource("ButtonGroup_6c5l5")
+particle_button_group = SubResource("ButtonGroup_0e34q")
 
 [node name="GenerationButton" parent="PullOutTabs" instance=ExtResource("22_u64s1")]
 offset_left = -76.0

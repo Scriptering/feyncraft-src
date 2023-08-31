@@ -339,7 +339,6 @@ func generate_directionless_connections(unconnected_interaction_matrix: Interact
 	
 	var directionless_particle_count := unconnected_interaction_matrix.get_unconnected_particles().filter(is_directionless_particle).size()
 	var directionless_ids := unconnected_interaction_matrix.find_all_unconnected(is_directionless_particle)
-	var point_in_directionless_ids : Callable = func(point): return point in directionless_ids
 	
 	var state_points : PackedInt32Array = unconnected_interaction_matrix.get_state_ids(StateLine.StateType.Both)
 
@@ -988,3 +987,5 @@ func print_matrix(matrix : Array) -> void:
 	print('Printing Matrix')
 	for interaction in matrix:
 		print(interaction)
+
+

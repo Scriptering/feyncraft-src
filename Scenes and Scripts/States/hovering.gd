@@ -24,11 +24,11 @@ func process(_delta: float) -> State:
 
 func connect_grabbable() -> void:
 	for object in get_tree().get_nodes_in_group("grabbable"):
-		object.connect("grab_area_clicked", Callable(self, "_grabbable_object_clicked"))
+		object.grab_area_clicked.connect(_grabbable_object_clicked)
 
 func disconnect_grabbable() -> void:
 	for object in get_tree().get_nodes_in_group("grabbable"):
-		object.disconnect("grab_area_clicked", Callable(self, "_grabbable_object_clicked"))
+		object.grab_area_clicked.disconnect(_grabbable_object_clicked)
 
 func _grabbable_object_clicked(object: Node) -> void:
 	start_placing = true

@@ -12,15 +12,15 @@ func exit() -> void:
 
 func connect_deletable() -> void:
 	for line in get_tree().get_nodes_in_group("lines"):
-		line.connect("clicked_on", Callable(self, "line_deletion"))
+		line.clicked_on.connect(line_deletion)
 	for interaction in get_tree().get_nodes_in_group("interactions"):
-		interaction.connect("clicked_on", Callable(self, "interaction_deletion"))
+		interaction.clicked_on.connect(interaction_deletion)
 
 func disconnect_deletable() -> void:
 	for line in get_tree().get_nodes_in_group("lines"):
-		line.disconnect("clicked_on", Callable(self, "line_deletion"))
+		line.clicked_on.disconnect(line_deletion)
 	for interaction in get_tree().get_nodes_in_group("interactions"):
-		interaction.disconnect("clicked_on", Callable(self, "interaction_deletion"))
+		interaction.clicked_on.disconnect(interaction_deletion)
 
 func input(_event: InputEvent) -> State:
 	if Input.is_action_just_released("deleting"):
@@ -54,6 +54,8 @@ func interaction_deletion(interaction: Interaction) -> void:
 		Diagram.add_diagram_to_history()
 		
 	Diagram.delete_interaction(interaction)
+	
+	SOUNDBUS.snip()
 	
 	await get_tree().process_frame
 	

@@ -2,6 +2,7 @@
 extends PanelContainer
 class_name PanelButton
 
+signal hide_tooltip
 signal pressed
 signal on_pressed 
 signal toggled
@@ -15,6 +16,8 @@ signal toggled
 @export var button_pressed: bool : set = _set_button_pressed
 @export var disabled: bool = false: set = _set_button_disabled
 @export var icon_use_parent_material: bool = false: set = _set_icon_use_parent_material
+@export var mute: bool = false
+
 
 @onready var button = $Button
 @onready var label = $ContentContainer/HBoxContainer/ButtonText
@@ -43,6 +46,11 @@ func _set_button_pressed(new_value: bool) -> void:
 func _set_button_disabled(new_value: bool) -> void:
 	disabled = new_value
 	$Button.disabled = new_value
+	
+	if is_inside_tree():
+		await get_tree().process_frame
+		self.button_pressed = false
+		_on_button_button_up()
 
 func _set_toggle_mode(new_value: bool) -> void:
 	toggle_mode = new_value
@@ -92,6 +100,7 @@ func _set_button_minimum_size(new_value: Vector2) -> void:
 func _on_button_pressed() -> void:
 	emit_signal("pressed")
 	emit_signal("on_pressed", self)
+	emit_signal("hide_tooltip")
 
 func set_content_margins(button_state: String) -> void:
 	$ContentContainer.add_theme_constant_override("margin_top",
@@ -111,12 +120,18 @@ func _on_button_button_down():
 	if toggle_mode:
 		return
 	
+	if !mute:
+		play_sound(true)
+		
 	set_content_margins(ButtonState[PRESSED])
 
 func _on_button_button_up():
 	if toggle_mode:
 		return
 	
+	if !mute:
+		play_sound(false)
+
 	set_content_margins(ButtonState[NORMAL])
 
 func _on_button_theme_changed():

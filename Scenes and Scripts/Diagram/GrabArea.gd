@@ -5,7 +5,7 @@ signal mouse_exited
 
 @export var Areas : Array[Node]
 
-func _ready() -> void:
+func init() -> void:
 	for area in Areas:
 		area.mouse_entered.connect(
 			func(): emit_signal("mouse_entered")

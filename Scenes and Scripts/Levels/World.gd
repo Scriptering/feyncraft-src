@@ -53,6 +53,7 @@ func _ready():
 	$Diagram.init($PullOutTabs/ParticleButtons)
 	$ShaderControl.init($PalletteButtons)
 	$PullOutTabs/GenerationButton.init($Diagram, $Generation, $FloatingMenus/GeneratedDiagrams)
+	$PullOutTabs/ProblemTab.init($Diagram, Problem.new(), $FloatingMenus/SubmittedDiagrams)
 	$PathFinding.init($Diagram, $Diagram.StateLines)
 	
 	Input.set_default_cursor_shape(Input.CURSOR_ARROW)

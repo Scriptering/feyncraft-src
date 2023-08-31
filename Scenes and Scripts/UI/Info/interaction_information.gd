@@ -160,6 +160,6 @@ func is_integer(test_float: float) -> bool:
 func _on_close_button_pressed():
 	emit_signal("closed_button_pressed")
 
-
-func _on_tab_container_child_entered_tree(node):
+func _on_tab_container_child_entered_tree(node: Control):
 	node.material = load("res://Resources/Shaders/palette_swap_material.tres")
+	node.mouse_filter = Control.MOUSE_FILTER_PASS

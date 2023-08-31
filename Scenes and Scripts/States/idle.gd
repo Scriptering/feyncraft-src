@@ -2,10 +2,6 @@ extends BaseState
 
 @export var minimum_press_time: float
 
-func enter() -> void:
-	super.enter()
-	crosshair.drawing_ended()
-
 func _ready() -> void:
 	$minimum_press_timer.wait_time = minimum_press_time
 

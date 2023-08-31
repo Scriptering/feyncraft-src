@@ -51,6 +51,7 @@ ArrowOut = ExtResource("3_cwc1p")
 [node name="TabButton" parent="." instance=ExtResource("5_30wpk")]
 layout_mode = 2
 minimum_size = Vector2(15, 15)
+mute = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 use_parent_material = true
