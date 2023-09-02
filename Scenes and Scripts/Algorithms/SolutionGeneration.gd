@@ -987,5 +987,3 @@ func print_matrix(matrix : Array) -> void:
 	print('Printing Matrix')
 	for interaction in matrix:
 		print(interaction)
-
-

@@ -61,47 +61,51 @@ const QUANTUM_NUMBERS : Array[Array] = [
 [-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 0, 1]
 ]
 
+const WEAK_QUANTUM_NUMBERS : Array[QuantumNumber] = [
+	QuantumNumber.up, QuantumNumber.down, QuantumNumber.charge, QuantumNumber.strange, QuantumNumber.top, QuantumNumber.bottom
+]
+
 const FERMION_DIMENSIONALITY : float = 1.5
 const BOSON_DIMENSIONALITY : float = 1.0
 
-const LEPTONS := [
+const LEPTONS : Array[GLOBALS.Particle] = [
 	Particle.lepton, Particle.electron, Particle.muon, Particle.tau,
 	Particle.lepton_neutrino, Particle.electron_neutrino, Particle.muon_neutrino, Particle.tau_neutrino
 ]
 
-const QUARKS := [
+const QUARKS : Array[GLOBALS.Particle] = [
 	Particle.bright_quark, Particle.dark_quark, Particle.up, Particle.down, Particle.charm, Particle.strange, Particle.top, Particle.bottom
 ]
 
 const FERMIONS := LEPTONS + QUARKS
 
-const BOSONS := [Particle.photon, Particle.gluon, Particle.H, Particle.W, Particle.Z]
+const BOSONS : Array[GLOBALS.Particle] = [Particle.photon, Particle.gluon, Particle.H, Particle.W, Particle.Z]
 
-const COLOUR_PARTICLES := [
+const COLOUR_PARTICLES : Array[GLOBALS.Particle] = [
 	Particle.gluon,
 	Particle.bright_quark, Particle.dark_quark, Particle.up, Particle.down, Particle.charm, Particle.strange, Particle.top, Particle.bottom
 ]
 
-const SHADED_PARTICLES := [
+const SHADED_PARTICLES : Array[GLOBALS.Particle] = [
 	Particle.W,
 	Particle.lepton, Particle.electron, Particle.muon, Particle.tau,
 	Particle.lepton_neutrino, Particle.electron_neutrino, Particle.muon_neutrino, Particle.tau_neutrino,
 	Particle.bright_quark, Particle.dark_quark, Particle.up, Particle.down, Particle.top, Particle.bottom, Particle.charm, Particle.strange
 ]
 
-const BRIGHT_PARTICLES := [
+const BRIGHT_PARTICLES : Array[GLOBALS.Particle] = [
 	Particle.W,
 	Particle.bright_quark, Particle.up, Particle.charm, Particle.top,
 	Particle.lepton_neutrino, Particle.electron_neutrino, Particle.muon_neutrino, Particle.tau_neutrino
 ]
 
-const DARK_PARTICLES := [
+const DARK_PARTICLES : Array[GLOBALS.Particle] = [
 	Particle.W,
 	Particle.dark_quark, Particle.down, Particle.strange, Particle.bottom,
 	Particle.lepton, Particle.electron, Particle.muon, Particle.tau
 ]
 
-const GENERAL_PARTICLES := [
+const GENERAL_PARTICLES : Array[GLOBALS.Particle] = [
 	Particle.lepton, Particle.lepton_neutrino, Particle.bright_quark, Particle.dark_quark
 ]
 

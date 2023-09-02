@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://c7n4o6dbkwilh"]
+[gd_scene load_steps=34 format=3 uid="uid://c7n4o6dbkwilh"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/Levels/World.gd" id="1"]
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="1_ovngh"]
@@ -13,9 +13,10 @@
 [ext_resource type="PackedScene" uid="uid://b22nw60juoc6k" path="res://Scenes and Scripts/Diagram/line.tscn" id="7_sgp8p"]
 [ext_resource type="Texture2D" uid="uid://d1e2fabmfhkx7" path="res://Textures/UI/drag_control.png" id="9"]
 [ext_resource type="PackedScene" uid="uid://brd5auomhnn6l" path="res://Scenes and Scripts/UI/Cursor.tscn" id="10"]
-[ext_resource type="PackedScene" path="res://Scenes and Scripts/Algorithms/PathFinding.tscn" id="13"]
+[ext_resource type="PackedScene" uid="uid://byrhmsj4f7kxm" path="res://Scenes and Scripts/Algorithms/PathFinding.tscn" id="13"]
+[ext_resource type="PackedScene" uid="uid://bs6vtukhlou2r" path="res://Scenes and Scripts/Algorithms/problem_generation.tscn" id="13_62803"]
 [ext_resource type="Script" path="res://Scenes and Scripts/Diagram/diagram_actions.gd" id="17_23v64"]
-[ext_resource type="PackedScene" uid="uid://nuajmillcsir" path="res://Scenes and Scripts/Algorithms/Generation.tscn" id="18"]
+[ext_resource type="PackedScene" uid="uid://nuajmillcsir" path="res://Scenes and Scripts/Algorithms/SolutionGeneration.tscn" id="18"]
 [ext_resource type="PackedScene" uid="uid://bbkvwth6ke1is" path="res://Scenes and Scripts/UI/Menus/problem_tab.tscn" id="20_uaeg6"]
 [ext_resource type="Texture2D" uid="uid://dhfjdunke4k7k" path="res://Textures/UI/delete_control.png" id="22"]
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="22_8vp8u"]
@@ -45,7 +46,7 @@ expand_margin_top = 1.0
 expand_margin_right = 1.0
 expand_margin_bottom = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_0e34q"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_k7ue3"]
 resource_name = "ParticleButtons"
 allow_unpress = true
 
@@ -142,9 +143,13 @@ patch_margin_top = 15
 patch_margin_right = 15
 patch_margin_bottom = 15
 
-[node name="Generation" parent="." instance=ExtResource("18")]
+[node name="Algorithms" type="Node" parent="."]
 
-[node name="PathFinding" parent="." instance=ExtResource("13")]
+[node name="SolutionGeneration" parent="Algorithms" instance=ExtResource("18")]
+
+[node name="PathFinding" parent="Algorithms" instance=ExtResource("13")]
+
+[node name="ProblemGeneration" parent="Algorithms" instance=ExtResource("13_62803")]
 
 [node name="Controls" type="Node2D" parent="."]
 visible = false
@@ -203,7 +208,7 @@ offset_right = 159.0
 offset_bottom = 336.0
 grow_vertical = 0
 size_flags_horizontal = 4
-particle_button_group = SubResource("ButtonGroup_0e34q")
+particle_button_group = SubResource("ButtonGroup_k7ue3")
 
 [node name="GenerationButton" parent="PullOutTabs" instance=ExtResource("22_u64s1")]
 offset_left = -76.0
@@ -246,4 +251,4 @@ script = ExtResource("22_vp45o")
 
 [editable path="Diagram/DiagramArea/Initial"]
 [editable path="Diagram/DiagramArea/Final"]
-[editable path="Generation"]
+[editable path="Algorithms/SolutionGeneration"]
