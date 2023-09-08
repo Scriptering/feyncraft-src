@@ -1,4 +1,4 @@
-extends Node2D
+extends Node
 
 @onready var Level = get_tree().get_nodes_in_group('level')[0]
 @onready var ColourLine = preload("res://Scenes and Scripts/Diagram/ColourLine.tscn")
@@ -36,9 +36,6 @@ const SHADES = [Color('ffffff'), Color('000000'), Color('727272')]
 
 var prev_paths = []
 var prev_c_paths = []
-
-func _ready():
-	pass
 
 func init(diagram: DiagramBase, state_lines: Array) -> void:
 	Diagram = diagram

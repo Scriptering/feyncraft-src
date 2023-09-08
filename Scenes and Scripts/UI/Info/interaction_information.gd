@@ -20,7 +20,7 @@ var invalid_icon := preload("res://Scenes and Scripts/UI/Info/invalid.tscn")
 var valid_icon := preload("res://Scenes and Scripts/UI/Info/valid.tscn")
 
 #1 charge, 2 lepton num., 3 e. num, 4 mu num., 5 tau num., 6 quark num., 7 up num., 8 down num., 9 charm num., 10 strange num., 11 top num., 12 bottom num., 13 colour
-var property_names = [['charge', 'lepton num.', 'electron num.', 'muon num.', 'tau num.', 'baryon num.', 'up num.', 'down num.', 'charm num.', 'strange num.', 'top num.', 'bottom num.'],
+var property_names = [['charge', 'lepton num.', 'electron num.', 'muon num.', 'tau num.', 'baryon num.', 'up num.', 'down num.', 'charm num.', 'strange num.', 'top num.', 'bottom num.', 'bright num.', 'dark num.'],
 ['dimensionality', 'colourless gluon?', 'neutral photon?', 'colour']]
 
 func _ready():
@@ -160,6 +160,6 @@ func is_integer(test_float: float) -> bool:
 func _on_close_button_pressed():
 	emit_signal("closed_button_pressed")
 
-
-func _on_tab_container_child_entered_tree(node):
+func _on_tab_container_child_entered_tree(node: Control):
 	node.material = load("res://Resources/Shaders/palette_swap_material.tres")
+	node.mouse_filter = Control.MOUSE_FILTER_PASS

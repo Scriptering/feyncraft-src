@@ -19,7 +19,7 @@ base_font = ExtResource("5_g1ia3")
 spacing_top = -2
 spacing_bottom = 3
 
-[node name="InteractionInformation" type="Control" node_paths=PackedStringArray("GrabArea") groups=["grabbable"]]
+[node name="InteractionInformation" type="Control" node_paths=PackedStringArray("GrabAreas") groups=["grabbable"]]
 z_index = 6
 z_as_relative = false
 material = ExtResource("1_ivc2f")
@@ -27,7 +27,7 @@ layout_mode = 3
 anchors_preset = 0
 theme = ExtResource("1_ulo0d")
 script = ExtResource("2_64w2u")
-GrabArea = NodePath("PanelContainer")
+GrabAreas = [NodePath("PanelContainer/TabContainer")]
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 use_parent_material = true

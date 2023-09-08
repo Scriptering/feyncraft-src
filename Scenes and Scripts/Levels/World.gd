@@ -8,8 +8,9 @@ extends Node2D
 
 @onready var FPS = get_node('FPS')
 @onready var Cursor = get_node('Cursor')
-@onready var Pathfinding = get_node('PathFinding')
-@onready var Generation = get_node('Generation')
+@onready var Pathfinding = $Algorithms/PathFinding
+@onready var SolutionGeneration = $Algorithms/SolutionGeneration
+@onready var ProblemGeneration = $Algorithms/ProblemGeneration
 
 @onready var States = $state_manager
 
@@ -52,10 +53,15 @@ func _ready():
 	States.init(Cursor, $Diagram)
 	$Diagram.init($PullOutTabs/ParticleButtons)
 	$ShaderControl.init($PalletteButtons)
-	$PullOutTabs/GenerationButton.init($Diagram, $Generation, $FloatingMenus/GeneratedDiagrams)
-	$PathFinding.init($Diagram, $Diagram.StateLines)
+	$PullOutTabs/GenerationButton.init($Diagram, $Algorithms/SolutionGeneration, $FloatingMenus/GeneratedDiagrams)
+	$PullOutTabs/ProblemTab.init(
+		$Diagram, Problem.new(), $FloatingMenus/SubmittedDiagrams, $Algorithms/ProblemGeneration, $Algorithms/SolutionGeneration
+	)
+	$Algorithms/PathFinding.init($Diagram, $Diagram.StateLines)
+	$Algorithms/ProblemGeneration.init($Algorithms/SolutionGeneration)
 	
 	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
+
 
 func _process(_delta):
 	FPS.text = str(Engine.get_frames_per_second())
@@ -101,11 +107,11 @@ func generate(initialState : Array, finalState : Array, minDegree : int, maxDegr
 
 	await get_tree().create_timer(0.01).timeout
 
-	match (Generation.generate_diagram(initialState, finalState, minDegree, maxDegree, interaction_checks)):
+	match (SolutionGeneration.generate_diagram(initialState, finalState, minDegree, maxDegree, interaction_checks)):
 		INVALID:
-			get_node('Buttons/GenerationButton/GenerationUI').display_text('Failed to find')
+			get_node('Buttons/SolutionGenerationButton/SolutionGenerationUI').display_text('Failed to find')
 		0:
-			get_node('Buttons/GenerationButton/GenerationUI').display_text('Wrong quantum numbers')
+			get_node('Buttons/SolutionGenerationButton/SolutionGenerationUI').display_text('Wrong quantum numbers')
 
 func clear():
 	mode = 'drawing'

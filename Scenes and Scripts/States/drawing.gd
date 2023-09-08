@@ -23,6 +23,9 @@ func enter() -> void:
 	crosshair.drawing_started()
 	delay_timer.start()
 
+func exit() -> void:
+	crosshair.drawing_ended()
+
 func input(_event: InputEvent) -> State:
 	if Input.is_action_just_pressed("editing"):
 		cancel_placement()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://c7n4o6dbkwilh"]
+[gd_scene load_steps=36 format=3 uid="uid://c7n4o6dbkwilh"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/Levels/World.gd" id="1"]
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="1_ovngh"]
@@ -11,11 +11,15 @@
 [ext_resource type="PackedScene" uid="uid://bhi4xq3qdbt4d" path="res://Scenes and Scripts/Diagram/interaction.tscn" id="6_aqbiw"]
 [ext_resource type="Texture2D" uid="uid://c3cqabe0p66kd" path="res://Textures/UI/clear_control.png" id="7"]
 [ext_resource type="PackedScene" uid="uid://b22nw60juoc6k" path="res://Scenes and Scripts/Diagram/line.tscn" id="7_sgp8p"]
+[ext_resource type="Texture2D" uid="uid://doyaei3vq3cbb" path="res://Textures/Background/state_line_shadow_top.png" id="8_fwvkc"]
 [ext_resource type="Texture2D" uid="uid://d1e2fabmfhkx7" path="res://Textures/UI/drag_control.png" id="9"]
+[ext_resource type="Texture2D" uid="uid://basekc2ce6rmp" path="res://Textures/Background/state_line_shadow_tile.png" id="9_075jn"]
 [ext_resource type="PackedScene" uid="uid://brd5auomhnn6l" path="res://Scenes and Scripts/UI/Cursor.tscn" id="10"]
-[ext_resource type="PackedScene" path="res://Scenes and Scripts/Algorithms/PathFinding.tscn" id="13"]
+[ext_resource type="PackedScene" uid="uid://byrhmsj4f7kxm" path="res://Scenes and Scripts/Algorithms/PathFinding.tscn" id="13"]
+[ext_resource type="PackedScene" uid="uid://bs6vtukhlou2r" path="res://Scenes and Scripts/Algorithms/problem_generation.tscn" id="13_62803"]
 [ext_resource type="Script" path="res://Scenes and Scripts/Diagram/diagram_actions.gd" id="17_23v64"]
-[ext_resource type="PackedScene" uid="uid://nuajmillcsir" path="res://Scenes and Scripts/Algorithms/Generation.tscn" id="18"]
+[ext_resource type="PackedScene" uid="uid://nuajmillcsir" path="res://Scenes and Scripts/Algorithms/SolutionGeneration.tscn" id="18"]
+[ext_resource type="PackedScene" uid="uid://bbkvwth6ke1is" path="res://Scenes and Scripts/UI/Menus/problem_tab.tscn" id="20_uaeg6"]
 [ext_resource type="Texture2D" uid="uid://dhfjdunke4k7k" path="res://Textures/UI/delete_control.png" id="22"]
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="22_8vp8u"]
 [ext_resource type="PackedScene" uid="uid://cc28vwhkixh8t" path="res://Scenes and Scripts/UI/Buttons/pallette_buttons.tscn" id="22_kt0hd"]
@@ -26,7 +30,7 @@
 [ext_resource type="PackedScene" uid="uid://ds2iet11sv3ty" path="res://Scenes and Scripts/UI/Buttons/particle_buttons.tscn" id="24_lunb1"]
 [ext_resource type="PackedScene" uid="uid://dm0yec0rjuvwl" path="res://Scenes and Scripts/sound_bus.tscn" id="26_tlvja"]
 [ext_resource type="PackedScene" uid="uid://dcpcxfh7umytq" path="res://Scenes and Scripts/UI/MiniDiagram/mini_diagram_viewer.tscn" id="27_laye5"]
-[ext_resource type="PackedScene" uid="uid://b0cpcu52rxnii" path="res://Scenes and Scripts/event_bus.tscn" id="28_tehha"]
+[ext_resource type="PackedScene" uid="uid://byavwp1ynk2py" path="res://Scenes and Scripts/event_bus.tscn" id="28_tehha"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ue1rd"]
 shader = ExtResource("1_ovngh")
@@ -44,7 +48,7 @@ expand_margin_top = 1.0
 expand_margin_right = 1.0
 expand_margin_bottom = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_ug1nr"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_kor41"]
 resource_name = "ParticleButtons"
 allow_unpress = true
 
@@ -90,18 +94,95 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_2v8fu")
 
 [node name="DiagramArea" type="Control" parent="Diagram"]
+use_parent_material = true
 anchors_preset = 0
 offset_left = 64.0
 offset_right = 384.0
 offset_bottom = 256.0
 mouse_filter = 1
 
+[node name="InitialShadow" type="VBoxContainer" parent="Diagram/DiagramArea"]
+use_parent_material = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -164.0
+offset_top = 1.0
+offset_right = -156.0
+offset_bottom = 255.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Top" type="TextureRect" parent="Diagram/DiagramArea/InitialShadow"]
+use_parent_material = true
+layout_mode = 2
+texture = ExtResource("8_fwvkc")
+stretch_mode = 2
+
+[node name="Middle" type="TextureRect" parent="Diagram/DiagramArea/InitialShadow"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("9_075jn")
+stretch_mode = 1
+
+[node name="Bottom" type="TextureRect" parent="Diagram/DiagramArea/InitialShadow"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("8_fwvkc")
+stretch_mode = 2
+flip_h = true
+flip_v = true
+
+[node name="FinalShadow" type="VBoxContainer" parent="Diagram/DiagramArea"]
+use_parent_material = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 156.0
+offset_top = 1.0
+offset_right = 164.0
+offset_bottom = 255.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Top" type="TextureRect" parent="Diagram/DiagramArea/FinalShadow"]
+use_parent_material = true
+layout_mode = 2
+texture = ExtResource("8_fwvkc")
+stretch_mode = 2
+
+[node name="Middle" type="TextureRect" parent="Diagram/DiagramArea/FinalShadow"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("9_075jn")
+stretch_mode = 1
+
+[node name="Bottom" type="TextureRect" parent="Diagram/DiagramArea/FinalShadow"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("8_fwvkc")
+stretch_mode = 2
+flip_h = true
+flip_v = true
+
 [node name="Initial" parent="Diagram/DiagramArea" instance=ExtResource("4")]
 layout_mode = 2
 offset_top = -12.0
 offset_bottom = 28.0
 
-[node name="Line" parent="Diagram/DiagramArea/Initial" index="1"]
+[node name="Line" parent="Diagram/DiagramArea/Initial" index="0"]
 offset_bottom = 280.0
 
 [node name="Final" parent="Diagram/DiagramArea" instance=ExtResource("4")]
@@ -112,7 +193,7 @@ offset_right = 320.0
 offset_bottom = -12.0
 state = 1
 
-[node name="Line" parent="Diagram/DiagramArea/Final" index="1"]
+[node name="Line" parent="Diagram/DiagramArea/Final" index="0"]
 offset_bottom = 280.0
 
 [node name="ParticleLines" type="Control" parent="Diagram/DiagramArea"]
@@ -129,8 +210,6 @@ mouse_filter = 1
 
 [node name="HadronJoints" type="Control" parent="Diagram/DiagramArea"]
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
 
 [node name="GridOutline" type="NinePatchRect" parent="."]
 z_index = 10
@@ -143,9 +222,13 @@ patch_margin_top = 15
 patch_margin_right = 15
 patch_margin_bottom = 15
 
-[node name="Generation" parent="." instance=ExtResource("18")]
+[node name="Algorithms" type="Node" parent="."]
 
-[node name="PathFinding" parent="." instance=ExtResource("13")]
+[node name="SolutionGeneration" parent="Algorithms" instance=ExtResource("18")]
+
+[node name="PathFinding" parent="Algorithms" instance=ExtResource("13")]
+
+[node name="ProblemGeneration" parent="Algorithms" instance=ExtResource("13_62803")]
 
 [node name="Controls" type="Node2D" parent="."]
 visible = false
@@ -175,6 +258,15 @@ offset_left = 177.0
 offset_top = 51.0
 offset_right = 177.0
 offset_bottom = 51.0
+title = "Generated Diagrams"
+
+[node name="SubmittedDiagrams" parent="FloatingMenus" instance=ExtResource("27_laye5")]
+visible = false
+offset_left = 177.0
+offset_top = 51.0
+offset_right = 177.0
+offset_bottom = 51.0
+title = "Submitted Diagrams"
 
 [node name="PullOutTabs" type="Node2D" parent="."]
 z_index = 3
@@ -190,18 +282,24 @@ anchors_preset = 7
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 159.0
-offset_top = 335.0
+offset_top = 336.0
 offset_right = 159.0
-offset_bottom = 335.0
+offset_bottom = 336.0
 grow_vertical = 0
 size_flags_horizontal = 4
-particle_button_group = SubResource("ButtonGroup_ug1nr")
+particle_button_group = SubResource("ButtonGroup_kor41")
 
 [node name="GenerationButton" parent="PullOutTabs" instance=ExtResource("22_u64s1")]
 offset_left = -76.0
 offset_top = 57.0
 offset_right = -76.0
 offset_bottom = 57.0
+
+[node name="ProblemTab" parent="PullOutTabs" instance=ExtResource("20_uaeg6")]
+offset_left = 157.0
+offset_top = -26.0
+offset_right = 157.0
+offset_bottom = -26.0
 
 [node name="FPS" type="Label" parent="."]
 visible = false
@@ -232,4 +330,4 @@ script = ExtResource("22_vp45o")
 
 [editable path="Diagram/DiagramArea/Initial"]
 [editable path="Diagram/DiagramArea/Final"]
-[editable path="Generation"]
+[editable path="Algorithms/SolutionGeneration"]

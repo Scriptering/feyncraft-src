@@ -38,7 +38,7 @@ func find_hadron(quarks: Array) -> GLOBALS.Hadrons:
 		if quarks in GLOBALS.HADRON_QUARK_CONTENT[hadron]:
 			return hadron
 	
-	return 0
+	return GLOBALS.Hadrons.Proton
 
 func create_hadron_joint(drawing_matrix: DrawingMatrix, hadron_ids: PackedInt32Array) -> void:
 	var interaction_ys: PackedInt32Array = []
@@ -49,7 +49,7 @@ func create_hadron_joint(drawing_matrix: DrawingMatrix, hadron_ids: PackedInt32A
 		
 		if drawing_matrix.get_state_from_id(id) == StateLine.StateType.Initial:
 			quarks.append_array(drawing_matrix.get_connected_particles(id))
-			quarks.append_array(drawing_matrix.get_reverse_connected_particles(id).map(
+			quarks.append_array(drawing_matrix.get_connected_particles(id, false, false, true).map(
 				func(particle: GLOBALS.Particle): return -particle
 			))
 		
@@ -57,7 +57,7 @@ func create_hadron_joint(drawing_matrix: DrawingMatrix, hadron_ids: PackedInt32A
 			quarks.append_array(drawing_matrix.get_connected_particles(id).map(
 				func(particle: GLOBALS.Particle): return -particle
 			))
-			quarks.append_array(drawing_matrix.get_reverse_connected_particles(id))
+			quarks.append_array(drawing_matrix.get_connected_particles(id, false, false, true))
 	
 	quarks.sort()
 	

@@ -16,7 +16,6 @@ signal show_information_box
 @export var information_box_offset := Vector2(0, 0)
 
 static var used_information_numbers: Array[int] = []
-static var number_of_placing_lines: int = 0
 
 enum {HIGHLIGHT, NORMAL}
 enum Side {Before = -1, After = +1}
@@ -52,8 +51,6 @@ func _ready():
 	super._ready()
 	
 	show_information_box.connect(EVENTBUS.add_floating_menu)
-	picked_up.connect(Crosshair.interaction_picked_up)
-	dropped.connect(Crosshair.interaction_placed)
 	request_deletion.connect(Diagram.delete_interaction)
 	
 	id = interaction_matrix.calculate_new_interaction_id()
@@ -119,10 +116,11 @@ func update_valid_visual() -> void:
 		Ball.animation = 'invalid'
 
 func update_dot_visual() -> void:
-	if connected_lines.size() >= INTERACTION_SIZE_MINIMUM:
-		Dot.visible = true
-	else:
-		Dot.visible = false
+	if !grabbed:
+		if connected_lines.size() >= INTERACTION_SIZE_MINIMUM:
+			Dot.visible = true
+		else:
+			Dot.visible = false
 	
 	if get_on_state_line() != StateLine.StateType.None:
 		Dot.frame = 1
@@ -232,28 +230,25 @@ func validate() -> bool:
 
 func get_invalid_quantum_numbers() -> Array[GLOBALS.QuantumNumber]:
 	var is_weak: bool = has_base_particle_connected(GLOBALS.Particle.W)
+	var has_W_0: bool = self.connected_lines.any(
+		func(line: ParticleLine): return line.line_vector.x == 0 and line.base_particle == GLOBALS.Particle.W
+	)
 	var invalid_quantum_numbers: Array[GLOBALS.QuantumNumber] = []
 	var before_quantum_sum : Array[float] = get_side_quantum_sum(Side.Before)
 	var after_quantum_sum : Array[float] = get_side_quantum_sum(Side.After)
 	var interaction_in_list := is_interaction_in_list()
 	
 	for quantum_number in GLOBALS.QuantumNumber.values():
-		var quantum_numbers_equal := is_equal_approx(before_quantum_sum[quantum_number], after_quantum_sum[quantum_number])
+		var quantum_number_difference := before_quantum_sum[quantum_number] - after_quantum_sum[quantum_number]
+		var quantum_numbers_equal := is_zero_approx(quantum_number_difference)
 		
-		if !is_weak:
-			if !quantum_numbers_equal:
+		if !quantum_numbers_equal:
+			if has_W_0 and quantum_number == GLOBALS.QuantumNumber.charge and abs(quantum_number_difference) == 1:
+				continue
+			
+			if !is_weak or quantum_number not in GLOBALS.WEAK_QUANTUM_NUMBERS:
 				invalid_quantum_numbers.append(quantum_number)
-		
-		elif (
-			(quantum_number == GLOBALS.QuantumNumber.charge or
-			quantum_number == GLOBALS.QuantumNumber.lepton or
-			quantum_number == GLOBALS.QuantumNumber.electron or
-			quantum_number == GLOBALS.QuantumNumber.muon or
-			quantum_number == GLOBALS.QuantumNumber.tau or
-			quantum_number == GLOBALS.QuantumNumber.quark) and
-			!quantum_numbers_equal
-		):
-			invalid_quantum_numbers.append(quantum_number)
+				continue
 			
 		elif !interaction_in_list:
 			invalid_quantum_numbers.append(quantum_number)
@@ -288,7 +283,13 @@ func get_side_quantum_sum(side: Interaction.Side) -> Array[float]:
 	for quantum_number in GLOBALS.QuantumNumber.values():
 		var sum: float = 0
 		for line in side_connected_lines:
+			var line_is_W_0: bool = line.line_vector.x == 0 and line.base_particle == GLOBALS.Particle.W
+			
+			if line_is_W_0 and quantum_number == GLOBALS.QuantumNumber.charge:
+				continue
+			
 			sum += line.quantum_numbers[quantum_number]
+
 		quantum_sum.append(sum)
 
 	return quantum_sum
@@ -319,18 +320,17 @@ func is_interaction_in_list() -> bool:
 	var sorted_connected_base_particles := self.connected_base_particles.duplicate(true)
 	sorted_connected_base_particles.sort()
 	
-	for interaction_type in GLOBALS.INTERACTIONS:
-		if sorted_connected_base_particles in interaction_type:
-			return true
-	
-	return false
+	return (
+		GLOBALS.INTERACTIONS.any(func(interaction_type: Array): return sorted_connected_base_particles in interaction_type) or
+		GLOBALS.GENERAL_INTERACTIONS.any(func(interaction_type: Array): return sorted_connected_base_particles in interaction_type)
+	)
 
 func is_hovered() -> bool:
 	return hovering
 
 func pick_up() -> void:
 	super.pick_up()
-	number_of_placing_lines += connected_lines.size()
+	
 	for line in connected_lines:
 		line.pick_up(line.get_point_at_position(position))
 
@@ -382,7 +382,8 @@ func _on_tree_exiting():
 	
 func drop() -> void:
 	super.drop()
-	number_of_placing_lines = 0
+	
+	update_dot_visual()
 	Diagram.update_statelines()
 
 func get_interaction_index() -> Array[int]:

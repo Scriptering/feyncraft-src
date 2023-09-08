@@ -1,8 +1,17 @@
+@tool
+
 class_name MiniDiagramViewer
 extends GrabbableControl
 
+signal diagram_deleted
 signal load_diagram
 signal closed
+
+@export var title: String:
+	set(new_value):
+		print("title set")
+		title = new_value
+		get_node("VBoxContainer/HBoxContainer/Title").text = new_value
 
 var drag_vector_start: Vector2
 var current_diagram: MiniDiagram:
@@ -12,7 +21,7 @@ var current_diagram: MiniDiagram:
 var last_loaded_tab: int = 0
 
 @onready var Diagram := preload("res://Scenes and Scripts/UI/MiniDiagram/mini_diagram.tscn")
-@onready var DiagramContainer := $PanelContainer/VBoxContainer/MiniDiagramContainer
+@onready var DiagramContainer := $VBoxContainer/PanelContainer/VBoxContainer/CenterContainer/MiniDiagramContainer
 
 func _ready() -> void:
 	super._ready()
@@ -36,7 +45,7 @@ func _on_left_pressed() -> void:
 	update_index_label()
 
 func _on_right_pressed() -> void:
-	DiagramContainer.current_tab = min(DiagramContainer.current_tab + 1, DiagramContainer.get_child_count()-1)
+	DiagramContainer.current_tab = min(DiagramContainer.current_tab + 1, DiagramContainer.get_tab_count()-1)
 	update_index_label()
 
 func get_diagram(index: int) -> DiagramBase:
@@ -53,9 +62,15 @@ func create_diagrams(matrices: Array) -> void:
 		create_diagram(matrix)
 
 func update_index_label() -> void:
-	$PanelContainer/VBoxContainer/HBoxContainer/IndexContainer/IndexLabel.text = (
-		str(DiagramContainer.current_tab + 1) + "/" + str(DiagramContainer.get_child_count())
+	var diagram_count: int = get_diagram_count()
+	var current_index: int = DiagramContainer.current_tab + 1 if diagram_count != 0 else 0
+	
+	$VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/IndexContainer/IndexLabel.text = (
+		str(current_index) + "/" + str(diagram_count)
 	)
+
+func update_delete_button() -> void:
+	$VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Delete.disabled = DiagramContainer.get_child_count() == 0
 
 func create_diagram(matrix) -> void:
 	var new_diagram : MiniDiagram = Diagram.instantiate()
@@ -66,13 +81,24 @@ func create_diagram(matrix) -> void:
 	
 	elif matrix is DrawingMatrix:
 		new_diagram.draw_diagram(matrix)
-
+	
+	await get_tree().process_frame
+	
 	update_index_label()
+	update_delete_button()
 
 func remove_diagram(index: int = DiagramContainer.current_tab) -> void:
 	DiagramContainer.get_child(index).queue_free()
 	
+	emit_signal("diagram_deleted", index)
+	
+	await get_tree().process_frame
+	
 	update_index_label()
+	update_delete_button()
+
+func get_diagram_count() -> int:
+	return DiagramContainer.get_tab_count()
 
 func _on_delete_pressed() -> void:
 	remove_diagram()

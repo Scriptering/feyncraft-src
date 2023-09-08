@@ -3,13 +3,18 @@ extends Node
 enum ColourScheme {TeaStain, SeaFoam, Professional}
 enum COLOURS {primary, secondary, pencil, primary_highlight, invalid, invalid_highlight}
 
+#0 photon, 1 gluon, 2 Z, 3 H, 4 W,
+#5 lepton, 6 electron, 7 muon, 8 tau,
+#9 lepton_neutrino, 10 electron_neutrino, 11 muon_neutrino, 12 tau_neutrino,
+#13 bright_quark, 14 up, 15 charm, 16 top, 17 dark_quark, 18 down, 19 strange, 20 bottom,
+
 enum Particle {
 	photon, gluon, Z, H, W,
 	lepton, electron, muon, tau,
 	lepton_neutrino, electron_neutrino, muon_neutrino, tau_neutrino,
 	bright_quark, up, charm, top, dark_quark, down, strange, bottom,
 	anti_bottom = -20, anti_strange, anti_down, anti_dark_quark, anti_top, anti_charm, anti_up, anti_bright_quark,
-	anti_tau_neutrino, anti_muon_neutrino, anti_electron_neutrino, anti_neutrino,
+	anti_tau_neutrino, anti_muon_neutrino, anti_electron_neutrino, anti_lepton_neutrino,
 	anti_tau, anti_muon, anti_electron, anti_lepton,
 	anti_W,
 	none = 100}
@@ -19,7 +24,7 @@ AntiDeltaPlusPlus, AntiDeltaPlus, AntiDelta0, AntiDeltaMinus, Epsilon0, EpsilonM
 Lambda0, AntiLambda0, SigmaPlus, SigmaMinus, AntiSigmaPlus, AntiSigmaMinus, OmegaMinus, AntiOmegaMinus,
 DPlus, D0, AntiD0, DMinus, BPlus, B0, AntiB0, BMinus, JPsi, PionMinus, PionPlus, Pion0, KaonPlus, KaonMinus, Kaon0, Invalid}
 
-enum QuantumNumber {charge, lepton, electron, muon, tau, quark, up, down, charm, strange, top, bottom}
+enum QuantumNumber {charge, lepton, electron, muon, tau, quark, up, down, charm, strange, top, bottom, bright, dark}
 
 enum VISION_TYPE {COLOUR, SHADE, NONE = -1}
 
@@ -38,70 +43,79 @@ const COLOUR_SCHEMES : Array = [
 	[Color('FFFFFF'), Color('FFFFFF'), Color('000000'), Color('e3d3c0'), Color('df3e3e'), Color('e35959')]]
 
 const QUANTUM_NUMBERS : Array[Array] = [
-[0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-[0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[-1.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[-1.0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[-1.0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-[-1.0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-[-1.0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-[0.0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0.0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0.0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-[0.0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-[2.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 0, 0],
-[2.0/3, 0, 0, 0, 0, 1.0/3, 1, 0, 0, 0, 0, 0],
-[2.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 1, 0, 0, 0],
-[2.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 1, 0],
-[-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 0, 0],
-[-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 1, 0, 0, 0, 0],
-[-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 1, 0, 0],
-[-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 0, 1]
+[0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+[0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[-1.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1],
+[-1.0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+[-1.0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
+[-1.0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+[-1.0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+[0.0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+[0.0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+[0.0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+[0.0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+[2.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 0, 0, 1, 0],
+[2.0/3, 0, 0, 0, 0, 1.0/3, 1, 0, 0, 0, 0, 0, 1, 0],
+[2.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 1, 0, 0, 0, 1, 0],
+[2.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 1, 0, 1, 0],
+[-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 0, 0, 0, 1],
+[-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 1, 0, 0, 0, 0, 0, 1],
+[-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 1, 0, 0, 0, 1],
+[-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 0, 1, 0, 1]
+]
+
+const WEAK_QUANTUM_NUMBERS : Array[QuantumNumber] = [
+	QuantumNumber.up, QuantumNumber.down, QuantumNumber.charm, QuantumNumber.strange, QuantumNumber.top, QuantumNumber.bottom
 ]
 
 const FERMION_DIMENSIONALITY : float = 1.5
 const BOSON_DIMENSIONALITY : float = 1.0
 
-const LEPTONS := [
+const LEPTONS : Array[GLOBALS.Particle] = [
 	Particle.lepton, Particle.electron, Particle.muon, Particle.tau,
 	Particle.lepton_neutrino, Particle.electron_neutrino, Particle.muon_neutrino, Particle.tau_neutrino
 ]
 
-const QUARKS := [
+const QUARKS : Array[GLOBALS.Particle] = [
 	Particle.bright_quark, Particle.dark_quark, Particle.up, Particle.down, Particle.charm, Particle.strange, Particle.top, Particle.bottom
 ]
 
 const FERMIONS := LEPTONS + QUARKS
 
-const BOSONS := [Particle.photon, Particle.gluon, Particle.H, Particle.W, Particle.Z]
+const BOSONS : Array[GLOBALS.Particle] = [Particle.photon, Particle.gluon, Particle.H, Particle.W, Particle.Z]
 
-const COLOUR_PARTICLES := [
+const COLOUR_PARTICLES : Array[GLOBALS.Particle] = [
 	Particle.gluon,
 	Particle.bright_quark, Particle.dark_quark, Particle.up, Particle.down, Particle.charm, Particle.strange, Particle.top, Particle.bottom
 ]
 
-const SHADED_PARTICLES := [
+const SHADED_PARTICLES : Array[GLOBALS.Particle] = [
 	Particle.W,
 	Particle.lepton, Particle.electron, Particle.muon, Particle.tau,
 	Particle.lepton_neutrino, Particle.electron_neutrino, Particle.muon_neutrino, Particle.tau_neutrino,
 	Particle.bright_quark, Particle.dark_quark, Particle.up, Particle.down, Particle.top, Particle.bottom, Particle.charm, Particle.strange
 ]
 
-const BRIGHT_PARTICLES := [
+const BRIGHT_PARTICLES : Array[GLOBALS.Particle] = [
 	Particle.W,
 	Particle.bright_quark, Particle.up, Particle.charm, Particle.top,
 	Particle.lepton_neutrino, Particle.electron_neutrino, Particle.muon_neutrino, Particle.tau_neutrino
 ]
 
-const DARK_PARTICLES := [
+const DARK_PARTICLES : Array[GLOBALS.Particle] = [
 	Particle.W,
 	Particle.dark_quark, Particle.down, Particle.strange, Particle.bottom,
 	Particle.lepton, Particle.electron, Particle.muon, Particle.tau
 ]
 
-const GENERAL_PARTICLES := [
+const SHADE_PARTICLES : Array = [
+	BRIGHT_PARTICLES,
+	DARK_PARTICLES
+]
+
+const GENERAL_PARTICLES : Array[GLOBALS.Particle] = [
 	Particle.lepton, Particle.lepton_neutrino, Particle.bright_quark, Particle.dark_quark
 ]
 

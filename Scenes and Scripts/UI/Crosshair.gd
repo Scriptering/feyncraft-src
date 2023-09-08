@@ -6,7 +6,6 @@ signal moved(current_position, old_position)
 @onready var Level = get_tree().get_nodes_in_group('level')[0]
 @onready var StateManager = Level.get_node("state_manager")
 @onready var IdleCrosshair = $IdleCrosshair
-@onready var InteractionCrosshair = $InteractionCrosshair
 
 const Z_INDEX_IDLE := 0
 const Z_INDEX_DRAWING := 0
@@ -95,9 +94,12 @@ func is_placing_position_valid(try_position: Vector2) -> bool:
 	if is_crosshair_on_state_interaction(try_position):
 		return false
 	
-	var interactions := Diagram.get_interactions()
+	var particle_lines := Diagram.get_particle_lines()
+	var moving_line_count = particle_lines.reduce(
+		func(accum: int, particle_line: ParticleLine): return accum + int(!particle_line.is_placed), 0
+	)
 	
-	if interactions.size() > 0 and interactions.front().number_of_placing_lines > 1 and is_on_stateline(try_position):
+	if is_on_stateline(try_position) and moving_line_count > 1:
 		return false
 	
 	return true
@@ -112,23 +114,6 @@ func drawing_started() -> void:
 func drawing_ended() -> void:
 	IdleCrosshair.frame = 0
 	z_index = Z_INDEX_IDLE
-
-func interaction_picked_up(interaction: Interaction) -> void:
-	z_index = Z_INDEX_DRAWING
-	
-	InteractionCrosshair.show()
-	IdleCrosshair.hide()
-	
-	if interaction.get_on_state_line() == StateLine.StateType.None:
-		$InteractionDot.visible = interaction.Dot.visible
-	InteractionCrosshair.animation = interaction.Ball.animation
-	
-	print($InteractionDot.visible)
-
-func interaction_placed(_interaction: Interaction) -> void:
-	IdleCrosshair.show()
-	InteractionCrosshair.hide()
-	$InteractionDot.hide()
 
 func is_on_stateline(test_position: Vector2 = position) -> bool:
 	return test_position.x == Initial.position.x or test_position.x == Final.position.x

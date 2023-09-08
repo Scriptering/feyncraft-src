@@ -7,6 +7,8 @@ enum {INVALID}
 enum Connection {from_id, to_id, particle}
 enum EntryFactor {Entry = +1, Exit = -1}
 
+const MAX_REINDEX_ATTEMPTS : int = 100
+
 const state_factor : Dictionary = {
 	StateLine.StateType.Initial: +1,
 	StateLine.StateType.Final: -1
@@ -33,30 +35,51 @@ func init(new_size : int = 0, new_state_count: Array[int] = [0, 0, 0]) -> void:
 func set_connection_matrix(new_connection_matrix: Array) -> void:
 	connection_matrix = new_connection_matrix
 
+func remove_empty_rows() -> void:
+	for id in range(matrix_size - 1, -1, -1):
+		if get_connected_count(id, true) == 0:
+			remove_interaction(id)
+
 func connect_interactions(
-	connect_from_id: int, connect_to_id: int,
-	particle: int = GLOBALS.PARTICLE.none, bidirectional: bool = false) -> void:
+	from_id: int, to_id: int, particle: int = GLOBALS.PARTICLE.none, bidirectional: bool = false, reverse: bool = false
+) -> void:
+
+	if reverse:
+		var temp_id: int = from_id
+		from_id = to_id
+		to_id = temp_id
 	
-	check_bounds([connect_from_id, connect_to_id])
+	check_bounds([from_id, to_id])
 	
-	connection_matrix[connect_from_id][connect_to_id].append(particle)
+	connection_matrix[from_id][to_id].append(particle)
 	
 	if bidirectional:
-		connection_matrix[connect_to_id][connect_from_id].append(particle)
+		connection_matrix[to_id][from_id].append(particle)
+
+func swap_ids(id1: int, id2: int) -> void:
+	var temp_id2 : Array = connection_matrix[id2].duplicate(true)
+	
+	connection_matrix[id2] = connection_matrix[id1]
+	connection_matrix[id1] = temp_id2
 
 func insert_connection(connection: Array) -> void:
 	connect_interactions(connection[Connection.from_id], connection[Connection.to_id], connection[Connection.particle])
 
 func disconnect_interactions(
-	disconnect_from_id: int, disconnect_to_id: int,
-	particle: int = GLOBALS.Particle.none, bidirectional: bool = false) -> void:
+	from_id: int, to_id: int, particle: int = GLOBALS.Particle.none, bidirectional: bool = false, reverse: bool = false
+) -> void:
+
+	if reverse:
+		var temp_id: int = from_id
+		from_id = to_id
+		to_id = temp_id
 	
-	check_bounds([disconnect_from_id, disconnect_to_id])
+	check_bounds([from_id, to_id])
 	
-	connection_matrix[disconnect_from_id][disconnect_to_id].erase(particle)
+	connection_matrix[from_id][to_id].erase(particle)
 	
 	if bidirectional:
-		connection_matrix[disconnect_to_id][disconnect_from_id].erase(particle)
+		connection_matrix[to_id][from_id].erase(particle)
 
 func remove_connection(connection: Array) -> void:
 	disconnect_interactions(connection[Connection.from_id], connection[Connection.to_id], connection[Connection.particle])
@@ -114,56 +137,81 @@ func remove_interaction(id: int) -> void:
 	matrix_size -= 1
 
 func are_interactions_connected(
-	from_id: int, to_id: int, bidirectional: bool = false, particle: GLOBALS.Particle = GLOBALS.Particle.none
+	from_id: int, to_id: int, bidirectional: bool = false, particle: GLOBALS.Particle = GLOBALS.Particle.none, reverse: bool = false
 ) -> bool:
+	
+	if reverse:
+		var temp_id: int = from_id
+		from_id = to_id
+		to_id = temp_id
 	
 	if particle == GLOBALS.Particle.none:
 		return connection_matrix[from_id][to_id].size() != 0 or (bidirectional and connection_matrix[to_id][from_id].size() != 0)
 	else:
 		return particle in connection_matrix[from_id][to_id] or (bidirectional and particle in connection_matrix[to_id][from_id])
 
-func get_connection_size(from_id: int, to_id: int, bidirectional: bool = false) -> int:
+func get_connection_size(from_id: int, to_id: int, bidirectional: bool = false, reverse: bool = false) -> int:
+	if reverse:
+		var temp_id: int = from_id
+		from_id = to_id
+		to_id = temp_id
+	
 	return connection_matrix[from_id][to_id].size() + int(bidirectional) * connection_matrix[to_id][from_id].size()
 
-func get_connected_count(id: int, bidirectional: bool = false) -> int:
+func get_connected_count(id: int, bidirectional: bool = false, reverse: bool = false) -> int:
 	var connection_count : int = 0
 	
-	for connection_id in get_connected_ids(id, bidirectional):
-		connection_count += get_connection_size(id, connection_id, bidirectional)
+	for connection_id in get_connected_ids(id, bidirectional, GLOBALS.Particle.none, reverse):
+		connection_count += get_connection_size(id, connection_id, bidirectional, reverse)
 	
 	return connection_count
 
-func get_connected_ids(id: int, bidirectional: bool = false, particle: GLOBALS.Particle = GLOBALS.Particle.none) -> PackedInt32Array:
+func get_connected_ids(
+	id: int, bidirectional: bool = false, particle: GLOBALS.Particle = GLOBALS.Particle.none, reverse: bool = false,
+	include_directionless: bool = false
+) -> PackedInt32Array:
+	
 	var connected_ids: PackedInt32Array = []
 	
 	for jd in range(matrix_size):
-		if are_interactions_connected(id, jd, bidirectional, particle):
+		if are_interactions_connected(id, jd, bidirectional, particle, reverse):
+			connected_ids.push_back(jd)
+			continue
+		
+		if include_directionless and get_connection_particles(id, jd, false, true, reverse).size() > 0:
 			connected_ids.push_back(jd)
 	
 	return connected_ids
 
-func get_connected_particles(id: int, bidirectional: bool = false) -> Array:
+func get_sorted_connected_particles(
+	id: int, bidirectional: bool = false, include_directionless: bool = false, reverse: bool = false
+) -> Array:
+	var connected_particles: Array = get_connected_particles(id, bidirectional, include_directionless, reverse)
+	connected_particles.sort()
+	return connected_particles
+
+func get_connected_particles(id: int, bidirectional: bool = false, include_directionless: bool = false, reverse: bool = false) -> Array:
 	var connected_particles: Array = []
 	
 	for jd in range(matrix_size):
-		connected_particles += get_connection_particles(id, jd, bidirectional)
+		connected_particles += get_connection_particles(id, jd, bidirectional, include_directionless, reverse)
 	
 	return connected_particles
-
-func get_reverse_connected_particles(id: int, bidirectional: bool = false) -> Array:
-	var reverse_connected_particles: Array = []
-	
-	for jd in range(matrix_size):
-		reverse_connected_particles += get_connection_particles(jd, id, bidirectional)
-	
-	return reverse_connected_particles
 
 func get_sorted_connection_particles(from_id: int, to_id: int, bidirectional: bool = false, include_directionless: bool = false) -> Array:
 	var connection_particles: Array = get_connection_particles(from_id, to_id, bidirectional, include_directionless)
 	connection_particles.sort()
 	return connection_particles
 
-func get_connection_particles(from_id: int, to_id: int, bidirectional: bool = false, include_directionless: bool = false) -> Array:
+func get_connection_particles(
+	from_id: int, to_id: int, bidirectional: bool = false, include_directionless: bool = false, reverse: bool = false
+) -> Array:
+	
+	if reverse:
+		var temp_id: int = from_id
+		from_id = to_id
+		to_id = temp_id
+	
 	var connection_particles : Array = connection_matrix[from_id][to_id]
 	
 	if bidirectional:
@@ -237,6 +285,9 @@ func get_state_from_id(id: int) -> StateLine.StateType:
 	
 	return StateLine.StateType.None
 
+func get_id_state_index(id: int) -> int:
+	return id - get_starting_state_id(get_state_from_id(id))
+
 func get_state_count(state: StateLine.StateType) -> int:
 	if state == StateLine.StateType.Both:
 		return state_count[StateLine.StateType.Initial] + state_count[StateLine.StateType.Final]
@@ -283,13 +334,17 @@ func duplicate():
 	
 	return new_connection_matrix
 
+func is_extreme_point(id: int, entry_factor: EntryFactor) -> bool:
+	if get_state_from_id(id) == StateLine.StateType.None:
+		return false
+	
+	return get_connected_count(id, false, entry_factor == EntryFactor.Exit) != 0
+
 func get_extreme_points(entry_factor: EntryFactor) -> PackedInt32Array:
 	var extreme_points: PackedInt32Array = []
 	
-	for state_id in range(get_state_count(StateLine.StateType.Both)):
-		if get_connected_count(state_id) != 0 and entry_factor == EntryFactor.Entry:
-			extreme_points.push_back(state_id)
-		elif get_connected_count(state_id, true) != 0 and entry_factor == EntryFactor.Exit:
+	for state_id in get_state_ids(StateLine.StateType.Both):
+		if is_extreme_point(state_id, entry_factor):
 			extreme_points.push_back(state_id)
 	
 	return extreme_points
@@ -300,14 +355,23 @@ func get_entry_points() -> PackedInt32Array:
 func get_exit_points() -> PackedInt32Array:
 	return get_extreme_points(EntryFactor.Exit)
 
-func get_state_particles(state: StateLine.StateType) -> Array:
-	var state_particles: Array = []
+func get_state_interactions(state: StateLine.StateType) -> Array:
+	var state_interactions: Array = []
 	
 	for from_state_id in get_state_ids(state):
+		var state_interaction: Array = [] 
 		for to_id in matrix_size:
-			state_particles += get_connection_particles(from_state_id, to_id, true)
+			state_interaction += get_connection_particles(from_state_id, to_id, false, false, true).map(
+				func(base_particle: GLOBALS.Particle): return -1 * StateLine.state_factor[state] * base_particle
+			)
+			
+			state_interaction += get_connection_particles(from_state_id, to_id).map(
+				func(base_particle: GLOBALS.Particle): return StateLine.state_factor[state] * base_particle
+			)
+		
+		state_interactions.push_back(state_interaction)
 	
-	return state_particles
+	return state_interactions
 
 func get_unique(array: Array) -> Array:
 	var unique_elements: Array = []
@@ -321,10 +385,93 @@ func get_unique(array: Array) -> Array:
 func is_duplicate(comparison_matrix: ConnectionMatrix) -> bool:
 	for i in matrix_size:
 		for j in matrix_size:
-			if get_sorted_connection_particles(i, j) != comparison_matrix.get_sorted_connection_particles(i, j):
+			if get_sorted_connection_particles(i, j, false, true) != comparison_matrix.get_sorted_connection_particles(i, j, false, true):
 				return false
 			
 	return true
+
+func get_further_reindex_points(reindexed_id: int, reindexed_ids: Array) -> Array:
+	var non_reindexed_ids: Array = []
+	for connected_id in get_connected_ids(reindexed_id, false, GLOBALS.Particle.none, false, true):
+		if connected_id not in reindexed_ids and connected_id not in non_reindexed_ids:
+			non_reindexed_ids.push_back(connected_id)
+	
+	var non_reindexed_size: int = non_reindexed_ids.size()
+	
+	if non_reindexed_size == 0:
+		return []
+	elif non_reindexed_size == 1:
+		return non_reindexed_ids
+	
+	var further_reindex_points: Array = []
+	var self_connection_sizes: Array = []
+	
+	for i in range(non_reindexed_size):
+		var connection_count: int = 0
+		
+		for id in non_reindexed_ids:
+			if i == id:
+				pass
+			
+			connection_count += get_connection_size(non_reindexed_ids[i], id)
+		
+		self_connection_sizes.push_back(connection_count)
+	
+	for i in range(non_reindexed_size):
+		if self_connection_sizes.count(self_connection_sizes[i]) == 1:
+			further_reindex_points.push_back(non_reindexed_ids[i])
+	
+	if further_reindex_points.size() != 0:
+		return further_reindex_points
+	
+	var connected_particles: Array = []
+	var connected_counts: Array = []
+	for i in range(non_reindexed_size):
+		connected_particles.push_back(get_sorted_connected_particles(non_reindexed_ids[i]))
+		connected_counts.push_back(get_connected_count(non_reindexed_ids[i]))
+	
+	for i in range(non_reindexed_size):
+		if connected_particles.count(connected_particles[i]) == 1 or connected_counts.count(connected_counts[i]) == 1:
+			further_reindex_points.push_back(non_reindexed_ids[i])
+	
+	if further_reindex_points.size() != 0:
+		return further_reindex_points
+	
+	var further_points_counts: Array = []
+	for non_reindexed_id in non_reindexed_ids:
+		var further_further_points : Array = get_further_reindex_points(non_reindexed_id, reindexed_ids + non_reindexed_ids)
+		further_points_counts.push_back(further_further_points.size())
+		
+		further_reindex_points += further_further_points
+	
+	non_reindexed_ids.sort_custom(
+		func(id1: int, id2: int):
+			return further_points_counts[non_reindexed_ids.find(id1)] > further_points_counts[non_reindexed_ids.find(id2)]
+	)
+	
+	further_reindex_points = non_reindexed_ids + further_reindex_points
+	
+	return further_reindex_points
+	
+
+func reindex_further_paths(reindex_dictionary: Dictionary, travel_matrix: Array[PackedInt32Array]) -> Dictionary:
+	var reindexed_ids : Array = reindex_dictionary.keys()
+	reindexed_ids.sort()
+	
+	for reindexed_id in reindexed_ids:
+		var further_from_reindex_points: PackedInt32Array = get_further_reindex_points(reindexed_id, reindexed_ids)
+		
+		for further_point in further_from_reindex_points:
+			if further_point in reindex_dictionary.keys():
+				continue
+				
+			reindex_dictionary[further_point] = reindex_dictionary.size()
+			reindex_from_point(further_point, reindex_dictionary, travel_matrix)
+			
+			if reindex_dictionary.size() == matrix_size:
+				return reindex_dictionary
+	
+	return reindex_dictionary
 
 func generate_reindex_dictionary() -> Dictionary:
 	var reindex_dictionary: Dictionary = {}
@@ -333,16 +480,14 @@ func generate_reindex_dictionary() -> Dictionary:
 	
 	for state_id in state_ids:
 		reindex_dictionary[state_id] = state_id
-	
+
 	for state_id in state_ids:
 		reindex_from_point(state_id, reindex_dictionary, travel_matrix)
 		if reindex_dictionary.size() == matrix_size:
 			return reindex_dictionary
 	
-	for state_id in state_ids:
-		var state_paths := generate_paths_from_point(state_id)
-		index_state_paths(reindex_dictionary, get_unique(state_paths))
-		
+	for reindex_attempt in range(MAX_REINDEX_ATTEMPTS):
+		reindex_dictionary = reindex_further_paths(reindex_dictionary, travel_matrix)
 		if reindex_dictionary.size() == matrix_size:
 			return reindex_dictionary
 	
@@ -354,7 +499,13 @@ func reindex() -> void:
 	var reindexed_connection_matrix : Array = connection_matrix.duplicate(true)
 	
 	for i in matrix_size:
+		if i not in reindex_dictionary.keys():
+			continue
+		
 		for j in matrix_size:
+			if j not in reindex_dictionary.keys():
+				continue
+
 			reindexed_connection_matrix[reindex_dictionary[i]][reindex_dictionary[j]] = connection_matrix[i][j]
 	
 	connection_matrix = reindexed_connection_matrix.duplicate(true)
@@ -380,11 +531,12 @@ func reindex_from_point(point: int, reindex_dictionary: Dictionary, travel_matri
 		connected_particles.push_back(get_sorted_connection_particles(point, id, false, true).front())
 	
 	var unique_particle_connected_ids: Array = []
+	var non_unique_particles: Array = []
+	var ids_to_further_sort: Array[PackedInt32Array] = []
 	for id in connected_ids:
-		if connected_particles.count(get_sorted_connection_particles(point, id, false, true).front()) > 1:
+		if connected_particles.count(get_sorted_connection_particles(point, id, false, true).front()) == 1:
+			unique_particle_connected_ids.push_back(id)
 			continue
-		
-		unique_particle_connected_ids.push_back(id)
 	
 	unique_particle_connected_ids.sort_custom(
 		func(id1: int, id2: int):

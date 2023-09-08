@@ -6,7 +6,7 @@ signal picked_up
 signal dropped
 
 @export
-var GrabArea: Node
+var GrabAreas: Array[Node]
 
 var grabbed: bool = false: set = _grabbed_changed
 var grab_area_hovered: bool = false: set = _grab_area_hovered_changed
@@ -14,8 +14,10 @@ var grabbable: bool = true: set = _grabbable_changed
 
 func _ready():
 	add_to_group("grabbable")
-	GrabArea.connect("mouse_entered", Callable(self, "_on_GrabArea_mouse_entered"))
-	GrabArea.connect("mouse_exited", Callable(self, "_on_GrabArea_mouse_exited"))
+	
+	for GrabArea in GrabAreas:
+		GrabArea.mouse_entered.connect(_on_GrabArea_mouse_entered)
+		GrabArea.mouse_exited.connect(_on_GrabArea_mouse_exited)
 
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("click") and grab_area_hovered:

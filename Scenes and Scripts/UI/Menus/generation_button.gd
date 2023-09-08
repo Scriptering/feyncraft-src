@@ -41,10 +41,14 @@ func init(diagram: DiagramBase, generation: Node, generated_diagram_viewer: Mini
 	GeneratedDiagramViewer = generated_diagram_viewer
 	
 	GeneratedDiagramViewer.closed.connect(toggle_diagram_viewer)
+	GeneratedDiagramViewer.diagram_deleted.connect(_diagram_deleted)
 
 func _set_can_generate(new_value: bool) -> void:
 	can_generate = new_value
 	GenerateButton.disabled = !new_value
+
+func update_view_button() -> void:
+	$MovingContainer/PanelContainer/VBoxContainer/HBoxContainer/View.disabled = GeneratedDiagramViewer.get_diagram_count() == 0
 
 func get_state_interactions(state_line: StateLine) -> Array:
 	var state_interactions : Array = []
@@ -71,6 +75,9 @@ func set_checks(state_interactions : Array) -> void:
 	if GLOBALS.Particle.H in particles or GLOBALS.Particle.Z in particles:
 		set_electroweak_check(true)
 
+func _diagram_deleted(_index: int) -> void:
+	update_view_button()
+
 func _on_options_pressed() -> void:
 	OptionsContainer.visible = !OptionsContainer.visible
 
@@ -94,6 +101,8 @@ func generate(checks: Array[bool]) -> void:
 			InitialState, FinalState, DegreeRange.minValue, DegreeRange.maxValue, Generation.get_usable_interactions(checks)
 		)
 	)
+	
+	update_view_button()
 
 func _on_em_toggled(button_pressed: bool) -> void:
 	electroweak_type_button_pressed(button_pressed)

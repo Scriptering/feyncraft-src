@@ -25,6 +25,7 @@ signal clicked_on
 enum Anti {anti = -1, noanti = +1}
 enum Point {Start = 0, End = 1, Invalid = -1}
 enum PointsConnected {None, Left, Right, Both}
+enum Shade {Bright, Dark}
 
 var Diagram: MainDiagram
 var Initial: StateLine
