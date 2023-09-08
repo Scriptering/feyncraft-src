@@ -362,6 +362,9 @@ func connect_interaction_matrix(
 		return [null]
 	
 	if find == Find.One:
+		directional_interaction_matrices.shuffle()
+		directionless_interaction_matrices.shuffle()
+		
 		for i in range(directional_interaction_matrices.size()):
 			for j in range(directionless_interaction_matrices.size()):
 				var combined_connection_matrix : ConnectionMatrix = combine_connection_matrices(

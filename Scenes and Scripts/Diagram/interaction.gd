@@ -320,11 +320,10 @@ func is_interaction_in_list() -> bool:
 	var sorted_connected_base_particles := self.connected_base_particles.duplicate(true)
 	sorted_connected_base_particles.sort()
 	
-	for interaction_type in GLOBALS.INTERACTIONS:
-		if sorted_connected_base_particles in interaction_type:
-			return true
-	
-	return false
+	return (
+		GLOBALS.INTERACTIONS.any(func(interaction_type: Array): return sorted_connected_base_particles in interaction_type) or
+		GLOBALS.GENERAL_INTERACTIONS.any(func(interaction_type: Array): return sorted_connected_base_particles in interaction_type)
+	)
 
 func is_hovered() -> bool:
 	return hovering

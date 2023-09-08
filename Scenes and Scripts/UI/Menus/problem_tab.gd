@@ -24,6 +24,7 @@ func init(
 	diagram: DiagramBase, _current_problem: Problem, submitted_diagrams_viewer: MiniDiagramViewer, problem_generation: Node,
 	_solution_generation: Node
 ) -> void:
+
 	Diagram = diagram
 	current_problem = _current_problem
 	SubmittedDiagramViewer = submitted_diagrams_viewer
@@ -101,9 +102,17 @@ func toggle_diagram_viewer() -> void:
 func _on_view_submissions_pressed() -> void:
 	toggle_diagram_viewer()
 
-func load_new_problem(problem: Problem) -> void:
+func load_new_problem(problem: Problem, save_to_history: bool = true) -> void:
+	if save_to_history:
+		problem_history.push_back(current_problem)
 	current_problem = problem
 	Equation.load_problem(problem)
 	
 func _on_solution_pressed() -> void:
 	EVENTBUS.draw_diagram_raw(generate_solution())
+
+func _on_rewind_pressed() -> void:
+	load_new_problem(problem_history[-1], false)
+	problem_history.pop_back()
+	
+	$MovingContainer/VBoxContainer/Tab/HBoxContainer/Rewind.disabled = problem_history.size() == 0

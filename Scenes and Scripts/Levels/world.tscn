@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://c7n4o6dbkwilh"]
+[gd_scene load_steps=36 format=3 uid="uid://c7n4o6dbkwilh"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/Levels/World.gd" id="1"]
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="1_ovngh"]
@@ -11,7 +11,9 @@
 [ext_resource type="PackedScene" uid="uid://bhi4xq3qdbt4d" path="res://Scenes and Scripts/Diagram/interaction.tscn" id="6_aqbiw"]
 [ext_resource type="Texture2D" uid="uid://c3cqabe0p66kd" path="res://Textures/UI/clear_control.png" id="7"]
 [ext_resource type="PackedScene" uid="uid://b22nw60juoc6k" path="res://Scenes and Scripts/Diagram/line.tscn" id="7_sgp8p"]
+[ext_resource type="Texture2D" uid="uid://doyaei3vq3cbb" path="res://Textures/Background/state_line_shadow_top.png" id="8_fwvkc"]
 [ext_resource type="Texture2D" uid="uid://d1e2fabmfhkx7" path="res://Textures/UI/drag_control.png" id="9"]
+[ext_resource type="Texture2D" uid="uid://basekc2ce6rmp" path="res://Textures/Background/state_line_shadow_tile.png" id="9_075jn"]
 [ext_resource type="PackedScene" uid="uid://brd5auomhnn6l" path="res://Scenes and Scripts/UI/Cursor.tscn" id="10"]
 [ext_resource type="PackedScene" uid="uid://byrhmsj4f7kxm" path="res://Scenes and Scripts/Algorithms/PathFinding.tscn" id="13"]
 [ext_resource type="PackedScene" uid="uid://bs6vtukhlou2r" path="res://Scenes and Scripts/Algorithms/problem_generation.tscn" id="13_62803"]
@@ -46,7 +48,7 @@ expand_margin_top = 1.0
 expand_margin_right = 1.0
 expand_margin_bottom = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_xq4je"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_kor41"]
 resource_name = "ParticleButtons"
 allow_unpress = true
 
@@ -92,11 +94,88 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_2v8fu")
 
 [node name="DiagramArea" type="Control" parent="Diagram"]
+use_parent_material = true
 anchors_preset = 0
 offset_left = 64.0
 offset_right = 384.0
 offset_bottom = 256.0
 mouse_filter = 1
+
+[node name="InitialShadow" type="VBoxContainer" parent="Diagram/DiagramArea"]
+use_parent_material = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -164.0
+offset_top = 1.0
+offset_right = -156.0
+offset_bottom = 255.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Top" type="TextureRect" parent="Diagram/DiagramArea/InitialShadow"]
+use_parent_material = true
+layout_mode = 2
+texture = ExtResource("8_fwvkc")
+stretch_mode = 2
+
+[node name="Middle" type="TextureRect" parent="Diagram/DiagramArea/InitialShadow"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("9_075jn")
+stretch_mode = 1
+
+[node name="Bottom" type="TextureRect" parent="Diagram/DiagramArea/InitialShadow"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("8_fwvkc")
+stretch_mode = 2
+flip_h = true
+flip_v = true
+
+[node name="FinalShadow" type="VBoxContainer" parent="Diagram/DiagramArea"]
+use_parent_material = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 156.0
+offset_top = 1.0
+offset_right = 164.0
+offset_bottom = 255.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Top" type="TextureRect" parent="Diagram/DiagramArea/FinalShadow"]
+use_parent_material = true
+layout_mode = 2
+texture = ExtResource("8_fwvkc")
+stretch_mode = 2
+
+[node name="Middle" type="TextureRect" parent="Diagram/DiagramArea/FinalShadow"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("9_075jn")
+stretch_mode = 1
+
+[node name="Bottom" type="TextureRect" parent="Diagram/DiagramArea/FinalShadow"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("8_fwvkc")
+stretch_mode = 2
+flip_h = true
+flip_v = true
 
 [node name="Initial" parent="Diagram/DiagramArea" instance=ExtResource("4")]
 layout_mode = 2
@@ -208,7 +287,7 @@ offset_right = 159.0
 offset_bottom = 336.0
 grow_vertical = 0
 size_flags_horizontal = 4
-particle_button_group = SubResource("ButtonGroup_xq4je")
+particle_button_group = SubResource("ButtonGroup_kor41")
 
 [node name="GenerationButton" parent="PullOutTabs" instance=ExtResource("22_u64s1")]
 offset_left = -76.0

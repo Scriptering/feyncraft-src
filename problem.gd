@@ -49,7 +49,10 @@ func get_sorted_states(states: Array) -> Array:
 	)
 
 func is_matching_states(reduced_submission: ConnectionMatrix) -> bool:
-	var sorted_submitted_states: Array = get_sorted_states(reduced_submission.get_state_interactions())
+	var sorted_submitted_states: Array = get_sorted_states([
+		reduced_submission.get_state_interactions(StateLine.StateType.Initial),
+		reduced_submission.get_state_interactions(StateLine.StateType.Final)
+	])
 	var sorted_states: Array = get_sorted_states(state_interactions)
 	
 	for state in [StateLine.StateType.Initial, StateLine.StateType.Final]:

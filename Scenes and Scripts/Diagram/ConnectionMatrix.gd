@@ -355,18 +355,18 @@ func get_entry_points() -> PackedInt32Array:
 func get_exit_points() -> PackedInt32Array:
 	return get_extreme_points(EntryFactor.Exit)
 
-func get_state_interactions(state: StateLine.StateType = StateLine.StateType.Both) -> Array:
+func get_state_interactions(state: StateLine.StateType) -> Array:
 	var state_interactions: Array = []
 	
 	for from_state_id in get_state_ids(state):
 		var state_interaction: Array = [] 
 		for to_id in matrix_size:
 			state_interaction += get_connection_particles(from_state_id, to_id, false, false, true).map(
-				func(base_particle: GLOBALS.Particle): return -1 * StateLine.state_factor[get_state_from_id(from_state_id)] * base_particle
+				func(base_particle: GLOBALS.Particle): return -1 * StateLine.state_factor[state] * base_particle
 			)
 			
 			state_interaction += get_connection_particles(from_state_id, to_id).map(
-				func(base_particle: GLOBALS.Particle): return StateLine.state_factor[get_state_from_id(from_state_id)] * base_particle
+				func(base_particle: GLOBALS.Particle): return StateLine.state_factor[state] * base_particle
 			)
 		
 		state_interactions.push_back(state_interaction)

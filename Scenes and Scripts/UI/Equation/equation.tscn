@@ -156,5 +156,5 @@ size_flags_horizontal = 10
 theme_override_constants/separation = 0
 alignment = 2
 
-[connection signal="child_entered_tree" from="HBoxContainer/LeftMarginContainer/LeftScrollContainer" to="." method="_on_left_scroll_container_child_entered_tree"]
+[connection signal="child_entered_tree" from="HBoxContainer/LeftMarginContainer/LeftScrollContainer" to="." method="_on_scroll_container_child_entered_tree"]
 [connection signal="child_entered_tree" from="HBoxContainer/RightMarginContainer/RightScrollContainer" to="." method="_on_scroll_container_child_entered_tree"]
