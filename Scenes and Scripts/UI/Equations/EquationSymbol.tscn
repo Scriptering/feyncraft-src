@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://bhn0iymjmye2g"]
+[gd_scene load_steps=6 format=3 uid="uid://dedmmmrsqtjpw"]
 
 [ext_resource type="Texture2D" uid="uid://bhudxuhqjghi2" path="res://Textures/ParticlesAndLines/anti_down.png" id="1"]
 [ext_resource type="Shader" path="res://Resources/Shaders/particle_line.gdshader" id="1_778kk"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Equations/EquationSymbol.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="4_7bq6a"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yumpo"]
 shader = ExtResource("1_778kk")
@@ -22,3 +23,6 @@ texture = ExtResource("1")
 expand_mode = 3
 stretch_mode = 4
 script = ExtResource("2")
+
+[node name="Tooltip" parent="." instance=ExtResource("4_7bq6a")]
+z_index = 2

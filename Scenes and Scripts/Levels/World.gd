@@ -8,7 +8,7 @@ extends Node2D
 
 @onready var FPS = get_node('FPS')
 @onready var Cursor = get_node('Cursor')
-@onready var Pathfinding = $Algorithms/PathFindingPathFinding
+@onready var Pathfinding = $Algorithms/PathFinding
 @onready var SolutionGeneration = $Algorithms/SolutionGeneration
 @onready var ProblemGeneration = $Algorithms/ProblemGeneration
 
@@ -53,11 +53,15 @@ func _ready():
 	States.init(Cursor, $Diagram)
 	$Diagram.init($PullOutTabs/ParticleButtons)
 	$ShaderControl.init($PalletteButtons)
-	$PullOutTabs/GenerationButton.init($Diagram, $SolutionGeneration, $FloatingMenus/GeneratedDiagrams)
-	$PullOutTabs/ProblemTab.init($Diagram, Problem.new(), $FloatingMenus/SubmittedDiagrams)
+	$PullOutTabs/GenerationButton.init($Diagram, $Algorithms/SolutionGeneration, $FloatingMenus/GeneratedDiagrams)
+	$PullOutTabs/ProblemTab.init(
+		$Diagram, Problem.new(), $FloatingMenus/SubmittedDiagrams, $Algorithms/ProblemGeneration, $Algorithms/SolutionGeneration
+	)
 	$Algorithms/PathFinding.init($Diagram, $Diagram.StateLines)
+	$Algorithms/ProblemGeneration.init($Algorithms/SolutionGeneration)
 	
 	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
+
 
 func _process(_delta):
 	FPS.text = str(Engine.get_frames_per_second())

@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://fl01bx28xqrn"]
+[gd_scene load_steps=18 format=3 uid="uid://fl01bx28xqrn"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_e0bw4"]
 [ext_resource type="Texture2D" uid="uid://c7tah165tpo1j" path="res://Textures/UI/Equation/scroll_grabber_normal.png" id="2_l4jgc"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://dxt3ti14uhl8s" path="res://Textures/UI/Equation/boundary.png" id="5_1nqt5"]
 [ext_resource type="Texture2D" uid="uid://cqenoy2xbqeok" path="res://Textures/UI/Equation/scrollbar.png" id="5_byqw6"]
 [ext_resource type="Texture2D" uid="uid://denysnbqxm0co" path="res://Textures/UI/Equation/equation_arrow.png" id="6_nibs3"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/Equation/ProblemEquation.gd" id="7_buqx1"]
 [ext_resource type="Texture2D" uid="uid://b7be8bbrdmc4v" path="res://Textures/UI/Equation/boundary_flipped.png" id="7_kdpci"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bhtjg"]
@@ -71,6 +72,7 @@ custom_minimum_size = Vector2(200, 24)
 offset_right = 200.0
 offset_bottom = 24.0
 theme = SubResource("Theme_fbh0y")
+script = ExtResource("7_buqx1")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 use_parent_material = true
@@ -143,7 +145,7 @@ vertical_scroll_mode = 0
 
 [node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/RightMarginContainer/RightScrollContainer"]
 layout_mode = 2
-size_flags_horizontal = 10
+size_flags_horizontal = 2
 theme_override_constants/margin_bottom = -1
 
 [node name="RightEquation" type="HBoxContainer" parent="HBoxContainer/RightMarginContainer/RightScrollContainer/MarginContainer"]
@@ -153,3 +155,6 @@ layout_mode = 2
 size_flags_horizontal = 10
 theme_override_constants/separation = 0
 alignment = 2
+
+[connection signal="child_entered_tree" from="HBoxContainer/LeftMarginContainer/LeftScrollContainer" to="." method="_on_left_scroll_container_child_entered_tree"]
+[connection signal="child_entered_tree" from="HBoxContainer/RightMarginContainer/RightScrollContainer" to="." method="_on_scroll_container_child_entered_tree"]

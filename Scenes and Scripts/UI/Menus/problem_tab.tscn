@@ -213,6 +213,7 @@ layout_mode = 2
 icon = ExtResource("5_t5pc5")
 minimum_size = Vector2(26, 24)
 expand_icon = true
+disabled = true
 icon_use_parent_material = true
 
 [node name="Tooltip" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer/Rewind" instance=ExtResource("7_itf5n")]
@@ -262,5 +263,6 @@ TabIcon = ExtResource("9_oqp5o")
 TabMinimumSize = Vector2(33, 15)
 icon_use_parent_material = true
 
+[connection signal="pressed" from="MovingContainer/VBoxContainer/Tab/HBoxContainer/Solution" to="." method="_on_solution_pressed"]
 [connection signal="pressed" from="MovingContainer/VBoxContainer/Tab/HBoxContainer/ViewSubmissions" to="." method="_on_view_submissions_pressed"]
 [connection signal="pressed" from="MovingContainer/VBoxContainer/Tab/HBoxContainer/Submit" to="." method="_on_submit_pressed"]

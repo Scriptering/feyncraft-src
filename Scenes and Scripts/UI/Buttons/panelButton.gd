@@ -6,6 +6,8 @@ signal hide_tooltip
 signal pressed
 signal on_pressed 
 signal toggled
+signal button_mouse_entered
+signal button_mouse_exited
 
 @export var icon: Texture2D : set = _set_button_icon
 @export var text: String : set = _set_button_text
@@ -18,7 +20,6 @@ signal toggled
 @export var icon_use_parent_material: bool = false: set = _set_icon_use_parent_material
 @export var mute: bool = false
 
-
 @onready var button = $Button
 @onready var label = $ContentContainer/HBoxContainer/ButtonText
 @onready var iconSprite = $ContentContainer/HBoxContainer/ButtonIcon
@@ -27,13 +28,25 @@ enum {NORMAL, PRESSED}
 const ButtonState : Array[String] = ['normal', 'pressed']
 
 var previous_button_pressed : bool
+var is_hovered: bool:
+	get:
+		return button.is_hovered()
 
 func _ready() -> void:
 	previous_button_pressed = button_pressed
 	set_content_margins(ButtonState[NORMAL])
 	
-	$Button.mouse_entered.connect(func(): emit_signal("mouse_entered"))
-	$Button.mouse_exited.connect(func(): emit_signal("mouse_exited"))
+	$Button.mouse_entered.connect(
+		func(): 
+			emit_signal("mouse_entered")
+			emit_signal("button_mouse_entered", self)
+	)
+	
+	$Button.mouse_exited.connect(
+		func(): 
+			emit_signal("mouse_exited")
+			emit_signal("button_mouse_exited", self)
+	)
 
 func _set_icon_use_parent_material(new_value: bool) -> void:
 	icon_use_parent_material = new_value

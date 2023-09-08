@@ -1,6 +1,8 @@
 extends Node
 class_name BaseState
 
+signal change_cursor
+
 enum State {
 	Null,
 	Idle,
@@ -10,7 +12,6 @@ enum State {
 	Drawing
 }
 
-var cursor : Sprite2D
 var crosshair : Node2D
 var state_manager : Node
 var Diagram : DiagramBase
@@ -18,7 +19,7 @@ var Diagram : DiagramBase
 @export var cursor_state : GLOBALS.CURSOR
 
 func enter() -> void:
-	cursor.change_cursor(cursor_state)
+	emit_signal("change_cursor", cursor_state)
 
 func exit() -> void:
 	pass

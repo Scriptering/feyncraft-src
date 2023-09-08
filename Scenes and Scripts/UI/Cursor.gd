@@ -42,12 +42,12 @@ func _ready():
 	offset = Scale * normal_offset
 	Heart.offset = Scale * normal_heart_offset
 	
+	EVENTBUS.signal_change_cursor.connect(change_cursor)
+	
 #	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 
 func _input(event: InputEvent) -> void:
-#	if Input.mouse_mode != Input.MOUSE_MODE_HIDDEN:
-#		Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
-	
+
 	if event is InputEventKey:
 		if check_love():
 			self.glowing = !glowing
@@ -95,9 +95,7 @@ func _process(_delta):
 
 func change_cursor(cursor: GLOBALS.CURSOR):
 	if cursor == GLOBALS.CURSOR.default:
-		if hovering_disabled_button():
-			cursor = GLOBALS.CURSOR.disabled
-		elif angry:
+		if angry:
 			cursor = GLOBALS.CURSOR.middle
 		else:
 			cursor = GLOBALS.CURSOR.point
@@ -106,12 +104,3 @@ func change_cursor(cursor: GLOBALS.CURSOR):
 		texture = cursors[cursor]
 		Input.set_custom_mouse_cursor(cursors[cursor], Input.CURSOR_ARROW, Vector2(12, 6))
 		current_cursor = cursor
-
-func hovering_disabled_button() -> bool:
-	var buttons = get_tree().get_nodes_in_group('UIbuttons')
-	
-	for button in buttons:
-		if button.is_hovered() and button.disabled:
-			return true
-	
-	return false

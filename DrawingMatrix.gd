@@ -26,9 +26,21 @@ func add_interaction_with_position(
 	add_interaction(interaction_state, id)
 	add_interaction_position(interaction_position, grid_size, id)
 
+func duplicate() -> DrawingMatrix:
+	var new_drawing_matrix: DrawingMatrix = DrawingMatrix.new()
+	new_drawing_matrix.split_hadron_ids = split_hadron_ids.duplicate(true)
+	new_drawing_matrix.normalised_interaction_positions = normalised_interaction_positions.duplicate()
+	new_drawing_matrix.state_line_positions = state_line_positions.duplicate()
+	new_drawing_matrix.connection_matrix = connection_matrix.duplicate(true)
+	new_drawing_matrix.state_count = state_count.duplicate()
+	new_drawing_matrix.matrix_size = connection_matrix.size()
+	
+	return new_drawing_matrix
+
 func make_drawable() -> void:
 	split_hadrons()
 	seperate_double_connections()
+	reorder_hadrons()
 
 func seperate_double_connections() -> void:
 	for i in range(matrix_size):
@@ -109,3 +121,108 @@ func split_hadron(hadron_id: int) -> void:
 			connect_interactions(connection_id, new_interaction_id, connecting_particle)
 	
 		new_interaction_id += 1
+
+func get_directly_connected_ids() -> PackedInt32Array:
+	var directly_connected_ids: PackedInt32Array
+	
+	for from_id in get_state_ids(StateLine.StateType.Both):
+		for to_id in get_connected_ids(from_id):
+			if get_state_from_id(to_id) == StateLine.StateType.None:
+				continue
+			
+			directly_connected_ids.push_back(from_id)
+	
+	return directly_connected_ids
+
+func get_id_hadron_index(id: int) -> int:
+	for hadron_ids in split_hadron_ids:
+		if id not in hadron_ids:
+			continue
+		
+		return hadron_ids.find(id)
+	
+	return -1
+
+func reorder_hadrons() -> void:
+	var directly_connected_ids: PackedInt32Array = get_directly_connected_ids()
+	
+	for i in range(directly_connected_ids.size()):
+		var from_id: int = directly_connected_ids[i]
+		var to_id: int = get_connected_ids(from_id)[0]
+		
+		var from_hadron_index: int = get_id_hadron_index(from_id)
+		var to_hadron_index: int = get_id_hadron_index(to_id)
+		
+		var swap_id: int
+		if from_hadron_index == to_hadron_index:
+			continue
+		elif from_hadron_index < to_hadron_index:
+			swap_id = from_id
+		else:
+			swap_id = to_id
+		
+		swap_ids(swap_id, swap_id + abs(from_hadron_index - to_hadron_index))
+
+func rejoin_double_connections() -> void:
+	for id in get_state_ids(StateLine.StateType.None):
+		if !(get_connected_count(id) == 1 and get_connected_count(id, false, true) == 1):
+			continue
+		
+		var from_id: int = get_connected_ids(id, false, GLOBALS.Particle.none, true)[0]
+		var to_id: int = get_connected_ids(id)[0]
+		
+		if get_connection_particles(from_id, to_id) != get_connection_particles(id, to_id):
+			continue
+			
+		var connection_particle: GLOBALS.Particle = get_connection_particles(from_id, to_id).front()
+		
+		disconnect_interactions(from_id, id, connection_particle)
+		disconnect_interactions(id, to_id, connection_particle)
+		
+		connect_interactions(from_id, to_id, connection_particle)
+	
+	remove_empty_rows()
+
+
+func rejoin_hadrons() -> void:
+	for i in range(split_hadron_ids.size()):
+		rejoin_hadron(split_hadron_ids[i])
+		split_hadron_ids.clear()
+	
+	remove_empty_rows()
+
+func rejoin_hadron(hadron_ids: PackedInt32Array) -> void:
+	var to_id := hadron_ids[0]
+	var from_ids := hadron_ids.slice(1)
+	
+	from_ids.sort()
+	from_ids.reverse()
+	
+	for hadron_id in hadron_ids.slice(1):
+		var connected_id: int = get_connected_ids(hadron_id, true)[0]
+		var reverse: bool = !are_interactions_connected(hadron_id, connected_id)
+		
+		var connection_particle: GLOBALS.Particle = get_connection_particles(
+			hadron_id, connected_id, true
+		).front()
+		
+		disconnect_interactions(to_id, connected_id, connection_particle, false, reverse)
+		connect_interactions(to_id, connected_id, connection_particle, false, reverse)
+
+func reduce_to_connection_matrix() -> ConnectionMatrix:
+	var reduced_drawing_matrix : DrawingMatrix = duplicate()
+	
+	reduced_drawing_matrix.rejoin_hadrons()
+	reduced_drawing_matrix.rejoin_double_connections()
+	
+	return reduced_drawing_matrix.get_connection_matrix()
+
+func get_connection_matrix() -> ConnectionMatrix:
+	var new_connection_matrix := ConnectionMatrix.new()
+	
+	new_connection_matrix.connection_matrix = connection_matrix.duplicate(true)
+	new_connection_matrix.state_count = state_count.duplicate()
+	new_connection_matrix.matrix_size = self.matrix_size
+	
+	return new_connection_matrix
+

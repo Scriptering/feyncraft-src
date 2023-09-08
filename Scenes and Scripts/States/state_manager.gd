@@ -28,7 +28,7 @@ func init(cursor: Sprite2D, Diagram: DiagramBase) -> void:
 	var crosshair = Diagram.get_node("DiagramArea/Crosshair")
 	
 	for child in get_children():
-		child.cursor = cursor
+		child.change_cursor.connect(Callable(EVENTBUS.change_cursor))
 		child.state_manager = self
 		child.Diagram = Diagram
 		child.crosshair = crosshair

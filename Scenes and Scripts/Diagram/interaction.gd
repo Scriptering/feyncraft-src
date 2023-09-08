@@ -230,28 +230,25 @@ func validate() -> bool:
 
 func get_invalid_quantum_numbers() -> Array[GLOBALS.QuantumNumber]:
 	var is_weak: bool = has_base_particle_connected(GLOBALS.Particle.W)
+	var has_W_0: bool = self.connected_lines.any(
+		func(line: ParticleLine): return line.line_vector.x == 0 and line.base_particle == GLOBALS.Particle.W
+	)
 	var invalid_quantum_numbers: Array[GLOBALS.QuantumNumber] = []
 	var before_quantum_sum : Array[float] = get_side_quantum_sum(Side.Before)
 	var after_quantum_sum : Array[float] = get_side_quantum_sum(Side.After)
 	var interaction_in_list := is_interaction_in_list()
 	
 	for quantum_number in GLOBALS.QuantumNumber.values():
-		var quantum_numbers_equal := is_equal_approx(before_quantum_sum[quantum_number], after_quantum_sum[quantum_number])
+		var quantum_number_difference := before_quantum_sum[quantum_number] - after_quantum_sum[quantum_number]
+		var quantum_numbers_equal := is_zero_approx(quantum_number_difference)
 		
-		if !is_weak:
-			if !quantum_numbers_equal:
+		if !quantum_numbers_equal:
+			if has_W_0 and quantum_number == GLOBALS.QuantumNumber.charge and abs(quantum_number_difference) == 1:
+				continue
+			
+			if !is_weak or quantum_number not in GLOBALS.WEAK_QUANTUM_NUMBERS:
 				invalid_quantum_numbers.append(quantum_number)
-		
-		elif (
-			(quantum_number == GLOBALS.QuantumNumber.charge or
-			quantum_number == GLOBALS.QuantumNumber.lepton or
-			quantum_number == GLOBALS.QuantumNumber.electron or
-			quantum_number == GLOBALS.QuantumNumber.muon or
-			quantum_number == GLOBALS.QuantumNumber.tau or
-			quantum_number == GLOBALS.QuantumNumber.quark) and
-			!quantum_numbers_equal
-		):
-			invalid_quantum_numbers.append(quantum_number)
+				continue
 			
 		elif !interaction_in_list:
 			invalid_quantum_numbers.append(quantum_number)
@@ -286,7 +283,13 @@ func get_side_quantum_sum(side: Interaction.Side) -> Array[float]:
 	for quantum_number in GLOBALS.QuantumNumber.values():
 		var sum: float = 0
 		for line in side_connected_lines:
+			var line_is_W_0: bool = line.line_vector.x == 0 and line.base_particle == GLOBALS.Particle.W
+			
+			if line_is_W_0 and quantum_number == GLOBALS.QuantumNumber.charge:
+				continue
+			
 			sum += line.quantum_numbers[quantum_number]
+
 		quantum_sum.append(sum)
 
 	return quantum_sum

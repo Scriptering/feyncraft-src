@@ -1,11 +1,8 @@
 extends PullOutTab
 
-var Diagram: MainDiagram
-var current_problem: Problem
-var SubmittedDiagramViewer: MiniDiagramViewer
-
 @export var diagram_viewer_offset: Vector2 = Vector2(15, 15)
 
+@onready var Equation : PanelContainer = $MovingContainer/VBoxContainer/Tab/HBoxContainer/Equation
 @onready var SubmissionFeedback : PullOutTab = $MovingContainer/SubmitFeedback
 @onready var DiagramNotValid : Control = $MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/DiagramNotValid
 @onready var DiagramNotConnected : Control = (
@@ -15,13 +12,30 @@ var SubmittedDiagramViewer: MiniDiagramViewer
 @onready var DiagramSubmitted : Control = $MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/DiagramSubmitted
 @onready var DiagramNotSolution : Control = $MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/DiagramNotSolution
 
-func init(diagram: DiagramBase, _current_problem: Problem, submitted_diagrams_viewer: MiniDiagramViewer) -> void:
+var Diagram: MainDiagram
+var current_problem: Problem
+var SubmittedDiagramViewer: MiniDiagramViewer
+var ProblemGeneration: Node
+var SolutionGeneration: Node
+
+var problem_history: Array[Problem] = []
+
+func init(
+	diagram: DiagramBase, _current_problem: Problem, submitted_diagrams_viewer: MiniDiagramViewer, problem_generation: Node,
+	_solution_generation: Node
+) -> void:
 	Diagram = diagram
 	current_problem = _current_problem
 	SubmittedDiagramViewer = submitted_diagrams_viewer
 	SubmittedDiagramViewer.diagram_deleted.connect(submitted_diagram_deleted)
 	SubmittedDiagramViewer.closed.connect(toggle_diagram_viewer)
-
+	ProblemGeneration = problem_generation
+	SolutionGeneration = _solution_generation
+	
+	await get_tree().create_timer(1).timeout
+	
+	load_new_problem(ProblemGeneration.generate(true, 3, 4))
+	
 func _on_submit_pressed() -> void:
 	submit_diagram()
 
@@ -43,7 +57,7 @@ func check_submission(submission: DrawingMatrix) -> bool:
 	if !Diagram.is_fully_connected(true):
 		DiagramNotConnected.show()
 		diagram_is_valid = false
-	
+
 	if current_problem.is_submission_duplicate(submission):
 		DiagramDuplicate.show()
 		diagram_is_valid = false
@@ -73,10 +87,23 @@ func submit_diagram() -> void:
 	
 	update_view_submission_button()
 
+func generate_solution() -> ConnectionMatrix:
+	return(SolutionGeneration.generate_diagrams(
+		current_problem.state_interactions[StateLine.StateType.Initial], current_problem.state_interactions[StateLine.StateType.Final],
+		1, 10, SolutionGeneration.generate_useable_interactions_from_particles(current_problem.allowed_particles),
+		SolutionGeneration.Find.One
+	))[0]
+
 func toggle_diagram_viewer() -> void:
 	SubmittedDiagramViewer.visible = !SubmittedDiagramViewer.visible
 	SubmittedDiagramViewer.position = diagram_viewer_offset + position
 
 func _on_view_submissions_pressed() -> void:
 	toggle_diagram_viewer()
+
+func load_new_problem(problem: Problem) -> void:
+	current_problem = problem
+	Equation.load_problem(problem)
 	
+func _on_solution_pressed() -> void:
+	EVENTBUS.draw_diagram_raw(generate_solution())

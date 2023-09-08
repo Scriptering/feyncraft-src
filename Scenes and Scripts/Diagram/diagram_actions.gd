@@ -234,6 +234,7 @@ func can_place_interaction(test_position: Vector2) -> bool:
 		
 		if interaction.position == test_position:
 			return false
+
 	return true
 
 func place_line(

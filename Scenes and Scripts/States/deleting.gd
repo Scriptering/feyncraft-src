@@ -26,9 +26,9 @@ func input(_event: InputEvent) -> State:
 	if Input.is_action_just_released("deleting"):
 		return State.Idle
 	elif Input.is_action_just_pressed("click"):
-		cursor.change_cursor(GLOBALS.CURSOR.snipped)
+		emit_signal("change_cursor", GLOBALS.CURSOR.snipped)
 	elif Input.is_action_just_released("click"):
-		cursor.change_cursor(GLOBALS.CURSOR.snip)
+		emit_signal("change_cursor", GLOBALS.CURSOR.snip)
 
 	return State.Null
 

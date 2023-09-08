@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dcpcxfh7umytq"]
+[gd_scene load_steps=18 format=3 uid="uid://dcpcxfh7umytq"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_gc6j6"]
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="2_o6xnf"]
@@ -9,6 +9,9 @@
 [ext_resource type="Texture2D" uid="uid://blp8o56nt6djk" path="res://Textures/Buttons/X_icon.png" id="7_t41g2"]
 [ext_resource type="Texture2D" uid="uid://bm3ag65nskhpk" path="res://Textures/UI/MiniDiagram/arrow_left.png" id="8_g4oap"]
 [ext_resource type="Texture2D" uid="uid://cb6lapmtgwimd" path="res://Textures/UI/MiniDiagram/arrow_right.png" id="9_4bpdd"]
+[ext_resource type="Texture2D" uid="uid://bvdr8f7dmjpmi" path="res://Textures/Buttons/icons/upload.png" id="9_ulpnp"]
+[ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="10_6viqt"]
+[ext_resource type="Texture2D" uid="uid://cms1u4elh5bo3" path="res://Textures/Buttons/icons/delete.png" id="11_5ck4b"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pkocb"]
 texture = ExtResource("2_o6xnf")
@@ -126,14 +129,24 @@ icon_use_parent_material = true
 [node name="Load" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
 layout_mode = 2
 mouse_filter = 1
-text = "Load"
-minimum_size = Vector2(42, 2.08165e-12)
+icon = ExtResource("9_ulpnp")
+minimum_size = Vector2(25, 25)
+expand_icon = true
+icon_use_parent_material = true
+
+[node name="Tooltip" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Load" instance=ExtResource("10_6viqt")]
+tooltip = "Load Diagram"
 
 [node name="Delete" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
 layout_mode = 2
 mouse_filter = 1
-text = "Delete"
-minimum_size = Vector2(50, 2.08165e-12)
+icon = ExtResource("11_5ck4b")
+minimum_size = Vector2(24, 25)
+expand_icon = true
+icon_use_parent_material = true
+
+[node name="Tooltip" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Delete" instance=ExtResource("10_6viqt")]
+tooltip = "Delete Diagram"
 
 [node name="Right" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
 layout_mode = 2
