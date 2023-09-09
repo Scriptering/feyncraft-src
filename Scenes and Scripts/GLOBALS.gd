@@ -509,3 +509,19 @@ func set_interaction_strength_limits() -> void:
 	
 	MAXIMUM_INTERACTION_STRENGTH = maximum_strength
 	MINIMUM_INTERACTION_STRENGTH = minimum_strength
+
+func find_var(array: Array, test_func: Callable) -> int:
+	for i in range(array.size()):
+		if test_func.call(array[i]):
+			return i
+	
+	return array.size()
+
+func find_all_var(array: Array, test_func: Callable) -> PackedInt32Array:
+	var found_ids: PackedInt32Array = []
+	
+	for i in range(array.size()):
+		if test_func.call(array[i]):
+			found_ids.push_back(i)
+
+	return found_ids

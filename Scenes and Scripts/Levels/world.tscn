@@ -15,7 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://d1e2fabmfhkx7" path="res://Textures/UI/drag_control.png" id="9"]
 [ext_resource type="Texture2D" uid="uid://basekc2ce6rmp" path="res://Textures/Background/state_line_shadow_tile.png" id="9_075jn"]
 [ext_resource type="PackedScene" uid="uid://brd5auomhnn6l" path="res://Scenes and Scripts/UI/Cursor.tscn" id="10"]
-[ext_resource type="PackedScene" uid="uid://byrhmsj4f7kxm" path="res://Scenes and Scripts/Algorithms/PathFinding.tscn" id="13"]
+[ext_resource type="PackedScene" uid="uid://byrhmsj4f7kxm" path="res://Scenes and Scripts/Algorithms/Vision.tscn" id="13"]
 [ext_resource type="PackedScene" uid="uid://bs6vtukhlou2r" path="res://Scenes and Scripts/Algorithms/problem_generation.tscn" id="13_62803"]
 [ext_resource type="Script" path="res://Scenes and Scripts/Diagram/diagram_actions.gd" id="17_23v64"]
 [ext_resource type="PackedScene" uid="uid://nuajmillcsir" path="res://Scenes and Scripts/Algorithms/SolutionGeneration.tscn" id="18"]
@@ -50,7 +50,7 @@ expand_margin_top = 1.0
 expand_margin_right = 1.0
 expand_margin_bottom = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_2n8qt"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_24ay3"]
 resource_name = "ParticleButtons"
 allow_unpress = true
 
@@ -289,7 +289,7 @@ offset_right = 159.0
 offset_bottom = 336.0
 grow_vertical = 0
 size_flags_horizontal = 4
-particle_button_group = SubResource("ButtonGroup_2n8qt")
+particle_button_group = SubResource("ButtonGroup_24ay3")
 
 [node name="GenerationButton" parent="PullOutTabs" instance=ExtResource("22_u64s1")]
 offset_left = -76.0

@@ -146,6 +146,10 @@ func get_id_hadron_index(id: int) -> int:
 func reorder_hadrons() -> void:
 	var directly_connected_ids: PackedInt32Array = get_directly_connected_ids()
 	
+	for id in get_state_ids(StateLine.StateType.Both):
+		if get_connected_count(id, true) > 1:
+			breakpoint
+	
 	for i in range(directly_connected_ids.size()):
 		var from_id: int = directly_connected_ids[i]
 		var to_id: int = get_connected_ids(from_id)[0]
@@ -162,6 +166,10 @@ func reorder_hadrons() -> void:
 			swap_id = to_id
 		
 		swap_ids(swap_id, swap_id + abs(from_hadron_index - to_hadron_index))
+	
+	for id in get_state_ids(StateLine.StateType.Both):
+		if get_connected_count(id, true) > 1:
+			breakpoint
 
 func rejoin_double_connections() -> void:
 	for id in get_state_ids(StateLine.StateType.None):

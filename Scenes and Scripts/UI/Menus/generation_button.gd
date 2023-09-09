@@ -96,7 +96,7 @@ func set_electroweak_check(new_value: bool) -> void:
 		weak_check.button_pressed = true
 
 func generate(checks: Array[bool]) -> void:
-	GeneratedDiagramViewer.create_diagrams(
+	GeneratedDiagramViewer.store_diagrams(
 		Generation.generate_diagrams(
 			InitialState, FinalState, DegreeRange.minValue, DegreeRange.maxValue, Generation.get_usable_interactions(checks)
 		)
@@ -133,7 +133,7 @@ func _on_save_pressed() -> void:
 		set_checks(InitialState + FinalState)
 
 func toggle_diagram_viewer() -> void:
-	GeneratedDiagramViewer.visible = !GeneratedDiagramViewer.visible
+	GeneratedDiagramViewer.toggle_visible()
 	GeneratedDiagramViewer.position = generated_diagram_viewer_offset + position
 
 func _on_view_pressed() -> void:

@@ -57,10 +57,27 @@ func connect_interactions(
 		connection_matrix[to_id][from_id].append(particle)
 
 func swap_ids(id1: int, id2: int) -> void:
-	var temp_id2 : Array = connection_matrix[id2].duplicate(true)
+	var id1_forward_connections: Array = get_connections(id1)
+	var id2_forward_connections: Array = get_connections(id2)
+	var id1_reverse_connections: Array = get_connections(id1, true)
+	var id2_reverse_connections: Array = get_connections(id2, true)
 	
-	connection_matrix[id2] = connection_matrix[id1]
-	connection_matrix[id1] = temp_id2
+	for connection in id1_forward_connections:
+		remove_connection(connection)
+		insert_connection([id2, connection[Connection.to_id], connection[Connection.particle]])
+
+	for connection in id2_forward_connections:
+		remove_connection(connection)
+		insert_connection([id1, connection[Connection.to_id], connection[Connection.particle]])
+
+	for connection in id1_reverse_connections:
+		remove_connection(connection)
+		insert_connection([connection[Connection.from_id], id2, connection[Connection.particle]])
+
+	for connection in id2_reverse_connections:
+		remove_connection(connection)
+		insert_connection([connection[Connection.from_id], id1, connection[Connection.particle]])
+	
 
 func insert_connection(connection: Array) -> void:
 	connect_interactions(connection[Connection.from_id], connection[Connection.to_id], connection[Connection.particle])
@@ -135,6 +152,18 @@ func remove_interaction(id: int) -> void:
 		connection_matrix[row].remove_at(id)
 	
 	matrix_size -= 1
+
+func get_connections(id: int, reverse: bool = false) -> Array:
+	var connections: Array = []
+	
+	for connected_id in get_connected_ids(id, false, GLOBALS.Particle.none, reverse):
+		for connection_particle in get_connection_particles(id, connected_id, false, false, reverse):
+			if reverse:
+				connections.push_back([connected_id, id, connection_particle])
+			else:
+				connections.push_back([id, connected_id, connection_particle])
+	
+	return connections
 
 func are_interactions_connected(
 	from_id: int, to_id: int, bidirectional: bool = false, particle: GLOBALS.Particle = GLOBALS.Particle.none, reverse: bool = false

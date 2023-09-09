@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dcpcxfh7umytq"]
+[gd_scene load_steps=19 format=3 uid="uid://dcpcxfh7umytq"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_gc6j6"]
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="2_o6xnf"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/MiniDiagram/mini_diagram_viewer.gd" id="4_o6nlg"]
 [ext_resource type="Texture2D" uid="uid://b4w0nb2kv1et0" path="res://Textures/UI/Information/InfoTabFocus.png" id="4_yg0ra"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="6_r8qrn"]
+[ext_resource type="PackedScene" uid="uid://cktgoqxrvgsh0" path="res://Scenes and Scripts/UI/MiniDiagram/mini_diagram.tscn" id="6_y8o7g"]
 [ext_resource type="Texture2D" uid="uid://blp8o56nt6djk" path="res://Textures/Buttons/X_icon.png" id="7_t41g2"]
 [ext_resource type="Texture2D" uid="uid://bm3ag65nskhpk" path="res://Textures/UI/MiniDiagram/arrow_left.png" id="8_g4oap"]
 [ext_resource type="Texture2D" uid="uid://cb6lapmtgwimd" path="res://Textures/UI/MiniDiagram/arrow_right.png" id="9_4bpdd"]
@@ -95,15 +96,15 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "No diagrams to show :("
 
-[node name="MiniDiagramContainer" type="TabContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/CenterContainer"]
+[node name="MiniDiagramContainer" type="PanelContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/CenterContainer"]
 use_parent_material = true
 custom_minimum_size = Vector2(230, 128)
 layout_mode = 2
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_05qsh")
-tab_alignment = 1
-clip_tabs = false
-tabs_visible = false
-use_hidden_tabs_for_min_size = true
+
+[node name="MiniDiagram" parent="VBoxContainer/PanelContainer/VBoxContainer/CenterContainer/MiniDiagramContainer" instance=ExtResource("6_y8o7g")]
+layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2

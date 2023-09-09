@@ -4,10 +4,9 @@ class_name HadronJoint
 @onready var HadronLabel = $HadronSprite
 
 @export var label_seperation : float = 25
-var state : int
+var state : StateLine.StateType
 var hadron : Hadron
 var hadron_lines : Array
-var hadron_interactions : Array
 
 func _ready():
 	place_label()
@@ -16,6 +15,14 @@ func init() -> void:
 	hadron_lines = hadron.quark_lines
 	position = calculate_position()
 	$Panel.size.y += get_hadron_seperation()
+
+func get_hadron_interactions() -> Array[Interaction]:
+	var hadron_interactions = []
+	
+	for hadron_line in hadron_lines:
+		hadron_interactions.push_back(hadron_line.get_interaction_at_point(hadron_line.get_side_point(state)))
+	
+	return hadron_interactions
 
 func get_hadron_seperation() -> float:
 	return abs(get_highest_line().get_side_point(state).y-get_lowest_line().get_side_point(state).y)

@@ -72,10 +72,12 @@ func create_hadron_joint(drawing_matrix: DrawingMatrix, hadron_ids: PackedInt32A
 	
 	$DiagramArea/HadronJoints.add_child(hadron_joint)
 	
-	hadron_joint.init(StateLines[state].position.x)
+	hadron_joint.init(StateLines[state].position.x, self)
 
 func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 	super.draw_diagram(drawing_matrix)
+	
+	await get_tree().process_frame
 
 	show_interaction_dots(drawing_matrix)
 
