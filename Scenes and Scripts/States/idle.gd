@@ -25,6 +25,14 @@ func exit() -> void:
 	super.exit()
 	disconnect_buttons()
 
+func process(_delta: float) -> State:
+	if Controls.Snip.is_just_pressed:
+		return State.Deleting
+	elif Controls.Grab.is_just_pressed:
+		return State.Hovering
+	
+	return State.Null
+
 func input(event: InputEvent) -> State:
 	if Input.is_action_just_pressed("draw_history"):
 		Diagram.draw_history()

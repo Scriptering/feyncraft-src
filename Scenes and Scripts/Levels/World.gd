@@ -50,8 +50,8 @@ func _ready():
 		func(menu: Node): $FloatingMenus.add_child(menu)
 	)
 	
-	States.init(Cursor, $Diagram)
-	$Diagram.init($PullOutTabs/ParticleButtons)
+	States.init($Diagram, $PullOutTabs/ControlsTab)
+	$Diagram.init($PullOutTabs/ParticleButtons, $PullOutTabs/ControlsTab)
 	$ShaderControl.init($PalletteButtons)
 	$PullOutTabs/GenerationButton.init($Diagram, $Algorithms/SolutionGeneration, $FloatingMenus/GeneratedDiagrams)
 	$PullOutTabs/ProblemTab.init(

@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://c7n4o6dbkwilh"]
+[gd_scene load_steps=38 format=3 uid="uid://c7n4o6dbkwilh"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/Levels/World.gd" id="1"]
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="1_ovngh"]
@@ -27,7 +27,9 @@
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/ColourPicker/ColourPickerButton.gd" id="22_vp45o"]
 [ext_resource type="Texture2D" uid="uid://bvc8sakoqg037" path="res://Textures/Background/background_border.png" id="23_ebvm0"]
 [ext_resource type="PackedScene" uid="uid://cv3ttwhplgav" path="res://Scenes and Scripts/States/state_manager.tscn" id="23_kpp6c"]
+[ext_resource type="PackedScene" uid="uid://wgw4km4uc7fh" path="res://Scenes and Scripts/UI/Menus/menu_tab.tscn" id="24_f5s2a"]
 [ext_resource type="PackedScene" uid="uid://ds2iet11sv3ty" path="res://Scenes and Scripts/UI/Buttons/particle_buttons.tscn" id="24_lunb1"]
+[ext_resource type="PackedScene" uid="uid://b65u1c7v5mbh6" path="res://Scenes and Scripts/UI/Menus/controls_tab.tscn" id="25_1bppy"]
 [ext_resource type="PackedScene" uid="uid://dm0yec0rjuvwl" path="res://Scenes and Scripts/sound_bus.tscn" id="26_tlvja"]
 [ext_resource type="PackedScene" uid="uid://dcpcxfh7umytq" path="res://Scenes and Scripts/UI/MiniDiagram/mini_diagram_viewer.tscn" id="27_laye5"]
 [ext_resource type="PackedScene" uid="uid://byavwp1ynk2py" path="res://Scenes and Scripts/event_bus.tscn" id="28_tehha"]
@@ -48,7 +50,7 @@ expand_margin_top = 1.0
 expand_margin_right = 1.0
 expand_margin_bottom = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_kor41"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_2n8qt"]
 resource_name = "ParticleButtons"
 allow_unpress = true
 
@@ -287,7 +289,7 @@ offset_right = 159.0
 offset_bottom = 336.0
 grow_vertical = 0
 size_flags_horizontal = 4
-particle_button_group = SubResource("ButtonGroup_kor41")
+particle_button_group = SubResource("ButtonGroup_2n8qt")
 
 [node name="GenerationButton" parent="PullOutTabs" instance=ExtResource("22_u64s1")]
 offset_left = -76.0
@@ -300,6 +302,18 @@ offset_left = 157.0
 offset_top = -26.0
 offset_right = 157.0
 offset_bottom = -26.0
+
+[node name="MenuTab" parent="PullOutTabs" instance=ExtResource("24_f5s2a")]
+offset_left = 541.0
+offset_top = 339.0
+offset_right = 541.0
+offset_bottom = 339.0
+
+[node name="ControlsTab" parent="PullOutTabs" instance=ExtResource("25_1bppy")]
+offset_left = 10.0
+offset_top = 326.0
+offset_right = 10.0
+offset_bottom = 326.0
 
 [node name="FPS" type="Label" parent="."]
 visible = false

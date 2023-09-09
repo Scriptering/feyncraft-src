@@ -174,8 +174,6 @@ func convert_general_matrices(general_connection_matrices: Array[ConnectionMatri
 	var converted_matrices: Array[ConnectionMatrix] = []
 	
 	for general_connection_matrix in general_connection_matrices:
-		var pre_converted_matrix : ConnectionMatrix = general_connection_matrix.duplicate()
-		
 		converted_matrices.push_back(convert_general_matrix(general_connection_matrix, state_interactions))
 	
 	return converted_matrices

@@ -40,8 +40,8 @@ func get_state_interaction(state: StateLine.StateType) -> Array:
 	return state_interactions[state]
 
 func get_sorted_states(states: Array) -> Array:
-	return states.map(func(state_interactions):
-		return state_interactions.map(func(state_interaction):
+	return states.map(func(interactions):
+		return interactions.map(func(state_interaction):
 			var sorted_interaction = state_interaction.duplicate(true)
 			sorted_interaction.sort()
 			return sorted_interaction

@@ -24,7 +24,7 @@ func change_state(new_state: BaseState.State) -> void:
 	state = new_state
 	current_state.enter()
 
-func init(cursor: Sprite2D, Diagram: DiagramBase) -> void:
+func init(Diagram: DiagramBase, Controls: Node) -> void:
 	var crosshair = Diagram.get_node("DiagramArea/Crosshair")
 	
 	for child in get_children():
@@ -32,6 +32,7 @@ func init(cursor: Sprite2D, Diagram: DiagramBase) -> void:
 		child.state_manager = self
 		child.Diagram = Diagram
 		child.crosshair = crosshair
+		child.Controls = Controls
 		
 	crosshair.moved.connect(crosshair_moved)
 	self.state_changed.connect(Callable(crosshair, "_state_changed"))

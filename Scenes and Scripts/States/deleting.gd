@@ -10,6 +10,12 @@ func exit() -> void:
 	super.exit()
 	disconnect_deletable()
 
+func process(_delta: float) -> State:
+	if Controls.Snip.is_just_released:
+		return State.Idle
+	
+	return State.Null
+
 func connect_deletable() -> void:
 	for line in get_tree().get_nodes_in_group("lines"):
 		line.clicked_on.connect(line_deletion)
