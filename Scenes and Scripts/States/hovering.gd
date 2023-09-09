@@ -17,6 +17,9 @@ func input(_event: InputEvent) -> State:
 	return State.Null
 
 func process(_delta: float) -> State:
+	if Controls.Grab.is_just_released:
+		return State.Idle
+	
 	if start_placing:
 		start_placing = false
 		return State.Placing

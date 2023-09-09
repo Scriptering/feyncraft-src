@@ -5,6 +5,7 @@ extends DiagramBase
 @onready var DiagramArea := $DiagramArea
 
 var ParticleButtons: Control
+var Controls: Node
 
 var line_diagram_actions: bool = true
 
@@ -27,8 +28,17 @@ func _ready() -> void:
 	
 	Crosshair.init(self, StateLines, grid_size)
 
-func init(particle_buttons: Control) -> void:
+func init(particle_buttons: Control, controls: Node) -> void:
 	ParticleButtons = particle_buttons
+	Controls = controls
+	
+	Controls.clear_diagram.connect(
+		func(): 
+			add_diagram_to_history()
+			clear_diagram()
+	)
+	Controls.undo.connect(undo)
+	Controls.redo.connect(redo)
 
 func _process(_delta: float) -> void:
 	for stateline in StateLines:

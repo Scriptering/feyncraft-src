@@ -50,7 +50,7 @@ func get_all_particles() -> Array[GLOBALS.Particle]:
 		if particle == GLOBALS.Particle.none:
 			continue
 		
-		if particle in GLOBALS.GENERAL_PARTICLES:
+		if base_particle(particle) in GLOBALS.GENERAL_PARTICLES:
 			continue
 		
 		all_particles.push_back(particle)
@@ -61,7 +61,7 @@ func anti(particle: GLOBALS.Particle) -> int:
 	return sign(particle)
 
 func anti_particle(particle: GLOBALS.Particle) -> GLOBALS.Particle:
-	return -particle
+	return -particle as GLOBALS.Particle
 
 func base_particle(particle: GLOBALS.Particle) -> GLOBALS.Particle:
 	return abs(particle)

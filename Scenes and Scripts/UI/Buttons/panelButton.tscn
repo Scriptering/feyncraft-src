@@ -24,6 +24,7 @@ script = ExtResource("2_ns04d")
 use_parent_material = true
 layout_mode = 2
 action_mode = 0
+keep_pressed_outside = true
 
 [node name="ContentContainer" type="MarginContainer" parent="."]
 use_parent_material = true
@@ -55,6 +56,7 @@ stretch_mode = 3
 
 [connection signal="button_down" from="Button" to="." method="_on_button_button_down"]
 [connection signal="button_up" from="Button" to="." method="_on_button_button_up"]
+[connection signal="mouse_exited" from="Button" to="." method="_on_button_mouse_exited"]
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
 [connection signal="theme_changed" from="Button" to="." method="_on_button_theme_changed"]
 [connection signal="toggled" from="Button" to="." method="_on_button_toggled"]

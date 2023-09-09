@@ -12,7 +12,7 @@ func _ready() -> void:
 	get_parent().mouse_entered.connect(_on_parent_mouse_entered)
 	get_parent().mouse_exited.connect(_on_parent_mouse_exited)
 	
-	if get_signal_list().any(
+	if get_parent().get_signal_list().any(
 		func(signal_dict: Dictionary): return signal_dict['name'] == "hide_tooltip"
 	):
 		get_parent().hide_tooltip.connect(_on_parent_hide_tooltip)
@@ -21,14 +21,14 @@ func _ready() -> void:
 
 func _on_parent_hide_tooltip() -> void:
 	$TooltipTimer.stop()
-	hide()
+	hide_tooltip()
 
 func _on_parent_mouse_entered() -> void:
 	$TooltipTimer.start()
 
 func _on_parent_mouse_exited() -> void:
 	$TooltipTimer.stop()
-	hide()
+	hide_tooltip()
 
 func _on_tooltip_timer_timeout() -> void:
 	show_tooltip()
@@ -39,6 +39,9 @@ func show_tooltip() -> void:
 	
 	position = offset
 	show()
+
+func hide_tooltip() -> void:
+	hide()
 
 func add_content(content: Node) -> void:
 	$TooltipPanel/HBoxContainer.add_child(content)

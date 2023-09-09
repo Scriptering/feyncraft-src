@@ -8,6 +8,8 @@ signal on_pressed
 signal toggled
 signal button_mouse_entered
 signal button_mouse_exited
+signal button_down
+signal button_up
 
 @export var icon: Texture2D : set = _set_button_icon
 @export var text: String : set = _set_button_text
@@ -31,6 +33,8 @@ var previous_button_pressed : bool
 var is_hovered: bool:
 	get:
 		return button.is_hovered()
+var is_just_pressed: bool = false
+var is_just_released: bool = false
 
 func _ready() -> void:
 	previous_button_pressed = button_pressed
@@ -137,6 +141,12 @@ func _on_button_button_down():
 		play_sound(true)
 		
 	set_content_margins(ButtonState[PRESSED])
+	
+	emit_signal("button_down")
+	
+	is_just_pressed = true
+	await get_tree().process_frame
+	is_just_pressed = false
 
 func _on_button_button_up():
 	if toggle_mode:
@@ -146,6 +156,12 @@ func _on_button_button_up():
 		play_sound(false)
 
 	set_content_margins(ButtonState[NORMAL])
+	
+	emit_signal("button_up")
+
+	is_just_released = true
+	await get_tree().process_frame
+	is_just_released = false
 
 func _on_button_theme_changed():
 	set_content_margins(ButtonState[NORMAL])

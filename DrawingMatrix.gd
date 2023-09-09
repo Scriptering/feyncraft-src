@@ -123,7 +123,7 @@ func split_hadron(hadron_id: int) -> void:
 		new_interaction_id += 1
 
 func get_directly_connected_ids() -> PackedInt32Array:
-	var directly_connected_ids: PackedInt32Array
+	var directly_connected_ids: PackedInt32Array = []
 	
 	for from_id in get_state_ids(StateLine.StateType.Both):
 		for to_id in get_connected_ids(from_id):

@@ -1,0 +1,112 @@
+[gd_scene load_steps=14 format=3 uid="uid://ihqre0f6s8qw"]
+
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_qkq2t"]
+[ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="2_in4d7"]
+[ext_resource type="FontFile" uid="uid://dohkbu7ekkfx8" path="res://Textures/Fonts/pixeltype/Pixeltype.ttf" id="3_i7hsb"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/MiniDiagram/mini_diagram_viewer.gd" id="4_y7gmt"]
+[ext_resource type="Texture2D" uid="uid://b4w0nb2kv1et0" path="res://Textures/UI/Information/InfoTabFocus.png" id="5_nc762"]
+[ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="6_paj6f"]
+[ext_resource type="Texture2D" uid="uid://bm3ag65nskhpk" path="res://Textures/UI/MiniDiagram/arrow_left.png" id="7_v8blb"]
+[ext_resource type="Texture2D" uid="uid://blp8o56nt6djk" path="res://Textures/Buttons/X_icon.png" id="8_60nkr"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pkocb"]
+texture = ExtResource("2_in4d7")
+texture_margin_left = 6.0
+texture_margin_top = 6.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+
+[sub_resource type="FontVariation" id="FontVariation_eel88"]
+base_font = ExtResource("3_i7hsb")
+spacing_top = 2
+spacing_bottom = -2
+
+[sub_resource type="Theme" id="Theme_x8r6v"]
+default_font = SubResource("FontVariation_eel88")
+default_font_size = 16
+PanelContainer/styles/panel = SubResource("StyleBoxTexture_pkocb")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_mtd58"]
+texture = ExtResource("5_nc762")
+texture_margin_left = 7.0
+texture_margin_top = 4.0
+texture_margin_right = 7.0
+texture_margin_bottom = 3.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ryajk"]
+
+[node name="MiniDiagramViewer" type="Control" node_paths=PackedStringArray("GrabAreas")]
+material = ExtResource("1_qkq2t")
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -640.0
+offset_bottom = -360.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_x8r6v")
+script = ExtResource("4_y7gmt")
+GrabAreas = [null, null]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+use_parent_material = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = -4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+z_index = 1
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 4
+alignment = 1
+
+[node name="Title" type="Label" parent="VBoxContainer/HBoxContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(2.08165e-12, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+mouse_filter = 1
+theme_override_styles/normal = SubResource("StyleBoxTexture_mtd58")
+text = "Options"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ryajk")
+tabs_visible = false
+use_hidden_tabs_for_min_size = true
+
+[node name="MainMenu" type="VBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/TabContainer"]
+layout_mode = 2
+
+[node name="Button" parent="VBoxContainer/PanelContainer/VBoxContainer/TabContainer/MainMenu" instance=ExtResource("6_paj6f")]
+layout_mode = 2
+text = "Controls"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Button" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_paj6f")]
+layout_mode = 2
+icon = ExtResource("7_v8blb")
+minimum_size = Vector2(20, 2.08165e-12)
+icon_use_parent_material = true
+
+[node name="Button2" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_paj6f")]
+layout_mode = 2
+icon = ExtResource("8_60nkr")
+minimum_size = Vector2(19, 19)
+expand_icon = true
