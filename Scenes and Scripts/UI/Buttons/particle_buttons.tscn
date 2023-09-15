@@ -217,42 +217,36 @@ layout_mode = 2
 particle = 6
 icon = ExtResource("8_67c1b")
 button_group = SubResource("ButtonGroup_61joa")
-tooltip = ""
 
 [node name="muon" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
 layout_mode = 2
 particle = 7
 icon = ExtResource("9_2eilt")
 button_group = SubResource("ButtonGroup_c3d16")
-tooltip = ""
 
 [node name="tau" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
 layout_mode = 2
 particle = 8
 icon = ExtResource("10_sfd4m")
 button_group = SubResource("ButtonGroup_647hl")
-tooltip = ""
 
 [node name="electron_neutrino" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
 layout_mode = 2
 particle = 10
 icon = ExtResource("11_lvtjt")
 button_group = SubResource("ButtonGroup_aoips")
-tooltip = ""
 
 [node name="muon_neutrino" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
 layout_mode = 2
 particle = 11
 icon = ExtResource("12_a0utd")
 button_group = SubResource("ButtonGroup_hq5df")
-tooltip = ""
 
 [node name="tau_neutrino" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
 layout_mode = 2
 particle = 12
 icon = ExtResource("13_s46ou")
 button_group = SubResource("ButtonGroup_5nspk")
-tooltip = ""
 
 [node name="Bosons" type="Control" parent="HBoxContainer" node_paths=PackedStringArray("ContentContainer", "TabButton", "MovingContainer")]
 use_parent_material = true
@@ -300,35 +294,30 @@ alignment = 1
 layout_mode = 2
 icon = ExtResource("16_yvhx5")
 button_group = SubResource("ButtonGroup_ap8lc")
-tooltip = ""
 
 [node name="gluon" parent="HBoxContainer/Bosons/MovingContainer/Tab/Bosons" instance=ExtResource("7_omtgh")]
 layout_mode = 2
 particle = 1
 icon = ExtResource("17_h03t5")
 button_group = SubResource("ButtonGroup_dprlb")
-tooltip = ""
 
 [node name="W" parent="HBoxContainer/Bosons/MovingContainer/Tab/Bosons" instance=ExtResource("7_omtgh")]
 layout_mode = 2
 particle = 4
 icon = ExtResource("18_qblna")
 button_group = SubResource("ButtonGroup_pf7io")
-tooltip = ""
 
 [node name="Z" parent="HBoxContainer/Bosons/MovingContainer/Tab/Bosons" instance=ExtResource("7_omtgh")]
 layout_mode = 2
 particle = 2
 icon = ExtResource("18_vqhce")
 button_group = SubResource("ButtonGroup_gu7rd")
-tooltip = ""
 
 [node name="H" parent="HBoxContainer/Bosons/MovingContainer/Tab/Bosons" instance=ExtResource("7_omtgh")]
 layout_mode = 2
 particle = 3
 icon = ExtResource("19_p5w2o")
 button_group = SubResource("ButtonGroup_16a5r")
-tooltip = ""
 
 [node name="Quarks" type="Control" parent="HBoxContainer" node_paths=PackedStringArray("ContentContainer", "TabButton", "MovingContainer")]
 use_parent_material = true
@@ -377,42 +366,36 @@ layout_mode = 2
 particle = 14
 icon = ExtResource("20_6f0nv")
 button_group = SubResource("ButtonGroup_ubj5a")
-tooltip = ""
 
 [node name="charm" parent="HBoxContainer/Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
 layout_mode = 2
 particle = 15
 icon = ExtResource("21_0ad65")
 button_group = SubResource("ButtonGroup_3o72a")
-tooltip = ""
 
 [node name="top" parent="HBoxContainer/Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
 layout_mode = 2
 particle = 16
 icon = ExtResource("22_cx8b1")
 button_group = SubResource("ButtonGroup_4kaqt")
-tooltip = ""
 
 [node name="down" parent="HBoxContainer/Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
 layout_mode = 2
 particle = 18
 icon = ExtResource("23_vb17d")
 button_group = SubResource("ButtonGroup_16rhn")
-tooltip = ""
 
 [node name="strange" parent="HBoxContainer/Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
 layout_mode = 2
 particle = 19
 icon = ExtResource("24_4efsy")
 button_group = SubResource("ButtonGroup_rjrwq")
-tooltip = ""
 
 [node name="bottom" parent="HBoxContainer/Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
 layout_mode = 2
 particle = 20
 icon = ExtResource("25_e3fe6")
 button_group = SubResource("ButtonGroup_q1skb")
-tooltip = ""
 
 [node name="General" type="Control" parent="HBoxContainer" node_paths=PackedStringArray("ContentContainer", "TabButton", "MovingContainer")]
 use_parent_material = true
@@ -461,27 +444,23 @@ layout_mode = 2
 particle = 5
 icon = ExtResource("28_dahfx")
 button_group = SubResource("ButtonGroup_ubj5a")
-tooltip = ""
 
 [node name="bright_quark" parent="HBoxContainer/General/MovingContainer/Tab/General" instance=ExtResource("7_omtgh")]
 layout_mode = 2
 particle = 13
 icon = ExtResource("29_xleuq")
 button_group = SubResource("ButtonGroup_4kaqt")
-tooltip = ""
 
 [node name="lepton_neutrino" parent="HBoxContainer/General/MovingContainer/Tab/General" instance=ExtResource("7_omtgh")]
 layout_mode = 2
 particle = 9
 icon = ExtResource("30_luk6k")
 button_group = SubResource("ButtonGroup_3o72a")
-tooltip = ""
 
 [node name="dark_quark" parent="HBoxContainer/General/MovingContainer/Tab/General" instance=ExtResource("7_omtgh")]
 layout_mode = 2
 particle = 17
 icon = ExtResource("31_uy8wt")
 button_group = SubResource("ButtonGroup_16rhn")
-tooltip = ""
 
 [editable path="HBoxContainer/Leptons/MovingContainer/PullOutTabButtonUp"]

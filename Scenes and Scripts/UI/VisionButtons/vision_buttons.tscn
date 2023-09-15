@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://cv6hlxtiukmtc"]
+[gd_scene load_steps=24 format=3 uid="uid://cv6hlxtiukmtc"]
 
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="1_eukm1"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/VisionButtons/vision_buttons.gd" id="1_hjucs"]
@@ -9,7 +9,10 @@
 [ext_resource type="Texture2D" uid="uid://b4nip5xmw07y4" path="res://Textures/Buttons/icons/shade.png" id="6_63enc"]
 [ext_resource type="Texture2D" uid="uid://bv0t333v5kk08" path="res://Textures/Buttons/icons/colour_wheel.png" id="6_v7snu"]
 [ext_resource type="Texture2D" uid="uid://dosrelr2snlx" path="res://Textures/Buttons/icons/dumbell.png" id="7_nx8nj"]
+[ext_resource type="Texture2D" uid="uid://bo1u07jlygktr" path="res://Textures/Buttons/square_hover.png" id="8_4caw0"]
+[ext_resource type="Texture2D" uid="uid://s14bo7fcdam0" path="res://Textures/Buttons/square_normal.png" id="9_ve0wv"]
 [ext_resource type="Texture2D" uid="uid://d16opu3dyhri7" path="res://Textures/Buttons/eye/eye_open.png" id="10_qooab"]
+[ext_resource type="Texture2D" uid="uid://cea5mj3u65016" path="res://Textures/Buttons/square_pressed_active.png" id="10_vbxnf"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8lupt"]
 shader = ExtResource("1_eukm1")
@@ -21,6 +24,47 @@ texture_margin_top = 6.0
 texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 expand_margin_right = 10.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kubuy"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8ny3c"]
+content_margin_left = 5.0
+content_margin_top = 4.0
+content_margin_right = 5.0
+content_margin_bottom = 8.0
+texture = ExtResource("8_4caw0")
+texture_margin_left = 5.0
+texture_margin_top = 6.0
+texture_margin_right = 5.0
+texture_margin_bottom = 7.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ajrl4"]
+content_margin_left = 5.0
+content_margin_top = 4.0
+content_margin_right = 5.0
+content_margin_bottom = 8.0
+texture = ExtResource("9_ve0wv")
+texture_margin_left = 5.0
+texture_margin_top = 6.0
+texture_margin_right = 5.0
+texture_margin_bottom = 7.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3hrye"]
+content_margin_left = 5.0
+content_margin_top = 6.0
+content_margin_right = 5.0
+content_margin_bottom = 6.0
+texture = ExtResource("10_vbxnf")
+texture_margin_left = 5.0
+texture_margin_top = 6.0
+texture_margin_right = 5.0
+texture_margin_bottom = 5.0
+
+[sub_resource type="Theme" id="Theme_fuyn4"]
+Button/styles/focus = SubResource("StyleBoxEmpty_kubuy")
+Button/styles/hover = SubResource("StyleBoxTexture_8ny3c")
+Button/styles/normal = SubResource("StyleBoxTexture_ajrl4")
+Button/styles/pressed = SubResource("StyleBoxTexture_3hrye")
 
 [sub_resource type="Animation" id="Animation_2er6j"]
 length = 0.001
@@ -43,10 +87,16 @@ anchors_preset = 0
 offset_right = 22.0
 offset_bottom = 60.0
 script = ExtResource("1_hjucs")
+avg_seconds_per_blink = null
 ContentContainer = NodePath("MovingContainer/Tab/MovingContainer")
 TabButton = NodePath("MovingContainer/TabButton")
 MovingContainer = NodePath("MovingContainer")
 moving_container_margins = Vector2(6, 2.08165e-12)
+move_direction = null
+tab_out = null
+time_to_pull_out = null
+time_to_push_in = null
+stay_out_time = null
 
 [node name="MovingContainer" type="HBoxContainer" parent="."]
 use_parent_material = true
@@ -75,6 +125,7 @@ theme_override_constants/separation = -3
 
 [node name="Colour" parent="MovingContainer/Tab/MovingContainer" instance=ExtResource("5_tinf7")]
 layout_mode = 2
+theme = SubResource("Theme_fuyn4")
 icon = ExtResource("6_v7snu")
 minimum_size = Vector2(26, 26)
 toggle_mode = true
@@ -82,6 +133,7 @@ expand_icon = true
 
 [node name="Shade" parent="MovingContainer/Tab/MovingContainer" instance=ExtResource("5_tinf7")]
 layout_mode = 2
+theme = SubResource("Theme_fuyn4")
 icon = ExtResource("6_63enc")
 minimum_size = Vector2(26, 26)
 toggle_mode = true
@@ -89,6 +141,7 @@ expand_icon = true
 
 [node name="Strength" parent="MovingContainer/Tab/MovingContainer" instance=ExtResource("5_tinf7")]
 layout_mode = 2
+theme = SubResource("Theme_fuyn4")
 icon = ExtResource("7_nx8nj")
 minimum_size = Vector2(26, 26)
 toggle_mode = true

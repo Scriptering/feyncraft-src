@@ -129,8 +129,24 @@ func get_entry_points() -> PackedInt32Array:
 func get_exit_points() -> PackedInt32Array:
 	return get_extreme_points(EntryFactor.Exit)
 
+func find_unconnected_id() -> int:
+	for id in range(matrix_size):
+		if unconnected_matrix[id].size() > 0 :
+			return id
+	
+	return matrix_size
+
+func find_unconnected_ids() -> PackedInt32Array:
+	var unconnected_ids: PackedInt32Array = []
+	
+	for id in range(matrix_size):
+		if unconnected_matrix[id].size() > 0 :
+			unconnected_ids.push_back(id)
+	
+	return unconnected_ids
+
 func find_first_unconnected(test_function: Callable) -> int:
-	for id in matrix_size:
+	for id in range(matrix_size):
 		if unconnected_matrix[id].any(func(particle): return test_function.call(particle)):
 			return id
 
@@ -139,7 +155,7 @@ func find_first_unconnected(test_function: Callable) -> int:
 func find_all_unconnected(test_function: Callable) -> PackedInt32Array:
 	var found_ids: PackedInt32Array = []
 
-	for id in matrix_size:
+	for id in range(matrix_size):
 		if unconnected_matrix[id].any(func(particle): return test_function.call(particle)):
 			found_ids.push_back(id)
 

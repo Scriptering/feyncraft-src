@@ -4,6 +4,7 @@ extends Panel
 @onready var StateLines: Array = [$DiagramArea/Initial, $DiagramArea/Final]
 @onready var Interactions: Control = $DiagramArea/Interactions
 @onready var ParticleLines: Control = $DiagramArea/ParticleLines
+@onready var HadronJoints: Control = $DiagramArea/HadronJoints
 
 @export var grid_size: int
 @export var InteractionInstance : PackedScene
@@ -32,6 +33,10 @@ func draw_raw_diagram(connection_matrix : ConnectionMatrix) -> void:
 
 	var drawable_matrix := DrawingMatrix.new()
 	drawable_matrix.initialise_from_connection_matrix(connection_matrix)
+	
+	for id in drawable_matrix.get_state_ids(StateLine.StateType.Both):
+		if drawable_matrix.get_connected_count(id) > 1:
+			breakpoint
 
 	create_diagram_interaction_positions(drawable_matrix)
 	draw_diagram(drawable_matrix)
@@ -42,7 +47,12 @@ func get_interactions() -> Array:
 func get_particle_lines() -> Array:
 	return ParticleLines.get_children()
 
+func get_hadron_joints() -> Array:
+	return HadronJoints.get_children()
+
 func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
+	clear_diagram()
+	
 	for state in range(StateLines.size()):
 		StateLines[state].position.x = drawing_matrix.state_line_positions[state] * grid_size
 
@@ -52,11 +62,15 @@ func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 	for interaction_position in drawing_matrix.get_interaction_positions():
 		place_interaction(interaction_position * grid_size)
 	
+	for id in drawing_matrix.get_state_ids(StateLine.StateType.Both):
+		if drawing_matrix.get_connected_count(id) > 1:
+			breakpoint
 
 func generate_drawing_matrix_from_diagram() -> DrawingMatrix:
 	var generated_matrix := DrawingMatrix.new()
+	var interactions: Array = get_interactions()
 
-	for interaction in get_interactions():
+	for interaction in interactions:
 		generated_matrix.add_interaction_with_position(interaction.position, grid_size, interaction.get_on_state_line())
 
 	for line in get_particle_lines():
@@ -68,7 +82,19 @@ func generate_drawing_matrix_from_diagram() -> DrawingMatrix:
 	
 	for state in range(StateLines.size()):
 		generated_matrix.state_line_positions[state] = StateLines[state].position.x / grid_size
-		
+	
+	var hadron_ids: Array[PackedInt32Array] = []
+	for hadron_joint in get_hadron_joints():
+		var hadron_id: PackedInt32Array = []
+		for interaction in interactions.filter(
+			func(interaction: Interaction): return interaction in hadron_joint.get_hadron_interactions()
+		):
+			hadron_id.push_back(GLOBALS.find_var(generated_matrix.get_interaction_positions(grid_size),
+				func(interaction_position: Vector2): return interaction.position == interaction_position
+			))
+		hadron_ids.push_back(hadron_id)
+	generated_matrix.split_hadron_ids = hadron_ids
+	
 	return generated_matrix
 
 func create_diagram_interaction_positions(drawing_matrix: DrawingMatrix) -> void:

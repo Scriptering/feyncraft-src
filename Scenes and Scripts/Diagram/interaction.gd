@@ -110,10 +110,14 @@ func crosshair_moved(_current_position: Vector2, _old_position: Vector2):
 		update_interaction()
 
 func update_valid_visual() -> void:
+	var current_ball_frame: int = Ball.frame
+	
 	if valid and valid_colourless:
 		Ball.animation = 'valid'
 	else:
 		Ball.animation = 'invalid'
+	
+	Ball.frame = current_ball_frame
 
 func update_dot_visual() -> void:
 	if !grabbed:
@@ -255,14 +259,15 @@ func get_invalid_quantum_numbers() -> Array[GLOBALS.QuantumNumber]:
 	
 	return invalid_quantum_numbers
 
+func get_unconnected_line_vector(line: ParticleLine) -> Vector2:
+	return line.points[line.get_unconnected_point(self)] - position
+
 func get_side_connected_lines(side: Interaction.Side) -> Array[ParticleLine]:
 	var side_connected_lines : Array[ParticleLine] = []
 	
 	for line in connected_lines:
 		var unconnected_point := line.get_unconnected_point(self)
-		var unconnected_vector : Vector2 = (
-			line.points[unconnected_point] - position
-		)
+		var unconnected_vector : Vector2 = get_unconnected_line_vector(line)
 		if side * unconnected_vector.x > 0:
 			side_connected_lines.append(line)
 		elif unconnected_vector.x == 0 and is_vertical_line_on_side(unconnected_point, side):
@@ -427,3 +432,37 @@ func set_shader_parameters() -> void:
 func set_connected_line_shader_parameters(interaction_strength_alpha: float) -> void:
 	for line in connected_lines:
 		line.set_point_interaction_strength_alpha(line.get_point_at_position(position), interaction_strength_alpha)
+
+func get_connected_vision_lines(vision: GLOBALS.Vision) -> Array[ParticleLine]:
+	match vision:
+		GLOBALS.Vision.Colour:
+			return self.connected_colour_lines
+		GLOBALS.Vision.Shade:
+			return self.connected_shade_lines
+	
+	return []
+
+func get_vision_vectors(vision: GLOBALS.Vision) -> PackedVector2Array:
+	var vision_particle_line_vectors: PackedVector2Array = get_connected_vision_lines(vision).map(
+		func(vision_line: ParticleLine): return get_unconnected_line_vector(vision_line)
+	)
+	
+	if vision_particle_line_vectors.size() == 1:
+		if get_on_state_line() == StateLine.StateType.None:
+			var orthogonal_vector: Vector2 = vision_particle_line_vectors[0].orthogonal().normalized()
+			return [orthogonal_vector, -orthogonal_vector]
+		
+		return [Vector2.UP, Vector2.DOWN]
+	
+	elif vision_particle_line_vectors.size() == 2:
+		var middle_vector: Vector2 = (vision_particle_line_vectors[0] + vision_particle_line_vectors[1]).normalized()
+		return [middle_vector, -middle_vector]
+	
+	var vision_vectors: PackedVector2Array = []
+	for i in range(vision_particle_line_vectors.size()):
+		vision_vectors.push_back(
+			(vision_particle_line_vectors[i] + vision_particle_line_vectors[(i+1 % vision_particle_line_vectors.size())]).normalized()
+		)
+	
+	return vision_vectors
+	

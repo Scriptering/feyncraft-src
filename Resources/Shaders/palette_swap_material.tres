@@ -4,3 +4,4 @@
 
 [resource]
 shader = ExtResource("1_onnb2")
+shader_parameter/alpha = null

@@ -1,11 +1,21 @@
 class_name MainDiagram
 extends DiagramBase
 
+@export var vision_line_offset: float = 6
+@export var min_vision_line_offset_factor: float = 5
+@export var max_vision_line_offset_factor: float = 15
+
 @onready var Crosshair := $DiagramArea/Crosshair
 @onready var DiagramArea := $DiagramArea
+@onready var VisionLines := $DiagramArea/VisionLines
+
+@onready var VisionLine := preload("res://Scenes and Scripts/Diagram/vision_line.tscn")
 
 var ParticleButtons: Control
 var Controls: Node
+var VisionButtons: Control
+var Vision: Node
+
 
 var line_diagram_actions: bool = true
 
@@ -28,9 +38,11 @@ func _ready() -> void:
 	
 	Crosshair.init(self, StateLines, grid_size)
 
-func init(particle_buttons: Control, controls: Node) -> void:
+func init(particle_buttons: Control, controls: Node, vision_buttons: Control, vision: Node) -> void:
 	ParticleButtons = particle_buttons
 	Controls = controls
+	VisionButtons = vision_buttons
+	Vision = vision
 	
 	Controls.clear_diagram.connect(
 		func(): 
@@ -39,6 +51,8 @@ func init(particle_buttons: Control, controls: Node) -> void:
 	)
 	Controls.undo.connect(undo)
 	Controls.redo.connect(redo)
+	
+	vision_buttons.vision_button_toggled.connect(_on_vision_button_toggled)
 
 func _process(_delta: float) -> void:
 	for stateline in StateLines:
@@ -53,6 +67,45 @@ func _crosshair_moved(new_position: Vector2, old_position: Vector2) -> void:
 		interaction.crosshair_moved(new_position, old_position)
 	
 	update_statelines()
+
+func convert_path_colours(path_colours: Array, vision: GLOBALS.Vision) -> Array[Color]:
+	var path_colors: Array[Color] = []
+	
+	for path_colour in path_colours:
+		path_colors.push_back(GLOBALS.VISION_COLOURS[vision][path_colour])
+	
+	return path_colors
+
+func update_colourless_interactions(diagram: DrawingMatrix, colourless_interactions: PackedInt32Array) -> void:
+	for id in range(diagram.matrix_size):
+		get_interaction_from_matrix_id(id, diagram).valid_colourless = id not in colourless_interactions
+
+func update_vision(current_vision: GLOBALS.Vision = VisionButtons.get_active_vision()) -> void:
+	if current_vision == GLOBALS.Vision.None:
+		return
+	
+	var diagram: DrawingMatrix = generate_drawing_matrix_from_diagram()
+	var zip : Array = Vision.generate_vision_paths(current_vision, diagram)
+	
+	if zip == []:
+		return
+	
+	var paths : Array[PackedInt32Array] = zip.front()
+	var path_colours : Array = zip.back()
+	
+	if paths.size() == 0:
+		return
+
+	if current_vision == GLOBALS.Vision.Colour:
+		update_colourless_interactions(diagram, Vision.find_colourless_interactions(paths, path_colours, diagram))
+		
+	draw_vision_lines(paths, convert_path_colours(path_colours,current_vision), diagram)
+
+func _on_vision_button_toggled(vision: GLOBALS.Vision, button_pressed: bool) -> void:
+	if !button_pressed:
+		return
+	
+	update_vision(vision)
 
 func move_stateline(stateline: StateLine) -> void:
 	var non_state_interactions := get_interactions().filter(
@@ -114,6 +167,7 @@ func place_objects() -> void:
 		line.place()
 	
 	check_split_lines()
+	check_rejoin_lines()
 
 func get_interactions() -> Array[Interaction]:
 	var interactions : Array[Interaction] = []
@@ -234,8 +288,8 @@ func place_interaction(interaction_position: Vector2, bypass_can_place: bool = f
 	if can_place_interaction(interaction_position) or bypass_can_place:
 		super.place_interaction(interaction_position)
 	
-		check_split_lines()
-		check_rejoin_lines()
+	check_split_lines()
+	check_rejoin_lines()
 
 func can_place_interaction(test_position: Vector2) -> bool:
 	for interaction in Interactions.get_children():
@@ -259,7 +313,6 @@ func place_line(
 	if end_position != Vector2.ZERO:
 		line.points[line.Point.End] = end_position
 		line.is_placed = true
-		
 	
 	line.base_particle = base_particle
 	
@@ -273,11 +326,16 @@ func draw_raw_diagram(connection_matrix : ConnectionMatrix) -> void:
 	
 	super.draw_raw_diagram(connection_matrix)
 
+func clear_vision_lines() -> void:
+	for vision_line in VisionLines.get_children():
+		vision_line.queue_free()
+
 func clear_diagram() -> void:
 	for interaction in Interactions.get_children():
 		delete_interaction(interaction)
 	for state_line in StateLines:
 		state_line.clear_hadrons()
+	clear_vision_lines()
 
 func draw_diagram_particles(drawing_matrix: DrawingMatrix) -> Array:
 	var drawing_lines : Array = super.draw_diagram_particles(drawing_matrix)
@@ -357,3 +415,125 @@ func is_valid() -> bool:
 
 func is_fully_connected(bidirectional: bool) -> bool:
 	return generate_drawing_matrix_from_diagram().is_fully_connected(bidirectional)
+
+func get_interaction_from_matrix_id(id: int, matrix: DrawingMatrix) -> Interaction:
+	var interaction_position: Vector2 = matrix.get_interaction_positions(grid_size)[id]
+	
+	return get_interactions()[
+		GLOBALS.find_var(get_interactions(), func(interaction: Interaction): return interaction.position == interaction_position)
+	]
+
+func vector_intercept_factor(vec1_start: Vector2, vec1_dir: Vector2, vec2_start: Vector2, vec2_dir: Vector2) -> float:
+	var nominator: float = (vec2_dir.x * (vec2_start.y - vec1_start.y) + vec2_dir.y * (vec1_start.x - vec2_start.x))
+	var denominator: float = (vec2_dir.x * vec1_dir.y - vec2_dir.y * vec1_dir.x)
+	
+	return nominator / denominator
+
+func vector_intercept(vec1_start: Vector2, vec1_dir: Vector2, vec2_start: Vector2, vec2_dir: Vector2) -> Vector2:
+	return vec1_start + vector_intercept_factor(vec1_start, vec1_dir, vec2_start, vec2_dir) * vec1_dir
+
+func get_starting_vision_offset_vector(
+	path: PackedInt32Array, interaction_positions: PackedVector2Array, vision_matrix: DrawingMatrix
+) -> Vector2:
+	var forward_vector: Vector2 = interaction_positions[path[1]] - interaction_positions[path[0]]
+	
+	if vision_matrix.is_lonely_extreme_point(path[0], vision_matrix.EntryFactor.Entry):
+		return (interaction_positions[path[1]] - interaction_positions[path[0]]).orthogonal().normalized() * vision_line_offset
+	
+	if vision_matrix.get_state_from_id(path[0]) != StateLine.StateType.None:
+		return (Vector2.UP * StateLine.state_factor[vision_matrix.get_state_from_id(path[0])]).normalized() * vision_line_offset
+	
+	var backward_vector: Vector2 = interaction_positions[path[-1]] - interaction_positions[path[-2]]
+	
+	if is_zero_approx(backward_vector.angle_to(forward_vector)):
+		return forward_vector.orthogonal() * vision_line_offset
+	
+	return middle_vector(forward_vector, -backward_vector).normalized() * clamp(
+		middle_vector(forward_vector, -backward_vector).length() * vision_line_offset,
+		min_vision_line_offset_factor, max_vision_line_offset_factor
+	)
+
+func get_vision_offset_vector(
+	current_point: int, path: PackedInt32Array, interaction_positions: PackedVector2Array, vision_matrix: DrawingMatrix
+) -> Vector2:
+	if (
+		vision_matrix.is_lonely_extreme_point(path[current_point+1], vision_matrix.EntryFactor.Exit)
+	):
+		return (interaction_positions[path[current_point+1]] - interaction_positions[path[current_point]]).orthogonal().normalized()
+	
+	if vision_matrix.get_state_from_id(path[current_point+1]) != StateLine.StateType.None:
+		return (Vector2.UP * StateLine.state_factor[vision_matrix.get_state_from_id(path[current_point+1])]).normalized()
+	
+	var look_ahead_count: int = 2 + int(current_point == path.size() - 2)
+	
+	if is_zero_approx(
+		(
+			interaction_positions[path[(current_point+look_ahead_count) % path.size()]] -
+			interaction_positions[path[(current_point+1) % path.size()]]).angle_to( 
+			interaction_positions[path[(current_point+1) % path.size()]] - interaction_positions[path[current_point]]
+		)
+	):
+		return (
+			interaction_positions[path[(current_point+1) % path.size()]] -
+			interaction_positions[path[current_point]]).orthogonal().normalized()
+	
+	return middle_vector(
+		interaction_positions[path[(current_point+look_ahead_count) % path.size()]] -
+		interaction_positions[path[(current_point+1) % path.size()]],
+		interaction_positions[path[current_point]] - interaction_positions[path[(current_point+1) % path.size()]]
+	).normalized()
+
+func middle_vector(vec1: Vector2, vec2: Vector2) -> Vector2:
+	return (vec1.normalized() + vec2.normalized()) * [-1, +1][int(vec1.angle_to(vec2) < vec2.angle_to(vec1))]
+
+func get_starting_vision_line_position(
+	path: PackedInt32Array, interaction_positions: PackedVector2Array, vision_matrix: DrawingMatrix
+) -> Vector2:
+	return (
+		interaction_positions[path[0]] +
+		get_starting_vision_offset_vector(path, interaction_positions, vision_matrix)
+	)
+
+func calculate_vision_line_points(path: PackedInt32Array, vision_matrix: DrawingMatrix) -> PackedVector2Array:
+	var interaction_positions: PackedVector2Array = vision_matrix.get_interaction_positions(grid_size)
+	
+	var current_position: Vector2 = get_starting_vision_line_position(path, interaction_positions, vision_matrix)
+	
+	var vision_line_points: PackedVector2Array = [current_position]
+	
+	for i in range(path.size() - 1):
+		var path_start: Vector2 = interaction_positions[path[i]]
+		var path_vector: Vector2 = interaction_positions[path[i+1]] - path_start
+		var vision_offset_vector: Vector2 = get_vision_offset_vector(i, path, interaction_positions, vision_matrix)
+		
+		var vs : float = vector_intercept_factor(interaction_positions[path[i+1]], vision_offset_vector, current_position, path_vector)
+		
+		var vision_offset_factor: float = sign(vs) * clamp(
+			abs(vs),
+			min_vision_line_offset_factor,
+			max_vision_line_offset_factor
+		)
+		
+		current_position = vision_offset_factor * vision_offset_vector + interaction_positions[path[i+1]]
+		
+		vision_line_points.push_back(current_position)
+	
+	return vision_line_points
+
+func draw_vision_line(points: PackedVector2Array, path_colour: Color) -> void:
+	var vision_line : Line2D = VisionLine.instantiate()
+	vision_line.points = points
+	vision_line.colour = path_colour
+
+	$DiagramArea/VisionLines.add_child(vision_line)
+
+func draw_vision_lines(
+	paths: Array[PackedInt32Array], path_colours: Array[Color], vision_matrix: DrawingMatrix
+) -> void:
+	clear_vision_lines()
+	
+	for i in range(paths.size()):
+		draw_vision_line(calculate_vision_line_points(paths[i], vision_matrix), path_colours[i])
+	
+
+

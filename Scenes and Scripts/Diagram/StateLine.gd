@@ -78,7 +78,7 @@ func create_hadron_joint(hadron: Hadron) -> void:
 	joint.hadron = hadron
 	joint.state = state
 	joint.init()
-	Diagram.get_node("DiagramArea").add_child(joint)
+	Diagram.get_node("DiagramArea/HadronJoints").add_child(joint)
 	joints.append(joint)
 
 func create_hadrons(quark_groups: Array) -> void:
@@ -145,7 +145,7 @@ func group_connected_quarks(sorted_connected_lines: Array) -> Array:
 				
 		current_y_point = line.get_side_point(state).y
 
-	if current_group.size() > 1:
+	if current_group.size() > 1 and current_group not in grouped_connected_lines:
 		grouped_connected_lines.append(current_group)
 
 	return grouped_connected_lines

@@ -3,6 +3,8 @@ extends Node
 enum ColourScheme {TeaStain, SeaFoam, Professional}
 enum COLOURS {primary, secondary, pencil, primary_highlight, invalid, invalid_highlight}
 
+enum Vision {Colour, Shade, Strength, None}
+
 #0 photon, 1 gluon, 2 Z, 3 H, 4 W,
 #5 lepton, 6 electron, 7 muon, 8 tau,
 #9 lepton_neutrino, 10 electron_neutrino, 11 muon_neutrino, 12 tau_neutrino,
@@ -26,8 +28,6 @@ DPlus, D0, AntiD0, DMinus, BPlus, B0, AntiB0, BMinus, JPsi, PionMinus, PionPlus,
 
 enum QuantumNumber {charge, lepton, electron, muon, tau, quark, up, down, charm, strange, top, bottom, bright, dark}
 
-enum VISION_TYPE {COLOUR, SHADE, NONE = -1}
-
 enum INTERACTION_TYPE {electromagnetic, strong, weak, electroweak}
 
 enum STATE_LINE {INITIAL, FINAL}
@@ -41,6 +41,12 @@ const MISSING_COLOUR := Color('ff1bea')
 const COLOUR_SCHEMES : Array = [
 	[Color('e1cba0'), Color('d1bd97'), Color('383930'), Color('e3d3c0'), Color('df3e3e'), Color('e35959')],
 	[Color('FFFFFF'), Color('FFFFFF'), Color('000000'), Color('e3d3c0'), Color('df3e3e'), Color('e35959')]]
+
+
+const VISION_COLOURS : Array = [
+	[Color('c13e3e'), Color('3ec13e'), Color('4057be')],
+	[Color('ffffff'), Color('000000'), Color('727272')]
+]
 
 const QUANTUM_NUMBERS : Array[Array] = [
 [0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
@@ -509,3 +515,39 @@ func set_interaction_strength_limits() -> void:
 	
 	MAXIMUM_INTERACTION_STRENGTH = maximum_strength
 	MINIMUM_INTERACTION_STRENGTH = minimum_strength
+
+func flatten(array: Array) -> Array:
+	var flat_array: Array = []
+	
+	for element in array:
+		flat_array.append_array(element)
+	
+	return flat_array
+
+func filter(array: Array, test_func: Callable) -> Array:
+	var filtered_array : Array = []
+	
+	for element in array:
+		if test_func.call(element):
+			filtered_array.push_back(element)
+	
+	return filtered_array
+
+func any(array: Array, test_func: Callable) -> bool:
+	return array.any(test_func)
+
+func find_var(array: Array, test_func: Callable, start_index: int = 0) -> int:
+	for i in range(start_index, array.size()):
+		if test_func.call(array[i]):
+			return i
+	
+	return array.size()
+
+func find_all_var(array: Array, test_func: Callable, start_index: int = 0) -> PackedInt32Array:
+	var found_ids: PackedInt32Array = []
+	
+	for i in range(start_index, array.size()):
+		if test_func.call(array[i]):
+			found_ids.push_back(i)
+
+	return found_ids
