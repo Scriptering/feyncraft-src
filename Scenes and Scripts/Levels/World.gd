@@ -51,7 +51,7 @@ func _ready():
 	)
 	
 	States.init($Diagram, $PullOutTabs/ControlsTab)
-	$Diagram.init($PullOutTabs/ParticleButtons, $PullOutTabs/ControlsTab)
+	$Diagram.init($PullOutTabs/ParticleButtons, $PullOutTabs/ControlsTab, $PullOutTabs/VisionButton, $Algorithms/PathFinding)
 	$ShaderControl.init($PalletteButtons)
 	$PullOutTabs/GenerationButton.init($Diagram, $Algorithms/SolutionGeneration, $FloatingMenus/GeneratedDiagrams)
 	$PullOutTabs/ProblemTab.init(

@@ -64,7 +64,7 @@ func end_drawing() -> void:
 		cancel_placement()
 		return
 	
-	for line in get_tree().get_nodes_in_group("lines"):
+	for line in Diagram.get_particle_lines():
 		if !line.is_placed:
 			line.place()
 	Diagram.place_interaction(crosshair.position)
@@ -76,7 +76,7 @@ func is_valid_end_position() -> bool:
 
 func cancel_placement() -> void:
 	Diagram.remove_last_diagram_from_history()
-	for line in get_tree().get_nodes_in_group('lines'):
+	for line in Diagram.get_particle_lines():
 		if !line.is_placed:
 			Diagram.delete_line(line)
 

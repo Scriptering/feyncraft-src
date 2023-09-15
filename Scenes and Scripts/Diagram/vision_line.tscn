@@ -1,0 +1,73 @@
+[gd_scene load_steps=5 format=3 uid="uid://cdya38yl7t3mh"]
+
+[ext_resource type="Texture2D" uid="uid://ksgt2c2j71ou" path="res://Textures/ParticlesAndLines/Lines/vision_line.png" id="2_v3s52"]
+[ext_resource type="Script" path="res://Scenes and Scripts/Diagram/vision_line.gd" id="3_getg2"]
+
+[sub_resource type="Shader" id="Shader_0csxq"]
+code = "shader_type canvas_item;
+
+global uniform sampler2D colour_scheme: filter_nearest;
+uniform vec4 line_color : source_color = vec4(1);
+uniform vec4 outline_color : source_color = vec4(1);
+uniform float line_thickness : hint_range(0, 10) = 1.0;
+varying vec2 clamped_UV;
+uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_linear_mipmap;
+
+
+void vertex()
+{
+	if (UV.x > 1.0 || UV.y > 1.0) {
+		clamped_UV = vec2(1.0, 1.0);
+	} else {
+		clamped_UV = UV;
+	}
+}
+
+vec4 add_outline(vec4 color, vec2 pixel_size, sampler2D Texture, vec2 uv)
+{
+	vec2 size = pixel_size * line_thickness;
+	float outline = texture(Texture, uv + vec2(-size.x, 0)).a;
+	outline += texture(Texture, uv + vec2(0, size.y)).a;
+	outline += texture(Texture, uv + vec2(size.x, 0)).a;
+	outline += texture(Texture, uv + vec2(0, -size.y)).a;
+	outline += texture(Texture, uv + vec2(-size.x, size.y)).a;
+	outline += texture(Texture, uv + vec2(size.x, size.y)).a;
+	outline += texture(Texture, uv + vec2(-size.x, -size.y)).a;
+	outline += texture(Texture, uv + vec2(size.x, -size.y)).a;
+	outline = min(outline, 1.0);
+	
+	vec4 palette_outline_color = vec4(texture(colour_scheme, vec2(outline_color.r, outline_color.g)).rgb, outline_color.a);
+	
+	return mix(color, palette_outline_color, outline - color.a);
+}
+
+
+void fragment()
+{
+	vec4 color = texture(SCREEN_TEXTURE, SCREEN_UV);
+	
+	color = vec4(line_color.rgb, texture(TEXTURE, UV).a);
+	color = add_outline(color, TEXTURE_PIXEL_SIZE, TEXTURE, UV);
+
+	COLOR = color;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vwy20"]
+resource_local_to_scene = true
+shader = SubResource("Shader_0csxq")
+shader_parameter/line_color = Color(0.247059, 0.207843, 0.215686, 1)
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/line_thickness = 0.5
+
+[node name="VisionLine" type="Line2D"]
+material = SubResource("ShaderMaterial_vwy20")
+points = PackedVector2Array(0, 0, 100, 0, 19, 32)
+width = 4.0
+texture = ExtResource("2_v3s52")
+texture_mode = 1
+joint_mode = 1
+round_precision = 20
+antialiased = true
+script = ExtResource("3_getg2")
+metadata/_edit_lock_ = true

@@ -25,9 +25,9 @@ content_margin_top = 5.0
 content_margin_right = 6.0
 content_margin_bottom = 9.0
 texture = ExtResource("2_4su16")
-texture_margin_left = 4.0
+texture_margin_left = 5.0
 texture_margin_top = 6.0
-texture_margin_right = 4.0
+texture_margin_right = 5.0
 texture_margin_bottom = 7.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pbk00"]
@@ -58,7 +58,6 @@ particle = 0
 minimum_size = Vector2(23, 26)
 toggle_mode = true
 expand_icon = true
-tooltip = null
 
 [node name="Button" parent="." index="0"]
 custom_minimum_size = Vector2(23, 26)

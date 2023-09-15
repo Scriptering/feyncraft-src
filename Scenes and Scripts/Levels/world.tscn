@@ -50,7 +50,7 @@ expand_margin_top = 1.0
 expand_margin_right = 1.0
 expand_margin_bottom = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_24ay3"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_edkne"]
 resource_name = "ParticleButtons"
 allow_unpress = true
 
@@ -206,6 +206,9 @@ mouse_filter = 1
 position = Vector2(-160, -48)
 grid_margin = 0
 
+[node name="VisionLines" type="Control" parent="Diagram/DiagramArea"]
+anchors_preset = 0
+
 [node name="Interactions" type="Control" parent="Diagram/DiagramArea"]
 anchors_preset = 0
 mouse_filter = 1
@@ -229,6 +232,8 @@ patch_margin_bottom = 15
 [node name="SolutionGeneration" parent="Algorithms" instance=ExtResource("18")]
 
 [node name="PathFinding" parent="Algorithms" instance=ExtResource("13")]
+IGNORE_COLOURLESS_GROUP_GLUONS = true
+print_results = true
 
 [node name="ProblemGeneration" parent="Algorithms" instance=ExtResource("13_62803")]
 
@@ -289,7 +294,7 @@ offset_right = 159.0
 offset_bottom = 336.0
 grow_vertical = 0
 size_flags_horizontal = 4
-particle_button_group = SubResource("ButtonGroup_24ay3")
+particle_button_group = SubResource("ButtonGroup_edkne")
 
 [node name="GenerationButton" parent="PullOutTabs" instance=ExtResource("22_u64s1")]
 offset_left = -76.0

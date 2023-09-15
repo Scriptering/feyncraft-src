@@ -17,10 +17,12 @@ func init() -> void:
 	$Panel.size.y += get_hadron_seperation()
 
 func get_hadron_interactions() -> Array[Interaction]:
-	var hadron_interactions = []
+	var hadron_interactions : Array[Interaction] = []
 	
 	for hadron_line in hadron_lines:
-		hadron_interactions.push_back(hadron_line.get_interaction_at_point(hadron_line.get_side_point(state)))
+		hadron_interactions.push_back(
+			hadron_line.get_interaction_at_point(hadron_line.get_point_at_position(hadron_line.get_side_point(state)))
+		)
 	
 	return hadron_interactions
 

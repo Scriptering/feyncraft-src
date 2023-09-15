@@ -85,9 +85,14 @@ func generate_drawing_matrix_from_diagram() -> DrawingMatrix:
 	
 	var hadron_ids: Array[PackedInt32Array] = []
 	for hadron_joint in get_hadron_joints():
-		hadron_ids.push_back(
-			GLOBALS.find_all_var(interactions, func(interaction: Interaction): return interaction in hadron_joint.get_hadron_interactions())
-	)
+		var hadron_id: PackedInt32Array = []
+		for interaction in interactions.filter(
+			func(interaction: Interaction): return interaction in hadron_joint.get_hadron_interactions()
+		):
+			hadron_id.push_back(GLOBALS.find_var(generated_matrix.get_interaction_positions(grid_size),
+				func(interaction_position: Vector2): return interaction.position == interaction_position
+			))
+		hadron_ids.push_back(hadron_id)
 	generated_matrix.split_hadron_ids = hadron_ids
 	
 	return generated_matrix

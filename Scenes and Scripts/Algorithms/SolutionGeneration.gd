@@ -658,6 +658,9 @@ func generate_fermion_connections(
 		unconnected_interaction_matrix, entry_points, available_points, exit_points, state_points, is_fermion, entry_states
 	)
 	
+	if is_null_array(unconnected_interaction_matrices):
+		return [null]
+	
 	var connected_interaction_matrices : Array[InteractionMatrix] = generate_possible_loops(
 		unconnected_interaction_matrices, is_fermion
 	)

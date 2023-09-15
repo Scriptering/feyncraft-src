@@ -5,9 +5,10 @@ signal interaction_removed(point_id)
 
 enum {INVALID}
 enum Connection {from_id, to_id, particle}
-enum EntryFactor {Entry = +1, Exit = -1}
+enum EntryFactor {Entry = +1, Exit = -1, Both = 0}
 
 const MAX_REINDEX_ATTEMPTS : int = 100
+const MAX_PATH_STEPS : int = 100
 
 const state_factor : Dictionary = {
 	StateLine.StateType.Initial: +1,
@@ -98,6 +99,11 @@ func disconnect_interactions(
 	if bidirectional:
 		connection_matrix[to_id][from_id].erase(particle)
 
+func empty_interaction(id: int) -> void:
+	var state : StateLine.StateType = get_state_from_id(id)
+	remove_interaction(id)
+	add_interaction(state, id)
+
 func remove_connection(connection: Array) -> void:
 	disconnect_interactions(connection[Connection.from_id], connection[Connection.to_id], connection[Connection.particle])
 
@@ -131,9 +137,7 @@ func add_interaction(
 	
 	state_count[interaction_state] += 1
 
-func calculate_new_interaction_id(
-	interaction_state: StateLine.StateType = StateLine.StateType.None
-) -> int:
+func calculate_new_interaction_id(interaction_state: StateLine.StateType = StateLine.StateType.None) -> int:
 	match interaction_state:
 		StateLine.StateType.None:
 			return matrix_size
@@ -146,10 +150,10 @@ func calculate_new_interaction_id(
 func remove_interaction(id: int) -> void:
 	emit_signal("interaction_removed", id)
 	
-	connection_matrix.remove_at(id)
-	
 	for row in range(matrix_size):
 		connection_matrix[row].remove_at(id)
+	
+	connection_matrix.remove_at(id)
 	
 	matrix_size -= 1
 
@@ -164,6 +168,18 @@ func get_connections(id: int, reverse: bool = false) -> Array:
 				connections.push_back([id, connected_id, connection_particle])
 	
 	return connections
+
+func get_all_connections(reverse: bool = false) -> Array:
+	var connections: Array = []
+	
+	for id in range(matrix_size):
+		connections.append_array(get_connections(id, reverse))
+	
+	return connections
+
+func reverse_connection(connection: Array) -> void:
+	remove_connection(connection)
+	connect_interactions(connection[Connection.to_id], connection[Connection.from_id], connection[Connection.particle])
 
 func are_interactions_connected(
 	from_id: int, to_id: int, bidirectional: bool = false, particle: GLOBALS.Particle = GLOBALS.Particle.none, reverse: bool = false
@@ -285,6 +301,13 @@ func get_starting_state_id(state: StateLine.StateType) -> int:
 	
 	return INVALID
 
+func find_first_id(test_function: Callable) -> int:
+	for id in range(matrix_size):
+		if test_function.call(id):
+			return id
+	
+	return matrix_size
+
 func find_all_ids(test_function: Callable) -> PackedInt32Array:
 	return range(matrix_size).filter(
 		func(id: int):
@@ -363,9 +386,19 @@ func duplicate():
 	
 	return new_connection_matrix
 
-func is_extreme_point(id: int, entry_factor: EntryFactor) -> bool:
+func is_empty() -> bool:
+	for id in range(matrix_size):
+		if get_connected_count(id, true) > 0:
+			return false
+	
+	return true
+
+func is_extreme_point(id: int, entry_factor: EntryFactor = EntryFactor.Both) -> bool:
 	if get_state_from_id(id) == StateLine.StateType.None:
 		return false
+	
+	if entry_factor == EntryFactor.Both:
+		return true
 	
 	return get_connected_count(id, false, entry_factor == EntryFactor.Exit) != 0
 
@@ -660,3 +693,14 @@ func generate_paths_from_point(
 	
 	return paths_from_current_point
 
+func get_reduced_matrix(particle_test_function: Callable):
+	var reduced_matrix: ConnectionMatrix = duplicate()
+	
+	for id in range(matrix_size):
+		for connection in get_connections(id) + get_connections(id, true):
+			if particle_test_function.call(connection[Connection.particle]):
+				continue
+			
+			reduced_matrix.remove_connection(connection)
+	
+	return reduced_matrix

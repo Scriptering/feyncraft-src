@@ -3,11 +3,28 @@ extends Node
 @onready var Level = get_tree().get_nodes_in_group('level')[0]
 @onready var ColourLine = preload("res://Scenes and Scripts/Diagram/ColourLine.tscn")
 
+@export var IGNORE_COLOURLESS_GROUP_GLUONS: bool = true
+
 var Diagram: DiagramBase
 var Initial: StateLine
 var Final: StateLine
 
+enum {
+	MAX_PATH_STEPS = 100,
+	MAX_LOOP_COUNT = 100,
+	MAX_RESTRICTED_HADRON_COUNT = 10,
+	MAX_LOOP_ATTEMPTS = 100,
+	NOT_FOUND = -1
+}
+
+enum Colour {Red, Green, Blue, None = -1}
+enum Shade {Bright, Dark, None}
+
+const colours : Array[Colour] = [Colour.Red, Colour.Green, Colour.Blue]
+const shades: Array[Shade] = [Shade.Bright, Shade.Dark]
+
 const INVALID := -1
+const INVALID_PATH: Array[PackedInt32Array] = [[INVALID]]
 
 enum COLOUR {RED, GREEN, BLUE}
 enum SHADE {BRIGHT, DARK, GREY}
@@ -16,6 +33,8 @@ const VISION_NAMES = ['none', 'colour', 'shade']
 const SHADE_NAMES = ['bright', 'dark']
 
 @export var print_results : bool = true
+
+enum Index {Path, Colour}
 
 var cdiagram = AStar2D.new()
 var nog_diagram = AStar2D.new()
@@ -28,7 +47,6 @@ var old_ends : Array
 var old_starts : Array
 var old_diagram = AStar2D.new()
 
-var showing_type = GLOBALS.VISION_TYPE.NONE: set = _set_showing_type
 var counter = 0
 
 const RGB = [Color('c13e3e'), Color('3ec13e'), Color('4057be')]
@@ -37,43 +55,457 @@ const SHADES = [Color('ffffff'), Color('000000'), Color('727272')]
 var prev_paths = []
 var prev_c_paths = []
 
+func generate_vision_paths(vision: GLOBALS.Vision, diagram: DrawingMatrix) -> Array:
+	match vision:
+		GLOBALS.Vision.Colour:
+			return generate_colour_paths(diagram)
+		
+		GLOBALS.Vision.Shade:
+			return generate_shade_paths(diagram)
+	
+	return []
+
+func generate_shade_matrix(shade: Shade, diagram: DrawingMatrix) -> DrawingMatrix:
+	var shade_matrix: DrawingMatrix = diagram.get_reduced_matrix(
+		func(particle: GLOBALS.Particle): return particle in GLOBALS.SHADE_PARTICLES[shade]
+	)
+
+	if shade == Shade.Dark:
+		return shade_matrix
+	
+	for connection in shade_matrix.get_all_connections():
+		if connection[shade_matrix.Connection.particle] == GLOBALS.Particle.W:
+			shade_matrix.reverse_connection(connection)
+	
+	return shade_matrix
+
+func generate_shade_paths(diagram: DrawingMatrix) -> Array:
+	var paths: Array[PackedInt32Array] = []
+	var path_colours: Array[Shade] = []
+	
+	for shade in shades:
+		var shade_matrix : DrawingMatrix = generate_shade_matrix(shade, diagram)
+		
+		if shade_matrix.is_empty():
+			continue
+		
+		var shade_paths: Array[PackedInt32Array] = generate_paths(shade_matrix, pick_next_shade_point)
+		paths.append_array(shade_paths)
+		
+		for path in shade_paths:
+			path_colours.push_back(shade)
+	
+	if paths.size() == 0:
+		return []
+	
+	return [paths, path_colours]
+
+func generate_colour_paths(drawing_matrix: DrawingMatrix) -> Array:
+	var colour_matrix: DrawingMatrix = generate_colour_matrix(drawing_matrix)
+	if colour_matrix.is_empty():
+		return []
+		
+	var paths: Array[PackedInt32Array] = generate_paths(colour_matrix.duplicate(), pick_next_colour_point)
+	
+	if paths.size() == 0:
+		return []
+	
+	var path_colours: Array[Colour] = generate_path_colours(paths, colour_matrix)
+	
+	return [paths, path_colours]
+
+func find_colourless_interactions(
+	paths: Array[PackedInt32Array], path_colours: Array[Colour], vision_matrix: DrawingMatrix
+) -> PackedInt32Array:
+	var colourless_interactions: PackedInt32Array = []
+	
+	colourless_interactions.append_array(find_colourless_group_interactions(paths, vision_matrix))
+	colourless_interactions.append_array(find_colourless_hadron_interactions(paths, path_colours, vision_matrix, colourless_interactions))
+	
+	return colourless_interactions
+
+func path_has_repeated_point(path: PackedInt32Array) -> bool:
+	for point in path:
+		if path.count(point) > 1:
+			return true
+	
+	return false
+
+func find_colourless_hadron_interactions(
+	paths: Array[PackedInt32Array], path_colours: Array[Colour], vision_matrix: DrawingMatrix,
+	colourless_group_interactions: PackedInt32Array = []
+) -> PackedInt32Array:
+	
+	var colourless_hadron_interactions: PackedInt32Array = []
+	var hadrons : Array = vision_matrix.split_hadron_ids
+	
+	if hadrons.size() == 0:
+		return colourless_hadron_interactions
+	
+	var quark_paths: Array[PackedInt32Array] = generate_paths(
+		vision_matrix.get_reduced_matrix(func(particle: GLOBALS.Particle): return particle in GLOBALS.QUARKS), pick_next_colour_point
+	)
+	
+	for hadron in hadrons:
+		var colourless_hadron_interaction: int = find_colourless_hadron_interaction(
+			hadron, GLOBALS.flatten(hadrons), quark_paths, paths, path_colours, vision_matrix, colourless_group_interactions
+		)
+		
+		if colourless_hadron_interaction == NOT_FOUND:
+			continue
+		
+		colourless_hadron_interactions.push_back(colourless_hadron_interaction)
+	
+	return colourless_hadron_interactions
+
+func get_quark_path_gluon_points(
+	quark_path: PackedInt32Array, vision_matrix: DrawingMatrix, colourless_group_interactions: PackedInt32Array = []
+) -> PackedInt32Array:
+	var gluon_points: PackedInt32Array = []
+	
+	for point in quark_path:
+		for connected_id in vision_matrix.get_connected_ids(point):
+			if IGNORE_COLOURLESS_GROUP_GLUONS or connected_id in colourless_group_interactions:
+				continue
+			
+			if vision_matrix.are_interactions_connected(point, connected_id, false, GLOBALS.Particle.gluon):
+				gluon_points.push_back(point)
+
+	return gluon_points
+
+func find_colourless_hadron_interaction(
+	hadron: PackedInt32Array, hadron_ids: PackedInt32Array, quark_paths: Array[PackedInt32Array], paths: Array[PackedInt32Array],
+	path_colours: Array[Colour], vision_matrix: DrawingMatrix, colourless_group_interactions: PackedInt32Array = [],
+) -> int:
+	
+	var gluon_ids: PackedInt32Array = []
+	
+	for hadron_point in hadron:
+		var quark_path_id: int = get_path_from_id(hadron_point, quark_paths)
+		if get_colour_from_id(hadron_point, path_colours, paths) != get_colour_from_id(quark_paths[quark_path_id][-1], path_colours, paths):
+			return NOT_FOUND
+		
+		if quark_paths[quark_path_id][-1] not in hadron_ids:
+			return NOT_FOUND
+		
+		gluon_ids.append_array(get_quark_path_gluon_points(quark_paths[quark_path_id], vision_matrix))
+	
+	if gluon_ids.size() != 1:
+		return NOT_FOUND
+	
+	return gluon_ids[0]
+
+func find_colourless_group_interactions(paths: Array[PackedInt32Array], vision_matrix: DrawingMatrix) -> PackedInt32Array:
+	var colourless_group_interactions: PackedInt32Array = []
+	
+	var possible_paths: Array[PackedInt32Array] = paths.filter(
+		func(path: PackedInt32Array): return path_has_repeated_point(path) and (
+			GLOBALS.any(path, func(point: int): return vision_matrix.is_extreme_point(point)) or
+			GLOBALS.any(path, func(point: int): return vision_matrix.is_lonely_extreme_point(point))
+		)
+	)
+	
+	for path in possible_paths:
+		var colourless_group_interaction: int = find_colourless_group_interaction(path, vision_matrix)
+		
+		if colourless_group_interaction == NOT_FOUND:
+			continue
+		
+		colourless_group_interactions.push_back(colourless_group_interaction)
+	
+	return colourless_group_interactions
+
+func get_repeated_points_in_path(path: PackedInt32Array) -> PackedInt32Array:
+	var repeated_points: PackedInt32Array = []
+	
+	for point in path:
+		if path.count(point) > 1 and point not in repeated_points:
+			repeated_points.push_back(point)
+	
+	return repeated_points
+
+func find_colourless_group_interaction(path: PackedInt32Array, vision_matrix: DrawingMatrix) -> int:
+	var repeated_points: PackedInt32Array = get_repeated_points_in_path(path)
+	
+	var test_index: int = GLOBALS.find_var(repeated_points, func(point: int): return vision_matrix.get_connected_count(point, true) > 2, 1)
+
+	var test_gluon: PackedInt32Array = [repeated_points[test_index-1], repeated_points[test_index]]
+	var test_point: int = repeated_points[test_index]
+
+	var test_vision_matrix: DrawingMatrix = vision_matrix.duplicate()
+	test_vision_matrix.disconnect_interactions(repeated_points[test_index-1], repeated_points[test_index], GLOBALS.Particle.gluon, true)
+
+	for reached_point in test_vision_matrix.reach_ids(test_point, [], true):
+		if reached_point == test_point:
+			continue
+		
+		if test_vision_matrix.is_extreme_point(reached_point) or test_vision_matrix.is_lonely_extreme_point(reached_point):
+			return NOT_FOUND
+
+	return test_point
+
+func generate_path_colours(paths: Array[PackedInt32Array], colour_matrix: DrawingMatrix) -> Array[Colour]:
+	var path_colours: Array[Colour] = []
+	path_colours.resize(paths.size())
+	path_colours.fill(Colour.None)
+	
+	path_colours = colour_hadrons(path_colours, paths, colour_matrix)
+	path_colours = colour_other_paths(path_colours)
+
+	return path_colours
+
+func colour_other_paths(path_colours: Array[Colour]) -> Array[Colour]:
+	for path_id in range(path_colours.size()):
+		if path_colours[path_id] != Colour.None:
+			continue
+		
+		path_colours[path_id] = get_least_used_colour(path_colours)
+	
+	return path_colours
+
+func is_hadron_restricted(hadron: PackedInt32Array, path_colours: Array[Colour], paths: Array[PackedInt32Array]) -> bool:
+	return (
+		get_hadron_colours(hadron, path_colours, paths).any(func(colour: Colour) -> bool: return colour != Colour.None) and
+		get_hadron_colours(hadron, path_colours, paths).any(func(colour: Colour) -> bool: return colour == Colour.None)
+	)
+
+func colour_hadron(hadron: PackedInt32Array, path_colours: Array[Colour], paths: Array[PackedInt32Array]) -> Array[Colour]:
+	if hadron.size() == 2:
+		path_colours = colour_meson(hadron, path_colours, paths)
+	else:
+		path_colours = colour_baryon(hadron, path_colours, paths)
+	
+	return path_colours
+
+func colour_hadrons(path_colours: Array[Colour], paths: Array[PackedInt32Array], colour_matrix: DrawingMatrix) -> Array[Colour]:
+	var entry_baryons: Array = colour_matrix.get_entry_baryons()
+	var exit_baryons: Array = colour_matrix.get_exit_baryons()
+	var mesons: Array = colour_matrix.get_mesons()
+	var hadrons: Array = entry_baryons + exit_baryons + mesons
+	
+	for hadron in hadrons:
+		path_colours = colour_hadron(hadron, path_colours, paths)
+		
+		for i in range(MAX_RESTRICTED_HADRON_COUNT):
+			var restricted_hadron_index : int = (
+				GLOBALS.find_var(hadrons, func(test_hadron: PackedInt32Array) -> bool:
+					return is_hadron_restricted(test_hadron, path_colours, paths))
+			)
+			
+			if restricted_hadron_index == hadrons.size():
+				break
+			
+			colour_hadron(hadrons[restricted_hadron_index], path_colours, paths)
+	
+	return path_colours
+
+func get_path_from_id(id:int, paths: Array[PackedInt32Array]) -> int:
+	return GLOBALS.find_var(paths, func(path: PackedInt32Array): return id in path)
+
+func get_colour_from_id(id: int, path_colours: Array[Colour], paths: Array[PackedInt32Array]) -> Colour:
+	return path_colours[get_path_from_id(id, paths)]
+
+func get_hadron_colours(hadron: Array, path_colours: Array[Colour], paths: Array[PackedInt32Array]) -> Array[Colour]:
+	var hadron_colours: Array[Colour] = []
+	
+	for hadron_point in hadron:
+		hadron_colours.push_back(get_colour_from_id(hadron_point, path_colours, paths))
+	
+	return hadron_colours
+
+func colour_baryon(baryon: Array, path_colours: Array[Colour], paths: Array[PackedInt32Array]) -> Array[Colour]:
+	var used_colours: Array[Colour] = get_hadron_colours(baryon, path_colours, paths)
+	
+	if !used_colours.any(func(colour: Colour): return colour == Colour.None):
+		return path_colours
+	
+	for baryon_point in baryon:
+		if get_colour_from_id(baryon_point, path_colours, paths) != Colour.None:
+			continue
+		
+		var next_colour: Colour = colours[GLOBALS.find_var(
+			colours, func(colour: Colour): return colour not in used_colours
+		)]
+		
+		used_colours[baryon.find(baryon_point)] = next_colour
+		path_colours[get_path_from_id(baryon_point, paths)] = next_colour
+
+	return path_colours
+
+func get_least_used_colour(path_colours: Array[Colour]) -> Colour:
+	var least_used_colour: Colour = Colour.Red
+	var lowest_count: int = path_colours.count(Colour.Red)
+	
+	for colour in colours:
+		if path_colours.count(colour) < lowest_count:
+			lowest_count = path_colours.count(colour)
+			least_used_colour = colour
+	
+	return least_used_colour
+
+func colour_meson(meson: Array, path_colours: Array[Colour], paths: Array[PackedInt32Array]) -> Array[Colour]:
+	var meson_colours: Array[Colour] = get_hadron_colours(meson, path_colours, paths)
+	
+	for i in range(meson.size()):
+		if meson_colours[i] == Colour.None:
+			continue
+		
+		path_colours[get_path_from_id(meson[(i + 1) % meson.size()], paths)] = meson_colours[i]
+		
+		return path_colours
+	
+	var meson_colour: Colour = get_least_used_colour(path_colours)
+	for meson_point in meson:
+		path_colours[get_path_from_id(meson_point, paths)] = meson_colour
+
+	return path_colours
+
+func generate_colour_matrix(drawing_matrix: DrawingMatrix) -> DrawingMatrix:
+	var colour_matrix : DrawingMatrix = drawing_matrix.get_reduced_matrix(
+		func(particle: GLOBALS.Particle): return particle in GLOBALS.COLOUR_PARTICLES
+	)
+	
+	var gluon_connections: Array = []
+	for id in range(colour_matrix.matrix_size):
+		for connected_id in colour_matrix.get_connected_ids(id):
+			if colour_matrix.get_connection_particles(id, connected_id).front() == GLOBALS.Particle.gluon:
+				gluon_connections.push_back([connected_id, id, GLOBALS.Particle.gluon])
+	
+	for gluon_connection in gluon_connections:
+		colour_matrix.insert_connection(gluon_connection)
+	
+	for id in range(colour_matrix.matrix_size):
+		if (
+			colour_matrix.is_extreme_point(id) or
+			colour_matrix.is_lonely_extreme_point(id, colour_matrix.EntryFactor.Entry) or
+			colour_matrix.is_lonely_extreme_point(id, colour_matrix.EntryFactor.Exit)
+		):
+			continue
+		
+		if colour_matrix.get_connected_count(id) == 0 or colour_matrix.get_connected_count(id, false, true) == 0:
+			colour_matrix.empty_interaction(id)
+	
+	return colour_matrix
+
+func pick_next_shade_point(current_point: int, available_points: PackedInt32Array, connections: DrawingMatrix) -> int:
+	return available_points[randi() % available_points.size()]
+
+func pick_next_colour_point(current_point: int, available_points: PackedInt32Array, connections: DrawingMatrix) -> int:
+	var gluon_points: PackedInt32Array = []
+	
+	if available_points.size() == 0:
+		return NOT_FOUND
+
+	for available_point in available_points:
+		if GLOBALS.Particle.gluon in connections.get_connection_particles(current_point, available_point, false, true):
+			gluon_points.push_back(available_point)
+	
+	if gluon_points.size() != 0:
+		return gluon_points[randi() % gluon_points.size()]
+	
+	return available_points[randi() % available_points.size()]
+
+func generate_paths(colour_matrix: DrawingMatrix, next_point_picker_function: Callable) -> Array[PackedInt32Array]:
+	var paths: Array[PackedInt32Array] = []
+	
+	paths.append_array(generate_state_paths(colour_matrix, next_point_picker_function))
+	
+	for _attempt in range(MAX_LOOP_ATTEMPTS):
+		var loop_matrix: DrawingMatrix = colour_matrix.duplicate()
+		var loops: Array[PackedInt32Array] = generate_loops(loop_matrix, next_point_picker_function)
+		
+		if loops == INVALID_PATH:
+			continue
+		
+		paths.append_array(loops)
+		break
+	
+	return paths
+
+func generate_state_paths(connections: DrawingMatrix, next_point_picker_function: Callable) -> Array[PackedInt32Array]:
+	var start_points: PackedInt32Array = connections.get_entry_points()
+	start_points.append_array(connections.get_lonely_entry_points())
+	
+	var end_points: PackedInt32Array = connections.get_exit_points()
+	end_points.append_array(connections.get_lonely_exit_points())
+	
+	var paths: Array[PackedInt32Array] = []
+	
+	for start_point in start_points:
+		var new_path: PackedInt32Array = generate_path(connections, start_point, end_points, next_point_picker_function)
+		
+		if new_path.size() == 0:
+			continue
+			
+		paths.push_back(new_path)
+	
+	return paths
+
+func generate_loops(connections: DrawingMatrix, next_point_picker_function: Callable) -> Array[PackedInt32Array]:
+	
+	var paths: Array[PackedInt32Array] = []
+	
+	for _loop in range(MAX_LOOP_COUNT):
+		var start_point: int =  connections.find_first_id(func(id: int): return connections.get_connected_count(id, true) > 0)
+		
+		if start_point == connections.matrix_size:
+			if paths.any(func(path: PackedInt32Array): get_repeated_points_in_path(paths[-1]).size() > 1):
+				breakpoint
+			return paths
+		
+		var new_path : PackedInt32Array = generate_path(connections, start_point, [start_point], next_point_picker_function)
+		
+		if new_path.size() == 0:
+			return INVALID_PATH
+		
+		paths.push_back(new_path)
+	
+	return INVALID_PATH
+
+func get_next_point(current_point: int, path: PackedInt32Array, connections: DrawingMatrix, next_point_picker_function: Callable) -> int:
+	var available_points: PackedInt32Array = connections.get_connected_ids(current_point)
+	var ap: PackedInt32Array = available_points.duplicate()
+	
+	for available_point in ap:
+		if path.size() < 2:
+			continue
+		
+		if available_point == path[-2] or (current_point == path[1] and available_point == path[0]):
+			available_points.remove_at(available_points.find(available_point))
+			
+	return next_point_picker_function.call(current_point, available_points, connections)
+
+func generate_path(
+	connections: DrawingMatrix, start_point: int, end_points: PackedInt32Array, next_point_picker_function: Callable
+) -> PackedInt32Array:
+	
+	var path: PackedInt32Array = []
+	var current_point: int = start_point
+	
+	for step in range(MAX_PATH_STEPS):
+		path.push_back(current_point)
+		
+		if current_point in end_points and step != 0:
+			return path
+		
+		var next_point: int = get_next_point(current_point, path, connections, next_point_picker_function)
+		
+		if next_point == NOT_FOUND:
+			return []
+		
+		var connection: Array = [
+			current_point, next_point, connections.get_connection_particles(current_point, next_point, false, true).front()
+		]
+		
+		connections.remove_connection(connection)
+		current_point = next_point
+	
+	return []
+
 func init(diagram: DiagramBase, state_lines: Array) -> void:
 	Diagram = diagram
 	Initial = state_lines[StateLine.StateType.Initial]
 	Final = state_lines[StateLine.StateType.Final]
-
-func _set_showing_type(new_type):
-	showing_type = new_type
-	
-	for i in range(VISION_NAMES.size()):
-		show_lines(i, i == showing_type)
-
-func show_lines(i, is_show):
-	for cl in get_tree().get_nodes_in_group(VISION_NAMES[i] + '_lines'):
-		cl.visible = is_show
-
-func set_valid_showing():
-	for vision_type in range(VISION_NAMES.size()):
-		if vision_type == showing_type:
-			show_lines(vision_type, Level.valid())
-		
-
-func colourful(force):
-	var generate_colours = false
-	var generate_shade = false
-	
-	set_valid_showing()
-
-	for i in get_tree().get_nodes_in_group('interactions'):
-		if i.has_colour:
-			generate_colours = true
-		if i.has_shade:
-			generate_shade = true
-	
-	if generate_colours:
-		build_colour(force)
-	if generate_shade:
-		build_shade()
 
 func build_diagram():
 	var interactions := get_tree().get_nodes_in_group('interactions')
@@ -180,7 +612,7 @@ func build_shade():
 		paths += new_paths
 	
 	
-	show_colours(paths, path_colours, SHADES, GLOBALS.VISION_TYPE.SHADE)
+#	show_colours(paths, path_colours, SHADES, GLOBALS.VISION_TYPE.SHADE)
 
 func get_shade_paths(shade : int) -> Array:
 	var shaded_interactions := []
@@ -287,14 +719,14 @@ func build_colour(force):
 	if prev_c_paths.size() == 0:
 		force = true
 
-	if (!same or force) and Level.valid:
-		find_colour_paths()
-	elif same and Level.valid:
-		show_colours(prev_paths, prev_c_paths, RGB, GLOBALS.VISION_TYPE.COLOUR)
-	elif same and !Level.valid and !check_colourless:
-		get_tree().call_group('colour_lines', 'queue_free')
-	elif check_colourless:
-		find_colour_paths()
+#	if (!same or force) and Level.valid:
+#		find_colour_paths()
+#	elif same and Level.valid:
+#		show_colours(prev_paths, prev_c_paths, RGB, GLOBALS.VISION_TYPE.COLOUR)
+#	elif same and !Level.valid and !check_colourless:
+#		get_tree().call_group('colour_lines', 'queue_free')
+#	elif check_colourless:
+#		find_colour_paths()
 
 func find_colour_paths():
 	var end_points := []
@@ -352,7 +784,7 @@ func find_colour_paths():
 	
 	var path_colours = hadron_colour(paths, cdiagram, meson_points, baryon_points, entry_baryon_points, start_points, end_points)
 			
-	show_colours(paths, path_colours, RGB, GLOBALS.VISION_TYPE.COLOUR)
+#	show_colours(paths, path_colours, RGB, GLOBALS.VISION_TYPE.COLOUR)
 
 func get_start_end_points(interactions : Array, diagram : AStar2D) -> Array:
 	var start_points := []
@@ -730,77 +1162,77 @@ func normalise_colours(path_colours):
 	
 	return path_colours
 
-func show_colours(paths, path_colours, colours, type):
-	prev_c_paths = [path_colours][0]
-	prev_paths = [paths][0]
-	
-	get_tree().call_group(VISION_NAMES[type] + '_lines', 'queue_free')
-	
-	if path_colours.size() == 0:
-		if print_results:
-			print('No paths to show')
-		return
-	
-	if print_results:
-		print('showing colours')
-		print(path_colours)
-	
-	var interactions : Array
-	
-	match type:
-		GLOBALS.VISION_TYPE.COLOUR:
-			set_interaction_colour(path_colours, paths)
-			interactions = cinteractions
-			
-		GLOBALS.VISION_TYPE.SHADE:
-			interactions = shade_interactions
-	
-	if type == GLOBALS.VISION_TYPE.COLOUR:
-		set_interaction_colour(path_colours, paths)
-	
-	for i in range(paths.size()):
-		var path = paths[i]
-		var colour = colours[path_colours[i]]
-		
-		for p in range(path.size() - 1):
-			var cl = ColourLine.instantiate()
-			
-			cl.add_to_group(VISION_NAMES[type] + '_lines')
-			
-			cl.colour = path_colours[i]
-			cl.default_color = colour
-			
-			if type == GLOBALS.VISION_TYPE.SHADE:
-				cl.default_color = Color('ffffff')
-				cl.width = 5
-				cl.shade = path_colours[i]
-				match path_colours[i]:
-					SHADE.BRIGHT:
-						cl.texture = load('res://Textures/ParticlesAndLines/colour_lines/line_white.png')
-					SHADE.DARK:
-						cl.texture = load('res://Textures/ParticlesAndLines/colour_lines/line_black.png')
-					
-			if showing_type == type:
-				cl.visible = true
-			
-			var line
-			for l in get_tree().get_nodes_in_group('lines'):
-				if interactions[path[p]].position in l.points and interactions[path[p+1]].position in l.points:
-					line = l
-					break
-
-			cl.points[0] = interactions[path[p]].position
-			cl.points[1] = interactions[path[p+1]].position
-			
-			
-			cl.position = 3 * (cl.points[1] - cl.points[0]).orthogonal().normalized()
-
-			if is_instance_valid(line):
-				if cl.points[0] == line.points[1]:
-					cl.reverse = true
-				line.add_child(cl)
-	
-	set_valid_showing()
+#func show_colours(paths, path_colours, colours, type):
+#	prev_c_paths = [path_colours][0]
+#	prev_paths = [paths][0]
+#
+#	get_tree().call_group(VISION_NAMES[type] + '_lines', 'queue_free')
+#
+#	if path_colours.size() == 0:
+#		if print_results:
+#			print('No paths to show')
+#		return
+#
+#	if print_results:
+#		print('showing colours')
+#		print(path_colours)
+#
+#	var interactions : Array
+#
+#	match type:
+#		GLOBALS.VISION_TYPE.COLOUR:
+#			set_interaction_colour(path_colours, paths)
+#			interactions = cinteractions
+#
+#		GLOBALS.VISION_TYPE.SHADE:
+#			interactions = shade_interactions
+#
+#	if type == GLOBALS.VISION_TYPE.COLOUR:
+#		set_interaction_colour(path_colours, paths)
+#
+#	for i in range(paths.size()):
+#		var path = paths[i]
+#		var colour = colours[path_colours[i]]
+#
+#		for p in range(path.size() - 1):
+#			var cl = ColourLine.instantiate()
+#
+#			cl.add_to_group(VISION_NAMES[type] + '_lines')
+#
+#			cl.colour = path_colours[i]
+#			cl.default_color = colour
+#
+#			if type == GLOBALS.VISION_TYPE.SHADE:
+#				cl.default_color = Color('ffffff')
+#				cl.width = 5
+#				cl.shade = path_colours[i]
+#				match path_colours[i]:
+#					SHADE.BRIGHT:
+#						cl.texture = load('res://Textures/ParticlesAndLines/colour_lines/line_white.png')
+#					SHADE.DARK:
+#						cl.texture = load('res://Textures/ParticlesAndLines/colour_lines/line_black.png')
+#
+#			if showing_type == type:
+#				cl.visible = true
+#
+#			var line
+#			for l in get_tree().get_nodes_in_group('lines'):
+#				if interactions[path[p]].position in l.points and interactions[path[p+1]].position in l.points:
+#					line = l
+#					break
+#
+#			cl.points[0] = interactions[path[p]].position
+#			cl.points[1] = interactions[path[p+1]].position
+#
+#
+#			cl.position = 3 * (cl.points[1] - cl.points[0]).orthogonal().normalized()
+#
+#			if is_instance_valid(line):
+#				if cl.points[0] == line.points[1]:
+#					cl.reverse = true
+#				line.add_child(cl)
+#
+#	set_valid_showing()
 
 func set_interaction_colour(path_colours, paths):
 	var path_colour_string = []
