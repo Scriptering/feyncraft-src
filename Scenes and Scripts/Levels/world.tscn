@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://c7n4o6dbkwilh"]
+[gd_scene load_steps=45 format=3 uid="uid://c7n4o6dbkwilh"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/Levels/World.gd" id="1"]
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="1_ovngh"]
@@ -35,7 +35,9 @@
 [ext_resource type="PackedScene" uid="uid://byavwp1ynk2py" path="res://Scenes and Scripts/event_bus.tscn" id="28_tehha"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ue1rd"]
+resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
+shader_parameter/alpha = 1.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vcfy5"]
 
@@ -50,9 +52,44 @@ expand_margin_top = 1.0
 expand_margin_right = 1.0
 expand_margin_bottom = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_edkne"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dr5nu"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+shader_parameter/alpha = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4asg1"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+shader_parameter/alpha = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lwi7w"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+shader_parameter/alpha = 1.0
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_w1703"]
 resource_name = "ParticleButtons"
 allow_unpress = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_keecq"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+shader_parameter/alpha = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yfdvj"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+shader_parameter/alpha = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2sdx2"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+shader_parameter/alpha = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_odq3f"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+shader_parameter/alpha = 1.0
 
 [node name="World" type="Node2D" groups=["level"]]
 material = SubResource("ShaderMaterial_ue1rd")
@@ -232,8 +269,6 @@ patch_margin_bottom = 15
 [node name="SolutionGeneration" parent="Algorithms" instance=ExtResource("18")]
 
 [node name="PathFinding" parent="Algorithms" instance=ExtResource("13")]
-IGNORE_COLOURLESS_GROUP_GLUONS = true
-print_results = true
 
 [node name="ProblemGeneration" parent="Algorithms" instance=ExtResource("13_62803")]
 
@@ -261,6 +296,7 @@ z_index = 2
 
 [node name="GeneratedDiagrams" parent="FloatingMenus" instance=ExtResource("27_laye5")]
 visible = false
+material = SubResource("ShaderMaterial_dr5nu")
 offset_left = 177.0
 offset_top = 51.0
 offset_right = 177.0
@@ -269,6 +305,7 @@ title = "Generated Diagrams"
 
 [node name="SubmittedDiagrams" parent="FloatingMenus" instance=ExtResource("27_laye5")]
 visible = false
+material = SubResource("ShaderMaterial_4asg1")
 offset_left = 177.0
 offset_top = 51.0
 offset_right = 177.0
@@ -285,6 +322,7 @@ offset_right = 633.0
 offset_bottom = 120.0
 
 [node name="ParticleButtons" parent="PullOutTabs" instance=ExtResource("24_lunb1")]
+material = SubResource("ShaderMaterial_lwi7w")
 anchors_preset = 7
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -294,27 +332,31 @@ offset_right = 159.0
 offset_bottom = 336.0
 grow_vertical = 0
 size_flags_horizontal = 4
-particle_button_group = SubResource("ButtonGroup_edkne")
+particle_button_group = SubResource("ButtonGroup_w1703")
 
 [node name="GenerationButton" parent="PullOutTabs" instance=ExtResource("22_u64s1")]
+material = SubResource("ShaderMaterial_keecq")
 offset_left = -76.0
 offset_top = 57.0
 offset_right = -76.0
 offset_bottom = 57.0
 
 [node name="ProblemTab" parent="PullOutTabs" instance=ExtResource("20_uaeg6")]
+material = SubResource("ShaderMaterial_yfdvj")
 offset_left = 157.0
 offset_top = -26.0
 offset_right = 157.0
 offset_bottom = -26.0
 
 [node name="MenuTab" parent="PullOutTabs" instance=ExtResource("24_f5s2a")]
+material = SubResource("ShaderMaterial_2sdx2")
 offset_left = 541.0
 offset_top = 339.0
 offset_right = 541.0
 offset_bottom = 339.0
 
 [node name="ControlsTab" parent="PullOutTabs" instance=ExtResource("25_1bppy")]
+material = SubResource("ShaderMaterial_odq3f")
 offset_left = 10.0
 offset_top = 326.0
 offset_right = 10.0

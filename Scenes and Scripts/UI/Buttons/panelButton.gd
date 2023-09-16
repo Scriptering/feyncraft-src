@@ -82,7 +82,7 @@ func _set_expand_icon(new_value: bool) -> void:
 		$ContentContainer/HBoxContainer/ButtonIcon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	else:
 		$ContentContainer/HBoxContainer/ButtonIcon.expand_mode = TextureRect.EXPAND_KEEP_SIZE
-		$ContentContainer/HBoxContainer/ButtonIcon.stretch_mode = TextureRect.STRETCH_KEEP
+		$ContentContainer/HBoxContainer/ButtonIcon.stretch_mode = TextureRect.STRETCH_KEEP_CENTERED
 	
 	
 func _set_button_button_group(new_value: ButtonGroup) -> void:

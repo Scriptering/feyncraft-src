@@ -23,6 +23,7 @@ script = ExtResource("2_ns04d")
 [node name="Button" type="Button" parent="."]
 use_parent_material = true
 layout_mode = 2
+mouse_filter = 1
 action_mode = 0
 keep_pressed_outside = true
 
