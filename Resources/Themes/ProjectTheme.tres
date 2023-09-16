@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=59 format=3 uid="uid://cfmbhoq8cuoge"]
+[gd_resource type="Theme" load_steps=60 format=3 uid="uid://cfmbhoq8cuoge"]
 
 [ext_resource type="FontFile" uid="uid://cq27s0444iwkg" path="res://Textures/Fonts/ConnectionIi-2wj8.otf" id="1_s2gkm"]
 [ext_resource type="Texture2D" uid="uid://bcwpdy0lmenue" path="res://Textures/Buttons/square_disabled.png" id="2_8m3bx"]
@@ -9,8 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://dvqoqr6r6f3bj" path="res://Textures/UI/Information/checkbox/check_box.png" id="7_45kj4"]
 [ext_resource type="Texture2D" uid="uid://dteauwy1hwl25" path="res://Textures/UI/Information/checkbutton/checkbutton_off.png" id="8_65x6c"]
 [ext_resource type="Texture2D" uid="uid://c3xdjv1m3l5tb" path="res://Textures/UI/Information/checkbutton/checkbutton_on.png" id="9_pnq7a"]
-[ext_resource type="Texture2D" uid="uid://dwk1sdoelypxf" path="res://Textures/UI/Information/checkbutton/button_highlight.png" id="10_a6r5o"]
-[ext_resource type="Texture2D" uid="uid://ly3mlobpku4" path="res://Textures/UI/Information/checkbutton/button.png" id="11_jhn8g"]
+[ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="11_hhi3e"]
 [ext_resource type="Texture2D" uid="uid://d3yddpra1btvh" path="res://Textures/UI/Information/sliderH/grabber.png" id="16_tru3k"]
 [ext_resource type="Texture2D" uid="uid://dne44tp1it1xy" path="res://Textures/UI/Information/sliderH/grabber_highlighted.png" id="17_slpu5"]
 [ext_resource type="Texture2D" uid="uid://30oe2l4k7py3" path="res://Textures/UI/Information/sliderH/tick.png" id="18_rn8st"]
@@ -577,13 +576,33 @@ texture_margin_bottom = 5.0
 
 [sub_resource type="StyleBoxEmpty" id="35"]
 
-[sub_resource type="StyleBoxTexture" id="37"]
-texture = ExtResource("10_a6r5o")
-region_rect = Rect2(0, 0, 20, 11)
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fgl3n"]
+texture = ExtResource("11_hhi3e")
+texture_margin_left = 6.0
+texture_margin_top = 7.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
 
-[sub_resource type="StyleBoxTexture" id="36"]
-texture = ExtResource("11_jhn8g")
-region_rect = Rect2(0, 0, 20, 11)
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_mllob"]
+texture = ExtResource("11_hhi3e")
+texture_margin_left = 6.0
+texture_margin_top = 7.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qn32u"]
+texture = ExtResource("11_hhi3e")
+texture_margin_left = 6.0
+texture_margin_top = 7.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hcv62"]
+texture = ExtResource("11_hhi3e")
+texture_margin_left = 6.0
+texture_margin_top = 7.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
 
 [sub_resource type="StyleBoxEmpty" id="38"]
 
@@ -1572,10 +1591,10 @@ CheckButton/icons/off_disabled = ExtResource("8_65x6c")
 CheckButton/icons/on = ExtResource("9_pnq7a")
 CheckButton/styles/disabled = SubResource("34")
 CheckButton/styles/focus = SubResource("35")
-CheckButton/styles/hover = SubResource("37")
-CheckButton/styles/hover_pressed = SubResource("37")
-CheckButton/styles/normal = SubResource("36")
-CheckButton/styles/pressed = SubResource("36")
+CheckButton/styles/hover = SubResource("StyleBoxTexture_fgl3n")
+CheckButton/styles/hover_pressed = SubResource("StyleBoxTexture_mllob")
+CheckButton/styles/normal = SubResource("StyleBoxTexture_qn32u")
+CheckButton/styles/pressed = SubResource("StyleBoxTexture_hcv62")
 HSlider/constants/grabber_offset = 0
 HSlider/icons/grabber = ExtResource("16_tru3k")
 HSlider/icons/grabber_disabled = ExtResource("16_tru3k")

@@ -1,6 +1,7 @@
 extends PanelContainer
 
 var problem_set: ProblemSet
+var is_custom: bool = false
 
 @onready var ButtonContainer = $VBoxContainer/ProblemSetContainer/ButtonContainer
 

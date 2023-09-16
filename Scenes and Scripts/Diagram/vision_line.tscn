@@ -56,9 +56,6 @@ void fragment()
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vwy20"]
 resource_local_to_scene = true
 shader = SubResource("Shader_0csxq")
-shader_parameter/line_color = Color(0.247059, 0.207843, 0.215686, 1)
-shader_parameter/outline_color = Color(0, 0, 0, 1)
-shader_parameter/line_thickness = 0.5
 
 [node name="VisionLine" type="Line2D"]
 material = SubResource("ShaderMaterial_vwy20")

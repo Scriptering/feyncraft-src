@@ -18,8 +18,7 @@ func generate(
 	for _interaction_generation_attempt in range(MAX_INTERACTION_GENERATION_ATTEMPTS):
 		state_interactions = generate_state_interactions(
 			get_useable_state_interactions(use_hadrons, useable_particles),
-			randi_range(min_degree, max_degree),
-			GLOBALS.Particle.W in useable_particles
+			randi_range(min_degree, max_degree)
 		)
 		
 		if state_interactions == []:
@@ -97,9 +96,9 @@ func get_useable_hadrons(useable_particles: Array[GLOBALS.Particle]) -> Array:
 	return useable_hadrons
 
 func get_possible_interaction_count(degree: int) -> Array:
-	return range(ceil(3*degree/2), 3*degree, 2)
+	return range(ceil(3*degree/2.0), 3*degree, 2)
 
-func generate_state_interactions(useable_state_interactions: Array, degree: int, can_weak: bool) -> Array:
+func generate_state_interactions(useable_state_interactions: Array, degree: int) -> Array:
 	var interaction_count : int = get_possible_interaction_count(degree).pick_random()
 	var quantum_number_difference: Array = []
 	quantum_number_difference.resize(GLOBALS.QuantumNumber.size())
@@ -116,7 +115,7 @@ func generate_state_interactions(useable_state_interactions: Array, degree: int,
 			quantum_number_difference, useable_state_interactions, interaction_count, interaction_count_left, W_count, state_factor
 		)
 		
-		current_state = (current_state + 1) % 2
+		current_state = (current_state + 1) % 2 as StateLine.StateType
 		
 		if next_state_interaction == []:
 			continue

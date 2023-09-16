@@ -1,137 +1,22 @@
-[gd_scene load_steps=15 format=3 uid="uid://ccnq2lkaxb0vk"]
+[gd_scene load_steps=5 format=3 uid="uid://ccnq2lkaxb0vk"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_lh18m"]
+[ext_resource type="StyleBox" uid="uid://dvu7f5h7snggp" path="res://Scenes and Scripts/UI/Menus/panelContainer.tres" id="2_4r8ad"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/ProblemSelection/problem_set_selector.gd" id="2_7m7ny"]
-[ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="2_gg22h"]
-[ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="2_yg01j"]
-[ext_resource type="Texture2D" uid="uid://lg66gjndu2yn" path="res://Textures/UI/ProblemSetSelector/shaded_box.png" id="3_fobx5"]
-[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="3_ifhvu"]
-[ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="4_c7up8"]
-[ext_resource type="Texture2D" uid="uid://cb6lapmtgwimd" path="res://Textures/UI/MiniDiagram/arrow_right.png" id="6_prjng"]
-[ext_resource type="Texture2D" uid="uid://bvdr8f7dmjpmi" path="res://Textures/Buttons/icons/upload.png" id="6_vodua"]
-[ext_resource type="Texture2D" uid="uid://bt1qr2mxq14l8" path="res://Textures/Buttons/icons/restart.png" id="8_j8w63"]
-[ext_resource type="Texture2D" uid="uid://em240kmik0fw" path="res://Textures/Buttons/icons/modify.png" id="10_8itxw"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_aa8r0"]
-content_margin_left = 0.0
-content_margin_top = 0.0
-content_margin_right = 0.0
-content_margin_bottom = 0.0
-texture = ExtResource("2_gg22h")
-texture_margin_left = 6.0
-texture_margin_top = 6.0
-texture_margin_right = 6.0
-texture_margin_bottom = 6.0
+[sub_resource type="Theme" id="Theme_rpr5f"]
+TabContainer/styles/panel = ExtResource("2_4r8ad")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ykbe3"]
-resource_local_to_scene = true
-shader = ExtResource("3_ifhvu")
-shader_parameter/alpha = 1.0
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5vbnf"]
-texture = ExtResource("3_fobx5")
-texture_margin_left = 6.0
-texture_margin_top = 6.0
-texture_margin_right = 6.0
-texture_margin_bottom = 6.0
-
-[node name="ProblemSetSelector" type="PanelContainer"]
+[node name="ProblemSetSelector2" type="TabContainer"]
 material = ExtResource("1_lh18m")
+custom_minimum_size = Vector2(121, 121)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -568.0
-offset_bottom = -278.0
+offset_right = -519.0
+offset_bottom = -239.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = SubResource("Theme_rpr5f")
+tabs_visible = false
 script = ExtResource("2_7m7ny")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-use_parent_material = true
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Title" type="Label" parent="VBoxContainer"]
-layout_mode = 2
-text = "Electromagnetic"
-horizontal_alignment = 1
-text_overrun_behavior = 3
-
-[node name="ProblemSetContainer" type="PanelContainer" parent="VBoxContainer"]
-use_parent_material = true
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_aa8r0")
-
-[node name="ButtonContainer" type="PanelContainer" parent="VBoxContainer/ProblemSetContainer"]
-material = SubResource("ShaderMaterial_ykbe3")
-layout_mode = 2
-mouse_filter = 1
-theme_override_styles/panel = SubResource("StyleBoxTexture_5vbnf")
-
-[node name="Buttons" type="GridContainer" parent="VBoxContainer/ProblemSetContainer/ButtonContainer"]
-use_parent_material = true
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-columns = 2
-
-[node name="Resume" parent="VBoxContainer/ProblemSetContainer/ButtonContainer/Buttons" instance=ExtResource("2_yg01j")]
-material = null
-use_parent_material = true
-layout_mode = 2
-mouse_filter = 1
-icon = ExtResource("6_prjng")
-minimum_size = Vector2(22, 22)
-icon_use_parent_material = true
-
-[node name="Tooltip" parent="VBoxContainer/ProblemSetContainer/ButtonContainer/Buttons/Resume" instance=ExtResource("4_c7up8")]
-tooltip = "Resume"
-
-[node name="Restart" parent="VBoxContainer/ProblemSetContainer/ButtonContainer/Buttons" instance=ExtResource("2_yg01j")]
-material = null
-use_parent_material = true
-layout_mode = 2
-mouse_filter = 1
-icon = ExtResource("8_j8w63")
-minimum_size = Vector2(22, 22)
-expand_icon = true
-icon_use_parent_material = true
-
-[node name="Tooltip" parent="VBoxContainer/ProblemSetContainer/ButtonContainer/Buttons/Restart" instance=ExtResource("4_c7up8")]
-tooltip = "Restart"
-
-[node name="Upload" parent="VBoxContainer/ProblemSetContainer/ButtonContainer/Buttons" instance=ExtResource("2_yg01j")]
-material = null
-use_parent_material = true
-layout_mode = 2
-mouse_filter = 1
-icon = ExtResource("6_vodua")
-minimum_size = Vector2(22, 22)
-expand_icon = true
-icon_use_parent_material = true
-
-[node name="Tooltip" parent="VBoxContainer/ProblemSetContainer/ButtonContainer/Buttons/Upload" instance=ExtResource("4_c7up8")]
-tooltip = "Upload"
-
-[node name="Modify" parent="VBoxContainer/ProblemSetContainer/ButtonContainer/Buttons" instance=ExtResource("2_yg01j")]
-material = null
-use_parent_material = true
-layout_mode = 2
-mouse_filter = 1
-icon = ExtResource("10_8itxw")
-minimum_size = Vector2(22, 22)
-expand_icon = true
-icon_use_parent_material = true
-
-[node name="Tooltip" parent="VBoxContainer/ProblemSetContainer/ButtonContainer/Buttons/Modify" instance=ExtResource("4_c7up8")]
-tooltip = "Modify"
-
-[node name="IndexLabel" type="Label" parent="VBoxContainer"]
-layout_mode = 2
-text = "1/10"
-horizontal_alignment = 1
-vertical_alignment = 2
-
-[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
-[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

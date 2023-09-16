@@ -487,7 +487,7 @@ func generate_directional_connections(
 
 func generate_possible_path(
 	connected_interaction_matrices: Array[InteractionMatrix], start_point: int, available_points: PackedInt32Array,
-	end_points: PackedInt32Array, state_points: PackedInt32Array, particle_test_function: Callable, entry_states: Array = [],
+	end_points: PackedInt32Array, state_points: PackedInt32Array, particle_test_function: Callable,
 	starting_particle : GLOBALS.Particle = GLOBALS.Particle.none
 ) -> Array[InteractionMatrix]:
 	
@@ -523,7 +523,7 @@ func generate_possible_state_paths(
 		for starting_particle in entry_states[start_point]:
 			connected_interaction_matrices = generate_possible_path(
 				connected_interaction_matrices, start_point, available_points, end_points, state_points, particle_test_function,
-				entry_states, starting_particle
+				starting_particle
 			)
 	
 	return connected_interaction_matrices
