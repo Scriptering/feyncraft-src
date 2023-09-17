@@ -45,7 +45,7 @@ func create_hadron_joint(drawing_matrix: DrawingMatrix, hadron_ids: PackedInt32A
 	var quarks: Array = []
 	
 	for id in hadron_ids:
-		interaction_ys.push_back(drawing_matrix.normalised_interaction_positions[id].y*grid_size)
+		interaction_ys.push_back(int(drawing_matrix.normalised_interaction_positions[id].y*grid_size))
 		
 		if drawing_matrix.get_state_from_id(id) == StateLine.StateType.Initial:
 			quarks.append_array(drawing_matrix.get_connected_particles(id))

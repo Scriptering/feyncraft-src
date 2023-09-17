@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://cv6hlxtiukmtc"]
+[gd_scene load_steps=28 format=3 uid="uid://cv6hlxtiukmtc"]
 
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="1_eukm1"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/VisionButtons/vision_buttons.gd" id="1_hjucs"]
@@ -15,7 +15,14 @@
 [ext_resource type="Texture2D" uid="uid://cea5mj3u65016" path="res://Textures/Buttons/square_pressed_active.png" id="10_vbxnf"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8lupt"]
+resource_local_to_scene = true
 shader = ExtResource("1_eukm1")
+shader_parameter/alpha = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b1xoh"]
+resource_local_to_scene = true
+shader = ExtResource("1_eukm1")
+shader_parameter/alpha = 1.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ei2kr"]
 texture = ExtResource("4_hck84")
@@ -24,6 +31,11 @@ texture_margin_top = 6.0
 texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 expand_margin_right = 10.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sgbjl"]
+resource_local_to_scene = true
+shader = ExtResource("1_eukm1")
+shader_parameter/alpha = 1.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kubuy"]
 
@@ -66,6 +78,16 @@ Button/styles/hover = SubResource("StyleBoxTexture_8ny3c")
 Button/styles/normal = SubResource("StyleBoxTexture_ajrl4")
 Button/styles/pressed = SubResource("StyleBoxTexture_3hrye")
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5gcvg"]
+resource_local_to_scene = true
+shader = ExtResource("1_eukm1")
+shader_parameter/alpha = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bg2ma"]
+resource_local_to_scene = true
+shader = ExtResource("1_eukm1")
+shader_parameter/alpha = 1.0
+
 [sub_resource type="Animation" id="Animation_2er6j"]
 length = 0.001
 
@@ -106,6 +128,7 @@ offset_bottom = 40.0
 theme_override_constants/separation = 0
 
 [node name="TabButton" parent="MovingContainer" instance=ExtResource("3_08n6d")]
+material = SubResource("ShaderMaterial_b1xoh")
 layout_mode = 2
 TabIcon = ExtResource("10_qooab")
 TabMinimumSize = Vector2(2.08165e-12, 22)
@@ -124,6 +147,7 @@ size_flags_horizontal = 8
 theme_override_constants/separation = -3
 
 [node name="Colour" parent="MovingContainer/Tab/MovingContainer" instance=ExtResource("5_tinf7")]
+material = SubResource("ShaderMaterial_sgbjl")
 layout_mode = 2
 theme = SubResource("Theme_fuyn4")
 icon = ExtResource("6_v7snu")
@@ -132,6 +156,7 @@ toggle_mode = true
 expand_icon = true
 
 [node name="Shade" parent="MovingContainer/Tab/MovingContainer" instance=ExtResource("5_tinf7")]
+material = SubResource("ShaderMaterial_5gcvg")
 layout_mode = 2
 theme = SubResource("Theme_fuyn4")
 icon = ExtResource("6_63enc")
@@ -140,6 +165,7 @@ toggle_mode = true
 expand_icon = true
 
 [node name="Strength" parent="MovingContainer/Tab/MovingContainer" instance=ExtResource("5_tinf7")]
+material = SubResource("ShaderMaterial_bg2ma")
 layout_mode = 2
 theme = SubResource("Theme_fuyn4")
 icon = ExtResource("7_nx8nj")

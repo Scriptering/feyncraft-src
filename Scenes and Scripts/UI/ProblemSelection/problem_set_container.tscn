@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://0lgbqrhcokwr"]
+
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_s84eo"]
+[ext_resource type="PackedScene" uid="uid://ccnq2lkaxb0vk" path="res://Scenes and Scripts/UI/ProblemSelection/problem_set_selector.tscn" id="3_ej710"]
+[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="4_vnfrs"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5v6dt"]
+resource_local_to_scene = true
+shader = ExtResource("4_vnfrs")
+shader_parameter/alpha = 1.0
+
+[node name="ScrollContainer" type="PanelContainer"]
+material = ExtResource("1_s84eo")
+custom_minimum_size = Vector2(300, 300)
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PanelContainer" type="ScrollContainer" parent="."]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="PanelContainer"]
+layout_mode = 2
+columns = 3
+
+[node name="ProblemSetSelector" parent="PanelContainer/GridContainer" instance=ExtResource("3_ej710")]
+material = SubResource("ShaderMaterial_5v6dt")
+layout_mode = 2

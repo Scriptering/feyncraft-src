@@ -20,14 +20,12 @@ func _ready() -> void:
 	$TooltipTimer.wait_time = delay
 
 func _on_parent_hide_tooltip() -> void:
-	$TooltipTimer.stop()
 	hide_tooltip()
 
 func _on_parent_mouse_entered() -> void:
 	$TooltipTimer.start()
 
 func _on_parent_mouse_exited() -> void:
-	$TooltipTimer.stop()
 	hide_tooltip()
 
 func _on_tooltip_timer_timeout() -> void:
@@ -41,6 +39,7 @@ func show_tooltip() -> void:
 	show()
 
 func hide_tooltip() -> void:
+	$TooltipTimer.stop()
 	hide()
 
 func add_content(content: Node) -> void:

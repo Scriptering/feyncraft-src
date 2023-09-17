@@ -1,105 +1,220 @@
-[gd_scene load_steps=12 format=3 uid="uid://ccnq2lkaxb0vk"]
+[gd_scene load_steps=25 format=3 uid="uid://ccnq2lkaxb0vk"]
 
-[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_lh18m"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/ProblemSelection/problem_set_selector.gd" id="2_7m7ny"]
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="2_gg22h"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="2_yg01j"]
-[ext_resource type="Texture2D" uid="uid://lg66gjndu2yn" path="res://Textures/UI/ProblemSetSelector/shaded_box.png" id="3_fobx5"]
-[ext_resource type="Texture2D" uid="uid://bryamn5jwtk0u" path="res://Textures/Buttons/Tabs/arrow_right.png" id="3_vmlji"]
-[ext_resource type="Texture2D" uid="uid://cbb30ccopvh6r" path="res://Textures/Buttons/icons/reset.png" id="4_2qh0v"]
+[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="3_ifhvu"]
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="4_c7up8"]
+[ext_resource type="FontFile" uid="uid://cq27s0444iwkg" path="res://Textures/Fonts/ConnectionIi-2wj8.otf" id="4_mtvaa"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/BaseOptionMenu.gd" id="5_a6j7k"]
+[ext_resource type="Texture2D" uid="uid://cb6lapmtgwimd" path="res://Textures/UI/MiniDiagram/arrow_right.png" id="6_prjng"]
 [ext_resource type="Texture2D" uid="uid://bvdr8f7dmjpmi" path="res://Textures/Buttons/icons/upload.png" id="6_vodua"]
-[ext_resource type="Texture2D" uid="uid://q7kyu3yv27sv" path="res://Textures/Buttons/icons/hammer.png" id="7_416wp"]
+[ext_resource type="Texture2D" uid="uid://bt1qr2mxq14l8" path="res://Textures/Buttons/icons/restart.png" id="8_j8w63"]
+[ext_resource type="Texture2D" uid="uid://em240kmik0fw" path="res://Textures/Buttons/icons/modify.png" id="10_8itxw"]
+[ext_resource type="PackedScene" uid="uid://b6hfbwan62in4" path="res://Scenes and Scripts/UI/ProblemSelection/problem_set_edit.tscn" id="14_6w3xi"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_aa8r0"]
-content_margin_left = 0.0
-content_margin_top = 0.0
-content_margin_right = 0.0
-content_margin_bottom = 0.0
+[sub_resource type="Shader" id="Shader_tmadl"]
+code = "shader_type canvas_item;
+
+global uniform sampler2D colour_scheme: filter_nearest;
+uniform float alpha: hint_range(0.0, 1.0);
+
+void fragment() {
+	vec4 color = texture(TEXTURE, UV);
+	COLOR = vec4(texture(colour_scheme, vec2(color.r, color.g)).rgb, color.a * alpha);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p05i4"]
+resource_local_to_scene = true
+shader = SubResource("Shader_tmadl")
+shader_parameter/alpha = 1.0
+
+[sub_resource type="FontVariation" id="FontVariation_rv075"]
+base_font = ExtResource("4_mtvaa")
+spacing_top = -1
+spacing_bottom = -1
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1e5hx"]
+texture = ExtResource("2_gg22h")
+texture_margin_left = 6.0
+texture_margin_top = 6.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+region_rect = Rect2(0, 0, 114, 82)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_y84mf"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5gpif"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_mcxos"]
 texture = ExtResource("2_gg22h")
 texture_margin_left = 6.0
 texture_margin_top = 6.0
 texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5vbnf"]
-texture = ExtResource("3_fobx5")
-texture_margin_left = 5.0
-texture_margin_top = 5.0
-texture_margin_right = 5.0
-texture_margin_bottom = 5.0
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_n6knd"]
+
+[sub_resource type="Shader" id="Shader_wd42x"]
+code = "shader_type canvas_item;
+
+global uniform sampler2D colour_scheme: filter_nearest;
+uniform float alpha: hint_range(0.0, 1.0);
+
+void fragment() {
+	vec4 color = texture(TEXTURE, UV);
+	COLOR = vec4(texture(colour_scheme, vec2(color.r, color.g)).rgb, color.a * alpha);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kc84c"]
+resource_local_to_scene = true
+shader = SubResource("Shader_wd42x")
+shader_parameter/alpha = 1.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4wvwq"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_du0a0"]
+resource_local_to_scene = true
+shader = ExtResource("3_ifhvu")
+shader_parameter/alpha = null
 
 [node name="ProblemSetSelector" type="PanelContainer"]
-material = ExtResource("1_lh18m")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = -568.0
-offset_bottom = -278.0
-grow_horizontal = 2
-grow_vertical = 2
+material = SubResource("ShaderMaterial_p05i4")
+offset_right = 12.0
+offset_bottom = 12.0
+script = ExtResource("2_7m7ny")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 use_parent_material = true
 layout_mode = 2
-theme_override_constants/separation = 0
 
-[node name="Title" type="Label" parent="VBoxContainer"]
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer"]
+use_parent_material = true
 layout_mode = 2
-text = "Electromagnetic"
-horizontal_alignment = 1
+size_flags_vertical = 4
+theme_override_fonts/font = SubResource("FontVariation_rv075")
+theme_override_font_sizes/font_size = 9
+theme_override_styles/normal = SubResource("StyleBoxTexture_1e5hx")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_y84mf")
+theme_override_styles/read_only = SubResource("StyleBoxEmpty_5gpif")
+text = "electromagnetic"
+placeholder_text = "[Enter Title]"
+alignment = 1
+max_length = 20
+editable = false
+caret_blink = true
 
-[node name="ProblemSetContainer" type="PanelContainer" parent="VBoxContainer"]
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_mcxos")
+tabs_visible = false
+use_hidden_tabs_for_min_size = true
+script = ExtResource("5_a6j7k")
+
+[node name="ProblemSetContainer" type="PanelContainer" parent="VBoxContainer/TabContainer"]
 use_parent_material = true
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_aa8r0")
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxEmpty_n6knd")
 
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/ProblemSetContainer"]
-use_parent_material = true
+[node name="ButtonContainer" type="PanelContainer" parent="VBoxContainer/TabContainer/ProblemSetContainer"]
+material = SubResource("ShaderMaterial_kc84c")
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_5vbnf")
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxEmpty_4wvwq")
 
-[node name="Buttons" type="GridContainer" parent="VBoxContainer/ProblemSetContainer/PanelContainer"]
+[node name="Buttons" type="GridContainer" parent="VBoxContainer/TabContainer/ProblemSetContainer/ButtonContainer"]
+use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 columns = 2
 
-[node name="Resume" parent="VBoxContainer/ProblemSetContainer/PanelContainer/Buttons" instance=ExtResource("2_yg01j")]
+[node name="Resume" parent="VBoxContainer/TabContainer/ProblemSetContainer/ButtonContainer/Buttons" instance=ExtResource("2_yg01j")]
+material = null
+use_parent_material = true
 layout_mode = 2
-icon = ExtResource("3_vmlji")
+mouse_filter = 1
+icon = ExtResource("6_prjng")
 minimum_size = Vector2(22, 22)
 expand_icon = true
 icon_use_parent_material = true
+action_mode = 1
 
-[node name="Tooltip" parent="VBoxContainer/ProblemSetContainer/PanelContainer/Buttons/Resume" instance=ExtResource("4_c7up8")]
+[node name="Button" parent="VBoxContainer/TabContainer/ProblemSetContainer/ButtonContainer/Buttons/Resume" index="0"]
+custom_minimum_size = Vector2(22, 22)
+action_mode = 1
+
+[node name="ButtonIcon" parent="VBoxContainer/TabContainer/ProblemSetContainer/ButtonContainer/Buttons/Resume/ContentContainer/HBoxContainer" index="1"]
+visible = true
+use_parent_material = true
+texture = ExtResource("6_prjng")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Tooltip" parent="VBoxContainer/TabContainer/ProblemSetContainer/ButtonContainer/Buttons/Resume" instance=ExtResource("4_c7up8")]
 tooltip = "Resume"
 
-[node name="Restart" parent="VBoxContainer/ProblemSetContainer/PanelContainer/Buttons" instance=ExtResource("2_yg01j")]
+[node name="Restart" parent="VBoxContainer/TabContainer/ProblemSetContainer/ButtonContainer/Buttons" instance=ExtResource("2_yg01j")]
+material = null
+use_parent_material = true
 layout_mode = 2
-icon = ExtResource("4_2qh0v")
+mouse_filter = 1
+icon = ExtResource("8_j8w63")
 minimum_size = Vector2(22, 22)
 expand_icon = true
 icon_use_parent_material = true
+action_mode = 1
 
-[node name="Tooltip" parent="VBoxContainer/ProblemSetContainer/PanelContainer/Buttons/Restart" instance=ExtResource("4_c7up8")]
+[node name="Tooltip" parent="VBoxContainer/TabContainer/ProblemSetContainer/ButtonContainer/Buttons/Restart" instance=ExtResource("4_c7up8")]
 tooltip = "Restart"
 
-[node name="Upload" parent="VBoxContainer/ProblemSetContainer/PanelContainer/Buttons" instance=ExtResource("2_yg01j")]
+[node name="Upload" parent="VBoxContainer/TabContainer/ProblemSetContainer/ButtonContainer/Buttons" instance=ExtResource("2_yg01j")]
+material = null
+use_parent_material = true
 layout_mode = 2
+mouse_filter = 1
 icon = ExtResource("6_vodua")
 minimum_size = Vector2(22, 22)
 expand_icon = true
 icon_use_parent_material = true
+action_mode = 1
 
-[node name="Tooltip" parent="VBoxContainer/ProblemSetContainer/PanelContainer/Buttons/Upload" instance=ExtResource("4_c7up8")]
+[node name="Tooltip" parent="VBoxContainer/TabContainer/ProblemSetContainer/ButtonContainer/Buttons/Upload" instance=ExtResource("4_c7up8")]
 tooltip = "Upload"
 
-[node name="Delete" parent="VBoxContainer/ProblemSetContainer/PanelContainer/Buttons" instance=ExtResource("2_yg01j")]
+[node name="Modify" parent="VBoxContainer/TabContainer/ProblemSetContainer/ButtonContainer/Buttons" instance=ExtResource("2_yg01j")]
+material = null
+use_parent_material = true
 layout_mode = 2
-icon = ExtResource("7_416wp")
+mouse_filter = 1
+icon = ExtResource("10_8itxw")
 minimum_size = Vector2(22, 22)
 expand_icon = true
+icon_use_parent_material = true
+action_mode = 1
 
-[node name="Tooltip" parent="VBoxContainer/ProblemSetContainer/PanelContainer/Buttons/Delete" instance=ExtResource("4_c7up8")]
+[node name="Tooltip" parent="VBoxContainer/TabContainer/ProblemSetContainer/ButtonContainer/Buttons/Modify" instance=ExtResource("4_c7up8")]
 tooltip = "Modify"
+
+[node name="ProblemSetEdit" parent="VBoxContainer/TabContainer" instance=ExtResource("14_6w3xi")]
+visible = false
+material = SubResource("ShaderMaterial_du0a0")
+layout_mode = 2
+
+[node name="IndexLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "1/10"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
+[connection signal="pressed" from="VBoxContainer/TabContainer/ProblemSetContainer/ButtonContainer/Buttons/Modify" to="." method="_on_modify_pressed"]
+
+[editable path="VBoxContainer/TabContainer/ProblemSetContainer/ButtonContainer/Buttons/Resume"]

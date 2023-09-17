@@ -76,7 +76,6 @@ func store_diagrams(matrices: Array) -> void:
 	update_index_label()
 
 func update_index_label() -> void:
-	var diagram_count: int = get_diagram_count()
 	var label_index: int = current_index + 1 if diagrams.size() != 0 else 0
 	
 	$VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/IndexContainer/IndexLabel.text = (

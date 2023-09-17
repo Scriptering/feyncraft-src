@@ -5,6 +5,10 @@ enum COLOURS {primary, secondary, pencil, primary_highlight, invalid, invalid_hi
 
 enum Vision {Colour, Shade, Strength, None}
 
+enum Mode {
+	Sandbox, ProblemSolving, ProblemCreation, ParticleSelection, SolutionCreation
+}
+
 #0 photon, 1 gluon, 2 Z, 3 H, 4 W,
 #5 lepton, 6 electron, 7 muon, 8 tau,
 #9 lepton_neutrino, 10 electron_neutrino, 11 muon_neutrino, 12 tau_neutrino,

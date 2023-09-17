@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://bgvo11j4kfjdc"]
+[gd_scene load_steps=38 format=3 uid="uid://bgvo11j4kfjdc"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_h3eo1"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/generation_button.gd" id="2_plgpl"]
@@ -17,6 +17,23 @@ texture_margin_top = 6.0
 texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 expand_margin_left = 15.0
+
+[sub_resource type="Shader" id="Shader_tmadl"]
+code = "shader_type canvas_item;
+
+global uniform sampler2D colour_scheme: filter_nearest;
+uniform float alpha: hint_range(0.0, 1.0);
+
+void fragment() {
+	vec4 color = texture(TEXTURE, UV);
+	COLOR = vec4(texture(colour_scheme, vec2(color.r, color.g)).rgb, color.a * alpha);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_estbh"]
+resource_local_to_scene = true
+shader = SubResource("Shader_tmadl")
+shader_parameter/alpha = null
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ac3qj"]
 
@@ -65,6 +82,21 @@ expand_margin_left = 15.0
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_58h3g"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kpwo5"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xbmkg"]
+resource_local_to_scene = true
+shader = SubResource("Shader_tmadl")
+shader_parameter/alpha = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q4d1n"]
+resource_local_to_scene = true
+shader = SubResource("Shader_tmadl")
+shader_parameter/alpha = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e76l1"]
+resource_local_to_scene = true
+shader = SubResource("Shader_tmadl")
+shader_parameter/alpha = null
 
 [node name="GenerationButton" type="Control" node_paths=PackedStringArray("ContentContainer", "TabButton", "MovingContainer")]
 material = ExtResource("1_h3eo1")
@@ -116,8 +148,10 @@ theme_override_constants/separation = 0
 alignment = 2
 
 [node name="Save" parent="MovingContainer/PanelContainer/VBoxContainer" instance=ExtResource("8_ihypl")]
+material = SubResource("ShaderMaterial_estbh")
 layout_mode = 2
 text = "Save States"
+action_mode = 0
 
 [node name="Saved State" type="Label" parent="MovingContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
@@ -219,15 +253,20 @@ layout_mode = 2
 alignment = 1
 
 [node name="Generate" parent="MovingContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("8_ihypl")]
+material = SubResource("ShaderMaterial_xbmkg")
 layout_mode = 2
 text = "Generate"
+action_mode = 0
 
 [node name="View" parent="MovingContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("8_ihypl")]
+material = SubResource("ShaderMaterial_q4d1n")
 layout_mode = 2
 text = "View"
 disabled = true
+action_mode = 0
 
 [node name="Tab" parent="MovingContainer" instance=ExtResource("6_7e8c8")]
+material = SubResource("ShaderMaterial_e76l1")
 layout_mode = 2
 TabIcon = ExtResource("4_xnawx")
 
