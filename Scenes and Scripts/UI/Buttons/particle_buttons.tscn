@@ -1,8 +1,7 @@
-[gd_scene load_steps=82 format=3 uid="uid://ds2iet11sv3ty"]
+[gd_scene load_steps=64 format=3 uid="uid://ds2iet11sv3ty"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_kba7r"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Buttons/particle_buttons.gd" id="1_magdw"]
-[ext_resource type="ButtonGroup" uid="uid://ct8rqk7pojop1" path="res://Scenes and Scripts/UI/Buttons/particles.tres" id="2_0vjci"]
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="4_1s6pp"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/PullOutTab.gd" id="5_hlykg"]
 [ext_resource type="PackedScene" uid="uid://diro6a1arcmc0" path="res://Scenes and Scripts/UI/Buttons/ParticleButtons/ParticleButton.tscn" id="7_omtgh"]
@@ -72,7 +71,7 @@ Label/fonts/font = SubResource("FontVariation_bju0s")
 
 [sub_resource type="Theme" id="Theme_be46u"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_62j5o"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r0fuy"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 shader_parameter/alpha = 1.0
@@ -90,186 +89,122 @@ texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 expand_margin_bottom = 10.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_16pje"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bma18"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 shader_parameter/alpha = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_61joa"]
-resource_name = "ParticleButtons"
-allow_unpress = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3maqx"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tqf6w"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 shader_parameter/alpha = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_c3d16"]
-resource_name = "ParticleButtons"
-allow_unpress = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_jyhva"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2yi72"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 shader_parameter/alpha = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_647hl"]
-resource_name = "ParticleButtons"
-allow_unpress = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_a1ax6"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6g3dy"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 shader_parameter/alpha = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_aoips"]
-resource_name = "ParticleButtons"
-allow_unpress = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_6wqai"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1b5s6"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 shader_parameter/alpha = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_hq5df"]
-resource_name = "ParticleButtons"
-allow_unpress = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gvo7i"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p57gy"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 shader_parameter/alpha = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_5nspk"]
-resource_name = "ParticleButtons"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_d0wbw"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lh510"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 shader_parameter/alpha = 1.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_22v5c"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vq147"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 shader_parameter/alpha = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_ap8lc"]
-resource_name = "ParticleButtons"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_eh2uu"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_41xbv"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 shader_parameter/alpha = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_dprlb"]
-resource_name = "ParticleButtons"
-allow_unpress = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_oo4pe"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_45q67"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 shader_parameter/alpha = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_pf7io"]
-resource_name = "ParticleButtons"
-allow_unpress = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_iwym7"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_78ew2"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 shader_parameter/alpha = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_gu7rd"]
-resource_name = "ParticleButtons"
-allow_unpress = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_kae8d"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yj6xg"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 shader_parameter/alpha = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_16a5r"]
-resource_name = "ParticleButtons"
-allow_unpress = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_lona0"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e8sni"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 shader_parameter/alpha = 1.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8faxo"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wgm2k"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 shader_parameter/alpha = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_ubj5a"]
-resource_name = "ParticleButtons"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ut3kb"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tkq46"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 shader_parameter/alpha = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_3o72a"]
-resource_name = "ParticleButtons"
-allow_unpress = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_7xfvt"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tiuyc"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 shader_parameter/alpha = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_4kaqt"]
-resource_name = "ParticleButtons"
-allow_unpress = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_k0yvd"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l7pnc"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 shader_parameter/alpha = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_16rhn"]
-resource_name = "ParticleButtons"
-allow_unpress = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_7f8k7"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cax5b"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 shader_parameter/alpha = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_rjrwq"]
-resource_name = "ParticleButtons"
-allow_unpress = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ati8w"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h6anv"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 shader_parameter/alpha = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_q1skb"]
-resource_name = "ParticleButtons"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_dw1yb"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_470tj"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 shader_parameter/alpha = 1.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_yfuuc"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h68nl"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 shader_parameter/alpha = 1.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_yymgf"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_034ca"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 shader_parameter/alpha = 1.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4dr81"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3cole"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 shader_parameter/alpha = 1.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2xxwt"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4aavn"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 shader_parameter/alpha = 1.0
@@ -283,7 +218,6 @@ anchor_right = 0.5
 grow_horizontal = 2
 theme = SubResource("Theme_nl1g0")
 script = ExtResource("1_magdw")
-particle_button_group = ExtResource("2_0vjci")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 use_parent_material = true
@@ -319,7 +253,7 @@ grow_horizontal = 2
 theme_override_constants/separation = 0
 
 [node name="PullOutTabButtonUp" parent="HBoxContainer/Leptons/MovingContainer" instance=ExtResource("8_uancy")]
-material = SubResource("ShaderMaterial_62j5o")
+material = SubResource("ShaderMaterial_r0fuy")
 use_parent_material = true
 custom_minimum_size = Vector2(55, 2.08165e-12)
 layout_mode = 2
@@ -347,46 +281,46 @@ theme_override_constants/v_separation = -2
 alignment = 1
 
 [node name="electron" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_16pje")
+material = SubResource("ShaderMaterial_bma18")
+use_parent_material = false
 layout_mode = 2
 particle = 6
 icon = ExtResource("8_67c1b")
-button_group = SubResource("ButtonGroup_61joa")
 
 [node name="muon" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_3maqx")
+material = SubResource("ShaderMaterial_tqf6w")
+use_parent_material = false
 layout_mode = 2
 particle = 7
 icon = ExtResource("9_2eilt")
-button_group = SubResource("ButtonGroup_c3d16")
 
 [node name="tau" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_jyhva")
+material = SubResource("ShaderMaterial_2yi72")
+use_parent_material = false
 layout_mode = 2
 particle = 8
 icon = ExtResource("10_sfd4m")
-button_group = SubResource("ButtonGroup_647hl")
 
 [node name="electron_neutrino" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_a1ax6")
+material = SubResource("ShaderMaterial_6g3dy")
+use_parent_material = false
 layout_mode = 2
 particle = 10
 icon = ExtResource("11_lvtjt")
-button_group = SubResource("ButtonGroup_aoips")
 
 [node name="muon_neutrino" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_6wqai")
+material = SubResource("ShaderMaterial_1b5s6")
+use_parent_material = false
 layout_mode = 2
 particle = 11
 icon = ExtResource("12_a0utd")
-button_group = SubResource("ButtonGroup_hq5df")
 
 [node name="tau_neutrino" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_gvo7i")
+material = SubResource("ShaderMaterial_p57gy")
+use_parent_material = false
 layout_mode = 2
 particle = 12
 icon = ExtResource("13_s46ou")
-button_group = SubResource("ButtonGroup_5nspk")
 
 [node name="Bosons" type="Control" parent="HBoxContainer" node_paths=PackedStringArray("ContentContainer", "TabButton", "MovingContainer")]
 use_parent_material = true
@@ -412,7 +346,7 @@ grow_horizontal = 2
 theme_override_constants/separation = 0
 
 [node name="PullOutTabButtonUp" parent="HBoxContainer/Bosons/MovingContainer" instance=ExtResource("8_uancy")]
-material = SubResource("ShaderMaterial_d0wbw")
+material = SubResource("ShaderMaterial_lh510")
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -433,38 +367,38 @@ theme_override_constants/v_separation = -2
 alignment = 1
 
 [node name="photon" parent="HBoxContainer/Bosons/MovingContainer/Tab/Bosons" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_22v5c")
+material = SubResource("ShaderMaterial_vq147")
+use_parent_material = false
 layout_mode = 2
 icon = ExtResource("16_yvhx5")
-button_group = SubResource("ButtonGroup_ap8lc")
 
 [node name="gluon" parent="HBoxContainer/Bosons/MovingContainer/Tab/Bosons" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_eh2uu")
+material = SubResource("ShaderMaterial_41xbv")
+use_parent_material = false
 layout_mode = 2
 particle = 1
 icon = ExtResource("17_h03t5")
-button_group = SubResource("ButtonGroup_dprlb")
 
 [node name="W" parent="HBoxContainer/Bosons/MovingContainer/Tab/Bosons" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_oo4pe")
+material = SubResource("ShaderMaterial_45q67")
+use_parent_material = false
 layout_mode = 2
 particle = 4
 icon = ExtResource("18_qblna")
-button_group = SubResource("ButtonGroup_pf7io")
 
 [node name="Z" parent="HBoxContainer/Bosons/MovingContainer/Tab/Bosons" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_iwym7")
+material = SubResource("ShaderMaterial_78ew2")
+use_parent_material = false
 layout_mode = 2
 particle = 2
 icon = ExtResource("18_vqhce")
-button_group = SubResource("ButtonGroup_gu7rd")
 
 [node name="H" parent="HBoxContainer/Bosons/MovingContainer/Tab/Bosons" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_kae8d")
+material = SubResource("ShaderMaterial_yj6xg")
+use_parent_material = false
 layout_mode = 2
 particle = 3
 icon = ExtResource("19_p5w2o")
-button_group = SubResource("ButtonGroup_16a5r")
 
 [node name="Quarks" type="Control" parent="HBoxContainer" node_paths=PackedStringArray("ContentContainer", "TabButton", "MovingContainer")]
 use_parent_material = true
@@ -490,7 +424,7 @@ grow_horizontal = 2
 theme_override_constants/separation = 0
 
 [node name="PullOutTabButtonUp" parent="HBoxContainer/Quarks/MovingContainer" instance=ExtResource("8_uancy")]
-material = SubResource("ShaderMaterial_lona0")
+material = SubResource("ShaderMaterial_e8sni")
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -511,46 +445,46 @@ theme_override_constants/v_separation = -2
 alignment = 1
 
 [node name="up" parent="HBoxContainer/Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_8faxo")
+material = SubResource("ShaderMaterial_wgm2k")
+use_parent_material = false
 layout_mode = 2
 particle = 14
 icon = ExtResource("20_6f0nv")
-button_group = SubResource("ButtonGroup_ubj5a")
 
 [node name="charm" parent="HBoxContainer/Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_ut3kb")
+material = SubResource("ShaderMaterial_tkq46")
+use_parent_material = false
 layout_mode = 2
 particle = 15
 icon = ExtResource("21_0ad65")
-button_group = SubResource("ButtonGroup_3o72a")
 
 [node name="top" parent="HBoxContainer/Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_7xfvt")
+material = SubResource("ShaderMaterial_tiuyc")
+use_parent_material = false
 layout_mode = 2
 particle = 16
 icon = ExtResource("22_cx8b1")
-button_group = SubResource("ButtonGroup_4kaqt")
 
 [node name="down" parent="HBoxContainer/Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_k0yvd")
+material = SubResource("ShaderMaterial_l7pnc")
+use_parent_material = false
 layout_mode = 2
 particle = 18
 icon = ExtResource("23_vb17d")
-button_group = SubResource("ButtonGroup_16rhn")
 
 [node name="strange" parent="HBoxContainer/Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_7f8k7")
+material = SubResource("ShaderMaterial_cax5b")
+use_parent_material = false
 layout_mode = 2
 particle = 19
 icon = ExtResource("24_4efsy")
-button_group = SubResource("ButtonGroup_rjrwq")
 
 [node name="bottom" parent="HBoxContainer/Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_ati8w")
+material = SubResource("ShaderMaterial_h6anv")
+use_parent_material = false
 layout_mode = 2
 particle = 20
 icon = ExtResource("25_e3fe6")
-button_group = SubResource("ButtonGroup_q1skb")
 
 [node name="General" type="Control" parent="HBoxContainer" node_paths=PackedStringArray("ContentContainer", "TabButton", "MovingContainer")]
 use_parent_material = true
@@ -576,7 +510,7 @@ grow_horizontal = 2
 theme_override_constants/separation = 0
 
 [node name="PullOutTabButtonUp" parent="HBoxContainer/General/MovingContainer" instance=ExtResource("8_uancy")]
-material = SubResource("ShaderMaterial_dw1yb")
+material = SubResource("ShaderMaterial_470tj")
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -597,31 +531,31 @@ theme_override_constants/v_separation = -2
 alignment = 1
 
 [node name="lepton" parent="HBoxContainer/General/MovingContainer/Tab/General" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_yfuuc")
+material = SubResource("ShaderMaterial_h68nl")
+use_parent_material = false
 layout_mode = 2
 particle = 5
 icon = ExtResource("28_dahfx")
-button_group = SubResource("ButtonGroup_ubj5a")
 
 [node name="bright_quark" parent="HBoxContainer/General/MovingContainer/Tab/General" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_yymgf")
+material = SubResource("ShaderMaterial_034ca")
+use_parent_material = false
 layout_mode = 2
 particle = 13
 icon = ExtResource("29_xleuq")
-button_group = SubResource("ButtonGroup_4kaqt")
 
 [node name="lepton_neutrino" parent="HBoxContainer/General/MovingContainer/Tab/General" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_4dr81")
+material = SubResource("ShaderMaterial_3cole")
+use_parent_material = false
 layout_mode = 2
 particle = 9
 icon = ExtResource("30_luk6k")
-button_group = SubResource("ButtonGroup_3o72a")
 
 [node name="dark_quark" parent="HBoxContainer/General/MovingContainer/Tab/General" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_2xxwt")
+material = SubResource("ShaderMaterial_4aavn")
+use_parent_material = false
 layout_mode = 2
 particle = 17
 icon = ExtResource("31_uy8wt")
-button_group = SubResource("ButtonGroup_16rhn")
 
 [editable path="HBoxContainer/Leptons/MovingContainer/PullOutTabButtonUp"]

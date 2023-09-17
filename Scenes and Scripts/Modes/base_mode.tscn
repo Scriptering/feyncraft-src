@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://8nb3v708klvk"]
+
+[ext_resource type="Script" path="res://Scenes and Scripts/Modes/BaseMode.gd" id="1_04ujc"]
+
+[node name="BaseMode" type="Node"]
+script = ExtResource("1_04ujc")

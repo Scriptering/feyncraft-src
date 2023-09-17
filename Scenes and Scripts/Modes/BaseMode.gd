@@ -1,0 +1,38 @@
+extends Node
+class_name BaseMode
+
+@export var mode: Mode
+
+enum Mode {
+	Null,
+	Sandbox,
+	ProblemSolving,
+	ParticleSelection,
+	ProblemCreation,
+	SolutionCreation
+}
+
+var ProblemTab: Control
+var VisionTab: Control
+var GenerationTab: Control
+var OptionsTab: Control
+var ParticleButtons: Control
+
+
+func enter() -> void:
+	toggle_menu_visibility()
+
+func exit() -> void:
+	pass
+
+func input(_event: InputEvent) -> Mode:
+	return Mode.Null
+
+func process(_delta: float) -> Mode:
+	return Mode.Null
+
+func physics_process(_delta: float) -> Mode:
+	return Mode.Null
+
+func toggle_menu_visibility() -> void:
+	pass

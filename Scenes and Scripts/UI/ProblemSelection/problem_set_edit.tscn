@@ -1,164 +1,134 @@
-[gd_scene load_steps=26 format=3 uid="uid://c7lypmsuqa3g0"]
+[gd_scene load_steps=21 format=3 uid="uid://b6hfbwan62in4"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_7bo03"]
 [ext_resource type="FontFile" uid="uid://cq27s0444iwkg" path="res://Textures/Fonts/ConnectionIi-2wj8.otf" id="2_60aru"]
 [ext_resource type="Texture2D" uid="uid://cs50mifpalsrn" path="res://Textures/Buttons/CheckButton/checked.png" id="2_irbsl"]
 [ext_resource type="Texture2D" uid="uid://cdfgpqy1srg8j" path="res://Textures/Buttons/CheckButton/unchecked.png" id="3_cs2t4"]
-[ext_resource type="Texture2D" uid="uid://bn572c7lrben7" path="res://Textures/UI/box_hover.png" id="4_4cgf2"]
-[ext_resource type="StyleBox" uid="uid://dvu7f5h7snggp" path="res://Scenes and Scripts/UI/Menus/panelContainer.tres" id="4_wng1k"]
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="7_e4swi"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/ProblemSelection/problem_set_edit.gd" id="7_mnd7d"]
-[ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="8_0eupk"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/ProblemSelection/BaseCheckButton.gd" id="8_gyxq3"]
-[ext_resource type="Texture2D" uid="uid://cfclcitg3wwrb" path="res://Textures/UI/joint.png" id="10_cqghq"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="11_3njlh"]
+[ext_resource type="Texture2D" uid="uid://bcu6ptkd3fwfe" path="res://Textures/Buttons/icons/submit.png" id="11_ce51q"]
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="12_1f7po"]
-[ext_resource type="Texture2D" uid="uid://blp8o56nt6djk" path="res://Textures/Buttons/X_icon.png" id="13_byd5i"]
 [ext_resource type="Texture2D" uid="uid://em240kmik0fw" path="res://Textures/Buttons/icons/modify.png" id="14_4ul7e"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ryh4c"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fdbvi"]
-content_margin_top = 5.0
-content_margin_bottom = 5.0
-texture = ExtResource("4_4cgf2")
-texture_margin_left = 6.0
-texture_margin_top = 6.0
-texture_margin_right = 6.0
-texture_margin_bottom = 6.0
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ho4cm"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5emyc"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vimyv"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_coosi"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_v3cli"]
 
 [sub_resource type="Theme" id="Theme_8yu3m"]
 default_font = ExtResource("2_60aru")
-default_font_size = 8
+default_font_size = 7
+CheckButton/constants/h_separation = 4
 CheckButton/icons/checked = ExtResource("2_irbsl")
 CheckButton/icons/unchecked = ExtResource("3_cs2t4")
 CheckButton/styles/focus = SubResource("StyleBoxEmpty_ryh4c")
-CheckButton/styles/hover = SubResource("StyleBoxTexture_fdbvi")
-CheckButton/styles/hover_pressed = SubResource("StyleBoxTexture_fdbvi")
-CheckButton/styles/normal = ExtResource("4_wng1k")
-CheckButton/styles/pressed = ExtResource("4_wng1k")
+CheckButton/styles/hover = SubResource("StyleBoxEmpty_ho4cm")
+CheckButton/styles/hover_pressed = SubResource("StyleBoxEmpty_5emyc")
+CheckButton/styles/normal = SubResource("StyleBoxEmpty_vimyv")
+CheckButton/styles/pressed = SubResource("StyleBoxEmpty_coosi")
 PanelContainer/styles/panel = SubResource("StyleBoxEmpty_v3cli")
 
-[sub_resource type="FontVariation" id="FontVariation_pmfes"]
-base_font = ExtResource("2_60aru")
-spacing_top = -1
-spacing_bottom = -1
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_paq4h"]
-texture = ExtResource("8_0eupk")
-texture_margin_left = 6.0
-texture_margin_top = 6.0
-texture_margin_right = 6.0
-texture_margin_bottom = 6.0
-region_rect = Rect2(0, 0, 114, 82)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7crpg"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ce82q"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ct56d"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gvjsi"]
 resource_local_to_scene = true
 shader = ExtResource("12_1f7po")
 shader_parameter/alpha = 1.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_udwrl"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7ujcj"]
 resource_local_to_scene = true
 shader = ExtResource("12_1f7po")
 shader_parameter/alpha = 1.0
 
 [node name="ProblemSetEdit" type="PanelContainer"]
 material = ExtResource("1_7bo03")
-offset_right = 109.0
-offset_bottom = 116.0
+offset_right = 89.0
+offset_bottom = 70.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = SubResource("Theme_8yu3m")
 script = ExtResource("7_mnd7d")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer2" type="VBoxContainer" parent="."]
+use_parent_material = true
+custom_minimum_size = Vector2(89, 72)
+layout_mode = 2
+alignment = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer2"]
 use_parent_material = true
 layout_mode = 2
+size_flags_vertical = 2
 theme_override_constants/separation = 2
 
-[node name="LineEdit" type="LineEdit" parent="VBoxContainer"]
-use_parent_material = true
-layout_mode = 2
-size_flags_vertical = 4
-theme_override_fonts/font = SubResource("FontVariation_pmfes")
-theme_override_font_sizes/font_size = 7
-theme_override_styles/normal = SubResource("StyleBoxTexture_paq4h")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_7crpg")
-theme_override_styles/read_only = SubResource("StyleBoxEmpty_ce82q")
-text = "electromagnetic"
-placeholder_text = "[Enter Title]"
-alignment = 1
-max_length = 15
-
-[node name="CustomSolutions" type="CheckButton" parent="VBoxContainer"]
+[node name="CustomSolutions" type="CheckButton" parent="VBoxContainer2/VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
 action_mode = 0
 text = "Custom Solutions"
 script = ExtResource("8_gyxq3")
 
-[node name="Tooltip" parent="VBoxContainer/CustomSolutions" instance=ExtResource("7_e4swi")]
+[node name="Tooltip" parent="VBoxContainer2/VBoxContainer/CustomSolutions" instance=ExtResource("7_e4swi")]
 tooltip = "Enable for specific solutions."
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer2/VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
-theme_override_constants/separation = -1
 
-[node name="LimitedParticles" type="CheckButton" parent="VBoxContainer/VBoxContainer"]
+[node name="LimitedParticles" type="CheckButton" parent="VBoxContainer2/VBoxContainer/VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
 action_mode = 0
 text = "Limited Particles"
 script = ExtResource("8_gyxq3")
 
-[node name="Tooltip" parent="VBoxContainer/VBoxContainer/LimitedParticles" instance=ExtResource("7_e4swi")]
+[node name="Tooltip" parent="VBoxContainer2/VBoxContainer/VBoxContainer/LimitedParticles" instance=ExtResource("7_e4swi")]
 tooltip = "Limit particles that can be used."
 
-[node name="HiddenParticlesContainer" type="VBoxContainer" parent="VBoxContainer/VBoxContainer"]
-use_parent_material = true
-layout_mode = 2
-theme_override_constants/separation = -1
-
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/HiddenParticlesContainer"]
-use_parent_material = true
-custom_minimum_size = Vector2(16, 4)
-layout_mode = 2
-size_flags_horizontal = 4
-texture = ExtResource("10_cqghq")
-
-[node name="HiddenParticles" type="CheckButton" parent="VBoxContainer/VBoxContainer/HiddenParticlesContainer"]
+[node name="HiddenParticles" type="CheckButton" parent="VBoxContainer2/VBoxContainer/VBoxContainer"]
+visible = false
 use_parent_material = true
 layout_mode = 2
 action_mode = 0
 text = "Hidden Particles"
 script = ExtResource("8_gyxq3")
 
-[node name="Tooltip" parent="VBoxContainer/VBoxContainer/HiddenParticlesContainer/HiddenParticles" instance=ExtResource("7_e4swi")]
+[node name="Tooltip" parent="VBoxContainer2/VBoxContainer/VBoxContainer/HiddenParticles" instance=ExtResource("7_e4swi")]
 tooltip = "Unavailable particles are hidden, instead of disabled."
 
-[node name="Buttons" type="HBoxContainer" parent="VBoxContainer"]
+[node name="Buttons" type="HBoxContainer" parent="VBoxContainer2"]
 layout_mode = 2
+size_flags_vertical = 8
+alignment = 1
 
-[node name="Close" parent="VBoxContainer/Buttons" instance=ExtResource("11_3njlh")]
-material = SubResource("ShaderMaterial_ct56d")
+[node name="Return" parent="VBoxContainer2/Buttons" instance=ExtResource("11_3njlh")]
+material = SubResource("ShaderMaterial_gvjsi")
 layout_mode = 2
-icon = ExtResource("13_byd5i")
+icon = ExtResource("11_ce51q")
+minimum_size = Vector2(23, 23)
+icon_use_parent_material = true
+action_mode = 1
 
-[node name="Tooltip" parent="VBoxContainer/Buttons/Close" instance=ExtResource("7_e4swi")]
-tooltip = "Close"
+[node name="Tooltip" parent="VBoxContainer2/Buttons/Return" instance=ExtResource("7_e4swi")]
+tooltip = "Return"
 
-[node name="Create" parent="VBoxContainer/Buttons" instance=ExtResource("11_3njlh")]
-material = SubResource("ShaderMaterial_udwrl")
+[node name="Create" parent="VBoxContainer2/Buttons" instance=ExtResource("11_3njlh")]
+material = SubResource("ShaderMaterial_7ujcj")
 layout_mode = 2
 icon = ExtResource("14_4ul7e")
 minimum_size = Vector2(23, 23)
 icon_use_parent_material = true
+action_mode = 1
 
-[connection signal="toggled" from="VBoxContainer/VBoxContainer/LimitedParticles" to="." method="_on_limited_particles_toggled"]
+[node name="Tooltip" parent="VBoxContainer2/Buttons/Create" instance=ExtResource("7_e4swi")]
+tooltip = "Create Problems"
+
+[connection signal="toggled" from="VBoxContainer2/VBoxContainer/VBoxContainer/LimitedParticles" to="." method="_on_limited_particles_toggled"]
+[connection signal="pressed" from="VBoxContainer2/Buttons/Return" to="." method="_on_return_pressed"]

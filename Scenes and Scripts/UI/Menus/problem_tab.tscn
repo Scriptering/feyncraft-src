@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://bbkvwth6ke1is"]
+[gd_scene load_steps=34 format=3 uid="uid://bbkvwth6ke1is"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_vo33s"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/PullOutTab.gd" id="2_kmb27"]
@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="7_itf5n"]
 [ext_resource type="Texture2D" uid="uid://bcu6ptkd3fwfe" path="res://Textures/Buttons/icons/submit.png" id="8_2kr0t"]
 [ext_resource type="FontFile" uid="uid://dohkbu7ekkfx8" path="res://Textures/Fonts/pixeltype/Pixeltype.ttf" id="8_cwpoq"]
+[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="8_w33hb"]
 [ext_resource type="Texture2D" uid="uid://b3diapu0ec332" path="res://Textures/Buttons/icons/puzzle_piece.png" id="9_oqp5o"]
 [ext_resource type="PackedScene" uid="uid://80bi27me1iqr" path="res://Scenes and Scripts/UI/Buttons/pull_out_tab_button_down.tscn" id="10_xn6km"]
 
@@ -40,6 +41,36 @@ texture_margin_top = 6.0
 texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 expand_margin_top = 10.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ipros"]
+resource_local_to_scene = true
+shader = ExtResource("8_w33hb")
+shader_parameter/alpha = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_osjy7"]
+resource_local_to_scene = true
+shader = ExtResource("8_w33hb")
+shader_parameter/alpha = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ivo4j"]
+resource_local_to_scene = true
+shader = ExtResource("8_w33hb")
+shader_parameter/alpha = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5lhr0"]
+resource_local_to_scene = true
+shader = ExtResource("8_w33hb")
+shader_parameter/alpha = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xcowx"]
+resource_local_to_scene = true
+shader = ExtResource("8_w33hb")
+shader_parameter/alpha = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h2bak"]
+resource_local_to_scene = true
+shader = ExtResource("8_w33hb")
+shader_parameter/alpha = 1.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_loeqa"]
 content_margin_left = 4.0
@@ -204,11 +235,13 @@ size_flags_vertical = 8
 theme_override_styles/panel = SubResource("StyleBoxTexture_ci0m4")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MovingContainer/VBoxContainer/Tab"]
+use_parent_material = true
 layout_mode = 2
 theme_override_constants/separation = 3
 alignment = 1
 
 [node name="Rewind" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
+material = SubResource("ShaderMaterial_ipros")
 layout_mode = 2
 icon = ExtResource("5_t5pc5")
 minimum_size = Vector2(26, 24)
@@ -220,6 +253,7 @@ icon_use_parent_material = true
 tooltip = "Load previous problem"
 
 [node name="Solution" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
+material = SubResource("ShaderMaterial_osjy7")
 layout_mode = 2
 tooltip_text = "Show solution"
 icon = ExtResource("6_pp1px")
@@ -231,9 +265,11 @@ icon_use_parent_material = true
 tooltip = "Show solution"
 
 [node name="Equation" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("3_7jee8")]
+material = SubResource("ShaderMaterial_ivo4j")
 layout_mode = 2
 
 [node name="ViewSubmissions" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
+material = SubResource("ShaderMaterial_5lhr0")
 layout_mode = 2
 tooltip_text = "View submissions"
 icon = ExtResource("5_15poa")
@@ -245,6 +281,7 @@ disabled = true
 tooltip = "View submissions"
 
 [node name="Submit" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
+material = SubResource("ShaderMaterial_xcowx")
 layout_mode = 2
 tooltip_text = "Submit solution"
 icon = ExtResource("8_2kr0t")
@@ -256,6 +293,7 @@ icon_use_parent_material = true
 tooltip = "Submit solution"
 
 [node name="PullOutTabButtonDown" parent="MovingContainer/VBoxContainer" instance=ExtResource("10_xn6km")]
+material = SubResource("ShaderMaterial_h2bak")
 layout_mode = 2
 size_flags_horizontal = 4
 theme = SubResource("Theme_d1tq1")

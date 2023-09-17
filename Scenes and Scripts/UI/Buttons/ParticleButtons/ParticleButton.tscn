@@ -1,10 +1,16 @@
-[gd_scene load_steps=11 format=3 uid="uid://diro6a1arcmc0"]
+[gd_scene load_steps=13 format=3 uid="uid://diro6a1arcmc0"]
 
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="1_ubmeo"]
 [ext_resource type="Texture2D" uid="uid://s14bo7fcdam0" path="res://Textures/Buttons/square_normal.png" id="2_4su16"]
 [ext_resource type="Texture2D" uid="uid://bo1u07jlygktr" path="res://Textures/Buttons/square_hover.png" id="2_scj6f"]
+[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="2_yvc8w"]
 [ext_resource type="Texture2D" uid="uid://cea5mj3u65016" path="res://Textures/Buttons/square_pressed_active.png" id="4_dp80q"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Buttons/ParticleButtons/ParticleButton.gd" id="5_pltn4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ch4ec"]
+resource_local_to_scene = true
+shader = ExtResource("2_yvc8w")
+shader_parameter/alpha = 1.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kubuy"]
 
@@ -48,6 +54,7 @@ Button/styles/normal = SubResource("StyleBoxTexture_kxnlx")
 Button/styles/pressed = SubResource("StyleBoxTexture_pbk00")
 
 [node name="ParticleButton" instance=ExtResource("1_ubmeo")]
+material = SubResource("ShaderMaterial_ch4ec")
 offset_left = -6.0
 offset_top = -6.0
 offset_right = -616.0

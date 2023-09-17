@@ -1,8 +1,8 @@
 [gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://b863l3lxgsu55"]
 
-[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="1_onnb2"]
+[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="1_2g61b"]
 
 [resource]
 resource_local_to_scene = true
-shader = ExtResource("1_onnb2")
+shader = ExtResource("1_2g61b")
 shader_parameter/alpha = 1.0

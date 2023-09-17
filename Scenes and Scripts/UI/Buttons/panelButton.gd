@@ -4,9 +4,10 @@ class_name PanelButton
 
 signal hide_tooltip
 signal pressed
-signal on_pressed 
-signal toggled
-signal button_mouse_entered
+signal on_pressed
+signal button_toggled(button_pressed, button)
+signal toggled(button_pressed)
+signal button_mouse_entered(button)
 signal button_mouse_exited
 signal button_down
 signal button_up
@@ -14,13 +15,15 @@ signal button_up
 @export var icon: Texture2D : set = _set_button_icon
 @export var text: String : set = _set_button_text
 @export var minimum_size: Vector2 : set = _set_button_minimum_size
-@export var button_group: ButtonGroup : set = _set_button_button_group
 @export var toggle_mode: bool : set = _set_toggle_mode
 @export var expand_icon: bool : set = _set_expand_icon
-@export var button_pressed: bool : set = _set_button_pressed
+@export var button_pressed: bool: set = _set_button_pressed, get = _get_button_pressed
 @export var disabled: bool = false: set = _set_button_disabled
 @export var icon_use_parent_material: bool = false: set = _set_icon_use_parent_material
 @export var mute: bool = false
+@export var action_mode: Button.ActionMode = Button.ACTION_MODE_BUTTON_PRESS :
+	set = _set_action_mode
+@export var button_group: ButtonGroup : set = _set_button_button_group
 
 @onready var button = $Button
 @onready var label = $ContentContainer/HBoxContainer/ButtonText
@@ -42,14 +45,14 @@ func _ready() -> void:
 	
 	$Button.mouse_entered.connect(
 		func(): 
-			emit_signal("mouse_entered")
-			emit_signal("button_mouse_entered", self)
+			mouse_entered.emit()
+			button_mouse_entered.emit(self)
 	)
 	
 	$Button.mouse_exited.connect(
 		func(): 
-			emit_signal("mouse_exited")
-			emit_signal("button_mouse_exited", self)
+			mouse_exited.emit()
+			button_mouse_exited.emit(self)
 	)
 
 func _set_icon_use_parent_material(new_value: bool) -> void:
@@ -83,12 +86,13 @@ func _set_expand_icon(new_value: bool) -> void:
 	else:
 		$ContentContainer/HBoxContainer/ButtonIcon.expand_mode = TextureRect.EXPAND_KEEP_SIZE
 		$ContentContainer/HBoxContainer/ButtonIcon.stretch_mode = TextureRect.STRETCH_KEEP_CENTERED
-	
+
+func _get_button_pressed() -> bool:
+	return get_node("Button").button_pressed
 	
 func _set_button_button_group(new_value: ButtonGroup) -> void:
 	button_group = new_value
-	
-	$Button.button_group = new_value
+	get_node("Button").button_group = button_group
 
 func _set_button_icon(new_value: Texture2D) -> void:
 	icon = new_value
@@ -114,10 +118,15 @@ func _set_button_minimum_size(new_value: Vector2) -> void:
 	
 	$Button.set_custom_minimum_size(new_value)
 
+func _set_action_mode(new_value: Button.ActionMode):
+	action_mode = new_value
+	
+	get_node("Button").action_mode = new_value
+
 func _on_button_pressed() -> void:
-	emit_signal("pressed")
-	emit_signal("on_pressed", self)
-	emit_signal("hide_tooltip")
+	pressed.emit()
+	on_pressed.emit(self)
+	hide_tooltip.emit()
 
 func set_content_margins(button_state: String) -> void:
 	$ContentContainer.add_theme_constant_override("margin_top",
@@ -142,7 +151,7 @@ func _on_button_button_down():
 		
 	set_content_margins(ButtonState[PRESSED])
 	
-	emit_signal("button_down")
+	button_down.emit()
 	
 	is_just_pressed = true
 	await get_tree().process_frame
@@ -157,7 +166,7 @@ func _on_button_button_up():
 
 	set_content_margins(ButtonState[NORMAL])
 	
-	emit_signal("button_up")
+	button_up.emit()
 
 	is_just_released = true
 	await get_tree().process_frame
@@ -169,8 +178,9 @@ func _on_button_theme_changed():
 func get_button() -> Button:
 	return $Button
 
-func _on_button_toggled(button_pressed_state) -> void:
-	emit_signal("toggled", button_pressed_state)
+func _on_button_toggled(button_pressed_state: bool) -> void:
+	button_toggled.emit(button_pressed_state, self)
+	toggled.emit(button_pressed_state)
 	
 	if button_pressed_state:
 		set_content_margins(ButtonState[PRESSED])
