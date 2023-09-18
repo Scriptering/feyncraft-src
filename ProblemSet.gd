@@ -7,6 +7,9 @@ var current_index: int: set = _set_current_index
 var current_problem: Problem:
 	get:
 		return problems[current_index]
+var limited_particles: bool = false
+var custom_solutions: bool = false
+var hidden_particles: bool = false
 
 func _set_current_index(new_value: int) -> void:
 	current_index = clamp(new_value, 0, problems.size()-1)

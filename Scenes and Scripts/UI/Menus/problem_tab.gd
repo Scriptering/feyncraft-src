@@ -1,5 +1,7 @@
 extends PullOutTab
 
+signal submit_pressed
+
 @export var diagram_viewer_offset: Vector2 = Vector2(15, 15)
 
 @onready var Equation : PanelContainer = $MovingContainer/VBoxContainer/Tab/HBoxContainer/Equation
@@ -39,6 +41,7 @@ func init(
 	
 func _on_submit_pressed() -> void:
 	submit_diagram()
+	submit_pressed.emit()
 
 func submitted_diagram_deleted(index: int) -> void:
 	current_problem.submitted_diagrams.remove_at(index)

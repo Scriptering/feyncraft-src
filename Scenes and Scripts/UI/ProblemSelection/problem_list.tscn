@@ -1,0 +1,54 @@
+[gd_scene load_steps=8 format=3 uid="uid://b8jrtk1lv0oo0"]
+
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_a6eex"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/ProblemSelection/problem_list.gd" id="2_ycbub"]
+[ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="3_tav84"]
+[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="4_sya5g"]
+[ext_resource type="Texture2D" uid="uid://1qi6lr05g0vt" path="res://Textures/Buttons/icons/add.png" id="5_6tky2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c33yr"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yi8df"]
+resource_local_to_scene = true
+shader = ExtResource("4_sya5g")
+shader_parameter/alpha = 1.0
+
+[node name="ProblemList" type="PanelContainer"]
+material = ExtResource("1_a6eex")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -365.0
+offset_bottom = -263.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_ycbub")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+use_parent_material = true
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_c33yr")
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ProblemContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_right = 30
+
+[node name="AddProblem" parent="ScrollContainer/VBoxContainer/MarginContainer" instance=ExtResource("3_tav84")]
+material = SubResource("ShaderMaterial_yi8df")
+layout_mode = 2
+size_flags_horizontal = 1
+icon = ExtResource("5_6tky2")
+minimum_size = Vector2(2.08165e-12, 28)
+icon_use_parent_material = true
+action_mode = 1

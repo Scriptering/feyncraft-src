@@ -37,6 +37,7 @@ func init(Level: Node2D, start_mode: BaseMode.Mode) -> void:
 		mode.OptionsTab = Level.OptionsTab
 		mode.ProblemTab = Level.ProblemTab
 		mode.ParticleButtons = Level.ParticleButtons
+		mode.CreationInformation = Level.CreationInformation
 
 	change_mode(start_mode)
 

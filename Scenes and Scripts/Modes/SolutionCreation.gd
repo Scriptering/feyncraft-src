@@ -2,7 +2,7 @@ extends BaseMode
 
 func process(_delta: float) -> Mode:
 	if CreationInformation.submit.button_pressed:
-		return Mode.ProblemCreation
+		return Mode.ParticleSelection
 	
 	return Mode.Null
 

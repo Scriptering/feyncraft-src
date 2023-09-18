@@ -1,6 +1,22 @@
-[gd_scene load_steps=2 format=3 uid="uid://2a6lut0gvuil"]
+[gd_scene load_steps=6 format=3 uid="uid://2a6lut0gvuil"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/Modes/mode_manager.gd" id="1_4f12t"]
+[ext_resource type="Script" path="res://Scenes and Scripts/Modes/ParticleSelection.gd" id="2_c53cr"]
+[ext_resource type="Script" path="res://Scenes and Scripts/Modes/Sandbox.gd" id="3_qxovk"]
+[ext_resource type="Script" path="res://Scenes and Scripts/Modes/ProblemCreation.gd" id="4_ae31o"]
+[ext_resource type="Script" path="res://Scenes and Scripts/Modes/SolutionCreation.gd" id="5_i7wis"]
 
 [node name="ModeManager" type="Node"]
 script = ExtResource("1_4f12t")
+
+[node name="ParticleSelection" type="Node" parent="."]
+script = ExtResource("2_c53cr")
+
+[node name="Sandbox" type="Node" parent="."]
+script = ExtResource("3_qxovk")
+
+[node name="ProblemCreation" type="Node" parent="."]
+script = ExtResource("4_ae31o")
+
+[node name="SolutionCreation" type="Node" parent="."]
+script = ExtResource("5_i7wis")

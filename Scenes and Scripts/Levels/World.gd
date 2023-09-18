@@ -1,9 +1,6 @@
 extends Node2D
 
-signal mode_changed
-
 @onready var FPS = get_node('FPS')
-@onready var Cursor = get_node('Cursor')
 @onready var Pathfinding = $Algorithms/PathFinding
 @onready var SolutionGeneration = $Algorithms/SolutionGeneration
 @onready var ProblemGeneration = $Algorithms/ProblemGeneration
@@ -13,19 +10,26 @@ signal mode_changed
 @onready var ProblemTab := $PullOutTabs/ProblemTab
 @onready var MenuTab := $PullOutTabs/MenuTab
 @onready var VisionTab := $PullOutTabs/VisionButton
+@onready var CreationInformation := $FloatingMenus/CreationInformation
 
 @onready var States = $state_manager
+@onready var ModeManager = $mode_manager
 
-var current_mode: GLOBALS.Mode = GLOBALS.Mode.Sandbox: set = _set_mode
+var starting_mode: BaseMode.Mode = BaseMode.Mode.Sandbox
+var current_mode: BaseMode.Mode: get = _get_current_mode
+var problem_set: ProblemSet
+
+func _get_current_mode() -> BaseMode.Mode:
+	return ModeManager.mode
 
 func _ready():
 	EVENTBUS.signal_add_floating_menu.connect(
 		func(menu: Node): $FloatingMenus.add_child(menu)
 	)
 	
-	mode_changed.connect(EVENTBUS.mode_changed)
-	
+	CreationInformation.init(problem_set.limited_particles, problem_set.custom_solutions, $Diagram)
 	States.init($Diagram, $PullOutTabs/ControlsTab)
+	ModeManager.init(self, starting_mode)
 	$Diagram.init(ParticleButtons, $PullOutTabs/ControlsTab, VisionTab, $Algorithms/PathFinding)
 	$ShaderControl.init($PalletteButtons)
 	GenerationTab.init($Diagram, $Algorithms/SolutionGeneration, $FloatingMenus/GeneratedDiagrams)
@@ -39,12 +43,6 @@ func _ready():
 
 func _process(_delta):
 	FPS.text = str(Engine.get_frames_per_second())
-
-func _set_mode(new_value: GLOBALS.Mode) -> void:
-	var prev_mode: GLOBALS.Mode = current_mode
-	current_mode = new_value
-	
-	mode_changed.emit(prev_mode, current_mode)
 
 func enter_particle_selection() -> void:
 	ParticleButtons.enter_particle_selection()

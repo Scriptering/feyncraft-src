@@ -1,6 +1,5 @@
-[gd_scene load_steps=25 format=3 uid="uid://ccnq2lkaxb0vk"]
+[gd_scene load_steps=25 format=3 uid="uid://dbknurs6vqu1w"]
 
-[ext_resource type="Script" path="res://Scenes and Scripts/UI/ProblemSelection/problem_set_selector.gd" id="2_7m7ny"]
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="2_gg22h"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="2_yg01j"]
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="3_ifhvu"]
@@ -29,6 +28,48 @@ void fragment() {
 resource_local_to_scene = true
 shader = SubResource("Shader_tmadl")
 shader_parameter/alpha = 1.0
+
+[sub_resource type="GDScript" id="GDScript_nr23b"]
+script/source = "extends PanelContainer
+
+var problem_set: ProblemSet
+var is_custom: bool = false
+
+@onready var Title : LineEdit = $VBoxContainer/LineEdit
+@onready var ButtonContainer = $VBoxContainer/TabContainer/ProblemSetContainer/ButtonContainer
+@onready var Tabs = $VBoxContainer/TabContainer
+
+func _ready() -> void:
+	hide_buttons()
+	
+	$VBoxContainer/TabContainer.returned.connect(options_returned)
+
+func _on_mouse_entered() -> void:
+	show_buttons()
+
+func _on_mouse_exited() -> void:
+	if get_global_rect().has_point(get_global_mouse_position()):
+		return
+
+	hide_buttons()
+
+func hide_buttons() -> void:
+	var tween = get_tree().create_tween()
+	tween.finished.connect(ButtonContainer.hide)
+	tween.tween_property(ButtonContainer.material, \"shader_parameter/alpha\", 0, .05)
+
+func show_buttons() -> void:
+	var tween = get_tree().create_tween()
+	ButtonContainer.show()
+	tween.tween_property(ButtonContainer.material, \"shader_parameter/alpha\", 1, .05)
+
+func _on_modify_pressed() -> void:
+	Tabs.current_tab = 1
+	Title.editable = true
+
+func options_returned() -> void:
+	Title.editable = false
+"
 
 [sub_resource type="FontVariation" id="FontVariation_rv075"]
 base_font = ExtResource("4_mtvaa")
@@ -75,7 +116,7 @@ shader_parameter/alpha = 1.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4wvwq"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_du0a0"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7veea"]
 resource_local_to_scene = true
 shader = ExtResource("3_ifhvu")
 shader_parameter/alpha = null
@@ -84,7 +125,7 @@ shader_parameter/alpha = null
 material = SubResource("ShaderMaterial_p05i4")
 offset_right = 12.0
 offset_bottom = 12.0
-script = ExtResource("2_7m7ny")
+script = SubResource("GDScript_nr23b")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 use_parent_material = true
@@ -136,7 +177,6 @@ columns = 2
 
 [node name="Resume" parent="VBoxContainer/TabContainer/ProblemSetContainer/ButtonContainer/Buttons" instance=ExtResource("2_yg01j")]
 material = null
-use_parent_material = true
 layout_mode = 2
 mouse_filter = 1
 icon = ExtResource("6_prjng")
@@ -161,7 +201,6 @@ tooltip = "Resume"
 
 [node name="Restart" parent="VBoxContainer/TabContainer/ProblemSetContainer/ButtonContainer/Buttons" instance=ExtResource("2_yg01j")]
 material = null
-use_parent_material = true
 layout_mode = 2
 mouse_filter = 1
 icon = ExtResource("8_j8w63")
@@ -175,7 +214,6 @@ tooltip = "Restart"
 
 [node name="Upload" parent="VBoxContainer/TabContainer/ProblemSetContainer/ButtonContainer/Buttons" instance=ExtResource("2_yg01j")]
 material = null
-use_parent_material = true
 layout_mode = 2
 mouse_filter = 1
 icon = ExtResource("6_vodua")
@@ -189,7 +227,6 @@ tooltip = "Upload"
 
 [node name="Modify" parent="VBoxContainer/TabContainer/ProblemSetContainer/ButtonContainer/Buttons" instance=ExtResource("2_yg01j")]
 material = null
-use_parent_material = true
 layout_mode = 2
 mouse_filter = 1
 icon = ExtResource("10_8itxw")
@@ -203,7 +240,7 @@ tooltip = "Modify"
 
 [node name="ProblemSetEdit" parent="VBoxContainer/TabContainer" instance=ExtResource("14_6w3xi")]
 visible = false
-material = SubResource("ShaderMaterial_du0a0")
+material = SubResource("ShaderMaterial_7veea")
 layout_mode = 2
 
 [node name="IndexLabel" type="Label" parent="VBoxContainer"]

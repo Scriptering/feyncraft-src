@@ -8,6 +8,7 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rrm4r"]
 shader = ExtResource("1_7byww")
+shader_parameter/alpha = null
 
 [node name="StateLine" type="Control" node_paths=PackedStringArray("GrabAreas") groups=["state_lines"]]
 material = SubResource("ShaderMaterial_rrm4r")

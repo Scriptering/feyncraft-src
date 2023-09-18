@@ -16,7 +16,6 @@ var Controls: Node
 var VisionButtons: Control
 var Vision: Node
 
-
 var line_diagram_actions: bool = true
 
 var crosshair_above_interactions: bool = false
@@ -67,6 +66,20 @@ func _crosshair_moved(new_position: Vector2, old_position: Vector2) -> void:
 		interaction.crosshair_moved(new_position, old_position)
 	
 	update_statelines()
+
+func are_quantum_numbers_matching(ignore_weak_quantum_numbers: bool = true) -> bool:
+	var initial_quantum_numbers: PackedFloat32Array = StateLines[StateLine.StateType.Initial].get_quantum_numbers()
+	var final_quantum_numbers: PackedFloat32Array = StateLines[StateLine.StateType.Final].get_quantum_numbers()
+	
+	for quantum_number in GLOBALS.QuantumNumber.keys():
+		if ignore_weak_quantum_numbers and quantum_number in GLOBALS.WEAK_QUANTUM_NUMBERS:
+			continue
+		
+		if !is_zero_approx(initial_quantum_numbers[quantum_number]-final_quantum_numbers[quantum_number]):
+			return false
+	
+	return true
+	
 
 func convert_path_colours(path_colours: Array, vision: GLOBALS.Vision) -> Array[Color]:
 	var path_colors: Array[Color] = []

@@ -91,6 +91,22 @@ func create_hadrons(quark_groups: Array) -> void:
 		hadron.init(quark_group, group_hadron)
 		hadrons.append(hadron)
 
+func get_quantum_numbers() -> PackedFloat32Array:
+	var connected_quantum_numbers: Array = get_connected_lines().map(
+		func(particle_line: ParticleLine): return particle_line.quantum_numbers
+	)
+	
+	var quantum_sum: PackedFloat32Array = []
+	quantum_sum.resize(connected_quantum_numbers.size())
+	quantum_sum.fill(0)
+	
+	for connected_quantum_number in connected_quantum_numbers:
+		for quantum_number in GLOBALS.QuantumNumber.keys():
+			quantum_sum[quantum_number] += connected_quantum_number[quantum_number]
+	
+	return quantum_sum
+	
+
 func get_quark_group_hadron(quark_group: Array) -> GLOBALS.Hadrons:
 	var quarks : Array[GLOBALS.Particle] = []
 	for line in quark_group:

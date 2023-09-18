@@ -15,20 +15,12 @@ var particle_button_group: ButtonGroup
 ]
 
 func _ready():
-	EVENTBUS.signal_mode_changed.connect(_level_mode_changed)
-	
 	for particle_button_category in ParticleButtonCategories:
 		for particle_button in particle_button_category.get_children():
 			particle_buttons.append(particle_button)
 			particle_button.connect("on_pressed", Callable(self, "on_particle_button_pressed"))
 		
 	add_buttons_to_button_group()
-
-func _level_mode_changed(prev_mode: GLOBALS.Mode, new_mode: GLOBALS.Mode) -> void:
-	if new_mode == GLOBALS.Mode.ParticleSelection:
-		enter_particle_selection()
-	elif prev_mode == GLOBALS.Mode.ParticleSelection:
-		add_buttons_to_button_group()
 
 func on_particle_button_pressed(button) -> void:
 	selected_particle = button.particle
