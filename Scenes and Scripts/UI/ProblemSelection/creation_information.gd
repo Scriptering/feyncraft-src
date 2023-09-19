@@ -2,82 +2,48 @@ extends Control
 
 signal submit_problem
 
-var step: int = 0: set = _set_step
-
-var active_modes: Array[BaseMode.Mode] = [BaseMode.Mode.ProblemCreation]
-
-@onready var problem_text: Label = $"PanelContainer/VBoxContainer/VBoxContainer/ProblemCount"
-@onready var title: Label = $PanelContainer/VBoxContainer/VBoxContainer/Title
-@onready var body: Label = $PanelContainer/VBoxContainer/VBoxContainer/Body
-
-@onready var Prev: PanelButton = $PanelContainer/VBoxContainer/Buttons/PrevStep
-@onready var Next: PanelButton = $PanelContainer/VBoxContainer/Buttons/NextStep
-@onready var Submit: PanelButton = $PanelContainer/VBoxContainer/Buttons/Submit
+var active_modes: Array[BaseMode.Mode] = [
+	BaseMode.Mode.ParticleSelection,
+	BaseMode.Mode.ProblemCreation,
+	BaseMode.Mode.SolutionCreation
+]
 
 var Diagram: MainDiagram
-var ModeManager: Node
 var problem: Problem
+var Level: Node2D
 
 func _process(_delta: float) -> void:
-	if ModeManager.mode != BaseMode.Mode.ProblemCreation:
+	if Level.current_mode != BaseMode.Mode.ProblemCreation:
 		return
 	
-	var quantum_numbers_match: bool = Diagram.are_quantum_numbers_matching
+	$TabContainer/ProblemCreationInfo.toggle_invalid_quantum_numbers(Diagram.are_quantum_numbers_matching())
 	
-	Next.disabled = !quantum_numbers_match
-
-func _set_step(new_value: int) -> void:
-	step = clamp(new_value, 0, active_modes.size()-1)
-	
-	Prev.visible = step != 0
-	Next.visible = step != active_modes.size()-1
-	Submit.visible = step == active_modes.size()-1
-
-func init(_problem: Problem, diagram: MainDiagram, mode_manager: Node) -> void:
+func init(_problem: Problem, diagram: MainDiagram, level: Node2D) -> void:
 	Diagram = diagram
-	ModeManager = mode_manager
 	problem = _problem
-	
-	if _problem.limited_particles:
-		active_modes.push_front(BaseMode.Mode.ParticleSelection)
+	Level = level
 
-	if _problem.custom_solutions:
-		active_modes.push_back(BaseMode.Mode.SolutionCreation)
+func change_mode(mode_index: int) -> void:
+	$TabContainer.current_tab = mode_index
+	Level.current_mode = active_modes[mode_index]
 
-	self.step = 0
+func next_mode() -> void:
+	change_mode(active_modes.find(Level.current_mode) + 1)
 
-func change_mode(mode: BaseMode.Mode) -> void:
-	if mode == BaseMode.Mode.Sandbox:
-		return
-	
-	match mode:
-		BaseMode.Mode.ParticleSelection:
-			particle_selection()
-		BaseMode.Mode.ProblemCreation:
-			problem_creation()
-		BaseMode.Mode.SolutionCreation:
-			solution_creation()
-			
-func particle_selection() -> void:
-	title.text = str(step+1) + ". Particle Selection"
-	body.text = "
-		- Deselect/Select available particles.\n
-		- Deselected particles will not be able to be used.
-	"
+func prev_mode() -> void:
+	change_mode(active_modes.find(Level.current_mode) - 1)
 
-func problem_creation() -> void:
-	title.text = str(step+1) + ". Problem Creation"
-	body.text = "
-		- Draw the problem.\n
-		- Only the drawn initial and final states matter.
-	"
+func _on_particle_selection_info_next() -> void:
+	next_mode()
 
-func solution_creation() -> void:
-	title.text = str(step+1) + ". Solution Creation"
-	body.text = "
-		- Draw solutions to the problem.\n
-		- Submit using puzzle tab.
-	"
+func _on_problem_creation_info_next() -> void:
+	next_mode()
 
-func _on_submit_pressed() -> void:
+func _on_solution_creation_info_exit() -> void:
 	submit_problem.emit()
+
+func _on_solution_creation_info_previous() -> void:
+	prev_mode()
+
+func _on_problem_creation_info_previous() -> void:
+	prev_mode()

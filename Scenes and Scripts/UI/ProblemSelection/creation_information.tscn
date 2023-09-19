@@ -1,24 +1,21 @@
-[gd_scene load_steps=12 format=3 uid="uid://c5scpc4iadf17"]
+[gd_scene load_steps=10 format=3 uid="uid://c5scpc4iadf17"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_j0xio"]
-[ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="2_m2m7j"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/ProblemSelection/creation_information.gd" id="2_sqpln"]
-[ext_resource type="Texture2D" uid="uid://tql14gtq05lf" path="res://Textures/UI/Information/invalid.png" id="3_84kb5"]
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="3_e86ap"]
-[ext_resource type="Texture2D" uid="uid://bcu6ptkd3fwfe" path="res://Textures/Buttons/icons/submit.png" id="4_0q0ct"]
-[ext_resource type="Texture2D" uid="uid://dvx430022t0ua" path="res://Textures/Buttons/icons/next.png" id="5_0o5el"]
-[ext_resource type="Texture2D" uid="uid://c3nrennubqoow" path="res://Textures/Buttons/icons/back.png" id="6_jhohi"]
-[ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="6_ueq70"]
+[ext_resource type="PackedScene" uid="uid://buskwt83mql4x" path="res://Scenes and Scripts/UI/ProblemSelection/particle_selection_info.tscn" id="3_gxgmm"]
+[ext_resource type="PackedScene" uid="uid://rtdlfrcuvhi8" path="res://Scenes and Scripts/UI/ProblemSelection/problem_creation_info.tscn" id="5_224cs"]
+[ext_resource type="PackedScene" uid="uid://bvn4ssrvphh28" path="res://Scenes and Scripts/UI/ProblemSelection/solution_creation_info.tscn" id="6_jjee5"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_6b1lh"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0pnha"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_emdbf"]
 resource_local_to_scene = true
 shader = ExtResource("3_e86ap")
-shader_parameter/alpha = null
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_d7rlo"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ugknh"]
 resource_local_to_scene = true
 shader = ExtResource("3_e86ap")
-shader_parameter/alpha = 1.0
 
 [node name="CreationInformation" type="Control"]
 material = ExtResource("1_j0xio")
@@ -32,90 +29,30 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_sqpln")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="TabContainer" type="TabContainer" parent="."]
 use_parent_material = true
 layout_mode = 0
-offset_right = 89.0
-offset_bottom = 76.0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_0pnha")
+tabs_visible = false
+use_hidden_tabs_for_min_size = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
-use_parent_material = true
+[node name="ParticleSelectionInfo" parent="TabContainer" instance=ExtResource("3_gxgmm")]
+material = SubResource("ShaderMaterial_emdbf")
 layout_mode = 2
-alignment = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer"]
-use_parent_material = true
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Title" type="Label" parent="PanelContainer/VBoxContainer/VBoxContainer"]
-use_parent_material = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 8
-text = "1. Particle Selection"
-horizontal_alignment = 1
-
-[node name="Body" type="Label" parent="PanelContainer/VBoxContainer/VBoxContainer"]
-use_parent_material = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 7
-text = "- Unselect/Select available particles.
-- Unselected particles will not be able to be used.
-"
-autowrap_mode = 3
-
-[node name="InvalidQuantumNumbers" type="HBoxContainer" parent="PanelContainer/VBoxContainer/VBoxContainer"]
+[node name="ProblemCreationInfo" parent="TabContainer" instance=ExtResource("5_224cs")]
 visible = false
-use_parent_material = true
+material = SubResource("ShaderMaterial_ugknh")
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="PanelContainer/VBoxContainer/VBoxContainer/InvalidQuantumNumbers"]
+[node name="SolutionCreationInfo" parent="TabContainer" instance=ExtResource("6_jjee5")]
+visible = false
 layout_mode = 2
-texture = ExtResource("3_84kb5")
-stretch_mode = 2
 
-[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/VBoxContainer/InvalidQuantumNumbers"]
-use_parent_material = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 1
-theme_override_font_sizes/font_size = 8
-text = "Quantum numbers don't match"
-autowrap_mode = 2
-
-[node name="Buttons" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
-use_parent_material = true
-layout_mode = 2
-alignment = 1
-
-[node name="PrevStep" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2_m2m7j")]
-material = SubResource("ShaderMaterial_6b1lh")
-layout_mode = 2
-icon = ExtResource("6_jhohi")
-minimum_size = Vector2(24, 21)
-icon_use_parent_material = true
-
-[node name="Tooltip" parent="PanelContainer/VBoxContainer/Buttons/PrevStep" instance=ExtResource("6_ueq70")]
-tooltip = "Previous Step"
-
-[node name="Submit" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2_m2m7j")]
-material = SubResource("ShaderMaterial_d7rlo")
-layout_mode = 2
-icon = ExtResource("4_0q0ct")
-minimum_size = Vector2(22, 22)
-icon_use_parent_material = true
-
-[node name="Tooltip" parent="PanelContainer/VBoxContainer/Buttons/Submit" instance=ExtResource("6_ueq70")]
-tooltip = "Submit Problem"
-
-[node name="NextStep" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2_m2m7j")]
-material = SubResource("ShaderMaterial_6b1lh")
-layout_mode = 2
-icon = ExtResource("5_0o5el")
-minimum_size = Vector2(24, 21)
-icon_use_parent_material = true
-
-[node name="Tooltip" parent="PanelContainer/VBoxContainer/Buttons/NextStep" instance=ExtResource("6_ueq70")]
-tooltip = "Next Step"
-
-[connection signal="pressed" from="PanelContainer/VBoxContainer/Buttons/Submit" to="." method="_on_submit_pressed"]
+[connection signal="next" from="TabContainer/ParticleSelectionInfo" to="." method="_on_particle_selection_info_next"]
+[connection signal="next" from="TabContainer/ProblemCreationInfo" to="." method="_on_problem_creation_info_next"]
+[connection signal="previous" from="TabContainer/ProblemCreationInfo" to="." method="_on_problem_creation_info_previous"]
+[connection signal="exit" from="TabContainer/SolutionCreationInfo" to="." method="_on_solution_creation_info_exit"]
+[connection signal="previous" from="TabContainer/SolutionCreationInfo" to="." method="_on_solution_creation_info_previous"]

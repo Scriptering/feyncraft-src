@@ -7,15 +7,15 @@ enum Mode {
 	ParticleSelection,
 	ProblemCreation,
 	SolutionCreation,
-	Null,
 	Sandbox,
-	ProblemSolving
+	ProblemSolving,
+	Null
 }
 
 var ProblemTab: Control
 var VisionTab: Control
 var GenerationTab: Control
-var OptionsTab: Control
+var MenuTab: Control
 var ParticleButtons: Control
 var CreationInformation: Control
 

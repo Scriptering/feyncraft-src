@@ -108,6 +108,7 @@ action_mode = 1
 tooltip = "View Problems"
 
 [node name="Delete" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("4_dol4y")]
+visible = false
 material = null
 layout_mode = 2
 mouse_filter = 1
@@ -121,6 +122,7 @@ action_mode = 1
 tooltip = "Delete"
 
 [node name="Upload" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("4_dol4y")]
+visible = false
 material = null
 layout_mode = 2
 mouse_filter = 1
@@ -144,5 +146,6 @@ vertical_alignment = 2
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
 [connection signal="text_changed" from="HBoxContainer/PanelContainer/HBoxContainer/Title" to="." method="_on_title_text_changed"]
+[connection signal="pressed" from="HBoxContainer/PanelContainer/HBoxContainer/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="HBoxContainer/PanelContainer/HBoxContainer/View" to="." method="_on_view_pressed"]
 [connection signal="pressed" from="HBoxContainer/PanelContainer/HBoxContainer/Delete" to="." method="_on_delete_pressed"]
-[connection signal="pressed" from="HBoxContainer/PanelContainer/HBoxContainer/Upload" to="." method="_on_delete_pressed"]

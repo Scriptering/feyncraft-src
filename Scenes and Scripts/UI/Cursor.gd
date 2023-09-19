@@ -1,8 +1,5 @@
 extends Sprite2D
 
-#temp
-
-@onready var Level = get_tree().get_nodes_in_group('level')[0]
 @onready var Heart = get_node('Heart')
 
 @export var Scale : float = 1.0
@@ -13,15 +10,6 @@ var angry := false
 var glowing := false: set = _set_glowing
 var playing := false
 var current_cursor := GLOBALS.CURSOR.default
-var override = false
-
-var connected_buttons := []
-var connected_scrollcontainers := []
-var connected_sliders := []
-
-var scrolling : bool = false
-var deleting : bool = false
-var scroll_hovering := false
 
 var point := load('res://Textures/Cursors/cursor_point.png')
 var hold := load('res://Textures/Cursors/cursor_hold.png')
@@ -43,8 +31,6 @@ func _ready():
 	Heart.offset = Scale * normal_heart_offset
 	
 	EVENTBUS.signal_change_cursor.connect(change_cursor)
-	
-#	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 
 func _input(event: InputEvent) -> void:
 

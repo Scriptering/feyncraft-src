@@ -32,15 +32,24 @@ func add_buttons_to_button_group() -> void:
 		particle_button.button_group = particle_button_group
 
 func clear_button_group() -> void:
-	particle_button_group.free()
+	for particle_button in particle_buttons:
+		particle_button.button_group = null
 
 func disable_buttons(disabled_particles: Array[GLOBALS.Particle]) -> void:
 	for particle_button in particle_buttons:
 		particle_button.disabled = particle_button.particle in disabled_particles
 
+func toggle_button_mute(mute: bool) -> void:
+	for particle_button in particle_buttons:
+		particle_button.mute = mute
+
 func enter_particle_selection() -> void:
+	toggle_button_mute(true)
 	clear_button_group()
 	toggle_buttons(true)
+	
+	await get_tree().process_frame
+	toggle_button_mute(false)
 
 func get_toggled_particles(toggled: bool) -> Array[GLOBALS.Particle]:
 	var toggled_particles: Array[GLOBALS.Particle] = []
@@ -53,10 +62,7 @@ func get_toggled_particles(toggled: bool) -> Array[GLOBALS.Particle]:
 
 func toggle_buttons(button_pressed: bool) -> void:
 	for particle_button in particle_buttons:
-		var is_particle_button_mute: bool = particle_button.mute
-		particle_button.mute = true
 		particle_button.button_pressed = button_pressed
-		particle_button.mude = is_particle_button_mute
 
 func exit_particle_selection() -> void:
 	var disabled_particles: Array[GLOBALS.Particle] = get_toggled_particles(false)

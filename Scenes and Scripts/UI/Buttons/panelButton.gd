@@ -36,8 +36,21 @@ var previous_button_pressed : bool
 var is_hovered: bool:
 	get:
 		return button.is_hovered()
-var is_just_pressed: bool = false
-var is_just_released: bool = false
+var is_just_pressed: bool:
+	get:
+		return just_pressed_counter > 0
+var just_pressed_counter: int = 0
+var is_just_released: bool:
+	get:
+		return just_released_counter > 0
+var just_released_counter: int = 0
+
+func _process(_delta: float) -> void:
+	if just_pressed_counter > 0:
+		just_pressed_counter -= 1
+	
+	if just_released_counter > 0:
+		just_released_counter -= 1
 
 func _ready() -> void:
 	previous_button_pressed = button_pressed
@@ -141,6 +154,7 @@ func set_content_margins(button_state: String) -> void:
 	$ContentContainer.add_theme_constant_override("margin_bottom",
 		$Button.get_theme_stylebox(button_state).get_margin(SIDE_BOTTOM)
 	)
+	
 
 func _on_button_button_down():
 	if toggle_mode:
@@ -153,9 +167,7 @@ func _on_button_button_down():
 	
 	button_down.emit()
 	
-	is_just_pressed = true
-	await get_tree().process_frame
-	is_just_pressed = false
+	just_pressed_counter += 2
 
 func _on_button_button_up():
 	if toggle_mode:
@@ -168,9 +180,7 @@ func _on_button_button_up():
 	
 	button_up.emit()
 
-	is_just_released = true
-	await get_tree().process_frame
-	is_just_released = false
+	just_released_counter += 2
 
 func _on_button_theme_changed():
 	set_content_margins(ButtonState[NORMAL])

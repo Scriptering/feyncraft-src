@@ -13,23 +13,45 @@ extends Node2D
 @onready var CreationInformation := $FloatingMenus/CreationInformation
 
 @onready var States = $state_manager
-@onready var ModeManager = $mode_manager
 
-var starting_mode: BaseMode.Mode = BaseMode.Mode.Sandbox
-var current_mode: BaseMode.Mode: get = _get_current_mode
+var current_mode: BaseMode.Mode = BaseMode.Mode.Null: set = _set_current_mode
 var problem_set: ProblemSet
 
-func _get_current_mode() -> BaseMode.Mode:
-	return ModeManager.mode
+var mode_enter_funcs : Dictionary = {
+	BaseMode.Mode.ParticleSelection: enter_particle_selection,
+	BaseMode.Mode.ProblemCreation: enter_problem_creation,
+	BaseMode.Mode.SolutionCreation: enter_solution_creation,
+	BaseMode.Mode.Sandbox: enter_sandbox,
+	BaseMode.Mode.ProblemSolving: enter_problem_solving
+}
+
+var mode_exit_funcs : Dictionary = {
+	BaseMode.Mode.ParticleSelection: exit_particle_selection,
+	BaseMode.Mode.ProblemCreation: exit_problem_creation,
+	BaseMode.Mode.SolutionCreation: exit_solution_creation,
+	BaseMode.Mode.Sandbox: exit_sandbox,
+	BaseMode.Mode.ProblemSolving: exit_problem_solving
+}
+
+func _set_current_mode(new_value: BaseMode.Mode):
+	if new_value == current_mode:
+		return
+	
+	if current_mode != BaseMode.Mode.Null:
+		mode_exit_funcs[current_mode].call()
+
+	current_mode = new_value
+	mode_enter_funcs[current_mode].call()
 
 func _ready():
+	self.current_mode = GLOBALS.load_mode
+	
 	EVENTBUS.signal_add_floating_menu.connect(
 		func(menu: Node): $FloatingMenus.add_child(menu)
 	)
 	
-	CreationInformation.init(problem_set.limited_particles, problem_set.custom_solutions, $Diagram)
+	CreationInformation.init(GLOBALS.creating_problem, $Diagram, self)
 	States.init($Diagram, $PullOutTabs/ControlsTab)
-	ModeManager.init(self, starting_mode)
 	$Diagram.init(ParticleButtons, $PullOutTabs/ControlsTab, VisionTab, $Algorithms/PathFinding)
 	$ShaderControl.init($PalletteButtons)
 	GenerationTab.init($Diagram, $Algorithms/SolutionGeneration, $FloatingMenus/GeneratedDiagrams)
@@ -45,7 +67,50 @@ func _process(_delta):
 	FPS.text = str(Engine.get_frames_per_second())
 
 func enter_particle_selection() -> void:
+	ParticleButtons.show()
+	GenerationTab.hide()
+	ProblemTab.hide()
+	VisionTab.hide()
+	
 	ParticleButtons.enter_particle_selection()
 
 func exit_particle_selection() -> void:
 	ParticleButtons.exit_particle_selection()
+
+func enter_sandbox() -> void:
+	ParticleButtons.show()
+	GenerationTab.show()
+	ProblemTab.show()
+	VisionTab.show()
+
+func enter_problem_solving() -> void:
+	ParticleButtons.show()
+	GenerationTab.hide()
+	ProblemTab.show()
+	VisionTab.show()
+
+func enter_problem_creation() -> void:
+	ParticleButtons.show()
+	GenerationTab.hide()
+	ProblemTab.hide()
+	VisionTab.show()
+
+func enter_solution_creation() -> void:
+	ParticleButtons.show()
+	GenerationTab.show()
+	ProblemTab.show()
+	VisionTab.show()
+
+func exit_sandbox() -> void:
+	return
+
+func exit_problem_solving() -> void:
+	return
+
+func exit_problem_creation() -> void:
+	return
+
+func exit_solution_creation() -> void:
+	return
+
+

@@ -1,35 +1,31 @@
-[gd_scene load_steps=11 format=3 uid="uid://c3m8fesktmd85"]
+[gd_scene load_steps=13 format=3 uid="uid://c3m8fesktmd85"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_dmm2o"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="1_tgmdf"]
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="2_ecomh"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/ProblemSelection/problem_set_list.gd" id="2_oi7x7"]
+[ext_resource type="Texture2D" uid="uid://b4w0nb2kv1et0" path="res://Textures/UI/Information/InfoTabFocus.png" id="3_7scrx"]
 [ext_resource type="Texture2D" uid="uid://1qi6lr05g0vt" path="res://Textures/Buttons/icons/add.png" id="3_fyqnn"]
-[ext_resource type="PackedScene" uid="uid://b6go021ha3ocr" path="res://Scenes and Scripts/UI/ProblemSelection/problem_set_item.tscn" id="3_vvwkf"]
+[ext_resource type="Texture2D" uid="uid://c3nrennubqoow" path="res://Textures/Buttons/icons/back.png" id="6_d5g0v"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c33yr"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lehaf"]
 
-[sub_resource type="Shader" id="Shader_tmadl"]
-code = "shader_type canvas_item;
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_v5ahc"]
+texture = ExtResource("3_7scrx")
+texture_margin_left = 7.0
+texture_margin_top = 4.0
+texture_margin_right = 7.0
+texture_margin_bottom = 3.0
 
-global uniform sampler2D colour_scheme: filter_nearest;
-uniform float alpha: hint_range(0.0, 1.0);
-
-void fragment() {
-	vec4 color = texture(TEXTURE, UV);
-	COLOR = vec4(texture(colour_scheme, vec2(color.r, color.g)).rgb, color.a * alpha);
-}
-"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_6khou"]
-resource_local_to_scene = true
-shader = SubResource("Shader_tmadl")
-shader_parameter/alpha = 1.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_e172d"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h8pct"]
 resource_local_to_scene = true
 shader = ExtResource("2_ecomh")
-shader_parameter/alpha = 1.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dbgr6"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2sn5q"]
+resource_local_to_scene = true
+shader = ExtResource("2_ecomh")
 
 [node name="ProblemSetList" type="PanelContainer"]
 material = ExtResource("1_dmm2o")
@@ -37,37 +33,80 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = -381.0
-offset_bottom = -263.0
+offset_bottom = -175.999
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_lehaf")
 script = ExtResource("2_oi7x7")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 use_parent_material = true
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxEmpty_c33yr")
+theme_override_constants/separation = -4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+z_index = 1
+use_parent_material = true
+layout_mode = 2
+alignment = 1
+
+[node name="Title" type="Label" parent="VBoxContainer/HBoxContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(100, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+mouse_filter = 1
+theme_override_font_sizes/font_size = 9
+theme_override_styles/normal = SubResource("StyleBoxTexture_v5ahc")
+text = "Problem Sets"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer"]
+use_parent_material = true
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+alignment = 1
+
+[node name="Back" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("1_tgmdf")]
+material = SubResource("ShaderMaterial_h8pct")
+layout_mode = 2
+icon = ExtResource("6_d5g0v")
+minimum_size = Vector2(30, 21)
+icon_use_parent_material = true
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_dbgr6")
 horizontal_scroll_mode = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer"]
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ProblemContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="ProblemContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="ProblemSetItem" parent="ScrollContainer/VBoxContainer/ProblemContainer" instance=ExtResource("3_vvwkf")]
-material = SubResource("ShaderMaterial_6khou")
-layout_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
 theme_override_constants/margin_left = 30
 theme_override_constants/margin_right = 30
 
-[node name="AddProblemSet" parent="ScrollContainer/VBoxContainer/MarginContainer" instance=ExtResource("1_tgmdf")]
-material = SubResource("ShaderMaterial_e172d")
+[node name="AddProblemSet" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer" instance=ExtResource("1_tgmdf")]
+material = SubResource("ShaderMaterial_2sn5q")
 layout_mode = 2
 size_flags_horizontal = 1
 icon = ExtResource("3_fyqnn")
@@ -75,4 +114,5 @@ minimum_size = Vector2(2.08165e-12, 28)
 icon_use_parent_material = true
 action_mode = 1
 
-[connection signal="pressed" from="ScrollContainer/VBoxContainer/MarginContainer/AddProblemSet" to="." method="_on_add_problem_set_pressed"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer/AddProblemSet" to="." method="_on_add_problem_set_pressed"]

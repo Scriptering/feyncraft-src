@@ -5,9 +5,9 @@ enum COLOURS {primary, secondary, pencil, primary_highlight, invalid, invalid_hi
 
 enum Vision {Colour, Shade, Strength, None}
 
-enum Mode {
-	Sandbox, ProblemSolving, ProblemCreation, ParticleSelection, SolutionCreation
-}
+var load_mode: BaseMode.Mode = BaseMode.Mode.ParticleSelection
+var creating_problem: Problem = Problem.new()
+var load_problem_set: ProblemSet = ProblemSet.new()
 
 #0 photon, 1 gluon, 2 Z, 3 H, 4 W,
 #5 lepton, 6 electron, 7 muon, 8 tau,
@@ -453,6 +453,8 @@ const HADRON_NAMES : Dictionary = {
 var isOnBuild := false
 
 func _ready():
+	load_problem_set.problems.push_back(creating_problem)
+	
 	sort_interactions()
 	sort_hadrons()
 	set_interaction_strength_limits()

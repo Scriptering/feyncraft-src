@@ -5,6 +5,13 @@ extends PanelContainer
 
 signal move
 signal deleted
+signal modify
+signal play
+
+var problem: Problem
+
+func update() -> void:
+	return
 
 func toggle_edit_visiblity(can_edit: bool) -> void:
 	$HBoxContainer/PanelContainer/HBoxContainer/Delete.visible = can_edit
@@ -16,7 +23,8 @@ func set_index(index: int) -> void:
 	Down.disabled = index == get_parent().get_child_count() - 1
 	Up.disabled = index == 0
 
-func load_problem(problem: Problem) -> void:
+func load_problem(_problem: Problem) -> void:
+	problem = _problem
 	$HBoxContainer/PanelContainer/HBoxContainer/Equation.load_problem(problem)
 
 func _on_up_pressed() -> void:
@@ -27,3 +35,9 @@ func _on_down_pressed() -> void:
 
 func _on_delete_pressed() -> void:
 	deleted.emit(self)
+
+func _on_modify_pressed() -> void:
+	modify.emit(self)
+
+func _on_play_pressed() -> void:
+	play.emit(problem)

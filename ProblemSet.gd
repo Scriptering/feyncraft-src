@@ -1,6 +1,6 @@
 class_name ProblemSet
 
-var title: String = ""
+var title: String = "Problem Set"
 var problems: Array[Problem] = []
 var highest_index_reached: int = 0
 var current_index: int: set = _set_current_index
@@ -10,6 +10,7 @@ var current_problem: Problem:
 var limited_particles: bool = false
 var custom_solutions: bool = false
 var hidden_particles: bool = false
+var is_custom: bool = false
 
 func _set_current_index(new_value: int) -> void:
 	current_index = clamp(new_value, 0, problems.size()-1)
