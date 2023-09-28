@@ -97,15 +97,14 @@ func get_quantum_numbers() -> PackedFloat32Array:
 	)
 	
 	var quantum_sum: PackedFloat32Array = []
-	quantum_sum.resize(connected_quantum_numbers.size())
+	quantum_sum.resize(GLOBALS.QuantumNumber.size())
 	quantum_sum.fill(0)
 	
 	for connected_quantum_number in connected_quantum_numbers:
-		for quantum_number in GLOBALS.QuantumNumber.keys():
+		for quantum_number in GLOBALS.QuantumNumber.values():
 			quantum_sum[quantum_number] += connected_quantum_number[quantum_number]
 	
 	return quantum_sum
-	
 
 func get_quark_group_hadron(quark_group: Array) -> GLOBALS.Hadrons:
 	var quarks : Array[GLOBALS.Particle] = []
@@ -183,4 +182,12 @@ func _get_connected_lone_particles() -> Array[GLOBALS.Particle]:
 		lone_connected_particles.append(connected_line.particle)
 	
 	return lone_connected_particles
+
+func get_connected_base_particles() -> Array[GLOBALS.Particle]:
+	var connected_base_particles: Array[GLOBALS.Particle] = []
+	
+	for particle_line in get_connected_lines():
+		connected_base_particles.push_back(particle_line.base_particle)
+	
+	return connected_base_particles
 

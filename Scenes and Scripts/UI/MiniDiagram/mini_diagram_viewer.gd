@@ -13,8 +13,6 @@ signal closed
 		title = new_value
 		get_node("VBoxContainer/HBoxContainer/Title").text = new_value
 
-var drag_vector_start: Vector2
-
 var diagrams: Array[DrawingMatrix] = []
 var current_index: int = 0:
 	set(new_value):
@@ -29,14 +27,6 @@ func _ready() -> void:
 	super._ready()
 	
 	load_diagram.connect(EVENTBUS.draw_diagram)
-
-func pick_up() -> void:
-	super.pick_up()
-	drag_vector_start = position - get_global_mouse_position()
-
-func _process(_delta:float) -> void:
-	if grabbed:
-		position = get_global_mouse_position() + drag_vector_start
 
 func _on_load_pressed() -> void:
 	emit_signal("load_diagram", diagrams[current_index])

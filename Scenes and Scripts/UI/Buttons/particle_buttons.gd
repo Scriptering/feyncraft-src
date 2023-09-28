@@ -27,7 +27,7 @@ func on_particle_button_pressed(button) -> void:
 
 func add_buttons_to_button_group() -> void:
 	particle_button_group = ButtonGroup.new()
-	particle_button_group.allow_unpress = true
+#	particle_button_group.allow_unpress = true
 	for particle_button in particle_buttons:
 		particle_button.button_group = particle_button_group
 
@@ -35,18 +35,23 @@ func clear_button_group() -> void:
 	for particle_button in particle_buttons:
 		particle_button.button_group = null
 
-func disable_buttons(disabled_particles: Array[GLOBALS.Particle]) -> void:
+func disable_buttons(disable: bool, disabled_particles: Array = GLOBALS.Particle.values()) -> void:
 	for particle_button in particle_buttons:
-		particle_button.disabled = particle_button.particle in disabled_particles
+		particle_button.disabled = disable and particle_button.particle in disabled_particles
 
 func toggle_button_mute(mute: bool) -> void:
 	for particle_button in particle_buttons:
 		particle_button.mute = mute
 
-func enter_particle_selection() -> void:
+func enter_particle_selection(problem: Problem) -> void:
 	toggle_button_mute(true)
 	clear_button_group()
-	toggle_buttons(true)
+	disable_buttons(false)
+	
+	if problem.allowed_particles.size() == 0:
+		toggle_buttons(true)
+	else:
+		toggle_buttons(true, problem.allowed_particles)
 	
 	await get_tree().process_frame
 	toggle_button_mute(false)
@@ -55,17 +60,17 @@ func get_toggled_particles(toggled: bool) -> Array[GLOBALS.Particle]:
 	var toggled_particles: Array[GLOBALS.Particle] = []
 	
 	for particle_button in particle_buttons:
-		if particle_button.button_pressed:
+		if particle_button.button_pressed == toggled:
 			toggled_particles.push_back(particle_button.particle)
 	
 	return toggled_particles
 
-func toggle_buttons(button_pressed: bool) -> void:
+func toggle_buttons(button_pressed: bool, particles: Array = GLOBALS.Particle.values()) -> void:
 	for particle_button in particle_buttons:
-		particle_button.button_pressed = button_pressed
+		particle_button.button_pressed = button_pressed and particle_button.particle in particles
 
 func exit_particle_selection() -> void:
 	var disabled_particles: Array[GLOBALS.Particle] = get_toggled_particles(false)
-	toggle_buttons(true)
-	disable_buttons(disabled_particles)
+	toggle_buttons(false)
+	disable_buttons(true, disabled_particles)
 	add_buttons_to_button_group()

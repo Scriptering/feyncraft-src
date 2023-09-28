@@ -14,8 +14,10 @@ func connect_buttons() -> void:
 
 func disconnect_buttons() -> void:
 	for button in get_tree().get_nodes_in_group('button'):
-		button.button_mouse_entered.disconnect(_on_button_mouse_entered)
-		button.mouse_exited.disconnect(_on_button_mouse_exited)
+		if button.button_mouse_entered.is_connected(_on_button_mouse_entered):
+			button.button_mouse_entered.disconnect(_on_button_mouse_entered)
+		if button.mouse_exited.is_connected(_on_button_mouse_exited):
+			button.mouse_exited.disconnect(_on_button_mouse_exited)
 
 func enter() -> void:
 	super.enter()

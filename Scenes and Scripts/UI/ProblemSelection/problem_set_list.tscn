@@ -10,6 +10,16 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lehaf"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b1yfg"]
+resource_local_to_scene = true
+shader = ExtResource("2_ecomh")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dbgr6"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7hu14"]
+resource_local_to_scene = true
+shader = ExtResource("2_ecomh")
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_v5ahc"]
 texture = ExtResource("3_7scrx")
 texture_margin_left = 7.0
@@ -17,23 +27,14 @@ texture_margin_top = 4.0
 texture_margin_right = 7.0
 texture_margin_bottom = 3.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_h8pct"]
-resource_local_to_scene = true
-shader = ExtResource("2_ecomh")
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dbgr6"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2sn5q"]
-resource_local_to_scene = true
-shader = ExtResource("2_ecomh")
-
 [node name="ProblemSetList" type="PanelContainer"]
 material = ExtResource("1_dmm2o")
+custom_minimum_size = Vector2(117, 50)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -381.0
-offset_bottom = -175.999
+offset_right = -523.0
+offset_bottom = -310.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_lehaf")
@@ -42,31 +43,11 @@ script = ExtResource("2_oi7x7")
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 use_parent_material = true
 layout_mode = 2
-theme_override_constants/separation = -4
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-z_index = 1
-use_parent_material = true
-layout_mode = 2
-alignment = 1
-
-[node name="Title" type="Label" parent="VBoxContainer/HBoxContainer"]
-use_parent_material = true
-custom_minimum_size = Vector2(100, 20)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 8
-mouse_filter = 1
-theme_override_font_sizes/font_size = 9
-theme_override_styles/normal = SubResource("StyleBoxTexture_v5ahc")
-text = "Problem Sets"
-horizontal_alignment = 1
-vertical_alignment = 1
+theme_override_constants/separation = -53
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
-size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer"]
 use_parent_material = true
@@ -78,7 +59,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="Back" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("1_tgmdf")]
-material = SubResource("ShaderMaterial_h8pct")
+material = SubResource("ShaderMaterial_b1yfg")
 layout_mode = 2
 icon = ExtResource("6_d5g0v")
 minimum_size = Vector2(30, 21)
@@ -106,13 +87,31 @@ theme_override_constants/margin_left = 30
 theme_override_constants/margin_right = 30
 
 [node name="AddProblemSet" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer" instance=ExtResource("1_tgmdf")]
-material = SubResource("ShaderMaterial_2sn5q")
+material = SubResource("ShaderMaterial_7hu14")
 layout_mode = 2
 size_flags_horizontal = 1
 icon = ExtResource("3_fyqnn")
 minimum_size = Vector2(2.08165e-12, 28)
 icon_use_parent_material = true
 action_mode = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+alignment = 1
+
+[node name="Title" type="Label" parent="VBoxContainer/HBoxContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(100, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+mouse_filter = 1
+theme_override_font_sizes/font_size = 9
+theme_override_styles/normal = SubResource("StyleBoxTexture_v5ahc")
+text = "Problem Sets"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer/AddProblemSet" to="." method="_on_add_problem_set_pressed"]

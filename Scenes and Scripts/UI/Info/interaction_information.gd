@@ -15,7 +15,6 @@ const NUMBER_OF_TITLE_NODES : int = 4
 
 var ConnectedInteraction: Interaction
 var ID: int
-var drag_vector_start: Vector2
 var invalid_icon := preload("res://Scenes and Scripts/UI/Info/invalid.tscn")
 var valid_icon := preload("res://Scenes and Scripts/UI/Info/valid.tscn")
 
@@ -31,14 +30,6 @@ func _ready():
 	$PanelContainer/NumberContainer/Number.text = str(ID)
 	
 	build_table()
-
-func pick_up() -> void:
-	super.pick_up()
-	drag_vector_start = position - get_global_mouse_position()
-
-func _process(_delta:float):
-	if grabbed:
-		position = get_global_mouse_position() + drag_vector_start
 	
 func build_table() -> void:
 	clear_table()
@@ -78,7 +69,10 @@ func build_other_tab() -> void:
 	
 	if ConnectedInteraction.has_base_particle_connected(GLOBALS.Particle.gluon):
 		add_label(data_containers[Tab.Other], property_names[Tab.Other][OtherProperties.ColourlessGluon])
-		add_label(data_containers[Tab.Other], '  Yes  ' if ConnectedInteraction.has_colourless_gluon() else '  No  ')
+		add_label(
+			data_containers[Tab.Other],
+			'  Yes  ' if ConnectedInteraction.has_colourless_gluon() or
+			!ConnectedInteraction.valid_colourless else '  No  ')
 		add_invalid(data_containers[Tab.Other], !ConnectedInteraction.has_colourless_gluon())
 	
 	if ConnectedInteraction.has_base_particle_connected(GLOBALS.Particle.photon):

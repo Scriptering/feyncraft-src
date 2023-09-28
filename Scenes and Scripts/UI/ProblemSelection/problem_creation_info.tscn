@@ -9,20 +9,22 @@
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="7_y52ba"]
 [ext_resource type="Texture2D" uid="uid://dvx430022t0ua" path="res://Textures/Buttons/icons/next.png" id="8_2yrn2"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3y4cm"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vplsm"]
 resource_local_to_scene = true
 shader = ExtResource("5_bibin")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0g1bx"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1weik"]
 resource_local_to_scene = true
 shader = ExtResource("5_bibin")
 
-[node name="ProblemCreationInfo" type="PanelContainer"]
+[node name="ProblemCreationInfo" type="PanelContainer" node_paths=PackedStringArray("next_button", "prev_button")]
 material = ExtResource("1_4tkmy")
 use_parent_material = true
 offset_right = 89.0
 offset_bottom = 76.0
 script = ExtResource("2_13y6g")
+next_button = NodePath("VBoxContainer/Buttons/NextStep")
+prev_button = NodePath("VBoxContainer/Buttons/PrevStep")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 use_parent_material = true
@@ -68,13 +70,32 @@ theme_override_font_sizes/font_size = 8
 text = "Quantum numbers don't match"
 autowrap_mode = 2
 
+[node name="NoParticles" type="HBoxContainer" parent="VBoxContainer/VBoxContainer"]
+visible = false
+use_parent_material = true
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/NoParticles"]
+layout_mode = 2
+texture = ExtResource("3_1n5rt")
+stretch_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/NoParticles"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 8
+text = "No particles"
+autowrap_mode = 2
+
 [node name="Buttons" type="HBoxContainer" parent="VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
 alignment = 1
 
 [node name="PrevStep" parent="VBoxContainer/Buttons" instance=ExtResource("4_5sf8a")]
-material = SubResource("ShaderMaterial_3y4cm")
+material = SubResource("ShaderMaterial_vplsm")
 layout_mode = 2
 icon = ExtResource("6_1wu7s")
 minimum_size = Vector2(24, 21)
@@ -84,7 +105,7 @@ icon_use_parent_material = true
 tooltip = "Previous Step"
 
 [node name="NextStep" parent="VBoxContainer/Buttons" instance=ExtResource("4_5sf8a")]
-material = SubResource("ShaderMaterial_0g1bx")
+material = SubResource("ShaderMaterial_1weik")
 layout_mode = 2
 icon = ExtResource("8_2yrn2")
 minimum_size = Vector2(24, 21)

@@ -34,10 +34,7 @@ func init(
 	SubmittedDiagramViewer.closed.connect(toggle_diagram_viewer)
 	ProblemGeneration = problem_generation
 	SolutionGeneration = _solution_generation
-	
-	await get_tree().create_timer(1).timeout
-	
-	load_new_problem(ProblemGeneration.generate(true, 3, 4))
+
 	
 func _on_submit_pressed() -> void:
 	submit_diagram()
@@ -87,7 +84,7 @@ func submit_diagram() -> void:
 		return
 	
 	current_problem.submit_diagram(submission)
-	SubmittedDiagramViewer.create_diagram(submission)
+	SubmittedDiagramViewer.store_diagram(submission)
 	
 	update_view_submission_button()
 

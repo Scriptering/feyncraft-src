@@ -19,8 +19,9 @@ var middle := load('res://Textures/Cursors/cursor_middle.png')
 var hover := load('res://Textures/Cursors/cursor_hover.png')
 var press := load('res://Textures/Cursors/cursor_press.png')
 var disabled := load('res://Textures/Cursors/cursor_disabled.png')
+var sampler: = load("res://Textures/Buttons/icons/sampler.png")
 
-var cursors := [0, point, hold, snip, snipped, middle, hover, press, disabled]
+var cursors := [0, point, hold, snip, snipped, middle, hover, press, disabled, sampler]
 
 func _ready():
 	Heart.visible = false

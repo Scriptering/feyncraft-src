@@ -14,3 +14,6 @@ func pull_out_tab() -> void:
 
 func push_in_tab() -> void:
 	$UI/PushInTab.play()
+
+func mute(toggle: bool) -> void:
+	AudioServer.set_bus_mute(0, toggle)

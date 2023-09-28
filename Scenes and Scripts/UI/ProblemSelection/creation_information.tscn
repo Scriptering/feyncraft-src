@@ -9,11 +9,11 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0pnha"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_emdbf"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xm8eo"]
 resource_local_to_scene = true
 shader = ExtResource("3_e86ap")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ugknh"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rh1v8"]
 resource_local_to_scene = true
 shader = ExtResource("3_e86ap")
 
@@ -39,12 +39,12 @@ tabs_visible = false
 use_hidden_tabs_for_min_size = true
 
 [node name="ParticleSelectionInfo" parent="TabContainer" instance=ExtResource("3_gxgmm")]
-material = SubResource("ShaderMaterial_emdbf")
+material = SubResource("ShaderMaterial_xm8eo")
 layout_mode = 2
 
 [node name="ProblemCreationInfo" parent="TabContainer" instance=ExtResource("5_224cs")]
 visible = false
-material = SubResource("ShaderMaterial_ugknh")
+material = SubResource("ShaderMaterial_rh1v8")
 layout_mode = 2
 
 [node name="SolutionCreationInfo" parent="TabContainer" instance=ExtResource("6_jjee5")]

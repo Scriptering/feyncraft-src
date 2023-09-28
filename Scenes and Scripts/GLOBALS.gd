@@ -5,7 +5,7 @@ enum COLOURS {primary, secondary, pencil, primary_highlight, invalid, invalid_hi
 
 enum Vision {Colour, Shade, Strength, None}
 
-var load_mode: BaseMode.Mode = BaseMode.Mode.ParticleSelection
+var load_mode: BaseMode.Mode = BaseMode.Mode.Sandbox
 var creating_problem: Problem = Problem.new()
 var load_problem_set: ProblemSet = ProblemSet.new()
 
@@ -36,7 +36,7 @@ enum INTERACTION_TYPE {electromagnetic, strong, weak, electroweak}
 
 enum STATE_LINE {INITIAL, FINAL}
 
-enum CURSOR {default, point, hold, snip, snipped, middle, hover, press, disabled}
+enum CURSOR {default, point, hold, snip, snipped, middle, hover, press, disabled, sampler}
 
 const REPLACEMENT_SHADER := preload('res://Resources/Shaders/replacement_material.tres')
 
@@ -122,7 +122,8 @@ const DARK_PARTICLES : Array[GLOBALS.Particle] = [
 
 const SHADE_PARTICLES : Array = [
 	BRIGHT_PARTICLES,
-	DARK_PARTICLES
+	DARK_PARTICLES,
+	SHADED_PARTICLES
 ]
 
 const GENERAL_PARTICLES : Array[GLOBALS.Particle] = [
@@ -276,17 +277,41 @@ const CKM_MATRIX := [
 	[0.008, 0.0388, 1.013]
 ]
 
-var INTERACTION_STRENGTHS : Array = [
+var PARTICLE_MASSES: Dictionary = {
+	Particle.W: 80.36e3,
+	Particle.Z: 91.19e3,
+	Particle.H: 125e3,
+	Particle.gluon: 0.0,
+	Particle.photon: 0.0,
+	Particle.lepton: 0.551,
+	Particle.lepton_neutrino: 0.001,
+	Particle.bright_quark: 2.2,
+	Particle.dark_quark: 4.7,
+	Particle.electron: 0.551,
+	Particle.muon: 105.66,
+	Particle.tau: 1.7768e3,
+	Particle.electron_neutrino: 0.001,
+	Particle.muon_neutrino: 0.001,
+	Particle.tau_neutrino: 0.001,
+	Particle.up: 2.2, 
+	Particle.charm: 1.28e3,
+	Particle.top: 173.1e3,
+	Particle.down: 4.7,
+	Particle.strange: 96,
+	Particle.bottom: 4.18e3
+}
+
+var INTERACTION_STRENGTHS: Array = [
 	[
-		[2.0/3*ALPHA_EM],
-		[1.0/3*ALPHA_EM],
-		[2.0/3*ALPHA_EM],
-		[1.0/3*ALPHA_EM],
-		[2.0/3*ALPHA_EM],
-		[1.0/3*ALPHA_EM],
-		[ALPHA_EM],
-		[ALPHA_EM],
-		[ALPHA_EM]
+		[abs(QUANTUM_NUMBERS[Particle.up][QuantumNumber.charge]*ALPHA_EM)],
+		[abs(QUANTUM_NUMBERS[Particle.down][QuantumNumber.charge]*ALPHA_EM)],
+		[abs(QUANTUM_NUMBERS[Particle.charm][QuantumNumber.charge]*ALPHA_EM)],
+		[abs(QUANTUM_NUMBERS[Particle.strange][QuantumNumber.charge]*ALPHA_EM)],
+		[abs(QUANTUM_NUMBERS[Particle.top][QuantumNumber.charge]*ALPHA_EM)],
+		[abs(QUANTUM_NUMBERS[Particle.bottom][QuantumNumber.charge]*ALPHA_EM)],
+		[abs(QUANTUM_NUMBERS[Particle.electron][QuantumNumber.charge]*ALPHA_EM)],
+		[abs(QUANTUM_NUMBERS[Particle.muon][QuantumNumber.charge]*ALPHA_EM)],
+		[abs(QUANTUM_NUMBERS[Particle.tau][QuantumNumber.charge]*ALPHA_EM)]
 	],
 	[
 		[ALPHA_S],
@@ -296,7 +321,7 @@ var INTERACTION_STRENGTHS : Array = [
 		[ALPHA_S],
 		[ALPHA_S],
 		[ALPHA_S],
-		[ALPHA_S*ALPHA_S],
+		[ALPHA_S**2],
 	],
 	[
 		[ALPHA_W],
@@ -331,22 +356,22 @@ var INTERACTION_STRENGTHS : Array = [
 		[ALPHA_W*ALPHA_W],
 		[ALPHA_W*ALPHA_W],
 		[ALPHA_W*ALPHA_W],
-		[ALPHA_W],
-		[ALPHA_W],
-		[ALPHA_W],
-		[ALPHA_W],
-		[ALPHA_W],
-		[ALPHA_W],
-		[ALPHA_W],
-		[ALPHA_W],
-		[ALPHA_W],
-		[ALPHA_W],
-		[ALPHA_W],
-		[ALPHA_W],
-		[ALPHA_W],
-		[ALPHA_W*ALPHA_W],
-		[ALPHA_W*ALPHA_W],
-		[ALPHA_W*ALPHA_W]
+		[ALPHA_W*PARTICLE_MASSES[Particle.up]/PARTICLE_MASSES[Particle.H]],
+		[ALPHA_W*PARTICLE_MASSES[Particle.down]/PARTICLE_MASSES[Particle.H]],
+		[ALPHA_W*PARTICLE_MASSES[Particle.charm]/PARTICLE_MASSES[Particle.H]],
+		[ALPHA_W*PARTICLE_MASSES[Particle.strange]/PARTICLE_MASSES[Particle.H]],
+		[ALPHA_W*PARTICLE_MASSES[Particle.top]/PARTICLE_MASSES[Particle.H]],
+		[ALPHA_W*PARTICLE_MASSES[Particle.bottom]/PARTICLE_MASSES[Particle.H]],
+		[ALPHA_W*PARTICLE_MASSES[Particle.electron]/PARTICLE_MASSES[Particle.H]],
+		[ALPHA_W*PARTICLE_MASSES[Particle.muon]/PARTICLE_MASSES[Particle.H]],
+		[ALPHA_W*PARTICLE_MASSES[Particle.tau]/PARTICLE_MASSES[Particle.H]],
+		[ALPHA_W*PARTICLE_MASSES[Particle.electron_neutrino]/PARTICLE_MASSES[Particle.H]],
+		[ALPHA_W*PARTICLE_MASSES[Particle.muon_neutrino]/PARTICLE_MASSES[Particle.H]],
+		[ALPHA_W*PARTICLE_MASSES[Particle.tau_neutrino]/PARTICLE_MASSES[Particle.H]],
+		[ALPHA_W*PARTICLE_MASSES[Particle.Z]/PARTICLE_MASSES[Particle.H]],
+		[(ALPHA_W * PARTICLE_MASSES[Particle.Z]/PARTICLE_MASSES[Particle.H])**2],
+		[(ALPHA_W * PARTICLE_MASSES[Particle.W]/PARTICLE_MASSES[Particle.H])**2],
+		[ALPHA_W**2]
 	]
 ]
 

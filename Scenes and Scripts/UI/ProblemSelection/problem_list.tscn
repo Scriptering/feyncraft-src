@@ -17,13 +17,13 @@ texture_margin_top = 4.0
 texture_margin_right = 7.0
 texture_margin_bottom = 3.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_roie3"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k5fql"]
 resource_local_to_scene = true
 shader = ExtResource("4_sya5g")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vw46e"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_iwm7s"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mc8hs"]
 resource_local_to_scene = true
 shader = ExtResource("4_sya5g")
 
@@ -78,7 +78,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="Back" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("3_tav84")]
-material = SubResource("ShaderMaterial_roie3")
+material = SubResource("ShaderMaterial_k5fql")
 layout_mode = 2
 icon = ExtResource("5_6vt8q")
 minimum_size = Vector2(30, 21)
@@ -106,7 +106,7 @@ theme_override_constants/margin_left = 30
 theme_override_constants/margin_right = 30
 
 [node name="AddProblem" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer" instance=ExtResource("3_tav84")]
-material = SubResource("ShaderMaterial_iwm7s")
+material = SubResource("ShaderMaterial_mc8hs")
 layout_mode = 2
 size_flags_horizontal = 1
 icon = ExtResource("5_6tky2")

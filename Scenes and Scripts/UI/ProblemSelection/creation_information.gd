@@ -9,7 +9,6 @@ var active_modes: Array[BaseMode.Mode] = [
 ]
 
 var Diagram: MainDiagram
-var problem: Problem
 var Level: Node2D
 
 func _process(_delta: float) -> void:
@@ -17,10 +16,12 @@ func _process(_delta: float) -> void:
 		return
 	
 	$TabContainer/ProblemCreationInfo.toggle_invalid_quantum_numbers(Diagram.are_quantum_numbers_matching())
+	$TabContainer/ProblemCreationInfo.toggle_no_particles(
+		Diagram.StateLines.any(func(state_line: StateLine): return state_line.get_connected_lines().size() > 0)
+	)
 	
-func init(_problem: Problem, diagram: MainDiagram, level: Node2D) -> void:
+func init(diagram: MainDiagram, level: Node2D) -> void:
 	Diagram = diagram
-	problem = _problem
 	Level = level
 
 func change_mode(mode_index: int) -> void:

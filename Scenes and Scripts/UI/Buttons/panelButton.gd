@@ -5,8 +5,8 @@ class_name PanelButton
 signal hide_tooltip
 signal pressed
 signal on_pressed
-signal button_toggled(button_pressed, button)
-signal toggled(button_pressed)
+signal button_toggled(button_pressed: bool, button: PanelButton)
+signal toggled(button_pressed: bool)
 signal button_mouse_entered(button)
 signal button_mouse_exited
 signal button_down
@@ -24,6 +24,7 @@ signal button_up
 @export var action_mode: Button.ActionMode = Button.ACTION_MODE_BUTTON_PRESS :
 	set = _set_action_mode
 @export var button_group: ButtonGroup : set = _set_button_button_group
+@export var icon_text_seperation: int = 3: set = _set_icon_text_seperation
 
 @onready var button = $Button
 @onready var label = $ContentContainer/HBoxContainer/ButtonText
@@ -53,8 +54,12 @@ func _process(_delta: float) -> void:
 		just_released_counter -= 1
 
 func _ready() -> void:
+	add_to_group("button", true)
+	
 	previous_button_pressed = button_pressed
-	set_content_margins(ButtonState[NORMAL])
+	set_content_margins(ButtonState[int(button_pressed)])
+	
+	visibility_changed.connect(_on_visibility_changed)
 	
 	$Button.mouse_entered.connect(
 		func(): 
@@ -75,12 +80,17 @@ func _set_icon_use_parent_material(new_value: bool) -> void:
 func _set_button_pressed(new_value: bool) -> void:
 	button_pressed = new_value
 	$Button.button_pressed = new_value
+	
+	set_content_margins(ButtonState[int(button_pressed)])
 
 func _set_button_disabled(new_value: bool) -> void:
+	if disabled == new_value:
+		return
+	
 	disabled = new_value
 	$Button.disabled = new_value
 	
-	if is_inside_tree():
+	if is_inside_tree() and disabled:
 		await get_tree().process_frame
 		self.button_pressed = false
 		_on_button_button_up()
@@ -136,6 +146,11 @@ func _set_action_mode(new_value: Button.ActionMode):
 	
 	get_node("Button").action_mode = new_value
 
+func _set_icon_text_seperation(new_value: int) -> void:
+	icon_text_seperation = new_value
+	
+	$ContentContainer/HBoxContainer.add_theme_constant_override("separation", icon_text_seperation) 
+
 func _on_button_pressed() -> void:
 	pressed.emit()
 	on_pressed.emit(self)
@@ -154,7 +169,6 @@ func set_content_margins(button_state: String) -> void:
 	$ContentContainer.add_theme_constant_override("margin_bottom",
 		$Button.get_theme_stylebox(button_state).get_margin(SIDE_BOTTOM)
 	)
-	
 
 func _on_button_button_down():
 	if toggle_mode:
@@ -192,20 +206,26 @@ func _on_button_toggled(button_pressed_state: bool) -> void:
 	button_toggled.emit(button_pressed_state, self)
 	toggled.emit(button_pressed_state)
 	
-	if button_pressed_state:
-		set_content_margins(ButtonState[PRESSED])
-		play_sound(button_pressed_state)
-	else:
-		set_content_margins(ButtonState[NORMAL])
-		play_sound(button_pressed_state)
-
-func play_sound(button_pressed_state: bool) -> void:
 	if button_pressed_state == previous_button_pressed:
 		return
-	
 	previous_button_pressed = button_pressed_state
 	
+	play_sound(button_pressed_state)
+	if button_pressed_state:
+		set_content_margins(ButtonState[PRESSED])
+	else:
+		set_content_margins(ButtonState[NORMAL])
+
+func play_sound(button_pressed_state: bool) -> void:
 	if button_pressed_state:
 		SOUNDBUS.button_down()
 	elif !$Button.button_group:
 		SOUNDBUS.button_up()
+	elif $Button.button_group.get_pressed_button() == null:
+		SOUNDBUS.button_up()
+
+func _on_visibility_changed() -> void:
+	if button_pressed:
+		set_content_margins(ButtonState[PRESSED])
+	else:
+		set_content_margins(ButtonState[NORMAL])

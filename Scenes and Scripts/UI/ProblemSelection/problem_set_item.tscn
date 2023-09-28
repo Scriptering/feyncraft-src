@@ -1,9 +1,10 @@
-[gd_scene load_steps=17 format=3 uid="uid://b6go021ha3ocr"]
+[gd_scene load_steps=18 format=3 uid="uid://b6go021ha3ocr"]
 
 [ext_resource type="StyleBox" uid="uid://dvu7f5h7snggp" path="res://Scenes and Scripts/UI/Menus/panelContainer.tres" id="1_g4bto"]
-[ext_resource type="FontFile" uid="uid://cq27s0444iwkg" path="res://Textures/Fonts/ConnectionIi-2wj8.otf" id="1_rajbj"]
+[ext_resource type="FontFile" uid="uid://dohkbu7ekkfx8" path="res://Textures/Fonts/pixeltype/Pixeltype.ttf" id="1_qnpxi"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/ProblemSelection/problem_set_item.gd" id="3_1cbyy"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="4_dol4y"]
+[ext_resource type="Script" path="res://Scenes and Scripts/Classes/line_edit.gd" id="4_ylu82"]
 [ext_resource type="Texture2D" uid="uid://cb6lapmtgwimd" path="res://Textures/UI/MiniDiagram/arrow_right.png" id="5_7dhmq"]
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="6_plt5e"]
 [ext_resource type="Texture2D" uid="uid://cms1u4elh5bo3" path="res://Textures/Buttons/icons/delete.png" id="7_dyt28"]
@@ -28,9 +29,8 @@ shader = SubResource("Shader_tmadl")
 shader_parameter/alpha = 1.0
 
 [sub_resource type="FontVariation" id="FontVariation_5o2co"]
-base_font = ExtResource("1_rajbj")
-spacing_top = -1
-spacing_bottom = -1
+base_font = ExtResource("1_qnpxi")
+spacing_bottom = -2
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vtmen"]
 
@@ -81,6 +81,7 @@ placeholder_text = "[Enter Title]"
 alignment = 1
 max_length = 18
 editable = false
+script = ExtResource("4_ylu82")
 
 [node name="Play" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("4_dol4y")]
 material = null

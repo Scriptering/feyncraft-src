@@ -6,7 +6,8 @@ func enter() -> void:
 
 func exit() -> void:
 	super.exit()
-	crosshair.show()
+	if Diagram.hovering:
+		crosshair.show()
 
 func input(_event: InputEvent) -> State:
 	if Input.is_action_just_released("editing"):

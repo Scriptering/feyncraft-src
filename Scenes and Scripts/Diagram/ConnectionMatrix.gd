@@ -153,6 +153,8 @@ func remove_interaction(id: int) -> void:
 	for row in range(matrix_size):
 		connection_matrix[row].remove_at(id)
 	
+	state_count[get_state_from_id(id)] -= 1
+	
 	connection_matrix.remove_at(id)
 	
 	matrix_size -= 1
@@ -271,6 +273,9 @@ func get_connection_particles(
 	return connection_particles
 
 func is_fully_connected(bidirectional: bool = false) -> bool:
+	if matrix_size == 0:
+		return true
+	
 	var reached_ids : PackedInt32Array = []
 	var start_id: int = 0
 	

@@ -116,10 +116,9 @@ shader_parameter/alpha = 1.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4wvwq"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_7veea"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2j7ws"]
 resource_local_to_scene = true
 shader = ExtResource("3_ifhvu")
-shader_parameter/alpha = null
 
 [node name="ProblemSetSelector" type="PanelContainer"]
 material = SubResource("ShaderMaterial_p05i4")
@@ -240,7 +239,7 @@ tooltip = "Modify"
 
 [node name="ProblemSetEdit" parent="VBoxContainer/TabContainer" instance=ExtResource("14_6w3xi")]
 visible = false
-material = SubResource("ShaderMaterial_7veea")
+material = SubResource("ShaderMaterial_2j7ws")
 layout_mode = 2
 
 [node name="IndexLabel" type="Label" parent="VBoxContainer"]
