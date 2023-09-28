@@ -1,0 +1,58 @@
+[gd_scene load_steps=10 format=3 uid="uid://c5scpc4iadf17"]
+
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_j0xio"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/ProblemSelection/creation_information.gd" id="2_sqpln"]
+[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="3_e86ap"]
+[ext_resource type="PackedScene" uid="uid://buskwt83mql4x" path="res://Scenes and Scripts/UI/ProblemSelection/particle_selection_info.tscn" id="3_gxgmm"]
+[ext_resource type="PackedScene" uid="uid://rtdlfrcuvhi8" path="res://Scenes and Scripts/UI/ProblemSelection/problem_creation_info.tscn" id="5_224cs"]
+[ext_resource type="PackedScene" uid="uid://bvn4ssrvphh28" path="res://Scenes and Scripts/UI/ProblemSelection/solution_creation_info.tscn" id="6_jjee5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0pnha"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xm8eo"]
+resource_local_to_scene = true
+shader = ExtResource("3_e86ap")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rh1v8"]
+resource_local_to_scene = true
+shader = ExtResource("3_e86ap")
+
+[node name="CreationInformation" type="Control"]
+material = ExtResource("1_j0xio")
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -640.0
+offset_bottom = -360.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_sqpln")
+
+[node name="TabContainer" type="TabContainer" parent="."]
+use_parent_material = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_0pnha")
+tabs_visible = false
+use_hidden_tabs_for_min_size = true
+
+[node name="ParticleSelectionInfo" parent="TabContainer" instance=ExtResource("3_gxgmm")]
+material = SubResource("ShaderMaterial_xm8eo")
+layout_mode = 2
+
+[node name="ProblemCreationInfo" parent="TabContainer" instance=ExtResource("5_224cs")]
+visible = false
+material = SubResource("ShaderMaterial_rh1v8")
+layout_mode = 2
+
+[node name="SolutionCreationInfo" parent="TabContainer" instance=ExtResource("6_jjee5")]
+visible = false
+layout_mode = 2
+
+[connection signal="next" from="TabContainer/ParticleSelectionInfo" to="." method="_on_particle_selection_info_next"]
+[connection signal="next" from="TabContainer/ProblemCreationInfo" to="." method="_on_problem_creation_info_next"]
+[connection signal="previous" from="TabContainer/ProblemCreationInfo" to="." method="_on_problem_creation_info_previous"]
+[connection signal="exit" from="TabContainer/SolutionCreationInfo" to="." method="_on_solution_creation_info_exit"]
+[connection signal="previous" from="TabContainer/SolutionCreationInfo" to="." method="_on_solution_creation_info_previous"]

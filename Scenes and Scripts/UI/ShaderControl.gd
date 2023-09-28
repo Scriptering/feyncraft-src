@@ -1,9 +1,13 @@
 extends Node
 
-func init(palette_buttons: Node) -> void:
-	palette_buttons.connect("palette_changed", Callable(self, "change_shaders"))
+func _ready() -> void:
+	EVENTBUS.signal_change_palette.connect(_on_palette_changed)
 
-func change_shaders(palette: CompressedTexture2D):
+func change_shaders(palette: ImageTexture):
 	RenderingServer.global_shader_parameter_set("colour_scheme", palette)
 
+func _on_palette_changed(palette: ImageTexture) -> void:
+	change_shaders(palette)
 
+func toggle_interaction_strength(toggle: bool) -> void:
+	RenderingServer.global_shader_parameter_set("interaction_strength_showing", toggle)

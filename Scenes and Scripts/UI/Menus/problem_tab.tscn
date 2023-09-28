@@ -42,37 +42,31 @@ texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 expand_margin_top = 10.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ipros"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ntqs4"]
 resource_local_to_scene = true
 shader = ExtResource("8_w33hb")
-shader_parameter/alpha = 1.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_osjy7"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ltjw8"]
 resource_local_to_scene = true
 shader = ExtResource("8_w33hb")
-shader_parameter/alpha = 1.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ivo4j"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_aco4x"]
 resource_local_to_scene = true
 shader = ExtResource("8_w33hb")
-shader_parameter/alpha = 1.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_5lhr0"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fawcl"]
 resource_local_to_scene = true
 shader = ExtResource("8_w33hb")
-shader_parameter/alpha = 1.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_xcowx"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yee1a"]
 resource_local_to_scene = true
 shader = ExtResource("8_w33hb")
-shader_parameter/alpha = 1.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_h2bak"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j4ybo"]
 resource_local_to_scene = true
 shader = ExtResource("8_w33hb")
-shader_parameter/alpha = 1.0
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_loeqa"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3leac"]
 content_margin_left = 4.0
 content_margin_top = 2.0
 content_margin_right = 4.0
@@ -83,7 +77,7 @@ texture_margin_top = 3.0
 texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xwugc"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_k0cp4"]
 content_margin_left = 4.0
 content_margin_top = 1.0
 content_margin_right = 4.0
@@ -94,17 +88,17 @@ texture_margin_top = 2.0
 texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 
-[sub_resource type="FontVariation" id="FontVariation_68meq"]
+[sub_resource type="FontVariation" id="FontVariation_ipn0w"]
 base_font = ExtResource("8_cwpoq")
 spacing_top = -2
 spacing_bottom = -4
 
 [sub_resource type="Theme" id="Theme_d1tq1"]
-Button/styles/hover = SubResource("StyleBoxTexture_loeqa")
-Button/styles/normal = SubResource("StyleBoxTexture_xwugc")
-Button/styles/pressed = SubResource("StyleBoxTexture_xwugc")
+Button/styles/hover = SubResource("StyleBoxTexture_3leac")
+Button/styles/normal = SubResource("StyleBoxTexture_k0cp4")
+Button/styles/pressed = SubResource("StyleBoxTexture_k0cp4")
 Label/font_sizes/font_size = 16
-Label/fonts/font = SubResource("FontVariation_68meq")
+Label/fonts/font = SubResource("FontVariation_ipn0w")
 
 [node name="ProblemTab" type="Control" node_paths=PackedStringArray("ContentContainer", "TabButton", "MovingContainer")]
 material = ExtResource("1_vo33s")
@@ -137,7 +131,7 @@ stay_out_time = 2.0
 
 [node name="MovingContainer" type="PanelContainer" parent="MovingContainer/SubmitFeedback"]
 use_parent_material = true
-custom_minimum_size = Vector2(2.08165e-12, 60)
+custom_minimum_size = Vector2(2.08165e-12, 72)
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -241,7 +235,7 @@ theme_override_constants/separation = 3
 alignment = 1
 
 [node name="Rewind" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
-material = SubResource("ShaderMaterial_ipros")
+material = SubResource("ShaderMaterial_ntqs4")
 layout_mode = 2
 icon = ExtResource("5_t5pc5")
 minimum_size = Vector2(26, 24)
@@ -253,7 +247,7 @@ icon_use_parent_material = true
 tooltip = "Load previous problem"
 
 [node name="Solution" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
-material = SubResource("ShaderMaterial_osjy7")
+material = SubResource("ShaderMaterial_ltjw8")
 layout_mode = 2
 tooltip_text = "Show solution"
 icon = ExtResource("6_pp1px")
@@ -265,11 +259,12 @@ icon_use_parent_material = true
 tooltip = "Show solution"
 
 [node name="Equation" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("3_7jee8")]
-material = SubResource("ShaderMaterial_ivo4j")
+material = SubResource("ShaderMaterial_aco4x")
+use_parent_material = true
 layout_mode = 2
 
 [node name="ViewSubmissions" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
-material = SubResource("ShaderMaterial_5lhr0")
+material = SubResource("ShaderMaterial_fawcl")
 layout_mode = 2
 tooltip_text = "View submissions"
 icon = ExtResource("5_15poa")
@@ -281,7 +276,7 @@ disabled = true
 tooltip = "View submissions"
 
 [node name="Submit" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
-material = SubResource("ShaderMaterial_xcowx")
+material = SubResource("ShaderMaterial_yee1a")
 layout_mode = 2
 tooltip_text = "Submit solution"
 icon = ExtResource("8_2kr0t")
@@ -293,7 +288,8 @@ icon_use_parent_material = true
 tooltip = "Submit solution"
 
 [node name="PullOutTabButtonDown" parent="MovingContainer/VBoxContainer" instance=ExtResource("10_xn6km")]
-material = SubResource("ShaderMaterial_h2bak")
+z_index = 0
+material = SubResource("ShaderMaterial_j4ybo")
 layout_mode = 2
 size_flags_horizontal = 4
 theme = SubResource("Theme_d1tq1")

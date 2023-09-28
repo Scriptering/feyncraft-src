@@ -4,7 +4,9 @@ signal signal_draw_diagram
 signal signal_draw_raw_diagram
 signal signal_add_floating_menu
 signal signal_change_cursor
-signal signal_mode_changed
+signal signal_enter_game
+signal signal_change_palette(palette: ImageTexture)
+signal signal_diagram_action_taken
 
 func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 	signal_draw_diagram.emit(drawing_matrix)
@@ -18,5 +20,12 @@ func add_floating_menu(menu: Node) -> void:
 func change_cursor(new_cursor: GLOBALS.CURSOR) -> void:
 	signal_change_cursor.emit(new_cursor)
 
-func mode_changed(prev_mode: GLOBALS.Mode, new_mode: GLOBALS.Mode) -> void:
-	signal_mode_changed.emit(prev_mode, new_mode)
+func enter_game(mode: BaseMode.Mode, problem_set: ProblemSet = null, problem: Problem = null) -> void:
+	GLOBALS.load_mode = mode
+	GLOBALS.load_problem_set = problem_set
+	GLOBALS.creating_problem = problem
+	
+	signal_enter_game.emit()
+
+func change_palette(palette: ImageTexture) -> void:
+	signal_change_palette.emit(palette)

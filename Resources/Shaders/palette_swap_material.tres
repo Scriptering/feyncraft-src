@@ -5,4 +5,3 @@
 [resource]
 resource_local_to_scene = true
 shader = ExtResource("1_2g61b")
-shader_parameter/alpha = 1.0

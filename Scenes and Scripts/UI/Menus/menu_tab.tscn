@@ -1,14 +1,18 @@
-[gd_scene load_steps=12 format=3 uid="uid://wgw4km4uc7fh"]
+[gd_scene load_steps=22 format=3 uid="uid://wgw4km4uc7fh"]
 
-[ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/PullOutTab.gd" id="1_2nmmp"]
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_wau64"]
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="2_0suyh"]
 [ext_resource type="PackedScene" uid="uid://ctj2f7ofdkrr1" path="res://Scenes and Scripts/UI/Buttons/pull_out_tab_button_up.tscn" id="2_ofglp"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/menu_tab.gd" id="3_24y3d"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="4_eh4di"]
 [ext_resource type="Texture2D" uid="uid://qaoot28mfcll" path="res://Textures/Buttons/icons/menu.png" id="5_0l85b"]
+[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="5_sq2sq"]
 [ext_resource type="Texture2D" uid="uid://bmns12qjnvbff" path="res://Textures/Buttons/icons/exit.png" id="7_verjv"]
-[ext_resource type="Texture2D" uid="uid://dpx0ebqyihc40" path="res://Textures/Buttons/icons/cog.png" id="8_h0cfd"]
+[ext_resource type="Theme" uid="uid://cfmbhoq8cuoge" path="res://Resources/Themes/ProjectTheme.tres" id="8_1y1ot"]
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="8_hwedl"]
+[ext_resource type="Texture2D" uid="uid://cea5mj3u65016" path="res://Textures/Buttons/square_pressed_active.png" id="10_3qs86"]
+[ext_resource type="Texture2D" uid="uid://bxlc5rvpwjq8o" path="res://Textures/Buttons/icons/unmute.png" id="10_bu15m"]
+[ext_resource type="Texture2D" uid="uid://btu2jj1bbbbil" path="res://Textures/Buttons/icons/palette.png" id="11_w1230"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4ap8b"]
 texture = ExtResource("2_0suyh")
@@ -21,6 +25,36 @@ expand_margin_bottom = 10.0
 [sub_resource type="Theme" id="Theme_jad7o"]
 PanelContainer/styles/panel = SubResource("StyleBoxTexture_4ap8b")
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dasjo"]
+resource_local_to_scene = true
+shader = ExtResource("5_sq2sq")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ch5f5"]
+resource_local_to_scene = true
+shader = ExtResource("5_sq2sq")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_13k4r"]
+resource_local_to_scene = true
+shader = ExtResource("5_sq2sq")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rolwb"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+texture = ExtResource("10_3qs86")
+texture_margin_left = 5.0
+texture_margin_top = 6.0
+texture_margin_right = 5.0
+texture_margin_bottom = 5.0
+
+[sub_resource type="Theme" id="Theme_g2x2b"]
+Button/styles/pressed = SubResource("StyleBoxTexture_rolwb")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hb22g"]
+resource_local_to_scene = true
+shader = ExtResource("5_sq2sq")
+
 [node name="MenuTab" type="Control" node_paths=PackedStringArray("ContentContainer", "TabButton", "MovingContainer")]
 material = ExtResource("1_wau64")
 layout_mode = 3
@@ -32,11 +66,10 @@ offset_bottom = -360.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = SubResource("Theme_jad7o")
-script = ExtResource("1_2nmmp")
+script = ExtResource("3_24y3d")
 ContentContainer = NodePath("MovingContainer/ContentContainer")
 TabButton = NodePath("MovingContainer/TabButton")
 MovingContainer = NodePath("MovingContainer")
-moving_container_margins = Vector2(2.08165e-12, -6)
 move_direction = 1
 
 [node name="MovingContainer" type="VBoxContainer" parent="."]
@@ -48,6 +81,7 @@ theme_override_constants/separation = 0
 alignment = 1
 
 [node name="TabButton" parent="MovingContainer" instance=ExtResource("2_ofglp")]
+material = SubResource("ShaderMaterial_dasjo")
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -65,21 +99,43 @@ layout_mode = 2
 theme_override_constants/separation = 1
 
 [node name="Exit" parent="MovingContainer/ContentContainer/HBoxContainer" instance=ExtResource("4_eh4di")]
-use_parent_material = true
+material = SubResource("ShaderMaterial_ch5f5")
 layout_mode = 2
+theme = ExtResource("8_1y1ot")
 icon = ExtResource("7_verjv")
 minimum_size = Vector2(26, 26)
 expand_icon = true
+icon_use_parent_material = true
 
 [node name="Tooltip" parent="MovingContainer/ContentContainer/HBoxContainer/Exit" instance=ExtResource("8_hwedl")]
 tooltip = "Exit to menu"
 
-[node name="Options" parent="MovingContainer/ContentContainer/HBoxContainer" instance=ExtResource("4_eh4di")]
-use_parent_material = true
+[node name="Mute" parent="MovingContainer/ContentContainer/HBoxContainer" instance=ExtResource("4_eh4di")]
+material = SubResource("ShaderMaterial_13k4r")
 layout_mode = 2
-icon = ExtResource("8_h0cfd")
+theme = SubResource("Theme_g2x2b")
+icon = ExtResource("10_bu15m")
 minimum_size = Vector2(26, 26)
+toggle_mode = true
 expand_icon = true
+button_pressed = true
+icon_use_parent_material = true
 
-[node name="Tooltip" parent="MovingContainer/ContentContainer/HBoxContainer/Options" instance=ExtResource("8_hwedl")]
-tooltip = "Options"
+[node name="Tooltip" parent="MovingContainer/ContentContainer/HBoxContainer/Mute" instance=ExtResource("8_hwedl")]
+tooltip = "Mute"
+
+[node name="Palettes" parent="MovingContainer/ContentContainer/HBoxContainer" instance=ExtResource("4_eh4di")]
+material = SubResource("ShaderMaterial_hb22g")
+layout_mode = 2
+icon = ExtResource("11_w1230")
+minimum_size = Vector2(26, 26)
+toggle_mode = true
+expand_icon = true
+icon_use_parent_material = true
+
+[node name="Tooltip" parent="MovingContainer/ContentContainer/HBoxContainer/Palettes" instance=ExtResource("8_hwedl")]
+tooltip = "Palettes"
+
+[connection signal="pressed" from="MovingContainer/ContentContainer/HBoxContainer/Exit" to="." method="_on_exit_pressed"]
+[connection signal="toggled" from="MovingContainer/ContentContainer/HBoxContainer/Mute" to="." method="_on_mute_toggled"]
+[connection signal="toggled" from="MovingContainer/ContentContainer/HBoxContainer/Palettes" to="." method="_on_palettes_toggled"]

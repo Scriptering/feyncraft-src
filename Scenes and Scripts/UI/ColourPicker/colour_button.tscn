@@ -1,0 +1,34 @@
+[gd_scene load_steps=6 format=3 uid="uid://c062i5iscj5rd"]
+
+[ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="1_xrvbt"]
+[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="2_s3yiu"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/ColourPicker/ColourButton.gd" id="3_coarc"]
+[ext_resource type="Texture2D" uid="uid://ddv5m0qeqb5lp" path="res://Textures/UI/ColourPicker/colour_icon.png" id="4_3mh40"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qxnfj"]
+resource_local_to_scene = true
+shader = ExtResource("2_s3yiu")
+
+[node name="ColourButton" groups=["button"] instance=ExtResource("1_xrvbt")]
+material = SubResource("ShaderMaterial_qxnfj")
+offset_right = -618.0
+offset_bottom = -338.0
+script = ExtResource("3_coarc")
+picker_offset = Vector2(0, 0)
+icon_colour = Color(0.819608, 0.254902, 0.541176, 1)
+icon = ExtResource("4_3mh40")
+toggle_mode = true
+expand_icon = true
+
+[node name="Button" parent="." index="0"]
+toggle_mode = true
+
+[node name="HBoxContainer" parent="ContentContainer" index="0"]
+theme_override_constants/separation = 3
+
+[node name="ButtonIcon" parent="ContentContainer/HBoxContainer" index="1"]
+visible = true
+modulate = Color(0.819608, 0.254902, 0.541176, 1)
+texture = ExtResource("4_3mh40")
+expand_mode = 3
+stretch_mode = 5

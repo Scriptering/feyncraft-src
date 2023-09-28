@@ -32,44 +32,38 @@ default_font = SubResource("FontVariation_eel88")
 default_font_size = 16
 PanelContainer/styles/panel = SubResource("StyleBoxTexture_pkocb")
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_05qsh"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3mk4e"]
+resource_local_to_scene = true
+shader = ExtResource("7_nj3d4")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6uhgs"]
+resource_local_to_scene = true
+shader = ExtResource("7_nj3d4")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w6b4c"]
+resource_local_to_scene = true
+shader = ExtResource("7_nj3d4")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ladyh"]
+resource_local_to_scene = true
+shader = ExtResource("7_nj3d4")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wsp31"]
+resource_local_to_scene = true
+shader = ExtResource("7_nj3d4")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6h7ix"]
+resource_local_to_scene = true
+shader = ExtResource("7_nj3d4")
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_mtd58"]
 texture = ExtResource("4_yg0ra")
 texture_margin_left = 7.0
 texture_margin_top = 4.0
 texture_margin_right = 7.0
 texture_margin_bottom = 3.0
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_05qsh"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_dc2xg"]
-resource_local_to_scene = true
-shader = ExtResource("7_nj3d4")
-shader_parameter/alpha = 1.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_sg1oi"]
-resource_local_to_scene = true
-shader = ExtResource("7_nj3d4")
-shader_parameter/alpha = 1.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2nte1"]
-resource_local_to_scene = true
-shader = ExtResource("7_nj3d4")
-shader_parameter/alpha = 1.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ckmsr"]
-resource_local_to_scene = true
-shader = ExtResource("7_nj3d4")
-shader_parameter/alpha = 1.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_pysy1"]
-resource_local_to_scene = true
-shader = ExtResource("7_nj3d4")
-shader_parameter/alpha = 1.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_afndk"]
-resource_local_to_scene = true
-shader = ExtResource("7_nj3d4")
-shader_parameter/alpha = 1.0
 
 [node name="MiniDiagramViewer" type="Control" node_paths=PackedStringArray("GrabAreas")]
 material = ExtResource("1_gc6j6")
@@ -90,25 +84,7 @@ use_parent_material = true
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
-theme_override_constants/separation = -4
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-z_index = 1
-use_parent_material = true
-layout_mode = 2
-size_flags_horizontal = 4
-alignment = 1
-
-[node name="Title" type="Label" parent="VBoxContainer/HBoxContainer"]
-use_parent_material = true
-custom_minimum_size = Vector2(2.08165e-12, 20)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 8
-mouse_filter = 1
-theme_override_styles/normal = SubResource("StyleBoxTexture_mtd58")
-horizontal_alignment = 1
-vertical_alignment = 1
+theme_override_constants/separation = -185
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
 use_parent_material = true
@@ -120,9 +96,11 @@ use_parent_material = true
 layout_mode = 2
 
 [node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
+use_parent_material = true
 layout_mode = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/CenterContainer"]
+use_parent_material = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "No diagrams to show :("
@@ -135,26 +113,29 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_05qsh")
 
 [node name="MiniDiagram" parent="VBoxContainer/PanelContainer/VBoxContainer/CenterContainer/MiniDiagramContainer" instance=ExtResource("6_y8o7g")]
-material = SubResource("ShaderMaterial_dc2xg")
+material = SubResource("ShaderMaterial_3mk4e")
+use_parent_material = true
 layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
+use_parent_material = true
 layout_mode = 2
 alignment = 1
 
 [node name="X_container" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 
 [node name="X" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/X_container" instance=ExtResource("6_r8qrn")]
-material = SubResource("ShaderMaterial_sg1oi")
+material = SubResource("ShaderMaterial_6uhgs")
 layout_mode = 2
 icon = ExtResource("7_t41g2")
 minimum_size = Vector2(18, 18)
 
 [node name="Left" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
-material = SubResource("ShaderMaterial_2nte1")
+material = SubResource("ShaderMaterial_w6b4c")
 layout_mode = 2
 mouse_filter = 1
 icon = ExtResource("8_g4oap")
@@ -162,7 +143,7 @@ minimum_size = Vector2(18, 2.08165e-12)
 icon_use_parent_material = true
 
 [node name="Load" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
-material = SubResource("ShaderMaterial_ckmsr")
+material = SubResource("ShaderMaterial_ladyh")
 layout_mode = 2
 mouse_filter = 1
 icon = ExtResource("9_ulpnp")
@@ -174,7 +155,7 @@ icon_use_parent_material = true
 tooltip = "Load Diagram"
 
 [node name="Delete" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
-material = SubResource("ShaderMaterial_pysy1")
+material = SubResource("ShaderMaterial_wsp31")
 layout_mode = 2
 mouse_filter = 1
 icon = ExtResource("11_5ck4b")
@@ -186,7 +167,7 @@ icon_use_parent_material = true
 tooltip = "Delete Diagram"
 
 [node name="Right" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
-material = SubResource("ShaderMaterial_afndk")
+material = SubResource("ShaderMaterial_6h7ix")
 layout_mode = 2
 mouse_filter = 1
 icon = ExtResource("9_4bpdd")
@@ -202,6 +183,23 @@ alignment = 1
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "1/10"
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 4
+alignment = 1
+
+[node name="Title" type="Label" parent="VBoxContainer/HBoxContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(2.08165e-12, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+mouse_filter = 1
+theme_override_styles/normal = SubResource("StyleBoxTexture_mtd58")
+horizontal_alignment = 1
 vertical_alignment = 1
 
 [connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/X_container/X" to="." method="_on_x_pressed"]

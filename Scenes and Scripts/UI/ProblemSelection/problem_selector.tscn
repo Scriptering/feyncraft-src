@@ -1,0 +1,140 @@
+[gd_scene load_steps=17 format=3 uid="uid://j70abl1nme6y"]
+
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/ProblemSelection/problem_selector.gd" id="2_7m7ny"]
+[ext_resource type="PackedScene" uid="uid://cqfassynt86vn" path="res://Scenes and Scripts/UI/Equation/mini_equation.tscn" id="2_v0r42"]
+[ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="2_yg01j"]
+[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="3_ifhvu"]
+[ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="4_c7up8"]
+[ext_resource type="Texture2D" uid="uid://cb6lapmtgwimd" path="res://Textures/UI/MiniDiagram/arrow_right.png" id="6_prjng"]
+[ext_resource type="Texture2D" uid="uid://cms1u4elh5bo3" path="res://Textures/Buttons/icons/delete.png" id="8_moko8"]
+[ext_resource type="Texture2D" uid="uid://drw6s2h3fn501" path="res://Textures/Buttons/Tabs/arrow_up.png" id="9_38yb2"]
+[ext_resource type="Texture2D" uid="uid://em240kmik0fw" path="res://Textures/Buttons/icons/modify.png" id="10_8itxw"]
+[ext_resource type="Texture2D" uid="uid://dwh7e30xi8v07" path="res://Textures/Buttons/Tabs/arrow_down.png" id="10_r0lbv"]
+
+[sub_resource type="Shader" id="Shader_tmadl"]
+code = "shader_type canvas_item;
+
+global uniform sampler2D colour_scheme: filter_nearest;
+uniform float alpha: hint_range(0.0, 1.0);
+
+void fragment() {
+	vec4 color = texture(TEXTURE, UV);
+	COLOR = vec4(texture(colour_scheme, vec2(color.r, color.g)).rgb, color.a * alpha);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p05i4"]
+resource_local_to_scene = true
+shader = SubResource("Shader_tmadl")
+shader_parameter/alpha = 1.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qxe7s"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yl85d"]
+resource_local_to_scene = true
+shader = ExtResource("3_ifhvu")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jmc82"]
+resource_local_to_scene = true
+shader = ExtResource("3_ifhvu")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_km5r2"]
+resource_local_to_scene = true
+shader = ExtResource("3_ifhvu")
+
+[node name="ProblemSelector" type="PanelContainer"]
+material = SubResource("ShaderMaterial_p05i4")
+offset_right = 12.0
+offset_bottom = 12.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_qxe7s")
+script = ExtResource("2_7m7ny")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+use_parent_material = true
+layout_mode = 2
+
+[node name="Index" type="Label" parent="HBoxContainer"]
+custom_minimum_size = Vector2(24, 2.08165e-12)
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/PanelContainer"]
+use_parent_material = true
+layout_mode = 2
+
+[node name="Equation" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("2_v0r42")]
+material = SubResource("ShaderMaterial_yl85d")
+layout_mode = 2
+
+[node name="Play" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("2_yg01j")]
+material = null
+layout_mode = 2
+mouse_filter = 1
+icon = ExtResource("6_prjng")
+minimum_size = Vector2(22, 22)
+expand_icon = true
+icon_use_parent_material = true
+action_mode = 1
+
+[node name="Tooltip" parent="HBoxContainer/PanelContainer/HBoxContainer/Play" instance=ExtResource("4_c7up8")]
+tooltip = "Resume"
+
+[node name="Delete" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("2_yg01j")]
+material = null
+layout_mode = 2
+mouse_filter = 1
+icon = ExtResource("8_moko8")
+minimum_size = Vector2(22, 22)
+expand_icon = true
+icon_use_parent_material = true
+action_mode = 1
+
+[node name="Tooltip" parent="HBoxContainer/PanelContainer/HBoxContainer/Delete" instance=ExtResource("4_c7up8")]
+tooltip = "Delete"
+
+[node name="Modify" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("2_yg01j")]
+material = null
+layout_mode = 2
+mouse_filter = 1
+icon = ExtResource("10_8itxw")
+minimum_size = Vector2(22, 22)
+expand_icon = true
+icon_use_parent_material = true
+action_mode = 1
+
+[node name="Tooltip" parent="HBoxContainer/PanelContainer/HBoxContainer/Modify" instance=ExtResource("4_c7up8")]
+tooltip = "Modify"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/PanelContainer/HBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = -6
+
+[node name="Up" parent="HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer" instance=ExtResource("2_yg01j")]
+material = SubResource("ShaderMaterial_jmc82")
+layout_mode = 2
+icon = ExtResource("9_38yb2")
+minimum_size = Vector2(19, 15)
+icon_use_parent_material = true
+
+[node name="Down" parent="HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer" instance=ExtResource("2_yg01j")]
+material = SubResource("ShaderMaterial_km5r2")
+layout_mode = 2
+icon = ExtResource("10_r0lbv")
+minimum_size = Vector2(19, 15)
+icon_use_parent_material = true
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
+[connection signal="pressed" from="HBoxContainer/PanelContainer/HBoxContainer/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="HBoxContainer/PanelContainer/HBoxContainer/Delete" to="." method="_on_delete_pressed"]
+[connection signal="pressed" from="HBoxContainer/PanelContainer/HBoxContainer/Modify" to="." method="_on_modify_pressed"]
+[connection signal="pressed" from="HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/Up" to="." method="_on_up_pressed"]
+[connection signal="pressed" from="HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/Down" to="." method="_on_down_pressed"]

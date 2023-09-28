@@ -1,7 +1,14 @@
 extends BaseMode
 
+func process(_delta: float) -> Mode:
+	if CreationInformation.submit.button_pressed:
+		return Mode.ProblemCreation
+	
+	return Mode.Null
+
 func enter() -> void:
 	super.enter()
+	
 	ParticleButtons.enter_particle_selection()
 
 func exit() -> void:
@@ -12,4 +19,6 @@ func toggle_menu_visibility() -> void:
 	
 	GenerationTab.hide()
 	ProblemTab.hide()
-	VisionTab.hdie()
+	VisionTab.hide()
+
+

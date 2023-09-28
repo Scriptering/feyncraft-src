@@ -1,0 +1,93 @@
+[gd_scene load_steps=10 format=3 uid="uid://bvn4ssrvphh28"]
+
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/ProblemSelection/info_panel.gd" id="1_i62pt"]
+[ext_resource type="Texture2D" uid="uid://tql14gtq05lf" path="res://Textures/UI/Information/invalid.png" id="1_mp3ie"]
+[ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="2_66fjv"]
+[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="3_ktptg"]
+[ext_resource type="Texture2D" uid="uid://c3nrennubqoow" path="res://Textures/Buttons/icons/back.png" id="4_187qd"]
+[ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="5_8fnwf"]
+[ext_resource type="Texture2D" uid="uid://bcu6ptkd3fwfe" path="res://Textures/Buttons/icons/submit.png" id="6_eyill"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i4lt8"]
+resource_local_to_scene = true
+shader = ExtResource("3_ktptg")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oefv5"]
+resource_local_to_scene = true
+shader = ExtResource("3_ktptg")
+
+[node name="SolutionCreationInfo" type="PanelContainer" node_paths=PackedStringArray("prev_button", "exit_button")]
+use_parent_material = true
+offset_right = 89.0
+offset_bottom = 76.0
+script = ExtResource("1_i62pt")
+prev_button = NodePath("VBoxContainer/Buttons/PrevStep")
+exit_button = NodePath("VBoxContainer/Buttons/Submit")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+use_parent_material = true
+layout_mode = 2
+alignment = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Title" type="Label" parent="VBoxContainer/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "3. Solution Creation"
+horizontal_alignment = 1
+
+[node name="Body" type="Label" parent="VBoxContainer/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+text = "- Draw solutions to the problem.
+- Submit solutions using puzzle tab."
+autowrap_mode = 3
+
+[node name="InvalidQuantumNumbers" type="HBoxContainer" parent="VBoxContainer/VBoxContainer"]
+visible = false
+use_parent_material = true
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/InvalidQuantumNumbers"]
+layout_mode = 2
+texture = ExtResource("1_mp3ie")
+stretch_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/InvalidQuantumNumbers"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 8
+text = "Quantum numbers don't match"
+autowrap_mode = 2
+
+[node name="Buttons" type="HBoxContainer" parent="VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+alignment = 1
+
+[node name="PrevStep" parent="VBoxContainer/Buttons" instance=ExtResource("2_66fjv")]
+material = SubResource("ShaderMaterial_i4lt8")
+layout_mode = 2
+icon = ExtResource("4_187qd")
+minimum_size = Vector2(24, 21)
+icon_use_parent_material = true
+
+[node name="Tooltip" parent="VBoxContainer/Buttons/PrevStep" instance=ExtResource("5_8fnwf")]
+tooltip = "Previous Step"
+
+[node name="Submit" parent="VBoxContainer/Buttons" instance=ExtResource("2_66fjv")]
+material = SubResource("ShaderMaterial_oefv5")
+layout_mode = 2
+icon = ExtResource("6_eyill")
+minimum_size = Vector2(22, 22)
+icon_use_parent_material = true
+
+[node name="Tooltip" parent="VBoxContainer/Buttons/Submit" instance=ExtResource("5_8fnwf")]
+tooltip = "Submit Problem"

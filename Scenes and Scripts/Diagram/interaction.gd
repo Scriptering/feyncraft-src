@@ -11,8 +11,6 @@ signal show_information_box
 
 @onready var Dot = get_node("Dot")
 @onready var InfoNumberLabel = get_node('InfoNumberLabel')
-@onready var interaction_matrix: ConnectionMatrix = Level.interaction_matrix
-
 @export var information_box_offset := Vector2(0, 0)
 
 static var used_information_numbers: Array[int] = []
@@ -52,9 +50,6 @@ func _ready():
 	
 	show_information_box.connect(EVENTBUS.add_floating_menu)
 	request_deletion.connect(Diagram.delete_interaction)
-	
-	id = interaction_matrix.calculate_new_interaction_id()
-	interaction_matrix.add_interaction()
 	
 	for line in Diagram.get_particle_lines():
 		if position in line.points and !line in connected_lines:
@@ -319,6 +314,7 @@ func has_colourless_gluon() -> bool:
 	for line in connected_lines:
 		if !line.has_colour:
 			return true
+	
 	return false
 
 func is_interaction_in_list() -> bool:

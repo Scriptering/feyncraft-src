@@ -42,10 +42,10 @@ func draw_raw_diagram(connection_matrix : ConnectionMatrix) -> void:
 	draw_diagram(drawable_matrix)
 
 func get_interactions() -> Array:
-	return Interactions.get_children()
+	return Interactions.get_children().filter(func(interaction): return !interaction.is_queued_for_deletion())
 
 func get_particle_lines() -> Array:
-	return ParticleLines.get_children()
+	return ParticleLines.get_children().filter(func(particle_line): return !particle_line.is_queued_for_deletion())
 
 func get_hadron_joints() -> Array:
 	return HadronJoints.get_children()

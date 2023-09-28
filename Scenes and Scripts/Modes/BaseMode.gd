@@ -4,23 +4,24 @@ class_name BaseMode
 @export var mode: Mode
 
 enum Mode {
-	Null,
-	Sandbox,
-	ProblemSolving,
 	ParticleSelection,
 	ProblemCreation,
-	SolutionCreation
+	SolutionCreation,
+	Sandbox,
+	ProblemSolving,
+	Null
 }
 
 var ProblemTab: Control
 var VisionTab: Control
 var GenerationTab: Control
-var OptionsTab: Control
+var MenuTab: Control
 var ParticleButtons: Control
-
+var CreationInformation: Control
 
 func enter() -> void:
 	toggle_menu_visibility()
+	CreationInformation.change_mode(mode)
 
 func exit() -> void:
 	pass

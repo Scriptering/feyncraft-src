@@ -34,9 +34,10 @@ func init(Level: Node2D, start_mode: BaseMode.Mode) -> void:
 	for mode in get_modes():
 		mode.VisionTab = Level.VisionTab
 		mode.GenerationTab = Level.GenerationTab
-		mode.OptionsTab = Level.OptionsTab
+		mode.MenuTab = Level.MenuTab
 		mode.ProblemTab = Level.ProblemTab
 		mode.ParticleButtons = Level.ParticleButtons
+		mode.CreationInformation = Level.CreationInformation
 
 	change_mode(start_mode)
 

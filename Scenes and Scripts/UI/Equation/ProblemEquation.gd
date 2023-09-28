@@ -8,9 +8,6 @@ extends PanelContainer
 
 const States = [StateLine.StateType.Initial, StateLine.StateType.Final]
 
-func _ready() -> void:
-	pass
-
 func load_problem(problem: Problem) -> void:
 	for state in States:
 		clear_equation(state)

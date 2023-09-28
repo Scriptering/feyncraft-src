@@ -1,9 +1,12 @@
 class_name Problem
 
+var limited_particles: bool = false
+var custom_solutions: bool = false
+
 var submitted_diagrams : Array[DrawingMatrix] = []
 var solutions : Array[DrawingMatrix] = []
 var allowed_particles : Array[GLOBALS.Particle] = []
-var state_interactions : Array
+var state_interactions : Array = [[], []]
 
 func is_submission_valid(submission: DrawingMatrix) -> bool:
 	if is_submission_duplicate(submission):
@@ -25,7 +28,7 @@ func is_submission_duplicate(submission: DrawingMatrix) -> bool:
 func is_submission_solution(submission: DrawingMatrix) -> bool:
 	var reduced_submission: ConnectionMatrix = submission.reduce_to_connection_matrix()
 	
-	if solutions.size() == 0:
+	if !custom_solutions:
 		return is_matching_states(reduced_submission)
 	
 	return solutions.any(
