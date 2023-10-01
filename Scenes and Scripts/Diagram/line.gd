@@ -33,6 +33,7 @@ var Final: StateLine
 var Crosshair: Node
 
 var points := PackedVector2Array([[0, 0], [0, 0]]) : set = _set_points
+var prev_points := PackedVector2Array([[0, 0], [0, 0]])
 var line_vector : Vector2 = Vector2.ZERO:
 	get: return points[Point.End] - points[Point.Start]
 
@@ -102,7 +103,7 @@ func _ready():
 	
 	update_line()
 
-	Text.visible = true
+#	Text.visible = true
 	
 	connect_to_interactions()
 
@@ -144,7 +145,6 @@ func _set_points(new_value: PackedVector2Array) -> void:
 	
 	if is_inside_tree() and !being_deleted:
 		connect_to_interactions()
-		Diagram.update_statelines()
 	
 func set_textures() -> void:
 	LineMiddle.texture = line_texture
@@ -259,19 +259,23 @@ func get_unconnected_point(interaction: Interaction) -> Point:
 func update_line() -> void:
 	if !is_placed:
 		points[moving_point] = Crosshair.position
-	move_line()
-	
-	set_left_and_right_points()
-	set_anti()
-	
-	Arrow.visible = get_arrow_visiblity()
-	if Arrow.visible:
-		move_arrow()
 
-	move_click_area()
-	move_text()
+	if points != prev_points:
+		prev_points = points.duplicate()
+
+		move_line()
 	
-	set_text_texture()
+		set_left_and_right_points()
+		set_anti()
+	
+		Arrow.visible = get_arrow_visiblity()
+		if Arrow.visible:
+			move_arrow()
+
+		move_click_area()
+		set_text_texture()
+		
+	move_text()
 	
 func move_line() -> void:
 	LineJointStart.points[Point.Start] = points[Point.Start]

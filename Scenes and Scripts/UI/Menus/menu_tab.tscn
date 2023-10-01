@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://wgw4km4uc7fh"]
+[gd_scene load_steps=23 format=3 uid="uid://wgw4km4uc7fh"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_wau64"]
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="2_0suyh"]
@@ -11,8 +11,9 @@
 [ext_resource type="Theme" uid="uid://cfmbhoq8cuoge" path="res://Resources/Themes/ProjectTheme.tres" id="8_1y1ot"]
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="8_hwedl"]
 [ext_resource type="Texture2D" uid="uid://cea5mj3u65016" path="res://Textures/Buttons/square_pressed_active.png" id="10_3qs86"]
-[ext_resource type="Texture2D" uid="uid://bxlc5rvpwjq8o" path="res://Textures/Buttons/icons/unmute.png" id="10_bu15m"]
 [ext_resource type="Texture2D" uid="uid://btu2jj1bbbbil" path="res://Textures/Buttons/icons/palette.png" id="11_w1230"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/Buttons/MuteButton.gd" id="12_jlkch"]
+[ext_resource type="Texture2D" uid="uid://ueqdiuyv54f0" path="res://Textures/Buttons/icons/mute.png" id="13_k0j5n"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4ap8b"]
 texture = ExtResource("2_0suyh")
@@ -25,19 +26,19 @@ expand_margin_bottom = 10.0
 [sub_resource type="Theme" id="Theme_jad7o"]
 PanelContainer/styles/panel = SubResource("StyleBoxTexture_4ap8b")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_dasjo"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_02ptg"]
 resource_local_to_scene = true
 shader = ExtResource("5_sq2sq")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ch5f5"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ppmo5"]
 resource_local_to_scene = true
 shader = ExtResource("5_sq2sq")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_13k4r"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d5fx1"]
 resource_local_to_scene = true
 shader = ExtResource("5_sq2sq")
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rolwb"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bauei"]
 content_margin_left = 5.0
 content_margin_top = 5.0
 content_margin_right = 5.0
@@ -49,9 +50,9 @@ texture_margin_right = 5.0
 texture_margin_bottom = 5.0
 
 [sub_resource type="Theme" id="Theme_g2x2b"]
-Button/styles/pressed = SubResource("StyleBoxTexture_rolwb")
+Button/styles/pressed = SubResource("StyleBoxTexture_bauei")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hb22g"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u6twr"]
 resource_local_to_scene = true
 shader = ExtResource("5_sq2sq")
 
@@ -81,7 +82,7 @@ theme_override_constants/separation = 0
 alignment = 1
 
 [node name="TabButton" parent="MovingContainer" instance=ExtResource("2_ofglp")]
-material = SubResource("ShaderMaterial_dasjo")
+material = SubResource("ShaderMaterial_02ptg")
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -99,7 +100,7 @@ layout_mode = 2
 theme_override_constants/separation = 1
 
 [node name="Exit" parent="MovingContainer/ContentContainer/HBoxContainer" instance=ExtResource("4_eh4di")]
-material = SubResource("ShaderMaterial_ch5f5")
+material = SubResource("ShaderMaterial_ppmo5")
 layout_mode = 2
 theme = ExtResource("8_1y1ot")
 icon = ExtResource("7_verjv")
@@ -111,10 +112,11 @@ icon_use_parent_material = true
 tooltip = "Exit to menu"
 
 [node name="Mute" parent="MovingContainer/ContentContainer/HBoxContainer" instance=ExtResource("4_eh4di")]
-material = SubResource("ShaderMaterial_13k4r")
+material = SubResource("ShaderMaterial_d5fx1")
 layout_mode = 2
 theme = SubResource("Theme_g2x2b")
-icon = ExtResource("10_bu15m")
+script = ExtResource("12_jlkch")
+icon = ExtResource("13_k0j5n")
 minimum_size = Vector2(26, 26)
 toggle_mode = true
 expand_icon = true
@@ -125,17 +127,15 @@ icon_use_parent_material = true
 tooltip = "Mute"
 
 [node name="Palettes" parent="MovingContainer/ContentContainer/HBoxContainer" instance=ExtResource("4_eh4di")]
-material = SubResource("ShaderMaterial_hb22g")
+material = SubResource("ShaderMaterial_u6twr")
 layout_mode = 2
 icon = ExtResource("11_w1230")
 minimum_size = Vector2(26, 26)
 toggle_mode = true
 expand_icon = true
-icon_use_parent_material = true
 
 [node name="Tooltip" parent="MovingContainer/ContentContainer/HBoxContainer/Palettes" instance=ExtResource("8_hwedl")]
 tooltip = "Palettes"
 
 [connection signal="pressed" from="MovingContainer/ContentContainer/HBoxContainer/Exit" to="." method="_on_exit_pressed"]
-[connection signal="toggled" from="MovingContainer/ContentContainer/HBoxContainer/Mute" to="." method="_on_mute_toggled"]
 [connection signal="toggled" from="MovingContainer/ContentContainer/HBoxContainer/Palettes" to="." method="_on_palettes_toggled"]

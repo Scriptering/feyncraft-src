@@ -1,4 +1,5 @@
 class_name ConnectionMatrix
+extends Resource
 
 signal interaction_added(point_id)
 signal interaction_removed(point_id)
@@ -17,10 +18,10 @@ const state_factor : Dictionary = {
 
 const States : Array[StateLine.StateType] = [StateLine.StateType.Initial, StateLine.StateType.Final]
 
-var connection_matrix : Array = []
-var state_count: PackedInt32Array = [0, 0, 0]
-var matrix_size : int = 0
-var last_added_id: int
+@export var connection_matrix : Array = []
+@export var state_count: Array[int] = [0, 0, 0]
+@export var matrix_size : int = 0
+@export var last_added_id: int = -1
 
 const PREVIOUS_POINT: int = -2
 
@@ -383,14 +384,6 @@ func combine_matrix(new_matrix):
 		for j in new_matrix.matrix_size:
 			connection_matrix[i][j] += new_matrix.connection_matrix[i][j]
 
-func duplicate():
-	var new_connection_matrix := ConnectionMatrix.new()
-	new_connection_matrix.state_count = state_count.duplicate()
-	new_connection_matrix.connection_matrix = connection_matrix.duplicate(true)
-	new_connection_matrix.matrix_size = matrix_size
-	
-	return new_connection_matrix
-
 func is_empty() -> bool:
 	for id in range(matrix_size):
 		if get_connected_count(id, true) > 0:
@@ -598,8 +591,6 @@ func reindex_from_point(point: int, reindex_dictionary: Dictionary, travel_matri
 		connected_particles.push_back(get_sorted_connection_particles(point, id, false, true).front())
 	
 	var unique_particle_connected_ids: Array = []
-	var non_unique_particles: Array = []
-	var ids_to_further_sort: Array[PackedInt32Array] = []
 	for id in connected_ids:
 		if connected_particles.count(get_sorted_connection_particles(point, id, false, true).front()) == 1:
 			unique_particle_connected_ids.push_back(id)
@@ -699,7 +690,7 @@ func generate_paths_from_point(
 	return paths_from_current_point
 
 func get_reduced_matrix(particle_test_function: Callable):
-	var reduced_matrix: ConnectionMatrix = duplicate()
+	var reduced_matrix: ConnectionMatrix = duplicate(true)
 	
 	for id in range(matrix_size):
 		for connection in get_connections(id) + get_connections(id, true):

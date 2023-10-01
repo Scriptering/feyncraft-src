@@ -507,6 +507,47 @@ func _ready():
 				if file_name.ends_with('.png'):
 					PARTICLE_TEXTURES[file_name.trim_suffix('.png')] = ResourceLoader.load(folder_path + file_name)
 
+func get_unique_file_name(folder_path: String, suffix: String = '.tres') -> String:
+	var random_hex : String = "%x" % (randi() % 4095)
+	
+	var files: Array[String] = get_files_in_folder(folder_path)
+	
+	while folder_path + random_hex + suffix in files:
+		random_hex = "%x" % (randi() % 4095)
+	
+	return folder_path + random_hex + suffix
+
+func create_file(path: String) -> void:
+	var file = FileAccess.open(path, FileAccess.WRITE)
+	file.store_string("empty file")
+	file = null
+
+func save_data(data: Resource, path: String = "res://saves/") -> Error:
+	return ResourceSaver.save(data, path, ResourceSaver.FLAG_REPLACE_SUBRESOURCE_PATHS)
+
+func load_data(path: String) -> Resource:
+	if ResourceLoader.exists(path):
+		return ResourceLoader.load(path)
+	
+	return null
+
+func delete_file(path: String) -> Error:
+	return DirAccess.remove_absolute(path)
+
+func get_files_in_folder(folder_path: String) -> Array[String]:
+	var files : Array[String] = []
+	var dir := DirAccess.open(folder_path)
+	dir.list_dir_begin()
+
+	while true:
+		var file = dir.get_next()
+		if file == "":
+			break
+		elif not file.begins_with("."):
+			files.append(folder_path + file)
+
+	return files
+
 func get_particle_name(particle: int):
 	return Particle.keys()[Particle.values().find(particle)]
 

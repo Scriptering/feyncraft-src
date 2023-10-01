@@ -11,33 +11,26 @@ var palette_menu: GrabbableControl
 
 func _ready() -> void:
 	super._ready()
-	mute.button_pressed = !AudioServer.is_bus_mute(0)
 	
 	await get_tree().process_frame
 	palette_menu = PaletteMenu.instantiate()
 	EVENTBUS.add_floating_menu(palette_menu)
 	palette_menu.hide()
+	palette_menu.closed.connect(_on_palette_menu_closed)
 	
-
 func _on_exit_pressed() -> void:
 	pass # Replace with function body.
 
-func _on_mute_toggled(button_pressed: bool) -> void:
-	SOUNDBUS.mute(!button_pressed)
-	
-	if button_pressed:
-		mute.icon = load("res://Textures/Buttons/icons/unmute.png")
-	else:
-		mute.icon = load("res://Textures/Buttons/icons/mute.png")
-
-func _on_palettes_toggled(button_pressed: bool) -> void:
-	if !button_pressed:
+func toggle_palette_menu(toggle: bool) -> void:
+	if !toggle:
 		palette_menu.hide()
 		return
 	
 	palette_menu.show()
 	palette_menu.position = get_global_position() + palette_menu_offset
 	
-	
-	
-	
+func _on_palettes_toggled(button_pressed: bool) -> void:
+	toggle_palette_menu(button_pressed)
+
+func _on_palette_menu_closed() -> void:
+	palettes.button_pressed = false

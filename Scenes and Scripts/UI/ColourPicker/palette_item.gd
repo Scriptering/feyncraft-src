@@ -28,9 +28,9 @@ signal selected
 	Palette.ColourIndex.Shadow2: Shadow2ColourButton
 }
 
+var file_path: String
 var is_selected: bool = false: set = _set_is_selected
 var palette: Palette = Palette.new()
-var changed_colours: Array[Palette.ColourIndex] = []
 var main_colours: Array[Palette.ColourIndex] = [Palette.ColourIndex.Primary, Palette.ColourIndex.Grid, Palette.ColourIndex.Secondary]
 
 func _ready() -> void:
@@ -57,13 +57,13 @@ func toggle_more_colours(toggle: bool) -> void:
 
 func update_button_colours() -> void:
 	for key in ColourButtonDict.keys():
-		if key in changed_colours:
+		if key in palette.changed_colours:
 			continue
 		
 		ColourButtonDict[key].icon_colour = palette.get_colour(key)
 
-func get_button_colours() -> PackedColorArray:
-	var button_colours: PackedColorArray = []
+func get_button_colours() -> Array[Color]:
+	var button_colours: Array[Color] = []
 	
 	for i in Palette.ColourIndex.values():
 		if i not in ColourButtonDict.keys():
@@ -87,16 +87,16 @@ func load_data(_palette: Palette) -> void:
 	update_button_colours()
 
 func update_custom_palette() -> void:
-	var custom_colours: PackedColorArray = palette.get_custom_colours()
+	var custom_colours: Array[Color] = palette.get_custom_colours()
 	
 	for i in range(Palette.ColourIndex.size()):
-		if i in changed_colours:
+		if i in palette.changed_colours:
 			continue
 		
 		palette.colours[i] = custom_colours[i]
 
 func _on_reset_pressed() -> void:
-	changed_colours.clear()
+	palette.changed_colours.clear()
 	update_custom_palette()
 	update_button_colours()
 
@@ -113,8 +113,8 @@ func _on_randomise_pressed() -> void:
 func _on_colour_button_colour_changed(colour_button: ColourButton, new_colour: Color) -> void:
 	var colour_index: Palette.ColourIndex = ColourButtonDict.find_key(colour_button)
 	
-	if colour_index not in changed_colours:
-		changed_colours.push_back(colour_index)
+	if colour_index not in palette.changed_colours:
+		palette.changed_colours.push_back(colour_index)
 	
 	palette.colours[colour_index] = new_colour
 	
@@ -133,3 +133,6 @@ func _set_is_selected(new_value: bool) -> void:
 	
 	if is_selected:
 		update_shader()
+
+func _on_delete_pressed() -> void:
+	deleted.emit()

@@ -17,13 +17,13 @@ texture_margin_top = 4.0
 texture_margin_right = 7.0
 texture_margin_bottom = 3.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_k5fql"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ttbjr"]
 resource_local_to_scene = true
 shader = ExtResource("4_sya5g")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vw46e"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_mc8hs"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nc1ow"]
 resource_local_to_scene = true
 shader = ExtResource("4_sya5g")
 
@@ -78,11 +78,13 @@ layout_mode = 2
 alignment = 1
 
 [node name="Back" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("3_tav84")]
-material = SubResource("ShaderMaterial_k5fql")
+material = SubResource("ShaderMaterial_ttbjr")
 layout_mode = 2
 icon = ExtResource("5_6vt8q")
 minimum_size = Vector2(30, 21)
 icon_use_parent_material = true
+flip_icon_v = false
+flip_icon_h = false
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
 use_parent_material = true
@@ -99,20 +101,15 @@ size_flags_horizontal = 3
 [node name="ProblemContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
-use_parent_material = true
+[node name="AddProblem" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_tav84")]
+material = SubResource("ShaderMaterial_nc1ow")
 layout_mode = 2
-theme_override_constants/margin_left = 30
-theme_override_constants/margin_right = 30
-
-[node name="AddProblem" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer" instance=ExtResource("3_tav84")]
-material = SubResource("ShaderMaterial_mc8hs")
-layout_mode = 2
-size_flags_horizontal = 1
 icon = ExtResource("5_6tky2")
-minimum_size = Vector2(2.08165e-12, 28)
+minimum_size = Vector2(154, 28)
 icon_use_parent_material = true
 action_mode = 1
+flip_icon_v = false
+flip_icon_h = false
 
 [connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Back" to="." method="_on_back_pressed"]
-[connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer/AddProblem" to="." method="_on_add_problem_pressed"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/AddProblem" to="." method="_on_add_problem_pressed"]

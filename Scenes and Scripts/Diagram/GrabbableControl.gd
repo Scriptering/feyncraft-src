@@ -54,4 +54,3 @@ func _grab_area_hovered_changed(new_value: bool) -> void:
 
 func _grabbable_changed(new_value: bool) -> void:
 	grabbable = new_value
-

@@ -2,7 +2,7 @@ extends PanelContainer
 
 signal enter_problem_set(problem_set: ProblemSet)
 signal play_problem_set(mode, problem_set, problem)
-signal back
+signal close
 
 var ProblemSetItem: PackedScene = preload("res://Scenes and Scripts/UI/ProblemSelection/problem_set_item.tscn")
 
@@ -81,10 +81,9 @@ func _problem_set_viewed(problem_set_item: PanelContainer) -> void:
 func _problem_set_resumed(problem_set: ProblemSet) -> void:
 	play_problem_set.emit(BaseMode.Mode.ProblemSolving, problem_set, problem_set.problems[problem_set.highest_index_reached])
 
-func _on_back_pressed() -> void:
-	back.emit()
-
 func update() -> void:
 	update_index_labels()
 	update_problem_sets()
-	
+
+func _on_close_pressed() -> void:
+	close.emit()

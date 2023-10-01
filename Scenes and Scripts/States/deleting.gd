@@ -12,6 +12,8 @@ func exit() -> void:
 
 func process(_delta: float) -> State:
 	if Controls.Snip.is_just_released:
+		if Controls.Grab.is_just_pressed:
+			return State.Hovering
 		return State.Idle
 	
 	return State.Null
@@ -29,8 +31,11 @@ func disconnect_deletable() -> void:
 		interaction.clicked_on.disconnect(interaction_deletion)
 
 func input(_event: InputEvent) -> State:
-	if Input.is_action_just_released("deleting"):
+	if Input.is_action_just_released("deleting") and !Controls.Snip.button_pressed:
+		if Controls.Grab.is_just_pressed:
+			return State.Hovering
 		return State.Idle
+		
 	elif Input.is_action_just_pressed("click"):
 		emit_signal("change_cursor", GLOBALS.CURSOR.snipped)
 	elif Input.is_action_just_released("click"):

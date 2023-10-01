@@ -8,7 +8,7 @@ func _ready() -> void:
 	focus_entered.connect(_on_focus_entered)
 	focus_exited.connect(_on_focus_exited)
 
-func _input(event: InputEvent) -> void:
+func _input(_event: InputEvent) -> void:
 	if !has_focus():
 		return
 	

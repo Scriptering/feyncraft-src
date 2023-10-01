@@ -395,7 +395,7 @@ func combine_connection_matrices(
 	
 	for base_connection_matrix in base_connection_matrices:
 		for combining_connection_matrix in combining_connection_matrices:
-			var combined_matrix : ConnectionMatrix = base_connection_matrix.duplicate()
+			var combined_matrix : ConnectionMatrix = base_connection_matrix.duplicate(true)
 			combined_matrix.combine_matrix(combining_connection_matrix)
 			combined_connection_matrices.push_back(combined_matrix)
 	
@@ -437,7 +437,7 @@ func generate_directionless_connections(unconnected_interaction_matrix: Interact
 			var start_point := matrix.find_first_unconnected(is_directionless_particle)
 
 			for further_matrix in generate_paths_from_point(
-				start_point, matrix.duplicate(), directionless_ids, directionless_ids, state_points, is_directionless_particle,
+				start_point, matrix.duplicate(true), directionless_ids, directionless_ids, state_points, is_directionless_particle,
 				true, false
 			):
 				if further_matrix == null:
@@ -502,7 +502,7 @@ func generate_possible_path(
 	
 	for matrix in iteration_matrices:
 		for further_matrix in generate_paths_from_point(
-			start_point, matrix.duplicate(), available_points, end_points, state_points, particle_test_function, is_start_point,
+			start_point, matrix.duplicate(true), available_points, end_points, state_points, particle_test_function, is_start_point,
 			connect_uniquely, starting_particle
 		):
 			if further_matrix == null:
@@ -560,7 +560,7 @@ func generate_possible_loops(interaction_matrices : Array[InteractionMatrix], pa
 				continue
 			
 			for further_matrix in generate_paths_from_point(
-				loop_point, matrix.duplicate(), matrix.get_state_ids(StateLine.StateType.None), [loop_point], [],
+				loop_point, matrix.duplicate(true), matrix.get_state_ids(StateLine.StateType.None), [loop_point], [],
 				particle_test_function, true
 			):
 				if further_matrix == null:
@@ -741,7 +741,7 @@ func generate_paths_from_point(
 		return [null]
 
 	for point in next_possible_points:
-		var new_interaction_matrix : InteractionMatrix = interaction_matrix.duplicate()
+		var new_interaction_matrix : InteractionMatrix = interaction_matrix.duplicate(true)
 		new_interaction_matrix.connect_interactions(current_point, point, current_particle)
 
 		for further_interaction_matrix in generate_paths_from_point(
@@ -849,7 +849,7 @@ func generate_unique_interaction_matrices(
 		var hadron_connection_permutations : Array = get_permutations(possible_hadron_connections, connection_count)
 		
 		for hadron_connection_permutation in hadron_connection_permutations:
-			var interaction_matrix : InteractionMatrix = base_interaction_matrix.duplicate()
+			var interaction_matrix : InteractionMatrix = base_interaction_matrix.duplicate(true)
 			
 			interaction_matrix.unconnected_matrix = interaction_matrix.unconnected_matrix.map(convert_interaction_to_general)
 			
@@ -897,7 +897,7 @@ func add_interaction_sets(
 		unique_interaction_sets.push_back(interaction_set)
 	
 	for interaction_set in unique_interaction_sets:
-		var interaction_matrix : InteractionMatrix = base_interaction_matrix.duplicate()
+		var interaction_matrix : InteractionMatrix = base_interaction_matrix.duplicate(true)
 		for interaction in interaction_set:
 			interaction_matrix.add_unconnected_interaction(interaction)
 		unique_matrices.push_back(interaction_matrix)

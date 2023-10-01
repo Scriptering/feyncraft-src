@@ -1,12 +1,13 @@
 class_name Problem
+extends Resource
 
-var limited_particles: bool = false
-var custom_solutions: bool = false
+@export var limited_particles: bool = false
+@export var custom_solutions: bool = false
 
-var submitted_diagrams : Array[DrawingMatrix] = []
-var solutions : Array[DrawingMatrix] = []
-var allowed_particles : Array[GLOBALS.Particle] = []
-var state_interactions : Array = [[], []]
+@export var submitted_diagrams : Array[DrawingMatrix] = []
+@export var solutions : Array[DrawingMatrix] = []
+@export var allowed_particles : Array[GLOBALS.Particle] = []
+@export var state_interactions : Array = [[], []]
 
 func is_submission_valid(submission: DrawingMatrix) -> bool:
 	if is_submission_duplicate(submission):

@@ -1,9 +1,9 @@
 class_name DrawingMatrix
 extends ConnectionMatrix
 
-var split_hadron_ids : Array = []
-var normalised_interaction_positions : PackedVector2Array = []
-var state_line_positions : PackedInt32Array = [0, 20]
+@export var split_hadron_ids : Array = []
+@export var normalised_interaction_positions : Array[Vector2] = []
+@export var state_line_positions : Array[int] = [0, 20]
 
 func initialise_from_connection_matrix(from_connection_matrix: ConnectionMatrix) -> void:
 	connection_matrix = from_connection_matrix.connection_matrix.duplicate(true)
@@ -33,17 +33,6 @@ func add_interaction_with_position(
 
 	add_interaction(interaction_state, id)
 	add_interaction_position(interaction_position, grid_size, id)
-
-func duplicate() -> DrawingMatrix:
-	var new_drawing_matrix: DrawingMatrix = DrawingMatrix.new()
-	new_drawing_matrix.split_hadron_ids = split_hadron_ids.duplicate(true)
-	new_drawing_matrix.normalised_interaction_positions = normalised_interaction_positions.duplicate()
-	new_drawing_matrix.state_line_positions = state_line_positions.duplicate()
-	new_drawing_matrix.connection_matrix = connection_matrix.duplicate(true)
-	new_drawing_matrix.state_count = state_count.duplicate()
-	new_drawing_matrix.matrix_size = connection_matrix.size()
-	
-	return new_drawing_matrix
 
 func make_drawable() -> void:
 	split_hadrons()
@@ -264,7 +253,7 @@ func get_connection_matrix() -> ConnectionMatrix:
 	return new_connection_matrix
 
 func get_reduced_matrix(particle_test_function: Callable):
-	var reduced_matrix: DrawingMatrix = duplicate()
+	var reduced_matrix: DrawingMatrix = duplicate(true)
 	
 	for id in range(matrix_size):
 		for connection in get_connections(id) + get_connections(id, true):

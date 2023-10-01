@@ -6,9 +6,6 @@ signal request_deletion
 signal show_information_box
 
 @onready var Ball = get_node("Ball")
-@onready var Level := get_node("/root/World")
-@onready var StateManager = Level.get_node('state_manager')
-
 @onready var Dot = get_node("Dot")
 @onready var InfoNumberLabel = get_node('InfoNumberLabel')
 @export var information_box_offset := Vector2(0, 0)
@@ -25,6 +22,7 @@ var Diagram: MainDiagram
 var Initial: StateLine
 var Final: StateLine
 var Crosshair: Node
+var StateManager: Node
 
 var InformationBox := preload("res://Scenes and Scripts/UI/Info/interaction_information.tscn")
 var information_id: int
@@ -59,14 +57,12 @@ func _ready():
 	
 	update_interaction()
 
-	Diagram.check_split_lines()
-	Diagram.update_statelines()
-
 func init(diagram: MainDiagram) -> void:
 	Diagram = diagram
 	Initial = diagram.StateLines[StateLine.StateType.Initial]
 	Final = diagram.StateLines[StateLine.StateType.Final]
 	Crosshair = diagram.Crosshair
+	StateManager = diagram.StateManager
 
 func _process(_delta: float) -> void:
 	if old_connected_lines != connected_lines:

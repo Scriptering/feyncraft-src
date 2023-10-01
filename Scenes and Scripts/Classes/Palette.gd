@@ -1,5 +1,5 @@
 class_name Palette
-extends Node
+extends Resource
 
 enum ColourIndex {
 	Primary, GridShadow, Grid, Shadow1, Shadow2, Secondary, Disabled, White, Active,
@@ -10,12 +10,16 @@ enum Index {
 	A, ab, B, bc, C, ca
 }
 
+@export var title: String = ''
+@export var is_custom: bool = true
+@export var colours: Array[Color] = []
+@export var changed_colours: Array[ColourIndex] = []
+
 const palette_size: int = 5
 
-var colours: PackedColorArray = []
-
-var title: String = ''
-var is_custom: bool = true
+const RED := Color('c13e3e')
+const GREEN := Color('3ec13e')
+const BLUE := Color('4057be')
 
 var cas : float
 var bcs : float
@@ -61,7 +65,7 @@ func contrast(colour: Color) -> Color:
 	
 	return Color(r, g, b, colour.a)
 
-func get_random_colours() -> PackedColorArray:
+func get_random_colours() -> Array[Color]:
 	var random_start_colour: Color = Color(randf_range(0.0, 1.0), randf_range(0.0, 1.0), randf_range(0.0, 1.0))
 	var random_saturation: float = randf_range(min_saturation, max_saturation)
 	var lumin: float = random_start_colour.get_luminance()
@@ -74,7 +78,7 @@ func get_random_colours() -> PackedColorArray:
 		random_start_colour = random_start_colour.lightened(randf_range(min_lumin - lumin, max_lumin - lumin))
 	
 	print(random_start_colour.get_luminance())
-	var new_colours: PackedColorArray = make_palette(random_start_colour)
+	var new_colours: Array[Color] = make_palette(random_start_colour)
 	
 	print("Random")
 	for i in range(new_colours.size()):
@@ -88,9 +92,9 @@ func get_random_colours() -> PackedColorArray:
 func get_custom_colours(
 	primary: Color = colours[ColourIndex.Primary], secondary: Color = colours[ColourIndex.Secondary],
 	grid: Color = colours[ColourIndex.Grid]
-) -> PackedColorArray:
-	var custom_colours: PackedColorArray = colours.duplicate()
-	var mixed_colours: PackedColorArray = make_palette(primary, grid, secondary)
+) -> Array[Color]:
+	var custom_colours: Array[Color] = colours.duplicate()
+	var mixed_colours: Array[Color] = make_palette(primary, grid, secondary)
 	
 	custom_colours[ColourIndex.Primary] = primary
 	custom_colours[ColourIndex.Secondary] = secondary
@@ -106,9 +110,13 @@ func get_custom_colours(
 	
 	custom_colours[ColourIndex.Disabled] = Color.from_hsv(primary.h, primary.s - 0.25, primary.v)
 	
+	custom_colours[ColourIndex.Red] = RED
+	custom_colours[ColourIndex.Green] = GREEN
+	custom_colours[ColourIndex.Blue] = BLUE
+	
 	return custom_colours
 
-func make_palette(A : Color, B: Color = Color.FUCHSIA, C: Color = Color.FUCHSIA) -> PackedColorArray:
+func make_palette(A : Color, B: Color = Color.FUCHSIA, C: Color = Color.FUCHSIA) -> Array[Color]:
 	randomizeSettings()
 	
 	if C == Color.FUCHSIA:
@@ -121,7 +129,7 @@ func make_palette(A : Color, B: Color = Color.FUCHSIA, C: Color = Color.FUCHSIA)
 	var bc = get_secondary(B, C)
 	var ca = get_secondary(C, A)
 	
-	return PackedColorArray([A, ab, B, bc, C, ca])
+	return [A, ab, B, bc, C, ca]
 
 func getC(A) -> Color:
 	

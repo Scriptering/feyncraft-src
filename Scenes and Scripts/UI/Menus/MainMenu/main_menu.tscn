@@ -1,13 +1,83 @@
-[gd_scene load_steps=9 format=3 uid="uid://blu0n6lwfysjf"]
+[gd_scene load_steps=43 format=3 uid="uid://blu0n6lwfysjf"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_scc04"]
 [ext_resource type="Texture2D" uid="uid://c2myqhjupqo25" path="res://Textures/Background/tile.png" id="2_3tgej"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/MainMenu/main_menu.gd" id="2_bknyf"]
 [ext_resource type="Texture2D" uid="uid://bvc8sakoqg037" path="res://Textures/Background/background_border.png" id="3_6hhsb"]
+[ext_resource type="Script" path="res://Scenes and Scripts/Diagram/diagram_actions.gd" id="5_3sh45"]
 [ext_resource type="PackedScene" uid="uid://dm0yec0rjuvwl" path="res://Scenes and Scripts/sound_bus.tscn" id="5_afel8"]
 [ext_resource type="PackedScene" uid="uid://byavwp1ynk2py" path="res://Scenes and Scripts/event_bus.tscn" id="6_ocr3j"]
+[ext_resource type="PackedScene" uid="uid://bhi4xq3qdbt4d" path="res://Scenes and Scripts/Diagram/interaction.tscn" id="6_x1gwm"]
 [ext_resource type="PackedScene" uid="uid://brd5auomhnn6l" path="res://Scenes and Scripts/UI/Cursor.tscn" id="7_6ptx1"]
+[ext_resource type="PackedScene" uid="uid://b22nw60juoc6k" path="res://Scenes and Scripts/Diagram/line.tscn" id="7_ts01x"]
+[ext_resource type="Texture2D" uid="uid://dvmhtrrnuhqrj" path="res://Textures/UI/grid_outline.png" id="8_nsyxd"]
 [ext_resource type="PackedScene" uid="uid://dtllx04gp77mu" path="res://Scenes and Scripts/UI/Menus/MainMenu/problem_selection.tscn" id="8_oursg"]
+[ext_resource type="Texture2D" uid="uid://doyaei3vq3cbb" path="res://Textures/Background/state_line_shadow_top.png" id="9_182u3"]
+[ext_resource type="PackedScene" uid="uid://ctxcngctpd2w7" path="res://Scenes and Scripts/UI/ColourPicker/palette_list.tscn" id="9_j5rer"]
+[ext_resource type="PackedScene" uid="uid://cv3ttwhplgav" path="res://Scenes and Scripts/States/state_manager.tscn" id="9_sfs8a"]
+[ext_resource type="Texture2D" uid="uid://basekc2ce6rmp" path="res://Textures/Background/state_line_shadow_tile.png" id="10_v50i2"]
+[ext_resource type="Texture2D" uid="uid://fw31lvdyemj2" path="res://Textures/UI/main menu/title.png" id="11_12tia"]
+[ext_resource type="PackedScene" uid="uid://pgnduadnvgfx" path="res://Scenes and Scripts/Diagram/StateLine.tscn" id="11_ed86s"]
+[ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="11_t2od8"]
+[ext_resource type="PackedScene" uid="uid://besym8haj5qo4" path="res://Scenes and Scripts/UI/Crosshair.tscn" id="12_6wo74"]
+[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="12_nridv"]
+[ext_resource type="Texture2D" uid="uid://7ipru72d5e13" path="res://Textures/Buttons/icons/sandbox.png" id="13_21fnr"]
+[ext_resource type="Texture2D" uid="uid://cnenn4liabxxv" path="res://Textures/Buttons/icons/puzzle_piece_2.png" id="14_6sffg"]
+[ext_resource type="PackedScene" uid="uid://msapq42cjaba" path="res://Scenes and Scripts/UI/Buttons/MuteButton.tscn" id="16_1yq2b"]
+[ext_resource type="Texture2D" uid="uid://btu2jj1bbbbil" path="res://Textures/Buttons/icons/palette.png" id="17_cv4ds"]
+[ext_resource type="Texture2D" uid="uid://dvlwfy1unniw6" path="res://Textures/UI/Information/arrow.png" id="20_hipqk"]
+[ext_resource type="PackedScene" uid="uid://ds2iet11sv3ty" path="res://Scenes and Scripts/UI/Buttons/particle_buttons.tscn" id="26_grnbf"]
+[ext_resource type="PackedScene" uid="uid://cv6hlxtiukmtc" path="res://Scenes and Scripts/UI/VisionButtons/vision_buttons.tscn" id="27_y0o8i"]
+[ext_resource type="PackedScene" uid="uid://nuajmillcsir" path="res://Scenes and Scripts/Algorithms/SolutionGeneration.tscn" id="28_4mci8"]
+[ext_resource type="PackedScene" uid="uid://byrhmsj4f7kxm" path="res://Scenes and Scripts/Algorithms/Vision.tscn" id="29_y3moh"]
+[ext_resource type="PackedScene" uid="uid://bs6vtukhlou2r" path="res://Scenes and Scripts/Algorithms/problem_generation.tscn" id="30_ki1p2"]
+[ext_resource type="PackedScene" uid="uid://b65u1c7v5mbh6" path="res://Scenes and Scripts/UI/Menus/controls_tab.tscn" id="31_6psyu"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qgodk"]
+texture = ExtResource("8_nsyxd")
+texture_margin_left = 14.0
+texture_margin_top = 14.0
+texture_margin_right = 14.0
+texture_margin_bottom = 14.0
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+
+[sub_resource type="Theme" id="Theme_gyi6d"]
+Label/font_sizes/font_size = 16
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jo8r5"]
+resource_local_to_scene = true
+shader = ExtResource("12_nridv")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vmuel"]
+resource_local_to_scene = true
+shader = ExtResource("12_nridv")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d4hqc"]
+resource_local_to_scene = true
+shader = ExtResource("12_nridv")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ff5go"]
+resource_local_to_scene = true
+shader = ExtResource("12_nridv")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_66la2"]
+resource_local_to_scene = true
+shader = ExtResource("12_nridv")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3qpqo"]
+resource_local_to_scene = true
+shader = ExtResource("12_nridv")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dc552"]
+resource_local_to_scene = true
+shader = ExtResource("12_nridv")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fjiq5"]
+resource_local_to_scene = true
+shader = ExtResource("12_nridv")
 
 [node name="MainMenu" type="Control"]
 material = ExtResource("1_scc04")
@@ -40,20 +110,328 @@ patch_margin_top = 15
 patch_margin_right = 15
 patch_margin_bottom = 15
 
+[node name="Diagram" type="Panel" parent="."]
+use_parent_material = true
+layout_mode = 0
+offset_left = 48.0
+offset_top = 32.0
+offset_right = 592.0
+offset_bottom = 192.0
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_qgodk")
+script = ExtResource("5_3sh45")
+grid_size = 16
+InteractionInstance = ExtResource("6_x1gwm")
+Line = ExtResource("7_ts01x")
+
+[node name="GridTiles" type="TextureRect" parent="Diagram"]
+z_index = -1
+use_parent_material = true
+layout_mode = 0
+offset_right = 448.0
+offset_bottom = 256.0
+texture = ExtResource("2_3tgej")
+stretch_mode = 1
+
+[node name="DiagramArea" type="Control" parent="Diagram"]
+use_parent_material = true
+anchors_preset = 0
+offset_left = 64.0
+offset_right = 384.0
+offset_bottom = 130.0
+mouse_filter = 1
+
+[node name="InitialShadow" type="VBoxContainer" parent="Diagram/DiagramArea"]
+visible = false
+use_parent_material = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -212.0
+offset_top = 1.0
+offset_right = -204.0
+offset_bottom = 255.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Top" type="TextureRect" parent="Diagram/DiagramArea/InitialShadow"]
+use_parent_material = true
+layout_mode = 2
+texture = ExtResource("9_182u3")
+stretch_mode = 2
+
+[node name="Middle" type="TextureRect" parent="Diagram/DiagramArea/InitialShadow"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("10_v50i2")
+stretch_mode = 1
+
+[node name="Bottom" type="TextureRect" parent="Diagram/DiagramArea/InitialShadow"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("9_182u3")
+stretch_mode = 2
+flip_h = true
+flip_v = true
+
+[node name="FinalShadow" type="VBoxContainer" parent="Diagram/DiagramArea"]
+visible = false
+use_parent_material = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 156.0
+offset_top = 1.0
+offset_right = 164.0
+offset_bottom = 255.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Top" type="TextureRect" parent="Diagram/DiagramArea/FinalShadow"]
+use_parent_material = true
+layout_mode = 2
+texture = ExtResource("9_182u3")
+stretch_mode = 2
+
+[node name="Middle" type="TextureRect" parent="Diagram/DiagramArea/FinalShadow"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("10_v50i2")
+stretch_mode = 1
+
+[node name="Bottom" type="TextureRect" parent="Diagram/DiagramArea/FinalShadow"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("9_182u3")
+stretch_mode = 2
+flip_h = true
+flip_v = true
+
+[node name="Initial" parent="Diagram/DiagramArea" instance=ExtResource("11_ed86s")]
+visible = false
+use_parent_material = true
+layout_mode = 2
+offset_left = -48.0
+offset_top = -12.0
+offset_right = -48.0
+offset_bottom = 28.0
+
+[node name="Line" parent="Diagram/DiagramArea/Initial" index="0"]
+offset_bottom = 280.0
+
+[node name="Final" parent="Diagram/DiagramArea" node_paths=PackedStringArray("GrabAreas") instance=ExtResource("11_ed86s")]
+visible = false
+use_parent_material = true
+layout_mode = 2
+offset_left = 464.0
+offset_top = -12.0
+offset_right = 464.0
+offset_bottom = -12.0
+state = 1
+GrabAreas = [NodePath("Line/GrabTop"), NodePath("../Initial/Line/GrabBottom")]
+
+[node name="Line" parent="Diagram/DiagramArea/Final" index="0"]
+offset_bottom = 280.0
+
+[node name="ParticleLines" type="Control" parent="Diagram/DiagramArea"]
+use_parent_material = true
+anchors_preset = 0
+mouse_filter = 1
+
+[node name="Crosshair" parent="Diagram/DiagramArea" instance=ExtResource("12_6wo74")]
+use_parent_material = true
+position = Vector2(-160, -48)
+grid_margin = 0
+
+[node name="VisionLines" type="Control" parent="Diagram/DiagramArea"]
+use_parent_material = true
+anchors_preset = 0
+
+[node name="Interactions" type="Control" parent="Diagram/DiagramArea"]
+use_parent_material = true
+anchors_preset = 0
+mouse_filter = 1
+
+[node name="HadronJoints" type="Control" parent="Diagram/DiagramArea"]
+use_parent_material = true
+anchors_preset = 0
+
+[node name="Titles" type="TextureRect" parent="."]
+visible = false
+custom_minimum_size = Vector2(458, 2.08165e-12)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -229.0
+offset_top = -137.0
+offset_right = 229.0
+offset_bottom = -27.6136
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+texture = ExtResource("11_12tia")
+expand_mode = 5
+stretch_mode = 4
+
 [node name="SoundBus" parent="." instance=ExtResource("5_afel8")]
 
 [node name="EventBus" parent="." instance=ExtResource("6_ocr3j")]
 
+[node name="state_manager" parent="." instance=ExtResource("9_sfs8a")]
+
 [node name="Cursor" parent="." instance=ExtResource("7_6ptx1")]
 
-[node name="Menus" type="Control" parent="."]
+[node name="Center" type="Control" parent="."]
+use_parent_material = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = 22.0
+offset_bottom = 22.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_gyi6d")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Center"]
+use_parent_material = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -70.0
+offset_right = 70.0
+offset_bottom = 94.0
+grow_horizontal = 2
+alignment = 1
+
+[node name="Tutorial" parent="Center/VBoxContainer" instance=ExtResource("11_t2od8")]
+material = SubResource("ShaderMaterial_jo8r5")
+layout_mode = 2
+icon = ExtResource("20_hipqk")
+text = "Tutorial"
+minimum_size = Vector2(85, 2.08165e-12)
+expand_icon = true
+icon_text_seperation = 4
+
+[node name="Sandbox" parent="Center/VBoxContainer" instance=ExtResource("11_t2od8")]
+material = SubResource("ShaderMaterial_vmuel")
+layout_mode = 2
+icon = ExtResource("13_21fnr")
+text = "Sandbox"
+minimum_size = Vector2(103, 2.08165e-12)
+expand_icon = true
+icon_text_seperation = 4
+
+[node name="ProblemSets" parent="Center/VBoxContainer" instance=ExtResource("11_t2od8")]
+material = SubResource("ShaderMaterial_d4hqc")
+layout_mode = 2
+icon = ExtResource("14_6sffg")
+text = "Problem Sets"
+minimum_size = Vector2(144, 0)
+expand_icon = true
+icon_use_parent_material = true
+icon_text_seperation = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Center/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+alignment = 1
+
+[node name="MuteButton" parent="Center/VBoxContainer/HBoxContainer" instance=ExtResource("16_1yq2b")]
+material = SubResource("ShaderMaterial_ff5go")
+layout_mode = 2
+minimum_size = Vector2(30, 30)
+toggle_mode = true
+expand_icon = true
+button_pressed = true
+
+[node name="Palettes" parent="Center/VBoxContainer/HBoxContainer" instance=ExtResource("11_t2od8")]
+material = SubResource("ShaderMaterial_66la2")
+layout_mode = 2
+icon = ExtResource("17_cv4ds")
+minimum_size = Vector2(30, 30)
+toggle_mode = true
+expand_icon = true
+
+[node name="FloatingMenus" type="Control" parent="."]
+z_index = 1
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="ProblemSelection" parent="Menus" instance=ExtResource("8_oursg")]
+[node name="ProblemSelection" parent="FloatingMenus" instance=ExtResource("8_oursg")]
+visible = false
 layout_mode = 1
 offset_left = 304.0
 offset_top = 34.0
 offset_right = 599.0
 offset_bottom = 334.0
+
+[node name="PaletteControl" parent="FloatingMenus" instance=ExtResource("9_j5rer")]
+visible = false
+offset_left = 331.0
+offset_top = 113.0
+offset_right = 331.0
+offset_bottom = 113.0
+
+[node name="ParticleButtons" parent="." instance=ExtResource("26_grnbf")]
+visible = false
+material = SubResource("ShaderMaterial_3qpqo")
+layout_mode = 1
+offset_left = -166.0
+offset_top = 508.0
+offset_right = -166.0
+offset_bottom = 508.0
+
+[node name="VisionButton" parent="." instance=ExtResource("27_y0o8i")]
+visible = false
+material = SubResource("ShaderMaterial_dc552")
+offset_left = 836.0
+offset_top = 4.0
+offset_right = 858.0
+offset_bottom = 64.0
+
+[node name="Algorithms" type="Node" parent="."]
+
+[node name="SolutionGeneration" parent="Algorithms" instance=ExtResource("28_4mci8")]
+
+[node name="PathFinding" parent="Algorithms" instance=ExtResource("29_y3moh")]
+
+[node name="ProblemGeneration" parent="Algorithms" instance=ExtResource("30_ki1p2")]
+
+[node name="ControlsTab" parent="." instance=ExtResource("31_6psyu")]
+material = SubResource("ShaderMaterial_fjiq5")
+layout_mode = 1
+offset_left = 40.0
+offset_top = 326.0
+offset_right = -600.0
+offset_bottom = -34.0
+
+[connection signal="mouse_entered" from="Diagram" to="Diagram" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Diagram" to="Diagram" method="_on_mouse_exited"]
+[connection signal="pressed" from="Center/VBoxContainer/Tutorial" to="." method="_on_sandbox_pressed"]
+[connection signal="pressed" from="Center/VBoxContainer/Sandbox" to="." method="_on_sandbox_pressed"]
+[connection signal="toggled" from="Center/VBoxContainer/ProblemSets" to="." method="_on_problem_sets_toggled"]
+[connection signal="toggled" from="Center/VBoxContainer/HBoxContainer/Palettes" to="." method="_on_palettes_toggled"]
+
+[editable path="Diagram/DiagramArea/Initial"]
+[editable path="Diagram/DiagramArea/Final"]
+[editable path="Algorithms/SolutionGeneration"]

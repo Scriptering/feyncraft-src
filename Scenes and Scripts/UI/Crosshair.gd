@@ -3,8 +3,6 @@ extends Node2D
 @export var grid_margin: int
 
 signal moved(current_position, old_position)
-@onready var Level = get_tree().get_nodes_in_group('level')[0]
-@onready var StateManager = Level.get_node("state_manager")
 @onready var IdleCrosshair = $IdleCrosshair
 
 const Z_INDEX_IDLE := 0
@@ -21,6 +19,7 @@ var on_state_line : bool
 var Diagram: DiagramBase
 var Initial: StateLine
 var Final: StateLine
+var StateManager: Node
 var grid_size: int
 
 func _process(_event):
@@ -28,6 +27,7 @@ func _process(_event):
 
 func init(diagram: DiagramBase, state_lines: Array, gridsize: int) -> void:
 	Diagram = diagram
+	StateManager = diagram.StateManager
 	Initial = state_lines[StateLine.StateType.Initial]
 	Final = state_lines[StateLine.StateType.Final]
 	grid_size = gridsize

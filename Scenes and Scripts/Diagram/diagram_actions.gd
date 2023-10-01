@@ -42,8 +42,6 @@ func _ready() -> void:
 	
 	for state_line in StateLines:
 		state_line.init(self)
-	
-	Crosshair.init(self, StateLines, grid_size)
 
 func init(
 	particle_buttons: Control, controls: Node, vision_buttons: Control, vision: Node, state_manager: Node
@@ -53,6 +51,8 @@ func init(
 	VisionButtons = vision_buttons
 	Vision = vision
 	StateManager = state_manager
+	
+	Crosshair.init(self, StateLines, grid_size)
 	
 	Controls.clear_diagram.connect(
 		func(): 
@@ -69,7 +69,7 @@ func _process(_delta: float) -> void:
 		if stateline.grabbed:
 			move_stateline(stateline)
 
-func _crosshair_moved(new_position: Vector2, old_position: Vector2) -> void:
+func _crosshair_moved(_new_position: Vector2, _old_position: Vector2) -> void:
 	if StateManager.state not in [BaseState.State.Drawing, BaseState.State.Placing]:
 		return
 	
@@ -134,7 +134,7 @@ func generate_drawing_matrix_from_diagram(get_only_valid: bool = false) -> Drawi
 		)
 	
 	for state in range(StateLines.size()):
-		generated_matrix.state_line_positions[state] = StateLines[state].position.x / grid_size
+		generated_matrix.state_line_positions[state] = int(StateLines[state].position.x / grid_size)
 	
 	var hadron_ids: Array[PackedInt32Array] = []
 	for hadron_joint in get_hadron_joints():
@@ -331,16 +331,9 @@ func recursive_delete_interaction(interaction: Interaction) -> void:
 	check_rejoin_lines()
 
 func split_line(line_to_split: ParticleLine, split_point: Vector2) -> void:
-	var new_line := create_particle_line()
-
-	new_line.points[ParticleLine.Point.Start] = line_to_split.points[ParticleLine.Point.Start]
-	new_line.points[ParticleLine.Point.End] = split_point
+	var new_start_point: Vector2 = line_to_split.points[ParticleLine.Point.Start]
 	line_to_split.points[ParticleLine.Point.Start] = split_point
-
-	new_line.base_particle = line_to_split.base_particle
-	new_line.is_placed = true
-
-	ParticleLines.add_child(new_line)
+	place_line(new_start_point, split_point, line_to_split.base_particle)
 
 	line_to_split.update_line()
 
@@ -442,11 +435,6 @@ func place_line(
 	line.base_particle = base_particle
 	
 	ParticleLines.add_child(line)
-	
-	check_split_lines()
-	check_rejoin_lines()
-	
-	action()
 
 func draw_raw_diagram(connection_matrix : ConnectionMatrix) -> void:
 	add_diagram_to_history()
@@ -564,7 +552,7 @@ func is_energy_conserved() -> bool:
 		if state_base_particles[state_type].size() != 1:
 			continue
 		
-		if state_masses[state_type] > state_masses[(state_type + 1) % 2] + MASS_PRECISION:
+		if state_masses[state_type] < state_masses[(state_type + 1) % 2] - MASS_PRECISION:
 			return false
 	
 	return true
@@ -689,3 +677,6 @@ func _on_mouse_entered() -> void:
 
 func _on_mouse_exited() -> void:
 	hovering = false
+
+func set_title(text: String) -> void:
+	$Title.text = text

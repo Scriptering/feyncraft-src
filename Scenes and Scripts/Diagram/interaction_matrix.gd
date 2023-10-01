@@ -3,9 +3,8 @@ extends ConnectionMatrix
 
 enum {UNCONNECTED, CONNECTED}
 
-var unconnected_matrix: Array = []
-
-var unconnected_particle_count: PackedInt32Array = [0, 0, 0]
+@export var unconnected_matrix: Array = []
+@export var unconnected_particle_count: PackedInt32Array = [0, 0, 0]
 
 func add_interaction(
 	interaction_state : StateLine.StateType = StateLine.StateType.None,
@@ -206,15 +205,6 @@ func get_connection_matrix() -> ConnectionMatrix:
 	new_connection_matrix.matrix_size = self.matrix_size
 	
 	return new_connection_matrix
-
-func duplicate():
-	var new_interaction_matrix := InteractionMatrix.new()
-	new_interaction_matrix.unconnected_matrix = unconnected_matrix.duplicate(true)
-	new_interaction_matrix.connection_matrix = connection_matrix.duplicate(true)
-	new_interaction_matrix.state_count = state_count.duplicate()
-	new_interaction_matrix.unconnected_particle_count = unconnected_particle_count.duplicate()
-	new_interaction_matrix.matrix_size = self.matrix_size
-	return new_interaction_matrix
 
 func has_same_unconnected_matrix(comparison_matrix: InteractionMatrix) -> bool:
 	if unconnected_matrix == comparison_matrix.unconnected_matrix:

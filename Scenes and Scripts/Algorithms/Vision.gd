@@ -104,7 +104,7 @@ func generate_colour_paths(drawing_matrix: DrawingMatrix, is_vision_matrix: bool
 	if colour_matrix.is_empty():
 		return []
 		
-	var paths: Array[PackedInt32Array] = generate_paths(colour_matrix.duplicate(), pick_next_colour_point)
+	var paths: Array[PackedInt32Array] = generate_paths(colour_matrix.duplicate(true), pick_next_colour_point)
 	
 	if paths.size() == 0:
 		return []
@@ -175,7 +175,7 @@ func get_quark_path_gluon_points(
 
 func find_colourless_hadron_interaction(
 	hadron: PackedInt32Array, hadron_ids: PackedInt32Array, quark_paths: Array[PackedInt32Array], paths: Array[PackedInt32Array],
-	path_colours: Array[Colour], vision_matrix: DrawingMatrix, colourless_group_interactions: PackedInt32Array = [],
+	path_colours: Array[Colour], vision_matrix: DrawingMatrix, _colourless_group_interactions: PackedInt32Array = [],
 ) -> int:
 	
 	var gluon_ids: PackedInt32Array = []
@@ -243,10 +243,9 @@ func find_colourless_group_interaction(path: PackedInt32Array, vision_matrix: Dr
 	if test_index == repeated_points.size():
 		return NOT_FOUND
 	
-	var test_gluon: PackedInt32Array = [repeated_points[test_index-1], repeated_points[test_index]]
 	var test_point: int = repeated_points[test_index]
 
-	var test_vision_matrix: DrawingMatrix = vision_matrix.duplicate()
+	var test_vision_matrix: DrawingMatrix = vision_matrix.duplicate(true)
 	test_vision_matrix.disconnect_interactions(repeated_points[test_index-1], repeated_points[test_index], GLOBALS.Particle.gluon, true)
 
 	for reached_point in test_vision_matrix.reach_ids(test_point, [], true):
@@ -400,7 +399,7 @@ func generate_colour_matrix(drawing_matrix: DrawingMatrix) -> DrawingMatrix:
 	
 	return colour_matrix
 
-func pick_next_shade_point(current_point: int, available_points: PackedInt32Array, connections: DrawingMatrix) -> int:
+func pick_next_shade_point(_current_point: int, available_points: PackedInt32Array, _connections: DrawingMatrix) -> int:
 	return available_points[randi() % available_points.size()]
 
 func pick_next_colour_point(current_point: int, available_points: PackedInt32Array, connections: DrawingMatrix) -> int:
@@ -433,7 +432,7 @@ func generate_paths(colour_matrix: DrawingMatrix, next_point_picker_function: Ca
 	paths.append_array(generate_state_paths(colour_matrix, next_point_picker_function))
 	
 	for _attempt in range(MAX_LOOP_ATTEMPTS):
-		var loop_matrix: DrawingMatrix = colour_matrix.duplicate()
+		var loop_matrix: DrawingMatrix = colour_matrix.duplicate(true)
 		var loops: Array[PackedInt32Array] = generate_loops(loop_matrix, next_point_picker_function)
 		
 		if loops == INVALID_PATH:
@@ -481,8 +480,6 @@ func generate_loops(connections: DrawingMatrix, next_point_picker_function: Call
 			)
 		
 		if start_point == connections.matrix_size:
-			if paths.any(func(path: PackedInt32Array): get_repeated_points_in_path(paths[-1]).size() > 1):
-				breakpoint
 			return paths
 		
 		var new_path : PackedInt32Array = generate_path(connections, start_point, [start_point], next_point_picker_function)

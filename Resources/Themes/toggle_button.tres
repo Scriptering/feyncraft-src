@@ -1,0 +1,6 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://c7hk3afo5tria"]
+
+[ext_resource type="StyleBox" uid="uid://dsi7wkv5cn2k0" path="res://Resources/Themes/ActivePressed.tres" id="1_ppytv"]
+
+[resource]
+Button/styles/pressed = ExtResource("1_ppytv")

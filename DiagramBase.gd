@@ -16,7 +16,7 @@ var grid_width: int:
 
 var grid_height: int:
 	get:
-		return size.y
+		return int(size.y)
 
 var grid_centre: int:
 	get:
@@ -113,7 +113,7 @@ func create_middle_diagram_interaction_positions(drawing_matrix: DrawingMatrix) 
 		degree_pos.append(i * degree_step + degree_start)
 		
 	var radius : float = snapped(min(grid_width, grid_height) / 2 - grid_size, grid_size)
-	var circle_y_start : int = snapped(grid_height / 2, grid_size)
+	var circle_y_start : int = snapped(int(grid_height) / 2, grid_size)
 	var circle_x : int = grid_centre
 
 	for j in range(drawing_matrix.get_state_count(StateLine.StateType.None)):
