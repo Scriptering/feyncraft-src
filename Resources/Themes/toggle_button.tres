@@ -1,6 +1,43 @@
-[gd_resource type="Theme" load_steps=2 format=3 uid="uid://c7hk3afo5tria"]
+[gd_resource type="Theme" load_steps=7 format=3 uid="uid://c7hk3afo5tria"]
 
-[ext_resource type="StyleBox" uid="uid://dsi7wkv5cn2k0" path="res://Resources/Themes/ActivePressed.tres" id="1_ppytv"]
+[ext_resource type="Texture2D" uid="uid://s14bo7fcdam0" path="res://Textures/Buttons/square_normal.png" id="1_asste"]
+[ext_resource type="Texture2D" uid="uid://bo1u07jlygktr" path="res://Textures/Buttons/square_hover.png" id="1_kr8by"]
+[ext_resource type="Texture2D" uid="uid://cea5mj3u65016" path="res://Textures/Buttons/square_pressed_active.png" id="3_t6453"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_v6ruk"]
+content_margin_left = 6.0
+content_margin_top = 4.0
+content_margin_right = 6.0
+content_margin_bottom = 8.0
+texture = ExtResource("1_kr8by")
+texture_margin_left = 5.0
+texture_margin_top = 6.0
+texture_margin_right = 5.0
+texture_margin_bottom = 7.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_krher"]
+content_margin_left = 6.0
+content_margin_top = 4.0
+content_margin_right = 6.0
+content_margin_bottom = 8.0
+texture = ExtResource("1_asste")
+texture_margin_left = 5.0
+texture_margin_top = 6.0
+texture_margin_right = 5.0
+texture_margin_bottom = 7.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_d06u0"]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+texture = ExtResource("3_t6453")
+texture_margin_left = 5.0
+texture_margin_top = 6.0
+texture_margin_right = 5.0
+texture_margin_bottom = 5.0
 
 [resource]
-Button/styles/pressed = ExtResource("1_ppytv")
+Button/styles/hover = SubResource("StyleBoxTexture_v6ruk")
+Button/styles/normal = SubResource("StyleBoxTexture_krher")
+Button/styles/pressed = SubResource("StyleBoxTexture_d06u0")

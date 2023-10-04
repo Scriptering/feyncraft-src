@@ -3,7 +3,7 @@ extends Resource
 
 @export var limited_particles: bool = false
 @export var custom_solutions: bool = false
-
+@export var title: String = ''
 @export var submitted_diagrams : Array[DrawingMatrix] = []
 @export var solutions : Array[DrawingMatrix] = []
 @export var allowed_particles : Array[GLOBALS.Particle] = []

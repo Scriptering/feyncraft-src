@@ -8,6 +8,8 @@
 shader = ExtResource("2_l2b03")
 shader_parameter/line_color = null
 shader_parameter/line_thickness = 10.0
+shader_parameter/start_interaction_strength_alpha = null
+shader_parameter/end_interaction_strength_alpha = null
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1")

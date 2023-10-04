@@ -1,0 +1,332 @@
+[gd_scene load_steps=39 format=3 uid="uid://wfo6boyk67m8"]
+
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_ablgk"]
+[ext_resource type="Script" path="res://Scenes and Scripts/Classes/line_edit.gd" id="1_ju25l"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/ColourPicker/palette_item.gd" id="1_memmu"]
+[ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="2_j3oiu"]
+[ext_resource type="Texture2D" uid="uid://bo1u07jlygktr" path="res://Textures/Buttons/square_hover.png" id="3_34n3s"]
+[ext_resource type="StyleBox" uid="uid://dvu7f5h7snggp" path="res://Scenes and Scripts/UI/Menus/panelContainer.tres" id="3_b4qsh"]
+[ext_resource type="Texture2D" uid="uid://s14bo7fcdam0" path="res://Textures/Buttons/square_normal.png" id="4_7adso"]
+[ext_resource type="Texture2D" uid="uid://cea5mj3u65016" path="res://Textures/Buttons/square_pressed_active.png" id="5_xyfo5"]
+[ext_resource type="Texture2D" uid="uid://d16opu3dyhri7" path="res://Textures/Buttons/eye/eye_open.png" id="6_5d7ij"]
+[ext_resource type="ButtonGroup" uid="uid://dqe1qlfngy1ia" path="res://Resources/ButtonGroups/palette.tres" id="7_g18ib"]
+[ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="8_pa48w"]
+[ext_resource type="PackedScene" uid="uid://c062i5iscj5rd" path="res://Scenes and Scripts/UI/ColourPicker/colour_button.tscn" id="9_vjhyi"]
+[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="10_y84kw"]
+[ext_resource type="Theme" uid="uid://cfmbhoq8cuoge" path="res://Resources/Themes/ProjectTheme.tres" id="11_l36jc"]
+[ext_resource type="Texture2D" uid="uid://cms1u4elh5bo3" path="res://Textures/Buttons/icons/delete.png" id="12_ipd10"]
+[ext_resource type="PackedScene" uid="uid://7kmcsryae7lw" path="res://Scenes and Scripts/UI/Buttons/load_button.tscn" id="13_gyqq1"]
+[ext_resource type="Theme" uid="uid://c7hk3afo5tria" path="res://Resources/Themes/toggle_button.tres" id="14_ylj5d"]
+[ext_resource type="Texture2D" uid="uid://dwh7e30xi8v07" path="res://Textures/Buttons/Tabs/arrow_down.png" id="15_sejjs"]
+[ext_resource type="Texture2D" uid="uid://bt1qr2mxq14l8" path="res://Textures/Buttons/icons/restart.png" id="16_8spqa"]
+[ext_resource type="Texture2D" uid="uid://uuymrv72pyyc" path="res://Textures/Buttons/icons/shuffle.png" id="17_xlgvh"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f4av7"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kubuy"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_n0u2h"]
+content_margin_left = 5.0
+content_margin_top = 4.0
+content_margin_right = 5.0
+content_margin_bottom = 8.0
+texture = ExtResource("3_34n3s")
+texture_margin_left = 5.0
+texture_margin_top = 6.0
+texture_margin_right = 5.0
+texture_margin_bottom = 7.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_kxnlx"]
+content_margin_left = 5.0
+content_margin_top = 4.0
+content_margin_right = 5.0
+content_margin_bottom = 8.0
+texture = ExtResource("4_7adso")
+texture_margin_left = 5.0
+texture_margin_top = 6.0
+texture_margin_right = 5.0
+texture_margin_bottom = 7.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pbk00"]
+content_margin_left = 5.0
+content_margin_top = 6.0
+content_margin_right = 5.0
+content_margin_bottom = 6.0
+texture = ExtResource("5_xyfo5")
+texture_margin_left = 5.0
+texture_margin_top = 6.0
+texture_margin_right = 5.0
+texture_margin_bottom = 5.0
+
+[sub_resource type="Theme" id="Theme_35ehg"]
+Button/styles/focus = SubResource("StyleBoxEmpty_kubuy")
+Button/styles/hover = SubResource("StyleBoxTexture_n0u2h")
+Button/styles/normal = SubResource("StyleBoxTexture_kxnlx")
+Button/styles/pressed = SubResource("StyleBoxTexture_pbk00")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tagdo"]
+resource_local_to_scene = true
+shader = ExtResource("10_y84kw")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l2sq8"]
+resource_local_to_scene = true
+shader = ExtResource("10_y84kw")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yte8q"]
+resource_local_to_scene = true
+shader = ExtResource("10_y84kw")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ycaki"]
+resource_local_to_scene = true
+shader = ExtResource("10_y84kw")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dop5w"]
+resource_local_to_scene = true
+shader = ExtResource("10_y84kw")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_63v11"]
+resource_local_to_scene = true
+shader = ExtResource("10_y84kw")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ckwcm"]
+resource_local_to_scene = true
+shader = ExtResource("10_y84kw")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w2y8x"]
+resource_local_to_scene = true
+shader = ExtResource("10_y84kw")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xvnia"]
+resource_local_to_scene = true
+shader = ExtResource("10_y84kw")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0julm"]
+resource_local_to_scene = true
+shader = ExtResource("10_y84kw")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e0k3w"]
+resource_local_to_scene = true
+shader = ExtResource("10_y84kw")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4ylxj"]
+resource_local_to_scene = true
+shader = ExtResource("10_y84kw")
+
+[node name="PaletteItem" type="PanelContainer"]
+material = ExtResource("1_ablgk")
+use_parent_material = true
+offset_right = 12.0
+offset_bottom = 12.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_f4av7")
+script = ExtResource("1_memmu")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+use_parent_material = true
+layout_mode = 2
+
+[node name="Index" type="Label" parent="HBoxContainer"]
+visible = false
+use_parent_material = true
+custom_minimum_size = Vector2(24, 30)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 21
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(201, 2.08165e-12)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_b4qsh")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/PanelContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/PanelContainer/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Title" type="LineEdit" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(60, 2.08165e-12)
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+placeholder_text = "[Enter Title]"
+alignment = 1
+max_length = 12
+editable = false
+script = ExtResource("1_ju25l")
+
+[node name="Use" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("2_j3oiu")]
+material = null
+layout_mode = 2
+mouse_filter = 1
+theme = SubResource("Theme_35ehg")
+icon = ExtResource("6_5d7ij")
+minimum_size = Vector2(20, 20)
+toggle_mode = true
+expand_icon = true
+button_group = ExtResource("7_g18ib")
+
+[node name="Tooltip" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Use" instance=ExtResource("8_pa48w")]
+tooltip = "Use"
+
+[node name="Colours" type="HBoxContainer" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = -1
+
+[node name="Primary" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Colours" instance=ExtResource("9_vjhyi")]
+material = SubResource("ShaderMaterial_tagdo")
+layout_mode = 2
+icon_colour = Color(0.901961, 0.803922, 0.611765, 1)
+minimum_size = Vector2(20, 20)
+disabled = true
+
+[node name="Tooltip" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Colours/Primary" instance=ExtResource("8_pa48w")]
+tooltip = "Background"
+
+[node name="Grid" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Colours" instance=ExtResource("9_vjhyi")]
+material = SubResource("ShaderMaterial_l2sq8")
+layout_mode = 2
+icon_colour = Color(0.858824, 0.768627, 0.584314, 1)
+minimum_size = Vector2(20, 20)
+disabled = true
+
+[node name="Tooltip" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Colours/Grid" instance=ExtResource("8_pa48w")]
+tooltip = "Grid"
+
+[node name="Secondary" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Colours" instance=ExtResource("9_vjhyi")]
+material = SubResource("ShaderMaterial_yte8q")
+layout_mode = 2
+icon_colour = Color(0.219608, 0.223529, 0.188235, 1)
+minimum_size = Vector2(20, 20)
+disabled = true
+
+[node name="Tooltip" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Colours/Secondary" instance=ExtResource("8_pa48w")]
+tooltip = "Ink"
+
+[node name="Buttons" type="HBoxContainer" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = -1
+
+[node name="Delete" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Buttons" instance=ExtResource("2_j3oiu")]
+material = null
+layout_mode = 2
+mouse_filter = 1
+theme = ExtResource("11_l36jc")
+icon = ExtResource("12_ipd10")
+minimum_size = Vector2(20, 20)
+expand_icon = true
+icon_use_parent_material = true
+action_mode = 1
+
+[node name="Tooltip" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Buttons/Delete" instance=ExtResource("8_pa48w")]
+tooltip = "Delete"
+
+[node name="Upload" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Buttons" instance=ExtResource("13_gyqq1")]
+material = SubResource("ShaderMaterial_ycaki")
+layout_mode = 2
+theme = ExtResource("14_ylj5d")
+mode = 1
+minimum_size = Vector2(19, 20)
+expand_icon = true
+flip_icon_v = false
+
+[node name="Tooltip" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Buttons/Upload" instance=ExtResource("8_pa48w")]
+position = Vector2(20, 2)
+tooltip = "Upload"
+
+[node name="More" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("2_j3oiu")]
+material = null
+layout_mode = 2
+mouse_filter = 1
+theme = ExtResource("14_ylj5d")
+icon = ExtResource("15_sejjs")
+minimum_size = Vector2(17, 16)
+toggle_mode = true
+icon_use_parent_material = true
+
+[node name="Tooltip" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/More" instance=ExtResource("8_pa48w")]
+tooltip = "More"
+
+[node name="MoreContainer" type="VBoxContainer" parent="HBoxContainer/PanelContainer/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="HBoxContainer/PanelContainer/VBoxContainer/MoreContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/h_separation = 2
+theme_override_constants/v_separation = 2
+columns = 3
+
+[node name="Text" parent="HBoxContainer/PanelContainer/VBoxContainer/MoreContainer/GridContainer" instance=ExtResource("9_vjhyi")]
+material = SubResource("ShaderMaterial_dop5w")
+layout_mode = 2
+icon_colour = Color(0, 0, 0, 1)
+text = "Text"
+minimum_size = Vector2(49, 20)
+
+[node name="GridShadow" parent="HBoxContainer/PanelContainer/VBoxContainer/MoreContainer/GridContainer" instance=ExtResource("9_vjhyi")]
+material = SubResource("ShaderMaterial_63v11")
+layout_mode = 2
+text = "Grid Shadow"
+minimum_size = Vector2(49, 20)
+
+[node name="Active" parent="HBoxContainer/PanelContainer/VBoxContainer/MoreContainer/GridContainer" instance=ExtResource("9_vjhyi")]
+material = SubResource("ShaderMaterial_ckwcm")
+layout_mode = 2
+text = "Active"
+minimum_size = Vector2(50, 20)
+
+[node name="Shadow1" parent="HBoxContainer/PanelContainer/VBoxContainer/MoreContainer/GridContainer" instance=ExtResource("9_vjhyi")]
+material = SubResource("ShaderMaterial_w2y8x")
+layout_mode = 2
+text = "Shadow 1"
+minimum_size = Vector2(20, 20)
+
+[node name="Shadow2" parent="HBoxContainer/PanelContainer/VBoxContainer/MoreContainer/GridContainer" instance=ExtResource("9_vjhyi")]
+material = SubResource("ShaderMaterial_xvnia")
+layout_mode = 2
+text = "Shadow 2"
+minimum_size = Vector2(20, 20)
+
+[node name="Disabled" parent="HBoxContainer/PanelContainer/VBoxContainer/MoreContainer/GridContainer" instance=ExtResource("9_vjhyi")]
+material = SubResource("ShaderMaterial_0julm")
+layout_mode = 2
+text = "Disabled"
+minimum_size = Vector2(20, 20)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/PanelContainer/VBoxContainer/MoreContainer"]
+use_parent_material = true
+layout_mode = 2
+alignment = 1
+
+[node name="Reset" parent="HBoxContainer/PanelContainer/VBoxContainer/MoreContainer/HBoxContainer" instance=ExtResource("2_j3oiu")]
+material = SubResource("ShaderMaterial_e0k3w")
+layout_mode = 2
+icon = ExtResource("16_8spqa")
+minimum_size = Vector2(39, 21)
+icon_use_parent_material = true
+
+[node name="Randomise" parent="HBoxContainer/PanelContainer/VBoxContainer/MoreContainer/HBoxContainer" instance=ExtResource("2_j3oiu")]
+material = SubResource("ShaderMaterial_4ylxj")
+layout_mode = 2
+icon = ExtResource("17_xlgvh")
+minimum_size = Vector2(39, 21)
+icon_use_parent_material = true
+
+[connection signal="text_changed" from="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Title" to="." method="_on_title_text_changed"]
+[connection signal="toggled" from="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Use" to="." method="_on_use_toggled"]
+[connection signal="pressed" from="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Buttons/Delete" to="." method="_on_delete_pressed"]
+[connection signal="toggled" from="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Buttons/Upload" to="." method="_on_upload_toggled"]
+[connection signal="toggled" from="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/More" to="." method="_on_more_toggled"]
+[connection signal="pressed" from="HBoxContainer/PanelContainer/VBoxContainer/MoreContainer/HBoxContainer/Reset" to="." method="_on_reset_pressed"]
+[connection signal="pressed" from="HBoxContainer/PanelContainer/VBoxContainer/MoreContainer/HBoxContainer/Randomise" to="." method="_on_randomise_pressed"]

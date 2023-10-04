@@ -81,6 +81,8 @@ func _ready() -> void:
 			button_mouse_exited.emit(self)
 	)
 
+	EVENTBUS.button_created(self)
+
 func _set_icon_use_parent_material(new_value: bool) -> void:
 	icon_use_parent_material = new_value
 	$ContentContainer/HBoxContainer/ButtonIcon.use_parent_material = new_value
@@ -227,9 +229,14 @@ func _on_button_toggled(button_pressed_state: bool) -> void:
 		set_content_margins(ButtonState[PRESSED])
 	else:
 		set_content_margins(ButtonState[NORMAL])
-	
 
 func play_sound(button_pressed_state: bool) -> void:
+	if !is_inside_tree():
+		return
+		
+	if !is_hovered:
+		return
+	
 	if button_pressed_state:
 		SOUNDBUS.button_down()
 	elif !$Button.button_group:

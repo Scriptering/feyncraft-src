@@ -14,11 +14,11 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dbgr6"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2pvxw"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_40kby"]
 resource_local_to_scene = true
 shader = ExtResource("2_ecomh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_1o7uo"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cx32n"]
 resource_local_to_scene = true
 shader = ExtResource("2_ecomh")
 
@@ -66,18 +66,16 @@ layout_mode = 2
 alignment = 1
 
 [node name="AddProblemSet" parent="VBoxContainer/PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer" instance=ExtResource("1_tgmdf")]
-material = SubResource("ShaderMaterial_2pvxw")
+material = SubResource("ShaderMaterial_40kby")
 layout_mode = 2
 size_flags_horizontal = 1
 icon = ExtResource("3_fyqnn")
 minimum_size = Vector2(75, 28)
 icon_use_parent_material = true
 action_mode = 1
-flip_icon_v = false
-flip_icon_h = false
 
 [node name="DownloadProblemSet" parent="VBoxContainer/PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer" instance=ExtResource("1_tgmdf")]
-material = SubResource("ShaderMaterial_1o7uo")
+material = SubResource("ShaderMaterial_cx32n")
 layout_mode = 2
 size_flags_horizontal = 1
 icon = ExtResource("6_tj3w7")
@@ -85,7 +83,6 @@ minimum_size = Vector2(75, 28)
 icon_use_parent_material = true
 action_mode = 1
 flip_icon_v = true
-flip_icon_h = false
 
 [node name="TitleContainer" type="PanelContainer" parent="VBoxContainer"]
 use_parent_material = true

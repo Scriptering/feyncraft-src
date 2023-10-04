@@ -1,8 +1,9 @@
-[gd_scene load_steps=22 format=3 uid="uid://bk1gajbjms22h"]
+[gd_scene load_steps=23 format=3 uid="uid://bk1gajbjms22h"]
 
 [ext_resource type="Theme" uid="uid://cfmbhoq8cuoge" path="res://Resources/Themes/ProjectTheme.tres" id="1_qvc2w"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/LoadBox.gd" id="2_iws12"]
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="3_b4613"]
+[ext_resource type="Script" path="res://Scenes and Scripts/Classes/text_edit.gd" id="5_tjbbc"]
 [ext_resource type="StyleBox" uid="uid://dvu7f5h7snggp" path="res://Scenes and Scripts/UI/Menus/panelContainer.tres" id="6_cbvfb"]
 [ext_resource type="StyleBox" uid="uid://bubm5sx3xn6q5" path="res://Resources/Themes/TitleLabel.tres" id="6_kbw8s"]
 [ext_resource type="FontFile" uid="uid://cq27s0444iwkg" path="res://Textures/Fonts/ConnectionIi-2wj8.otf" id="7_kqs0u"]
@@ -22,19 +23,19 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f2w4s"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_j1moe"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0qomm"]
 resource_local_to_scene = true
 shader = ExtResource("9_3cb6c")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_1lkmi"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lnkjb"]
 resource_local_to_scene = true
 shader = ExtResource("9_3cb6c")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_uaf3k"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yy8q3"]
 resource_local_to_scene = true
 shader = ExtResource("9_3cb6c")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_dllhf"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mx41i"]
 resource_local_to_scene = true
 shader = ExtResource("9_3cb6c")
 
@@ -70,33 +71,7 @@ theme_override_styles/panel = SubResource("StyleBoxEmpty_1o4m4")
 use_parent_material = true
 layout_mode = 2
 size_flags_vertical = 0
-theme_override_constants/separation = -4
-
-[node name="TitleContainer" type="PanelContainer" parent="PanelContainer/VBoxContainer"]
-z_index = 1
-use_parent_material = true
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_styles/panel = ExtResource("6_kbw8s")
-
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/TitleContainer"]
-use_parent_material = true
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_constants/separation = 0
-alignment = 1
-
-[node name="Title" type="Label" parent="PanelContainer/VBoxContainer/TitleContainer/HBoxContainer"]
-use_parent_material = true
-custom_minimum_size = Vector2(30, 14)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 8
-mouse_filter = 1
-theme_override_font_sizes/font_size = 9
-text = "Load"
-horizontal_alignment = 1
-vertical_alignment = 1
+theme_override_constants/separation = -177
 
 [node name="PanelContainer" type="PanelContainer" parent="PanelContainer/VBoxContainer"]
 use_parent_material = true
@@ -126,14 +101,16 @@ theme_override_font_sizes/font_size = 8
 theme_override_styles/normal = SubResource("StyleBoxEmpty_1v5y6")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_btth5")
 theme_override_styles/read_only = SubResource("StyleBoxEmpty_f2w4s")
-text = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+placeholder_text = "[Insert load data]"
 editable = false
 context_menu_enabled = false
 virtual_keyboard_enabled = false
 wrap_mode = 1
 scroll_smooth = true
+script = ExtResource("5_tjbbc")
 
 [node name="PopUp" type="Label" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/PanelContainer"]
+visible = false
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -153,17 +130,18 @@ layout_mode = 2
 size_flags_horizontal = 2
 
 [node name="Close" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HBoxContainer" instance=ExtResource("8_eom8q")]
-material = SubResource("ShaderMaterial_j1moe")
+material = SubResource("ShaderMaterial_0qomm")
 layout_mode = 2
 icon = ExtResource("11_rg5fn")
 minimum_size = Vector2(24, 24)
 expand_icon = true
+icon_use_parent_material = true
 
 [node name="Tooltip" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HBoxContainer/Close" instance=ExtResource("11_3lrwy")]
 tooltip = "Close"
 
 [node name="Copy" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("8_eom8q")]
-material = SubResource("ShaderMaterial_1lkmi")
+material = SubResource("ShaderMaterial_lnkjb")
 layout_mode = 2
 icon = ExtResource("10_wm7fa")
 minimum_size = Vector2(24, 24)
@@ -174,7 +152,7 @@ icon_use_parent_material = true
 tooltip = "Copy"
 
 [node name="Paste" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("8_eom8q")]
-material = SubResource("ShaderMaterial_uaf3k")
+material = SubResource("ShaderMaterial_yy8q3")
 layout_mode = 2
 icon = ExtResource("11_ne5rf")
 minimum_size = Vector2(24, 24)
@@ -191,7 +169,7 @@ size_flags_horizontal = 3
 alignment = 2
 
 [node name="Submit" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/SubmitContainer" instance=ExtResource("8_eom8q")]
-material = SubResource("ShaderMaterial_dllhf")
+material = SubResource("ShaderMaterial_mx41i")
 layout_mode = 2
 icon = ExtResource("12_buvla")
 minimum_size = Vector2(24, 24)
@@ -201,11 +179,37 @@ icon_use_parent_material = true
 [node name="Tooltip" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/SubmitContainer/Submit" instance=ExtResource("11_3lrwy")]
 tooltip = "Submit"
 
+[node name="TitleContainer" type="PanelContainer" parent="PanelContainer/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = ExtResource("6_kbw8s")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/TitleContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Title" type="Label" parent="PanelContainer/VBoxContainer/TitleContainer/HBoxContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(30, 14)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+mouse_filter = 1
+theme_override_font_sizes/font_size = 9
+text = "Load"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="PopUpTimer" type="Timer" parent="."]
 one_shot = true
 
 [connection signal="child_entered_tree" from="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/PanelContainer/MarginContainer/TextEdit" to="." method="_on_text_edit_child_entered_tree"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HBoxContainer/Close" to="." method="_on_close_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Copy" to="." method="_on_copy_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Paste" to="." method="_on_paste_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/SubmitContainer/Submit" to="." method="_on_submit_pressed"]
-[connection signal="timeout" from="PopUpTimer" to="." method="_on_text_copied_timer_timeout"]
+[connection signal="timeout" from="PopUpTimer" to="." method="_on_pop_up_timer_timeout"]

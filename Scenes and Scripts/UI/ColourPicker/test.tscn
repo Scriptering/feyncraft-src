@@ -16,10 +16,10 @@ theme = ExtResource("1_g0dax")
 [node name="ColorPicker" type="ColorPicker" parent="."]
 material = ExtResource("2_g8w7p")
 layout_mode = 0
-offset_left = 32.0
-offset_top = 16.0
-offset_right = 310.0
-offset_bottom = 488.0
+offset_left = 40.0
+offset_top = 20.0
+offset_right = 314.0
+offset_bottom = 492.0
 edit_alpha = false
 can_add_swatches = false
 sampler_visible = false

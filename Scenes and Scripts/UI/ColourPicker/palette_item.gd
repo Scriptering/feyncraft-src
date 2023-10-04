@@ -39,28 +39,30 @@ func _ready() -> void:
 	for colour_button in ColourButtonDict.values():
 		colour_button.colour_changed.connect(_on_colour_button_colour_changed)
 	
-	var temp_palette: Palette = Palette.new()
-	temp_palette.colours = get_button_colours()
-	
-	load_data(temp_palette)
-	
+	set_buttons_disabled(!palette.is_custom)
+	update_button_colours(true)
+	set_custom_button_visibility()
+
 func _on_more_toggled(button_pressed: bool) -> void:
 	toggle_more_colours(button_pressed)
 
 func toggle_more_colours(toggle: bool) -> void:
 	MoreColoursContainer.visible = toggle
-	
+
 	if toggle:
 		MoreColoursButton.icon = load("res://Textures/Buttons/Tabs/arrow_up.png")
 	else:
 		MoreColoursButton.icon = load("res://Textures/Buttons/Tabs/arrow_down.png")
 
-func update_button_colours() -> void:
+func update_button_colours(ignore_changed_colours: bool = false) -> void:
 	for key in ColourButtonDict.keys():
-		if key in palette.changed_colours:
+		if key in palette.changed_colours and !ignore_changed_colours:
 			continue
 		
 		ColourButtonDict[key].icon_colour = palette.get_colour(key)
+	
+	if is_selected:
+		update_shader()
 
 func get_button_colours() -> Array[Color]:
 	var button_colours: Array[Color] = []
@@ -82,9 +84,11 @@ func load_data(_palette: Palette) -> void:
 	palette = _palette
 	
 	$HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Title.editable = palette.is_custom
-	
-	set_buttons_disabled(!palette.is_custom)
-	update_button_colours()
+	$HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Title.text = palette.title
+
+func set_custom_button_visibility() -> void:
+	$HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Buttons/Delete.visible = palette.is_custom
+	$HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Buttons/Upload.visible = palette.is_custom
 
 func update_custom_palette() -> void:
 	var custom_colours: Array[Color] = palette.get_custom_colours()
@@ -94,6 +98,8 @@ func update_custom_palette() -> void:
 			continue
 		
 		palette.colours[i] = custom_colours[i]
+	
+	update_button_colours()
 
 func _on_reset_pressed() -> void:
 	palette.changed_colours.clear()
@@ -103,12 +109,12 @@ func _on_reset_pressed() -> void:
 func update_shader() -> void:
 	EVENTBUS.change_palette(palette.generate_palette_texture())
 
-func _on_randomise_pressed() -> void:
+func randomise() -> void:
 	palette.colours = palette.get_random_colours()
 	update_button_colours()
-	
-	if is_selected:
-		update_shader()
+
+func _on_randomise_pressed() -> void:
+	randomise()
 
 func _on_colour_button_colour_changed(colour_button: ColourButton, new_colour: Color) -> void:
 	var colour_index: Palette.ColourIndex = ColourButtonDict.find_key(colour_button)
@@ -120,19 +126,34 @@ func _on_colour_button_colour_changed(colour_button: ColourButton, new_colour: C
 	
 	if colour_index in main_colours:
 		update_custom_palette()
-		update_button_colours()
 	
-	if is_selected:
-		update_shader()
+	update_button_colours()
  
 func _on_use_toggled(button_pressed: bool) -> void:
 	self.is_selected = button_pressed
 
 func _set_is_selected(new_value: bool) -> void:
+	var prev_value: bool = is_selected
 	is_selected = new_value
+	
+	if prev_value != is_selected:
+		UseButton.button_pressed = is_selected
 	
 	if is_selected:
 		update_shader()
 
 func _on_delete_pressed() -> void:
-	deleted.emit()
+	deleted.emit(self)
+
+func _on_title_text_changed(new_text: String) -> void:
+	palette.title = new_text
+
+func _on_upload_toggled(button_pressed) -> void:
+	if !button_pressed:
+		return
+	
+	await get_tree().process_frame
+	
+	$HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Buttons/Upload.set_text(
+		GLOBALS.get_resource_save_data(palette)
+	)

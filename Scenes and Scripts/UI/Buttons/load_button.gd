@@ -33,11 +33,18 @@ func create_load_panel() -> void:
 	load_panel.position = get_global_position()
 	load_panel.closed.connect(close_load_panel)
 	load_panel.submitted.connect(func(submitted_text: String): submitted.emit(submitted_text))
-	load_panel_created.emit()
+	load_panel_created.emit(load_panel)
 
 func close_load_panel() -> void:
-	load_panel.queue_free()
+	self.button_pressed = false
 
 func invalid_submission() -> void:
 	if load_panel:
 		load_panel.invalid_submission()
+
+func set_text(new_text: String) -> void:
+	load_panel.set_text(new_text)
+
+func load_error() -> void:
+	if load_panel:
+		load_panel.show_popup("Load Error!")

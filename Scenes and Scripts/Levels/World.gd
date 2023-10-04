@@ -48,13 +48,13 @@ func _set_current_mode(new_value: BaseMode.Mode):
 
 func _ready():
 	self.current_mode = GLOBALS.load_mode
-	
 	VisionTab.vision_button_toggled.connect(_vision_button_toggled)
 	
 	EVENTBUS.signal_add_floating_menu.connect(
 		func(menu: Node): $FloatingMenus.add_child(menu)
 	)
 	
+	MenuTab.init()
 	CreationInformation.init($Diagram, self)
 	States.init($Diagram, $PullOutTabs/ControlsTab)
 	$Diagram.init(ParticleButtons, $PullOutTabs/ControlsTab, VisionTab, $Algorithms/PathFinding, States)
@@ -67,12 +67,24 @@ func _ready():
 	$Algorithms/ProblemGeneration.init($Algorithms/SolutionGeneration)
 	
 	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
+	
+	await get_tree().process_frame
+	
+	load_problem($Algorithms/ProblemGeneration.generate(true))
 
 func _process(_delta):
 	FPS.text = str(Engine.get_frames_per_second())
 
 func _vision_button_toggled(current_vision: GLOBALS.Vision) -> void:
 	$ShaderControl.toggle_interaction_strength(current_vision == GLOBALS.Vision.Strength)
+
+func load_problem(problem: Problem) -> void:
+	$Diagram.load_problem(problem)
+	ProblemTab.load_problem(problem)
+	ParticleButtons.load_problem(problem)
+
+func load_problem_set(problem_set: ProblemSet) -> void:
+	$Diagram.load_problem_set(problem_set)
 
 func enter_particle_selection() -> void:
 	ParticleButtons.show()

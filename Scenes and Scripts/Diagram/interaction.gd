@@ -81,12 +81,15 @@ func _input(event: InputEvent) -> void:
 		emit_signal("clicked_on", self)
 
 func _set_hovering(new_value: bool):
+	hovering = new_value
+	
+	if grabbed:
+		return
+	
 	if new_value:
 		Ball.frame = HIGHLIGHT
 	else:
 		Ball.frame = NORMAL
-
-	hovering = new_value
 
 func _set_valid(new_valid: bool) -> void:
 	valid = new_valid
@@ -95,10 +98,6 @@ func _set_valid(new_valid: bool) -> void:
 func _set_valid_colourless(new_valid_colourless: bool) -> void:
 	valid_colourless = new_valid_colourless
 	update_valid_visual()
-
-func crosshair_moved(_current_position: Vector2, _old_position: Vector2):
-	if grabbed:
-		update_interaction()
 
 func update_valid_visual() -> void:
 	var current_ball_frame: int = Ball.frame
@@ -138,6 +137,8 @@ func get_on_state_line() -> StateLine.StateType:
 func update_interaction() -> void:
 	if grabbed:
 		move_interaction()
+		return
+		
 	elif should_request_deletion():
 		emit_signal("request_deletion", self)
 		return
@@ -381,6 +382,7 @@ func drop() -> void:
 	super.drop()
 	
 	update_dot_visual()
+	self.hovering = hovering
 	Diagram.update_statelines()
 
 func get_interaction_index() -> Array[int]:

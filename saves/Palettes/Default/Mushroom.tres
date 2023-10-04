@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Palette" load_steps=2 format=3 uid="uid://ckctgd35yhnsn"]
+
+[ext_resource type="Script" path="res://Scenes and Scripts/Classes/Palette.gd" id="1_5vrw8"]
+
+[resource]
+script = ExtResource("1_5vrw8")
+title = "Mushroom"
+is_custom = false
+colours = Array[Color]([Color(0.298187, 0.682599, 0.57956, 1), Color(0.308612, 0.746855, 0.630061, 1), Color(0.319037, 0.811111, 0.680561, 1), Color(0.456871, 0.444918, 0.395579, 1), Color(0.467296, 0.509174, 0.446079, 1), Color(0.615556, 0.207237, 0.211597, 1), Color(0.468837, 0.682599, 0.625302, 1), Color(0.508731, 0.777819, 0.705692, 1), Color(0.0251475, 0.682599, 0.506374, 1), Color(0.756863, 0.243137, 0.243137, 1), Color(0.243137, 0.756863, 0.243137, 1), Color(0.25098, 0.341176, 0.745098, 1), Color(0, 0, 0, 1), Color(0, 0, 0, 1)])
+changed_colours = Array[int]([2, 5])

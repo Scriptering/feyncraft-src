@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Palette" load_steps=2 format=3 uid="uid://c6ebo014jfl37"]
+
+[ext_resource type="Script" path="res://Scenes and Scripts/Classes/Palette.gd" id="1_qhl26"]
+
+[resource]
+script = ExtResource("1_qhl26")
+title = ""
+is_custom = true
+colours = Array[Color]([Color(0.257677, 0.693593, 0.383611, 1), Color(0.322287, 0.737598, 0.329035, 1), Color(0.386897, 0.781603, 0.274458, 1), Color(0.259162, 0.648228, 0.329237, 1), Color(0.323773, 0.692233, 0.274661, 1), Color(0.260648, 0.602863, 0.274863, 1), Color(0.431076, 0.693593, 0.506916, 1), Color(0.480374, 0.785515, 0.568528, 1), Color(-0.01976, 0.693593, 0.186324, 1), Color(0.756863, 0.243137, 0.243137, 1), Color(0.243137, 0.756863, 0.243137, 1), Color(0.25098, 0.341176, 0.745098, 1), Color(0, 0, 0, 1), Color(0, 0, 0, 1)])
+changed_colours = Array[int]([])

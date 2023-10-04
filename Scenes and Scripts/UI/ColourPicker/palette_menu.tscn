@@ -1,0 +1,162 @@
+[gd_scene load_steps=16 format=3 uid="uid://b5pj0lanxu0o6"]
+
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/ColourPicker/palette_control.gd" id="2_a8uju"]
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="3_60rp2"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/ColourPicker/PaletteList.gd" id="3_ul5gh"]
+[ext_resource type="PackedScene" uid="uid://wfo6boyk67m8" path="res://Scenes and Scripts/UI/ColourPicker/palette_list_item.tscn" id="4_260ay"]
+[ext_resource type="StyleBox" uid="uid://bubm5sx3xn6q5" path="res://Resources/Themes/TitleLabel.tres" id="5_1rhsj"]
+[ext_resource type="Texture2D" uid="uid://ci1qrp3pyqm6h" path="res://Textures/Buttons/icons/close.png" id="6_ypwjd"]
+[ext_resource type="Texture2D" uid="uid://cgfs1pdopjbh" path="res://Textures/Buttons/icons/close_hover.png" id="7_g568c"]
+[ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="8_qd7b2"]
+[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="9_i7r1x"]
+[ext_resource type="Texture2D" uid="uid://1qi6lr05g0vt" path="res://Textures/Buttons/icons/add.png" id="10_w2cob"]
+[ext_resource type="PackedScene" uid="uid://7kmcsryae7lw" path="res://Scenes and Scripts/UI/Buttons/load_button.tscn" id="11_jsxk3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rcifc"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c01uu"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uuoeu"]
+resource_local_to_scene = true
+shader = ExtResource("9_i7r1x")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1sion"]
+resource_local_to_scene = true
+shader = ExtResource("9_i7r1x")
+
+[node name="PaletteMenu" type="Control" node_paths=PackedStringArray("GrabAreas")]
+material = ExtResource("3_60rp2")
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -640.0
+offset_bottom = -360.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("2_a8uju")
+GrabAreas = [NodePath("PaletteList/VBoxContainer/TitleContainer"), NodePath("PaletteList/VBoxContainer/PanelContainer")]
+
+[node name="PaletteList" type="PanelContainer" parent="." node_paths=PackedStringArray("ItemContainer", "Title", "scroll_container")]
+use_parent_material = true
+custom_minimum_size = Vector2(225, 2.08165e-12)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -112.5
+offset_top = -87.0
+offset_right = 112.5
+offset_bottom = 87.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_rcifc")
+script = ExtResource("3_ul5gh")
+Item = ExtResource("4_260ay")
+ItemContainer = NodePath("VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/ItemContainer")
+Title = NodePath("VBoxContainer/TitleContainer/HBoxContainer/Title")
+title = "Palettes"
+scroll_container = NodePath("VBoxContainer/PanelContainer/MarginContainer/ScrollContainer")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PaletteList"]
+use_parent_material = true
+layout_mode = 2
+size_flags_vertical = 0
+mouse_filter = 2
+theme_override_constants/separation = -174
+
+[node name="PanelContainer" type="PanelContainer" parent="PaletteList/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="PaletteList/VBoxContainer/PanelContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/margin_right = -9
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PaletteList/VBoxContainer/PanelContainer/MarginContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(2.08165e-12, 139.999)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_c01uu")
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 1
+
+[node name="ItemContainer" type="VBoxContainer" parent="PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(2.08165e-12, 30)
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_right = 30
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer"]
+use_parent_material = true
+layout_mode = 2
+alignment = 1
+
+[node name="AddProblem" parent="PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/HBoxContainer" instance=ExtResource("8_qd7b2")]
+material = SubResource("ShaderMaterial_uuoeu")
+layout_mode = 2
+size_flags_horizontal = 1
+icon = ExtResource("10_w2cob")
+minimum_size = Vector2(70, 28)
+icon_use_parent_material = true
+action_mode = 1
+
+[node name="LoadButton" parent="PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/HBoxContainer" instance=ExtResource("11_jsxk3")]
+material = SubResource("ShaderMaterial_1sion")
+layout_mode = 2
+minimum_size = Vector2(70, 28)
+
+[node name="TitleContainer" type="PanelContainer" parent="PaletteList/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = ExtResource("5_1rhsj")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PaletteList/VBoxContainer/TitleContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Close" type="TextureButton" parent="PaletteList/VBoxContainer/TitleContainer/HBoxContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(10, 14)
+layout_mode = 2
+size_flags_vertical = 4
+texture_normal = ExtResource("6_ypwjd")
+texture_hover = ExtResource("7_g568c")
+stretch_mode = 5
+
+[node name="Title" type="Label" parent="PaletteList/VBoxContainer/TitleContainer/HBoxContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(50, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+mouse_filter = 1
+theme_override_font_sizes/font_size = 9
+text = "Palettes"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/HBoxContainer/AddProblem" to="." method="_on_add_problem_pressed"]
+[connection signal="submitted" from="PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/HBoxContainer/LoadButton" to="." method="_on_load_button_submitted"]
+[connection signal="pressed" from="PaletteList/VBoxContainer/TitleContainer/HBoxContainer/Close" to="." method="_on_close_pressed"]

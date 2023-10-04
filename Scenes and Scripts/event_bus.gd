@@ -7,6 +7,7 @@ signal signal_change_cursor
 signal signal_enter_game
 signal signal_change_palette(palette: ImageTexture)
 signal signal_diagram_action_taken
+signal signal_button_created(button: PanelButton)
 
 func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 	signal_draw_diagram.emit(drawing_matrix)
@@ -29,3 +30,6 @@ func enter_game(mode: BaseMode.Mode, problem_set: ProblemSet = null, problem: Pr
 
 func change_palette(palette: ImageTexture) -> void:
 	signal_change_palette.emit(palette)
+
+func button_created(button: PanelButton) -> void:
+	signal_button_created.emit(button)

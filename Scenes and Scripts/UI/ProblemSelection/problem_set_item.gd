@@ -1,11 +1,11 @@
-extends PanelContainer
+extends ListItem
 
 signal view
 signal title_changed
-signal deleted
 signal play
 
 var problem_set: ProblemSet
+var file_path: String
 
 func toggle_edit_visibility(can_edit: bool) -> void:
 	$HBoxContainer/PanelContainer/HBoxContainer/Title.editable = can_edit
@@ -41,3 +41,13 @@ func _on_view_pressed() -> void:
 
 func _on_play_pressed() -> void:
 	play.emit(problem_set)
+
+func _on_upload_toggled(button_pressed) -> void:
+	if !button_pressed:
+		return
+	
+	await get_tree().process_frame
+	
+	$HBoxContainer/PanelContainer/HBoxContainer/Upload.set_text(
+		GLOBALS.get_resource_save_data(problem_set)
+	)

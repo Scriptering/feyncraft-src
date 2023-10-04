@@ -75,6 +75,10 @@ func _crosshair_moved(_new_position: Vector2, _old_position: Vector2) -> void:
 	
 	action()
 
+func load_problem(problem: Problem) -> void:
+	clear_diagram()
+	set_title(problem.title)
+
 func are_quantum_numbers_matching(ignore_weak_quantum_numbers: bool = true) -> bool:
 	var initial_quantum_numbers: PackedFloat32Array = StateLines[StateLine.StateType.Initial].get_quantum_numbers()
 	var final_quantum_numbers: PackedFloat32Array = StateLines[StateLine.StateType.Final].get_quantum_numbers()

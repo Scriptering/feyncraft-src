@@ -16,7 +16,9 @@ enum Mode {Load, Upload}
 @onready var submit: PanelContainer = $PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/SubmitContainer/Submit
 
 func _ready() -> void:
-	$TextCopiedTimer.wait_time = pop_up_time
+	super._ready()
+	
+	$PopUpTimer.wait_time = pop_up_time
 	
 	match mode:
 		Mode.Load:
@@ -53,3 +55,9 @@ func _on_pop_up_timer_timeout() -> void:
 
 func invalid_submission() -> void:
 	show_popup("Invalid Upload.")
+
+func _on_close_pressed() -> void:
+	closed.emit()
+
+func set_text(new_text: String) -> void:
+	Text.text = new_text

@@ -519,11 +519,26 @@ func get_unique_file_name(folder_path: String, suffix: String = '.tres') -> Stri
 
 func create_file(path: String) -> void:
 	var file = FileAccess.open(path, FileAccess.WRITE)
-	file.store_string("empty file")
+	file.store_string("")
 	file = null
 
+func create_text_file(data: String, path: String) -> void:
+	if DirAccess.dir_exists_absolute(path):
+		return
+	
+	create_file(path)
+	
+	var file: FileAccess = FileAccess.open(path, FileAccess.WRITE)
+	file.store_string(data)
+	file = null
+
+func get_resource_save_data(resource: Resource) -> String:
+	save_data(resource, "res://saves/temp_save.tres")
+	
+	return FileAccess.open("res://saves/temp_save.tres", FileAccess.READ).get_as_text()
+
 func save_data(data: Resource, path: String = "res://saves/") -> Error:
-	return ResourceSaver.save(data, path, ResourceSaver.FLAG_REPLACE_SUBRESOURCE_PATHS)
+	return ResourceSaver.save(data, path, ResourceSaver.FLAG_BUNDLE_RESOURCES)
 
 func load_data(path: String) -> Resource:
 	if ResourceLoader.exists(path):
