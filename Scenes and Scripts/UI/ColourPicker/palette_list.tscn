@@ -1,31 +1,31 @@
 [gd_scene load_steps=16 format=3 uid="uid://b5pj0lanxu0o6"]
 
-[ext_resource type="Script" path="res://Scenes and Scripts/UI/ColourPicker/palette_control.gd" id="2_a8uju"]
-[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="3_60rp2"]
-[ext_resource type="Script" path="res://Scenes and Scripts/UI/ColourPicker/PaletteList.gd" id="3_ul5gh"]
-[ext_resource type="PackedScene" uid="uid://wfo6boyk67m8" path="res://Scenes and Scripts/UI/ColourPicker/palette_list_item.tscn" id="4_260ay"]
-[ext_resource type="StyleBox" uid="uid://bubm5sx3xn6q5" path="res://Resources/Themes/TitleLabel.tres" id="5_1rhsj"]
-[ext_resource type="Texture2D" uid="uid://ci1qrp3pyqm6h" path="res://Textures/Buttons/icons/close.png" id="6_ypwjd"]
-[ext_resource type="Texture2D" uid="uid://cgfs1pdopjbh" path="res://Textures/Buttons/icons/close_hover.png" id="7_g568c"]
-[ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="8_qd7b2"]
-[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="9_i7r1x"]
-[ext_resource type="Texture2D" uid="uid://1qi6lr05g0vt" path="res://Textures/Buttons/icons/add.png" id="10_w2cob"]
-[ext_resource type="PackedScene" uid="uid://7kmcsryae7lw" path="res://Scenes and Scripts/UI/Buttons/load_button.tscn" id="11_jsxk3"]
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_3q1kk"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/ColourPicker/palette_control.gd" id="2_arvfv"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/ColourPicker/PaletteList.gd" id="3_edpsv"]
+[ext_resource type="PackedScene" uid="uid://wfo6boyk67m8" path="res://Scenes and Scripts/UI/ColourPicker/palette_list_item.tscn" id="4_t1lxn"]
+[ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="5_7aaw2"]
+[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="6_gw1gk"]
+[ext_resource type="Texture2D" uid="uid://1qi6lr05g0vt" path="res://Textures/Buttons/icons/add.png" id="7_bfw4j"]
+[ext_resource type="PackedScene" uid="uid://7kmcsryae7lw" path="res://Scenes and Scripts/UI/Buttons/load_button.tscn" id="8_sg02h"]
+[ext_resource type="StyleBox" uid="uid://bubm5sx3xn6q5" path="res://Resources/Themes/TitleLabel.tres" id="9_niodb"]
+[ext_resource type="Texture2D" uid="uid://ci1qrp3pyqm6h" path="res://Textures/Buttons/icons/close.png" id="10_l6c52"]
+[ext_resource type="Texture2D" uid="uid://cgfs1pdopjbh" path="res://Textures/Buttons/icons/close_hover.png" id="11_qnsjp"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rcifc"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c01uu"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_uuoeu"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qbs5c"]
 resource_local_to_scene = true
-shader = ExtResource("9_i7r1x")
+shader = ExtResource("6_gw1gk")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_1sion"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s7gqk"]
 resource_local_to_scene = true
-shader = ExtResource("9_i7r1x")
+shader = ExtResource("6_gw1gk")
 
 [node name="PaletteMenu" type="Control" node_paths=PackedStringArray("GrabAreas")]
-material = ExtResource("3_60rp2")
+material = ExtResource("1_3q1kk")
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -36,7 +36,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-script = ExtResource("2_a8uju")
+script = ExtResource("2_arvfv")
 GrabAreas = [NodePath("PaletteList/VBoxContainer/TitleContainer"), NodePath("PaletteList/VBoxContainer/PanelContainer")]
 
 [node name="PaletteList" type="PanelContainer" parent="." node_paths=PackedStringArray("ItemContainer", "Title", "scroll_container")]
@@ -55,8 +55,8 @@ offset_bottom = 87.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_rcifc")
-script = ExtResource("3_ul5gh")
-Item = ExtResource("4_260ay")
+script = ExtResource("3_edpsv")
+Item = ExtResource("4_t1lxn")
 ItemContainer = NodePath("VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/ItemContainer")
 Title = NodePath("VBoxContainer/TitleContainer/HBoxContainer/Title")
 title = "Palettes"
@@ -67,7 +67,7 @@ use_parent_material = true
 layout_mode = 2
 size_flags_vertical = 0
 mouse_filter = 2
-theme_override_constants/separation = -174
+theme_override_constants/separation = -194
 
 [node name="PanelContainer" type="PanelContainer" parent="PaletteList/VBoxContainer"]
 use_parent_material = true
@@ -81,7 +81,7 @@ theme_override_constants/margin_right = -9
 
 [node name="ScrollContainer" type="ScrollContainer" parent="PaletteList/VBoxContainer/PanelContainer/MarginContainer"]
 use_parent_material = true
-custom_minimum_size = Vector2(2.08165e-12, 139.999)
+custom_minimum_size = Vector2(2.08165e-12, 159.999)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_c01uu")
 horizontal_scroll_mode = 0
@@ -109,17 +109,17 @@ use_parent_material = true
 layout_mode = 2
 alignment = 1
 
-[node name="AddProblem" parent="PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/HBoxContainer" instance=ExtResource("8_qd7b2")]
-material = SubResource("ShaderMaterial_uuoeu")
+[node name="AddProblem" parent="PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/HBoxContainer" instance=ExtResource("5_7aaw2")]
+material = SubResource("ShaderMaterial_qbs5c")
 layout_mode = 2
 size_flags_horizontal = 1
-icon = ExtResource("10_w2cob")
+icon = ExtResource("7_bfw4j")
 minimum_size = Vector2(70, 28)
 icon_use_parent_material = true
 action_mode = 1
 
-[node name="LoadButton" parent="PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/HBoxContainer" instance=ExtResource("11_jsxk3")]
-material = SubResource("ShaderMaterial_1sion")
+[node name="LoadButton" parent="PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/HBoxContainer" instance=ExtResource("8_sg02h")]
+material = SubResource("ShaderMaterial_s7gqk")
 layout_mode = 2
 minimum_size = Vector2(70, 28)
 
@@ -127,7 +127,7 @@ minimum_size = Vector2(70, 28)
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_styles/panel = ExtResource("5_1rhsj")
+theme_override_styles/panel = ExtResource("9_niodb")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="PaletteList/VBoxContainer/TitleContainer"]
 use_parent_material = true
@@ -141,8 +141,8 @@ use_parent_material = true
 custom_minimum_size = Vector2(10, 14)
 layout_mode = 2
 size_flags_vertical = 4
-texture_normal = ExtResource("6_ypwjd")
-texture_hover = ExtResource("7_g568c")
+texture_normal = ExtResource("10_l6c52")
+texture_hover = ExtResource("11_qnsjp")
 stretch_mode = 5
 
 [node name="Title" type="Label" parent="PaletteList/VBoxContainer/TitleContainer/HBoxContainer"]

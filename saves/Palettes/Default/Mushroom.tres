@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="Palette" load_steps=2 format=3 uid="uid://ckctgd35yhnsn"]
 
-[ext_resource type="Script" path="res://Scenes and Scripts/Classes/Palette.gd" id="1_5vrw8"]
+[ext_resource type="Script" path="res://Scenes and Scripts/Classes/PaletteClass.gd" id="1_5vrw8"]
 
 [resource]
 script = ExtResource("1_5vrw8")

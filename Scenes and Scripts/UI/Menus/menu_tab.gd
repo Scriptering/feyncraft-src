@@ -7,7 +7,7 @@ extends PullOutTab
 var palette_menu: GrabbableControl
 
 func init() -> void:
-	palette_menu = preload("res://Scenes and Scripts/UI/ColourPicker/palette_menu.tscn").instantiate()
+	palette_menu = preload("res://Scenes and Scripts/UI/ColourPicker/palette_list.tscn").instantiate()
 	
 	palette_menu.hide()
 	palette_menu.closed.connect(_on_palette_menu_closed)

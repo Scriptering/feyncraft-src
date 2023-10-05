@@ -107,7 +107,7 @@ func _on_reset_pressed() -> void:
 	update_button_colours()
 
 func update_shader() -> void:
-	EVENTBUS.change_palette(palette.generate_palette_texture())
+	EVENTBUS.signal_change_palette.emit(palette.generate_palette_texture())
 
 func randomise() -> void:
 	palette.colours = palette.get_random_colours()

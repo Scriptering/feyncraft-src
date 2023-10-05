@@ -80,14 +80,11 @@ func load_palette(palette_path: String) -> void:
 		load_error.emit()
 
 func save_palettes() -> void:
-	var save_error: Error
 	for palette in get_items():
 		if !palette.palette.is_custom:
 			continue
 
-		save_error = GLOBALS.save_data(palette.palette, palette.file_path)
-	
-	print(save_error)
+		GLOBALS.save_data(palette.palette, palette.file_path)
 	
 func create_new_palette(palette_path: String) -> void:
 	var new_palette: ListItem = Item.instantiate()

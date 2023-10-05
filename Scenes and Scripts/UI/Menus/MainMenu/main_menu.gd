@@ -8,6 +8,7 @@ var placing: bool = false
 @onready var problem_selection: Control = $FloatingMenus/ProblemSelection
 @onready var States = $state_manager
 @onready var Diagram: MainDiagram = $Diagram
+@onready var MenuTab: Control = $MenuTab
 
 func _ready():
 	EVENTBUS.signal_enter_game.connect(enter_game)
@@ -15,9 +16,9 @@ func _ready():
 		func(menu: Node): $FloatingMenus.add_child(menu)
 	)
 	
+	MenuTab.init()
 	palette_control.closed.connect(_on_palette_control_closed)
 	problem_selection.closed.connect(_on_problem_selection_closed)
-	
 	States.init($Diagram, $ControlsTab)
 	$Diagram.init($ParticleButtons, $ControlsTab, $VisionButton, $Algorithms/PathFinding, States)
 	$Algorithms/PathFinding.init($Diagram, $Diagram.StateLines)
