@@ -7,11 +7,14 @@ extends Resource
 @export var current_index: int: set = _set_current_index
 @export var current_problem: Problem:
 	get:
+		if problems.size() == 0:
+			return null
+			
 		return problems[current_index]
 @export var limited_particles: bool = false
 @export var custom_solutions: bool = false
 @export var hidden_particles: bool = false
-@export var is_custom: bool = false
+@export var is_custom: bool = true
 
 func _set_current_index(new_value: int) -> void:
 	current_index = clamp(new_value, 0, problems.size()-1)

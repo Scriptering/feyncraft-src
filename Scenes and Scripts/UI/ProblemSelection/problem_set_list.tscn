@@ -1,49 +1,48 @@
-[gd_scene load_steps=13 format=3 uid="uid://c3m8fesktmd85"]
+[gd_scene load_steps=16 format=3 uid="uid://c3m8fesktmd85"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_dmm2o"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="1_tgmdf"]
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="2_ecomh"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/ProblemSelection/problem_set_list.gd" id="2_oi7x7"]
-[ext_resource type="Texture2D" uid="uid://b4w0nb2kv1et0" path="res://Textures/UI/Information/InfoTabFocus.png" id="3_7scrx"]
 [ext_resource type="Texture2D" uid="uid://1qi6lr05g0vt" path="res://Textures/Buttons/icons/add.png" id="3_fyqnn"]
-[ext_resource type="Texture2D" uid="uid://c3nrennubqoow" path="res://Textures/Buttons/icons/back.png" id="6_d5g0v"]
+[ext_resource type="Texture2D" uid="uid://bfoxtqmre12qw" path="res://Textures/Buttons/icons/load.png" id="7_jqou4"]
+[ext_resource type="PackedScene" uid="uid://7kmcsryae7lw" path="res://Scenes and Scripts/UI/Buttons/load_button.tscn" id="7_sjfsr"]
+[ext_resource type="StyleBox" uid="uid://bubm5sx3xn6q5" path="res://Resources/Themes/TitleLabel.tres" id="9_blpuk"]
+[ext_resource type="PackedScene" uid="uid://dorw3vr2amuy3" path="res://Scenes and Scripts/Components/button_sound_component.tscn" id="10_4ouwk"]
+[ext_resource type="Texture2D" uid="uid://ci1qrp3pyqm6h" path="res://Textures/Buttons/icons/close.png" id="10_b7g42"]
+[ext_resource type="Texture2D" uid="uid://cgfs1pdopjbh" path="res://Textures/Buttons/icons/close_hover.png" id="11_5q7ul"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lehaf"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_r5641"]
-resource_local_to_scene = true
-shader = ExtResource("2_ecomh")
-
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dbgr6"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_1odfo"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sdkmk"]
 resource_local_to_scene = true
 shader = ExtResource("2_ecomh")
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_v5ahc"]
-texture = ExtResource("3_7scrx")
-texture_margin_left = 7.0
-texture_margin_top = 4.0
-texture_margin_right = 7.0
-texture_margin_bottom = 3.0
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_32or2"]
+resource_local_to_scene = true
+shader = ExtResource("2_ecomh")
 
 [node name="ProblemSetList" type="PanelContainer"]
 material = ExtResource("1_dmm2o")
-custom_minimum_size = Vector2(117, 50)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -523.0
+offset_left = -88.5
+offset_right = -434.5
 offset_bottom = -310.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 theme_override_styles/panel = SubResource("StyleBoxEmpty_lehaf")
 script = ExtResource("2_oi7x7")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 use_parent_material = true
 layout_mode = 2
-theme_override_constants/separation = -53
+theme_override_constants/separation = -235
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
 use_parent_material = true
@@ -53,20 +52,9 @@ layout_mode = 2
 use_parent_material = true
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
-use_parent_material = true
-layout_mode = 2
-alignment = 1
-
-[node name="Back" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("1_tgmdf")]
-material = SubResource("ShaderMaterial_r5641")
-layout_mode = 2
-icon = ExtResource("6_d5g0v")
-minimum_size = Vector2(30, 21)
-icon_use_parent_material = true
-
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
 use_parent_material = true
+custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_dbgr6")
@@ -80,38 +68,62 @@ size_flags_horizontal = 3
 [node name="ProblemContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
-use_parent_material = true
-layout_mode = 2
-theme_override_constants/margin_left = 30
-theme_override_constants/margin_right = 30
-
-[node name="AddProblemSet" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer" instance=ExtResource("1_tgmdf")]
-material = SubResource("ShaderMaterial_1odfo")
-layout_mode = 2
-size_flags_horizontal = 1
-icon = ExtResource("3_fyqnn")
-minimum_size = Vector2(2.08165e-12, 28)
-icon_use_parent_material = true
-action_mode = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
 alignment = 1
 
-[node name="Title" type="Label" parent="VBoxContainer/HBoxContainer"]
+[node name="AddProblemSet" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer" instance=ExtResource("1_tgmdf")]
+material = SubResource("ShaderMaterial_sdkmk")
+layout_mode = 2
+size_flags_horizontal = 1
+icon = ExtResource("3_fyqnn")
+minimum_size = Vector2(70, 28)
+icon_use_parent_material = true
+action_mode = 1
+
+[node name="LoadButton" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer" instance=ExtResource("7_sjfsr")]
+material = SubResource("ShaderMaterial_32or2")
+layout_mode = 2
+icon = ExtResource("7_jqou4")
+minimum_size = Vector2(70, 28)
+flip_icon_v = false
+
+[node name="TitleContainer" type="PanelContainer" parent="VBoxContainer"]
 use_parent_material = true
-custom_minimum_size = Vector2(100, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = ExtResource("9_blpuk")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TitleContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 4
+alignment = 1
+
+[node name="Close" type="TextureButton" parent="VBoxContainer/TitleContainer/HBoxContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(10, 14)
+layout_mode = 2
+size_flags_vertical = 4
+texture_normal = ExtResource("10_b7g42")
+texture_hover = ExtResource("11_5q7ul")
+stretch_mode = 5
+
+[node name="ButtonSoundComponent" parent="VBoxContainer/TitleContainer/HBoxContainer/Close" instance=ExtResource("10_4ouwk")]
+
+[node name="Title" type="Label" parent="VBoxContainer/TitleContainer/HBoxContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(50, 20)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 mouse_filter = 1
 theme_override_font_sizes/font_size = 9
-theme_override_styles/normal = SubResource("StyleBoxTexture_v5ahc")
 text = "Problem Sets"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Back" to="." method="_on_back_pressed"]
-[connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer/AddProblemSet" to="." method="_on_add_problem_set_pressed"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/AddProblemSet" to="." method="_on_add_problem_set_pressed"]
+[connection signal="submitted" from="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/LoadButton" to="." method="_on_load_button_submitted"]
+[connection signal="pressed" from="VBoxContainer/TitleContainer/HBoxContainer/Close" to="." method="_on_close_pressed"]

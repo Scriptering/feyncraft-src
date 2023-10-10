@@ -12,15 +12,16 @@ var ProblemSetItem: PackedScene = preload("res://Scenes and Scripts/UI/ProblemSe
 var problem_sets: Array[ProblemSet]
 
 func _ready() -> void:
+	tree_exited.connect(_on_tree_exited)
 	play_problem_set.connect(EVENTBUS.enter_game)
 	
-func load_problem_sets(_problem_sets: Array[ProblemSet]) -> void:
-	problem_sets = _problem_sets
+	load_problem_sets()
 	
-	clear_problem_sets()
-	
-	for problem_set in problem_sets:
-		add_problem_set(problem_set)
+	$VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer.get_v_scroll_bar().use_parent_material = true
+
+func load_problem_sets() -> void:
+	for file_path in GLOBALS.get_files_in_folder(problem_set_file_path + 'Custom/'):
+		load_problem_set(file_path)
 	
 	update_index_labels()
 	update_problem_sets()
@@ -36,8 +37,6 @@ func add_problem_set(problem_set: ProblemSet, problem_set_item: ListItem = Probl
 	problem_set_item.view.connect(_problem_set_viewed)
 	problem_set_item.play.connect(_problem_set_resumed)
 	
-	problem_set_item.toggle_edit_visibility(problem_set.is_custom)
-	
 	problem_container.add_child(problem_set_item)
 	
 	var count: int = problem_container.get_child_count()
@@ -46,14 +45,16 @@ func add_problem_set(problem_set: ProblemSet, problem_set_item: ListItem = Probl
 	problem_set_item.update()
 
 func update_index_labels() -> void:
+	var index: int = 0
 	for i in range(problem_container.get_child_count()):
 		var problem_set: PanelContainer = problem_container.get_child(i)
 		
 		if problem_set.is_queued_for_deletion():
 			continue
 		
-		problem_set.set_index(i)
+		problem_set.set_index(index)
 		problem_set.update_problem_index()
+		index += 1
 
 func update_problem_sets() -> void:
 	for problem_set in problem_container.get_children():
@@ -62,8 +63,8 @@ func update_problem_sets() -> void:
 func _problem_set_deleted(problem_set_item: PanelContainer) -> void:
 	var index: int = problem_container.get_children().find(problem_set_item)
 	
-	problem_container.remove_child(problem_set_item)
 	problem_sets.remove_at(index)
+	problem_set_item.queue_free()
 	
 	update_index_labels()
 
@@ -73,7 +74,7 @@ func create_problem_set() -> void:
 	add_problem_set(problem_set)
 
 func _on_add_problem_set_pressed() -> void:
-	create_problem_set()
+	create_new_problem_set(GLOBALS.get_unique_file_name(problem_set_file_path + "Custom/"))
 
 func _problem_set_viewed(problem_set_item: PanelContainer) -> void:
 	enter_problem_set.emit(problem_set_item.problem_set)
@@ -101,28 +102,28 @@ func load_problem_set(problem_set_path: String) -> void:
 	var new_problem_set: ListItem = ProblemSetItem.instantiate()
 	new_problem_set.file_path = problem_set_path
 	
-	var problem_set: ProblemSet = GLOBALS.load_data(problem_set_path)
+	var problem_set: ProblemSet = GLOBALS.load(problem_set_path)
 	if problem_set:
-		add_problem_set(GLOBALS.load_data(problem_set_path), new_problem_set)
+		add_problem_set(problem_set, new_problem_set)
 	else:
 		new_problem_set.queue_free()
 		GLOBALS.delete_file(problem_set_path)
 		on_load_error()
 
 func save_problem_sets() -> void:
-	var save_error: Error
 	for problem_set in problem_container.get_children():
 		if !problem_set.problem_set.is_custom:
 			continue
 
-		save_error = GLOBALS.save_data(problem_set.problem_set, problem_set.file_path)
-	
-	print(save_error)
+		GLOBALS.save(problem_set.problem_set, problem_set.file_path)
+
+func _on_tree_exited() -> void:
+	save_problem_sets()
 	
 func create_new_problem_set(problem_set_path: String) -> void:
 	var new_problem_set: ListItem = ProblemSetItem.instantiate()
 	new_problem_set.file_path = problem_set_path
-	GLOBALS.create_file(problem_set_path)
-	GLOBALS.save_data(new_problem_set.problem_set, problem_set_path)
 	add_problem_set(ProblemSet.new(), new_problem_set)
-	new_problem_set.randomise()
+	
+	GLOBALS.create_file(problem_set_path)
+	GLOBALS.save(new_problem_set.problem_set, problem_set_path)

@@ -1,5 +1,6 @@
-[gd_scene load_steps=17 format=3 uid="uid://j70abl1nme6y"]
+[gd_scene load_steps=16 format=3 uid="uid://j70abl1nme6y"]
 
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_7ln54"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/ProblemSelection/problem_selector.gd" id="2_7m7ny"]
 [ext_resource type="PackedScene" uid="uid://cqfassynt86vn" path="res://Scenes and Scripts/UI/Equation/mini_equation.tscn" id="2_v0r42"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="2_yg01j"]
@@ -11,39 +12,22 @@
 [ext_resource type="Texture2D" uid="uid://em240kmik0fw" path="res://Textures/Buttons/icons/modify.png" id="10_8itxw"]
 [ext_resource type="Texture2D" uid="uid://dwh7e30xi8v07" path="res://Textures/Buttons/Tabs/arrow_down.png" id="10_r0lbv"]
 
-[sub_resource type="Shader" id="Shader_tmadl"]
-code = "shader_type canvas_item;
-
-global uniform sampler2D colour_scheme: filter_nearest;
-uniform float alpha: hint_range(0.0, 1.0);
-
-void fragment() {
-	vec4 color = texture(TEXTURE, UV);
-	COLOR = vec4(texture(colour_scheme, vec2(color.r, color.g)).rgb, color.a * alpha);
-}
-"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_p05i4"]
-resource_local_to_scene = true
-shader = SubResource("Shader_tmadl")
-shader_parameter/alpha = 1.0
-
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qxe7s"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_yl85d"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n1bsj"]
 resource_local_to_scene = true
 shader = ExtResource("3_ifhvu")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_jmc82"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ub1lb"]
 resource_local_to_scene = true
 shader = ExtResource("3_ifhvu")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_km5r2"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nbp06"]
 resource_local_to_scene = true
 shader = ExtResource("3_ifhvu")
 
 [node name="ProblemSelector" type="PanelContainer"]
-material = SubResource("ShaderMaterial_p05i4")
+material = ExtResource("1_7ln54")
 offset_right = 12.0
 offset_bottom = 12.0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_qxe7s")
@@ -54,7 +38,7 @@ use_parent_material = true
 layout_mode = 2
 
 [node name="Index" type="Label" parent="HBoxContainer"]
-custom_minimum_size = Vector2(24, 2.08165e-12)
+custom_minimum_size = Vector2(16, 2.08165e-12)
 layout_mode = 2
 theme_override_font_sizes/font_size = 15
 text = "1"
@@ -70,7 +54,8 @@ use_parent_material = true
 layout_mode = 2
 
 [node name="Equation" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("2_v0r42")]
-material = SubResource("ShaderMaterial_yl85d")
+material = SubResource("ShaderMaterial_n1bsj")
+custom_minimum_size = Vector2(140.001, 21)
 layout_mode = 2
 
 [node name="Play" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("2_yg01j")]
@@ -84,7 +69,7 @@ icon_use_parent_material = true
 action_mode = 1
 
 [node name="Tooltip" parent="HBoxContainer/PanelContainer/HBoxContainer/Play" instance=ExtResource("4_c7up8")]
-tooltip = "Resume"
+tooltip = "Play"
 
 [node name="Delete" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("2_yg01j")]
 material = null
@@ -118,14 +103,14 @@ layout_mode = 2
 theme_override_constants/separation = -6
 
 [node name="Up" parent="HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer" instance=ExtResource("2_yg01j")]
-material = SubResource("ShaderMaterial_jmc82")
+material = SubResource("ShaderMaterial_ub1lb")
 layout_mode = 2
 icon = ExtResource("9_38yb2")
 minimum_size = Vector2(19, 15)
 icon_use_parent_material = true
 
 [node name="Down" parent="HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer" instance=ExtResource("2_yg01j")]
-material = SubResource("ShaderMaterial_km5r2")
+material = SubResource("ShaderMaterial_nbp06")
 layout_mode = 2
 icon = ExtResource("10_r0lbv")
 minimum_size = Vector2(19, 15)

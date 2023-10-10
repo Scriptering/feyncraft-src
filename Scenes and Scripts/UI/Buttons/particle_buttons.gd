@@ -37,7 +37,10 @@ func clear_button_group() -> void:
 
 func disable_buttons(disable: bool, disabled_particles: Array = GLOBALS.Particle.values()) -> void:
 	for particle_button in particle_buttons:
-		particle_button.disabled = disable and particle_button.particle in disabled_particles
+		if particle_button.particle not in disabled_particles:
+			continue
+		
+		particle_button.disabled = disable
 
 func toggle_button_mute(mute: bool) -> void:
 	for particle_button in particle_buttons:

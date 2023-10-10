@@ -38,8 +38,8 @@ func create_new_item() -> void:
 	load_item()
 
 func _item_deleted(item: ListItem) -> void:
-	ItemContainer.remove_child(item)
 	items_data.remove_at(get_items().find(item))
+	item.queue_free()
 
 func get_items() -> Array[ListItem]:
 	var items: Array[ListItem] = []

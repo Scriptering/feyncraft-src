@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="A Game of Feynman Diagrams"
-run/main_scene="res://Scenes and Scripts/Levels/world.tscn"
+run/main_scene="res://Scenes and Scripts/UI/Menus/MainMenu/main_menu.tscn"
 config/features=PackedStringArray("4.1")
 config/icon="res://icon.png"
 

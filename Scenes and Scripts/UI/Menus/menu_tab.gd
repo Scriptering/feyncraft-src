@@ -1,5 +1,7 @@
 extends PullOutTab
 
+signal exit_pressed
+
 @onready var exit: PanelContainer = $MovingContainer/ContentContainer/HBoxContainer/Exit
 @onready var mute: PanelContainer = $MovingContainer/ContentContainer/HBoxContainer/Mute
 @onready var palettes: PanelContainer = $MovingContainer/ContentContainer/HBoxContainer/Palettes
@@ -14,7 +16,7 @@ func init() -> void:
 	EVENTBUS.add_floating_menu(palette_menu)
 	
 func _on_exit_pressed() -> void:
-	pass # Replace with function body.
+	exit_pressed.emit()
 
 func toggle_palette_menu(toggle: bool) -> void:
 	if !toggle:

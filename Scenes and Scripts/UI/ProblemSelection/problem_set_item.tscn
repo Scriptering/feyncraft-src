@@ -1,5 +1,6 @@
 [gd_scene load_steps=20 format=3 uid="uid://b6go021ha3ocr"]
 
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_b04gi"]
 [ext_resource type="StyleBox" uid="uid://dvu7f5h7snggp" path="res://Scenes and Scripts/UI/Menus/panelContainer.tres" id="1_g4bto"]
 [ext_resource type="FontFile" uid="uid://dohkbu7ekkfx8" path="res://Textures/Fonts/pixeltype/Pixeltype.ttf" id="1_qnpxi"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/ProblemSelection/problem_set_item.gd" id="3_1cbyy"]
@@ -11,22 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://d16opu3dyhri7" path="res://Textures/Buttons/eye/eye_open.png" id="7_f5yhf"]
 [ext_resource type="PackedScene" uid="uid://7kmcsryae7lw" path="res://Scenes and Scripts/UI/Buttons/load_button.tscn" id="10_6kia2"]
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="11_l46c8"]
-
-[sub_resource type="Shader" id="Shader_tmadl"]
-code = "shader_type canvas_item;
-
-global uniform sampler2D colour_scheme: filter_nearest;
-uniform float alpha: hint_range(0.0, 1.0);
-
-void fragment() {
-	vec4 color = texture(TEXTURE, UV);
-	COLOR = vec4(texture(colour_scheme, vec2(color.r, color.g)).rgb, color.a * alpha);
-}
-"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_p05i4"]
-resource_local_to_scene = true
-shader = SubResource("Shader_tmadl")
+[ext_resource type="Texture2D" uid="uid://qxw17ji0dvra" path="res://Textures/Buttons/icons/share.png" id="13_4yitn"]
 
 [sub_resource type="FontVariation" id="FontVariation_5o2co"]
 base_font = ExtResource("1_qnpxi")
@@ -45,12 +31,12 @@ LineEdit/styles/read_only = SubResource("StyleBoxEmpty_0snhi")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qxe7s"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_u7x02"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_56xsh"]
 resource_local_to_scene = true
 shader = ExtResource("11_l46c8")
 
 [node name="ProblemSetItem" type="PanelContainer"]
-material = SubResource("ShaderMaterial_p05i4")
+material = ExtResource("1_b04gi")
 offset_right = 12.0
 offset_bottom = 12.0
 theme = SubResource("Theme_kr54n")
@@ -62,10 +48,10 @@ use_parent_material = true
 layout_mode = 2
 
 [node name="Index" type="Label" parent="HBoxContainer"]
-custom_minimum_size = Vector2(24, 2.08165e-12)
+custom_minimum_size = Vector2(16, 2.08165e-12)
 layout_mode = 2
 theme_override_font_sizes/font_size = 15
-text = "1"
+text = "99"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -81,6 +67,7 @@ layout_mode = 2
 use_parent_material = true
 custom_minimum_size = Vector2(100, 2.08165e-12)
 layout_mode = 2
+theme_override_font_sizes/font_size = 12
 placeholder_text = "[Enter Title]"
 alignment = 1
 max_length = 18
@@ -126,9 +113,10 @@ action_mode = 1
 tooltip = "Delete"
 
 [node name="Upload" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("10_6kia2")]
-material = SubResource("ShaderMaterial_u7x02")
+material = SubResource("ShaderMaterial_56xsh")
 layout_mode = 2
 mode = 1
+icon = ExtResource("13_4yitn")
 minimum_size = Vector2(22, 22)
 expand_icon = true
 flip_icon_v = false
@@ -136,10 +124,10 @@ flip_icon_v = false
 [node name="IndexLabel" type="Label" parent="HBoxContainer/PanelContainer/HBoxContainer"]
 custom_minimum_size = Vector2(32, 2.08165e-12)
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 9
 text = "0/0"
 horizontal_alignment = 1
-vertical_alignment = 2
+vertical_alignment = 1
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

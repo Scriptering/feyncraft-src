@@ -11,7 +11,7 @@
 [sub_resource type="FontVariation" id="FontVariation_4qjko"]
 base_font = ExtResource("3_sos4g")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_tow58"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o5773"]
 resource_local_to_scene = true
 shader = ExtResource("4_8p7ty")
 
@@ -56,7 +56,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="NextStep" parent="VBoxContainer/Buttons" instance=ExtResource("3_qv0n1")]
-material = SubResource("ShaderMaterial_tow58")
+material = SubResource("ShaderMaterial_o5773")
 layout_mode = 2
 icon = ExtResource("8_rm0tq")
 minimum_size = Vector2(24, 21)

@@ -6,6 +6,7 @@ signal closed
 func _ready() -> void:
 	tree_exited.connect(_on_tree_exited)
 	$PaletteList.load_error.connect(_on_load_error)
+	$PaletteList.selected_palette_deleted.connect(load_tea_stain)
 	
 	super._ready()
 	load_palettes()
@@ -16,10 +17,6 @@ func _on_close_pressed() -> void:
 	closed.emit()
 
 func load_palettes() -> void:
-	$PaletteList.load_palette("res://saves/Palettes/teastain.tres")
-	
-	for file_path in GLOBALS.get_files_in_folder(palette_file_path + 'Default/'):
-		$PaletteList.load_palette(file_path)
 	for file_path in GLOBALS.get_files_in_folder(palette_file_path + 'Custom/'):
 		$PaletteList.load_palette(file_path)
 

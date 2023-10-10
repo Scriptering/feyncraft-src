@@ -33,6 +33,10 @@ signal button_up
 	set(new_value):
 		flip_icon_h = new_value
 		$ContentContainer/HBoxContainer/ButtonIcon.flip_h = new_value
+@export var flat: bool = false:
+	set(new_value):
+		flat = new_value
+		get_node("Button").flat = flat
 
 @onready var button = $Button
 @onready var label = $ContentContainer/HBoxContainer/ButtonText
@@ -80,8 +84,9 @@ func _ready() -> void:
 			mouse_exited.emit()
 			button_mouse_exited.emit(self)
 	)
-
-	EVENTBUS.button_created(self)
+	
+	if EVENTBUS.has_method("button_created"):
+		EVENTBUS.button_created(self)
 
 func _set_icon_use_parent_material(new_value: bool) -> void:
 	icon_use_parent_material = new_value

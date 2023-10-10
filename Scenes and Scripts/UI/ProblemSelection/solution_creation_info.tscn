@@ -8,11 +8,11 @@
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="5_8fnwf"]
 [ext_resource type="Texture2D" uid="uid://bcu6ptkd3fwfe" path="res://Textures/Buttons/icons/submit.png" id="6_eyill"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_i4lt8"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t33hv"]
 resource_local_to_scene = true
 shader = ExtResource("3_ktptg")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_oefv5"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ll10t"]
 resource_local_to_scene = true
 shader = ExtResource("3_ktptg")
 
@@ -73,7 +73,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="PrevStep" parent="VBoxContainer/Buttons" instance=ExtResource("2_66fjv")]
-material = SubResource("ShaderMaterial_i4lt8")
+material = SubResource("ShaderMaterial_t33hv")
 layout_mode = 2
 icon = ExtResource("4_187qd")
 minimum_size = Vector2(24, 21)
@@ -83,7 +83,7 @@ icon_use_parent_material = true
 tooltip = "Previous Step"
 
 [node name="Submit" parent="VBoxContainer/Buttons" instance=ExtResource("2_66fjv")]
-material = SubResource("ShaderMaterial_oefv5")
+material = SubResource("ShaderMaterial_ll10t")
 layout_mode = 2
 icon = ExtResource("6_eyill")
 minimum_size = Vector2(22, 22)

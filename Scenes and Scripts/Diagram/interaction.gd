@@ -47,7 +47,7 @@ func _ready():
 	super._ready()
 	
 	show_information_box.connect(EVENTBUS.add_floating_menu)
-	request_deletion.connect(Diagram.delete_interaction)
+	request_deletion.connect(Diagram.recursive_delete_interaction)
 	
 	for line in Diagram.get_particle_lines():
 		if position in line.points and !line in connected_lines:
@@ -140,7 +140,7 @@ func update_interaction() -> void:
 		return
 		
 	elif should_request_deletion():
-		emit_signal("request_deletion", self)
+		request_deletion.emit(self)
 		return
 	update_dot_visual()
 	update_ball_hovering()

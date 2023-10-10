@@ -2,6 +2,8 @@ extends ListItem
 
 signal selected
 
+@export var palette: Palette = Palette.new()
+
 @onready var UseButton: PanelButton = $HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Use
 @onready var MoreColoursButton: PanelButton = $HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/More
 @onready var MoreColoursContainer: Container = $HBoxContainer/PanelContainer/VBoxContainer/MoreContainer
@@ -30,7 +32,6 @@ signal selected
 
 var file_path: String
 var is_selected: bool = false: set = _set_is_selected
-var palette: Palette = Palette.new()
 var main_colours: Array[Palette.ColourIndex] = [Palette.ColourIndex.Primary, Palette.ColourIndex.Grid, Palette.ColourIndex.Secondary]
 
 func _ready() -> void:

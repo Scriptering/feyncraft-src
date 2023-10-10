@@ -31,6 +31,7 @@ func enter_game() -> void:
 
 func _on_sandbox_pressed() -> void:
 	GLOBALS.load_mode = BaseMode.Mode.Sandbox
+	enter_game()
 
 func _on_palettes_toggled(button_pressed) -> void:
 	palette_control.visible = button_pressed

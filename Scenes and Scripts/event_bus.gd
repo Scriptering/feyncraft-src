@@ -5,6 +5,7 @@ signal signal_draw_raw_diagram
 signal signal_add_floating_menu
 signal signal_change_cursor
 signal signal_enter_game
+signal signal_exit_game(mode: BaseMode.Mode, created_problem: Problem)
 signal signal_change_palette(palette: ImageTexture)
 signal signal_diagram_action_taken
 signal signal_button_created(button: PanelButton)
@@ -25,8 +26,13 @@ func enter_game(mode: BaseMode.Mode, problem_set: ProblemSet = null, problem: Pr
 	GLOBALS.load_mode = mode
 	GLOBALS.load_problem_set = problem_set
 	GLOBALS.creating_problem = problem
+	GLOBALS.in_main_menu = false
 	
 	signal_enter_game.emit()
+
+func exit_game(mode: BaseMode.Mode, problem: Problem = null) -> void:
+	GLOBALS.in_main_menu = true
+	signal_exit_game.emit(mode, problem)
 
 func change_palette(palette: ImageTexture) -> void:
 	signal_change_palette.emit(palette)

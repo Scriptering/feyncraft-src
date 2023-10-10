@@ -103,7 +103,7 @@ func _ready():
 	
 	update_line()
 
-#	Text.visible = true
+	Text.visible = !GLOBALS.in_main_menu
 	
 	connect_to_interactions()
 

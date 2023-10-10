@@ -1,6 +1,7 @@
 extends PanelContainer
 
 signal load_error
+signal selected_palette_deleted
 
 @export var Item: PackedScene
 @export var ItemContainer: BoxContainer
@@ -43,8 +44,11 @@ func _item_deleted(item: ListItem) -> void:
 	var deleted_path: String = item.file_path
 	GLOBALS.delete_file(deleted_path)
 	
-	ItemContainer.remove_child(item)
 	items_data.remove_at(get_items().find(item))
+	item.queue_free()
+	
+	if item.is_selected:
+		selected_palette_deleted.emit()
 
 func get_items() -> Array[ListItem]:
 	var items: Array[ListItem] = []
@@ -71,9 +75,10 @@ func load_palette(palette_path: String) -> void:
 	var new_palette: ListItem = preload("res://Scenes and Scripts/UI/ColourPicker/palette_list_item.tscn").instantiate()
 	new_palette.file_path = palette_path
 	
-	var palette: Palette = GLOBALS.load_data(palette_path)
+	var palette: Palette = GLOBALS.load(palette_path)
+#	var palette: Palette = GLOBALS.load_data(palette_path)
 	if palette:
-		load_item(GLOBALS.load_data(palette_path), new_palette)
+		load_item(palette, new_palette)
 	else:
 		new_palette.queue_free()
 		GLOBALS.delete_file(palette_path)
@@ -83,8 +88,10 @@ func save_palettes() -> void:
 	for palette in get_items():
 		if !palette.palette.is_custom:
 			continue
+		
+		GLOBALS.save(palette.palette, palette.file_path)
 
-		GLOBALS.save_data(palette.palette, palette.file_path)
+#		GLOBALS.save_data(palette.palette, palette.file_path)
 	
 func create_new_palette(palette_path: String) -> void:
 	var new_palette: ListItem = Item.instantiate()

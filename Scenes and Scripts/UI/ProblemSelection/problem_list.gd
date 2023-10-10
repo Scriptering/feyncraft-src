@@ -11,11 +11,12 @@ var problem_set: ProblemSet
 
 func _ready() -> void:
 	problem_played.connect(EVENTBUS.enter_game)
+	$VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer.get_v_scroll_bar().use_parent_material = true
 	
 func load_problem_set(_problem_set: ProblemSet) -> void:
 	problem_set = _problem_set
 	
-	$VBoxContainer/HBoxContainer/Title.text = problem_set.title
+	$VBoxContainer/TitleContainer/HBoxContainer/Title.text = problem_set.title
 	
 	clear_problems()
 	
@@ -31,11 +32,10 @@ func clear_problems() -> void:
 func add_problem(problem: Problem, is_custom: bool = false) -> void:
 	var problem_select: PanelContainer = ProblemSelector.instantiate()
 	
-	problem_set.problems.push_back(problem)
-	
 	problem_select.move.connect(_problem_moved)
 	problem_select.deleted.connect(_problem_deleted)
 	problem_select.play.connect(play_problem)
+	problem_select.modify.connect(_problem_modified)
 	
 	problem_select.toggle_edit_visiblity(problem_set.is_custom)
 	
@@ -53,8 +53,13 @@ func update() -> void:
 		problem.update()
 
 func update_index_labels() -> void:
+	var index: int = 0
 	for i in range(problem_container.get_child_count()):
-		problem_container.get_child(i).set_index(i)
+		if problem_container.get_child(i).is_queued_for_deletion():
+			continue
+		
+		problem_container.get_child(i).set_index(index)
+		index += 1
 
 func _problem_moved(problem_select: PanelContainer, index_change: int) -> void:
 	var current_index: int = problem_container.get_children().find(problem_select)
@@ -71,13 +76,14 @@ func _problem_moved(problem_select: PanelContainer, index_change: int) -> void:
 func _problem_deleted(problem_select: PanelContainer) -> void:
 	var index: int = problem_container.get_children().find(problem_select)
 	
-	problem_container.remove_child(problem_select)
 	problem_set.problems.remove_at(index)
+	problem_select.queue_free()
 	
 	update_index_labels()
 
 func create_problem() -> void:
 	var problem: Problem = Problem.new()
+	problem_set.problems.push_back(problem)
 	add_problem(problem, true)
 
 func _on_add_problem_pressed() -> void:
@@ -88,3 +94,6 @@ func play_problem(problem: Problem) -> void:
 
 func _on_back_pressed() -> void:
 	back.emit()
+
+func _problem_modified(problem_item) -> void:
+	EVENTBUS.enter_game(BaseMode.Mode.ParticleSelection, problem_set, problem_item.problem)

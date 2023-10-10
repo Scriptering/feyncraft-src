@@ -10,10 +10,16 @@ enum Mode {Load, Upload}
 @export var mode: Mode = Mode.Load:
 	set(new_value):
 		mode = new_value
-		self.flip_icon_v = mode == Mode.Load
+		
+		icon = icon_dict[mode]
 
 var LoadPanel : PackedScene = preload("res://Scenes and Scripts/UI/load_box.tscn")
 var load_panel: GrabbableControl
+
+var icon_dict: Dictionary = {
+	Mode.Load: preload("res://Textures/Buttons/icons/load.png"),
+	Mode.Upload: preload("res://Textures/Buttons/icons/share.png")
+}
 
 func _ready() -> void:
 	super._ready()

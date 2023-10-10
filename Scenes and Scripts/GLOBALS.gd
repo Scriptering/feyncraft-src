@@ -5,6 +5,7 @@ enum COLOURS {primary, secondary, pencil, primary_highlight, invalid, invalid_hi
 
 enum Vision {Colour, Shade, Strength, None}
 
+var in_main_menu: bool = true
 var load_mode: BaseMode.Mode = BaseMode.Mode.Sandbox
 var creating_problem: Problem = Problem.new()
 var load_problem_set: ProblemSet = ProblemSet.new()
@@ -507,7 +508,7 @@ func _ready():
 				if file_name.ends_with('.png'):
 					PARTICLE_TEXTURES[file_name.trim_suffix('.png')] = ResourceLoader.load(folder_path + file_name)
 
-func get_unique_file_name(folder_path: String, suffix: String = '.tres') -> String:
+func get_unique_file_name(folder_path: String, suffix: String = '.txt') -> String:
 	var random_hex : String = "%x" % (randi() % 4095)
 	
 	var files: Array[String] = get_files_in_folder(folder_path)
@@ -529,22 +530,34 @@ func create_text_file(data: String, path: String) -> void:
 	create_file(path)
 	
 	var file: FileAccess = FileAccess.open(path, FileAccess.WRITE)
-	file.store_string(data)
-	file = null
+	file.store_var(data)
+	file.close()
 
 func get_resource_save_data(resource: Resource) -> String:
-	save_data(resource, "res://saves/temp_save.tres")
-	
-	return FileAccess.open("res://saves/temp_save.tres", FileAccess.READ).get_as_text()
+	return var_to_str(resource)
 
 func save_data(data: Resource, path: String = "res://saves/") -> Error:
-	return ResourceSaver.save(data, path, ResourceSaver.FLAG_BUNDLE_RESOURCES)
+	return ResourceSaver.save(data, path)
 
 func load_data(path: String) -> Resource:
 	if ResourceLoader.exists(path):
 		return ResourceLoader.load(path)
 	
 	return null
+
+func save(p_obj: Resource, p_path: String) -> void:
+	var file = FileAccess.open(p_path, FileAccess.WRITE)
+	
+	if !file: return
+	
+	file.store_var(var_to_str(p_obj))
+	file.close()
+
+func load(p_path: String) -> Resource:
+	var file = FileAccess.open(p_path, FileAccess.READ)
+	var obj: Resource = str_to_var(file.get_var())
+	file.close()
+	return obj
 
 func delete_file(path: String) -> Error:
 	return DirAccess.remove_absolute(path)

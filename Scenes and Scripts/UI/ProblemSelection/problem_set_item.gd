@@ -6,6 +6,11 @@ signal play
 
 var problem_set: ProblemSet
 var file_path: String
+var is_custom: bool
+
+func _ready() -> void:
+	toggle_edit_visibility(problem_set.is_custom)
+	update()
 
 func toggle_edit_visibility(can_edit: bool) -> void:
 	$HBoxContainer/PanelContainer/HBoxContainer/Title.editable = can_edit
@@ -29,6 +34,8 @@ func update() -> void:
 	
 	$HBoxContainer/PanelContainer/HBoxContainer/Play.disabled = no_problems
 	$HBoxContainer/PanelContainer/HBoxContainer/Upload.disabled = no_problems
+	
+	update_problem_index()
 
 func _on_delete_pressed() -> void:
 	deleted.emit(self)

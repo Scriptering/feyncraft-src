@@ -67,10 +67,6 @@ func _ready():
 	$Algorithms/ProblemGeneration.init($Algorithms/SolutionGeneration)
 	
 	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
-	
-	await get_tree().process_frame
-	
-	load_problem($Algorithms/ProblemGeneration.generate(true))
 
 func _process(_delta):
 	FPS.text = str(Engine.get_frames_per_second())
@@ -133,9 +129,15 @@ func exit_problem_creation() -> void:
 	for state in [StateLine.StateType.Initial, StateLine.StateType.Final]:
 		GLOBALS.creating_problem.state_interactions[state] = drawn_diagram.get_state_interactions(state)
 	
-	ProblemTab.load_new_problem(GLOBALS.creating_problem, false)
+	ProblemTab.load_problem(GLOBALS.creating_problem, false)
 
 func exit_solution_creation() -> void:
 	return
 
+func exit() -> void:
+	mode_exit_funcs[current_mode].call()
+	get_tree().change_scene_to_file("res://Scenes and Scripts/UI/Menus/MainMenu/main_menu.tscn")
+	EVENTBUS.signal_exit_game.emit()
 
+func _on_creation_information_submit_problem() -> void:
+	exit()
