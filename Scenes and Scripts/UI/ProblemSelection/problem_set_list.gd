@@ -1,6 +1,6 @@
 extends PanelContainer
 
-signal enter_problem_set(problem_set: ProblemSet)
+signal enter_problem_set(problem_set: ProblemSet, problem_set_file_path: String)
 signal play_problem_set(mode, problem_set, problem)
 signal close
 
@@ -62,7 +62,8 @@ func update_problem_sets() -> void:
 
 func _problem_set_deleted(problem_set_item: PanelContainer) -> void:
 	var index: int = problem_container.get_children().find(problem_set_item)
-	
+	GLOBALS.delete_file(problem_set_item.file_path)
+
 	problem_sets.remove_at(index)
 	problem_set_item.queue_free()
 	
@@ -77,7 +78,7 @@ func _on_add_problem_set_pressed() -> void:
 	create_new_problem_set(GLOBALS.get_unique_file_name(problem_set_file_path + "Custom/"))
 
 func _problem_set_viewed(problem_set_item: PanelContainer) -> void:
-	enter_problem_set.emit(problem_set_item.problem_set)
+	enter_problem_set.emit(problem_set_item.problem_set, problem_set_item.file_path)
 
 func _problem_set_resumed(problem_set: ProblemSet) -> void:
 	play_problem_set.emit(BaseMode.Mode.ProblemSolving, problem_set, problem_set.problems[problem_set.highest_index_reached])

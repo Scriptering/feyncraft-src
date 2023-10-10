@@ -54,6 +54,8 @@ func _ready():
 		func(menu: Node): $FloatingMenus.add_child(menu)
 	)
 	
+	MenuTab.exit_pressed.connect(exit_to_main_menu)
+	
 	MenuTab.init()
 	CreationInformation.init($Diagram, self)
 	States.init($Diagram, $PullOutTabs/ControlsTab)
@@ -79,8 +81,11 @@ func load_problem(problem: Problem) -> void:
 	ProblemTab.load_problem(problem)
 	ParticleButtons.load_problem(problem)
 
-func load_problem_set(problem_set: ProblemSet) -> void:
-	$Diagram.load_problem_set(problem_set)
+func load_problem_set(p_problem_set: ProblemSet) -> void:
+	problem_set = p_problem_set
+	problem_set.end_reached.connect(_on_problem_set_end_reached)
+	problem_set.current_index = problem_set.problems.find(GLOBALS.creating_problem)
+	load_problem(GLOBALS.creating_problem)
 
 func enter_particle_selection() -> void:
 	ParticleButtons.show()
@@ -105,6 +110,10 @@ func enter_problem_solving() -> void:
 	GenerationTab.hide()
 	ProblemTab.show()
 	VisionTab.show()
+	
+	await ready
+	
+	load_problem_set(GLOBALS.load_problem_set)
 
 func enter_problem_creation() -> void:
 	ParticleButtons.show()
@@ -134,10 +143,16 @@ func exit_problem_creation() -> void:
 func exit_solution_creation() -> void:
 	return
 
-func exit() -> void:
-	mode_exit_funcs[current_mode].call()
-	get_tree().change_scene_to_file("res://Scenes and Scripts/UI/Menus/MainMenu/main_menu.tscn")
-	EVENTBUS.signal_exit_game.emit()
-
 func _on_creation_information_submit_problem() -> void:
-	exit()
+	save_creating_problem_set()
+	exit_to_main_menu()
+
+func exit_to_main_menu() -> void:
+	mode_exit_funcs[current_mode].call()
+	EVENTBUS.exit_game(current_mode, GLOBALS.creating_problem)
+
+func save_creating_problem_set() -> void:
+	GLOBALS.save(GLOBALS.load_problem_set, GLOBALS.creating_problem_set_file)
+
+func _on_problem_set_end_reached() -> void:
+	exit_to_main_menu()

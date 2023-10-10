@@ -15,6 +15,7 @@ func _ready():
 	EVENTBUS.signal_add_floating_menu.connect(
 		func(menu: Node): $FloatingMenus.add_child(menu)
 	)
+	EVENTBUS.signal_exit_game.connect(_on_exit_game)
 	
 	MenuTab.init()
 	palette_control.closed.connect(_on_palette_control_closed)
@@ -30,8 +31,7 @@ func enter_game() -> void:
 	get_tree().change_scene_to_packed(level)
 
 func _on_sandbox_pressed() -> void:
-	GLOBALS.load_mode = BaseMode.Mode.Sandbox
-	enter_game()
+	EVENTBUS.enter_game(BaseMode.Mode.Sandbox)
 
 func _on_palettes_toggled(button_pressed) -> void:
 	palette_control.visible = button_pressed
@@ -49,3 +49,5 @@ func _on_palette_control_closed() -> void:
 func _on_problem_selection_closed() -> void:
 	$Center/VBoxContainer/ProblemSets.button_pressed = false
 
+func _on_exit_game(mode: BaseMode.Mode, problem: Problem) -> void:
+	return

@@ -23,19 +23,19 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f2w4s"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0qomm"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_474g6"]
 resource_local_to_scene = true
 shader = ExtResource("9_3cb6c")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_lnkjb"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ty35u"]
 resource_local_to_scene = true
 shader = ExtResource("9_3cb6c")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_yy8q3"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dnf7i"]
 resource_local_to_scene = true
 shader = ExtResource("9_3cb6c")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_mx41i"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m0x08"]
 resource_local_to_scene = true
 shader = ExtResource("9_3cb6c")
 
@@ -107,6 +107,7 @@ context_menu_enabled = false
 virtual_keyboard_enabled = false
 wrap_mode = 1
 scroll_smooth = true
+caret_blink = true
 script = ExtResource("5_tjbbc")
 
 [node name="PopUp" type="Label" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/PanelContainer"]
@@ -130,7 +131,7 @@ layout_mode = 2
 size_flags_horizontal = 2
 
 [node name="Close" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HBoxContainer" instance=ExtResource("8_eom8q")]
-material = SubResource("ShaderMaterial_0qomm")
+material = SubResource("ShaderMaterial_474g6")
 layout_mode = 2
 icon = ExtResource("11_rg5fn")
 minimum_size = Vector2(24, 24)
@@ -141,7 +142,7 @@ icon_use_parent_material = true
 tooltip = "Close"
 
 [node name="Copy" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("8_eom8q")]
-material = SubResource("ShaderMaterial_lnkjb")
+material = SubResource("ShaderMaterial_ty35u")
 layout_mode = 2
 icon = ExtResource("10_wm7fa")
 minimum_size = Vector2(24, 24)
@@ -152,7 +153,7 @@ icon_use_parent_material = true
 tooltip = "Copy"
 
 [node name="Paste" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("8_eom8q")]
-material = SubResource("ShaderMaterial_yy8q3")
+material = SubResource("ShaderMaterial_dnf7i")
 layout_mode = 2
 icon = ExtResource("11_ne5rf")
 minimum_size = Vector2(24, 24)
@@ -169,7 +170,7 @@ size_flags_horizontal = 3
 alignment = 2
 
 [node name="Submit" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/SubmitContainer" instance=ExtResource("8_eom8q")]
-material = SubResource("ShaderMaterial_mx41i")
+material = SubResource("ShaderMaterial_m0x08")
 layout_mode = 2
 icon = ExtResource("12_buvla")
 minimum_size = Vector2(24, 24)

@@ -25,10 +25,12 @@ func _ready() -> void:
 			Text.editable = true
 			Title.text = 'Load'
 			copy.hide()
+
 		Mode.Upload:
 			Text.editable = false
-			Title.text = 'Upload'
+			Title.text = 'Share'
 			paste.hide()
+			submit.hide()
 
 func _on_text_edit_child_entered_tree(node: Node) -> void:
 	if node is ScrollBar:

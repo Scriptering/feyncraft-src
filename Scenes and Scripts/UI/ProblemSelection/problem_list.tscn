@@ -13,7 +13,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vw46e"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ys6ns"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3avtl"]
 resource_local_to_scene = true
 shader = ExtResource("4_sya5g")
 
@@ -59,7 +59,7 @@ size_flags_horizontal = 3
 layout_mode = 2
 
 [node name="AddProblem" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_tav84")]
-material = SubResource("ShaderMaterial_ys6ns")
+material = SubResource("ShaderMaterial_3avtl")
 layout_mode = 2
 icon = ExtResource("5_6tky2")
 minimum_size = Vector2(154, 28)

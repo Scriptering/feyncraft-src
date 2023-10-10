@@ -8,13 +8,15 @@ var ProblemSelector: PackedScene = preload("res://Scenes and Scripts/UI/ProblemS
 @onready var problem_container: VBoxContainer = $VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/ProblemContainer
 
 var problem_set: ProblemSet
+var problem_set_file: String
 
 func _ready() -> void:
 	problem_played.connect(EVENTBUS.enter_game)
 	$VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer.get_v_scroll_bar().use_parent_material = true
 	
-func load_problem_set(_problem_set: ProblemSet) -> void:
+func load_problem_set(_problem_set: ProblemSet, p_problem_set_file_path: String) -> void:
 	problem_set = _problem_set
+	problem_set_file = p_problem_set_file_path
 	
 	$VBoxContainer/TitleContainer/HBoxContainer/Title.text = problem_set.title
 	
@@ -96,4 +98,4 @@ func _on_back_pressed() -> void:
 	back.emit()
 
 func _problem_modified(problem_item) -> void:
-	EVENTBUS.enter_game(BaseMode.Mode.ParticleSelection, problem_set, problem_item.problem)
+	EVENTBUS.enter_game(BaseMode.Mode.ParticleSelection, problem_set, problem_item.problem, problem_set_file)

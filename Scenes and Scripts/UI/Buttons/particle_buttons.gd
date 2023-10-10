@@ -69,7 +69,8 @@ func get_toggled_particles(toggled: bool) -> Array[GLOBALS.Particle]:
 	return toggled_particles
 
 func load_problem(problem: Problem) -> void:
-	disable_buttons(true, problem.allowed_particles)
+	disable_buttons(true)
+	disable_buttons(false, problem.allowed_particles)
 
 func toggle_buttons(button_pressed: bool, particles: Array = GLOBALS.Particle.values()) -> void:
 	for particle_button in particle_buttons:

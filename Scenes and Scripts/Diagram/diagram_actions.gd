@@ -77,6 +77,7 @@ func _crosshair_moved(_new_position: Vector2, _old_position: Vector2) -> void:
 
 func load_problem(problem: Problem) -> void:
 	clear_diagram()
+	
 	set_title(problem.title)
 
 func are_quantum_numbers_matching(ignore_weak_quantum_numbers: bool = true) -> bool:
@@ -91,7 +92,6 @@ func are_quantum_numbers_matching(ignore_weak_quantum_numbers: bool = true) -> b
 			return false
 	
 	return true
-	
 
 func convert_path_colours(path_colours: Array, vision: GLOBALS.Vision) -> Array[Color]:
 	var path_colors: Array[Color] = []
@@ -683,4 +683,8 @@ func _on_mouse_exited() -> void:
 	hovering = false
 
 func set_title(text: String) -> void:
+	$Title.visible = text != ''
 	$Title.text = text
+
+func _on_title_text_submitted(new_text: String) -> void:
+	GLOBALS.creating_problem.title = new_text

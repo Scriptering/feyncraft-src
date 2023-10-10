@@ -43,6 +43,8 @@ func _ready() -> void:
 	set_buttons_disabled(!palette.is_custom)
 	update_button_colours(true)
 	set_custom_button_visibility()
+	$HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Title.text = palette.title
+	
 
 func _on_more_toggled(button_pressed: bool) -> void:
 	toggle_more_colours(button_pressed)

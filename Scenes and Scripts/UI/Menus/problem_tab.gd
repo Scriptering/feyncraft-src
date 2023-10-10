@@ -6,16 +6,13 @@ signal submit_pressed
 
 @onready var Equation : PanelContainer = $MovingContainer/VBoxContainer/Tab/HBoxContainer/Equation
 @onready var SubmissionFeedback : PullOutTab = $MovingContainer/SubmitFeedback
-@onready var DiagramNotValid : Control = $MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/DiagramNotValid
-@onready var DiagramNotConnected : Control = (
-	$MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/DiagramNotConnected
-)
 @onready var DiagramDuplicate : Control = $MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/DuplicateDiagram
 @onready var DiagramSubmitted : Control = $MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/DiagramSubmitted
 @onready var DiagramNotSolution : Control = $MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/DiagramNotSolution
 
 var Diagram: MainDiagram
-var current_problem: Problem
+var current_problem: Problem:
+	set(new_value): current_problem = new_value
 var SubmittedDiagramViewer: MiniDiagramViewer
 var ProblemGeneration: Node
 var SolutionGeneration: Node
@@ -35,7 +32,6 @@ func init(
 	ProblemGeneration = problem_generation
 	SolutionGeneration = _solution_generation
 
-	
 func _on_submit_pressed() -> void:
 	submit_diagram()
 	submit_pressed.emit()
@@ -46,41 +42,28 @@ func submitted_diagram_deleted(index: int) -> void:
 	update_view_submission_button()
 
 func check_submission(submission: DrawingMatrix) -> bool:
-	var diagram_is_valid: bool = true
-	
 	for child in $MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer.get_children():
 		child.hide()
-	
-	if !Diagram.is_valid():
-		DiagramNotValid.show()
-		diagram_is_valid = false
-	
-	if !Diagram.is_fully_connected(true):
-		DiagramNotConnected.show()
-		diagram_is_valid = false
 
 	if current_problem.is_submission_duplicate(submission):
 		DiagramDuplicate.show()
-		diagram_is_valid = false
+		return false
 	
 	if !current_problem.is_submission_solution(submission):
 		DiagramNotSolution.show()
-		diagram_is_valid = false
+		return false
 	
-	if diagram_is_valid:
-		DiagramSubmitted.show()
-	
-	SubmissionFeedback.pull_out()
-	
-	return diagram_is_valid
+	DiagramSubmitted.show()
+	return true
 
 func update_view_submission_button() -> void:
 	$MovingContainer/VBoxContainer/Tab/HBoxContainer/ViewSubmissions.disabled = current_problem.submitted_diagrams.size() == 0
 
 func submit_diagram() -> void:
 	var submission: DrawingMatrix = Diagram.generate_drawing_matrix_from_diagram()
-	
-	if !check_submission(submission):
+	var submission_valid: bool = check_submission(submission)
+	SubmissionFeedback.pull_out()
+	if !submission_valid:
 		return
 	
 	current_problem.submit_diagram(submission)

@@ -16,11 +16,11 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dbgr6"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_sdkmk"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n8yxc"]
 resource_local_to_scene = true
 shader = ExtResource("2_ecomh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_32or2"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g0yoy"]
 resource_local_to_scene = true
 shader = ExtResource("2_ecomh")
 
@@ -74,7 +74,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="AddProblemSet" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer" instance=ExtResource("1_tgmdf")]
-material = SubResource("ShaderMaterial_sdkmk")
+material = SubResource("ShaderMaterial_n8yxc")
 layout_mode = 2
 size_flags_horizontal = 1
 icon = ExtResource("3_fyqnn")
@@ -83,7 +83,7 @@ icon_use_parent_material = true
 action_mode = 1
 
 [node name="LoadButton" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer" instance=ExtResource("7_sjfsr")]
-material = SubResource("ShaderMaterial_32or2")
+material = SubResource("ShaderMaterial_g0yoy")
 layout_mode = 2
 icon = ExtResource("7_jqou4")
 minimum_size = Vector2(70, 28)

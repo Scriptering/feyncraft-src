@@ -8,7 +8,10 @@ enum Vision {Colour, Shade, Strength, None}
 var in_main_menu: bool = true
 var load_mode: BaseMode.Mode = BaseMode.Mode.Sandbox
 var creating_problem: Problem = Problem.new()
+var creating_problem_set_file: String = ''
 var load_problem_set: ProblemSet = ProblemSet.new()
+var problem_selection_menu_position: Vector2
+var problem_selection_menu_showing: bool
 
 #0 photon, 1 gluon, 2 Z, 3 H, 4 W,
 #5 lepton, 6 electron, 7 muon, 8 tau,

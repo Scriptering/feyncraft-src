@@ -20,27 +20,27 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c01uu"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fcict"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f47k7"]
 resource_local_to_scene = true
 shader = ExtResource("6_gw1gk")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ohwx1"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7nlfp"]
 resource_local_to_scene = true
 shader = ExtResource("6_gw1gk")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_b2oot"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vwm8g"]
 resource_local_to_scene = true
 shader = ExtResource("6_gw1gk")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_mtskt"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_76ucm"]
 resource_local_to_scene = true
 shader = ExtResource("6_gw1gk")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_p52lj"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ws3u8"]
 resource_local_to_scene = true
 shader = ExtResource("6_gw1gk")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gu18l"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_22yw3"]
 resource_local_to_scene = true
 shader = ExtResource("6_gw1gk")
 
@@ -118,22 +118,22 @@ layout_mode = 2
 theme_override_constants/separation = 2
 
 [node name="TeaStain" parent="PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/ItemContainer" instance=ExtResource("4_t1lxn")]
-material = SubResource("ShaderMaterial_fcict")
+material = SubResource("ShaderMaterial_f47k7")
 layout_mode = 2
 palette = ExtResource("6_1gq2f")
 
 [node name="GameBoy" parent="PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/ItemContainer" instance=ExtResource("4_t1lxn")]
-material = SubResource("ShaderMaterial_ohwx1")
+material = SubResource("ShaderMaterial_7nlfp")
 layout_mode = 2
 palette = ExtResource("7_gp7r5")
 
 [node name="Mushroom" parent="PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/ItemContainer" instance=ExtResource("4_t1lxn")]
-material = SubResource("ShaderMaterial_b2oot")
+material = SubResource("ShaderMaterial_vwm8g")
 layout_mode = 2
 palette = ExtResource("8_tcy7h")
 
 [node name="Halloween" parent="PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/ItemContainer" instance=ExtResource("4_t1lxn")]
-material = SubResource("ShaderMaterial_mtskt")
+material = SubResource("ShaderMaterial_76ucm")
 layout_mode = 2
 palette = ExtResource("9_2ti7g")
 
@@ -150,7 +150,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="AddProblem" parent="PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/HBoxContainer" instance=ExtResource("5_7aaw2")]
-material = SubResource("ShaderMaterial_p52lj")
+material = SubResource("ShaderMaterial_ws3u8")
 layout_mode = 2
 size_flags_horizontal = 1
 icon = ExtResource("7_bfw4j")
@@ -159,7 +159,7 @@ icon_use_parent_material = true
 action_mode = 1
 
 [node name="LoadButton" parent="PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/HBoxContainer" instance=ExtResource("8_sg02h")]
-material = SubResource("ShaderMaterial_gu18l")
+material = SubResource("ShaderMaterial_22yw3")
 layout_mode = 2
 minimum_size = Vector2(70, 28)
 

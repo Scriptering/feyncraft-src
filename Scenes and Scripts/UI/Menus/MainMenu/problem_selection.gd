@@ -7,11 +7,11 @@ signal closed
 @onready var ProblemSetList = $ProblemSetList
 @onready var ProblemList = $ProblemList
 
-func _on_problem_set_list_enter_problem_set(problem_set: ProblemSet) -> void:
-	enter_problem_set(problem_set)
+func _on_problem_set_list_enter_problem_set(problem_set: ProblemSet, problem_set_file_path: String) -> void:
+	enter_problem_set(problem_set, problem_set_file_path)
 
-func enter_problem_set(problem_set: ProblemSet) -> void:
-	ProblemList.load_problem_set(problem_set)
+func enter_problem_set(problem_set: ProblemSet, problem_set_file_path: String) -> void:
+	ProblemList.load_problem_set(problem_set, problem_set_file_path)
 	current_tab = Tab.ProblemList
 
 func _on_problem_list_back() -> void:
