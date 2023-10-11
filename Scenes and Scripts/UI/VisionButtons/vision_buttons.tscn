@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://cv6hlxtiukmtc"]
+[gd_scene load_steps=34 format=3 uid="uid://cv6hlxtiukmtc"]
 
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="1_eukm1"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/VisionButtons/vision_buttons.gd" id="1_hjucs"]
@@ -13,12 +13,15 @@
 [ext_resource type="Texture2D" uid="uid://s14bo7fcdam0" path="res://Textures/Buttons/square_normal.png" id="9_ve0wv"]
 [ext_resource type="Texture2D" uid="uid://d16opu3dyhri7" path="res://Textures/Buttons/eye/eye_open.png" id="10_qooab"]
 [ext_resource type="Texture2D" uid="uid://cea5mj3u65016" path="res://Textures/Buttons/square_pressed_active.png" id="10_vbxnf"]
+[ext_resource type="Texture2D" uid="uid://j0pea6e3gc0u" path="res://Textures/Buttons/eye/eye_blink1.png" id="14_rstfv"]
+[ext_resource type="Texture2D" uid="uid://dudgi4erunjq1" path="res://Textures/Buttons/eye/eye_middle.png" id="15_7sxog"]
+[ext_resource type="Texture2D" uid="uid://q0m86e7d8xik" path="res://Textures/Buttons/eye/eye_closed.png" id="16_ylmah"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8lupt"]
 resource_local_to_scene = true
 shader = ExtResource("1_eukm1")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_mmk50"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d5xgb"]
 resource_local_to_scene = true
 shader = ExtResource("1_eukm1")
 
@@ -30,7 +33,7 @@ texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 expand_margin_right = 10.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_lej2k"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u46ja"]
 resource_local_to_scene = true
 shader = ExtResource("1_eukm1")
 
@@ -78,14 +81,14 @@ Button/styles/pressed = SubResource("StyleBoxTexture_3hrye")
 [sub_resource type="ButtonGroup" id="ButtonGroup_l4fok"]
 allow_unpress = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_htwg4"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wue6l"]
 resource_local_to_scene = true
 shader = ExtResource("1_eukm1")
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_3sqjg"]
 allow_unpress = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8rxvs"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3ft5r"]
 resource_local_to_scene = true
 shader = ExtResource("1_eukm1")
 
@@ -94,11 +97,35 @@ allow_unpress = true
 
 [sub_resource type="Animation" id="Animation_2er6j"]
 length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MovingContainer/TabButton:TabIcon")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("10_qooab")]
+}
 
 [sub_resource type="Animation" id="Animation_nxemd"]
 resource_name = "blink"
 length = 0.14
 step = 0.02
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MovingContainer/TabButton:TabIcon")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.02, 0.1, 0.14),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("10_qooab"), ExtResource("14_rstfv"), ExtResource("15_7sxog"), ExtResource("16_ylmah")]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_5283d"]
 _data = {
@@ -126,7 +153,7 @@ offset_bottom = 40.0
 theme_override_constants/separation = 0
 
 [node name="TabButton" parent="MovingContainer" instance=ExtResource("3_08n6d")]
-material = SubResource("ShaderMaterial_mmk50")
+material = SubResource("ShaderMaterial_d5xgb")
 layout_mode = 2
 TabIcon = ExtResource("10_qooab")
 TabMinimumSize = Vector2(2.08165e-12, 22)
@@ -145,7 +172,7 @@ size_flags_horizontal = 8
 theme_override_constants/separation = -3
 
 [node name="Colour" parent="MovingContainer/Tab/ButtonContainer" instance=ExtResource("5_tinf7")]
-material = SubResource("ShaderMaterial_lej2k")
+material = SubResource("ShaderMaterial_u46ja")
 layout_mode = 2
 theme = SubResource("Theme_fuyn4")
 icon = ExtResource("6_v7snu")
@@ -155,7 +182,7 @@ expand_icon = true
 button_group = SubResource("ButtonGroup_l4fok")
 
 [node name="Shade" parent="MovingContainer/Tab/ButtonContainer" instance=ExtResource("5_tinf7")]
-material = SubResource("ShaderMaterial_htwg4")
+material = SubResource("ShaderMaterial_wue6l")
 layout_mode = 2
 theme = SubResource("Theme_fuyn4")
 icon = ExtResource("6_63enc")
@@ -165,7 +192,7 @@ expand_icon = true
 button_group = SubResource("ButtonGroup_3sqjg")
 
 [node name="Strength" parent="MovingContainer/Tab/ButtonContainer" instance=ExtResource("5_tinf7")]
-material = SubResource("ShaderMaterial_8rxvs")
+material = SubResource("ShaderMaterial_3ft5r")
 layout_mode = 2
 theme = SubResource("Theme_fuyn4")
 icon = ExtResource("7_nx8nj")

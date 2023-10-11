@@ -1,6 +1,8 @@
 class_name Problem
 extends Resource
 
+const LOWEST_ORDER: int = -1
+
 @export var limited_particles: bool = false
 @export var custom_solutions: bool = false
 @export var title: String = ''
@@ -8,6 +10,12 @@ extends Resource
 @export var solutions : Array[DrawingMatrix] = []
 @export var allowed_particles : Array[GLOBALS.Particle] = []
 @export var state_interactions : Array = [[], []]
+@export var degree : int = LOWEST_ORDER
+@export var solution_count : int = 0:
+	get:
+		if solutions.size() > 0:
+			return solutions.size()
+		return solution_count
 
 func is_submission_valid(submission: DrawingMatrix) -> bool:
 	if is_submission_duplicate(submission):

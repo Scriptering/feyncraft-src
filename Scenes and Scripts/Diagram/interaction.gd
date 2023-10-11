@@ -35,6 +35,7 @@ var connected_base_particles: Array[GLOBALS.Particle] : get = _get_connected_bas
 var connected_colour_lines: Array[ParticleLine] : get = _get_connected_colour_lines
 var connected_shade_lines: Array[ParticleLine] : get = _get_connected_shade_lines
 var dimensionality: float : get = _get_dimensionality
+var degree: int = 0 : get = _get_degree
 
 var information_visible: bool = false
 var information_box
@@ -119,6 +120,10 @@ func update_dot_visual() -> void:
 	if get_on_state_line() != StateLine.StateType.None:
 		Dot.frame = 1
 		Dot.visible = true
+		return
+	
+	if degree == 2:
+		Dot.frame = 2
 	else:
 		Dot.frame = 0
 
@@ -194,6 +199,16 @@ func _get_connected_base_particles() -> Array[GLOBALS.Particle]:
 	for line in connected_lines:
 		connected_base_particles.append(line.base_particle)
 	return connected_base_particles
+
+func _get_degree() -> int:
+	var connected_count: int = connected_lines.size()
+	
+	if connected_count < INTERACTION_SIZE_MINIMUM:
+		return 0
+	elif connected_count == INTERACTION_SIZE_MINIMUM:
+		return 1
+	
+	return 2
 
 func should_request_deletion() -> bool:
 	if connected_lines.size() == 0:

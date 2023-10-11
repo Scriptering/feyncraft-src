@@ -455,6 +455,8 @@ func clear_diagram() -> void:
 	for state_line in StateLines:
 		state_line.clear_hadrons()
 	clear_vision_lines()
+	
+	action()
 
 func draw_diagram_particles(drawing_matrix: DrawingMatrix) -> Array:
 	var drawing_lines : Array = super.draw_diagram_particles(drawing_matrix)
@@ -688,3 +690,11 @@ func set_title(text: String) -> void:
 
 func _on_title_text_submitted(new_text: String) -> void:
 	GLOBALS.creating_problem.title = new_text
+
+func get_degree() -> int:
+	var degree: int = 0
+	
+	for interaction in get_interactions():
+		degree += interaction.degree
+	
+	return degree

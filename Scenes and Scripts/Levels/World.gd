@@ -104,12 +104,14 @@ func enter_sandbox() -> void:
 	GenerationTab.show()
 	ProblemTab.show()
 	VisionTab.show()
+	CreationInformation.hide()
 
 func enter_problem_solving() -> void:
 	ParticleButtons.show()
 	GenerationTab.hide()
 	ProblemTab.show()
 	VisionTab.show()
+	CreationInformation.hide()
 	
 	await ready
 	
@@ -156,3 +158,5 @@ func save_creating_problem_set() -> void:
 
 func _on_problem_set_end_reached() -> void:
 	exit_to_main_menu()
+
+
