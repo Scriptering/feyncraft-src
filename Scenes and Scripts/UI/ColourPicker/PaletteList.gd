@@ -1,6 +1,6 @@
 extends PanelContainer
 
-signal load_error
+signal load_result(valid: bool)
 signal selected_palette_deleted
 
 @export var Item: PackedScene
@@ -76,13 +76,13 @@ func load_palette(palette_path: String) -> void:
 	new_palette.file_path = palette_path
 	
 	var palette: Palette = GLOBALS.load(palette_path)
-#	var palette: Palette = GLOBALS.load_data(palette_path)
 	if palette:
 		load_item(palette, new_palette)
+		load_result.emit(true)
 	else:
 		new_palette.queue_free()
 		GLOBALS.delete_file(palette_path)
-		load_error.emit()
+		load_result.emit(false)
 
 func save_palettes() -> void:
 	for palette in get_items():
@@ -91,8 +91,6 @@ func save_palettes() -> void:
 		
 		GLOBALS.save(palette.palette, palette.file_path)
 
-#		GLOBALS.save_data(palette.palette, palette.file_path)
-	
 func create_new_palette(palette_path: String) -> void:
 	var new_palette: ListItem = Item.instantiate()
 	new_palette.file_path = palette_path

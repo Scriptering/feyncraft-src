@@ -20,6 +20,8 @@ var Vision: Node
 var StateManager: Node
 
 var line_diagram_actions: bool = true
+var show_line_labels: bool = true:
+	set = _set_show_line_labels
 
 var hovering: bool = false
 
@@ -74,6 +76,13 @@ func _crosshair_moved(_new_position: Vector2, _old_position: Vector2) -> void:
 		return
 	
 	action()
+
+func _set_show_line_labels(new_value: bool) -> void:
+	show_line_labels = new_value
+	
+	for line in get_particle_lines():
+		line.show_labels = show_line_labels
+		line.set_text_visiblity()
 
 func load_problem(problem: Problem) -> void:
 	clear_diagram()
@@ -437,6 +446,7 @@ func place_line(
 		line.is_placed = true
 	
 	line.base_particle = base_particle
+	line.show_labels = show_line_labels
 	
 	ParticleLines.add_child(line)
 
@@ -541,7 +551,9 @@ func is_valid() -> bool:
 	return get_interactions().all(func(interaction: Interaction): return interaction.valid)
 
 func is_fully_connected(bidirectional: bool) -> bool:
-	return generate_drawing_matrix_from_diagram().is_fully_connected(bidirectional)
+	var diagram: DrawingMatrix = generate_drawing_matrix_from_diagram()
+	
+	return diagram.is_fully_connected() and diagram.get_lonely_extreme_points(ConnectionMatrix.EntryFactor.Both).size() == 0
 
 func is_energy_conserved() -> bool:
 	var state_base_particles: Array = StateLines.map(

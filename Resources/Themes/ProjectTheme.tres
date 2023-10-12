@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=60 format=3 uid="uid://cfmbhoq8cuoge"]
+[gd_resource type="Theme" load_steps=63 format=3 uid="uid://cfmbhoq8cuoge"]
 
 [ext_resource type="FontFile" uid="uid://cq27s0444iwkg" path="res://Textures/Fonts/ConnectionIi-2wj8.otf" id="1_s2gkm"]
 [ext_resource type="Texture2D" uid="uid://bcwpdy0lmenue" path="res://Textures/Buttons/square_disabled.png" id="2_8m3bx"]
@@ -7,14 +7,17 @@
 [ext_resource type="Texture2D" uid="uid://brb0ytbpqclrn" path="res://Textures/Buttons/square_pressed.png" id="5_1inkr"]
 [ext_resource type="Texture2D" uid="uid://1jam8wcw7bd3" path="res://Textures/UI/Information/checkbox/checked.png" id="6_chc85"]
 [ext_resource type="Texture2D" uid="uid://dvqoqr6r6f3bj" path="res://Textures/UI/Information/checkbox/check_box.png" id="7_45kj4"]
-[ext_resource type="Texture2D" uid="uid://dteauwy1hwl25" path="res://Textures/UI/Information/checkbutton/checkbutton_off.png" id="8_65x6c"]
-[ext_resource type="Texture2D" uid="uid://c3xdjv1m3l5tb" path="res://Textures/UI/Information/checkbutton/checkbutton_on.png" id="9_pnq7a"]
+[ext_resource type="Texture2D" uid="uid://cs50mifpalsrn" path="res://Textures/Buttons/CheckButton/checked.png" id="8_lb8ym"]
+[ext_resource type="Texture2D" uid="uid://cdfgpqy1srg8j" path="res://Textures/Buttons/CheckButton/unchecked.png" id="9_yjmwd"]
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="11_hhi3e"]
 [ext_resource type="StyleBox" uid="uid://dvu7f5h7snggp" path="res://Scenes and Scripts/UI/Menus/panelContainer.tres" id="15_olnr4"]
 [ext_resource type="Texture2D" uid="uid://d3yddpra1btvh" path="res://Textures/UI/Information/sliderH/grabber.png" id="16_tru3k"]
 [ext_resource type="Texture2D" uid="uid://dne44tp1it1xy" path="res://Textures/UI/Information/sliderH/grabber_highlighted.png" id="17_slpu5"]
+[ext_resource type="FontFile" uid="uid://dtkr82iuj8ovy" path="res://Textures/Fonts/munro-font/Munro-2LYe.ttf" id="17_urngg"]
+[ext_resource type="Texture2D" uid="uid://c2m85qf18ix63" path="res://Textures/UI/radio_checked.png" id="18_r21sa"]
 [ext_resource type="Texture2D" uid="uid://30oe2l4k7py3" path="res://Textures/UI/Information/sliderH/tick.png" id="18_rn8st"]
 [ext_resource type="Texture2D" uid="uid://dfh2bwspbmrs3" path="res://Textures/UI/Information/sliderH/slider.png" id="19_eac24"]
+[ext_resource type="Texture2D" uid="uid://bvfpoc03mh2yo" path="res://Textures/UI/radio_unchecked.png" id="19_etkwf"]
 [ext_resource type="Texture2D" uid="uid://bcf2qslps6l4s" path="res://Textures/UI/Equation/scroll_grabber_normal_v.png" id="19_oi3ee"]
 [ext_resource type="Texture2D" uid="uid://cym2rn34oj5s3" path="res://Textures/UI/Information/box.png" id="20_osile"]
 [ext_resource type="Texture2D" uid="uid://cgghpligriwhd" path="res://Textures/UI/Equation/scroll_grabber_highlight_v.png" id="20_ullcv"]
@@ -1928,9 +1931,8 @@ CheckBox/constants/check_v_offset = 3
 CheckBox/constants/h_separation = -4
 CheckBox/icons/checked = ExtResource("6_chc85")
 CheckBox/icons/unchecked = ExtResource("7_45kj4")
-CheckButton/icons/off = ExtResource("8_65x6c")
-CheckButton/icons/off_disabled = ExtResource("8_65x6c")
-CheckButton/icons/on = ExtResource("9_pnq7a")
+CheckButton/icons/checked = ExtResource("8_lb8ym")
+CheckButton/icons/unchecked = ExtResource("9_yjmwd")
 CheckButton/styles/disabled = SubResource("34")
 CheckButton/styles/focus = SubResource("35")
 CheckButton/styles/hover = SubResource("StyleBoxTexture_fgl3n")
@@ -1959,6 +1961,11 @@ LineEdit/styles/read_only = SubResource("StyleBoxEmpty_rh83b")
 MainMenu/base_type = &"PanelContainer"
 Panel/styles/panel = SubResource("StyleBoxTexture_aix6r")
 PanelContainer/styles/panel = SubResource("StyleBoxTexture_0rh2f")
+PopupMenu/font_sizes/font_size = 10
+PopupMenu/fonts/font = ExtResource("17_urngg")
+PopupMenu/icons/radio_checked = ExtResource("18_r21sa")
+PopupMenu/icons/radio_unchecked = ExtResource("19_etkwf")
+PopupMenu/styles/panel = ExtResource("15_olnr4")
 PopupPanel/styles/panel = SubResource("29")
 ScrollContainer/styles/panel = SubResource("StyleBoxEmpty_4dpbh")
 SpinBox/icons/updown = ExtResource("21_6b0wi")

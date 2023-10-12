@@ -55,6 +55,12 @@ func _ready():
 	)
 	
 	MenuTab.exit_pressed.connect(exit_to_main_menu)
+	MenuTab.toggled_line_labels.connect(
+		func(toggle: bool) -> void:
+			$Diagram.show_line_labels = toggle
+	)
+	
+	ProblemTab.next_problem_pressed.connect(_on_next_problem_pressed)
 	
 	MenuTab.init()
 	CreationInformation.init($Diagram, self)
@@ -128,6 +134,8 @@ func enter_solution_creation() -> void:
 	GenerationTab.show()
 	ProblemTab.show()
 	VisionTab.show()
+	
+	ProblemTab.in_solution_creation = true
 
 func exit_sandbox() -> void:
 	return
@@ -136,14 +144,19 @@ func exit_problem_solving() -> void:
 	return
 
 func exit_problem_creation() -> void:
+	var creating_problem: Problem = GLOBALS.creating_problem
 	var drawn_diagram: DrawingMatrix = $Diagram.generate_drawing_matrix_from_diagram()
 	for state in [StateLine.StateType.Initial, StateLine.StateType.Final]:
 		GLOBALS.creating_problem.state_interactions[state] = drawn_diagram.get_state_interactions(state)
 	
+	if !setup_new_problem(creating_problem):
+		CreationInformation.no_solutions_found()
+		return
+	
 	ProblemTab.load_problem(GLOBALS.creating_problem, false)
 
 func exit_solution_creation() -> void:
-	return
+	ProblemTab.in_solution_creation = false
 
 func _on_creation_information_submit_problem() -> void:
 	save_creating_problem_set()
@@ -159,4 +172,31 @@ func save_creating_problem_set() -> void:
 func _on_problem_set_end_reached() -> void:
 	exit_to_main_menu()
 
+func _on_next_problem_pressed() -> void:
+	match current_mode:
+		BaseMode.Mode.ProblemSolving:
+			ProblemTab.load_problem(problem_set.next_problem())
+		BaseMode.Mode.Sandbox:
+			ProblemTab.load_problem(ProblemGeneration.generate_problem())
 
+func setup_new_problem(problem: Problem) -> bool:
+	var min_degree: int = problem.degree if problem.custom_degree else 1
+	var max_degree: int = problem.degree if problem.custom_degree else 6
+	
+	var generated_solutions: Array[ConnectionMatrix] = SolutionGeneration.generate_diagrams(
+		problem.state_interactions[StateLine.StateType.Initial],
+		problem.state_interactions[StateLine.StateType.Final],
+		min_degree, max_degree,
+		SolutionGeneration.get_useable_interactions_from_particles(problem.allowed_particles),
+		SolutionGeneration.Find.LowestOrder
+	)
+	
+	if generated_solutions == [null]:
+		return false
+	
+	problem.degree = generated_solutions.front().state_count[StateLine.StateType.None]
+	problem.solution_count = ProblemGeneration.calculate_solution_count(
+		problem.degree, generated_solutions.size()
+	)
+	
+	return true

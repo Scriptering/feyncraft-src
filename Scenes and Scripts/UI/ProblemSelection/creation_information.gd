@@ -1,4 +1,4 @@
-extends Control
+extends GrabbableControl
 
 signal submit_problem
 
@@ -11,22 +11,37 @@ var active_modes: Array[BaseMode.Mode] = [
 var Diagram: MainDiagram
 var Level: Node2D
 
-func _process(_delta: float) -> void:
+@onready var InfoContainer: TabContainer = $VBoxContainer/TabContainer
+
+
+func _process(delta: float) -> void:
+	super._process(delta)
+	
 	if Level.current_mode != BaseMode.Mode.ProblemCreation:
 		return
 	
-	$TabContainer/ProblemCreationInfo.toggle_invalid_quantum_numbers(Diagram.are_quantum_numbers_matching())
-	$TabContainer/ProblemCreationInfo.toggle_no_particles(
+	$VBoxContainer/TabContainer/ProblemCreationInfo.toggle_invalid_quantum_numbers(Diagram.are_quantum_numbers_matching())
+	$VBoxContainer/TabContainer/ProblemCreationInfo.toggle_no_particles(
 		Diagram.StateLines.any(func(state_line: StateLine): return state_line.get_connected_lines().size() > 0)
 	)
+	$VBoxContainer/TabContainer/ProblemCreationInfo.toggle_energy_not_conserved(Diagram.is_energy_conserved())
+
+func set_title() -> void:
+	$VBoxContainer/TitleContainer/Title.text = InfoContainer.get_current_tab_control().title
 	
 func init(diagram: MainDiagram, level: Node2D) -> void:
 	Diagram = diagram
 	Level = level
+	set_title()
+	
+	Diagram.action_taken.connect(
+		$VBoxContainer/TabContainer/ProblemCreationInfo.hide_no_solutions_found
+	)
 
 func change_mode(mode_index: int) -> void:
-	$TabContainer.current_tab = mode_index
+	InfoContainer.current_tab = mode_index
 	Level.current_mode = active_modes[mode_index]
+	set_title()
 
 func next_mode() -> void:
 	change_mode(active_modes.find(Level.current_mode) + 1)
@@ -38,6 +53,7 @@ func _on_particle_selection_info_next() -> void:
 	next_mode()
 
 func _on_problem_creation_info_next() -> void:
+	$VBoxContainer/TabContainer/ProblemCreationInfo.hide_no_solutions_found()
 	next_mode()
 
 func _on_solution_creation_info_exit() -> void:
@@ -48,3 +64,6 @@ func _on_solution_creation_info_previous() -> void:
 
 func _on_problem_creation_info_previous() -> void:
 	prev_mode()
+
+func no_solutions_found() -> void:
+	$VBoxContainer/TabContainer/ProblemCreationInfo.show_no_solutions_found()

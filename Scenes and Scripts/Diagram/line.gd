@@ -84,6 +84,7 @@ var texture_dict: Array = [
 'Particle']
 
 var line_texture
+var show_labels: bool = true
 
 func _ready():
 	self.connect("request_deletion", Callable(Diagram, "delete_line"))
@@ -102,9 +103,6 @@ func _ready():
 		place()
 	
 	update_line()
-
-	Text.visible = !GLOBALS.in_main_menu
-	
 	connect_to_interactions()
 
 func init(diagram: MainDiagram) -> void:
@@ -276,6 +274,7 @@ func update_line() -> void:
 		set_text_texture()
 		
 	move_text()
+	set_text_visiblity()
 	
 func move_line() -> void:
 	LineJointStart.points[Point.Start] = points[Point.Start]
@@ -333,17 +332,13 @@ func move_text() -> void:
 		StateLine.StateType.Both:
 			Text.position = left_point + text_gap * Vector2.LEFT
 			SpareText.position = right_point + text_gap * Vector2.RIGHT
-			SpareText.show()
 			return
 		StateLine.StateType.Initial:
 			Text.position = left_point + text_gap * Vector2.LEFT
-			SpareText.hide()
 			return
 		StateLine.StateType.Final:
 			Text.position = right_point + text_gap * Vector2.RIGHT
-			SpareText.hide()
 			return
-	SpareText.hide()
 	
 	if points[Point.Start] == points[Point.End]:
 		Text.position = left_point + text_gap * Vector2.LEFT
@@ -359,6 +354,26 @@ func move_text() -> void:
 		(right_point - left_point) / 2 + left_point +
 		text_gap * self.line_vector.orthogonal().normalized()
 	)
+
+func set_text_visiblity() -> void:
+	if GLOBALS.in_main_menu:
+		Text.hide()
+		SpareText.hide()
+		return
+	
+	match get_on_state_line():
+		StateLine.StateType.None:
+			if !show_labels:
+				Text.hide()
+				SpareText.hide()
+				return
+		StateLine.StateType.Both:
+			Text.show()
+			SpareText.show()
+			return
+	
+	Text.show()
+	SpareText.hide()
 
 func set_text_texture() -> void:
 	Text.texture = GLOBALS.PARTICLE_TEXTURES[self.particle_name]

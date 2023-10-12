@@ -45,11 +45,11 @@ texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 expand_margin_top = 10.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_a3o1o"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dj726"]
 resource_local_to_scene = true
 shader = ExtResource("8_w33hb")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_s0cpf"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cx3ym"]
 resource_local_to_scene = true
 shader = ExtResource("8_w33hb")
 
@@ -58,15 +58,15 @@ base_font = ExtResource("14_wsnu4")
 spacing_top = -3
 spacing_bottom = -5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fk30x"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_873sb"]
 resource_local_to_scene = true
 shader = ExtResource("8_w33hb")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_l8m47"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jsjgq"]
 resource_local_to_scene = true
 shader = ExtResource("8_w33hb")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_cifgy"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_51gv5"]
 resource_local_to_scene = true
 shader = ExtResource("8_w33hb")
 
@@ -74,11 +74,11 @@ shader = ExtResource("8_w33hb")
 default_font = SubResource("FontVariation_vdd88")
 default_font_size = 14
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3pwnt"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nr5b6"]
 resource_local_to_scene = true
 shader = ExtResource("8_w33hb")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fs3j8"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lpq63"]
 resource_local_to_scene = true
 shader = ExtResource("8_w33hb")
 
@@ -116,7 +116,7 @@ Button/styles/pressed = SubResource("StyleBoxTexture_k0cp4")
 Label/font_sizes/font_size = 16
 Label/fonts/font = SubResource("FontVariation_ipn0w")
 
-[node name="ProblemTab" type="Control" node_paths=PackedStringArray("DegreeLabel", "SubmitButton", "ContentContainer", "TabButton", "MovingContainer")]
+[node name="ProblemTab" type="Control" node_paths=PackedStringArray("DegreeLabel", "SubmitButton", "NextProblem", "PrevProblem", "ContentContainer", "TabButton", "MovingContainer")]
 material = ExtResource("1_vo33s")
 layout_mode = 3
 anchors_preset = 0
@@ -124,6 +124,8 @@ theme = SubResource("Theme_rwvfw")
 script = ExtResource("3_kka6b")
 DegreeLabel = NodePath("MovingContainer/VBoxContainer/Tab/HBoxContainer/DegreeContainer/HBoxContainer/Degree")
 SubmitButton = NodePath("MovingContainer/VBoxContainer/Tab/HBoxContainer/Submit")
+NextProblem = NodePath("MovingContainer/VBoxContainer/Tab/HBoxContainer/NextProblem")
+PrevProblem = NodePath("MovingContainer/VBoxContainer/Tab/HBoxContainer/Rewind")
 ContentContainer = NodePath("MovingContainer/VBoxContainer/Tab")
 TabButton = NodePath("MovingContainer/VBoxContainer/PullOutTabButtonDown")
 MovingContainer = NodePath("MovingContainer")
@@ -137,9 +139,9 @@ anchors_preset = 0
 [node name="SubmitFeedback" type="Control" parent="MovingContainer" node_paths=PackedStringArray("ContentContainer", "MovingContainer")]
 use_parent_material = true
 anchors_preset = 0
-offset_left = 183.0
+offset_left = 193.0
 offset_top = -40.0
-offset_right = 183.0
+offset_right = 193.0
 offset_bottom = -40.0
 script = ExtResource("2_kmb27")
 ContentContainer = NodePath("MovingContainer")
@@ -158,7 +160,6 @@ theme_override_styles/panel = SubResource("StyleBoxEmpty_u6ude")
 
 [node name="PanelContainer" type="PanelContainer" parent="MovingContainer/SubmitFeedback/MovingContainer"]
 use_parent_material = true
-custom_minimum_size = Vector2(127, 2.08165e-12)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -199,7 +200,13 @@ stretch_mode = 2
 use_parent_material = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 8
-text = "Incorrect order"
+text = "Incorrect degree"
+
+[node name="TextureRect2" type="TextureRect" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/IncorrectOrder"]
+use_parent_material = true
+layout_mode = 2
+texture = ExtResource("15_5phct")
+stretch_mode = 2
 
 [node name="DiagramNotSolution" type="HBoxContainer" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer"]
 use_parent_material = true
@@ -240,6 +247,7 @@ theme_override_constants/separation = 0
 
 [node name="Tab" type="PanelContainer" parent="MovingContainer/VBoxContainer"]
 use_parent_material = true
+custom_minimum_size = Vector2(426, 2.08165e-12)
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_styles/panel = SubResource("StyleBoxTexture_ci0m4")
@@ -251,7 +259,7 @@ theme_override_constants/separation = 3
 alignment = 1
 
 [node name="Rewind" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
-material = SubResource("ShaderMaterial_a3o1o")
+material = SubResource("ShaderMaterial_dj726")
 layout_mode = 2
 icon = ExtResource("5_t5pc5")
 minimum_size = Vector2(25, 24)
@@ -263,7 +271,7 @@ icon_use_parent_material = true
 tooltip = "Load previous problem"
 
 [node name="Solution" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
-material = SubResource("ShaderMaterial_s0cpf")
+material = SubResource("ShaderMaterial_cx3ym")
 layout_mode = 2
 icon = ExtResource("6_pp1px")
 minimum_size = Vector2(25, 24)
@@ -303,12 +311,12 @@ stretch_mode = 5
 tooltip = "Problem degree"
 
 [node name="Equation" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("3_7jee8")]
-material = SubResource("ShaderMaterial_fk30x")
+material = SubResource("ShaderMaterial_873sb")
 use_parent_material = true
 layout_mode = 2
 
 [node name="ViewSubmissions" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
-material = SubResource("ShaderMaterial_l8m47")
+material = SubResource("ShaderMaterial_jsjgq")
 layout_mode = 2
 icon = ExtResource("5_15poa")
 minimum_size = Vector2(24, 24)
@@ -319,7 +327,7 @@ disabled = true
 tooltip = "View submissions"
 
 [node name="Submit" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
-material = SubResource("ShaderMaterial_cifgy")
+material = SubResource("ShaderMaterial_51gv5")
 layout_mode = 2
 theme = SubResource("Theme_wmnb4")
 icon = ExtResource("8_2kr0t")
@@ -333,7 +341,7 @@ icon_text_seperation = 0
 tooltip = "Submit solution"
 
 [node name="NextProblem" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
-material = SubResource("ShaderMaterial_3pwnt")
+material = SubResource("ShaderMaterial_nr5b6")
 layout_mode = 2
 theme = SubResource("Theme_wmnb4")
 icon = ExtResource("16_leqlk")
@@ -346,7 +354,7 @@ tooltip = "Next Problem"
 
 [node name="PullOutTabButtonDown" parent="MovingContainer/VBoxContainer" instance=ExtResource("10_xn6km")]
 z_index = 0
-material = SubResource("ShaderMaterial_fs3j8")
+material = SubResource("ShaderMaterial_lpq63")
 layout_mode = 2
 size_flags_horizontal = 4
 theme = SubResource("Theme_d1tq1")
@@ -358,4 +366,4 @@ icon_use_parent_material = true
 [connection signal="pressed" from="MovingContainer/VBoxContainer/Tab/HBoxContainer/Solution" to="." method="_on_solution_pressed"]
 [connection signal="pressed" from="MovingContainer/VBoxContainer/Tab/HBoxContainer/ViewSubmissions" to="." method="_on_view_submissions_pressed"]
 [connection signal="pressed" from="MovingContainer/VBoxContainer/Tab/HBoxContainer/Submit" to="." method="_on_submit_pressed"]
-[connection signal="pressed" from="MovingContainer/VBoxContainer/Tab/HBoxContainer/NextProblem" to="." method="_on_submit_pressed"]
+[connection signal="pressed" from="MovingContainer/VBoxContainer/Tab/HBoxContainer/NextProblem" to="." method="_on_next_problem_pressed"]

@@ -24,6 +24,7 @@ func check() -> void:
 	var diagram_valid: bool = Diagram.is_valid()
 	var diagram_connected: bool = Diagram.is_fully_connected(true)
 	var enery_conserved: bool = Diagram.is_energy_conserved()
+	var diagram
 	
 	if diagram_valid and diagram_connected and enery_conserved:
 		TabButton.TabIcon = tick_circle

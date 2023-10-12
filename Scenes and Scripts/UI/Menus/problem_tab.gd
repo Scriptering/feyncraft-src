@@ -1,10 +1,13 @@
 extends PullOutTab
 
 signal submit_pressed
+signal next_problem_pressed
 
 @export var diagram_viewer_offset: Vector2 = Vector2(15, 15)
 @export var DegreeLabel: Label
 @export var SubmitButton: PanelButton
+@export var NextProblem: PanelButton
+@export var PrevProblem: PanelButton
 
 @onready var Equation : PanelContainer = $MovingContainer/VBoxContainer/Tab/HBoxContainer/Equation
 @onready var SubmissionFeedback : PullOutTab = $MovingContainer/SubmitFeedback
@@ -21,6 +24,16 @@ var ProblemGeneration: Node
 var SolutionGeneration: Node
 
 var problem_history: Array[Problem] = []
+var in_solution_creation: bool = false:
+	set(new_value):
+		in_solution_creation = new_value
+		
+		if in_solution_creation:
+			_enter_solution_creation()
+		else:
+			_exit_solution_creation()
+		
+		update_submitted_solution_count()
 
 func init(
 	diagram: DiagramBase, _current_problem: Problem, submitted_diagrams_viewer: MiniDiagramViewer, problem_generation: Node,
@@ -74,7 +87,10 @@ func update_view_submission_button() -> void:
 	$MovingContainer/VBoxContainer/Tab/HBoxContainer/ViewSubmissions.disabled = current_problem.submitted_diagrams.size() == 0
 
 func update_submitted_solution_count() -> void:
-	SubmitButton.text = str(current_problem.submitted_diagrams.size()) + "/" + str(current_problem.solution_count)
+	SubmitButton.text = str(current_problem.submitted_diagrams.size())
+	
+	if !in_solution_creation:
+		SubmitButton.text += "/" + str(current_problem.solution_count)
 
 func submit_diagram() -> void:
 	var submission: DrawingMatrix = Diagram.generate_drawing_matrix_from_diagram()
@@ -88,6 +104,8 @@ func submit_diagram() -> void:
 	
 	update_submitted_solution_count()
 	update_view_submission_button()
+	
+	NextProblem.disabled = current_problem.submitted_diagrams.size() < current_problem.solution_count
 
 func generate_solution() -> ConnectionMatrix:
 	return(SolutionGeneration.generate_diagrams(
@@ -106,8 +124,14 @@ func _on_view_submissions_pressed() -> void:
 func load_problem(problem: Problem, save_to_history: bool = true) -> void:
 	if save_to_history:
 		problem_history.push_back(current_problem)
+		PrevProblem.disabled = false
 	current_problem = problem
+	current_problem.submitted_diagrams.clear()
+	
 	Equation.load_problem(problem)
+	
+	update_degree_label()
+	update_submitted_solution_count()
 	
 func _on_solution_pressed() -> void:
 	EVENTBUS.draw_diagram_raw(generate_solution())
@@ -116,4 +140,13 @@ func _on_rewind_pressed() -> void:
 	load_problem(problem_history[-1], false)
 	problem_history.pop_back()
 	
-	$MovingContainer/VBoxContainer/Tab/HBoxContainer/Rewind.disabled = problem_history.size() == 0
+	PrevProblem.disabled = problem_history.size() == 0
+
+func _on_next_problem_pressed() -> void:
+	next_problem_pressed.emit()
+
+func _enter_solution_creation() -> void:
+	NextProblem.hide()
+
+func _exit_solution_creation() -> void:
+	NextProblem.show()

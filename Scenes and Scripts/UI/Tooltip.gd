@@ -35,7 +35,12 @@ func show_tooltip() -> void:
 	if tooltip == "" and $TooltipPanel/HBoxContainer.get_child_count() == 1:
 		return
 	
-	position = offset
+	var viewport_middle: Vector2 = get_viewport_rect().size/2
+
+	var direction_to_centre: Vector2 = (viewport_middle - get_global_position()).normalized()
+	
+	position = (offset + Vector2($TooltipPanel.get_rect().size.x / 2, 0)) * direction_to_centre
+
 	show()
 
 func hide_tooltip() -> void:

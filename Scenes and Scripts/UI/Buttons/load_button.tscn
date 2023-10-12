@@ -1,8 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://7kmcsryae7lw"]
+[gd_scene load_steps=6 format=3 uid="uid://7kmcsryae7lw"]
 
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="1_l16xj"]
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="2_bspdm"]
-[ext_resource type="Texture2D" uid="uid://bvdr8f7dmjpmi" path="res://Textures/Buttons/icons/upload.png" id="3_fn733"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Buttons/load_button.gd" id="3_vhhsg"]
 [ext_resource type="Texture2D" uid="uid://bfoxtqmre12qw" path="res://Textures/Buttons/icons/load.png" id="4_dxvp1"]
 
@@ -27,5 +26,5 @@ theme_override_constants/separation = 3
 [node name="ButtonIcon" parent="ContentContainer/HBoxContainer" index="1"]
 visible = true
 use_parent_material = true
-texture = ExtResource("3_fn733")
+texture = ExtResource("4_dxvp1")
 flip_v = true

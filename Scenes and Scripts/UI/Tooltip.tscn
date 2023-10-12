@@ -22,13 +22,14 @@ visible = false
 z_index = 1
 use_parent_material = true
 script = ExtResource("1_eetpi")
+offset = Vector2(2.08165e-12, 20)
 delay = 0.5
 
 [node name="TooltipPanel" type="PanelContainer" parent="."]
 material = ExtResource("1_cieob")
 use_parent_material = true
 offset_right = 13.0
-offset_bottom = 18.0
+offset_bottom = 19.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_vj2uj")
 

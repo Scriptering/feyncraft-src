@@ -21,7 +21,7 @@
 resource_local_to_scene = true
 shader = ExtResource("1_eukm1")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_d5xgb"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s58x4"]
 resource_local_to_scene = true
 shader = ExtResource("1_eukm1")
 
@@ -33,7 +33,7 @@ texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 expand_margin_right = 10.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_u46ja"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1lv15"]
 resource_local_to_scene = true
 shader = ExtResource("1_eukm1")
 
@@ -81,14 +81,14 @@ Button/styles/pressed = SubResource("StyleBoxTexture_3hrye")
 [sub_resource type="ButtonGroup" id="ButtonGroup_l4fok"]
 allow_unpress = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_wue6l"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xefc0"]
 resource_local_to_scene = true
 shader = ExtResource("1_eukm1")
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_3sqjg"]
 allow_unpress = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3ft5r"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rhwdp"]
 resource_local_to_scene = true
 shader = ExtResource("1_eukm1")
 
@@ -153,7 +153,7 @@ offset_bottom = 40.0
 theme_override_constants/separation = 0
 
 [node name="TabButton" parent="MovingContainer" instance=ExtResource("3_08n6d")]
-material = SubResource("ShaderMaterial_d5xgb")
+material = SubResource("ShaderMaterial_s58x4")
 layout_mode = 2
 TabIcon = ExtResource("10_qooab")
 TabMinimumSize = Vector2(2.08165e-12, 22)
@@ -172,7 +172,7 @@ size_flags_horizontal = 8
 theme_override_constants/separation = -3
 
 [node name="Colour" parent="MovingContainer/Tab/ButtonContainer" instance=ExtResource("5_tinf7")]
-material = SubResource("ShaderMaterial_u46ja")
+material = SubResource("ShaderMaterial_1lv15")
 layout_mode = 2
 theme = SubResource("Theme_fuyn4")
 icon = ExtResource("6_v7snu")
@@ -182,7 +182,7 @@ expand_icon = true
 button_group = SubResource("ButtonGroup_l4fok")
 
 [node name="Shade" parent="MovingContainer/Tab/ButtonContainer" instance=ExtResource("5_tinf7")]
-material = SubResource("ShaderMaterial_wue6l")
+material = SubResource("ShaderMaterial_xefc0")
 layout_mode = 2
 theme = SubResource("Theme_fuyn4")
 icon = ExtResource("6_63enc")
@@ -192,7 +192,7 @@ expand_icon = true
 button_group = SubResource("ButtonGroup_3sqjg")
 
 [node name="Strength" parent="MovingContainer/Tab/ButtonContainer" instance=ExtResource("5_tinf7")]
-material = SubResource("ShaderMaterial_3ft5r")
+material = SubResource("ShaderMaterial_rhwdp")
 layout_mode = 2
 theme = SubResource("Theme_fuyn4")
 icon = ExtResource("7_nx8nj")

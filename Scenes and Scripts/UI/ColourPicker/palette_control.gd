@@ -5,7 +5,7 @@ signal closed
 
 func _ready() -> void:
 	tree_exited.connect(_on_tree_exited)
-	$PaletteList.load_error.connect(_on_load_error)
+	$PaletteList.load_result.connect(_on_load_result)
 	$PaletteList.selected_palette_deleted.connect(load_tea_stain)
 	
 	super._ready()
@@ -34,6 +34,6 @@ func _on_load_button_submitted(submitted_text) -> void:
 	GLOBALS.create_text_file(submitted_text, file_path)
 	$PaletteList.load_palette(file_path)
 
-func _on_load_error() -> void:
+func _on_load_result(valid: bool) -> void:
 	($PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/HBoxContainer/LoadButton
-	.load_error())
+	.load_result(valid))

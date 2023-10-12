@@ -41,3 +41,8 @@ func _on_modify_pressed() -> void:
 
 func _on_play_pressed() -> void:
 	play.emit(problem)
+
+func is_empty() -> bool:
+	return problem.state_interactions.all(
+		func(state_interaction: Array): return state_interaction.size() == 0
+	)

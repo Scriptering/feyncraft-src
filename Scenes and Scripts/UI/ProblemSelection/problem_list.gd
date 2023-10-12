@@ -2,6 +2,7 @@ extends PanelContainer
 
 signal problem_played
 signal back
+signal problem_deleted
 
 var ProblemSelector: PackedScene = preload("res://Scenes and Scripts/UI/ProblemSelection/problem_selector.tscn")
 
@@ -13,7 +14,12 @@ var problem_set_file: String
 func _ready() -> void:
 	problem_played.connect(EVENTBUS.enter_game)
 	$VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer.get_v_scroll_bar().use_parent_material = true
-	
+
+func delete_empty_problems() -> void:
+	for problem_item in problem_container.get_children():
+		if problem_item.is_empty():
+			delete_problem(problem_item)
+
 func load_problem_set(_problem_set: ProblemSet, p_problem_set_file_path: String) -> void:
 	problem_set = _problem_set
 	problem_set_file = p_problem_set_file_path
@@ -25,6 +31,7 @@ func load_problem_set(_problem_set: ProblemSet, p_problem_set_file_path: String)
 	for problem in problem_set.problems:
 		add_problem(problem, problem_set.is_custom)
 	
+#	delete_empty_problems()
 	update_index_labels()
 
 func clear_problems() -> void:
@@ -75,13 +82,17 @@ func _problem_moved(problem_select: PanelContainer, index_change: int) -> void:
 	
 	update_index_labels()
 
-func _problem_deleted(problem_select: PanelContainer) -> void:
+func delete_problem(problem_select: PanelContainer) -> void:
 	var index: int = problem_container.get_children().find(problem_select)
 	
 	problem_set.problems.remove_at(index)
 	problem_select.queue_free()
 	
 	update_index_labels()
+	problem_deleted.emit()
+
+func _problem_deleted(problem_select: PanelContainer) -> void:
+	delete_problem(problem_select)
 
 func create_problem() -> void:
 	var problem: Problem = Problem.new()

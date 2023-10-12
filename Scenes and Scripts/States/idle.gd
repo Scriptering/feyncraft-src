@@ -60,7 +60,7 @@ func input(event: InputEvent) -> State:
 				return State.Drawing
 		elif !event.pressed and $minimum_press_timer.is_stopped():
 			emit_signal("change_cursor", GLOBALS.CURSOR.default)
-	elif Input.is_action_just_pressed("clear"):
+	elif Input.is_action_just_pressed("clear") and !GLOBALS.in_main_menu:
 		Diagram.add_diagram_to_history()
 		Diagram.clear_diagram()
 	elif Input.is_action_just_pressed("redo"):

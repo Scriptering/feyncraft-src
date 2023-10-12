@@ -20,3 +20,6 @@ func _on_problem_list_back() -> void:
 
 func _on_problem_set_list_close() -> void:
 	closed.emit()
+
+func _on_problem_list_problem_deleted() -> void:
+	ProblemSetList.update()

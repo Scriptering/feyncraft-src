@@ -47,14 +47,15 @@ func toggle_visible() -> void:
 	self.current_index = 0
 
 func store_diagram(matrix) -> void:
-	if matrix is ConnectionMatrix:
+	if matrix is DrawingMatrix:
+		diagrams.push_back(matrix)
+	elif matrix is ConnectionMatrix:
 		var drawing_matrix := DrawingMatrix.new()
 		drawing_matrix.initialise_from_connection_matrix(matrix)
 		Diagram.create_diagram_interaction_positions(drawing_matrix)
 		diagrams.push_back(drawing_matrix)
 	
-	elif matrix is DrawingMatrix:
-		diagrams.push_back(matrix)
+	self.current_index = current_index
 
 func store_diagrams(matrices: Array) -> void:
 	clear()

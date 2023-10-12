@@ -53,6 +53,17 @@ var generated_matrix: InteractionMatrix
 #
 #	generate_diagrams([[6], [14, 14, 18]], [[10], [14, 18, 18]], 1, 2, get_usable_interactions([true, true, true, true]))
 
+func get_useable_interactions_from_particles(allowed_particles: Array[GLOBALS.Particle]) -> Array:
+	var useable_interactions: Array = []
+	
+	for interaction_set in [GLOBALS.INTERACTIONS, GLOBALS.GENERAL_INTERACTIONS]:
+		for interaction_type in interaction_set:
+			for interaction in interaction_type:
+				if interaction.all(func(particle: GLOBALS.Particle): return particle in allowed_particles):
+					useable_interactions.push_back(interaction)
+	
+	return useable_interactions
+
 func generate_diagrams(
 	initial_state: Array, final_state: Array, min_degree: int, max_degree: int, usable_interactions: Array, find: Find = Find.All
 ) -> Array[ConnectionMatrix]:

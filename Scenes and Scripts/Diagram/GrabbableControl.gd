@@ -5,8 +5,8 @@ signal grab_area_clicked
 signal picked_up
 signal dropped
 
-@export
-var GrabAreas: Array[Node]
+@export var GrabAreas: Array[Node]
+@export var follow_cursor: bool = true
 
 var grabbed: bool = false: set = _grabbed_changed
 var grab_area_hovered: bool = false: set = _grab_area_hovered_changed
@@ -25,7 +25,7 @@ func _input(_event: InputEvent) -> void:
 		emit_signal("grab_area_clicked", self)
 
 func _process(_delta:float):
-	if grabbed:
+	if grabbed and follow_cursor:
 		position = get_global_mouse_position() + drag_vector_start
 
 func pick_up() -> void:

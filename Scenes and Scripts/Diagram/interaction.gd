@@ -149,7 +149,7 @@ func update_interaction() -> void:
 		return
 	update_dot_visual()
 	update_ball_hovering()
-	if connected_lines.size() < INTERACTION_SIZE_MINIMUM and information_visible:
+	if connected_lines.size() < 2 and information_visible:
 		close_information_box()
 	
 	if information_visible:
@@ -157,7 +157,7 @@ func update_interaction() -> void:
 	
 	set_shader_parameters()
 	
-	valid = connected_lines.size() < INTERACTION_SIZE_MINIMUM or validate()
+	valid = validate()
 
 func update_ball_hovering() -> void:
 	self.hovering = self.hovering
@@ -225,6 +225,9 @@ func has_base_particle_connected(base_particle: GLOBALS.Particle):
 	return base_particle in self.connected_base_particles
 
 func validate() -> bool:
+	if connected_lines.size() < 2:
+		return true
+	
 	if !is_dimensionality_valid():
 		return false
 
@@ -261,7 +264,7 @@ func get_invalid_quantum_numbers() -> Array[GLOBALS.QuantumNumber]:
 				invalid_quantum_numbers.append(quantum_number)
 				continue
 			
-		elif !interaction_in_list:
+		elif !interaction_in_list and connected_lines.size() >= INTERACTION_SIZE_MINIMUM:
 			invalid_quantum_numbers.append(quantum_number)
 	
 	return invalid_quantum_numbers
@@ -378,7 +381,7 @@ func _on_information_button_pressed():
 		(StateManager.state == BaseState.State.Idle or
 		(StateManager.state == BaseState.State.Drawing and
 		!StateManager.states[BaseState.State.Drawing].drawing)) and
-		connected_lines.size() >= INTERACTION_SIZE_MINIMUM
+		connected_lines.size() >= 2
 	):
 		if information_visible:
 			close_information_box()

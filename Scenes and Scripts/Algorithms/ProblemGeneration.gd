@@ -1,5 +1,7 @@
 extends Node
 
+const MAX_REQUIRED_SOLUTION_COUNT : int = 4
+
 const MAX_NEXT_INTERACTION_ATTEMPTS : int = 100
 const MAX_INTERACTION_GENERATION_ATTEMPTS : int = 100
 const MAX_SOLUTION_GENERATION_ATTEMPTS : int = 100
@@ -183,7 +185,11 @@ func is_quantum_number_difference_possible(
 	
 	return true
 
-
+func calculate_solution_count(degree: int, generated_solution_count: int) -> int:
+	if degree <= 4:
+		return min(generated_solution_count, MAX_REQUIRED_SOLUTION_COUNT)
+	
+	return 1
 
 
 

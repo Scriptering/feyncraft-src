@@ -2,9 +2,15 @@ class_name Problem
 extends Resource
 
 const LOWEST_ORDER: int = -1
+var custom_solutions: bool = false:
+	get:
+		return solutions.size() > 0
+var custom_degree: bool = false:
+	get:
+		return degree != LOWEST_ORDER
 
 @export var limited_particles: bool = false
-@export var custom_solutions: bool = false
+@export var hide_unavailable_particles: bool = false
 @export var title: String = ''
 @export var submitted_diagrams : Array[DrawingMatrix] = []
 @export var solutions : Array[DrawingMatrix] = []
@@ -13,7 +19,7 @@ const LOWEST_ORDER: int = -1
 @export var degree : int = LOWEST_ORDER
 @export var solution_count : int = 0:
 	get:
-		if solutions.size() > 0:
+		if custom_solutions:
 			return solutions.size()
 		return solution_count
 

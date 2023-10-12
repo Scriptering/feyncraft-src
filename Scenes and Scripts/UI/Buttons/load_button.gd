@@ -23,6 +23,7 @@ var icon_dict: Dictionary = {
 
 func _ready() -> void:
 	super._ready()
+	self.mode = mode
 	load_panel_created.connect(EVENTBUS.add_floating_menu)
 
 func _on_button_toggled(button_pressed_state: bool) -> void:
@@ -51,6 +52,11 @@ func invalid_submission() -> void:
 func set_text(new_text: String) -> void:
 	load_panel.set_text(new_text)
 
-func load_error() -> void:
-	if load_panel:
+func load_result(valid: bool) -> void:
+	if !load_panel:
+		return
+		
+	if !valid:
 		load_panel.show_popup("Load Error!")
+	else:
+		close_load_panel()

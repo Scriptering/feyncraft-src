@@ -21,7 +21,7 @@ texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 expand_margin_top = 10.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2dmem"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_88r8a"]
 resource_local_to_scene = true
 shader = ExtResource("6_uctth")
 
@@ -157,7 +157,7 @@ vertical_alignment = 2
 
 [node name="TabButton" parent="VBoxContainer" instance=ExtResource("5_vueuw")]
 z_index = 0
-material = SubResource("ShaderMaterial_2dmem")
+material = SubResource("ShaderMaterial_88r8a")
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8

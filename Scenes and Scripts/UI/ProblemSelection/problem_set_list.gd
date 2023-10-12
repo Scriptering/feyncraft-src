@@ -4,6 +4,8 @@ signal enter_problem_set(problem_set: ProblemSet, problem_set_file_path: String)
 signal play_problem_set(mode, problem_set, problem)
 signal close
 
+@export var LoadButton: PanelButton
+
 var problem_set_file_path: String = "res://saves/ProblemSets/"
 var ProblemSetItem: PackedScene = preload("res://Scenes and Scripts/UI/ProblemSelection/problem_set_item.tscn")
 
@@ -95,9 +97,8 @@ func _on_load_button_submitted(submitted_text) -> void:
 	GLOBALS.create_text_file(submitted_text, file_path)
 	load_problem_set(file_path)
 
-func on_load_error() -> void:
-	($problem_setList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/HBoxContainer/LoadButton
-	.load_error())
+func on_load_error(valid: bool) -> void:
+	LoadButton.load_result(valid)
 
 func load_problem_set(problem_set_path: String) -> void:
 	var new_problem_set: ListItem = ProblemSetItem.instantiate()
@@ -106,10 +107,11 @@ func load_problem_set(problem_set_path: String) -> void:
 	var problem_set: ProblemSet = GLOBALS.load(problem_set_path)
 	if problem_set:
 		add_problem_set(problem_set, new_problem_set)
+		on_load_error(true)
 	else:
 		new_problem_set.queue_free()
 		GLOBALS.delete_file(problem_set_path)
-		on_load_error()
+		on_load_error(false)
 
 func save_problem_sets() -> void:
 	for problem_set in problem_container.get_children():

@@ -5,6 +5,7 @@ signal previous
 signal next
 signal exit
 
+@export var title: String
 @export var next_button: PanelButton
 @export var prev_button: PanelButton
 @export var exit_button: PanelButton
