@@ -32,10 +32,10 @@ func _on_focus_entered() -> void:
 func _on_focus_exited() -> void:
 	line_edit.placeholder_text = previous_placeholder_text
 
-func _set(property: StringName, value: Variant) -> bool:
+func _set(property: StringName, new_value: Variant) -> bool:
 	if property == "editable":
-		editable = value
-		self.selecting_enabled = value
+		editable = new_value
+		self.selecting_enabled = new_value
 		return true
 	
 	return false

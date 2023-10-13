@@ -1,0 +1,30 @@
+[gd_scene load_steps=8 format=3 uid="uid://cnc7r7d27yn5c"]
+
+[ext_resource type="PackedScene" uid="uid://blu0n6lwfysjf" path="res://Scenes and Scripts/UI/Menus/MainMenu/main_menu.tscn" id="1_qkr4k"]
+[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="2_6gvvu"]
+[ext_resource type="PackedScene" uid="uid://c7n4o6dbkwilh" path="res://Scenes and Scripts/Levels/world.tscn" id="3_m7wj1"]
+[ext_resource type="PackedScene" uid="uid://dm0yec0rjuvwl" path="res://Scenes and Scripts/sound_bus.tscn" id="4_tyi58"]
+[ext_resource type="PackedScene" uid="uid://byavwp1ynk2py" path="res://Scenes and Scripts/event_bus.tscn" id="5_oclkt"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5676p"]
+resource_local_to_scene = true
+shader = ExtResource("2_6gvvu")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_53xjo"]
+resource_local_to_scene = true
+shader = ExtResource("2_6gvvu")
+
+[node name="Universe" type="Node2D"]
+
+[node name="MainMenu" parent="." instance=ExtResource("1_qkr4k")]
+material = SubResource("ShaderMaterial_5676p")
+offset_right = 640.0
+offset_bottom = 360.0
+
+[node name="World" parent="." instance=ExtResource("3_m7wj1")]
+visible = false
+material = SubResource("ShaderMaterial_53xjo")
+
+[node name="SoundBus" parent="." instance=ExtResource("4_tyi58")]
+
+[node name="EventBus" parent="." instance=ExtResource("5_oclkt")]

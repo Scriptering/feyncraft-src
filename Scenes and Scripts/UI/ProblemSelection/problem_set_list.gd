@@ -41,8 +41,6 @@ func add_problem_set(problem_set: ProblemSet, problem_set_item: ListItem = Probl
 	
 	problem_container.add_child(problem_set_item)
 	
-	var count: int = problem_container.get_child_count()
-	
 	problem_set_item.set_index(problem_container.get_child_count()-1)
 	problem_set_item.update()
 

@@ -103,7 +103,7 @@ func enter_particle_selection() -> void:
 
 func exit_particle_selection() -> void:
 	GLOBALS.creating_problem.allowed_particles = ParticleButtons.get_toggled_particles(true)
-	ParticleButtons.exit_particle_selection()
+	ParticleButtons.load_problem(GLOBALS.creating_problem)
 
 func enter_sandbox() -> void:
 	ParticleButtons.show()

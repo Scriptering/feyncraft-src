@@ -1,5 +1,8 @@
 extends Node
 
+var MainMenu = preload("res://Scenes and Scripts/UI/Menus/MainMenu/main_menu.tscn")
+@onready var TitleDiagram : DrawingMatrix = ResourceLoader.load("res://saves/title_diagram.tres")
+
 enum ColourScheme {TeaStain, SeaFoam, Professional}
 enum COLOURS {primary, secondary, pencil, primary_highlight, invalid, invalid_highlight}
 

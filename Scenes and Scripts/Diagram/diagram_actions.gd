@@ -271,6 +271,8 @@ func place_objects() -> void:
 	
 	check_split_lines()
 	check_rejoin_lines()
+	
+	action()
 
 func get_interactions() -> Array[Interaction]:
 	var interactions : Array[Interaction] = []
@@ -413,17 +415,29 @@ func rejoin_lines(line_to_extend: ParticleLine, line_to_delete: ParticleLine) ->
 	recursive_delete_line(line_to_delete)
 	line_to_extend.update_line()
 
-func place_interaction(interaction_position: Vector2, bypass_can_place: bool = false) -> void:
+func _on_interaction_dropped(interaction: Interaction) -> void:
+	if can_place_interaction(interaction.position, interaction):
+		return
+	
+	interaction.queue_free()
+
+func place_interaction(
+	interaction_position: Vector2, bypass_can_place: bool = false, interaction: Node = InteractionInstance.instantiate()
+) -> void:
 	if can_place_interaction(interaction_position) or bypass_can_place:
-		super.place_interaction(interaction_position)
+		interaction.dropped.connect(_on_interaction_dropped)
+		super.place_interaction(interaction_position, bypass_can_place, interaction)
 	
 	check_split_lines()
 	check_rejoin_lines()
 	
 	action()
 
-func can_place_interaction(test_position: Vector2) -> bool:
+func can_place_interaction(test_position: Vector2, test_interaction: Interaction = null) -> bool:
 	for interaction in Interactions.get_children():
+		if interaction == test_interaction:
+			continue
+		
 		if interaction.is_queued_for_deletion():
 			continue
 		
@@ -553,7 +567,7 @@ func is_valid() -> bool:
 func is_fully_connected(bidirectional: bool) -> bool:
 	var diagram: DrawingMatrix = generate_drawing_matrix_from_diagram()
 	
-	return diagram.is_fully_connected() and diagram.get_lonely_extreme_points(ConnectionMatrix.EntryFactor.Both).size() == 0
+	return diagram.is_fully_connected(bidirectional) and diagram.get_lonely_extreme_points(ConnectionMatrix.EntryFactor.Both).size() == 0
 
 func is_energy_conserved() -> bool:
 	var state_base_particles: Array = StateLines.map(

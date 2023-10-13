@@ -10,15 +10,15 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0pnha"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_wal2h"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2pk6y"]
 resource_local_to_scene = true
 shader = ExtResource("3_e86ap")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_yup6k"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u4p78"]
 resource_local_to_scene = true
 shader = ExtResource("3_e86ap")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_80v7d"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_iyym5"]
 resource_local_to_scene = true
 shader = ExtResource("3_e86ap")
 
@@ -64,19 +64,19 @@ tabs_visible = false
 use_hidden_tabs_for_min_size = true
 
 [node name="ParticleSelectionInfo" parent="VBoxContainer/TabContainer" instance=ExtResource("3_gxgmm")]
-material = SubResource("ShaderMaterial_wal2h")
+material = SubResource("ShaderMaterial_2pk6y")
 layout_mode = 2
 mouse_filter = 1
 
 [node name="ProblemCreationInfo" parent="VBoxContainer/TabContainer" instance=ExtResource("5_224cs")]
 visible = false
-material = SubResource("ShaderMaterial_yup6k")
+material = SubResource("ShaderMaterial_u4p78")
 layout_mode = 2
 mouse_filter = 1
 
 [node name="SolutionCreationInfo" parent="VBoxContainer/TabContainer" instance=ExtResource("6_jjee5")]
 visible = false
-material = SubResource("ShaderMaterial_80v7d")
+material = SubResource("ShaderMaterial_iyym5")
 layout_mode = 2
 mouse_filter = 1
 

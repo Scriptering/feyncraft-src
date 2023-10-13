@@ -114,7 +114,7 @@ func generate_state_interactions(useable_state_interactions: Array) -> Array:
 	for _attempt in range(MAX_NEXT_INTERACTION_ATTEMPTS):
 		var state_factor : int = StateLine.state_factor[current_state]
 		var next_state_interaction := get_next_state_interaction(
-			quantum_number_difference, useable_state_interactions, interaction_count, interaction_count_left, W_count, state_factor
+			quantum_number_difference, useable_state_interactions, interaction_count_left, W_count, state_factor
 		)
 		
 		current_state = (current_state + 1) % 2 as StateLine.StateType
@@ -133,14 +133,14 @@ func generate_state_interactions(useable_state_interactions: Array) -> Array:
 	return []
 
 func get_next_state_interaction(
-	quantum_number_difference: Array, useable_state_interactions: Array, interaction_count: int, interaction_count_left: int,
+	quantum_number_difference: Array, useable_state_interactions: Array, interaction_count_left: int,
 	W_count: int, state_factor: int
 ) -> Array:
 	
 	var possible_next_state_interactions := useable_state_interactions.filter(
 		func(state_interaction: Array):
 			return is_state_interaction_possible(
-				state_interaction, quantum_number_difference, interaction_count, interaction_count_left, W_count, state_factor
+				state_interaction, quantum_number_difference, interaction_count_left, W_count, state_factor
 			)
 	)
 	
@@ -158,7 +158,7 @@ func accum_state_interaction_quantum_numbers(state_interaction: Array, accum_qua
 	return new_quantum_numbers
 
 func is_state_interaction_possible(
-	state_interaction: Array, quantum_number_difference: Array, interaction_count: int, interaction_count_left: int, W_count: int,
+	state_interaction: Array, quantum_number_difference: Array, interaction_count_left: int, W_count: int,
 	state_factor: int
 ) -> bool:
 	

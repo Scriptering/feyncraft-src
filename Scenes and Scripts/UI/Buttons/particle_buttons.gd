@@ -14,6 +14,10 @@ var particle_button_group: ButtonGroup
 	Leptons, Bosons, Quarks, General
 ]
 
+@onready var ParticleControls : Array = [
+	$HBoxContainer/Leptons, $HBoxContainer/Bosons, $HBoxContainer/Quarks, $HBoxContainer/General
+]
+
 func _ready():
 	for particle_button_category in ParticleButtonCategories:
 		for particle_button in particle_button_category.get_children():
@@ -27,7 +31,6 @@ func on_particle_button_pressed(button) -> void:
 
 func add_buttons_to_button_group() -> void:
 	particle_button_group = ButtonGroup.new()
-#	particle_button_group.allow_unpress = true
 	for particle_button in particle_buttons:
 		particle_button.button_group = particle_button_group
 
@@ -42,6 +45,13 @@ func disable_buttons(disable: bool, disabled_particles: Array = GLOBALS.Particle
 		
 		particle_button.disabled = disable
 
+func toggle_button_visiblity(to_visible: bool, particles: Array = GLOBALS.Particle.values()) -> void:
+	for particle_button in particle_buttons:
+		if particle_button.particle not in particles:
+			continue
+		
+		particle_button.visible = to_visible
+
 func toggle_button_mute(mute: bool) -> void:
 	for particle_button in particle_buttons:
 		particle_button.mute = mute
@@ -50,6 +60,8 @@ func enter_particle_selection(problem: Problem) -> void:
 	toggle_button_mute(true)
 	clear_button_group()
 	disable_buttons(false)
+	toggle_button_visiblity(true)
+	toggle_button_group_visibility()
 	
 	if problem.allowed_particles.size() == 0:
 		toggle_buttons(true)
@@ -68,16 +80,22 @@ func get_toggled_particles(toggled: bool) -> Array[GLOBALS.Particle]:
 	
 	return toggled_particles
 
+func toggle_button_group_visibility() -> void:
+	for i in ParticleButtonCategories.size():
+		ParticleControls[i].visible = ParticleButtonCategories[i].get_children().any(
+			func(button: PanelButton): return button.visible
+		)
+
 func load_problem(problem: Problem) -> void:
 	disable_buttons(true)
+	toggle_button_visiblity(true)
 	disable_buttons(false, problem.allowed_particles)
+	
+	if problem.hide_unavailable_particles:
+		toggle_button_visiblity(false)
+		toggle_button_visiblity(true, problem.allowed_particles)
+		toggle_button_group_visibility()
 
 func toggle_buttons(button_pressed: bool, particles: Array = GLOBALS.Particle.values()) -> void:
 	for particle_button in particle_buttons:
 		particle_button.button_pressed = button_pressed and particle_button.particle in particles
-
-func exit_particle_selection() -> void:
-	var disabled_particles: Array[GLOBALS.Particle] = get_toggled_particles(false)
-	toggle_buttons(false)
-	disable_buttons(true, disabled_particles)
-	add_buttons_to_button_group()

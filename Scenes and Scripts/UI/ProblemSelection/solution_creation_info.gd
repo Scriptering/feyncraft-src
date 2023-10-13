@@ -12,6 +12,6 @@ func _process(_delta: float) -> void:
 
 func _next() -> void:
 	if check_button.button_pressed:
-		GLOBALS.creating_problem.solution_count = solution_count.value
+		GLOBALS.creating_problem.solution_count = int(solution_count.value)
 	
 	next.emit()

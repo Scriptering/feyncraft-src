@@ -16,9 +16,12 @@ signal closed
 var diagrams: Array[DrawingMatrix] = []
 var current_index: int = 0:
 	set(new_value):
-		var clamped_value = clamp(new_value, 0, diagrams.size() - 1)
+		var clamped_value = clamp(new_value, 0, max(0, diagrams.size() - 1))
 		current_index = clamped_value
-		Diagram.draw_diagram(diagrams[current_index])
+		
+		if diagrams.size() != 0:
+			Diagram.draw_diagram(diagrams[current_index])
+
 		update_index_label()
 
 @onready var Diagram : MiniDiagram = $VBoxContainer/PanelContainer/VBoxContainer/CenterContainer/MiniDiagramContainer/MiniDiagram
@@ -56,6 +59,8 @@ func store_diagram(matrix) -> void:
 		diagrams.push_back(drawing_matrix)
 	
 	self.current_index = current_index
+	
+	update_diagram_visibility()
 
 func store_diagrams(matrices: Array) -> void:
 	clear()
@@ -73,6 +78,9 @@ func update_index_label() -> void:
 		str(label_index) + "/" + str(diagrams.size())
 	)
 
+func update_diagram_visibility() -> void:
+	Diagram.visible = diagrams.size() > 0
+
 func update_delete_button() -> void:
 	$VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Delete.disabled = diagrams.size() == 0
 
@@ -87,6 +95,7 @@ func remove_diagram(index: int = current_index) -> void:
 	
 	update_index_label()
 	update_delete_button()
+	update_diagram_visibility()
 
 func get_diagram_count() -> int:
 	return diagrams.size()

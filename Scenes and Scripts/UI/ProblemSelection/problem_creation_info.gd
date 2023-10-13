@@ -33,7 +33,7 @@ func _on_check_button_toggled(button_pressed: bool) -> void:
 
 func _next() -> void:
 	if check_button.button_pressed:
-		GLOBALS.creating_problem.degree = Degree.value
+		GLOBALS.creating_problem.degree = int(Degree.value)
 	else:
 		GLOBALS.creating_problem.degree = Problem.LOWEST_ORDER
 	
@@ -45,5 +45,5 @@ func show_no_solutions_found() -> void:
 func hide_no_solutions_found() -> void:
 	$VBoxContainer/VBoxContainer/NoSolutions.hide()
 
-func _on_degree_value_changed(value: float) -> void:
+func _on_degree_value_changed(_value: float) -> void:
 	hide_no_solutions_found()

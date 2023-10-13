@@ -17,8 +17,8 @@ func toggle_edit_visibility(can_edit: bool) -> void:
 	$HBoxContainer/PanelContainer/HBoxContainer/Delete.visible = can_edit
 	$HBoxContainer/PanelContainer/HBoxContainer/Upload.visible = can_edit
 
-func set_index(index: int) -> void:
-	$HBoxContainer/Index.text = str(index+1)
+func set_index(new_index: int) -> void:
+	$HBoxContainer/Index.text = str(new_index+1)
 
 func update_problem_index() -> void:
 	$HBoxContainer/PanelContainer/HBoxContainer/IndexLabel.text = (

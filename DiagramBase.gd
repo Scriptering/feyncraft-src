@@ -141,8 +141,7 @@ func create_state_diagram_interaction_positions(drawing_matrix: DrawingMatrix, s
 			Vector2(StateLines[state].position.x, current_y), grid_size
 		)
 
-func place_interaction(interaction_position: Vector2) -> void:
-	var interaction = InteractionInstance.instantiate()
+func place_interaction(interaction_position: Vector2, _bypass_can_place: bool = false, interaction: Node = InteractionInstance.instantiate()) -> void:
 	interaction.position = interaction_position
 	interaction.init(self)
 	Interactions.add_child(interaction)

@@ -1,7 +1,6 @@
 extends Control
 
-var level := preload("res://Scenes and Scripts/Levels/world.tscn")
-
+var Level = preload("res://Scenes and Scripts/Levels/world.tscn")
 var placing: bool = false
 
 @onready var palette_control: Control = $FloatingMenus/PaletteControl
@@ -25,10 +24,10 @@ func _ready():
 	$Algorithms/PathFinding.init($Diagram, $Diagram.StateLines)
 	$Algorithms/ProblemGeneration.init($Algorithms/SolutionGeneration)
 	
-	Diagram.draw_diagram(ResourceLoader.load("res://saves/title_diagram.tres"))
+	Diagram.draw_diagram(GLOBALS.TitleDiagram)
 
 func enter_game() -> void:
-	get_tree().change_scene_to_packed(level)
+	get_tree().change_scene_to_packed(Level)
 
 func _on_sandbox_pressed() -> void:
 	EVENTBUS.enter_game(BaseMode.Mode.Sandbox)
@@ -49,5 +48,5 @@ func _on_palette_control_closed() -> void:
 func _on_problem_selection_closed() -> void:
 	$Center/VBoxContainer/ProblemSets.button_pressed = false
 
-func _on_exit_game(mode: BaseMode.Mode, problem: Problem) -> void:
+func _on_exit_game(_mode: BaseMode.Mode, _problem: Problem) -> void:
 	return

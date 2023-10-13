@@ -3,7 +3,7 @@ class_name GrabbableNode2D
 
 signal grab_area_clicked
 signal picked_up
-signal dropped
+signal dropped(object: GrabbableNode2D)
 
 @export
 var GrabArea: Node
@@ -14,20 +14,22 @@ var grabbable: bool = true: set = _grabbable_changed
 
 func _ready():
 	add_to_group("grabbable")
-	GrabArea.connect("mouse_entered", Callable(self, "_on_GrabArea_mouse_entered"))
-	GrabArea.connect("mouse_exited", Callable(self, "_on_GrabArea_mouse_exited"))
+	GrabArea.mouse_entered.connect(_on_GrabArea_mouse_entered)
+	GrabArea.mouse_exited.connect(_on_GrabArea_mouse_exited)
 
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("click") and grab_area_hovered:
-		emit_signal("grab_area_clicked", self)
+		grab_area_clicked.emit(self)
 
 func pick_up() -> void:
-	grabbed = true
-	emit_signal("picked_up", self)
+	if !grabbed:
+		grabbed = true
+		picked_up.emit(self)
 
 func drop() -> void:
-	grabbed = false
-	emit_signal("dropped", self)
+	if grabbed:
+		grabbed = false
+		dropped.emit(self)
 
 func can_be_grabbed() -> bool:
 	return grabbable and grab_area_hovered

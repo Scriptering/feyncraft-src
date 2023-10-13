@@ -35,7 +35,7 @@ func enter_game(
 
 func exit_game(mode: BaseMode.Mode, problem: Problem = null) -> void:
 	GLOBALS.in_main_menu = true
-	get_tree().change_scene_to_file("res://Scenes and Scripts/UI/Menus/MainMenu/main_menu.tscn")
+	get_tree().change_scene_to_packed(GLOBALS.MainMenu)
 	
 	await get_tree().process_frame
 	

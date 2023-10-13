@@ -42,7 +42,7 @@ Label/fonts/font = SubResource("FontVariation_bju0s")
 
 [sub_resource type="Theme" id="Theme_be46u"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qqsop"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cbiue"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 
@@ -56,101 +56,101 @@ texture_margin_left = 6.0
 texture_margin_top = 6.0
 texture_margin_right = 6.0
 texture_margin_bottom = 6.0
-expand_margin_bottom = 10.0
+expand_margin_bottom = 40.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_xeynt"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w32qy"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_1tkt7"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6t66e"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_xm7t2"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_eed3n"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_o3ith"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h8dk3"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2i2e8"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u2b7e"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_n0q63"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_phn8u"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fv4wp"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_csn7d"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_6rhui"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_orqvw"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_72sgn"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1ivnl"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ttx0v"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ce5tg"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_a28ia"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5bcox"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qstkv"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_27iwj"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_snoxt"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_byfn7"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_oe2cl"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wj0fl"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_i3r7c"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_exlof"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_jnmyb"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cyraf"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_vss6c"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pfbv2"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_sxf56"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h3lfw"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_rfuam"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kfx2h"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_q28sv"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_avr7m"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_j5hy7"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_24508"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_lcgpl"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7354j"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_cjmce"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5onbo"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_7j4gi"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qnckt"]
 resource_local_to_scene = true
 shader = ExtResource("9_pb36h")
 
@@ -167,10 +167,12 @@ script = ExtResource("1_magdw")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 use_parent_material = true
+custom_minimum_size = Vector2(322, 2.08165e-12)
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 theme_override_constants/separation = 2
+alignment = 1
 
 [node name="Leptons" type="Control" parent="HBoxContainer" node_paths=PackedStringArray("ContentContainer", "TabButton", "MovingContainer")]
 use_parent_material = true
@@ -199,7 +201,7 @@ grow_horizontal = 2
 theme_override_constants/separation = 0
 
 [node name="PullOutTabButtonUp" parent="HBoxContainer/Leptons/MovingContainer" instance=ExtResource("8_uancy")]
-material = SubResource("ShaderMaterial_qqsop")
+material = SubResource("ShaderMaterial_cbiue")
 use_parent_material = true
 custom_minimum_size = Vector2(55, 2.08165e-12)
 layout_mode = 2
@@ -228,37 +230,37 @@ theme_override_constants/v_separation = -2
 alignment = 1
 
 [node name="electron" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_xeynt")
+material = SubResource("ShaderMaterial_w32qy")
 layout_mode = 2
 particle = 6
 icon = ExtResource("8_67c1b")
 
 [node name="muon" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_1tkt7")
+material = SubResource("ShaderMaterial_6t66e")
 layout_mode = 2
 particle = 7
 icon = ExtResource("9_2eilt")
 
 [node name="tau" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_xm7t2")
+material = SubResource("ShaderMaterial_eed3n")
 layout_mode = 2
 particle = 8
 icon = ExtResource("10_sfd4m")
 
 [node name="electron_neutrino" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_o3ith")
+material = SubResource("ShaderMaterial_h8dk3")
 layout_mode = 2
 particle = 10
 icon = ExtResource("11_lvtjt")
 
 [node name="muon_neutrino" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_2i2e8")
+material = SubResource("ShaderMaterial_u2b7e")
 layout_mode = 2
 particle = 11
 icon = ExtResource("12_a0utd")
 
 [node name="tau_neutrino" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_n0q63")
+material = SubResource("ShaderMaterial_phn8u")
 layout_mode = 2
 particle = 12
 icon = ExtResource("13_s46ou")
@@ -287,7 +289,7 @@ grow_horizontal = 2
 theme_override_constants/separation = 0
 
 [node name="PullOutTabButtonUp" parent="HBoxContainer/Bosons/MovingContainer" instance=ExtResource("8_uancy")]
-material = SubResource("ShaderMaterial_fv4wp")
+material = SubResource("ShaderMaterial_csn7d")
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -309,30 +311,30 @@ theme_override_constants/v_separation = -2
 alignment = 1
 
 [node name="photon" parent="HBoxContainer/Bosons/MovingContainer/Tab/Bosons" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_6rhui")
+material = SubResource("ShaderMaterial_orqvw")
 layout_mode = 2
 icon = ExtResource("16_yvhx5")
 
 [node name="gluon" parent="HBoxContainer/Bosons/MovingContainer/Tab/Bosons" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_72sgn")
+material = SubResource("ShaderMaterial_1ivnl")
 layout_mode = 2
 particle = 1
 icon = ExtResource("17_h03t5")
 
 [node name="W" parent="HBoxContainer/Bosons/MovingContainer/Tab/Bosons" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_ttx0v")
+material = SubResource("ShaderMaterial_ce5tg")
 layout_mode = 2
 particle = 4
 icon = ExtResource("18_qblna")
 
 [node name="Z" parent="HBoxContainer/Bosons/MovingContainer/Tab/Bosons" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_a28ia")
+material = SubResource("ShaderMaterial_5bcox")
 layout_mode = 2
 particle = 2
 icon = ExtResource("18_vqhce")
 
 [node name="H" parent="HBoxContainer/Bosons/MovingContainer/Tab/Bosons" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_qstkv")
+material = SubResource("ShaderMaterial_27iwj")
 layout_mode = 2
 particle = 3
 icon = ExtResource("19_p5w2o")
@@ -361,7 +363,7 @@ grow_horizontal = 2
 theme_override_constants/separation = 0
 
 [node name="PullOutTabButtonUp" parent="HBoxContainer/Quarks/MovingContainer" instance=ExtResource("8_uancy")]
-material = SubResource("ShaderMaterial_snoxt")
+material = SubResource("ShaderMaterial_byfn7")
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -383,37 +385,37 @@ theme_override_constants/v_separation = -2
 alignment = 1
 
 [node name="up" parent="HBoxContainer/Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_oe2cl")
+material = SubResource("ShaderMaterial_wj0fl")
 layout_mode = 2
 particle = 14
 icon = ExtResource("20_6f0nv")
 
 [node name="charm" parent="HBoxContainer/Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_i3r7c")
+material = SubResource("ShaderMaterial_exlof")
 layout_mode = 2
 particle = 15
 icon = ExtResource("21_0ad65")
 
 [node name="top" parent="HBoxContainer/Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_jnmyb")
+material = SubResource("ShaderMaterial_cyraf")
 layout_mode = 2
 particle = 16
 icon = ExtResource("22_cx8b1")
 
 [node name="down" parent="HBoxContainer/Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_vss6c")
+material = SubResource("ShaderMaterial_pfbv2")
 layout_mode = 2
 particle = 18
 icon = ExtResource("23_vb17d")
 
 [node name="strange" parent="HBoxContainer/Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_sxf56")
+material = SubResource("ShaderMaterial_h3lfw")
 layout_mode = 2
 particle = 19
 icon = ExtResource("24_4efsy")
 
 [node name="bottom" parent="HBoxContainer/Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_rfuam")
+material = SubResource("ShaderMaterial_kfx2h")
 layout_mode = 2
 particle = 20
 icon = ExtResource("25_e3fe6")
@@ -442,7 +444,7 @@ grow_horizontal = 2
 theme_override_constants/separation = 0
 
 [node name="PullOutTabButtonUp" parent="HBoxContainer/General/MovingContainer" instance=ExtResource("8_uancy")]
-material = SubResource("ShaderMaterial_q28sv")
+material = SubResource("ShaderMaterial_avr7m")
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -464,25 +466,25 @@ theme_override_constants/v_separation = -2
 alignment = 1
 
 [node name="lepton" parent="HBoxContainer/General/MovingContainer/Tab/General" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_j5hy7")
+material = SubResource("ShaderMaterial_24508")
 layout_mode = 2
 particle = 5
 icon = ExtResource("28_dahfx")
 
 [node name="bright_quark" parent="HBoxContainer/General/MovingContainer/Tab/General" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_lcgpl")
+material = SubResource("ShaderMaterial_7354j")
 layout_mode = 2
 particle = 13
 icon = ExtResource("29_xleuq")
 
 [node name="lepton_neutrino" parent="HBoxContainer/General/MovingContainer/Tab/General" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_cjmce")
+material = SubResource("ShaderMaterial_5onbo")
 layout_mode = 2
 particle = 9
 icon = ExtResource("30_luk6k")
 
 [node name="dark_quark" parent="HBoxContainer/General/MovingContainer/Tab/General" instance=ExtResource("7_omtgh")]
-material = SubResource("ShaderMaterial_7j4gi")
+material = SubResource("ShaderMaterial_qnckt")
 layout_mode = 2
 particle = 17
 icon = ExtResource("31_uy8wt")

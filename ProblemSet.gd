@@ -13,7 +13,7 @@ signal end_reached
 			return null
 			
 		return problems[current_index]
-	set(new_value):
+	set(_new_value):
 		return
 @export var limited_particles: bool = false
 @export var custom_solutions: bool = false
