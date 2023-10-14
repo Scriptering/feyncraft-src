@@ -1,7 +1,6 @@
 extends ListItem
 
 signal view
-signal title_changed
 signal play
 
 var problem_set: ProblemSet
@@ -41,7 +40,7 @@ func _on_delete_pressed() -> void:
 	deleted.emit(self)
 
 func _on_title_text_changed(new_text: String) -> void:
-	title_changed.emit(new_text)
+	problem_set.title = new_text
 
 func _on_view_pressed() -> void:
 	view.emit(self)

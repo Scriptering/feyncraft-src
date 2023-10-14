@@ -1,6 +1,5 @@
 extends Node
 
-var MainMenu = preload("res://Scenes and Scripts/UI/Menus/MainMenu/main_menu.tscn")
 @onready var TitleDiagram : DrawingMatrix = ResourceLoader.load("res://saves/title_diagram.tres")
 
 enum ColourScheme {TeaStain, SeaFoam, Professional}
@@ -587,6 +586,9 @@ func get_particle_name(particle: int):
 
 func get_particle_texture(particle: int):
 	return PARTICLE_TEXTURES[Particle.keys()[Particle.values().find(particle)]]
+
+func get_particle_icon(particle: int) -> Texture2D:
+	return load("res://Textures/Buttons/icons/Particles/" + get_particle_name(particle) + ".png")
 
 func get_hadron_texture(hadron: Hadrons):
 	return PARTICLE_TEXTURES[HADRON_NAMES[hadron]]

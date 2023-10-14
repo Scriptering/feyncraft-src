@@ -1,5 +1,7 @@
 extends Control
 
+signal sandbox_pressed
+
 var Level = preload("res://Scenes and Scripts/Levels/world.tscn")
 var placing: bool = false
 
@@ -10,7 +12,6 @@ var placing: bool = false
 @onready var MenuTab: Control = $MenuTab
 
 func _ready():
-	EVENTBUS.signal_enter_game.connect(enter_game)
 	EVENTBUS.signal_add_floating_menu.connect(
 		func(menu: Node): $FloatingMenus.add_child(menu)
 	)
@@ -26,11 +27,8 @@ func _ready():
 	
 	Diagram.draw_diagram(GLOBALS.TitleDiagram)
 
-func enter_game() -> void:
-	get_tree().change_scene_to_packed(Level)
-
 func _on_sandbox_pressed() -> void:
-	EVENTBUS.enter_game(BaseMode.Mode.Sandbox)
+	sandbox_pressed.emit()
 
 func _on_palettes_toggled(button_pressed) -> void:
 	palette_control.visible = button_pressed

@@ -9,6 +9,9 @@ signal signal_exit_game(mode: BaseMode.Mode, created_problem: Problem)
 signal signal_change_palette(palette: ImageTexture)
 signal signal_diagram_action_taken
 signal signal_button_created(button: PanelButton)
+signal signal_problem_modified(problem_item)
+signal signal_problem_set_played(problem_set: ProblemSet, index: int)
+signal toggle_scene
 
 func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 	signal_draw_diagram.emit(drawing_matrix)
@@ -31,14 +34,15 @@ func enter_game(
 	GLOBALS.creating_problem_set_file = creating_problem_set_file
 	GLOBALS.in_main_menu = false
 	
+	toggle_scene.emit()
 	signal_enter_game.emit()
 
 func exit_game(mode: BaseMode.Mode, problem: Problem = null) -> void:
 	GLOBALS.in_main_menu = true
-	get_tree().change_scene_to_packed(GLOBALS.MainMenu)
 	
 	await get_tree().process_frame
 	
+	toggle_scene.emit()
 	signal_exit_game.emit(mode, problem)
 
 func change_palette(palette: ImageTexture) -> void:
@@ -46,3 +50,9 @@ func change_palette(palette: ImageTexture) -> void:
 
 func button_created(button: PanelButton) -> void:
 	signal_button_created.emit(button)
+
+func problem_modified(problem_item) -> void:
+	signal_problem_modified.emit(problem_item)
+
+func problem_set_played(problem_set: ProblemSet, index: int) -> void:
+	signal_problem_set_played.emit(problem_set, index)

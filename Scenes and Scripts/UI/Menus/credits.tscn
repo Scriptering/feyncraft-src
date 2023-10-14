@@ -29,11 +29,11 @@ expand_margin_bottom = 20.0
 base_font = ExtResource("9_t01cb")
 spacing_bottom = -2
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_koxeu"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wi2v2"]
 resource_local_to_scene = true
 shader = ExtResource("3_da0v7")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_7mmig"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_elh15"]
 resource_local_to_scene = true
 shader = ExtResource("3_da0v7")
 
@@ -142,7 +142,7 @@ text = "Aseprite"
 horizontal_alignment = 1
 
 [node name="Donate" parent="VBoxContainer/PanelContainer/VBoxContainer" instance=ExtResource("2_rnov3")]
-material = SubResource("ShaderMaterial_koxeu")
+material = SubResource("ShaderMaterial_wi2v2")
 layout_mode = 2
 icon = ExtResource("4_6crf1")
 text = "Donate on KoFi "
@@ -150,7 +150,7 @@ minimum_size = Vector2(100, 2.08165e-12)
 expand_icon = true
 
 [node name="Tab" parent="VBoxContainer" instance=ExtResource("6_5ir6h")]
-material = SubResource("ShaderMaterial_7mmig")
+material = SubResource("ShaderMaterial_elh15")
 layout_mode = 2
 size_flags_horizontal = 4
 theme = SubResource("Theme_v1op3")

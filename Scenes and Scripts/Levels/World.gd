@@ -1,5 +1,8 @@
 extends Node2D
 
+signal problem_submitted
+signal exit_to_main_menu
+
 @onready var FPS = get_node('FPS')
 @onready var Pathfinding = $Algorithms/PathFinding
 @onready var SolutionGeneration = $Algorithms/SolutionGeneration
@@ -47,14 +50,16 @@ func _set_current_mode(new_value: BaseMode.Mode):
 	mode_enter_funcs[current_mode].call()
 
 func _ready():
-	self.current_mode = GLOBALS.load_mode
 	VisionTab.vision_button_toggled.connect(_vision_button_toggled)
 	
 	EVENTBUS.signal_add_floating_menu.connect(
 		func(menu: Node): $FloatingMenus.add_child(menu)
 	)
 	
-	MenuTab.exit_pressed.connect(exit_to_main_menu)
+	MenuTab.exit_pressed.connect(
+		func() -> void:
+			exit_to_main_menu.emit()
+	)
 	MenuTab.toggled_line_labels.connect(
 		func(toggle: bool) -> void:
 			$Diagram.show_line_labels = toggle
@@ -87,11 +92,11 @@ func load_problem(problem: Problem) -> void:
 	ProblemTab.load_problem(problem)
 	ParticleButtons.load_problem(problem)
 
-func load_problem_set(p_problem_set: ProblemSet) -> void:
+func load_problem_set(p_problem_set: ProblemSet, index: int) -> void:
 	problem_set = p_problem_set
 	problem_set.end_reached.connect(_on_problem_set_end_reached)
-	problem_set.current_index = problem_set.problems.find(GLOBALS.creating_problem)
-	load_problem(GLOBALS.creating_problem)
+	problem_set.current_index = index
+	load_problem(problem_set.current_problem)
 
 func enter_particle_selection() -> void:
 	ParticleButtons.show()
@@ -118,10 +123,6 @@ func enter_problem_solving() -> void:
 	ProblemTab.show()
 	VisionTab.show()
 	CreationInformation.hide()
-	
-	await ready
-	
-	load_problem_set(GLOBALS.load_problem_set)
 
 func enter_problem_creation() -> void:
 	ParticleButtons.show()
@@ -159,18 +160,10 @@ func exit_solution_creation() -> void:
 	ProblemTab.in_solution_creation = false
 
 func _on_creation_information_submit_problem() -> void:
-	save_creating_problem_set()
-	exit_to_main_menu()
-
-func exit_to_main_menu() -> void:
-	mode_exit_funcs[current_mode].call()
-	EVENTBUS.exit_game(current_mode, GLOBALS.creating_problem)
-
-func save_creating_problem_set() -> void:
-	GLOBALS.save(GLOBALS.load_problem_set, GLOBALS.creating_problem_set_file)
+	problem_submitted.emit()
 
 func _on_problem_set_end_reached() -> void:
-	exit_to_main_menu()
+	exit_to_main_menu.emit()
 
 func _on_next_problem_pressed() -> void:
 	match current_mode:

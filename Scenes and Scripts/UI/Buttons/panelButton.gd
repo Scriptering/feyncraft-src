@@ -250,6 +250,8 @@ func play_sound(button_pressed_state: bool) -> void:
 		SOUNDBUS.button_up()
 
 func _on_visibility_changed() -> void:
+	await get_tree().process_frame
+	
 	if button_pressed:
 		set_content_margins(ButtonState[PRESSED])
 	else:

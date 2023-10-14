@@ -9,7 +9,7 @@
 resource_local_to_scene = true
 shader = ExtResource("2_s3yiu")
 
-[node name="ColourButton" groups=["button"] instance=ExtResource("1_xrvbt")]
+[node name="ColourButton" instance=ExtResource("1_xrvbt")]
 material = SubResource("ShaderMaterial_qxnfj")
 offset_right = -618.0
 offset_bottom = -338.0

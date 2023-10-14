@@ -10,10 +10,13 @@ config_version=5
 
 [application]
 
-config/name="A Game of Feynman Diagrams"
-run/main_scene="res://Scenes and Scripts/UI/Menus/MainMenu/main_menu.tscn"
+config/name="FeynCraft"
+run/main_scene="res://Scenes and Scripts/universe.tscn"
 config/features=PackedStringArray("4.1")
+boot_splash/bg_color=Color(0.254902, 0.25098, 0.258824, 1)
 boot_splash/image="res://Textures/splash_icon.png"
+boot_splash/fullsize=false
+boot_splash/use_filter=false
 config/icon="res://icon.png"
 
 [autoload]

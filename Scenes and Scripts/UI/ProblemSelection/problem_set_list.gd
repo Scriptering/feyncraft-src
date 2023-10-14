@@ -81,7 +81,7 @@ func _problem_set_viewed(problem_set_item: PanelContainer) -> void:
 	enter_problem_set.emit(problem_set_item.problem_set, problem_set_item.file_path)
 
 func _problem_set_resumed(problem_set: ProblemSet) -> void:
-	play_problem_set.emit(BaseMode.Mode.ProblemSolving, problem_set, problem_set.problems[problem_set.highest_index_reached])
+	EVENTBUS.signal_problem_set_played.emit(problem_set, problem_set.highest_index_reached)
 
 func update() -> void:
 	update_index_labels()

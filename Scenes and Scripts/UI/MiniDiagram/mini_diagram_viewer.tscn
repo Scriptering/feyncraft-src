@@ -34,27 +34,27 @@ PanelContainer/styles/panel = SubResource("StyleBoxTexture_pkocb")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_05qsh"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_jkt6b"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5y4rg"]
 resource_local_to_scene = true
 shader = ExtResource("7_nj3d4")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_63gxp"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r0e87"]
 resource_local_to_scene = true
 shader = ExtResource("7_nj3d4")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2ifci"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cpmst"]
 resource_local_to_scene = true
 shader = ExtResource("7_nj3d4")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_enyeh"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ltl7p"]
 resource_local_to_scene = true
 shader = ExtResource("7_nj3d4")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qpk80"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bdjcr"]
 resource_local_to_scene = true
 shader = ExtResource("7_nj3d4")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fefrn"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dcxj6"]
 resource_local_to_scene = true
 shader = ExtResource("7_nj3d4")
 
@@ -113,7 +113,7 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_05qsh")
 
 [node name="MiniDiagram" parent="VBoxContainer/PanelContainer/VBoxContainer/CenterContainer/MiniDiagramContainer" instance=ExtResource("6_y8o7g")]
-material = SubResource("ShaderMaterial_jkt6b")
+material = SubResource("ShaderMaterial_5y4rg")
 use_parent_material = true
 layout_mode = 2
 
@@ -129,14 +129,14 @@ size_flags_horizontal = 3
 alignment = 1
 
 [node name="X" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/X_container" instance=ExtResource("6_r8qrn")]
-material = SubResource("ShaderMaterial_63gxp")
+material = SubResource("ShaderMaterial_r0e87")
 layout_mode = 2
 icon = ExtResource("7_t41g2")
 minimum_size = Vector2(18, 18)
 icon_use_parent_material = true
 
 [node name="Left" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
-material = SubResource("ShaderMaterial_2ifci")
+material = SubResource("ShaderMaterial_cpmst")
 layout_mode = 2
 mouse_filter = 1
 icon = ExtResource("8_g4oap")
@@ -144,7 +144,7 @@ minimum_size = Vector2(18, 2.08165e-12)
 icon_use_parent_material = true
 
 [node name="Load" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
-material = SubResource("ShaderMaterial_enyeh")
+material = SubResource("ShaderMaterial_ltl7p")
 layout_mode = 2
 mouse_filter = 1
 icon = ExtResource("9_ulpnp")
@@ -156,7 +156,7 @@ icon_use_parent_material = true
 tooltip = "Load Diagram"
 
 [node name="Delete" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
-material = SubResource("ShaderMaterial_qpk80")
+material = SubResource("ShaderMaterial_bdjcr")
 layout_mode = 2
 mouse_filter = 1
 icon = ExtResource("11_5ck4b")
@@ -168,7 +168,7 @@ icon_use_parent_material = true
 tooltip = "Delete Diagram"
 
 [node name="Right" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
-material = SubResource("ShaderMaterial_fefrn")
+material = SubResource("ShaderMaterial_dcxj6")
 layout_mode = 2
 mouse_filter = 1
 icon = ExtResource("9_4bpdd")

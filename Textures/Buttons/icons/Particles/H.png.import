@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://2xby1xcpcbua"
-path="res://.godot/imported/higgs.png-2d1740d6c06f03c86b4ff223e3a4f63c.ctex"
+path="res://.godot/imported/H.png-beb010e1e3cf6f92643037e75f61dd34.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/Buttons/icons/Particles/higgs.png"
-dest_files=["res://.godot/imported/higgs.png-2d1740d6c06f03c86b4ff223e3a4f63c.ctex"]
+source_file="res://Textures/Buttons/icons/Particles/H.png"
+dest_files=["res://.godot/imported/H.png-beb010e1e3cf6f92643037e75f61dd34.ctex"]
 
 [params]
 

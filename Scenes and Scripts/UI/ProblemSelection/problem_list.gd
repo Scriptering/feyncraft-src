@@ -1,6 +1,5 @@
 extends PanelContainer
 
-signal problem_played
 signal back
 signal problem_deleted
 
@@ -12,7 +11,6 @@ var problem_set: ProblemSet
 var problem_set_file: String
 
 func _ready() -> void:
-	problem_played.connect(EVENTBUS.enter_game)
 	$VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer.get_v_scroll_bar().use_parent_material = true
 
 func delete_empty_problems() -> void:
@@ -24,7 +22,8 @@ func load_problem_set(_problem_set: ProblemSet, p_problem_set_file_path: String)
 	problem_set = _problem_set
 	problem_set_file = p_problem_set_file_path
 	
-	$VBoxContainer/TitleContainer/HBoxContainer/Title.text = problem_set.title
+	if problem_set.title != '':
+		$VBoxContainer/TitleContainer/HBoxContainer/Title.text = problem_set.title
 	
 	clear_problems()
 	
@@ -43,7 +42,7 @@ func add_problem(problem: Problem, is_custom: bool = false) -> void:
 	
 	problem_select.move.connect(_problem_moved)
 	problem_select.deleted.connect(_problem_deleted)
-	problem_select.play.connect(play_problem)
+	problem_select.play.connect(_problem_played)
 	problem_select.modify.connect(_problem_modified)
 	
 	problem_select.toggle_edit_visiblity(problem_set.is_custom)
@@ -102,11 +101,11 @@ func create_problem() -> void:
 func _on_add_problem_pressed() -> void:
 	create_problem()
 
-func play_problem(problem: Problem) -> void:
-	problem_played.emit(BaseMode.Mode.ProblemSolving, problem_set, problem)
+func _problem_played(problem: Problem) -> void:
+	EVENTBUS.problem_set_played(problem_set, problem_set.problems.find(problem))
 
 func _on_back_pressed() -> void:
 	back.emit()
 
 func _problem_modified(problem_item) -> void:
-	EVENTBUS.enter_game(BaseMode.Mode.ParticleSelection, problem_set, problem_item.problem, problem_set_file)
+	EVENTBUS.problem_modified(problem_item)
