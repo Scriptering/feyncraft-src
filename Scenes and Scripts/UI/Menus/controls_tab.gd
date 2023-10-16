@@ -11,10 +11,14 @@ signal undo
 signal redo
 
 func _on_reset_pressed() -> void:
-	emit_signal("clear_diagram")
+	clear_diagram.emit()
 
 func _on_undo_pressed() -> void:
-	emit_signal("undo")
+	undo.emit()
 
 func _on_redo_pressed() -> void:
-	emit_signal("redo")
+	redo.emit()
+
+func release_buttons() -> void:
+	for control_button in [Snip, Grab]:
+		control_button.button_pressed = false

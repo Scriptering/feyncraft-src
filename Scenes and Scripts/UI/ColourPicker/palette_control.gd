@@ -4,7 +4,8 @@ var palette_file_path: String = "res://saves/Palettes/"
 signal closed
 
 func _ready() -> void:
-	tree_exited.connect(_on_tree_exited)
+	EVENTBUS.signal_save_files.connect(save_palettes)
+	
 	$PaletteList.load_result.connect(_on_load_result)
 	$PaletteList.selected_palette_deleted.connect(load_tea_stain)
 	
@@ -23,7 +24,7 @@ func load_palettes() -> void:
 func load_tea_stain() -> void:
 	$PaletteList.get_items().front().is_selected = true
 
-func _on_tree_exited() -> void:
+func save_palettes() -> void:
 	$PaletteList.save_palettes()
 
 func _on_add_problem_pressed() -> void:

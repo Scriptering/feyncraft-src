@@ -15,7 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://cbb30ccopvh6r" path="res://Textures/Buttons/icons/reset.png" id="10_d874e"]
 [ext_resource type="Texture2D" uid="uid://bbqo1lidfmuje" path="res://Textures/Buttons/icons/undo.png" id="11_a0bdl"]
 [ext_resource type="Texture2D" uid="uid://7svrwb52wwlb" path="res://Textures/Buttons/icons/redo.png" id="12_3t38n"]
-[ext_resource type="ButtonGroup" uid="uid://cttxrsi5q43lj" path="res://Resources/ButtonGroups/controls.tres" id="13_vhilf"]
+[ext_resource type="ButtonGroup" path="res://Resources/ButtonGroups/controls.tres" id="13_vhilf"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4ap8b"]
 texture = ExtResource("2_kvqmk")
@@ -30,11 +30,11 @@ Label/font_sizes/font_size = 16
 Label/fonts/font = ExtResource("2_a54w8")
 PanelContainer/styles/panel = SubResource("StyleBoxTexture_4ap8b")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_xsb0p"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0unwj"]
 resource_local_to_scene = true
 shader = ExtResource("6_fyb0f")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_djsan"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_28jqf"]
 resource_local_to_scene = true
 shader = ExtResource("6_fyb0f")
 
@@ -52,22 +52,22 @@ texture_margin_bottom = 5.0
 [sub_resource type="Theme" id="Theme_p0ro2"]
 Button/styles/pressed = SubResource("StyleBoxTexture_bauei")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_cak52"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l8jkb"]
 resource_local_to_scene = true
 shader = ExtResource("6_fyb0f")
 
 [sub_resource type="Theme" id="Theme_tkvjt"]
 Button/styles/pressed = SubResource("StyleBoxTexture_bauei")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0n2sj"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_adosw"]
 resource_local_to_scene = true
 shader = ExtResource("6_fyb0f")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_m8162"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ailrl"]
 resource_local_to_scene = true
 shader = ExtResource("6_fyb0f")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_efxgf"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pwvc7"]
 resource_local_to_scene = true
 shader = ExtResource("6_fyb0f")
 
@@ -97,7 +97,7 @@ theme_override_constants/separation = 0
 alignment = 1
 
 [node name="TabButton" parent="MovingContainer" instance=ExtResource("4_ojgvm")]
-material = SubResource("ShaderMaterial_xsb0p")
+material = SubResource("ShaderMaterial_0unwj")
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -117,7 +117,7 @@ theme_override_constants/v_separation = 2
 columns = 2
 
 [node name="Snip" parent="MovingContainer/ContentContainer/GridContainer" instance=ExtResource("6_4bdyr")]
-material = SubResource("ShaderMaterial_djsan")
+material = SubResource("ShaderMaterial_28jqf")
 layout_mode = 2
 theme = SubResource("Theme_p0ro2")
 icon = ExtResource("7_rmxk8")
@@ -147,7 +147,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Grab" parent="MovingContainer/ContentContainer/GridContainer" instance=ExtResource("6_4bdyr")]
-material = SubResource("ShaderMaterial_cak52")
+material = SubResource("ShaderMaterial_l8jkb")
 layout_mode = 2
 theme = SubResource("Theme_tkvjt")
 icon = ExtResource("9_6aili")
@@ -177,7 +177,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Reset" parent="MovingContainer/ContentContainer/GridContainer" instance=ExtResource("6_4bdyr")]
-material = SubResource("ShaderMaterial_0n2sj")
+material = SubResource("ShaderMaterial_adosw")
 layout_mode = 2
 icon = ExtResource("10_d874e")
 minimum_size = Vector2(30, 30)
@@ -205,7 +205,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Undo" parent="MovingContainer/ContentContainer/GridContainer" instance=ExtResource("6_4bdyr")]
-material = SubResource("ShaderMaterial_m8162")
+material = SubResource("ShaderMaterial_ailrl")
 layout_mode = 2
 icon = ExtResource("11_a0bdl")
 minimum_size = Vector2(30, 30)
@@ -216,7 +216,7 @@ icon_use_parent_material = true
 tooltip = "Undo"
 
 [node name="Redo" parent="MovingContainer/ContentContainer/GridContainer" instance=ExtResource("6_4bdyr")]
-material = SubResource("ShaderMaterial_efxgf")
+material = SubResource("ShaderMaterial_pwvc7")
 layout_mode = 2
 icon = ExtResource("12_3t38n")
 minimum_size = Vector2(30, 30)

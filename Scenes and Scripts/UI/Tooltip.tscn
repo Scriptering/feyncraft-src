@@ -38,7 +38,7 @@ layout_mode = 2
 mouse_filter = 2
 
 [node name="Label" type="Label" parent="TooltipPanel/HBoxContainer"]
-use_parent_material = true
+material = ExtResource("1_cieob")
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 1

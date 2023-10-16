@@ -15,11 +15,11 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dbgr6"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3g87i"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ctvuv"]
 resource_local_to_scene = true
 shader = ExtResource("2_ecomh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_uprrc"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h34ex"]
 resource_local_to_scene = true
 shader = ExtResource("2_ecomh")
 
@@ -47,6 +47,7 @@ theme_override_constants/separation = -235
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
+mouse_filter = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer"]
 use_parent_material = true
@@ -74,7 +75,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="AddProblemSet" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer" instance=ExtResource("1_tgmdf")]
-material = SubResource("ShaderMaterial_3g87i")
+material = SubResource("ShaderMaterial_ctvuv")
 layout_mode = 2
 size_flags_horizontal = 1
 icon = ExtResource("3_fyqnn")
@@ -83,7 +84,7 @@ icon_use_parent_material = true
 action_mode = 1
 
 [node name="LoadButton" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer" instance=ExtResource("7_sjfsr")]
-material = SubResource("ShaderMaterial_uprrc")
+material = SubResource("ShaderMaterial_h34ex")
 layout_mode = 2
 minimum_size = Vector2(70, 28)
 
@@ -91,6 +92,7 @@ minimum_size = Vector2(70, 28)
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 4
+mouse_filter = 1
 theme_override_styles/panel = ExtResource("9_blpuk")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TitleContainer"]

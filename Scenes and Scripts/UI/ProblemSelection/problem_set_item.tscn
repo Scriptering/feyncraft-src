@@ -31,7 +31,7 @@ LineEdit/styles/read_only = SubResource("StyleBoxEmpty_0snhi")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qxe7s"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_lnxn3"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k68o7"]
 resource_local_to_scene = true
 shader = ExtResource("11_l46c8")
 
@@ -48,6 +48,7 @@ use_parent_material = true
 layout_mode = 2
 
 [node name="Index" type="Label" parent="HBoxContainer"]
+material = ExtResource("1_b04gi")
 custom_minimum_size = Vector2(16, 2.08165e-12)
 layout_mode = 2
 theme_override_font_sizes/font_size = 15
@@ -113,7 +114,7 @@ action_mode = 1
 tooltip = "Delete"
 
 [node name="Upload" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("10_6kia2")]
-material = SubResource("ShaderMaterial_lnxn3")
+material = SubResource("ShaderMaterial_k68o7")
 layout_mode = 2
 mode = 1
 icon = ExtResource("13_4yitn")

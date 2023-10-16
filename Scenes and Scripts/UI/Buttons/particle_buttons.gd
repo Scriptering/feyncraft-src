@@ -71,6 +71,9 @@ func enter_particle_selection(problem: Problem) -> void:
 	await get_tree().process_frame
 	toggle_button_mute(false)
 
+func exit_particle_selection() -> void:
+	add_buttons_to_button_group()
+
 func get_toggled_particles(toggled: bool) -> Array[GLOBALS.Particle]:
 	var toggled_particles: Array[GLOBALS.Particle] = []
 	

@@ -5,6 +5,7 @@ signal signal_draw_raw_diagram
 signal signal_add_floating_menu
 signal signal_change_cursor
 signal signal_enter_game
+signal signal_change_scene(scene: GLOBALS.Scene, args: Array)
 signal signal_exit_game(mode: BaseMode.Mode, created_problem: Problem)
 signal signal_change_palette(palette: ImageTexture)
 signal signal_diagram_action_taken
@@ -12,6 +13,7 @@ signal signal_button_created(button: PanelButton)
 signal signal_problem_modified(problem_item)
 signal signal_problem_set_played(problem_set: ProblemSet, index: int)
 signal toggle_scene
+signal signal_save_files
 
 func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 	signal_draw_diagram.emit(drawing_matrix)
@@ -45,6 +47,9 @@ func exit_game(mode: BaseMode.Mode, problem: Problem = null) -> void:
 	toggle_scene.emit()
 	signal_exit_game.emit(mode, problem)
 
+func change_scene(scene: GLOBALS.Scene, args: Array = []) -> void:
+	signal_change_scene.emit(scene, args)
+
 func change_palette(palette: ImageTexture) -> void:
 	signal_change_palette.emit(palette)
 
@@ -56,3 +61,6 @@ func problem_modified(problem_item) -> void:
 
 func problem_set_played(problem_set: ProblemSet, index: int) -> void:
 	signal_problem_set_played.emit(problem_set, index)
+
+func save_files() -> void:
+	signal_save_files.emit()

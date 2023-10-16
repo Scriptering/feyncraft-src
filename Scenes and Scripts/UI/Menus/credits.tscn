@@ -29,11 +29,11 @@ expand_margin_bottom = 20.0
 base_font = ExtResource("9_t01cb")
 spacing_bottom = -2
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_60jnv"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w4ebr"]
 resource_local_to_scene = true
 shader = ExtResource("3_da0v7")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_own6y"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ecfoe"]
 resource_local_to_scene = true
 shader = ExtResource("3_da0v7")
 
@@ -86,7 +86,7 @@ use_parent_material = true
 layout_mode = 2
 offset_right = 118.0
 offset_bottom = 62.0
-theme_override_constants/separation = -141
+theme_override_constants/separation = -151
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
 use_parent_material = true
@@ -101,10 +101,12 @@ layout_mode = 2
 use_parent_material = true
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_80dg7")
-text = "Made by
+text = "- Made by
 Adam Owen and Jo Gaunt
-Made with open-source
+- Funded by The Royal Society
+- Made with open-source
 software:"
+horizontal_alignment = 1
 
 [node name="GridContainer" type="GridContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
 use_parent_material = true
@@ -142,7 +144,7 @@ text = "Aseprite"
 horizontal_alignment = 1
 
 [node name="Donate" parent="VBoxContainer/PanelContainer/VBoxContainer" instance=ExtResource("2_rnov3")]
-material = SubResource("ShaderMaterial_60jnv")
+material = SubResource("ShaderMaterial_w4ebr")
 layout_mode = 2
 icon = ExtResource("4_6crf1")
 text = "Donate on KoFi "
@@ -150,11 +152,11 @@ minimum_size = Vector2(100, 2.08165e-12)
 expand_icon = true
 
 [node name="Tab" parent="VBoxContainer" instance=ExtResource("6_5ir6h")]
-material = SubResource("ShaderMaterial_own6y")
+material = SubResource("ShaderMaterial_ecfoe")
 layout_mode = 2
 size_flags_horizontal = 4
 theme = SubResource("Theme_v1op3")
-TabText = "Credits"
+TabText = "CREDITS"
 TabMinimumSize = Vector2(50, 2.08165e-12)
 
 [connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/GridContainer/GodotIcon" to="." method="_on_godot_icon_pressed"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://c7n4o6dbkwilh"]
+[gd_scene load_steps=39 format=3 uid="uid://c7n4o6dbkwilh"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/Levels/World.gd" id="1"]
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="1_ovngh"]
@@ -14,7 +14,6 @@
 [ext_resource type="Texture2D" uid="uid://doyaei3vq3cbb" path="res://Textures/Background/state_line_shadow_top.png" id="8_fwvkc"]
 [ext_resource type="Script" path="res://Scenes and Scripts/Levels/Title.gd" id="8_moevd"]
 [ext_resource type="Texture2D" uid="uid://basekc2ce6rmp" path="res://Textures/Background/state_line_shadow_tile.png" id="9_075jn"]
-[ext_resource type="PackedScene" uid="uid://brd5auomhnn6l" path="res://Scenes and Scripts/UI/Cursor.tscn" id="10"]
 [ext_resource type="PackedScene" uid="uid://byrhmsj4f7kxm" path="res://Scenes and Scripts/Algorithms/Vision.tscn" id="13"]
 [ext_resource type="PackedScene" uid="uid://bs6vtukhlou2r" path="res://Scenes and Scripts/Algorithms/problem_generation.tscn" id="13_62803"]
 [ext_resource type="Script" path="res://Scenes and Scripts/Diagram/diagram_actions.gd" id="17_23v64"]
@@ -22,10 +21,8 @@
 [ext_resource type="PackedScene" uid="uid://bbkvwth6ke1is" path="res://Scenes and Scripts/UI/Menus/problem_tab.tscn" id="20_uaeg6"]
 [ext_resource type="PackedScene" uid="uid://bgvo11j4kfjdc" path="res://Scenes and Scripts/UI/Menus/generation_button.tscn" id="22_u64s1"]
 [ext_resource type="Texture2D" uid="uid://bvc8sakoqg037" path="res://Textures/Background/background_border.png" id="23_ebvm0"]
-[ext_resource type="PackedScene" uid="uid://cv3ttwhplgav" path="res://Scenes and Scripts/States/state_manager.tscn" id="23_kpp6c"]
 [ext_resource type="PackedScene" uid="uid://wgw4km4uc7fh" path="res://Scenes and Scripts/UI/Menus/menu_tab.tscn" id="24_f5s2a"]
 [ext_resource type="PackedScene" uid="uid://ds2iet11sv3ty" path="res://Scenes and Scripts/UI/Buttons/particle_buttons.tscn" id="24_lunb1"]
-[ext_resource type="PackedScene" uid="uid://b65u1c7v5mbh6" path="res://Scenes and Scripts/UI/Menus/controls_tab.tscn" id="25_1bppy"]
 [ext_resource type="PackedScene" uid="uid://dcpcxfh7umytq" path="res://Scenes and Scripts/UI/MiniDiagram/mini_diagram_viewer.tscn" id="27_laye5"]
 [ext_resource type="PackedScene" uid="uid://dxeg8j8rmil8t" path="res://Scenes and Scripts/UI/Menus/health_tab.tscn" id="31_f28gh"]
 [ext_resource type="PackedScene" uid="uid://c5scpc4iadf17" path="res://Scenes and Scripts/UI/ProblemSelection/creation_information.tscn" id="31_l3pqm"]
@@ -47,43 +44,39 @@ expand_margin_top = 1.0
 expand_margin_right = 1.0
 expand_margin_bottom = 1.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_asmuv"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wcal0"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0ccp2"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b8not"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qpma4"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0qcp1"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_b7fdb"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l5xg4"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_o7o4n"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_stvf3"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_aq3dy"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_88gs2"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_tybkj"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wcq6a"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8p1iw"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fa5ue"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_77ivp"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_7j4tj"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y26fb"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
@@ -300,7 +293,7 @@ z_index = 2
 use_parent_material = true
 
 [node name="CreationInformation" parent="FloatingMenus" instance=ExtResource("31_l3pqm")]
-material = SubResource("ShaderMaterial_asmuv")
+material = SubResource("ShaderMaterial_wcal0")
 offset_left = 496.0
 offset_top = 144.0
 offset_right = 496.0
@@ -308,7 +301,7 @@ offset_bottom = 144.0
 
 [node name="GeneratedDiagrams" parent="FloatingMenus" instance=ExtResource("27_laye5")]
 visible = false
-material = SubResource("ShaderMaterial_0ccp2")
+material = SubResource("ShaderMaterial_b8not")
 offset_left = 177.0
 offset_top = 51.0
 offset_right = 177.0
@@ -317,7 +310,7 @@ title = "Generated Diagrams"
 
 [node name="SubmittedDiagrams" parent="FloatingMenus" instance=ExtResource("27_laye5")]
 visible = false
-material = SubResource("ShaderMaterial_qpma4")
+material = SubResource("ShaderMaterial_0qcp1")
 offset_left = 177.0
 offset_top = 51.0
 offset_right = 177.0
@@ -329,14 +322,14 @@ z_index = 3
 use_parent_material = true
 
 [node name="VisionButton" parent="PullOutTabs" instance=ExtResource("3_hqsoq")]
-material = SubResource("ShaderMaterial_b7fdb")
+material = SubResource("ShaderMaterial_l5xg4")
 offset_left = 612.0
 offset_top = 60.0
 offset_right = 634.0
 offset_bottom = 120.0
 
 [node name="ParticleButtons" parent="PullOutTabs" instance=ExtResource("24_lunb1")]
-material = SubResource("ShaderMaterial_o7o4n")
+material = SubResource("ShaderMaterial_stvf3")
 anchors_preset = 7
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -348,14 +341,14 @@ grow_vertical = 0
 size_flags_horizontal = 4
 
 [node name="GenerationButton" parent="PullOutTabs" instance=ExtResource("22_u64s1")]
-material = SubResource("ShaderMaterial_aq3dy")
+material = SubResource("ShaderMaterial_88gs2")
 offset_left = -76.0
 offset_top = 57.0
 offset_right = -76.0
 offset_bottom = 57.0
 
 [node name="ProblemTab" parent="PullOutTabs" instance=ExtResource("20_uaeg6")]
-material = SubResource("ShaderMaterial_tybkj")
+material = SubResource("ShaderMaterial_wcq6a")
 use_parent_material = true
 offset_left = 157.0
 offset_top = -26.0
@@ -363,21 +356,14 @@ offset_right = 157.0
 offset_bottom = -26.0
 
 [node name="MenuTab" parent="PullOutTabs" instance=ExtResource("24_f5s2a")]
-material = SubResource("ShaderMaterial_8p1iw")
+material = SubResource("ShaderMaterial_fa5ue")
 offset_left = 515.0
 offset_top = 339.0
 offset_right = 515.0
 offset_bottom = 339.0
 
-[node name="ControlsTab" parent="PullOutTabs" instance=ExtResource("25_1bppy")]
-material = SubResource("ShaderMaterial_77ivp")
-offset_left = 10.0
-offset_top = 326.0
-offset_right = 10.0
-offset_bottom = 326.0
-
 [node name="HealthTab" parent="PullOutTabs" instance=ExtResource("31_f28gh")]
-material = SubResource("ShaderMaterial_7j4tj")
+material = SubResource("ShaderMaterial_y26fb")
 offset_left = 501.0
 offset_top = -39.0
 offset_right = 501.0
@@ -391,11 +377,7 @@ offset_bottom = 14.0
 [node name="ShaderControl" type="Node" parent="."]
 script = ExtResource("2")
 
-[node name="state_manager" parent="." instance=ExtResource("23_kpp6c")]
-
 [node name="vision_manager" type="Node" parent="."]
-
-[node name="Cursor" parent="." instance=ExtResource("10")]
 
 [connection signal="mouse_entered" from="Diagram" to="Diagram" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="Diagram" to="Diagram" method="_on_mouse_exited"]

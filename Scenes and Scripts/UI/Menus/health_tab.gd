@@ -16,8 +16,6 @@ func init(diagram: MainDiagram) -> void:
 	Diagram = diagram
 	Diagram.action_taken.connect(check)
 	
-	await get_tree().process_frame
-	
 	check()
 
 func check() -> void:

@@ -8,11 +8,11 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q3cex"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_d8ae0"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ae1kh"]
 resource_local_to_scene = true
 shader = ExtResource("2_bvxeb")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_x0yl4"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_us2ud"]
 resource_local_to_scene = true
 shader = ExtResource("2_bvxeb")
 
@@ -22,6 +22,7 @@ size = Vector2(87, 25.5)
 [node name="Control" type="Control" node_paths=PackedStringArray("GrabAreas")]
 layout_mode = 3
 anchors_preset = 0
+mouse_filter = 2
 script = ExtResource("1_qn5hj")
 GrabAreas = [NodePath("ProblemSelection"), NodePath("TitleArea")]
 
@@ -44,12 +45,13 @@ use_hidden_tabs_for_min_size = true
 script = ExtResource("1_aqrhn")
 
 [node name="ProblemSetList" parent="ProblemSelection" instance=ExtResource("3_chpqf")]
-material = SubResource("ShaderMaterial_d8ae0")
+material = SubResource("ShaderMaterial_ae1kh")
 layout_mode = 2
+mouse_filter = 1
 
 [node name="ProblemList" parent="ProblemSelection" instance=ExtResource("1_gfl8q")]
 visible = false
-material = SubResource("ShaderMaterial_x0yl4")
+material = SubResource("ShaderMaterial_us2ud")
 layout_mode = 2
 
 [node name="TitleArea" type="Area2D" parent="."]

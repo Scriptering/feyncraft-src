@@ -14,8 +14,9 @@ var ProblemSetItem: PackedScene = preload("res://Scenes and Scripts/UI/ProblemSe
 var problem_sets: Array[ProblemSet]
 
 func _ready() -> void:
-	tree_exited.connect(_on_tree_exited)
 	play_problem_set.connect(EVENTBUS.enter_game)
+	
+	EVENTBUS.signal_save_files.connect(save_problem_sets)
 	
 	load_problem_sets()
 	
@@ -117,9 +118,6 @@ func save_problem_sets() -> void:
 			continue
 
 		GLOBALS.save(problem_set.problem_set, problem_set.file_path)
-
-func _on_tree_exited() -> void:
-	save_problem_sets()
 	
 func create_new_problem_set(problem_set_path: String) -> void:
 	var new_problem_set: ListItem = ProblemSetItem.instantiate()

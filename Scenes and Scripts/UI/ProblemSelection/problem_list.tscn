@@ -13,7 +13,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vw46e"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gr5na"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ked4n"]
 resource_local_to_scene = true
 shader = ExtResource("4_sya5g")
 
@@ -26,6 +26,7 @@ offset_right = -365.0
 offset_bottom = -263.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxEmpty_1o4m4")
 script = ExtResource("2_ycbub")
 
@@ -37,6 +38,7 @@ theme_override_constants/separation = -235
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
+mouse_filter = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer"]
 use_parent_material = true
@@ -59,7 +61,7 @@ size_flags_horizontal = 3
 layout_mode = 2
 
 [node name="AddProblem" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_tav84")]
-material = SubResource("ShaderMaterial_gr5na")
+material = SubResource("ShaderMaterial_ked4n")
 layout_mode = 2
 icon = ExtResource("5_6tky2")
 minimum_size = Vector2(154, 28)
@@ -71,6 +73,7 @@ use_parent_material = true
 custom_minimum_size = Vector2(89, 2.08165e-12)
 layout_mode = 2
 size_flags_horizontal = 4
+mouse_filter = 1
 theme_override_styles/panel = ExtResource("7_2wbjf")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TitleContainer"]

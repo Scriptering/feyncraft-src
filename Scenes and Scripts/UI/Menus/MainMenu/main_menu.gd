@@ -7,20 +7,26 @@ signal sandbox_pressed
 var Level = preload("res://Scenes and Scripts/Levels/world.tscn")
 var placing: bool = false
 
-@onready var palette_control: Control = $FloatingMenus/PaletteControl
 @onready var problem_selection: Control = $FloatingMenus/ProblemSelection
-@onready var States = $state_manager
 @onready var Diagram: MainDiagram = $Diagram
 @onready var MenuTab: Control = $MenuTab
 
+var ControlsTab: Control
+var StateManager: Node
+var PaletteList: GrabbableControl
+
 func _ready():
 	EVENTBUS.signal_exit_game.connect(_on_exit_game)
+
+func init(state_manager: Node, controls_tab: Control, palette_list: GrabbableControl):
+	StateManager = state_manager
+	ControlsTab = controls_tab
+	PaletteList = palette_list
 	
 	MenuTab.init(PaletteMenu)
-	palette_control.closed.connect(_on_palette_control_closed)
+	PaletteList.closed.connect(_on_PaletteList_closed)
 	problem_selection.closed.connect(_on_problem_selection_closed)
-	States.init($Diagram, $ControlsTab)
-	$Diagram.init($ParticleButtons, $ControlsTab, $VisionButton, $Algorithms/PathFinding, States)
+	$Diagram.init($ParticleButtons, ControlsTab, $VisionButton, $Algorithms/PathFinding, StateManager)
 	$Algorithms/PathFinding.init($Diagram, $Diagram.StateLines)
 	$Algorithms/ProblemGeneration.init($Algorithms/SolutionGeneration)
 	
@@ -30,16 +36,16 @@ func _on_sandbox_pressed() -> void:
 	sandbox_pressed.emit()
 
 func _on_palettes_toggled(button_pressed) -> void:
-	palette_control.visible = button_pressed
+	PaletteList.visible = button_pressed
 	
-	palette_control.set_anchors_preset(Control.PRESET_CENTER)
+	PaletteList.set_anchors_preset(Control.PRESET_CENTER)
 
 func _on_problem_sets_toggled(button_pressed) -> void:
 	problem_selection.visible = button_pressed
 	
 	problem_selection.set_anchors_preset(Control.PRESET_CENTER)
 
-func _on_palette_control_closed() -> void:
+func _on_PaletteList_closed() -> void:
 	$Center/VBoxContainer/HBoxContainer/Palettes.button_pressed = false
 
 func _on_problem_selection_closed() -> void:

@@ -3,8 +3,6 @@ extends Node2D
 signal problem_submitted
 signal exit_to_main_menu
 
-@export var PaletteMenu: GrabbableControl
-
 @onready var FPS = get_node('FPS')
 @onready var Pathfinding = $Algorithms/PathFinding
 @onready var SolutionGeneration = $Algorithms/SolutionGeneration
@@ -17,8 +15,11 @@ signal exit_to_main_menu
 @onready var VisionTab := $PullOutTabs/VisionButton
 @onready var CreationInformation := $FloatingMenus/CreationInformation
 @onready var HealthTab := $PullOutTabs/HealthTab
+@onready var Diagram: DiagramBase = $Diagram
 
-@onready var States = $state_manager
+var ControlsTab: Control
+var StateManager: Node
+var PaletteMenu: GrabbableControl
 
 var previous_mode: BaseMode.Mode = BaseMode.Mode.Null
 var current_mode: BaseMode.Mode = BaseMode.Mode.Null: set = _set_current_mode
@@ -41,9 +42,6 @@ var mode_exit_funcs : Dictionary = {
 }
 
 func _set_current_mode(new_value: BaseMode.Mode):
-	if new_value == current_mode:
-		return
-	
 	if current_mode != BaseMode.Mode.Null:
 		mode_exit_funcs[current_mode].call()
 
@@ -51,30 +49,27 @@ func _set_current_mode(new_value: BaseMode.Mode):
 	current_mode = new_value
 	mode_enter_funcs[current_mode].call()
 
-func _ready():
+func init(state_manager: Node, controls_tab: Control, palette_list: GrabbableControl):
+	StateManager = state_manager
+	ControlsTab = controls_tab
+	PaletteMenu = palette_list
 	VisionTab.vision_button_toggled.connect(_vision_button_toggled)
-
-	MenuTab.exit_pressed.connect(
-		func() -> void:
-			exit_to_main_menu.emit()
-	)
 	MenuTab.toggled_line_labels.connect(
 		func(toggle: bool) -> void:
-			$Diagram.show_line_labels = toggle
+			Diagram.show_line_labels = toggle
 	)
 	
 	ProblemTab.next_problem_pressed.connect(_on_next_problem_pressed)
 	
 	MenuTab.init(PaletteMenu)
-	CreationInformation.init($Diagram, self)
-	States.init($Diagram, $PullOutTabs/ControlsTab)
-	$Diagram.init(ParticleButtons, $PullOutTabs/ControlsTab, VisionTab, $Algorithms/PathFinding, States)
-	GenerationTab.init($Diagram, $Algorithms/SolutionGeneration, $FloatingMenus/GeneratedDiagrams)
+	CreationInformation.init(Diagram, self)
+	Diagram.init(ParticleButtons, ControlsTab, VisionTab, $Algorithms/PathFinding, StateManager)
+	GenerationTab.init(Diagram, $Algorithms/SolutionGeneration, $FloatingMenus/GeneratedDiagrams)
 	ProblemTab.init(
-		$Diagram, Problem.new(), $FloatingMenus/SubmittedDiagrams, $Algorithms/ProblemGeneration, $Algorithms/SolutionGeneration
+		Diagram, Problem.new(), $FloatingMenus/SubmittedDiagrams, $Algorithms/ProblemGeneration, $Algorithms/SolutionGeneration
 	)
-	HealthTab.init($Diagram)
-	$Algorithms/PathFinding.init($Diagram, $Diagram.StateLines)
+	HealthTab.init(Diagram)
+	$Algorithms/PathFinding.init(Diagram, Diagram.StateLines)
 	$Algorithms/ProblemGeneration.init($Algorithms/SolutionGeneration)
 	
 	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
@@ -86,7 +81,7 @@ func _vision_button_toggled(current_vision: GLOBALS.Vision) -> void:
 	$ShaderControl.toggle_interaction_strength(current_vision == GLOBALS.Vision.Strength)
 
 func load_problem(problem: Problem) -> void:
-	$Diagram.load_problem(problem)
+	Diagram.load_problem(problem)
 	ProblemTab.load_problem(problem)
 	ParticleButtons.load_problem(problem)
 
@@ -106,6 +101,7 @@ func enter_particle_selection() -> void:
 
 func exit_particle_selection() -> void:
 	GLOBALS.creating_problem.allowed_particles = ParticleButtons.get_toggled_particles(true)
+	ParticleButtons.exit_particle_selection()
 	ParticleButtons.load_problem(GLOBALS.creating_problem)
 
 func enter_sandbox() -> void:
@@ -144,7 +140,7 @@ func exit_problem_solving() -> void:
 
 func exit_problem_creation() -> void:
 	var creating_problem: Problem = GLOBALS.creating_problem
-	var drawn_diagram: DrawingMatrix = $Diagram.generate_drawing_matrix_from_diagram()
+	var drawn_diagram: DrawingMatrix = Diagram.generate_drawing_matrix_from_diagram()
 	for state in [StateLine.StateType.Initial, StateLine.StateType.Final]:
 		GLOBALS.creating_problem.state_interactions[state] = drawn_diagram.get_state_interactions(state)
 	

@@ -499,18 +499,27 @@ func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 	line_diagram_actions = true
 
 func undo() -> void:
+	if !is_inside_tree():
+		return
+	
 	move_backward_in_history()
 	
 	await get_tree().process_frame
 	action()
 
 func redo() -> void:
+	if !is_inside_tree():
+		return
+	
 	move_forward_in_history()
 	
 	await get_tree().process_frame
 	action()
 
 func add_diagram_to_history(clear_future: bool = true, diagram: DrawingMatrix = generate_drawing_matrix_from_diagram()) -> void:
+	if !is_inside_tree():
+		return
+	
 	diagram_history.append(diagram)
 	
 	if clear_future:
@@ -552,6 +561,9 @@ func print_history_sizes() -> void:
 	print("Diagram future  size  = " + str(diagram_future.size()))
 
 func draw_history() -> void:
+	if !is_inside_tree():
+		return
+	
 	for diagram in diagram_history:
 		draw_diagram(diagram)
 		await get_tree().create_timer(0.5).timeout
