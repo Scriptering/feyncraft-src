@@ -3,6 +3,8 @@ extends Node2D
 signal problem_submitted
 signal exit_to_main_menu
 
+@export var PaletteMenu: GrabbableControl
+
 @onready var FPS = get_node('FPS')
 @onready var Pathfinding = $Algorithms/PathFinding
 @onready var SolutionGeneration = $Algorithms/SolutionGeneration
@@ -51,11 +53,7 @@ func _set_current_mode(new_value: BaseMode.Mode):
 
 func _ready():
 	VisionTab.vision_button_toggled.connect(_vision_button_toggled)
-	
-	EVENTBUS.signal_add_floating_menu.connect(
-		func(menu: Node): $FloatingMenus.add_child(menu)
-	)
-	
+
 	MenuTab.exit_pressed.connect(
 		func() -> void:
 			exit_to_main_menu.emit()
@@ -67,7 +65,7 @@ func _ready():
 	
 	ProblemTab.next_problem_pressed.connect(_on_next_problem_pressed)
 	
-	MenuTab.init()
+	MenuTab.init(PaletteMenu)
 	CreationInformation.init($Diagram, self)
 	States.init($Diagram, $PullOutTabs/ControlsTab)
 	$Diagram.init(ParticleButtons, $PullOutTabs/ControlsTab, VisionTab, $Algorithms/PathFinding, States)

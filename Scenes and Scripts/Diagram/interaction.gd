@@ -5,9 +5,9 @@ signal clicked_on
 signal request_deletion
 signal show_information_box
 
-@onready var Ball = get_node("Ball")
-@onready var Dot = get_node("Dot")
-@onready var InfoNumberLabel = get_node('InfoNumberLabel')
+@onready var Ball: AnimatedSprite2D = $Ball
+@onready var Dot: AnimatedSprite2D = $Dot
+@onready var InfoNumberLabel: Label = $InfoNumberLabel
 @export var information_box_offset := Vector2(0, 0)
 
 static var used_information_numbers: Array[int] = []
@@ -65,12 +65,12 @@ func init(diagram: MainDiagram) -> void:
 	Crosshair = diagram.Crosshair
 	StateManager = diagram.StateManager
 
-func _process(_delta: float) -> void:
-	if old_connected_lines != connected_lines:
-		update_interaction()
-		old_connected_lines = connected_lines.duplicate(true)
-	if connected_lines.size() == 0 and not grabbed and StateManager.state != BaseState.State.Drawing:
-		queue_free()
+#func _process(_delta: float) -> void:
+#	if old_connected_lines != connected_lines:
+#		update_interaction()
+#		old_connected_lines = connected_lines.duplicate(true)
+#	if connected_lines.size() == 0 and not grabbed and StateManager.state != BaseState.State.Drawing:
+#		queue_free()
 
 func _grab_area_hovered_changed(new_value: bool):
 	self.hovering = new_value
@@ -79,7 +79,7 @@ func _grab_area_hovered_changed(new_value: bool):
 func _input(event: InputEvent) -> void:
 	super._input(event)
 	if Input.is_action_just_pressed("click") and hovering:
-		emit_signal("clicked_on", self)
+		clicked_on.emit(self)
 
 func _set_hovering(new_value: bool):
 	hovering = new_value
@@ -364,7 +364,7 @@ func open_information_box() -> void:
 	information_box.ConnectedInteraction = self
 	information_box.ID = information_id
 	information_box.position = Diagram.position + position + information_box_offset
-	emit_signal("show_information_box", information_box)
+	show_information_box.emit(information_box)
 	
 	InfoNumberLabel.text = str(information_id)
 	InfoNumberLabel.show()

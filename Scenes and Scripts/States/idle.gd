@@ -7,35 +7,36 @@ var hovering_disabled_button: bool = false
 func _ready() -> void:
 	$minimum_press_timer.wait_time = minimum_press_time
 	EVENTBUS.signal_button_created.connect(_button_created)
+	connect_buttons()
 
 func connect_button(button: PanelButton) -> void:
 	if button.button_mouse_entered.is_connected(_on_button_mouse_entered):
 		return
-	
+
 	button.button_mouse_entered.connect(_on_button_mouse_entered)
 	button.mouse_exited.connect(_on_button_mouse_exited)
-
-func disconnect_button(button: PanelButton) -> void:
-	if !button.button_mouse_entered.is_connected(_on_button_mouse_entered):
-		return
-	button.button_mouse_entered.disconnect(_on_button_mouse_entered)
-	button.mouse_exited.disconnect(_on_button_mouse_exited)
-
+#
+#func disconnect_button(button: PanelButton) -> void:
+#	if !button.button_mouse_entered.is_connected(_on_button_mouse_entered):
+#		return
+#	button.button_mouse_entered.disconnect(_on_button_mouse_entered)
+#	button.mouse_exited.disconnect(_on_button_mouse_exited)
+#
 func connect_buttons() -> void:
 	for button in get_tree().get_nodes_in_group('button'):
 		connect_button(button)
-
-func disconnect_buttons() -> void:
-	for button in get_tree().get_nodes_in_group('button'):
-		disconnect_button(button)
+#
+#func disconnect_buttons() -> void:
+#	for button in get_tree().get_nodes_in_group('button'):
+#		disconnect_button(button)
 
 func enter() -> void:
 	super.enter()
-	connect_buttons()
+#	connect_buttons()
 
 func exit() -> void:
 	super.exit()
-	disconnect_buttons()
+#	disconnect_buttons()
 
 func process(_delta: float) -> State:
 	if Controls.Snip.is_just_pressed:
@@ -55,11 +56,11 @@ func input(event: InputEvent) -> State:
 	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and !hovering_disabled_button:
 		if event.pressed:
 			$minimum_press_timer.start()
-			emit_signal("change_cursor", GLOBALS.CURSOR.press)
+			change_cursor.emit(GLOBALS.CURSOR.press)
 			if can_draw():
 				return State.Drawing
 		elif !event.pressed and $minimum_press_timer.is_stopped():
-			emit_signal("change_cursor", GLOBALS.CURSOR.default)
+			change_cursor.emit(GLOBALS.CURSOR.default)
 	elif Input.is_action_just_pressed("clear") and !GLOBALS.in_main_menu:
 		Diagram.add_diagram_to_history()
 		Diagram.clear_diagram()
@@ -78,19 +79,22 @@ func can_draw() -> bool:
 	return true
 
 func _on_button_mouse_entered(button: PanelButton) -> void:
-	if !button.disabled:
+	if !button.disabled or state_manager.state != State.Idle:
 		return
 	
-	emit_signal("change_cursor", GLOBALS.CURSOR.disabled)
+	change_cursor.emit(GLOBALS.CURSOR.disabled)
 	hovering_disabled_button = true
 
 func _on_button_mouse_exited() -> void:
-	emit_signal("change_cursor", GLOBALS.CURSOR.default)
+	if state_manager.state != State.Idle:
+		return
+	
+	change_cursor.emit(GLOBALS.CURSOR.default)
 	hovering_disabled_button = false
 
 func _on_minimum_press_timer_timeout():
 	if state_manager.state == State.Idle and !Input.is_action_pressed("click"):
-		emit_signal("change_cursor", GLOBALS.CURSOR.default)
+		change_cursor.emit(GLOBALS.CURSOR.default)
 
 func _button_created(button: PanelButton) -> void:
 	connect_button(button)

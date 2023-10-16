@@ -21,7 +21,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_uhdxj"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_1oyqp"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2cy2t"]
 resource_local_to_scene = true
 shader = ExtResource("4_8p7ty")
 
@@ -87,7 +87,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="NextStep" parent="VBoxContainer/VBoxContainer/Buttons" instance=ExtResource("3_qv0n1")]
-material = SubResource("ShaderMaterial_1oyqp")
+material = SubResource("ShaderMaterial_2cy2t")
 layout_mode = 2
 icon = ExtResource("8_rm0tq")
 minimum_size = Vector2(24, 21)

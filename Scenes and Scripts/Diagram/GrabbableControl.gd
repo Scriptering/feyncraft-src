@@ -22,7 +22,7 @@ func _ready():
 
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("click") and grab_area_hovered:
-		emit_signal("grab_area_clicked", self)
+		grab_area_clicked.emit(self)
 
 func _process(_delta:float):
 	if grabbed and follow_cursor:
@@ -31,11 +31,11 @@ func _process(_delta:float):
 func pick_up() -> void:
 	grabbed = true
 	drag_vector_start = position - get_global_mouse_position()
-	emit_signal("picked_up", self)
+	picked_up.emit(self)
 
 func drop() -> void:
 	grabbed = false
-	emit_signal("dropped", self)
+	dropped.emit(self)
 
 func can_be_grabbed() -> bool:
 	return grabbable and grab_area_hovered

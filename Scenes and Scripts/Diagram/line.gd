@@ -434,6 +434,10 @@ func _on_click_area_mouse_entered():
 func _on_click_area_mouse_exited():
 	hovering = false
 
+func delete() -> void:
+	queue_free()
+	deconstructor()
+
 func deconstructor():
 	being_deleted = true
 	for interaction in self.connected_interactions:
@@ -441,9 +445,6 @@ func deconstructor():
 	Diagram.update_statelines()
 	points[Point.Start] = Vector2.LEFT
 	points[Point.End] = Vector2.LEFT
-
-func _on_tree_exiting():
-	deconstructor()
 
 func set_point_interaction_strength_alpha(point: Point, interaction_strength_alpha: float) -> void:
 	if point == Point.Start:

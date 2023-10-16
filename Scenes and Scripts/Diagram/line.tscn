@@ -86,6 +86,5 @@ scale = Vector2(0.75, 0.75)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="clickArea"]
 shape = SubResource("RectangleShape2D_cuptf")
 
-[connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
 [connection signal="mouse_entered" from="clickArea" to="." method="_on_click_area_mouse_entered"]
 [connection signal="mouse_exited" from="clickArea" to="." method="_on_click_area_mouse_exited"]

@@ -4,7 +4,7 @@ extends Node
 
 enum ColourScheme {TeaStain, SeaFoam, Professional}
 enum COLOURS {primary, secondary, pencil, primary_highlight, invalid, invalid_highlight}
-
+enum Scene {Level, MainMenu}
 enum Vision {Colour, Shade, Strength, None}
 
 var in_main_menu: bool = true
@@ -307,6 +307,7 @@ var PARTICLE_MASSES: Dictionary = {
 	Particle.bottom: 4.18e3
 }
 
+const MIN_INTERACTION_STRENGTH: float = 1e-3
 var INTERACTION_STRENGTHS: Array = [
 	[
 		[abs(QUANTUM_NUMBERS[Particle.up][QuantumNumber.charge]*ALPHA_EM)],
@@ -614,12 +615,15 @@ func set_interaction_strength_limits() -> void:
 	var minimum_strength: float = 1
 	var maximum_strength: float = 0
 	
-	for interaction_type in INTERACTION_STRENGTHS:
-		for interaction_strength in interaction_type:
-			if interaction_strength[0] > maximum_strength:
-				maximum_strength = interaction_strength[0]
-			elif interaction_strength[0] < minimum_strength:
-				minimum_strength = interaction_strength[0]
+	for i in INTERACTION_STRENGTHS.size():
+		for j in INTERACTION_STRENGTHS[i].size():
+			INTERACTION_STRENGTHS[i][j][0] = max(INTERACTION_STRENGTHS[i][j][0], MIN_INTERACTION_STRENGTH)
+			var interaction_strength: float = INTERACTION_STRENGTHS[i][j][0]
+			
+			if interaction_strength > maximum_strength:
+				maximum_strength = interaction_strength
+			elif interaction_strength < minimum_strength:
+				minimum_strength = interaction_strength
 	
 	MAXIMUM_INTERACTION_STRENGTH = maximum_strength
 	MINIMUM_INTERACTION_STRENGTH = minimum_strength

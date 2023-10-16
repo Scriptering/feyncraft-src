@@ -3,6 +3,6 @@ extends GrabbableControl
 signal closed
 
 func _ready() -> void:
-	super._ready()
+	super()
 	
 	$ProblemSelection.closed.connect(func(): closed.emit())

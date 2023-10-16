@@ -23,19 +23,19 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f2w4s"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_xonxn"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_708pn"]
 resource_local_to_scene = true
 shader = ExtResource("9_3cb6c")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_5e1ny"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gfq1u"]
 resource_local_to_scene = true
 shader = ExtResource("9_3cb6c")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_yyr3k"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2gw30"]
 resource_local_to_scene = true
 shader = ExtResource("9_3cb6c")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8p1ka"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jrbwx"]
 resource_local_to_scene = true
 shader = ExtResource("9_3cb6c")
 
@@ -131,7 +131,7 @@ layout_mode = 2
 size_flags_horizontal = 2
 
 [node name="Close" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HBoxContainer" instance=ExtResource("8_eom8q")]
-material = SubResource("ShaderMaterial_xonxn")
+material = SubResource("ShaderMaterial_708pn")
 layout_mode = 2
 icon = ExtResource("11_rg5fn")
 minimum_size = Vector2(24, 24)
@@ -142,7 +142,7 @@ icon_use_parent_material = true
 tooltip = "Close"
 
 [node name="Copy" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("8_eom8q")]
-material = SubResource("ShaderMaterial_5e1ny")
+material = SubResource("ShaderMaterial_gfq1u")
 layout_mode = 2
 icon = ExtResource("10_wm7fa")
 minimum_size = Vector2(24, 24)
@@ -153,7 +153,7 @@ icon_use_parent_material = true
 tooltip = "Copy"
 
 [node name="Paste" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("8_eom8q")]
-material = SubResource("ShaderMaterial_yyr3k")
+material = SubResource("ShaderMaterial_2gw30")
 layout_mode = 2
 icon = ExtResource("11_ne5rf")
 minimum_size = Vector2(24, 24)
@@ -170,7 +170,7 @@ size_flags_horizontal = 3
 alignment = 2
 
 [node name="Submit" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/SubmitContainer" instance=ExtResource("8_eom8q")]
-material = SubResource("ShaderMaterial_8p1ka")
+material = SubResource("ShaderMaterial_jrbwx")
 layout_mode = 2
 icon = ExtResource("12_buvla")
 minimum_size = Vector2(24, 24)

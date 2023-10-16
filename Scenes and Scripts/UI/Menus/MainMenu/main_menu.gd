@@ -2,6 +2,8 @@ extends Control
 
 signal sandbox_pressed
 
+@export var PaletteMenu: GrabbableControl
+
 var Level = preload("res://Scenes and Scripts/Levels/world.tscn")
 var placing: bool = false
 
@@ -12,12 +14,9 @@ var placing: bool = false
 @onready var MenuTab: Control = $MenuTab
 
 func _ready():
-	EVENTBUS.signal_add_floating_menu.connect(
-		func(menu: Node): $FloatingMenus.add_child(menu)
-	)
 	EVENTBUS.signal_exit_game.connect(_on_exit_game)
 	
-	MenuTab.init()
+	MenuTab.init(PaletteMenu)
 	palette_control.closed.connect(_on_palette_control_closed)
 	problem_selection.closed.connect(_on_problem_selection_closed)
 	States.init($Diagram, $ControlsTab)

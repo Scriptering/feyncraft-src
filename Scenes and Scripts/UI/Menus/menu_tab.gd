@@ -9,12 +9,10 @@ signal toggled_line_labels(button_pressed: bool)
 
 var palette_menu: GrabbableControl
 
-func init() -> void:
-	palette_menu = preload("res://Scenes and Scripts/UI/ColourPicker/palette_list.tscn").instantiate()
-	
+func init(_palette_menu) -> void:
+	palette_menu = _palette_menu
 	palette_menu.hide()
 	palette_menu.closed.connect(_on_palette_menu_closed)
-	EVENTBUS.add_floating_menu(palette_menu)
 	
 func _on_exit_pressed() -> void:
 	exit_pressed.emit()

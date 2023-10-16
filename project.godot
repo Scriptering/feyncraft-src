@@ -23,7 +23,7 @@ config/icon="res://icon.png"
 
 GLOBALS="*res://Scenes and Scripts/GLOBALS.gd"
 SOUNDBUS="*res://Scenes and Scripts/sound_bus.tscn"
-EVENTBUS="*res://Scenes and Scripts/event_bus.tscn"
+EVENTBUS="*res://Scenes and Scripts/event_bus.gd"
 
 [display]
 
@@ -32,6 +32,7 @@ window/size/viewport_height=360
 window/size/mode=3
 window/energy_saving/keep_screen_on=false
 window/stretch/mode="canvas_items"
+window/vsync/vsync_mode=0
 mouse_cursor/custom_image_hotspot=Vector2(30, 7)
 mouse_cursor/tooltip_position_offset=Vector2(-5, 10)
 

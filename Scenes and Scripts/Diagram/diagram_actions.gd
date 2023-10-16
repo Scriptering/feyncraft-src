@@ -320,8 +320,7 @@ func delete_interaction(interaction: Interaction) -> void:
 	action()
 
 func recursive_delete_line(line: ParticleLine) -> void:
-	line.queue_free()
-	line.deconstructor()
+	line.delete()
 	for interaction in line.connected_interactions:
 		if interaction.connected_lines.size() == 0:
 			interaction.queue_free()
