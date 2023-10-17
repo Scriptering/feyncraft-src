@@ -75,11 +75,11 @@ offset = Vector2(-4, 0)
 visible = false
 z_index = 1
 material = SubResource("ShaderMaterial_g5clp")
-scale = Vector2(0.75, 0.75)
+scale = Vector2(1.5, 1.5)
 
 [node name="spareText" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_00w2k")
-scale = Vector2(0.75, 0.75)
+scale = Vector2(1.5, 1.5)
 
 [node name="clickArea" type="Area2D" parent="."]
 

@@ -12,15 +12,14 @@ shader_parameter/line_thickness = 1.0
 
 [node name="EquationSymbol" type="TextureRect"]
 material = SubResource("ShaderMaterial_24p5n")
+custom_minimum_size = Vector2(2.08165e-12, 2.08165e-12)
 offset_right = 16.3333
 offset_bottom = 28.0
 scale = Vector2(0.2, 0.2)
 size_flags_horizontal = 3
 size_flags_vertical = 3
 texture = ExtResource("1")
-expand_mode = 3
-stretch_mode = 4
+stretch_mode = 5
 script = ExtResource("2")
 
 [node name="Tooltip" parent="." instance=ExtResource("4_7bq6a")]
-z_index = 2

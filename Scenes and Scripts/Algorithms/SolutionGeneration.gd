@@ -113,6 +113,8 @@ func generate_diagrams(
 				continue
 			
 			generated_connection_matrices += new_connection_matrices
+			
+			if find == Find.One: break
 		
 		if (find == Find.One or find == Find.LowestOrder) and generated_connection_matrices.size() != 0:
 			break
@@ -158,7 +160,7 @@ func get_degrees_to_check(
 		get_non_shared_elements(initial_hadron_particles, final_hadron_particles).size()
 	)
 
-	min_degree = max(floor(number_of_unconnectable_particles/3.0)+1, min_degree)
+	min_degree = max(ceil(number_of_unconnectable_particles/3.0), min_degree)
 	
 	var unconnected_particles := interaction_matrix.get_unconnected_base_particles()
 	unconnected_particles.sort()

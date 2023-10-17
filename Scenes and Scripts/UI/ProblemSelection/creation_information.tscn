@@ -10,15 +10,15 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0pnha"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_jqdod"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_iw1vj"]
 resource_local_to_scene = true
 shader = ExtResource("3_e86ap")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_dc34v"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jjumi"]
 resource_local_to_scene = true
 shader = ExtResource("3_e86ap")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_myhti"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_68txq"]
 resource_local_to_scene = true
 shader = ExtResource("3_e86ap")
 
@@ -64,23 +64,24 @@ tabs_visible = false
 use_hidden_tabs_for_min_size = true
 
 [node name="ParticleSelectionInfo" parent="VBoxContainer/TabContainer" instance=ExtResource("3_gxgmm")]
-material = SubResource("ShaderMaterial_jqdod")
+material = SubResource("ShaderMaterial_iw1vj")
 layout_mode = 2
 mouse_filter = 1
 
 [node name="ProblemCreationInfo" parent="VBoxContainer/TabContainer" instance=ExtResource("5_224cs")]
 visible = false
-material = SubResource("ShaderMaterial_dc34v")
+material = SubResource("ShaderMaterial_jjumi")
 layout_mode = 2
 mouse_filter = 1
 
 [node name="SolutionCreationInfo" parent="VBoxContainer/TabContainer" instance=ExtResource("6_jjee5")]
 visible = false
-material = SubResource("ShaderMaterial_myhti")
+material = SubResource("ShaderMaterial_68txq")
 layout_mode = 2
 mouse_filter = 1
 
 [connection signal="next" from="VBoxContainer/TabContainer/ParticleSelectionInfo" to="." method="_on_particle_selection_info_next"]
+[connection signal="toggle_all" from="VBoxContainer/TabContainer/ParticleSelectionInfo" to="." method="_on_particle_selection_info_toggle_all"]
 [connection signal="next" from="VBoxContainer/TabContainer/ProblemCreationInfo" to="." method="_on_problem_creation_info_next"]
 [connection signal="previous" from="VBoxContainer/TabContainer/ProblemCreationInfo" to="." method="_on_problem_creation_info_previous"]
 [connection signal="exit" from="VBoxContainer/TabContainer/SolutionCreationInfo" to="." method="_on_solution_creation_info_exit"]

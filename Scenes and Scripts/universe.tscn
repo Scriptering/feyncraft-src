@@ -9,19 +9,19 @@
 [ext_resource type="PackedScene" uid="uid://cv3ttwhplgav" path="res://Scenes and Scripts/States/state_manager.tscn" id="6_qca7e"]
 [ext_resource type="PackedScene" uid="uid://brd5auomhnn6l" path="res://Scenes and Scripts/UI/Cursor.tscn" id="7_s5a7m"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_radts"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3enic"]
 resource_local_to_scene = true
 shader = ExtResource("2_6gvvu")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_h0gjh"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mirng"]
 resource_local_to_scene = true
 shader = ExtResource("2_6gvvu")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_o5pr5"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_35sl1"]
 resource_local_to_scene = true
 shader = ExtResource("2_6gvvu")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fag0b"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lldvp"]
 resource_local_to_scene = true
 shader = ExtResource("2_6gvvu")
 
@@ -29,13 +29,13 @@ shader = ExtResource("2_6gvvu")
 script = ExtResource("1_f3b25")
 
 [node name="MainMenu" parent="." node_paths=PackedStringArray("PaletteMenu") instance=ExtResource("1_qkr4k")]
-material = SubResource("ShaderMaterial_radts")
+material = SubResource("ShaderMaterial_3enic")
 offset_right = 640.0
 offset_bottom = 360.0
 PaletteMenu = NodePath("../FloatingMenus/PaletteMenu")
 
 [node name="World" parent="." instance=ExtResource("3_m7wj1")]
-material = SubResource("ShaderMaterial_h0gjh")
+material = SubResource("ShaderMaterial_mirng")
 
 [node name="FloatingMenus" type="Control" parent="."]
 layout_mode = 3
@@ -44,7 +44,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="PaletteMenu" parent="FloatingMenus" instance=ExtResource("5_yvg3b")]
-material = SubResource("ShaderMaterial_o5pr5")
+material = SubResource("ShaderMaterial_35sl1")
 layout_mode = 1
 offset_left = 318.0
 offset_top = 171.0
@@ -58,7 +58,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="ControlsTab" parent="PullOutTabs" instance=ExtResource("6_a8qlc")]
-material = SubResource("ShaderMaterial_fag0b")
+material = SubResource("ShaderMaterial_lldvp")
 layout_mode = 1
 offset_left = 40.0
 offset_top = 326.0
@@ -68,6 +68,36 @@ offset_bottom = 286.0
 [node name="state_manager" parent="." instance=ExtResource("6_qca7e")]
 
 [node name="Cursor" parent="." instance=ExtResource("7_s5a7m")]
+
+[node name="Borders" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BorderRectR" type="ColorRect" parent="Borders"]
+layout_mode = 0
+offset_left = 640.0
+offset_top = -2.0
+offset_right = 738.0
+offset_bottom = 360.0
+
+[node name="BorderRectD" type="ColorRect" parent="Borders"]
+layout_mode = 0
+offset_top = 360.0
+offset_right = 640.0
+offset_bottom = 444.0
+
+[node name="BorderRectU" type="ColorRect" parent="Borders"]
+layout_mode = 0
+offset_top = -84.0
+offset_right = 640.0
+
+[node name="BorderRectL" type="ColorRect" parent="Borders"]
+layout_mode = 0
+offset_left = -98.0
+offset_top = -2.0
+offset_bottom = 360.0
 
 [connection signal="tree_exited" from="." to="." method="_on_tree_exited"]
 [connection signal="problem_submitted" from="World" to="." method="_on_world_problem_submitted"]

@@ -35,6 +35,8 @@ var in_solution_creation: bool = false:
 		
 		update_submitted_solution_count()
 
+var in_sandbox: bool = false
+
 func init(
 	diagram: DiagramBase, _current_problem: Problem, submitted_diagrams_viewer: MiniDiagramViewer, problem_generation: Node,
 	_solution_generation: Node
@@ -105,7 +107,7 @@ func submit_diagram() -> void:
 	update_submitted_solution_count()
 	update_view_submission_button()
 	
-	NextProblem.disabled = current_problem.submitted_diagrams.size() < current_problem.solution_count
+	NextProblem.disabled = !in_sandbox and current_problem.submitted_diagrams.size() < current_problem.solution_count
 
 func generate_solution() -> ConnectionMatrix:
 	return(SolutionGeneration.generate_diagrams(
@@ -133,6 +135,8 @@ func load_problem(problem: Problem, save_to_history: bool = true) -> void:
 	update_degree_label()
 	update_submitted_solution_count()
 	
+	NextProblem.disabled = !in_sandbox
+	
 func _on_solution_pressed() -> void:
 	EVENTBUS.draw_diagram_raw(generate_solution())
 
@@ -150,3 +154,9 @@ func _enter_solution_creation() -> void:
 
 func _exit_solution_creation() -> void:
 	NextProblem.show()
+
+func _enter_sandbox() -> void:
+	in_sandbox = true
+
+func _exit_sandbox() -> void:
+	in_sandbox = false

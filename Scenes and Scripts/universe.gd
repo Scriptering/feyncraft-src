@@ -76,6 +76,8 @@ func _on_world_problem_submitted() -> void:
 	
 	change_scene(Scene.MainMenu)
 	
+	save_files.emit()
+	
 func _on_problem_modified(problem_item) -> void:
 	modifying_problem_item = problem_item
 	

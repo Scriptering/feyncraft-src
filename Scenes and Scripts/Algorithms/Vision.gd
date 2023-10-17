@@ -138,6 +138,10 @@ func find_colourless_hadron_interactions(
 	
 	var colourless_hadron_interactions: PackedInt32Array = []
 	var hadrons : Array = vision_matrix.split_hadron_ids
+	hadrons = hadrons.filter(
+		func(hadron: PackedInt32Array) -> bool:
+			return is_hadron_in_paths(hadron, paths)
+	)
 	
 	if hadrons.size() == 0:
 		return colourless_hadron_interactions
@@ -302,11 +306,12 @@ func colour_hadrons(path_colours: Array[Colour], paths: Array[PackedInt32Array],
 	var exit_baryons: Array = colour_matrix.get_exit_baryons()
 	var mesons: Array = colour_matrix.get_mesons()
 	var hadrons: Array = entry_baryons + exit_baryons + mesons
+	hadrons = hadrons.filter(
+		func(hadron: PackedInt32Array) -> bool:
+			return is_hadron_in_paths(hadron, paths)
+	)
 	
 	for hadron in hadrons:
-		if !is_hadron_in_paths(hadron, paths):
-			continue
-		
 		path_colours = colour_hadron(hadron, path_colours, paths)
 		
 		for i in range(MAX_RESTRICTED_HADRON_COUNT):

@@ -1,6 +1,7 @@
 extends GrabbableControl
 
 signal submit_problem
+signal toggle_all(toggle: bool)
 
 var active_modes: Array[BaseMode.Mode] = [
 	BaseMode.Mode.ParticleSelection,
@@ -12,7 +13,6 @@ var Diagram: MainDiagram
 var Level: Node2D
 
 @onready var InfoContainer: TabContainer = $VBoxContainer/TabContainer
-
 
 func _process(delta: float) -> void:
 	super._process(delta)
@@ -37,6 +37,10 @@ func init(diagram: MainDiagram, level: Node2D) -> void:
 	Diagram.action_taken.connect(
 		$VBoxContainer/TabContainer/ProblemCreationInfo.hide_no_solutions_found
 	)
+
+func reset() -> void:
+	InfoContainer.current_tab = 0
+	set_title()
 
 func change_mode(mode_index: int) -> void:
 	InfoContainer.current_tab = mode_index
@@ -67,3 +71,6 @@ func _on_problem_creation_info_previous() -> void:
 
 func no_solutions_found() -> void:
 	$VBoxContainer/TabContainer/ProblemCreationInfo.show_no_solutions_found()
+
+func _on_particle_selection_info_toggle_all(toggle: bool) -> void:
+	toggle_all.emit(toggle)

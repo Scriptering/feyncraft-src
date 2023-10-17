@@ -98,6 +98,7 @@ func enter_particle_selection() -> void:
 	VisionTab.hide()
 	
 	ParticleButtons.enter_particle_selection(GLOBALS.creating_problem)
+	CreationInformation.reset()
 
 func exit_particle_selection() -> void:
 	GLOBALS.creating_problem.allowed_particles = ParticleButtons.get_toggled_particles(true)
@@ -110,6 +111,10 @@ func enter_sandbox() -> void:
 	ProblemTab.show()
 	VisionTab.show()
 	CreationInformation.hide()
+	
+	ProblemTab._enter_sandbox()
+
+	load_problem(generate_new_problem())
 
 func enter_problem_solving() -> void:
 	ParticleButtons.show()
@@ -133,7 +138,7 @@ func enter_solution_creation() -> void:
 	ProblemTab.in_solution_creation = true
 
 func exit_sandbox() -> void:
-	return
+	ProblemTab._exit_sandbox()
 
 func exit_problem_solving() -> void:
 	return
@@ -162,9 +167,16 @@ func _on_problem_set_end_reached() -> void:
 func _on_next_problem_pressed() -> void:
 	match current_mode:
 		BaseMode.Mode.ProblemSolving:
-			ProblemTab.load_problem(problem_set.next_problem())
+			load_problem(problem_set.next_problem())
 		BaseMode.Mode.Sandbox:
-			ProblemTab.load_problem(ProblemGeneration.generate_problem())
+			load_problem(generate_new_problem())
+	
+	Diagram.clear_diagram()
+
+func generate_new_problem() -> Problem:
+	var new_problem: Problem = ProblemGeneration.generate()
+	setup_new_problem(new_problem)
+	return new_problem
 
 func setup_new_problem(problem: Problem) -> bool:
 	var min_degree: int = problem.degree if problem.custom_degree else 1
@@ -187,3 +199,6 @@ func setup_new_problem(problem: Problem) -> bool:
 	)
 	
 	return true
+
+func _on_creation_information_toggle_all(toggle: bool) -> void:
+	ParticleButtons.toggle_buttons(toggle)

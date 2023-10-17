@@ -421,7 +421,8 @@ func _on_interaction_dropped(interaction: Interaction) -> void:
 	interaction.queue_free()
 
 func place_interaction(
-	interaction_position: Vector2, bypass_can_place: bool = false, interaction: Node = InteractionInstance.instantiate()
+	interaction_position: Vector2, bypass_can_place: bool = false, interaction: Node = InteractionInstance.instantiate(),
+	action: bool = true
 ) -> void:
 	if can_place_interaction(interaction_position) or bypass_can_place:
 		interaction.dropped.connect(_on_interaction_dropped)
@@ -493,8 +494,15 @@ func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 	line_diagram_actions = false
 	
 	clear_diagram()
+	
+	for state in range(StateLines.size()):
+		StateLines[state].position.x = drawing_matrix.state_line_positions[state] * grid_size
 
-	super.draw_diagram(drawing_matrix)
+	for drawing_particle in draw_diagram_particles(drawing_matrix):
+		ParticleLines.add_child(drawing_particle)
+	
+	for interaction_position in drawing_matrix.get_interaction_positions():
+		place_interaction(interaction_position * grid_size, false, InteractionInstance.instantiate(), false)
 
 	line_diagram_actions = true
 

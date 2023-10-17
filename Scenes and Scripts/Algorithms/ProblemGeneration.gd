@@ -15,16 +15,17 @@ func init(solution_generation: Node) -> void:
 	SolutionGeneration = solution_generation
 
 func generate(
-	use_hadrons: bool, useable_particles: Array[GLOBALS.Particle] = get_all_particles()
+	use_hadrons: bool = true, useable_particles: Array[GLOBALS.Particle] = get_all_particles()
 ) -> Problem:
 	var problem := Problem.new()
 	
 	var state_interactions : Array
-	for _interaction_generation_attempt in range(MAX_INTERACTION_GENERATION_ATTEMPTS):
-		state_interactions = generate_state_interactions(get_useable_state_interactions(use_hadrons, useable_particles))
-		
-		if state_interactions == []:
-			continue
+	for _interaction_generation_attempt in MAX_INTERACTION_GENERATION_ATTEMPTS:
+		for _attempt in MAX_INTERACTION_GENERATION_ATTEMPTS:
+			state_interactions = generate_state_interactions(get_useable_state_interactions(use_hadrons, useable_particles))
+
+			if state_interactions != [] and is_energy_conserved(state_interactions):
+				break
 		
 		var solution_found: bool = true
 		for _solution_generation_attempt in range(MAX_SOLUTION_GENERATION_ATTEMPTS):
@@ -43,6 +44,31 @@ func generate(
 	problem.allowed_particles = useable_particles
 	
 	return problem
+
+func is_energy_conserved(state_interactions: Array) -> bool:
+	if state_interactions.all(func(state_interaction): return state_interaction.size() != 1):
+		return true
+	
+	var state_base_particles: Array = state_interactions.map(
+		func(state_interaction): return GLOBALS.flatten(state_interaction).map(
+			func(particle): return abs(particle)
+		)
+	)
+	
+	var state_masses: Array = state_base_particles.map(
+		func(base_particles: Array): return base_particles.reduce(
+			func(accum: float, particle: GLOBALS.Particle) -> float: return accum + GLOBALS.PARTICLE_MASSES[particle], 0.0
+		)
+	)
+	
+	for state_type in [StateLine.StateType.Initial, StateLine.StateType.Final]:
+		if state_base_particles[state_type].size() != 1:
+			continue
+		
+		if state_masses[state_type] < state_masses[(state_type + 1) % 2] - 0.005:
+			return false
+	
+	return true
 
 func get_all_particles() -> Array[GLOBALS.Particle]:
 	var all_particles: Array[GLOBALS.Particle] = []
@@ -111,7 +137,7 @@ func generate_state_interactions(useable_state_interactions: Array) -> Array:
 	var current_state : StateLine.StateType = StateLine.StateType.Initial
 	var W_count : int = 0
 	
-	for _attempt in range(MAX_NEXT_INTERACTION_ATTEMPTS):
+	for _particle_count in MAX_PARTICLE_COUNT:
 		var state_factor : int = StateLine.state_factor[current_state]
 		var next_state_interaction := get_next_state_interaction(
 			quantum_number_difference, useable_state_interactions, interaction_count_left, W_count, state_factor
@@ -120,7 +146,7 @@ func generate_state_interactions(useable_state_interactions: Array) -> Array:
 		current_state = (current_state + 1) % 2 as StateLine.StateType
 		
 		if next_state_interaction == []:
-			continue
+			return []
 		
 		interaction_count_left -= 1
 		quantum_number_difference = accum_state_interaction_quantum_numbers(next_state_interaction, quantum_number_difference, state_factor)
@@ -180,7 +206,9 @@ func is_quantum_number_difference_possible(
 	
 	var can_be_different: bool = quantum_number in GLOBALS.WEAK_QUANTUM_NUMBERS and W_count != 0
 	
-	if abs(quantum_number_difference) > state_interaction_count_left * 3 + int(can_be_different) * abs(W_count):
+	var difference_allowed: int = 1 if quantum_number in [GLOBALS.QuantumNumber.electron, GLOBALS.QuantumNumber.muon, GLOBALS.QuantumNumber.tau] else 3
+	
+	if abs(quantum_number_difference) > state_interaction_count_left * difference_allowed + int(can_be_different) * abs(W_count):
 		return false
 	
 	return true

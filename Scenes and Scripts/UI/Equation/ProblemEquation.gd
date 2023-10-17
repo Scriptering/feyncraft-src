@@ -1,5 +1,7 @@
 extends PanelContainer
 
+@export var scale_factor: float = 1.0
+
 @onready var Symbol := preload("res://Scenes and Scripts/UI/Equations/EquationSymbol.tscn")
 
 @onready var LeftEquation: HBoxContainer = $HBoxContainer/LeftMarginContainer/LeftScrollContainer/MarginContainer/LeftEquation
@@ -31,12 +33,14 @@ func load_state_symbols(state: StateLine.StateType, problem: Problem) -> void:
 func create_plus() -> TextureRect:
 	var plus := Symbol.instantiate()
 	plus.texture = load("res://Textures/UI/Equation/plus.png")
+	
 	return plus
 
 func create_particle_symbol(interaction: Array) -> TextureRect:
 	var particle := Symbol.instantiate()
 	
 	particle.texture = GLOBALS.PARTICLE_TEXTURES[get_particle_name(interaction)]
+	particle.custom_minimum_size = particle.texture.get_size() * scale_factor
 	
 	if interaction.size() != 1:
 		particle.init(get_hadron(interaction))

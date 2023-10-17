@@ -57,7 +57,6 @@ func toggle_button_mute(mute: bool) -> void:
 		particle_button.mute = mute
 
 func enter_particle_selection(problem: Problem) -> void:
-	toggle_button_mute(true)
 	clear_button_group()
 	disable_buttons(false)
 	toggle_button_visiblity(true)
@@ -67,9 +66,6 @@ func enter_particle_selection(problem: Problem) -> void:
 		toggle_buttons(true)
 	else:
 		toggle_buttons(true, problem.allowed_particles)
-	
-	await get_tree().process_frame
-	toggle_button_mute(false)
 
 func exit_particle_selection() -> void:
 	add_buttons_to_button_group()
@@ -100,5 +96,7 @@ func load_problem(problem: Problem) -> void:
 		toggle_button_group_visibility()
 
 func toggle_buttons(button_pressed: bool, particles: Array = GLOBALS.Particle.values()) -> void:
+	toggle_button_mute(true)
 	for particle_button in particle_buttons:
 		particle_button.button_pressed = button_pressed and particle_button.particle in particles
+	toggle_button_mute(false)
