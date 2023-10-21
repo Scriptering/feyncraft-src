@@ -24,6 +24,7 @@ config/icon="res://icon.png"
 GLOBALS="*res://Scenes and Scripts/GLOBALS.gd"
 SOUNDBUS="*res://Scenes and Scripts/sound_bus.tscn"
 EVENTBUS="*res://Scenes and Scripts/event_bus.gd"
+ParticleData="*res://ParticleData.gd"
 
 [display]
 

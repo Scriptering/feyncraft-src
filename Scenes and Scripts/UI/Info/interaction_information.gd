@@ -44,8 +44,8 @@ func clear_table() -> void:
 			container.get_child(i).queue_free()
 	
 func build_quantum_number_tab() -> void:
-	var relevant_quantum_numbers : Array[GLOBALS.QuantumNumber] = get_relevant_quantum_numbers()
-	var invalid_quantum_numbers : Array[GLOBALS.QuantumNumber] = ConnectedInteraction.get_invalid_quantum_numbers()
+	var relevant_quantum_numbers : Array[ParticleData.QuantumNumber] = get_relevant_quantum_numbers()
+	var invalid_quantum_numbers : Array[ParticleData.QuantumNumber] = ConnectedInteraction.get_invalid_quantum_numbers()
 	var before_quantum_numbers : Array[float] = ConnectedInteraction.get_side_quantum_sum(Interaction.Side.Before)
 	var after_quantum_numbers : Array[float] = ConnectedInteraction.get_side_quantum_sum(Interaction.Side.After)
 	
@@ -67,7 +67,7 @@ func build_other_tab() -> void:
 		(" ( <= 4 ) " if ConnectedInteraction.is_dimensionality_valid() else ' ( > 4 ) '))
 	add_invalid(data_containers[Tab.Other], ConnectedInteraction.is_dimensionality_valid())
 	
-	if ConnectedInteraction.has_base_particle_connected(GLOBALS.Particle.gluon):
+	if ConnectedInteraction.has_base_particle_connected(ParticleData.Particle.gluon):
 		add_label(data_containers[Tab.Other], property_names[Tab.Other][OtherProperties.ColourlessGluon])
 		add_label(
 			data_containers[Tab.Other],
@@ -75,7 +75,7 @@ func build_other_tab() -> void:
 			!ConnectedInteraction.valid_colourless else '  No  ')
 		add_invalid(data_containers[Tab.Other], !ConnectedInteraction.has_colourless_gluon())
 	
-	if ConnectedInteraction.has_base_particle_connected(GLOBALS.Particle.photon):
+	if ConnectedInteraction.has_base_particle_connected(ParticleData.Particle.photon):
 		add_label(data_containers[Tab.Other], property_names[Tab.Other][OtherProperties.NeutralPhoton])
 		add_label(data_containers[Tab.Other], '  Yes  ' if ConnectedInteraction.has_neutral_photon() else '  No  ')
 		add_invalid(data_containers[Tab.Other], ConnectedInteraction.has_neutral_photon())
@@ -95,56 +95,56 @@ func add_invalid(container: GridContainer, valid: bool) -> void:
 	else:
 		container.add_child(invalid_icon.instantiate())
 
-func get_relevant_quantum_numbers() -> Array[GLOBALS.QuantumNumber]:
-	var relevant_quantum_numbers: Array[GLOBALS.QuantumNumber] = []
+func get_relevant_quantum_numbers() -> Array[ParticleData.QuantumNumber]:
+	var relevant_quantum_numbers: Array[ParticleData.QuantumNumber] = []
 	
-	relevant_quantum_numbers.append(GLOBALS.QuantumNumber.charge)
+	relevant_quantum_numbers.append(ParticleData.QuantumNumber.charge)
 	
 	for base_particle in ConnectedInteraction.connected_base_particles:
-		if base_particle in GLOBALS.LEPTONS:
-			relevant_quantum_numbers.append(GLOBALS.QuantumNumber.lepton)
+		if base_particle in ParticleData.LEPTONS:
+			relevant_quantum_numbers.append(ParticleData.QuantumNumber.lepton)
 			break
 	
 	if (
-		ConnectedInteraction.has_base_particle_connected(GLOBALS.Particle.electron) or
-		ConnectedInteraction.has_base_particle_connected(GLOBALS.Particle.electron_neutrino)
+		ConnectedInteraction.has_base_particle_connected(ParticleData.Particle.electron) or
+		ConnectedInteraction.has_base_particle_connected(ParticleData.Particle.electron_neutrino)
 	):
-		relevant_quantum_numbers.append(GLOBALS.QuantumNumber.electron)
+		relevant_quantum_numbers.append(ParticleData.QuantumNumber.electron)
 		
 	if (
-		ConnectedInteraction.has_base_particle_connected(GLOBALS.Particle.muon) or
-		ConnectedInteraction.has_base_particle_connected(GLOBALS.Particle.muon_neutrino)
+		ConnectedInteraction.has_base_particle_connected(ParticleData.Particle.muon) or
+		ConnectedInteraction.has_base_particle_connected(ParticleData.Particle.muon_neutrino)
 	):
-		relevant_quantum_numbers.append(GLOBALS.QuantumNumber.muon)
+		relevant_quantum_numbers.append(ParticleData.QuantumNumber.muon)
 		
 	if (
-		ConnectedInteraction.has_base_particle_connected(GLOBALS.Particle.tau) or
-		ConnectedInteraction.has_base_particle_connected(GLOBALS.Particle.tau_neutrino)
+		ConnectedInteraction.has_base_particle_connected(ParticleData.Particle.tau) or
+		ConnectedInteraction.has_base_particle_connected(ParticleData.Particle.tau_neutrino)
 	):
-		relevant_quantum_numbers.append(GLOBALS.QuantumNumber.tau)
+		relevant_quantum_numbers.append(ParticleData.QuantumNumber.tau)
 	
 	for base_particle in ConnectedInteraction.connected_base_particles:
-		if base_particle in GLOBALS.QUARKS:
-			relevant_quantum_numbers.append(GLOBALS.QuantumNumber.quark)
+		if base_particle in ParticleData.QUARKS:
+			relevant_quantum_numbers.append(ParticleData.QuantumNumber.quark)
 			break
 
-	if ConnectedInteraction.has_base_particle_connected(GLOBALS.Particle.up):
-		relevant_quantum_numbers.append(GLOBALS.QuantumNumber.up)
+	if ConnectedInteraction.has_base_particle_connected(ParticleData.Particle.up):
+		relevant_quantum_numbers.append(ParticleData.QuantumNumber.up)
 
-	if ConnectedInteraction.has_base_particle_connected(GLOBALS.Particle.down):
-		relevant_quantum_numbers.append(GLOBALS.QuantumNumber.down)
+	if ConnectedInteraction.has_base_particle_connected(ParticleData.Particle.down):
+		relevant_quantum_numbers.append(ParticleData.QuantumNumber.down)
 
-	if ConnectedInteraction.has_base_particle_connected(GLOBALS.Particle.charm):
-		relevant_quantum_numbers.append(GLOBALS.QuantumNumber.charm)
+	if ConnectedInteraction.has_base_particle_connected(ParticleData.Particle.charm):
+		relevant_quantum_numbers.append(ParticleData.QuantumNumber.charm)
 
-	if ConnectedInteraction.has_base_particle_connected(GLOBALS.Particle.strange):
-		relevant_quantum_numbers.append(GLOBALS.QuantumNumber.strange)
+	if ConnectedInteraction.has_base_particle_connected(ParticleData.Particle.strange):
+		relevant_quantum_numbers.append(ParticleData.QuantumNumber.strange)
 
-	if ConnectedInteraction.has_base_particle_connected(GLOBALS.Particle.top):
-		relevant_quantum_numbers.append(GLOBALS.QuantumNumber.top)
+	if ConnectedInteraction.has_base_particle_connected(ParticleData.Particle.top):
+		relevant_quantum_numbers.append(ParticleData.QuantumNumber.top)
 
-	if ConnectedInteraction.has_base_particle_connected(GLOBALS.Particle.bottom):
-		relevant_quantum_numbers.append(GLOBALS.QuantumNumber.bottom)
+	if ConnectedInteraction.has_base_particle_connected(ParticleData.Particle.bottom):
+		relevant_quantum_numbers.append(ParticleData.QuantumNumber.bottom)
 	
 	return relevant_quantum_numbers
 

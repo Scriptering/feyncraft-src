@@ -3,10 +3,10 @@ extends Node
 enum INTERACTION_TYPE {electroweak, strong, higgs, weak}
 enum Shade {Bright, Dark, None}
 
-const SHADED_PARTICLES := [GLOBALS.BRIGHT_PARTICLES, GLOBALS.DARK_PARTICLES, GLOBALS.SHADED_PARTICLES]
+const SHADED_PARTICLES := [ParticleData.BRIGHT_PARTICLES, ParticleData.DARK_PARTICLES, ParticleData.SHADED_PARTICLES]
 const INTERACTION_SIZE = 3.0
 
-var INTERACTIONS := GLOBALS.INTERACTIONS
+var INTERACTIONS := ParticleData.INTERACTIONS
 var TOTAL_INTERACTIONS : Array
 
 enum Find {All, One, LowestOrder}
@@ -48,13 +48,13 @@ var print_times := true
 
 var generated_matrix: InteractionMatrix
 
-func get_useable_interactions_from_particles(allowed_particles: Array[GLOBALS.Particle]) -> Array:
+func get_useable_interactions_from_particles(allowed_particles: Array[ParticleData.Particle]) -> Array:
 	var useable_interactions: Array = []
 	
-	for interaction_set in [GLOBALS.INTERACTIONS, GLOBALS.GENERAL_INTERACTIONS]:
+	for interaction_set in [ParticleData.INTERACTIONS, ParticleData.GENERAL_INTERACTIONS]:
 		for interaction_type in interaction_set:
 			for interaction in interaction_type:
-				if interaction.all(func(particle: GLOBALS.Particle): return particle in allowed_particles):
+				if interaction.all(func(particle: ParticleData.Particle): return particle in allowed_particles):
 					useable_interactions.push_back(interaction)
 	
 	return useable_interactions
@@ -130,8 +130,8 @@ func generate_diagrams(
 
 	return convert_general_matrices(generated_connection_matrices, initial_state + final_state)
 
-func anti_particle(particle: GLOBALS.Particle) -> GLOBALS.Particle:
-	if base_particle(particle) in GLOBALS.SHADED_PARTICLES:
+func anti_particle(particle: ParticleData.Particle) -> ParticleData.Particle:
+	if base_particle(particle) in ParticleData.SHADED_PARTICLES:
 		return -particle
 	
 	return particle 
@@ -153,14 +153,14 @@ func get_forbidden_exit_points(base_interaction_matrix: InteractionMatrix) -> Ar
 		
 		
 		for particle_index in interaction.size():
-			var particle: GLOBALS.Particle = interaction[particle_index]
+			var particle: ParticleData.Particle = interaction[particle_index]
 			var forbidden_points: Array = []
 			for j in state_count:
 				if j not in exit_points:
 					continue
 
 				if base_interaction_matrix.unconnected_matrix[j].count(
-					particle if base_particle(particle) in GLOBALS.BOSONS else (
+					particle if base_particle(particle) in ParticleData.BOSONS else (
 						StateLine.state_factor[base_interaction_matrix.get_state_from_id(i)] *
 						StateLine.state_factor[base_interaction_matrix.get_state_from_id(j)] *
 						anti_particle(particle)
@@ -221,8 +221,8 @@ func convert_interaction_to_general(interaction: Array) -> Array:
 	return interaction.map(
 		func(particle):
 			return (
-				(sign(particle) * GLOBALS.GENERAL_CONVERSION[base_particle(particle)])
-				if base_particle(particle) not in GLOBALS.GENERAL_PARTICLES else particle
+				(sign(particle) * ParticleData.GENERAL_CONVERSION[base_particle(particle)])
+				if base_particle(particle) not in ParticleData.GENERAL_PARTICLES else particle
 			)
 	)
 
@@ -254,9 +254,9 @@ func convert_general_state_paths(
 ) -> ConnectionMatrix:
 	
 	var to_particles : Array = state_interactions[extreme_point].filter(
-		func(particle: GLOBALS.Particle):
+		func(particle: ParticleData.Particle):
 			return (
-				(base_particle(particle) not in GLOBALS.GENERAL_PARTICLES and base_particle(particle) not in GLOBALS.BOSONS) and
+				(base_particle(particle) not in ParticleData.GENERAL_PARTICLES and base_particle(particle) not in ParticleData.BOSONS) and
 				(
 					sign(particle) *
 					StateLine.state_factor[general_connection_matrix.get_state_from_id(extreme_point)] *
@@ -266,29 +266,29 @@ func convert_general_state_paths(
 	)
 	
 	to_particles = to_particles.map(
-		func(particle: GLOBALS.Particle):
+		func(particle: ParticleData.Particle):
 			return base_particle(particle)
 	)
 	
 	var possible_from_particles : Array = general_connection_matrix.get_connected_particles(extreme_point, false, false, reverse).filter(
-		func(particle: GLOBALS.Particle):
-			return particle in GLOBALS.GENERAL_PARTICLES
+		func(particle: ParticleData.Particle):
+			return particle in ParticleData.GENERAL_PARTICLES
 	)
 	
 	if possible_from_particles.size() == 0:
 		return general_connection_matrix
 	
 	for to_particle in to_particles:
-		var from_particle: GLOBALS.Particle = GLOBALS.Particle.none
+		var from_particle: ParticleData.Particle = ParticleData.Particle.none
 		
 		for general_particle in possible_from_particles:
-			if to_particle in GLOBALS.GENERAL_CONVERSION[general_particle]:
+			if to_particle in ParticleData.GENERAL_CONVERSION[general_particle]:
 				from_particle = general_particle
 				break
 		
 		possible_from_particles.erase(from_particle)
 		
-		if from_particle == GLOBALS.Particle.none:
+		if from_particle == ParticleData.Particle.none:
 			continue
 
 		convert_general_path(general_connection_matrix, extreme_point, from_particle, to_particle, entry_points, exit_points, reverse)
@@ -296,7 +296,7 @@ func convert_general_state_paths(
 	return general_connection_matrix
 
 func convert_general_path(
-	general_connection_matrix: ConnectionMatrix, start_point: int, from_particle: GLOBALS.Particle, to_particle: GLOBALS.Particle,
+	general_connection_matrix: ConnectionMatrix, start_point: int, from_particle: ParticleData.Particle, to_particle: ParticleData.Particle,
 	entry_points: PackedInt32Array, exit_points: PackedInt32Array, reverse: bool = false
 ) -> ConnectionMatrix:
 	
@@ -307,7 +307,7 @@ func convert_general_path(
 		
 		var path_finished: bool = step != 0 and (
 			current_point in entry_points + exit_points or
-			GLOBALS.Particle.W in general_connection_matrix.get_connected_particles(current_point, true)
+			ParticleData.Particle.W in general_connection_matrix.get_connected_particles(current_point, true)
 		)
 		
 		if path_finished:
@@ -333,13 +333,13 @@ func convert_interactions_to_general(interactions: Array) -> Array:
 
 	return general_interactions
 
-func generate_useable_interactions_from_particles(useable_particles: Array[GLOBALS.Particle]) -> Array:
+func generate_useable_interactions_from_particles(useable_particles: Array[ParticleData.Particle]) -> Array:
 	var useable_interactions: Array = []
 	
-	for interaction_type in GLOBALS.INTERACTIONS:
+	for interaction_type in ParticleData.INTERACTIONS:
 		for interaction in interaction_type:
 			if interaction.all(
-				func(particle: GLOBALS.Particle): return particle in useable_particles
+				func(particle: ParticleData.Particle): return particle in useable_particles
 			):
 				useable_interactions.push_back(interaction)
 	
@@ -460,7 +460,7 @@ func combine_connection_matrices(
 	return combined_connection_matrices
 
 func get_loop_points(interaction_matrix: InteractionMatrix) -> PackedInt32Array:
-	return interaction_matrix.find_all_unconnected(func(particle): return particle in GLOBALS.FERMIONS)
+	return interaction_matrix.find_all_unconnected(func(particle): return particle in ParticleData.FERMIONS)
 
 func generate_directionless_connections(unconnected_interaction_matrix: InteractionMatrix) -> Array[InteractionMatrix]:
 	print_time(2)
@@ -468,13 +468,13 @@ func generate_directionless_connections(unconnected_interaction_matrix: Interact
 	unconnected_interaction_matrix.clear_connection_matrix()
 	
 	var has_directionless_particles: bool = unconnected_interaction_matrix.get_unconnected_base_particles().any(
-		func(particle): return particle not in GLOBALS.SHADED_PARTICLES
+		func(particle): return particle not in ParticleData.SHADED_PARTICLES
 	)
 	
 	if !has_directionless_particles:
 		return []
 	
-	var is_directionless_particle: Callable = func(particle): return particle not in GLOBALS.SHADED_PARTICLES
+	var is_directionless_particle: Callable = func(particle): return particle not in ParticleData.SHADED_PARTICLES
 	
 	var directionless_particle_count := unconnected_interaction_matrix.get_unconnected_particles().filter(is_directionless_particle).size()
 	var directionless_ids := unconnected_interaction_matrix.find_all_unconnected(is_directionless_particle)
@@ -512,7 +512,7 @@ func generate_directional_connections(
 	print_time(1)
 	
 	var has_directional_particles : bool = unconnected_interaction_matrix.get_unconnected_base_particles().any(
-		func(particle): return particle in GLOBALS.SHADED_PARTICLES
+		func(particle): return particle in ParticleData.SHADED_PARTICLES
 	)
 	
 	if !has_directional_particles:
@@ -521,7 +521,7 @@ func generate_directional_connections(
 	unconnected_interaction_matrix.reduce_to_base_particles()
 	entry_states = entry_states.map(
 		func(state_interaction: Array): return state_interaction.map(
-			func(particle: GLOBALS.Particle): return base_particle(particle)
+			func(particle: ParticleData.Particle): return base_particle(particle)
 		)
 	)
 
@@ -548,7 +548,7 @@ func generate_directional_connections(
 func generate_possible_path(
 	connected_interaction_matrices: Array[InteractionMatrix], start_point: int, available_points: PackedInt32Array,
 	end_points: PackedInt32Array, state_points: PackedInt32Array, particle_test_function: Callable,
-	starting_particle : GLOBALS.Particle = GLOBALS.Particle.none
+	starting_particle : ParticleData.Particle = ParticleData.Particle.none
 ) -> Array[InteractionMatrix]:
 	
 	if connected_interaction_matrices.size() == 0:
@@ -581,7 +581,7 @@ func generate_possible_state_paths(
 	
 	for start_point in start_points:
 		for starting_particle_index in entry_states[start_point].size():
-			var starting_particle: GLOBALS.Particle = entry_states[start_point][starting_particle_index]
+			var starting_particle: ParticleData.Particle = entry_states[start_point][starting_particle_index]
 			
 			var start_point_available_points : PackedInt32Array = filter_points(available_points, func(point: int): 
 				return point not in forbidden_exit_points[start_point][starting_particle_index]
@@ -648,7 +648,7 @@ func filter_points(points: PackedInt32Array, test_function: Callable) -> PackedI
 func generate_W_connections(
 	unconnected_interaction_matrix: InteractionMatrix, entry_points: PackedInt32Array, exit_points: PackedInt32Array
 ) -> Array[InteractionMatrix]:
-	var is_W : Callable = func(particle): return particle == GLOBALS.Particle.W
+	var is_W : Callable = func(particle): return particle == ParticleData.Particle.W
 	
 	var W_ids : PackedInt32Array = unconnected_interaction_matrix.find_all_unconnected(is_W)
 	var point_in_W_ids : Callable = func(point): return point in W_ids
@@ -669,7 +669,7 @@ func generate_W_connections(
 		if unconnected_interaction_matrix.get_state_from_id(W_id) != StateLine.StateType.None:
 			continue
 		
-		if unconnected_interaction_matrix.get_connected_particles(W_id)[0] in GLOBALS.BRIGHT_PARTICLES:
+		if unconnected_interaction_matrix.get_connected_particles(W_id)[0] in ParticleData.BRIGHT_PARTICLES:
 			start_points.push_back(W_id)
 		
 		else:
@@ -702,7 +702,7 @@ func generate_fermion_connections(
 	exit_points: PackedInt32Array, entry_states: Array
 ) -> Array[InteractionMatrix]:
 	
-	var is_fermion : Callable = func(particle): return base_particle(particle) in GLOBALS.FERMIONS
+	var is_fermion : Callable = func(particle): return base_particle(particle) in ParticleData.FERMIONS
 	
 	var fermion_ids : PackedInt32Array = unconnected_interaction_matrix.find_all_unconnected(is_fermion)
 	var point_in_fermion_ids : Callable = func(point): return point in fermion_ids
@@ -745,15 +745,15 @@ func find_first_instance(array: Array, test_function: Callable) -> int:
 	
 	return array.size()
 
-func get_first_instance(array: Array, test_function: Callable) -> GLOBALS.Particle:
+func get_first_instance(array: Array, test_function: Callable) -> ParticleData.Particle:
 	for particle in array:
 		if test_function.call(particle):
 			return particle
 	
-	return GLOBALS.Particle.none
+	return ParticleData.Particle.none
 
 func get_possible_next_points(
-	current_point: int, particle: GLOBALS.Particle, interaction_matrix: InteractionMatrix, available_points: Array,
+	current_point: int, particle: ParticleData.Particle, interaction_matrix: InteractionMatrix, available_points: Array,
 	end_points: PackedInt32Array, state_points: PackedInt32Array, connect_uniquely: bool
 ) -> PackedInt32Array:
 	
@@ -786,17 +786,17 @@ func get_possible_next_points(
 func generate_paths_from_point(
 	current_point: int, interaction_matrix: InteractionMatrix, available_points: Array, end_points: PackedInt32Array,
 	state_points: PackedInt32Array, particle_test_function: Callable, is_start_point: bool = false, connect_uniquely: bool = true,
-	starting_particle: GLOBALS.Particle = GLOBALS.Particle.none
+	starting_particle: ParticleData.Particle = ParticleData.Particle.none
 ) -> Array[InteractionMatrix]:
 	
 	if current_point in end_points and !is_start_point:
 		return [interaction_matrix]
 	
-	var current_particle : GLOBALS.Particle = starting_particle if starting_particle != GLOBALS.Particle.none else get_first_instance(
+	var current_particle : ParticleData.Particle = starting_particle if starting_particle != ParticleData.Particle.none else get_first_instance(
 		interaction_matrix.unconnected_matrix[current_point], particle_test_function
 	)
 	
-	if current_particle == GLOBALS.Particle.none:
+	if current_particle == ParticleData.Particle.none:
 		return [null]
 
 	var further_matrices : Array[InteractionMatrix] = []
@@ -823,7 +823,7 @@ func generate_paths_from_point(
 	return further_matrices
 
 func get_available_points(
-	interaction_matrix: InteractionMatrix, current_point: int, current_particle: GLOBALS.Particle, forbidden_points: PackedInt32Array
+	interaction_matrix: InteractionMatrix, current_point: int, current_particle: ParticleData.Particle, forbidden_points: PackedInt32Array
 ) -> PackedInt32Array:
 	
 	var available_points := interaction_matrix.find_all_unconnected_state_particle(current_particle, StateLine.StateType.None)
@@ -843,9 +843,9 @@ func get_available_points(
 func get_usable_interactions(interaction_checks: Array[bool]) -> Array:
 	var usable_interactions : Array = []
 	
-	for interaction_type_count in range(GLOBALS.INTERACTIONS.size()):
+	for interaction_type_count in range(ParticleData.INTERACTIONS.size()):
 		if interaction_checks[interaction_type_count]:
-			usable_interactions += GLOBALS.INTERACTIONS[interaction_type_count]
+			usable_interactions += ParticleData.INTERACTIONS[interaction_type_count]
 	
 	return usable_interactions
 
@@ -1097,8 +1097,8 @@ func get_possible_hadron_connections(interaction_matrix: InteractionMatrix, same
 				):
 					continue
 				
-				if base_particle(particle) not in GLOBALS.GENERAL_PARTICLES:
-					particle = sign(particle) * GLOBALS.GENERAL_CONVERSION[base_particle(particle)]
+				if base_particle(particle) not in ParticleData.GENERAL_PARTICLES:
+					particle = sign(particle) * ParticleData.GENERAL_CONVERSION[base_particle(particle)]
 				
 				possible_hadron_connections.append([connect_from_id, connect_to_id, particle])
 
@@ -1174,28 +1174,28 @@ func is_connection_number_possible(unconnected_particle_count : int, interaction
 	return unconnected_particle_count <= interaction_count * INTERACTION_SIZE
 
 func compare_quantum_numbers(initial_state : Array, final_state : Array) -> int:
-	for quantum_number in range(GLOBALS.QuantumNumber.size()):
+	for quantum_number in range(ParticleData.QuantumNumber.size()):
 		if !is_equal_approx(calculate_quantum_sum(quantum_number, initial_state), calculate_quantum_sum(quantum_number, final_state)):
 			if (
-				quantum_number == GLOBALS.QuantumNumber.charge or
-				quantum_number == GLOBALS.QuantumNumber.lepton or 
-				quantum_number == GLOBALS.QuantumNumber.quark
+				quantum_number == ParticleData.QuantumNumber.charge or
+				quantum_number == ParticleData.QuantumNumber.lepton or 
+				quantum_number == ParticleData.QuantumNumber.quark
 			):
 				return INVALID
 	
 	return VALID
 
-func calculate_quantum_sum(quantum_number: GLOBALS.QuantumNumber, state_interactions: Array) -> float:
+func calculate_quantum_sum(quantum_number: ParticleData.QuantumNumber, state_interactions: Array) -> float:
 	var quantum_sum: float = 0
 	for state_interaction in state_interactions:
 		for particle in state_interaction:
-			quantum_sum += sign(particle) * GLOBALS.QUANTUM_NUMBERS[base_particle(particle)][quantum_number]
+			quantum_sum += sign(particle) * ParticleData.QUANTUM_NUMBERS[base_particle(particle)][quantum_number]
 	return quantum_sum
 
 func is_anti(particle) -> bool:
 	return particle < 0.0
 
-func base_particle(particle) -> GLOBALS.Particle:
+func base_particle(particle) -> ParticleData.Particle:
 	return abs(particle)
 
 func print_matrix(matrix : Array) -> void:

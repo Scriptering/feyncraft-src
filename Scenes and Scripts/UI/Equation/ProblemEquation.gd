@@ -37,7 +37,7 @@ func create_plus() -> TextureRect:
 func create_particle_symbol(interaction: Array) -> TextureRect:
 	var particle := Symbol.instantiate()
 	
-	particle.texture = GLOBALS.PARTICLE_TEXTURES[get_particle_name(interaction)]
+	particle.texture = ParticleData.PARTICLE_TEXTURES[get_particle_name(interaction)]
 	particle.custom_minimum_size = particle.texture.get_size() * scale_factor
 	
 	if interaction.size() != 1:
@@ -47,16 +47,16 @@ func create_particle_symbol(interaction: Array) -> TextureRect:
 
 func get_particle_name(interaction: Array) -> String:
 	if interaction.size() == 1:
-		return GLOBALS.Particle.keys()[GLOBALS.Particle.values().find(interaction.front())]
+		return ParticleData.Particle.keys()[ParticleData.Particle.values().find(interaction.front())]
 	
-	return GLOBALS.HADRON_NAMES[get_hadron(interaction)]
+	return ParticleData.HADRON_NAMES[get_hadron(interaction)]
 
-func get_hadron(interaction: Array) -> GLOBALS.Hadrons:
-	for hadron in GLOBALS.HADRON_QUARK_CONTENT.keys():
-		if interaction in GLOBALS.HADRON_QUARK_CONTENT[hadron]:
+func get_hadron(interaction: Array) -> ParticleData.Hadrons:
+	for hadron in ParticleData.HADRON_QUARK_CONTENT.keys():
+		if interaction in ParticleData.HADRON_QUARK_CONTENT[hadron]:
 			return hadron
 	
-	return GLOBALS.Hadrons.Invalid
+	return ParticleData.Hadrons.Invalid
 
 func _on_scroll_container_child_entered_tree(node: Node) -> void:
 	node.use_parent_material = true

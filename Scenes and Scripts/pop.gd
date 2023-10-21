@@ -28,9 +28,9 @@ var a2 : PackedInt32Array = [2]
 func _ready() -> void:
 	print(min%2)
 	
-	i1.add_unconnected_interaction([GLOBALS.Particle.gluon])
+	i1.add_unconnected_interaction([ParticleData.Particle.gluon])
 	
-	i2.add_unconnected_interaction([GLOBALS.Particle.photon])
+	i2.add_unconnected_interaction([ParticleData.Particle.photon])
 	
 	print(a1 + [a2])
 	

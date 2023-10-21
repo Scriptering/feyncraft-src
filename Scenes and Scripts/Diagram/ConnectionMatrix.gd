@@ -43,7 +43,7 @@ func remove_empty_rows() -> void:
 			remove_interaction(id)
 
 func connect_interactions(
-	from_id: int, to_id: int, particle: int = GLOBALS.PARTICLE.none, bidirectional: bool = false, reverse: bool = false
+	from_id: int, to_id: int, particle: int = ParticleData.PARTICLE.none, bidirectional: bool = false, reverse: bool = false
 ) -> void:
 
 	if reverse:
@@ -85,7 +85,7 @@ func insert_connection(connection: Array) -> void:
 	connect_interactions(connection[Connection.from_id], connection[Connection.to_id], connection[Connection.particle])
 
 func disconnect_interactions(
-	from_id: int, to_id: int, particle: int = GLOBALS.Particle.none, bidirectional: bool = false, reverse: bool = false
+	from_id: int, to_id: int, particle: int = ParticleData.Particle.none, bidirectional: bool = false, reverse: bool = false
 ) -> void:
 
 	if reverse:
@@ -163,7 +163,7 @@ func remove_interaction(id: int) -> void:
 func get_connections(id: int, reverse: bool = false) -> Array:
 	var connections: Array = []
 	
-	for connected_id in get_connected_ids(id, false, GLOBALS.Particle.none, reverse):
+	for connected_id in get_connected_ids(id, false, ParticleData.Particle.none, reverse):
 		for connection_particle in get_connection_particles(id, connected_id, false, false, reverse):
 			if reverse:
 				connections.push_back([connected_id, id, connection_particle])
@@ -185,7 +185,7 @@ func reverse_connection(connection: Array) -> void:
 	connect_interactions(connection[Connection.to_id], connection[Connection.from_id], connection[Connection.particle])
 
 func are_interactions_connected(
-	from_id: int, to_id: int, bidirectional: bool = false, particle: GLOBALS.Particle = GLOBALS.Particle.none, reverse: bool = false
+	from_id: int, to_id: int, bidirectional: bool = false, particle: ParticleData.Particle = ParticleData.Particle.none, reverse: bool = false
 ) -> bool:
 	
 	if reverse:
@@ -193,7 +193,7 @@ func are_interactions_connected(
 		from_id = to_id
 		to_id = temp_id
 	
-	if particle == GLOBALS.Particle.none:
+	if particle == ParticleData.Particle.none:
 		return connection_matrix[from_id][to_id].size() != 0 or (bidirectional and connection_matrix[to_id][from_id].size() != 0)
 	else:
 		return particle in connection_matrix[from_id][to_id] or (bidirectional and particle in connection_matrix[to_id][from_id])
@@ -209,13 +209,13 @@ func get_connection_size(from_id: int, to_id: int, bidirectional: bool = false, 
 func get_connected_count(id: int, bidirectional: bool = false, reverse: bool = false) -> int:
 	var connection_count : int = 0
 	
-	for connection_id in get_connected_ids(id, bidirectional, GLOBALS.Particle.none, reverse):
+	for connection_id in get_connected_ids(id, bidirectional, ParticleData.Particle.none, reverse):
 		connection_count += get_connection_size(id, connection_id, bidirectional, reverse)
 	
 	return connection_count
 
 func get_connected_ids(
-	id: int, bidirectional: bool = false, particle: GLOBALS.Particle = GLOBALS.Particle.none, reverse: bool = false,
+	id: int, bidirectional: bool = false, particle: ParticleData.Particle = ParticleData.Particle.none, reverse: bool = false,
 	include_directionless: bool = false
 ) -> PackedInt32Array:
 	
@@ -267,7 +267,7 @@ func get_connection_particles(
 	
 	if include_directionless:
 		var directionless_particles : Array = connection_matrix[to_id][from_id].filter(
-			func(particle): return particle not in GLOBALS.SHADED_PARTICLES
+			func(particle): return particle not in ParticleData.SHADED_PARTICLES
 		)
 		return connection_particles + directionless_particles
 	
@@ -422,16 +422,16 @@ func get_state_interactions(state: StateLine.StateType) -> Array:
 		var state_interaction: Array = [] 
 		for to_id in matrix_size:
 			state_interaction += get_connection_particles(from_state_id, to_id, false, false, true).map(
-				func(base_particle: GLOBALS.Particle): 
-					if base_particle in GLOBALS.BOSONS:
+				func(base_particle: ParticleData.Particle): 
+					if base_particle in ParticleData.BOSONS:
 						return base_particle
 					else:
 						return -1 * StateLine.state_factor[state] * base_particle
 			)
 			
 			state_interaction += get_connection_particles(from_state_id, to_id).map(
-				func(base_particle: GLOBALS.Particle):
-					if base_particle in GLOBALS.BOSONS:
+				func(base_particle: ParticleData.Particle):
+					if base_particle in ParticleData.BOSONS:
 						return base_particle
 					else:
 						return StateLine.state_factor[state] * base_particle
@@ -460,7 +460,7 @@ func is_duplicate(comparison_matrix: ConnectionMatrix) -> bool:
 
 func get_further_reindex_points(reindexed_id: int, reindexed_ids: Array) -> Array:
 	var non_reindexed_ids: Array = []
-	for connected_id in get_connected_ids(reindexed_id, false, GLOBALS.Particle.none, false, true):
+	for connected_id in get_connected_ids(reindexed_id, false, ParticleData.Particle.none, false, true):
 		if connected_id not in reindexed_ids and connected_id not in non_reindexed_ids:
 			non_reindexed_ids.push_back(connected_id)
 	

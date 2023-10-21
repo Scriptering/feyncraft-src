@@ -30,8 +30,8 @@ var information_id: int
 var id : int
 var connected_lines: Array[ParticleLine] = []
 var old_connected_lines: Array[ParticleLine] = []
-var connected_particles: Array[GLOBALS.Particle] : get = _get_connected_particles
-var connected_base_particles: Array[GLOBALS.Particle] : get = _get_connected_base_particles
+var connected_particles: Array[ParticleData.Particle] : get = _get_connected_particles
+var connected_base_particles: Array[ParticleData.Particle] : get = _get_connected_base_particles
 var connected_colour_lines: Array[ParticleLine] : get = _get_connected_colour_lines
 var connected_shade_lines: Array[ParticleLine] : get = _get_connected_shade_lines
 var dimensionality: float : get = _get_dimensionality
@@ -188,13 +188,13 @@ func _get_connected_shade_lines() -> Array[ParticleLine]:
 			connected_shaded_lines.append(line)
 	return connected_shaded_lines
 
-func _get_connected_particles() -> Array[GLOBALS.Particle]:
+func _get_connected_particles() -> Array[ParticleData.Particle]:
 	connected_particles.clear()
 	for line in connected_lines:
 		connected_particles.append(line.particle)
 	return connected_particles
 
-func _get_connected_base_particles() -> Array[GLOBALS.Particle]:
+func _get_connected_base_particles() -> Array[ParticleData.Particle]:
 	connected_base_particles.clear()
 	for line in connected_lines:
 		connected_base_particles.append(line.base_particle)
@@ -218,10 +218,10 @@ func should_request_deletion() -> bool:
 func move_interaction() -> void:
 	position = Crosshair.position
 
-func has_particle_connected(particle: GLOBALS.Particle):
+func has_particle_connected(particle: ParticleData.Particle):
 	return particle in self.connected_particles
 
-func has_base_particle_connected(base_particle: GLOBALS.Particle):
+func has_base_particle_connected(base_particle: ParticleData.Particle):
 	return base_particle in self.connected_base_particles
 
 func validate() -> bool:
@@ -231,10 +231,10 @@ func validate() -> bool:
 	if !is_dimensionality_valid():
 		return false
 
-	if has_particle_connected(GLOBALS.Particle.photon) and has_neutral_photon():
+	if has_particle_connected(ParticleData.Particle.photon) and has_neutral_photon():
 		return false
 	
-	if has_particle_connected(GLOBALS.Particle.gluon) and has_colourless_gluon():
+	if has_particle_connected(ParticleData.Particle.gluon) and has_colourless_gluon():
 		return false
 	
 	if get_invalid_quantum_numbers().size() > 0:
@@ -242,25 +242,25 @@ func validate() -> bool:
 	
 	return true
 
-func get_invalid_quantum_numbers() -> Array[GLOBALS.QuantumNumber]:
-	var is_weak: bool = has_base_particle_connected(GLOBALS.Particle.W)
+func get_invalid_quantum_numbers() -> Array[ParticleData.QuantumNumber]:
+	var is_weak: bool = has_base_particle_connected(ParticleData.Particle.W)
 	var has_W_0: bool = self.connected_lines.any(
-		func(line: ParticleLine): return line.line_vector.x == 0 and line.base_particle == GLOBALS.Particle.W
+		func(line: ParticleLine): return line.line_vector.x == 0 and line.base_particle == ParticleData.Particle.W
 	)
-	var invalid_quantum_numbers: Array[GLOBALS.QuantumNumber] = []
+	var invalid_quantum_numbers: Array[ParticleData.QuantumNumber] = []
 	var before_quantum_sum : Array[float] = get_side_quantum_sum(Side.Before)
 	var after_quantum_sum : Array[float] = get_side_quantum_sum(Side.After)
 	var interaction_in_list := is_interaction_in_list()
 	
-	for quantum_number in GLOBALS.QuantumNumber.values():
+	for quantum_number in ParticleData.QuantumNumber.values():
 		var quantum_number_difference := before_quantum_sum[quantum_number] - after_quantum_sum[quantum_number]
 		var quantum_numbers_equal := is_zero_approx(quantum_number_difference)
 		
 		if !quantum_numbers_equal:
-			if has_W_0 and quantum_number == GLOBALS.QuantumNumber.charge and abs(quantum_number_difference) == 1:
+			if has_W_0 and quantum_number == ParticleData.QuantumNumber.charge and abs(quantum_number_difference) == 1:
 				continue
 			
-			if !is_weak or quantum_number not in GLOBALS.WEAK_QUANTUM_NUMBERS:
+			if !is_weak or quantum_number not in ParticleData.WEAK_QUANTUM_NUMBERS:
 				invalid_quantum_numbers.append(quantum_number)
 				continue
 			
@@ -295,12 +295,12 @@ func get_side_quantum_sum(side: Interaction.Side) -> Array[float]:
 	var quantum_sum : Array[float] = []
 	var side_connected_lines := get_side_connected_lines(side)
 	
-	for quantum_number in GLOBALS.QuantumNumber.values():
+	for quantum_number in ParticleData.QuantumNumber.values():
 		var sum: float = 0
 		for line in side_connected_lines:
-			var line_is_W_0: bool = line.line_vector.x == 0 and line.base_particle == GLOBALS.Particle.W
+			var line_is_W_0: bool = line.line_vector.x == 0 and line.base_particle == ParticleData.Particle.W
 			
-			if line_is_W_0 and quantum_number == GLOBALS.QuantumNumber.charge:
+			if line_is_W_0 and quantum_number == ParticleData.QuantumNumber.charge:
 				continue
 			
 			sum += line.quantum_numbers[quantum_number]
@@ -320,7 +320,7 @@ func _get_dimensionality() -> float:
 
 func has_neutral_photon() -> bool:
 	for line in connected_lines:
-		if line.quantum_numbers[GLOBALS.QuantumNumber.charge] != 0:
+		if line.quantum_numbers[ParticleData.QuantumNumber.charge] != 0:
 			return false
 	
 	return is_interaction_in_list()
@@ -337,8 +337,8 @@ func is_interaction_in_list() -> bool:
 	sorted_connected_base_particles.sort()
 	
 	return (
-		GLOBALS.INTERACTIONS.any(func(interaction_type: Array): return sorted_connected_base_particles in interaction_type) or
-		GLOBALS.GENERAL_INTERACTIONS.any(func(interaction_type: Array): return sorted_connected_base_particles in interaction_type)
+		ParticleData.INTERACTIONS.any(func(interaction_type: Array): return sorted_connected_base_particles in interaction_type) or
+		ParticleData.GENERAL_INTERACTIONS.any(func(interaction_type: Array): return sorted_connected_base_particles in interaction_type)
 	)
 
 func is_hovered() -> bool:
@@ -407,9 +407,9 @@ func get_interaction_index() -> Array[int]:
 	var sorted_connected_base_particles := self.connected_base_particles.duplicate(true)
 	sorted_connected_base_particles.sort()
 	
-	for i in range(GLOBALS.INTERACTIONS.size()):
-		for j in range(GLOBALS.INTERACTIONS[i].size()):
-			if sorted_connected_base_particles == GLOBALS.INTERACTIONS[i][j]:
+	for i in range(ParticleData.INTERACTIONS.size()):
+		for j in range(ParticleData.INTERACTIONS[i].size()):
+			if sorted_connected_base_particles == ParticleData.INTERACTIONS[i][j]:
 				return [i, j]
 	
 	return []
@@ -418,11 +418,11 @@ func get_interaction_strength() -> float:
 	var interaction_index := get_interaction_index()
 	if interaction_index == []:
 		return -1
-	return GLOBALS.INTERACTION_STRENGTHS[interaction_index[0]][interaction_index[1]][0]
+	return ParticleData.INTERACTION_STRENGTHS[interaction_index[0]][interaction_index[1]][0]
 
 func calculate_interaction_strength_alpha(interaction_strength:float = get_interaction_strength()) -> float:
-	var minimum_log_strength := log(GLOBALS.MINIMUM_INTERACTION_STRENGTH)
-	var maximum_log_strength := log(GLOBALS.MAXIMUM_INTERACTION_STRENGTH)
+	var minimum_log_strength := log(ParticleData.MINIMUM_INTERACTION_STRENGTH)
+	var maximum_log_strength := log(ParticleData.MAXIMUM_INTERACTION_STRENGTH)
 	
 	if interaction_strength == -1:
 		return 1.0
@@ -430,7 +430,7 @@ func calculate_interaction_strength_alpha(interaction_strength:float = get_inter
 	var proportional_strength : float = (
 		(log(interaction_strength) - minimum_log_strength) /
 		(maximum_log_strength - minimum_log_strength) *
-		(1.0 - GLOBALS.MINIMUM_INTERACTION_STRENGTH_ALPHA) + GLOBALS.MINIMUM_INTERACTION_STRENGTH_ALPHA
+		(1.0 - ParticleData.MINIMUM_INTERACTION_STRENGTH_ALPHA) + ParticleData.MINIMUM_INTERACTION_STRENGTH_ALPHA
 	)
 	
 	return proportional_strength

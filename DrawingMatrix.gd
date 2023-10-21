@@ -64,7 +64,7 @@ func divert_connection(
 	divert_from_id: int, divert_to_id: int, new_id: int = calculate_new_interaction_id()
 ) -> void:
 	
-	var seperating_particle: GLOBALS.Particle = connection_matrix[divert_from_id][divert_to_id][0]
+	var seperating_particle: ParticleData.Particle = connection_matrix[divert_from_id][divert_to_id][0]
 	
 	disconnect_interactions(divert_from_id, divert_to_id, seperating_particle)
 	add_interaction(StateLine.StateType.None, new_id)
@@ -113,14 +113,14 @@ func are_ids_in_same_hadron(id: int, jd: int) -> bool:
 	)
 
 func are_interactions_connected(
-	from_id: int, to_id: int, bidirectional: bool = false, particle: GLOBALS.Particle = GLOBALS.Particle.none, reverse: bool = false
+	from_id: int, to_id: int, bidirectional: bool = false, particle: ParticleData.Particle = ParticleData.Particle.none, reverse: bool = false
 ) -> bool:
 	if reverse:
 		var temp_id: int = from_id
 		from_id = to_id
 		to_id = temp_id
 	
-	if particle == GLOBALS.Particle.none:
+	if particle == ParticleData.Particle.none:
 		return connection_matrix[from_id][to_id].size() != 0 or (bidirectional and connection_matrix[to_id][from_id].size() != 0)
 	else:
 		return particle in connection_matrix[from_id][to_id] or (bidirectional and particle in connection_matrix[to_id][from_id])
@@ -139,12 +139,12 @@ func split_hadron(hadron_id: int) -> void:
 		connection_id += int(connection_id > hadron_id)
 		
 		if are_interactions_connected(hadron_id, connection_id):
-			var connecting_particle : GLOBALS.Particle = get_connection_particles(hadron_id, connection_id)[0]
+			var connecting_particle : ParticleData.Particle = get_connection_particles(hadron_id, connection_id)[0]
 			disconnect_interactions(hadron_id, connection_id, connecting_particle)
 			connect_interactions(new_interaction_id, connection_id, connecting_particle)
 		
 		else:
-			var connecting_particle : GLOBALS.Particle = get_connection_particles(connection_id, hadron_id)[0]
+			var connecting_particle : ParticleData.Particle = get_connection_particles(connection_id, hadron_id)[0]
 			disconnect_interactions(connection_id, hadron_id, connecting_particle)
 			connect_interactions(connection_id, new_interaction_id, connecting_particle)
 	
@@ -226,13 +226,13 @@ func rejoin_double_connections() -> void:
 		if !(get_connected_count(id) == 1 and get_connected_count(id, false, true) == 1):
 			continue
 		
-		var from_id: int = get_connected_ids(id, false, GLOBALS.Particle.none, true)[0]
+		var from_id: int = get_connected_ids(id, false, ParticleData.Particle.none, true)[0]
 		var to_id: int = get_connected_ids(id)[0]
 		
 		if get_connection_particles(from_id, to_id) != get_connection_particles(id, to_id):
 			continue
 			
-		var connection_particle: GLOBALS.Particle = get_connection_particles(from_id, to_id).front()
+		var connection_particle: ParticleData.Particle = get_connection_particles(from_id, to_id).front()
 		
 		disconnect_interactions(from_id, id, connection_particle)
 		disconnect_interactions(id, to_id, connection_particle)
@@ -259,7 +259,7 @@ func rejoin_hadron(hadron_ids: PackedInt32Array) -> void:
 		var connected_id: int = get_connected_ids(hadron_id, true)[0]
 		var reverse: bool = !are_interactions_connected(hadron_id, connected_id)
 		
-		var connection_particle: GLOBALS.Particle = get_connection_particles(
+		var connection_particle: ParticleData.Particle = get_connection_particles(
 			hadron_id, connected_id, true
 		).front()
 		
