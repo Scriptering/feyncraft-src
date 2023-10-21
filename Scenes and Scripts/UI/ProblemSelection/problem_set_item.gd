@@ -33,6 +33,9 @@ func update() -> void:
 	
 	$HBoxContainer/PanelContainer/HBoxContainer/Play.disabled = no_problems
 	$HBoxContainer/PanelContainer/HBoxContainer/Upload.disabled = no_problems
+	$HBoxContainer/Completed.visible = (
+		!no_problems and problem_set.highest_index_reached >= problem_set.problems.size()
+	)
 	
 	update_problem_index()
 
@@ -54,6 +57,10 @@ func _on_upload_toggled(button_pressed) -> void:
 	
 	await get_tree().process_frame
 	
+	var uploading_problem_set : ProblemSet = problem_set.duplicate(true)
+	uploading_problem_set.highest_index_reached = 0
+	uploading_problem_set.is_custom = false
+	
 	$HBoxContainer/PanelContainer/HBoxContainer/Upload.set_text(
-		GLOBALS.get_resource_save_data(problem_set)
+		GLOBALS.get_resource_save_data(uploading_problem_set)
 	)

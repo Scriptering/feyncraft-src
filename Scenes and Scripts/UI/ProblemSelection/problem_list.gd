@@ -14,9 +14,19 @@ func _ready() -> void:
 	$VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer.get_v_scroll_bar().use_parent_material = true
 
 func delete_empty_problems() -> void:
-	for problem_item in problem_container.get_children():
+	for problem_item in get_problem_items():
 		if problem_item.is_empty():
 			delete_problem(problem_item)
+
+func reload() -> void:
+	for problem_item in get_problem_items():
+		problem_item.toggle_completed(!problem_set.is_custom and problem_item.index < problem_set.highest_index_reached)
+		problem_item.toggle_play_disabled(!problem_set.is_custom and problem_item.index > problem_set.highest_index_reached)
+
+func get_problem_items() -> Array:
+	return problem_container.get_children().filter(
+		func(child): return !child.is_queued_for_deletion()
+	)
 
 func load_problem_set(_problem_set: ProblemSet, p_problem_set_file_path: String) -> void:
 	problem_set = _problem_set
@@ -34,7 +44,7 @@ func load_problem_set(_problem_set: ProblemSet, p_problem_set_file_path: String)
 	update_index_labels()
 
 func clear_problems() -> void:
-	for child in problem_container.get_children():
+	for child in get_problem_items():
 		child.queue_free()
 
 func add_problem(problem: Problem, is_custom: bool = false) -> void:
@@ -50,27 +60,27 @@ func add_problem(problem: Problem, is_custom: bool = false) -> void:
 	problem_container.add_child(problem_select)
 	
 	problem_select.load_problem(problem)
-	problem_select.set_index(problem_container.get_child_count()-1)
+	problem_select.index = get_problem_items().size()-1
+	
+	problem_select.toggle_completed(!problem_set.is_custom and problem_select.index < problem_set.highest_index_reached)
+	problem_select.toggle_play_disabled(!problem_set.is_custom and problem_select.index > problem_set.highest_index_reached)
 	
 	update()
 
 func update() -> void:
 	update_index_labels()
 	
-	for problem in problem_container.get_children():
+	for problem in get_problem_items():
 		problem.update()
 
 func update_index_labels() -> void:
 	var index: int = 0
-	for i in range(problem_container.get_child_count()):
-		if problem_container.get_child(i).is_queued_for_deletion():
-			continue
-		
-		problem_container.get_child(i).set_index(index)
+	for i in get_problem_items().size():
+		get_problem_items()[i].index = index
 		index += 1
 
 func _problem_moved(problem_select: PanelContainer, index_change: int) -> void:
-	var current_index: int = problem_container.get_children().find(problem_select)
+	var current_index: int = get_problem_items().find(problem_select)
 	var new_index: int = current_index + index_change
 	
 	problem_container.move_child(problem_select, new_index)
@@ -82,7 +92,7 @@ func _problem_moved(problem_select: PanelContainer, index_change: int) -> void:
 	update_index_labels()
 
 func delete_problem(problem_select: PanelContainer) -> void:
-	var index: int = problem_container.get_children().find(problem_select)
+	var index: int = get_problem_items().find(problem_select)
 	
 	problem_set.problems.remove_at(index)
 	problem_select.queue_free()

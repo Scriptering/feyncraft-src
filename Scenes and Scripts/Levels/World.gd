@@ -1,7 +1,6 @@
 extends Node2D
 
 signal problem_submitted
-signal exit_to_main_menu
 
 @onready var FPS = get_node('FPS')
 @onready var Pathfinding = $Algorithms/PathFinding
@@ -10,6 +9,7 @@ signal exit_to_main_menu
 
 @onready var ParticleButtons := $PullOutTabs/ParticleButtons
 @onready var GenerationTab := $PullOutTabs/GenerationButton
+@onready var PuzzleOptions: Control = $PullOutTabs/PuzzleUI
 @onready var ProblemTab := $PullOutTabs/ProblemTab
 @onready var MenuTab := $PullOutTabs/MenuTab
 @onready var VisionTab := $PullOutTabs/VisionButton
@@ -24,6 +24,7 @@ var PaletteMenu: GrabbableControl
 var previous_mode: BaseMode.Mode = BaseMode.Mode.Null
 var current_mode: BaseMode.Mode = BaseMode.Mode.Null: set = _set_current_mode
 var problem_set: ProblemSet
+var problem_history: Array[Problem] = []
 
 var mode_enter_funcs : Dictionary = {
 	BaseMode.Mode.ParticleSelection: enter_particle_selection,
@@ -60,6 +61,7 @@ func init(state_manager: Node, controls_tab: Control, palette_list: GrabbableCon
 	)
 	
 	ProblemTab.next_problem_pressed.connect(_on_next_problem_pressed)
+	ProblemTab.prev_problem_pressed.connect(_on_prev_problem_pressed)
 	
 	MenuTab.init(PaletteMenu)
 	CreationInformation.init(Diagram, self)
@@ -81,15 +83,22 @@ func _vision_button_toggled(current_vision: GLOBALS.Vision) -> void:
 	$ShaderControl.toggle_interaction_strength(current_vision == GLOBALS.Vision.Strength)
 
 func load_problem(problem: Problem) -> void:
-	Diagram.load_problem(problem)
+	Diagram.load_problem(problem, current_mode)
 	ProblemTab.load_problem(problem)
 	ParticleButtons.load_problem(problem)
+
+	if current_mode == BaseMode.Mode.ProblemSolving:
+		ProblemTab.toggle_finish_icon(problem_set.current_index == problem_set.problems.size() - 1)
 
 func load_problem_set(p_problem_set: ProblemSet, index: int) -> void:
 	problem_set = p_problem_set
 	problem_set.end_reached.connect(_on_problem_set_end_reached)
 	problem_set.current_index = index
+	
+	problem_history.clear()
+	ProblemTab.set_prev_problem_disabled(index == 0)
 	load_problem(problem_set.current_problem)
+	ProblemTab.set_next_problem_disabled(index >= problem_set.highest_index_reached)
 
 func enter_particle_selection() -> void:
 	ParticleButtons.show()
@@ -97,13 +106,13 @@ func enter_particle_selection() -> void:
 	ProblemTab.hide()
 	VisionTab.hide()
 	
+	Diagram.load_problem(GLOBALS.creating_problem, current_mode)
 	ParticleButtons.enter_particle_selection(GLOBALS.creating_problem)
 	CreationInformation.reset()
 
 func exit_particle_selection() -> void:
 	GLOBALS.creating_problem.allowed_particles = ParticleButtons.get_toggled_particles(true)
 	ParticleButtons.exit_particle_selection()
-	ParticleButtons.load_problem(GLOBALS.creating_problem)
 
 func enter_sandbox() -> void:
 	ParticleButtons.show()
@@ -111,8 +120,11 @@ func enter_sandbox() -> void:
 	ProblemTab.show()
 	VisionTab.show()
 	CreationInformation.hide()
-	
+
 	ProblemTab._enter_sandbox()
+	
+	Diagram.set_title_editable(false)
+	Diagram.set_title_visible(false)
 
 	load_problem(generate_new_problem())
 
@@ -122,12 +134,16 @@ func enter_problem_solving() -> void:
 	ProblemTab.show()
 	VisionTab.show()
 	CreationInformation.hide()
+	
+	Diagram.set_title_editable(false)
 
 func enter_problem_creation() -> void:
 	ParticleButtons.show()
 	GenerationTab.hide()
 	ProblemTab.hide()
 	VisionTab.show()
+	
+	ParticleButtons.load_problem(GLOBALS.creating_problem)
 
 func enter_solution_creation() -> void:
 	ParticleButtons.show()
@@ -149,11 +165,11 @@ func exit_problem_creation() -> void:
 	for state in [StateLine.StateType.Initial, StateLine.StateType.Final]:
 		GLOBALS.creating_problem.state_interactions[state] = drawn_diagram.get_state_interactions(state)
 	
-	if !setup_new_problem(creating_problem):
+	if !ProblemGeneration.setup_new_problem(creating_problem):
 		CreationInformation.no_solutions_found()
 		return
 	
-	ProblemTab.load_problem(GLOBALS.creating_problem, false)
+	ProblemTab.load_problem(GLOBALS.creating_problem)
 
 func exit_solution_creation() -> void:
 	ProblemTab.in_solution_creation = false
@@ -162,43 +178,38 @@ func _on_creation_information_submit_problem() -> void:
 	problem_submitted.emit()
 
 func _on_problem_set_end_reached() -> void:
-	exit_to_main_menu.emit()
+	problem_set.end_reached.disconnect(_on_problem_set_end_reached)
+	
+	EVENTBUS.signal_change_scene.emit(GLOBALS.Scene.MainMenu)
 
 func _on_next_problem_pressed() -> void:
 	match current_mode:
 		BaseMode.Mode.ProblemSolving:
 			load_problem(problem_set.next_problem())
+			ProblemTab.set_next_problem_disabled(problem_set.current_index >= problem_set.highest_index_reached)
 		BaseMode.Mode.Sandbox:
 			load_problem(generate_new_problem())
 	
 	Diagram.clear_diagram()
+	ProblemTab.set_prev_problem_disabled(false)
+
+func _on_prev_problem_pressed() -> void:
+	match current_mode:
+		BaseMode.Mode.ProblemSolving:
+			load_problem(problem_set.previous_problem())
+			ProblemTab.set_prev_problem_disabled(problem_set.current_index == 0)
+		BaseMode.Mode.Sandbox:
+			load_problem(problem_history[-1])
+			problem_history.pop_back()
+			ProblemTab.set_prev_problem_disabled(problem_history.size() == 0)
+	
+	Diagram.clear_diagram()
 
 func generate_new_problem() -> Problem:
-	var new_problem: Problem = ProblemGeneration.generate()
-	setup_new_problem(new_problem)
-	return new_problem
-
-func setup_new_problem(problem: Problem) -> bool:
-	var min_degree: int = problem.degree if problem.custom_degree else 1
-	var max_degree: int = problem.degree if problem.custom_degree else 6
-	
-	var generated_solutions: Array[ConnectionMatrix] = SolutionGeneration.generate_diagrams(
-		problem.state_interactions[StateLine.StateType.Initial],
-		problem.state_interactions[StateLine.StateType.Final],
-		min_degree, max_degree,
-		SolutionGeneration.get_useable_interactions_from_particles(problem.allowed_particles),
-		SolutionGeneration.Find.LowestOrder
-	)
-	
-	if generated_solutions == [null]:
-		return false
-	
-	problem.degree = generated_solutions.front().state_count[StateLine.StateType.None]
-	problem.solution_count = ProblemGeneration.calculate_solution_count(
-		problem.degree, generated_solutions.size()
-	)
-	
-	return true
+	return ProblemGeneration.setup_new_problem(ProblemGeneration.generate(
+		PuzzleOptions.min_particle_count, PuzzleOptions.max_particle_count, PuzzleOptions.hadron_frequency,
+		ProblemGeneration.get_useable_particles_from_interaction_checks(PuzzleOptions.get_checks())
+	))
 
 func _on_creation_information_toggle_all(toggle: bool) -> void:
 	ParticleButtons.toggle_buttons(toggle)

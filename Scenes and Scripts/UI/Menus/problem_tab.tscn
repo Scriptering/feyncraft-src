@@ -45,11 +45,11 @@ texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 expand_margin_top = 10.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3af1t"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wx8vh"]
 resource_local_to_scene = true
 shader = ExtResource("8_w33hb")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0xmnx"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8rhau"]
 resource_local_to_scene = true
 shader = ExtResource("8_w33hb")
 
@@ -58,15 +58,15 @@ base_font = ExtResource("14_wsnu4")
 spacing_top = -3
 spacing_bottom = -5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_mhegb"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mflb6"]
 resource_local_to_scene = true
 shader = ExtResource("8_w33hb")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_tme4e"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2xwat"]
 resource_local_to_scene = true
 shader = ExtResource("8_w33hb")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_tmq7f"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dec50"]
 resource_local_to_scene = true
 shader = ExtResource("8_w33hb")
 
@@ -74,11 +74,11 @@ shader = ExtResource("8_w33hb")
 default_font = SubResource("FontVariation_vdd88")
 default_font_size = 14
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_mj3v6"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8hckq"]
 resource_local_to_scene = true
 shader = ExtResource("8_w33hb")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fhvbx"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0dgsl"]
 resource_local_to_scene = true
 shader = ExtResource("8_w33hb")
 
@@ -256,10 +256,9 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_ci0m4")
 use_parent_material = true
 layout_mode = 2
 theme_override_constants/separation = 3
-alignment = 1
 
 [node name="Rewind" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
-material = SubResource("ShaderMaterial_3af1t")
+material = SubResource("ShaderMaterial_wx8vh")
 layout_mode = 2
 icon = ExtResource("5_t5pc5")
 minimum_size = Vector2(25, 24)
@@ -271,7 +270,7 @@ icon_use_parent_material = true
 tooltip = "Load previous problem"
 
 [node name="Solution" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
-material = SubResource("ShaderMaterial_0xmnx")
+material = SubResource("ShaderMaterial_8rhau")
 layout_mode = 2
 icon = ExtResource("6_pp1px")
 minimum_size = Vector2(25, 24)
@@ -311,13 +310,13 @@ stretch_mode = 5
 tooltip = "Problem degree"
 
 [node name="Equation" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("3_7jee8")]
-material = SubResource("ShaderMaterial_mhegb")
+material = SubResource("ShaderMaterial_mflb6")
 use_parent_material = true
 layout_mode = 2
 scale_factor = 1.2
 
 [node name="ViewSubmissions" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
-material = SubResource("ShaderMaterial_tme4e")
+material = SubResource("ShaderMaterial_2xwat")
 layout_mode = 2
 icon = ExtResource("5_15poa")
 minimum_size = Vector2(24, 24)
@@ -328,7 +327,7 @@ disabled = true
 tooltip = "View submissions"
 
 [node name="Submit" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
-material = SubResource("ShaderMaterial_tmq7f")
+material = SubResource("ShaderMaterial_dec50")
 layout_mode = 2
 theme = SubResource("Theme_wmnb4")
 icon = ExtResource("8_2kr0t")
@@ -342,7 +341,7 @@ icon_text_seperation = 0
 tooltip = "Submit solution"
 
 [node name="NextProblem" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
-material = SubResource("ShaderMaterial_mj3v6")
+material = SubResource("ShaderMaterial_8hckq")
 layout_mode = 2
 theme = SubResource("Theme_wmnb4")
 icon = ExtResource("16_leqlk")
@@ -355,7 +354,7 @@ tooltip = "Next Problem"
 
 [node name="PullOutTabButtonDown" parent="MovingContainer/VBoxContainer" instance=ExtResource("10_xn6km")]
 z_index = 0
-material = SubResource("ShaderMaterial_fhvbx")
+material = SubResource("ShaderMaterial_0dgsl")
 layout_mode = 2
 size_flags_horizontal = 4
 theme = SubResource("Theme_d1tq1")

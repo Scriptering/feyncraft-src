@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://b22nw60juoc6k"]
+[gd_scene load_steps=12 format=3 uid="uid://b22nw60juoc6k"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/Diagram/line.gd" id="1_4fl17"]
 [ext_resource type="Shader" path="res://Resources/Shaders/particle_line.gdshader" id="1_x0i6p"]
@@ -6,7 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://c1joju14fxw1n" path="res://Textures/ParticlesAndLines/Particle.png" id="4_wgcwh"]
 [ext_resource type="Shader" path="res://Scenes and Scripts/Diagram/outline_palette_swap.gdshader" id="5_2gn0a"]
 [ext_resource type="Texture2D" uid="uid://dya0nescxtd67" path="res://Textures/ParticlesAndLines/arrow.png" id="5_chfwe"]
-[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="7_wftbm"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3ebw7"]
 resource_local_to_scene = true
@@ -23,7 +22,9 @@ shader_parameter/line_thickness = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g5clp"]
 resource_local_to_scene = true
-shader = ExtResource("7_wftbm")
+shader = ExtResource("5_2gn0a")
+shader_parameter/line_color = Color(0, 0, 0, 1)
+shader_parameter/line_thickness = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_00w2k"]
 shader = ExtResource("5_2gn0a")

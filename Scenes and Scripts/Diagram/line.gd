@@ -113,7 +113,7 @@ func init(diagram: MainDiagram) -> void:
 
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("click") and hovering:
-		emit_signal("clicked_on", self)
+		clicked_on.emit(self)
 
 func _get_particle() -> GLOBALS.Particle:
 	return (anti * base_particle) as GLOBALS.Particle
@@ -126,8 +126,6 @@ func _get_quantum_numbers() -> Array:
 
 func _set_anti(new_value: int) -> void:
 	anti = new_value
-	for interaction in self.connected_interactions:
-		interaction.update_interaction()
 
 func set_anti() -> void:
 	if base_particle in GLOBALS.SHADED_PARTICLES:
@@ -156,10 +154,6 @@ func get_side_point(state: StateLine.StateType) -> Vector2:
 	if state == StateLine.StateType.Initial:
 		return left_point
 	return right_point
-
-func crosshair_moved(_new_position: Vector2, _old_position: Vector2):
-	if !is_placed:
-		update_line()
 
 func set_dimensionality() -> void:
 	if base_particle in GLOBALS.FERMIONS:
@@ -384,7 +378,7 @@ func set_text_texture() -> void:
 
 func place() -> void:
 	if !is_placement_valid():
-		emit_signal("request_deletion", self)
+		request_deletion.emit(self)
 		return
 	is_placed = true
 	connect_to_interactions()

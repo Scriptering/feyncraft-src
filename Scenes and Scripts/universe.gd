@@ -24,7 +24,6 @@ var enter_funcs: Dictionary = {
 }
 
 func _ready() -> void:
-	Level.exit_to_main_menu.connect(enter_main_menu)
 	MainMenu.sandbox_pressed.connect(_on_sandbox_pressed)
 	
 	remove_child(Level)
@@ -48,10 +47,9 @@ func change_scene(scene: Scene, args: Array = []) -> void:
 	ControlsTab.release_buttons()
 	
 	switch_child_scene(scene)
-	
 	StateManager.change_scene(scenes[scene].Diagram, scenes[scene].ControlsTab)
-	enter_funcs[scene].call(args)
 	
+	enter_funcs[scene].call(args)
 	EVENTBUS.change_cursor(GLOBALS.CURSOR.default)
 
 func switch_child_scene(new_scene: Scene) -> void:
@@ -66,6 +64,8 @@ func enter_level(args: Array = [BaseMode.Mode.Sandbox]) -> void:
 func enter_main_menu(_args: Array = []) -> void:
 	GLOBALS.in_main_menu = true
 	modifying_problem_item = null
+	
+	MainMenu.reload_problem_selection()
 
 func _on_sandbox_pressed() -> void:
 	change_scene(Scene.Level, [BaseMode.Mode.Sandbox])
@@ -86,9 +86,8 @@ func _on_problem_modified(problem_item) -> void:
 	change_scene(Scene.Level, [BaseMode.Mode.ParticleSelection])
 
 func _on_problem_set_played(problem_set: ProblemSet, index: int) -> void:
-	Level.load_problem_set(problem_set, index)
-	
 	change_scene(Scene.Level, [BaseMode.Mode.ProblemSolving])
+	Level.load_problem_set(problem_set, index)
 
 func _on_tree_exited() -> void:
 	save_files.emit()

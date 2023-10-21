@@ -12,16 +12,14 @@ const States = [StateLine.StateType.Initial, StateLine.StateType.Final]
 
 func load_problem(problem: Problem) -> void:
 	for state in States:
-		clear_equation(state)
-		load_state_symbols(state, problem)
+		load_state_symbols(state, problem.get_state_interaction(state))
 
 func clear_equation(state: StateLine.StateType) -> void:
 	for child in StateEquations[state].get_children():
 		child.queue_free()
 
-func load_state_symbols(state: StateLine.StateType, problem: Problem) -> void:
-	var state_interactions: Array = problem.get_state_interaction(state)
-	
+func load_state_symbols(state: StateLine.StateType, state_interactions: Array) -> void:
+	clear_equation(state)
 	for i in range(state_interactions.size()):
 		var interaction: Array = state_interactions[i]
 		

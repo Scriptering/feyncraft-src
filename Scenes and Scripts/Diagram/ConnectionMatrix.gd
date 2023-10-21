@@ -422,11 +422,19 @@ func get_state_interactions(state: StateLine.StateType) -> Array:
 		var state_interaction: Array = [] 
 		for to_id in matrix_size:
 			state_interaction += get_connection_particles(from_state_id, to_id, false, false, true).map(
-				func(base_particle: GLOBALS.Particle): return -1 * StateLine.state_factor[state] * base_particle
+				func(base_particle: GLOBALS.Particle): 
+					if base_particle in GLOBALS.BOSONS:
+						return base_particle
+					else:
+						return -1 * StateLine.state_factor[state] * base_particle
 			)
 			
 			state_interaction += get_connection_particles(from_state_id, to_id).map(
-				func(base_particle: GLOBALS.Particle): return StateLine.state_factor[state] * base_particle
+				func(base_particle: GLOBALS.Particle):
+					if base_particle in GLOBALS.BOSONS:
+						return base_particle
+					else:
+						return StateLine.state_factor[state] * base_particle
 			)
 		
 		state_interactions.push_back(state_interaction)

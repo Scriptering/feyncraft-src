@@ -57,7 +57,7 @@ func generate_shade_matrix(shade: Shade, diagram: DrawingMatrix) -> DrawingMatri
 		func(particle: GLOBALS.Particle): return particle in GLOBALS.SHADE_PARTICLES[shade]
 	)
 
-	if shade == Shade.Dark:
+	if shade == Shade.Dark or shade == Shade.Both:
 		return shade_matrix
 	
 	for connection in shade_matrix.get_all_connections():

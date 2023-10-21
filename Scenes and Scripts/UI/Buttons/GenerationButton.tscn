@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://be3c30uk2tf1g"]
+[gd_scene load_steps=9 format=3 uid="uid://be3c30uk2tf1g"]
 
 [ext_resource type="PackedScene" uid="uid://lpbermjlr4kj" path="res://Scenes and Scripts/UI/Buttons/ButtonBase.tscn" id="1"]
 [ext_resource type="PackedScene" uid="uid://dumex72ems5r" path="res://Scenes and Scripts/UI/Menus/GenerationUI.tscn" id="2"]
@@ -6,6 +6,11 @@
 [ext_resource type="Texture2D" uid="uid://chtsqpcvqnou3" path="res://Textures/Buttons/icons/puzzle.png" id="4"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Buttons/GenerationButton.gd" id="5"]
 [ext_resource type="PackedScene" uid="uid://deuhqxgq1bveq" path="res://Scenes and Scripts/UI/Menus/PuzzleUI.tscn" id="6"]
+[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="6_l8l65"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pwq52"]
+resource_local_to_scene = true
+shader = ExtResource("6_l8l65")
 
 [node name="GenerationButton" type="Node2D"]
 z_index = 2
@@ -42,6 +47,9 @@ offset_left = 0.0
 offset_top = 0.0
 offset_right = 80.0
 offset_bottom = 146.0
+
+[node name="Options" parent="GenerationUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" index="0"]
+material = SubResource("ShaderMaterial_pwq52")
 
 [node name="Equation" parent="GenerationUI" index="1"]
 offset_left = 0.0

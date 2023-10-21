@@ -18,6 +18,9 @@ var PaletteList: GrabbableControl
 func _ready():
 	EVENTBUS.signal_exit_game.connect(_on_exit_game)
 
+func reload_problem_selection() -> void:
+	problem_selection.reload()
+
 func init(state_manager: Node, controls_tab: Control, palette_list: GrabbableControl):
 	StateManager = state_manager
 	ControlsTab = controls_tab

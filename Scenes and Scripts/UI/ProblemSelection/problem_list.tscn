@@ -13,7 +13,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vw46e"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ked4n"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d54wm"]
 resource_local_to_scene = true
 shader = ExtResource("4_sya5g")
 
@@ -22,7 +22,7 @@ material = ExtResource("1_a6eex")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -365.0
+offset_right = -465.0
 offset_bottom = -263.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -61,7 +61,7 @@ size_flags_horizontal = 3
 layout_mode = 2
 
 [node name="AddProblem" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_tav84")]
-material = SubResource("ShaderMaterial_ked4n")
+material = SubResource("ShaderMaterial_d54wm")
 layout_mode = 2
 icon = ExtResource("5_6tky2")
 minimum_size = Vector2(154, 28)

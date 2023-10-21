@@ -1,12 +1,13 @@
-[gd_scene load_steps=33 format=3 uid="uid://dumex72ems5r"]
+[gd_scene load_steps=35 format=3 uid="uid://dumex72ems5r"]
 
 [ext_resource type="Theme" uid="uid://dil4mrtu23acn" path="res://Resources/Themes/Info.tres" id="1"]
 [ext_resource type="Texture2D" uid="uid://cym2rn34oj5s3" path="res://Textures/UI/Information/box.png" id="2"]
 [ext_resource type="PackedScene" uid="uid://lpbermjlr4kj" path="res://Scenes and Scripts/UI/Buttons/ButtonBase.tscn" id="3"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/GenerationUI.gd" id="4"]
-[ext_resource type="PackedScene" path="res://Scenes and Scripts/UI/Equations/EquationPanel.tscn" id="5"]
-[ext_resource type="PackedScene" uid="uid://nw4q5r5g0miv" path="res://Scenes and Scripts/UI/Buttons/BaseButton.tscn" id="6_iwjv6"]
+[ext_resource type="PackedScene" uid="uid://btolegbl3qaau" path="res://Scenes and Scripts/UI/Equations/EquationPanel.tscn" id="5"]
+[ext_resource type="PackedScene" uid="uid://c2ikppvu16saf" path="res://Scenes and Scripts/UI/Buttons/BaseButton.tscn" id="6_iwjv6"]
 [ext_resource type="PackedScene" uid="uid://dq8wkl0j51p8p" path="res://Scenes and Scripts/UI/RangeSlider.tscn" id="7"]
+[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="7_cy0t3"]
 
 [sub_resource type="StyleBoxTexture" id="13"]
 content_margin_left = 4.0
@@ -67,6 +68,10 @@ region_rect = Rect2(0, 0, 32, 32)
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ld76w"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tywsq"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nv4wq"]
+resource_local_to_scene = true
+shader = ExtResource("7_cy0t3")
 
 [node name="GenerationUI" type="Control" groups=["buttons", "no_place"]]
 self_modulate = Color(1, 1, 1, 0)
@@ -225,6 +230,7 @@ text = "E. Weak"
 layout_mode = 2
 
 [node name="Options" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_iwjv6")]
+material = SubResource("ShaderMaterial_nv4wq")
 layout_mode = 2
 
 [node name="Generate" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("3")]
@@ -242,35 +248,11 @@ offset_bottom = 52.0
 scale = Vector2(0.3, 0.3)
 mouse_filter = 1
 
-[node name="VBoxContainer" parent="Equation" index="0"]
-layout_mode = 2
-
-[node name="EquationContainer" parent="Equation/VBoxContainer" index="0"]
-layout_mode = 2
-
 [node name="InitialScrollContainer" parent="Equation/VBoxContainer/EquationContainer" index="0"]
 custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-
-[node name="HBoxContainer" parent="Equation/VBoxContainer/EquationContainer/InitialScrollContainer" index="0"]
-layout_mode = 2
-
-[node name="StateContainer" parent="Equation/VBoxContainer/EquationContainer/InitialScrollContainer/HBoxContainer" index="0"]
-layout_mode = 2
-
-[node name="Arrow" parent="Equation/VBoxContainer/EquationContainer" index="1"]
-layout_mode = 2
-expand_mode = 1
 
 [node name="FinalScrollContainer" parent="Equation/VBoxContainer/EquationContainer" index="2"]
 custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-
-[node name="HBoxContainer" parent="Equation/VBoxContainer/EquationContainer/FinalScrollContainer" index="0"]
-layout_mode = 2
-
-[node name="StateContainer" parent="Equation/VBoxContainer/EquationContainer/FinalScrollContainer/HBoxContainer" index="0"]
-layout_mode = 2
 
 [connection signal="mouse_entered" from="VBoxContainer/PanelContainer" to="." method="_on_PanelContainer_mouse_entered"]
 [connection signal="mouse_exited" from="VBoxContainer/PanelContainer" to="." method="_on_PanelContainer_mouse_exited"]

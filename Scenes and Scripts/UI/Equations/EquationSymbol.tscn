@@ -6,8 +6,9 @@
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="4_7bq6a"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_24p5n"]
+resource_local_to_scene = true
 shader = ExtResource("1_vq4v5")
-shader_parameter/line_color = Color(0, 0, 0, 1)
+shader_parameter/line_color = Color(0.494118, 0, 0, 1)
 shader_parameter/line_thickness = 1.0
 
 [node name="EquationSymbol" type="TextureRect"]

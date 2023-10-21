@@ -22,6 +22,10 @@ func _ready() -> void:
 	
 	$VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer.get_v_scroll_bar().use_parent_material = true
 
+func reload() -> void:
+	for problem_set_item in problem_container.get_children():
+		problem_set_item.update()
+
 func load_problem_sets() -> void:
 	for file_path in GLOBALS.get_files_in_folder(problem_set_file_path + 'Custom/'):
 		load_problem_set(file_path)
@@ -82,7 +86,10 @@ func _problem_set_viewed(problem_set_item: PanelContainer) -> void:
 	enter_problem_set.emit(problem_set_item.problem_set, problem_set_item.file_path)
 
 func _problem_set_resumed(problem_set: ProblemSet) -> void:
-	EVENTBUS.signal_problem_set_played.emit(problem_set, problem_set.highest_index_reached)
+	EVENTBUS.signal_problem_set_played.emit(
+		problem_set, 
+		min(problem_set.highest_index_reached, problem_set.problems.size()-1)
+	)
 
 func update() -> void:
 	update_index_labels()
@@ -114,9 +121,6 @@ func load_problem_set(problem_set_path: String) -> void:
 
 func save_problem_sets() -> void:
 	for problem_set in problem_container.get_children():
-		if !problem_set.problem_set.is_custom:
-			continue
-
 		GLOBALS.save(problem_set.problem_set, problem_set.file_path)
 	
 func create_new_problem_set(problem_set_path: String) -> void:

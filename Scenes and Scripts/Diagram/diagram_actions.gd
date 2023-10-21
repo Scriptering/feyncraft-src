@@ -10,6 +10,7 @@ signal action_taken
 @onready var Crosshair := $DiagramArea/Crosshair
 @onready var DiagramArea := $DiagramArea
 @onready var VisionLines := $DiagramArea/VisionLines
+@export var Title: LineEdit
 
 @onready var VisionLine := preload("res://Scenes and Scripts/Diagram/vision_line.tscn")
 
@@ -84,10 +85,15 @@ func _set_show_line_labels(new_value: bool) -> void:
 		line.show_labels = show_line_labels
 		line.set_text_visiblity()
 
-func load_problem(problem: Problem) -> void:
+func load_problem(problem: Problem, mode: BaseMode.Mode) -> void:
 	clear_diagram()
 	
 	set_title(problem.title)
+	
+	var is_creating_problem: bool = mode not in [BaseMode.Mode.Sandbox, BaseMode.Mode.ProblemSolving]
+	
+	set_title_visible(is_creating_problem or problem.title != '')
+	set_title_editable(is_creating_problem)
 
 func are_quantum_numbers_matching(ignore_weak_quantum_numbers: bool = true) -> bool:
 	var initial_quantum_numbers: PackedFloat32Array = StateLines[StateLine.StateType.Initial].get_quantum_numbers()
@@ -121,9 +127,32 @@ func update_colourless_interactions(
 	for id in range(diagram.matrix_size):
 		get_interaction_from_matrix_id(id, diagram).valid_colourless = id not in colourless_interactions
 
+func sort_drawing_interactions(interaction1: Interaction, interaction2: Interaction) -> bool:
+	var state1: StateLine.StateType = interaction1.get_on_state_line()
+	var state2: StateLine.StateType = interaction2.get_on_state_line()
+	
+	if state1 != state2:
+		return state1 < state2
+	
+	var pos_y1: int = interaction1.position.y
+	var pos_y2: int = interaction2.position.y
+	
+	if state1 == StateLine.StateType.None:
+		return pos_y1 < pos_y2
+	
+	var particle1: GLOBALS.Particle = interaction1.connected_particles.front()
+	var particle2: GLOBALS.Particle = interaction2.connected_particles.front()
+	
+	if particle1 != particle2:
+		return particle1 < particle2
+	
+	return pos_y1 < pos_y2
+
 func generate_drawing_matrix_from_diagram(get_only_valid: bool = false) -> DrawingMatrix:
 	var generated_matrix := DrawingMatrix.new()
 	var interactions: Array[Interaction] = get_interactions()
+	
+	interactions.sort_custom(sort_drawing_interactions)
 
 	for interaction in interactions:
 		if StateManager.state == BaseState.State.Drawing and interaction.connected_lines.all(
@@ -421,17 +450,17 @@ func _on_interaction_dropped(interaction: Interaction) -> void:
 	interaction.queue_free()
 
 func place_interaction(
-	interaction_position: Vector2, bypass_can_place: bool = false, interaction: Node = InteractionInstance.instantiate(),
-	action: bool = true
+	interaction_position: Vector2, interaction: Node = InteractionInstance.instantiate(), is_action: bool = true
 ) -> void:
-	if can_place_interaction(interaction_position) or bypass_can_place:
+	if can_place_interaction(interaction_position):
 		interaction.dropped.connect(_on_interaction_dropped)
-		super.place_interaction(interaction_position, bypass_can_place, interaction)
+		super.place_interaction(interaction_position, interaction)
 	
 	check_split_lines()
 	check_rejoin_lines()
 	
-	action()
+	if is_action:
+		action()
 
 func can_place_interaction(test_position: Vector2, test_interaction: Interaction = null) -> bool:
 	for interaction in Interactions.get_children():
@@ -502,9 +531,11 @@ func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 		ParticleLines.add_child(drawing_particle)
 	
 	for interaction_position in drawing_matrix.get_interaction_positions():
-		place_interaction(interaction_position * grid_size, false, InteractionInstance.instantiate(), false)
+		place_interaction(interaction_position * grid_size, InteractionInstance.instantiate(), false)
 
 	line_diagram_actions = true
+	
+	update_statelines()
 
 func undo() -> void:
 	if !is_inside_tree():
@@ -729,9 +760,14 @@ func _on_mouse_entered() -> void:
 func _on_mouse_exited() -> void:
 	hovering = false
 
+func set_title_editable(editable: bool) -> void:
+	Title.editable = editable
+
+func set_title_visible(toggle: bool) -> void:
+	Title.visible = toggle
+
 func set_title(text: String) -> void:
-	$Title.visible = text != ''
-	$Title.text = text
+	Title.text = text
 
 func _on_title_text_submitted(new_text: String) -> void:
 	GLOBALS.creating_problem.title = new_text

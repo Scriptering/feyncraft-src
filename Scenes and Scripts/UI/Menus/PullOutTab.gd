@@ -1,10 +1,13 @@
 extends Control
 class_name PullOutTab
 
+signal pull_out_finished
+signal push_in_finished
+
 enum Direction {LEFT, UP, RIGHT, DOWN}
 
 @export var ContentContainer: Control
-@export var TabButton: Control
+@export var TabButton: Control = null
 @export var MovingContainer: Control
 @export var moving_container_margins: Vector2
 @export var move_direction: Direction
@@ -19,12 +22,13 @@ enum Direction {LEFT, UP, RIGHT, DOWN}
 @export var stay_out_time: float = 0.0
 
 var starting_moving_container_position: Vector2
-
 var tab_out_changed: bool = false
 
 func _ready() -> void:
 	if TabButton:
-		TabButton.connect("pressed", Callable(self, "_tab_button_pressed"))
+		TabButton.pressed.connect(_tab_button_pressed)
+	
+	ContentContainer.resized.connect(readjust)
 
 	starting_moving_container_position = MovingContainer.position
 
@@ -33,11 +37,11 @@ func _tab_button_pressed() -> void:
 		push_in()
 	else:
 		pull_out()
-		
+	
 	TabButton.change_state(tab_out)
 
 func pull_out() -> void:
-	if tab_out:
+	if tab_out or !is_inside_tree():
 		return
 		
 	self.tab_out = true
@@ -47,12 +51,14 @@ func pull_out() -> void:
 	var tween = get_tree().create_tween()
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_SPRING)
+	tween.finished.connect(_on_pull_out_finished)
 	tween.tween_property(MovingContainer, "position", get_pull_out_position(), time_to_pull_out)
+
+func readjust() -> void:
+	if !tab_out:
+		return
 	
-	if stay_out_time != 0.0:
-		tab_out_changed = false
-		await get_tree().create_timer(stay_out_time).timeout
-		stay_out_timer_finished()
+	MovingContainer.position = get_pull_out_position()
 
 func stay_out_timer_finished() -> void:
 	if tab_out_changed:
@@ -61,7 +67,7 @@ func stay_out_timer_finished() -> void:
 	push_in()
 
 func push_in() -> void:
-	if !tab_out:
+	if !tab_out or !is_inside_tree():
 		return
 	
 	self.tab_out = false
@@ -71,7 +77,9 @@ func push_in() -> void:
 	var tween = get_tree().create_tween()
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_SPRING)
+	tween.finished.connect(func(): push_in_finished.emit())
 	tween.tween_property(MovingContainer, "position", starting_moving_container_position, time_to_push_in)
+
 
 func get_pull_out_position() -> Vector2:
 	var pull_out_position := starting_moving_container_position
@@ -85,3 +93,11 @@ func negative_direction() -> int:
 	if move_direction < 2:
 		return -1
 	return +1
+
+func _on_pull_out_finished() -> void:
+	pull_out_finished.emit()
+	
+	if stay_out_time != 0.0:
+		tab_out_changed = false
+		await get_tree().create_timer(stay_out_time).timeout
+		stay_out_timer_finished()

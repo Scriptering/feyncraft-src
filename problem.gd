@@ -12,7 +12,6 @@ var custom_degree: bool = false:
 @export var limited_particles: bool = false
 @export var hide_unavailable_particles: bool = false
 @export var title: String = ''
-@export var submitted_diagrams : Array[DrawingMatrix] = []
 @export var solutions : Array[DrawingMatrix] = []
 @export var allowed_particles : Array[GLOBALS.Particle] = []
 @export var state_interactions : Array = [[], []]
@@ -24,21 +23,10 @@ var custom_degree: bool = false:
 		return solution_count
 
 func is_submission_valid(submission: DrawingMatrix) -> bool:
-	if is_submission_duplicate(submission):
-		return false
-	
 	if !is_submission_solution(submission):
 		return false
 	
 	return true
-
-func is_submission_duplicate(submission: DrawingMatrix) -> bool:
-	var reduced_submission: ConnectionMatrix = submission.reduce_to_connection_matrix()
-	
-	return submitted_diagrams.any(
-		func(submitted_diagram: DrawingMatrix):
-			return submitted_diagram.reduce_to_connection_matrix().is_duplicate(reduced_submission)
-	)
 
 func is_submission_solution(submission: DrawingMatrix) -> bool:
 	var reduced_submission: ConnectionMatrix = submission.reduce_to_connection_matrix()
@@ -50,9 +38,6 @@ func is_submission_solution(submission: DrawingMatrix) -> bool:
 		func(solution: DrawingMatrix):
 			return solution.reduce_to_connection_matrix().is_duplicate(reduced_submission)
 	)
-
-func submit_diagram(submission: DrawingMatrix) -> void:
-	submitted_diagrams.append(submission)
 
 func get_state_interaction(state: StateLine.StateType) -> Array:
 	return state_interactions[state]

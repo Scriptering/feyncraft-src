@@ -21,11 +21,11 @@ signal end_reached
 @export var is_custom: bool = true
 
 func _set_current_index(new_value: int) -> void:
-	if new_value >= problems.size():
-		end_reached.emit()
-	
 	current_index = clamp(new_value, 0, problems.size()-1)
-	highest_index_reached = max(highest_index_reached, current_index)
+	highest_index_reached = max(highest_index_reached, new_value)
+	
+	if new_value == problems.size():
+		end_reached.emit()
 
 func previous_problem() -> Problem:
 	self.current_index -= 1

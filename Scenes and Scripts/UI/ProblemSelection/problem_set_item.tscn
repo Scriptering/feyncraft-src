@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://b6go021ha3ocr"]
+[gd_scene load_steps=21 format=3 uid="uid://b6go021ha3ocr"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_b04gi"]
 [ext_resource type="StyleBox" uid="uid://dvu7f5h7snggp" path="res://Scenes and Scripts/UI/Menus/panelContainer.tres" id="1_g4bto"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://7kmcsryae7lw" path="res://Scenes and Scripts/UI/Buttons/load_button.tscn" id="10_6kia2"]
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="11_l46c8"]
 [ext_resource type="Texture2D" uid="uid://qxw17ji0dvra" path="res://Textures/Buttons/icons/share.png" id="13_4yitn"]
+[ext_resource type="Texture2D" uid="uid://co7w81osg53kf" path="res://Textures/UI/Information/valid.png" id="14_xqm6y"]
 
 [sub_resource type="FontVariation" id="FontVariation_5o2co"]
 base_font = ExtResource("1_qnpxi")
@@ -31,7 +32,7 @@ LineEdit/styles/read_only = SubResource("StyleBoxEmpty_0snhi")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qxe7s"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_k68o7"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mffu3"]
 resource_local_to_scene = true
 shader = ExtResource("11_l46c8")
 
@@ -114,7 +115,7 @@ action_mode = 1
 tooltip = "Delete"
 
 [node name="Upload" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("10_6kia2")]
-material = SubResource("ShaderMaterial_k68o7")
+material = SubResource("ShaderMaterial_mffu3")
 layout_mode = 2
 mode = 1
 icon = ExtResource("13_4yitn")
@@ -129,6 +130,14 @@ theme_override_font_sizes/font_size = 9
 text = "0/0"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Completed" type="TextureRect" parent="HBoxContainer"]
+custom_minimum_size = Vector2(7, 2.08165e-12)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("14_xqm6y")
+expand_mode = 5
+stretch_mode = 5
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

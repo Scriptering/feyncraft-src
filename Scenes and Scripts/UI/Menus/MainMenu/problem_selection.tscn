@@ -8,11 +8,11 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q3cex"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ae1kh"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hxwmd"]
 resource_local_to_scene = true
 shader = ExtResource("2_bvxeb")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_us2ud"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wh5uq"]
 resource_local_to_scene = true
 shader = ExtResource("2_bvxeb")
 
@@ -33,25 +33,24 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -147.0
+offset_left = -106.0
 offset_top = -100.0
-offset_right = 147.0
+offset_right = 106.0
 offset_bottom = 100.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_q3cex")
 tabs_visible = false
-use_hidden_tabs_for_min_size = true
 script = ExtResource("1_aqrhn")
 
 [node name="ProblemSetList" parent="ProblemSelection" instance=ExtResource("3_chpqf")]
-material = SubResource("ShaderMaterial_ae1kh")
+material = SubResource("ShaderMaterial_hxwmd")
 layout_mode = 2
 mouse_filter = 1
 
 [node name="ProblemList" parent="ProblemSelection" instance=ExtResource("1_gfl8q")]
 visible = false
-material = SubResource("ShaderMaterial_us2ud")
+material = SubResource("ShaderMaterial_wh5uq")
 layout_mode = 2
 
 [node name="TitleArea" type="Area2D" parent="."]

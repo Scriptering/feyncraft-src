@@ -15,9 +15,8 @@ func init(_hadron: GLOBALS.Hadrons) -> void:
 		if i != 0:
 			$Tooltip.add_content(create_slash())
 		
-		for hadron_content in GLOBALS.HADRON_QUARK_CONTENT[hadron]:
-			for quark in hadron_content:
-				$Tooltip.add_content(create_particle_symbol([quark]))
+		for quark in GLOBALS.HADRON_QUARK_CONTENT[hadron][i]:
+			$Tooltip.add_content(create_particle_symbol([quark]))
 	
 func create_slash() -> TextureRect:
 	var slash : TextureRect = Symbol.instantiate()

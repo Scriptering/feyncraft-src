@@ -2,6 +2,7 @@ extends PullOutTab
 
 signal submit_pressed
 signal next_problem_pressed
+signal prev_problem_pressed
 
 @export var diagram_viewer_offset: Vector2 = Vector2(15, 15)
 @export var DegreeLabel: Label
@@ -17,13 +18,14 @@ signal next_problem_pressed
 @onready var IncorrectOrder: HBoxContainer = $MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/IncorrectOrder
 
 var Diagram: MainDiagram
-var current_problem: Problem:
+var current_problem: Problem = null:
 	set(new_value): current_problem = new_value
 var SubmittedDiagramViewer: MiniDiagramViewer
 var ProblemGeneration: Node
 var SolutionGeneration: Node
 
-var problem_history: Array[Problem] = []
+var submitted_diagrams: Array[DrawingMatrix] = []
+
 var in_solution_creation: bool = false:
 	set(new_value):
 		in_solution_creation = new_value
@@ -62,7 +64,7 @@ func _on_submit_pressed() -> void:
 	submit_pressed.emit()
 
 func submitted_diagram_deleted(index: int) -> void:
-	current_problem.submitted_diagrams.remove_at(index)
+	submitted_diagrams.remove_at(index)
 	
 	update_view_submission_button()
 
@@ -74,7 +76,7 @@ func check_submission(submission: DrawingMatrix) -> bool:
 		IncorrectOrder.show()
 		return false
 
-	if current_problem.is_submission_duplicate(submission):
+	if is_submission_duplicate(submission):
 		DiagramDuplicate.show()
 		return false
 	
@@ -86,10 +88,10 @@ func check_submission(submission: DrawingMatrix) -> bool:
 	return true
 
 func update_view_submission_button() -> void:
-	$MovingContainer/VBoxContainer/Tab/HBoxContainer/ViewSubmissions.disabled = current_problem.submitted_diagrams.size() == 0
+	$MovingContainer/VBoxContainer/Tab/HBoxContainer/ViewSubmissions.disabled = submitted_diagrams.size() == 0
 
 func update_submitted_solution_count() -> void:
-	SubmitButton.text = str(current_problem.submitted_diagrams.size())
+	SubmitButton.text = str(submitted_diagrams.size())
 	
 	if !in_solution_creation:
 		SubmitButton.text += "/" + str(current_problem.solution_count)
@@ -101,13 +103,13 @@ func submit_diagram() -> void:
 	if !submission_valid:
 		return
 	
-	current_problem.submit_diagram(submission)
+	submitted_diagrams.push_back(submission)
 	SubmittedDiagramViewer.store_diagram(submission)
 	
 	update_submitted_solution_count()
 	update_view_submission_button()
 	
-	NextProblem.disabled = !in_sandbox and current_problem.submitted_diagrams.size() < current_problem.solution_count
+	NextProblem.disabled = !in_sandbox and submitted_diagrams.size() < current_problem.solution_count
 
 func generate_solution() -> ConnectionMatrix:
 	return(SolutionGeneration.generate_diagrams(
@@ -116,6 +118,14 @@ func generate_solution() -> ConnectionMatrix:
 		SolutionGeneration.Find.One
 	))[0]
 
+func is_submission_duplicate(submission: DrawingMatrix) -> bool:
+	var reduced_submission: ConnectionMatrix = submission.reduce_to_connection_matrix()
+	
+	return submitted_diagrams.any(
+		func(submitted_diagram: DrawingMatrix):
+			return submitted_diagram.reduce_to_connection_matrix().is_duplicate(reduced_submission)
+	)
+
 func toggle_diagram_viewer() -> void:
 	SubmittedDiagramViewer.visible = !SubmittedDiagramViewer.visible
 	SubmittedDiagramViewer.position = diagram_viewer_offset + position
@@ -123,28 +133,28 @@ func toggle_diagram_viewer() -> void:
 func _on_view_submissions_pressed() -> void:
 	toggle_diagram_viewer()
 
-func load_problem(problem: Problem, save_to_history: bool = true) -> void:
-	if save_to_history:
-		problem_history.push_back(current_problem)
-		PrevProblem.disabled = false
+func load_problem(problem: Problem) -> void:
 	current_problem = problem
-	current_problem.submitted_diagrams.clear()
 	
+	submitted_diagrams.clear()
 	Equation.load_problem(problem)
 	
 	update_degree_label()
 	update_submitted_solution_count()
 	
 	NextProblem.disabled = !in_sandbox
+
+func set_prev_problem_disabled(disable: bool) -> void:
+	PrevProblem.disabled = disable
+
+func set_next_problem_disabled(disable: bool) -> void:
+	NextProblem.disabled = disable
 	
 func _on_solution_pressed() -> void:
 	EVENTBUS.draw_diagram_raw(generate_solution())
 
 func _on_rewind_pressed() -> void:
-	load_problem(problem_history[-1], false)
-	problem_history.pop_back()
-	
-	PrevProblem.disabled = problem_history.size() == 0
+	prev_problem_pressed.emit()
 
 func _on_next_problem_pressed() -> void:
 	next_problem_pressed.emit()
@@ -160,3 +170,10 @@ func _enter_sandbox() -> void:
 
 func _exit_sandbox() -> void:
 	in_sandbox = false
+
+func toggle_finish_icon(toggle: bool) -> void:
+	if toggle:
+		NextProblem.icon = load("res://Textures/Buttons/icons/finish.png")
+	else:
+		NextProblem.icon = load("res://Textures/Buttons/icons/next.png")
+

@@ -16,10 +16,12 @@ const state_factor : Dictionary = {
 	StateType.Initial: +1,
 	StateType.Final: -1
 }
+const STATES : Array[StateType] = [StateType.Initial, StateType.Final]
 
 var hadrons : Array[Hadron] = []
 var joints : Array[HadronJoint] = []
 var old_quark_groups: Array = [[]]
+var old_position_x: int
 
 var connected_lone_particles : Array[GLOBALS.Particle] : get = _get_connected_lone_particles
 
@@ -48,8 +50,9 @@ func update_stateline() -> void:
 		return
 	var quark_groups := get_quark_groups(connected_lines)
 
-	if quark_groups != old_quark_groups:
+	if quark_groups != old_quark_groups or position.x != old_position_x:
 		old_quark_groups = quark_groups.duplicate(true)
+		old_position_x = position.x
 		update_hadrons(quark_groups)
 
 func get_quark_groups(connected_lines: Array = get_connected_lines()) -> Array:
@@ -190,4 +193,15 @@ func get_connected_base_particles() -> Array[GLOBALS.Particle]:
 		connected_base_particles.push_back(particle_line.base_particle)
 	
 	return connected_base_particles
+
+func get_state_interactions() -> Array:
+	var state_interactions : Array = []
+	
+	for particle in connected_lone_particles:
+		state_interactions.append([particle])
+	
+	for hadron in hadrons:
+		state_interactions.append(hadron.quarks)
+		
+	return state_interactions
 
