@@ -16,10 +16,10 @@ func _set_icon_colour(new_value: Color) -> void:
 	icon_colour = new_value
 	get_node("ContentContainer/HBoxContainer/ButtonIcon").modulate = icon_colour
 
-func _on_button_toggled(button_pressed: bool) -> void:
-	super._on_button_toggled(button_pressed)
+func _on_button_toggled(button_pressed_state: bool) -> void:
+	super._on_button_toggled(button_pressed_state)
 	
-	if button_pressed:
+	if button_pressed_state:
 		create_picker_panel()
 	else:
 		picker_panel.queue_free()

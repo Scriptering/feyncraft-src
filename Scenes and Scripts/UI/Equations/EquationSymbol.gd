@@ -1,8 +1,9 @@
 extends TextureRect
 
+const MINIMUM_LABEL_SIZE := Vector2(10, 10)
+
 var hadron: GLOBALS.Hadrons
 var Symbol := preload("res://Scenes and Scripts/UI/Equations/EquationSymbol.tscn")
-var HadronLabel := preload("res://Scenes and Scripts/UI/Equation/hadron_content_label.tscn")
 
 func init(_hadron: GLOBALS.Hadrons) -> void:
 	hadron = _hadron
@@ -10,26 +11,29 @@ func init(_hadron: GLOBALS.Hadrons) -> void:
 	if hadron == GLOBALS.Hadrons.Invalid:
 		return
 	
-	var hadron_label := HadronLabel.instantiate()
-	
 	for i in range(GLOBALS.HADRON_QUARK_CONTENT[hadron].size()):
 		if i != 0:
-			hadron_label.add_child(create_slash())
+			$Tooltip.add_content(create_slash())
 		
-		for hadron_content in GLOBALS.HADRON_QUARK_CONTENT[hadron]:
-			for quark in hadron_content:
-				hadron_label.add_child(create_particle_symbol([quark]))
-	
-	$Tooltip.add_content(hadron_label)
+		for quark in GLOBALS.HADRON_QUARK_CONTENT[hadron][i]:
+			$Tooltip.add_content(create_particle_symbol([quark]))
 	
 func create_slash() -> TextureRect:
-	var slash := Symbol.instantiate()
+	var slash : TextureRect = Symbol.instantiate()
 	slash.texture = load("res://Textures/UI/Equation/slash.png")
+	slash.stretch_mode = STRETCH_KEEP
+	slash.expand_mode = EXPAND_KEEP_SIZE
+	slash.size_flags_vertical = SIZE_SHRINK_END
+	
 	return slash
 
 func create_particle_symbol(interaction: Array) -> TextureRect:
 	var particle := Symbol.instantiate()
 	particle.texture = GLOBALS.PARTICLE_TEXTURES[get_particle_name(interaction)]
+	particle.stretch_mode = STRETCH_KEEP
+	particle.expand_mode = EXPAND_KEEP_SIZE
+	particle.size_flags_vertical = SIZE_SHRINK_END
+	
 	return particle
 
 func get_particle_name(interaction: Array) -> String:

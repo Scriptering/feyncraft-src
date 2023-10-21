@@ -1,5 +1,7 @@
 extends PanelContainer
 
+@export var scale_factor: float = 1.0
+
 @onready var Symbol := preload("res://Scenes and Scripts/UI/Equations/EquationSymbol.tscn")
 
 @onready var LeftEquation: HBoxContainer = $HBoxContainer/LeftMarginContainer/LeftScrollContainer/MarginContainer/LeftEquation
@@ -10,16 +12,14 @@ const States = [StateLine.StateType.Initial, StateLine.StateType.Final]
 
 func load_problem(problem: Problem) -> void:
 	for state in States:
-		clear_equation(state)
-		load_state_symbols(state, problem)
+		load_state_symbols(state, problem.get_state_interaction(state))
 
 func clear_equation(state: StateLine.StateType) -> void:
 	for child in StateEquations[state].get_children():
 		child.queue_free()
 
-func load_state_symbols(state: StateLine.StateType, problem: Problem) -> void:
-	var state_interactions: Array = problem.get_state_interaction(state)
-	
+func load_state_symbols(state: StateLine.StateType, state_interactions: Array) -> void:
+	clear_equation(state)
 	for i in range(state_interactions.size()):
 		var interaction: Array = state_interactions[i]
 		
@@ -31,12 +31,14 @@ func load_state_symbols(state: StateLine.StateType, problem: Problem) -> void:
 func create_plus() -> TextureRect:
 	var plus := Symbol.instantiate()
 	plus.texture = load("res://Textures/UI/Equation/plus.png")
+	
 	return plus
 
 func create_particle_symbol(interaction: Array) -> TextureRect:
 	var particle := Symbol.instantiate()
 	
 	particle.texture = GLOBALS.PARTICLE_TEXTURES[get_particle_name(interaction)]
+	particle.custom_minimum_size = particle.texture.get_size() * scale_factor
 	
 	if interaction.size() != 1:
 		particle.init(get_hadron(interaction))

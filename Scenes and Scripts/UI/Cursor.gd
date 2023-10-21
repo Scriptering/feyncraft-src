@@ -34,7 +34,6 @@ func _ready():
 	EVENTBUS.signal_change_cursor.connect(change_cursor)
 
 func _input(event: InputEvent) -> void:
-
 	if event is InputEventKey:
 		if check_love():
 			self.glowing = !glowing

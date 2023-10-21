@@ -1,45 +1,14 @@
-[gd_scene load_steps=12 format=3 uid="uid://diro6a1arcmc0"]
+[gd_scene load_steps=7 format=3 uid="uid://diro6a1arcmc0"]
 
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="1_ubmeo"]
-[ext_resource type="Texture2D" uid="uid://s14bo7fcdam0" path="res://Textures/Buttons/square_normal.png" id="2_4su16"]
-[ext_resource type="Texture2D" uid="uid://bo1u07jlygktr" path="res://Textures/Buttons/square_hover.png" id="2_scj6f"]
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="2_yvc8w"]
-[ext_resource type="StyleBox" uid="uid://dsi7wkv5cn2k0" path="res://Resources/Themes/ActivePressed.tres" id="5_j2j3u"]
+[ext_resource type="Theme" uid="uid://c7hk3afo5tria" path="res://Resources/Themes/toggle_button.tres" id="3_rxogd"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Buttons/ParticleButtons/ParticleButton.gd" id="5_pltn4"]
+[ext_resource type="Texture2D" uid="uid://c0fv0drhuu6cf" path="res://Textures/Buttons/icons/Particles/photon.png" id="5_q3x61"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ch4ec"]
 resource_local_to_scene = true
 shader = ExtResource("2_yvc8w")
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kubuy"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_n0u2h"]
-content_margin_left = 5.0
-content_margin_top = 4.0
-content_margin_right = 5.0
-content_margin_bottom = 8.0
-texture = ExtResource("2_scj6f")
-texture_margin_left = 5.0
-texture_margin_top = 6.0
-texture_margin_right = 5.0
-texture_margin_bottom = 7.0
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_kxnlx"]
-content_margin_left = 5.0
-content_margin_top = 4.0
-content_margin_right = 5.0
-content_margin_bottom = 8.0
-texture = ExtResource("2_4su16")
-texture_margin_left = 5.0
-texture_margin_top = 6.0
-texture_margin_right = 5.0
-texture_margin_bottom = 7.0
-
-[sub_resource type="Theme" id="Theme_lglir"]
-Button/styles/focus = SubResource("StyleBoxEmpty_kubuy")
-Button/styles/hover = SubResource("StyleBoxTexture_n0u2h")
-Button/styles/normal = SubResource("StyleBoxTexture_kxnlx")
-Button/styles/pressed = ExtResource("5_j2j3u")
 
 [node name="ParticleButton" instance=ExtResource("1_ubmeo")]
 material = SubResource("ShaderMaterial_ch4ec")
@@ -47,10 +16,10 @@ offset_left = -6.0
 offset_top = -6.0
 offset_right = -616.0
 offset_bottom = -336.0
-theme = SubResource("Theme_lglir")
+theme = ExtResource("3_rxogd")
 script = ExtResource("5_pltn4")
 particle = 0
-minimum_size = Vector2(23, 26)
+icon = ExtResource("5_q3x61")
 toggle_mode = true
 expand_icon = true
 
@@ -59,7 +28,9 @@ custom_minimum_size = Vector2(23, 26)
 toggle_mode = true
 
 [node name="ContentContainer" parent="." index="1"]
+theme_override_constants/margin_left = 6
 theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 6
 theme_override_constants/margin_bottom = 8
 
 [node name="HBoxContainer" parent="ContentContainer" index="0"]
@@ -69,5 +40,8 @@ theme_override_constants/separation = 3
 theme_override_font_sizes/font_size = 0
 
 [node name="ButtonIcon" parent="ContentContainer/HBoxContainer" index="1"]
+visible = true
+use_parent_material = true
+texture = ExtResource("5_q3x61")
 expand_mode = 3
 stretch_mode = 5

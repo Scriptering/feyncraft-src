@@ -25,6 +25,18 @@ signal button_up
 	set = _set_action_mode
 @export var button_group: ButtonGroup : set = _set_button_button_group
 @export var icon_text_seperation: int = 3: set = _set_icon_text_seperation
+@export var flip_icon_v: bool = false:
+	set(new_value):
+		flip_icon_v = new_value
+		$ContentContainer/HBoxContainer/ButtonIcon.flip_v = new_value
+@export var flip_icon_h: bool = false:
+	set(new_value):
+		flip_icon_h = new_value
+		$ContentContainer/HBoxContainer/ButtonIcon.flip_h = new_value
+@export var flat: bool = false:
+	set(new_value):
+		flat = new_value
+		get_node("Button").flat = flat
 
 @onready var button = $Button
 @onready var label = $ContentContainer/HBoxContainer/ButtonText
@@ -72,6 +84,8 @@ func _ready() -> void:
 			mouse_exited.emit()
 			button_mouse_exited.emit(self)
 	)
+	
+	EVENTBUS.button_created(self)
 
 func _set_icon_use_parent_material(new_value: bool) -> void:
 	icon_use_parent_material = new_value
@@ -205,6 +219,10 @@ func get_button() -> Button:
 func _on_button_toggled(button_pressed_state: bool) -> void:
 	button_toggled.emit(button_pressed_state, self)
 	toggled.emit(button_pressed_state)
+	if button_pressed_state:
+		just_pressed_counter += 2
+	else:
+		just_released_counter += 2
 	
 	if button_pressed_state == previous_button_pressed:
 		return
@@ -217,6 +235,12 @@ func _on_button_toggled(button_pressed_state: bool) -> void:
 		set_content_margins(ButtonState[NORMAL])
 
 func play_sound(button_pressed_state: bool) -> void:
+	if !is_inside_tree():
+		return
+		
+	if !is_hovered:
+		return
+	
 	if button_pressed_state:
 		SOUNDBUS.button_down()
 	elif !$Button.button_group:
@@ -225,6 +249,11 @@ func play_sound(button_pressed_state: bool) -> void:
 		SOUNDBUS.button_up()
 
 func _on_visibility_changed() -> void:
+	if !is_inside_tree():
+		return
+	
+	await get_tree().process_frame
+	
 	if button_pressed:
 		set_content_margins(ButtonState[PRESSED])
 	else:

@@ -1,13 +1,13 @@
-[gd_scene load_steps=18 format=3 uid="uid://fl01bx28xqrn"]
+[gd_scene load_steps=19 format=3 uid="uid://fl01bx28xqrn"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_e0bw4"]
 [ext_resource type="Texture2D" uid="uid://c7tah165tpo1j" path="res://Textures/UI/Equation/scroll_grabber_normal.png" id="2_l4jgc"]
-[ext_resource type="StyleBox" uid="uid://dvu7f5h7snggp" path="res://Scenes and Scripts/UI/Menus/panelContainer.tres" id="2_sy1ts"]
 [ext_resource type="Texture2D" uid="uid://bviwft3lcovj6" path="res://Textures/UI/Equation/scroll_grabber_highlight.png" id="3_p8ghx"]
 [ext_resource type="Texture2D" uid="uid://c0xyku0mewhpu" path="res://Textures/UI/Equation/scroll_grabber_pressed.png" id="4_5skgd"]
 [ext_resource type="Texture2D" uid="uid://dxt3ti14uhl8s" path="res://Textures/UI/Equation/boundary.png" id="5_1nqt5"]
 [ext_resource type="Texture2D" uid="uid://cqenoy2xbqeok" path="res://Textures/UI/Equation/scrollbar.png" id="5_byqw6"]
 [ext_resource type="Texture2D" uid="uid://denysnbqxm0co" path="res://Textures/UI/Equation/equation_arrow.png" id="6_nibs3"]
+[ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="6_nkgij"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Equation/ProblemEquation.gd" id="7_buqx1"]
 [ext_resource type="Texture2D" uid="uid://b7be8bbrdmc4v" path="res://Textures/UI/Equation/boundary_flipped.png" id="7_kdpci"]
 
@@ -36,13 +36,22 @@ texture_margin_bottom = 2.0
 texture = ExtResource("5_byqw6")
 texture_margin_top = 9.0
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2gnwd"]
+content_margin_top = 5.0
+content_margin_bottom = 4.0
+texture = ExtResource("6_nkgij")
+texture_margin_left = 6.0
+texture_margin_top = 6.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+
 [sub_resource type="Theme" id="Theme_fbh0y"]
 HScrollBar/styles/grabber = SubResource("StyleBoxTexture_bhtjg")
 HScrollBar/styles/grabber_highlight = SubResource("StyleBoxTexture_21goa")
 HScrollBar/styles/grabber_pressed = SubResource("StyleBoxTexture_jyq41")
 HScrollBar/styles/scroll = SubResource("StyleBoxTexture_im2l8")
 HScrollBar/styles/scroll_focus = null
-PanelContainer/styles/panel = ExtResource("2_sy1ts")
+PanelContainer/styles/panel = SubResource("StyleBoxTexture_2gnwd")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_s0tkh"]
 texture = ExtResource("5_1nqt5")

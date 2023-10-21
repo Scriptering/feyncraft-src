@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://6woy774ldjbj"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Equations/EquationControl.gd" id="1"]
-[ext_resource type="PackedScene" path="res://Scenes and Scripts/UI/Equations/EquationPanel.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://btolegbl3qaau" path="res://Scenes and Scripts/UI/Equations/EquationPanel.tscn" id="2"]
 
 [node name="Equation" type="Control" groups=["equation"]]
 layout_mode = 3

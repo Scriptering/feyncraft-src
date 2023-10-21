@@ -17,35 +17,43 @@ texture_margin_bottom = 6.0
 [sub_resource type="FontVariation" id="FontVariation_2xm4r"]
 base_font = ExtResource("4_64fg8")
 
-[node name="Tooltip" type="Node2D"]
-visible = false
-z_index = 1
-use_parent_material = true
+[node name="Tooltip" type="Node" node_paths=PackedStringArray("TooltipPanel", "TooltipLabel", "TooltipContainer")]
 script = ExtResource("1_eetpi")
+offset = Vector2(2.08165e-12, 20)
 delay = 0.5
+TooltipPanel = NodePath("TooltipPanel")
+TooltipLabel = NodePath("TooltipPanel/HBoxContainer/Label")
+TooltipContainer = NodePath("TooltipPanel/HBoxContainer")
+
+[node name="TooltipTimer" type="Timer" parent="."]
+wait_time = 0.25
+one_shot = true
 
 [node name="TooltipPanel" type="PanelContainer" parent="."]
+visible = false
+z_index = 6
 material = ExtResource("1_cieob")
-use_parent_material = true
 offset_right = 13.0
-offset_bottom = 18.0
+offset_bottom = 19.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_vj2uj")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="TooltipPanel"]
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
 mouse_filter = 2
+theme_override_constants/separation = 1
 
 [node name="Label" type="Label" parent="TooltipPanel/HBoxContainer"]
+material = ExtResource("1_cieob")
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 1
 theme_override_fonts/font = SubResource("FontVariation_2xm4r")
 theme_override_font_sizes/font_size = 12
-vertical_alignment = 1
-
-[node name="TooltipTimer" type="Timer" parent="."]
-wait_time = 0.25
-one_shot = true
+vertical_alignment = 2
 
 [connection signal="timeout" from="TooltipTimer" to="." method="_on_tooltip_timer_timeout"]

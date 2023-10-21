@@ -2,11 +2,11 @@ extends PullOutTab
 
 @onready var ButtonContainer: VBoxContainer = $MovingContainer/Tab/ButtonContainer
 
-@export var avg_seconds_per_blink := 6000
+@export var avg_seconds_per_blink := 2000
 
-var eye_open := load("res://Textures/Buttons/eye/eye_open.png")
-var eye_middle := load("res://Textures/Buttons/eye/eye_middle.png")
-var eye_closed := load("res://Textures/Buttons/eye/eye_closed.png")
+var eye_open := preload("res://Textures/Buttons/eye/eye_open.png")
+var eye_middle := preload("res://Textures/Buttons/eye/eye_middle.png")
+var eye_closed := preload("res://Textures/Buttons/eye/eye_closed.png")
 
 signal vision_button_toggled(active_vision: GLOBALS.Vision)
 
@@ -33,7 +33,7 @@ func blink() -> void:
 func get_active_vision() -> GLOBALS.Vision:
 	for i in range(ButtonContainer.get_children().size()):
 		if ButtonContainer.get_children()[i].button_pressed:
-			return i
+			return i as GLOBALS.Vision
 	return GLOBALS.Vision.None
 
 func _vision_button_toggled(_button: Button) -> void:

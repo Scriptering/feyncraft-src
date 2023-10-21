@@ -29,4 +29,4 @@ metadata/_edit_use_anchors_ = true
 
 [node name="HadronSprite" type="Sprite2D" parent="."]
 use_parent_material = true
-scale = Vector2(0.75, 0.75)
+scale = Vector2(1.5, 1.5)

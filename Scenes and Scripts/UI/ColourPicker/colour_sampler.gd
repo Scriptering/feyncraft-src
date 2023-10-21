@@ -34,7 +34,7 @@ func _on_sampler_toggled(button_pressed) -> void:
 func start_sampling() -> void:
 	await RenderingServer.frame_post_draw
 	screen_image = get_viewport().get_texture().get_image()
-	screen_image.resize(get_viewport_rect().size.x, get_viewport_rect().size.y)
+	screen_image.resize(int(get_viewport_rect().size.x), int(get_viewport_rect().size.y))
 	
 	$SampleScreen.show()
 	sampling = true

@@ -9,18 +9,18 @@
 resource_local_to_scene = true
 shader = ExtResource("2_s3yiu")
 
-[node name="ColourButton" groups=["button"] instance=ExtResource("1_xrvbt")]
+[node name="ColourButton" instance=ExtResource("1_xrvbt")]
 material = SubResource("ShaderMaterial_qxnfj")
 offset_right = -618.0
 offset_bottom = -338.0
 script = ExtResource("3_coarc")
 picker_offset = Vector2(0, 0)
-icon_colour = Color(0.819608, 0.254902, 0.541176, 1)
+icon_colour = Color(0, 0, 0, 1)
 icon = ExtResource("4_3mh40")
-toggle_mode = true
-expand_icon = true
+minimum_size = Vector2(20, 20)
 
 [node name="Button" parent="." index="0"]
+custom_minimum_size = Vector2(20, 20)
 toggle_mode = true
 
 [node name="HBoxContainer" parent="ContentContainer" index="0"]

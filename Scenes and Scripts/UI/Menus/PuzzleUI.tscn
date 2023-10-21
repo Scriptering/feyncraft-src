@@ -1,294 +1,251 @@
-[gd_scene load_steps=24 format=3 uid="uid://deuhqxgq1bveq"]
+[gd_scene load_steps=16 format=3 uid="uid://deuhqxgq1bveq"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/PuzzleUI.gd" id="1_0a0xk"]
-[ext_resource type="Theme" uid="uid://dil4mrtu23acn" path="res://Resources/Themes/Info.tres" id="2_8obiu"]
-[ext_resource type="Texture2D" uid="uid://cym2rn34oj5s3" path="res://Textures/UI/Information/box.png" id="3_whs2u"]
-[ext_resource type="PackedScene" uid="uid://dq8wkl0j51p8p" path="res://Scenes and Scripts/UI/RangeSlider.tscn" id="4_6rx6l"]
-[ext_resource type="PackedScene" uid="uid://lpbermjlr4kj" path="res://Scenes and Scripts/UI/Buttons/ButtonBase.tscn" id="5_ltga0"]
-[ext_resource type="Texture2D" uid="uid://bkeq4psmxa4g5" path="res://Textures/Buttons/cog.png" id="6_tr3r0"]
-[ext_resource type="Texture2D" uid="uid://uuymrv72pyyc" path="res://Textures/Buttons/icons/shuffle.png" id="7_u58pw"]
-[ext_resource type="Texture2D" uid="uid://b7i5pfnd47348" path="res://Textures/Buttons/icons/solution.png" id="8_wjcog"]
-[ext_resource type="Texture2D" uid="uid://bcu6ptkd3fwfe" path="res://Textures/Buttons/icons/submit.png" id="9_o72n7"]
-[ext_resource type="PackedScene" path="res://Scenes and Scripts/UI/Equations/EquationPanel.tscn" id="10_t8bno"]
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_bvq6l"]
+[ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="3_afnrn"]
+[ext_resource type="FontFile" uid="uid://dtkr82iuj8ovy" path="res://Textures/Fonts/munro-font/Munro-2LYe.ttf" id="3_ksjpd"]
+[ext_resource type="Texture2D" uid="uid://c8iesbop3uqwa" path="res://Textures/Buttons/up_down.png" id="4_8b34h"]
+[ext_resource type="Script" path="res://Scenes and Scripts/Classes/spin_box.gd" id="5_pj5qq"]
+[ext_resource type="Texture2D" uid="uid://dvx430022t0ua" path="res://Textures/Buttons/icons/next.png" id="6_tjr7e"]
+[ext_resource type="Theme" uid="uid://cfmbhoq8cuoge" path="res://Resources/Themes/ProjectTheme.tres" id="8_cwndk"]
+[ext_resource type="PackedScene" uid="uid://dorw3vr2amuy3" path="res://Scenes and Scripts/Components/button_sound_component.tscn" id="8_f0h1v"]
+[ext_resource type="PackedScene" uid="uid://bug3v1xlp1gfr" path="res://Scenes and Scripts/UI/Buttons/pull_out_tab_button_right.tscn" id="9_2kx5m"]
+[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="10_f4opp"]
+[ext_resource type="Texture2D" uid="uid://cvm801v32lknm" path="res://Textures/Buttons/icons/puzzle_options.png" id="11_01uho"]
 
-[sub_resource type="StyleBoxTexture" id="17"]
-content_margin_top = 4.0
-content_margin_bottom = 4.0
-texture = ExtResource("3_whs2u")
-region_rect = Rect2(0, 0, 32, 32)
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_d0ke6"]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+texture = ExtResource("3_afnrn")
+texture_margin_left = 6.0
+texture_margin_top = 6.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+expand_margin_left = 20.0
 
-[sub_resource type="StyleBoxEmpty" id="6"]
+[sub_resource type="Theme" id="Theme_g5tjp"]
+default_font = ExtResource("3_ksjpd")
+default_font_size = 10
+LineEdit/font_sizes/font_size = 11
 
-[sub_resource type="StyleBoxEmpty" id="2"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0liva"]
+resource_local_to_scene = true
+shader = ExtResource("10_f4opp")
 
-[sub_resource type="StyleBoxEmpty" id="4"]
-
-[sub_resource type="StyleBoxTexture" id="1"]
-content_margin_top = 4.0
-content_margin_bottom = 4.0
-texture = ExtResource("3_whs2u")
-region_rect = Rect2(0, 0, 32, 32)
-
-[sub_resource type="StyleBoxEmpty" id="5"]
-
-[sub_resource type="StyleBoxEmpty" id="3"]
-
-[sub_resource type="StyleBoxEmpty" id="12"]
-
-[sub_resource type="StyleBoxEmpty" id="8"]
-
-[sub_resource type="StyleBoxEmpty" id="10"]
-
-[sub_resource type="StyleBoxEmpty" id="7"]
-
-[sub_resource type="StyleBoxEmpty" id="11"]
-
-[sub_resource type="StyleBoxEmpty" id="9"]
-
-[node name="PuzzleUI" type="Control" groups=["buttons", "no_place"]]
+[node name="PuzzleUI" type="Control" node_paths=PackedStringArray("EMCheck", "StrongCheck", "WeakCheck", "ElectroweakCheck", "HadronFrequencySlider", "MinParticleCount", "MaxParticleCount", "ContentContainer", "TabButton", "MovingContainer") groups=["buttons", "no_place"]]
 self_modulate = Color(1, 1, 1, 0)
+material = ExtResource("1_bvq6l")
+use_parent_material = true
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_0a0xk")
+EMCheck = NodePath("HBoxContainer/ContentContainer/OptionsContainer/GridContainer/electromagnetic")
+StrongCheck = NodePath("HBoxContainer/ContentContainer/OptionsContainer/GridContainer/strong")
+WeakCheck = NodePath("HBoxContainer/ContentContainer/OptionsContainer/GridContainer/weak")
+ElectroweakCheck = NodePath("HBoxContainer/ContentContainer/OptionsContainer/GridContainer/electro_weak")
+HadronFrequencySlider = NodePath("HBoxContainer/ContentContainer/OptionsContainer/PanelContainer/HadronSlider/HadronFrequency")
+MinParticleCount = NodePath("HBoxContainer/ContentContainer/OptionsContainer/StateParticleCountContainer/VBoxContainer/DegreeContainer/MinParticleCount")
+MaxParticleCount = NodePath("HBoxContainer/ContentContainer/OptionsContainer/StateParticleCountContainer/VBoxContainer/DegreeContainer/MaxParticleCount")
+ContentContainer = NodePath("HBoxContainer/ContentContainer")
+TabButton = NodePath("HBoxContainer/Tab")
+MovingContainer = NodePath("HBoxContainer")
+move_direction = 2
+time_to_pull_out = 0.35
+time_to_push_in = 0.35
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-custom_minimum_size = Vector2(80, 130)
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+use_parent_material = true
 layout_mode = 0
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -40.0
-offset_top = -140.0
 offset_right = 40.0
-alignment = 2
+offset_bottom = 40.0
+theme_override_constants/separation = 0
 
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+[node name="ContentContainer" type="PanelContainer" parent="HBoxContainer"]
+use_parent_material = true
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 mouse_filter = 1
-theme = ExtResource("2_8obiu")
-theme_override_styles/panel = SubResource("17")
+theme_override_styles/panel = SubResource("StyleBoxTexture_d0ke6")
 
-[node name="MouseTrap" type="Panel" parent="VBoxContainer/PanelContainer"]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 2
-mouse_filter = 1
-
-[node name="Popupcontainer" type="MarginContainer" parent="VBoxContainer/PanelContainer"]
-layout_mode = 2
-
-[node name="Text" type="Label" parent="VBoxContainer/PanelContainer/Popupcontainer"]
-layout_mode = 2
-size_flags_vertical = 0
-mouse_filter = 1
-
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_constants/separation = 0
-alignment = 2
-
-[node name="Goal" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-mouse_filter = 1
-text = "Goal:"
-
-[node name="EquationHolder" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 6)
-layout_mode = 2
-
-[node name="OptionsContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = -1
-
-[node name="HadronSlider" type="VBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer"]
+[node name="OptionsContainer" type="VBoxContainer" parent="HBoxContainer/ContentContainer"]
+use_parent_material = true
 layout_mode = 2
 theme_override_constants/separation = 1
 
-[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/HadronSlider"]
+[node name="StateParticleCountContainer" type="PanelContainer" parent="HBoxContainer/ContentContainer/OptionsContainer"]
+use_parent_material = true
 layout_mode = 2
-mouse_filter = 1
-text = "Hadron problems?"
 
-[node name="HSlider" type="HSlider" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/HadronSlider" groups=["sliders"]]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ContentContainer/OptionsContainer/StateParticleCountContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="HBoxContainer/ContentContainer/OptionsContainer/StateParticleCountContainer/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_ksjpd")
+theme_override_font_sizes/font_size = 11
+text = "No. STATE PARTICLES"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="DegreeContainer" type="HBoxContainer" parent="HBoxContainer/ContentContainer/OptionsContainer/StateParticleCountContainer/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = 1
+alignment = 1
+
+[node name="MinParticleCount" type="SpinBox" parent="HBoxContainer/ContentContainer/OptionsContainer/StateParticleCountContainer/VBoxContainer/DegreeContainer"]
+use_parent_material = true
+layout_mode = 2
+theme = SubResource("Theme_g5tjp")
+theme_override_icons/updown = ExtResource("4_8b34h")
+min_value = 2.0
+max_value = 6.0
+value = 2.0
+alignment = 1
+select_all_on_focus = true
+script = ExtResource("5_pj5qq")
+
+[node name="TextureRect2" type="TextureRect" parent="HBoxContainer/ContentContainer/OptionsContainer/StateParticleCountContainer/VBoxContainer/DegreeContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(15, 2.08165e-12)
+layout_mode = 2
+texture = ExtResource("6_tjr7e")
+expand_mode = 5
+stretch_mode = 5
+
+[node name="MaxParticleCount" type="SpinBox" parent="HBoxContainer/ContentContainer/OptionsContainer/StateParticleCountContainer/VBoxContainer/DegreeContainer"]
+use_parent_material = true
+layout_mode = 2
+theme = SubResource("Theme_g5tjp")
+theme_override_icons/updown = ExtResource("4_8b34h")
+min_value = 2.0
+max_value = 6.0
+value = 6.0
+alignment = 1
+select_all_on_focus = true
+script = ExtResource("5_pj5qq")
+
+[node name="GridContainer" type="GridContainer" parent="HBoxContainer/ContentContainer/OptionsContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/h_separation = 1
+theme_override_constants/v_separation = 1
+columns = 2
+
+[node name="electromagnetic" type="CheckButton" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_ksjpd")
+theme_override_font_sizes/font_size = 11
+button_pressed = true
+text = "EM"
+
+[node name="ButtonSoundComponent" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer/electromagnetic" instance=ExtResource("8_f0h1v")]
+
+[node name="strong" type="CheckButton" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_ksjpd")
+theme_override_font_sizes/font_size = 11
+button_pressed = true
+text = "STRONG"
+
+[node name="ButtonSoundComponent" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer/strong" instance=ExtResource("8_f0h1v")]
+
+[node name="weak" type="CheckButton" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_ksjpd")
+theme_override_font_sizes/font_size = 11
+button_pressed = true
+text = "WEAK"
+
+[node name="ButtonSoundComponent" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer/weak" instance=ExtResource("8_f0h1v")]
+
+[node name="electro_weak" type="CheckButton" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_ksjpd")
+theme_override_font_sizes/font_size = 11
+button_pressed = true
+text = "E. WEAK"
+
+[node name="ButtonSoundComponent" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer/electro_weak" instance=ExtResource("8_f0h1v")]
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/ContentContainer/OptionsContainer"]
+use_parent_material = true
+layout_mode = 2
+
+[node name="HadronSlider" type="VBoxContainer" parent="HBoxContainer/ContentContainer/OptionsContainer/PanelContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="Label" type="Label" parent="HBoxContainer/ContentContainer/OptionsContainer/PanelContainer/HadronSlider"]
+use_parent_material = true
 layout_mode = 2
 mouse_filter = 1
-theme = ExtResource("2_8obiu")
+theme_override_fonts/font = ExtResource("3_ksjpd")
+theme_override_font_sizes/font_size = 11
+text = "HADRON FREQUENCY"
+horizontal_alignment = 1
+
+[node name="HadronFrequency" type="HSlider" parent="HBoxContainer/ContentContainer/OptionsContainer/PanelContainer/HadronSlider"]
+use_parent_material = true
+custom_minimum_size = Vector2(102, 2.08165e-12)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("8_cwndk")
+theme_override_constants/grabber_offset = -6
 max_value = 2.0
 value = 1.0
 tick_count = 3
 ticks_on_borders = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/HadronSlider"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/ContentContainer/OptionsContainer/PanelContainer/HadronSlider"]
+use_parent_material = true
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="Yes" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/HadronSlider/HBoxContainer"]
+[node name="Always" type="Label" parent="HBoxContainer/ContentContainer/OptionsContainer/PanelContainer/HadronSlider/HBoxContainer"]
+use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Yes"
+theme_override_fonts/font = ExtResource("3_ksjpd")
+theme_override_font_sizes/font_size = 11
+text = "Always "
+horizontal_alignment = 1
 
-[node name="Randomly" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/HadronSlider/HBoxContainer"]
+[node name="Allowed" type="Label" parent="HBoxContainer/ContentContainer/OptionsContainer/PanelContainer/HadronSlider/HBoxContainer"]
+use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Randomly"
+theme_override_fonts/font = ExtResource("3_ksjpd")
+theme_override_font_sizes/font_size = 11
+text = " Allowed"
+horizontal_alignment = 1
 
-[node name="No" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/HadronSlider/HBoxContainer"]
+[node name="Never" type="Label" parent="HBoxContainer/ContentContainer/OptionsContainer/PanelContainer/HadronSlider/HBoxContainer"]
+use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
-text = "No"
+theme_override_fonts/font = ExtResource("3_ksjpd")
+theme_override_font_sizes/font_size = 11
+text = "  Never"
+horizontal_alignment = 1
 
-[node name="DegreeSlider" type="VBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer"]
+[node name="Tab" parent="HBoxContainer" instance=ExtResource("9_2kx5m")]
+material = SubResource("ShaderMaterial_0liva")
 layout_mode = 2
-theme_override_constants/separation = 2
+TabIcon = ExtResource("11_01uho")
+icon_use_parent_material = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/DegreeSlider"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/DegreeSlider/VBoxContainer"]
-layout_mode = 2
-mouse_filter = 1
-text = "No. state particles"
-
-[node name="RangeSlider" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/DegreeSlider/VBoxContainer" instance=ExtResource("4_6rx6l")]
-layout_mode = 2
-minRange = 2
-minValue = 2
-tickCount = 9
-
-[node name="GridContainer" type="GridContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer"]
-layout_mode = 2
-theme_override_constants/v_separation = -2
-columns = 2
-
-[node name="em" type="CheckBox" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer"]
-layout_mode = 2
-focus_mode = 0
-mouse_filter = 1
-theme_override_styles/normal = SubResource("6")
-theme_override_styles/pressed = SubResource("2")
-theme_override_styles/disabled = SubResource("4")
-theme_override_styles/hover = SubResource("1")
-theme_override_styles/hover_pressed = SubResource("5")
-theme_override_styles/focus = SubResource("3")
-action_mode = 0
-text = "EM"
-
-[node name="strong" type="CheckBox" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer"]
-layout_mode = 2
-focus_mode = 0
-mouse_filter = 1
-theme_override_styles/normal = SubResource("12")
-theme_override_styles/pressed = SubResource("8")
-theme_override_styles/disabled = SubResource("10")
-theme_override_styles/hover = SubResource("7")
-theme_override_styles/hover_pressed = SubResource("11")
-theme_override_styles/focus = SubResource("9")
-action_mode = 0
-text = "Strong"
-
-[node name="weak" type="CheckBox" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer"]
-layout_mode = 2
-focus_mode = 0
-mouse_filter = 1
-theme_override_styles/normal = SubResource("12")
-theme_override_styles/pressed = SubResource("8")
-theme_override_styles/disabled = SubResource("10")
-theme_override_styles/hover = SubResource("7")
-theme_override_styles/hover_pressed = SubResource("11")
-theme_override_styles/focus = SubResource("9")
-action_mode = 0
-text = "Weak"
-
-[node name="electroweak" type="CheckBox" parent="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer"]
-layout_mode = 2
-focus_mode = 0
-mouse_filter = 1
-theme_override_styles/normal = SubResource("12")
-theme_override_styles/pressed = SubResource("8")
-theme_override_styles/disabled = SubResource("10")
-theme_override_styles/hover = SubResource("7")
-theme_override_styles/hover_pressed = SubResource("11")
-theme_override_styles/focus = SubResource("9")
-action_mode = 0
-text = "E. Weak"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = -1
-
-[node name="Options" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("5_ltga0")]
-custom_minimum_size = Vector2(17, 17)
-layout_mode = 2
-Icon = ExtResource("6_tr3r0")
-
-[node name="Shuffle" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("5_ltga0")]
-custom_minimum_size = Vector2(19, 17)
-layout_mode = 2
-Icon = ExtResource("7_u58pw")
-
-[node name="Solution" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("5_ltga0")]
-custom_minimum_size = Vector2(19, 17)
-layout_mode = 2
-Icon = ExtResource("8_wjcog")
-
-[node name="Submit" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("5_ltga0")]
-custom_minimum_size = Vector2(19, 17)
-layout_mode = 2
-Icon = ExtResource("9_o72n7")
-active = true
-
-[node name="Equation" parent="." instance=ExtResource("10_t8bno")]
-layout_mode = 0
-offset_left = 4.0
-offset_top = 28.0
-offset_right = 244.0
-offset_bottom = 52.0
-scale = Vector2(0.3, 0.3)
-mouse_filter = 1
-
-[node name="VBoxContainer" parent="Equation" index="0"]
-layout_mode = 2
-
-[node name="EquationContainer" parent="Equation/VBoxContainer" index="0"]
-layout_mode = 2
-
-[node name="InitialScrollContainer" parent="Equation/VBoxContainer/EquationContainer" index="0"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-
-[node name="HBoxContainer" parent="Equation/VBoxContainer/EquationContainer/InitialScrollContainer" index="0"]
-layout_mode = 2
-
-[node name="StateContainer" parent="Equation/VBoxContainer/EquationContainer/InitialScrollContainer/HBoxContainer" index="0"]
-layout_mode = 2
-
-[node name="Arrow" parent="Equation/VBoxContainer/EquationContainer" index="1"]
-layout_mode = 2
-expand_mode = 1
-
-[node name="FinalScrollContainer" parent="Equation/VBoxContainer/EquationContainer" index="2"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-
-[node name="HBoxContainer" parent="Equation/VBoxContainer/EquationContainer/FinalScrollContainer" index="0"]
-layout_mode = 2
-
-[node name="StateContainer" parent="Equation/VBoxContainer/EquationContainer/FinalScrollContainer/HBoxContainer" index="0"]
-layout_mode = 2
-
-[connection signal="mouse_entered" from="VBoxContainer/PanelContainer" to="." method="_on_PanelContainer_mouse_entered"]
-[connection signal="mouse_exited" from="VBoxContainer/PanelContainer" to="." method="_on_PanelContainer_mouse_exited"]
-[connection signal="mouse_entered" from="VBoxContainer/PanelContainer/MouseTrap" to="." method="_on_MouseTrap_mouse_entered"]
-[connection signal="mouse_exited" from="VBoxContainer/PanelContainer/MouseTrap" to="." method="_on_MouseTrap_mouse_exited"]
-[connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/em" to="." method="_on_electroweaktype_pressed"]
-[connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/strong" to="." method="_on_strong_pressed"]
-[connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/weak" to="." method="_on_electroweaktype_pressed"]
-[connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/electroweak" to="." method="_on_electroweak_pressed"]
-[connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Options" to="." method="_on_Options_pressed"]
-
-[editable path="Equation"]
-[editable path="Equation/VBoxContainer/EquationContainer/InitialScrollContainer"]
-[editable path="Equation/VBoxContainer/EquationContainer/FinalScrollContainer"]
+[connection signal="mouse_entered" from="HBoxContainer/ContentContainer" to="." method="_on_PanelContainer_mouse_entered"]
+[connection signal="mouse_exited" from="HBoxContainer/ContentContainer" to="." method="_on_PanelContainer_mouse_exited"]
+[connection signal="value_changed" from="HBoxContainer/ContentContainer/OptionsContainer/StateParticleCountContainer/VBoxContainer/DegreeContainer/MinParticleCount" to="." method="_on_min_particle_count_value_changed"]
+[connection signal="value_changed" from="HBoxContainer/ContentContainer/OptionsContainer/StateParticleCountContainer/VBoxContainer/DegreeContainer/MaxParticleCount" to="." method="_on_max_particle_count_value_changed"]

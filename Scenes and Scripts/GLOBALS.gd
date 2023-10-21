@@ -1,13 +1,19 @@
 extends Node
 
+@onready var TitleDiagram : DrawingMatrix = ResourceLoader.load("res://saves/title_diagram.tres")
+
 enum ColourScheme {TeaStain, SeaFoam, Professional}
 enum COLOURS {primary, secondary, pencil, primary_highlight, invalid, invalid_highlight}
-
+enum Scene {Level, MainMenu}
 enum Vision {Colour, Shade, Strength, None}
 
+var in_main_menu: bool = true
 var load_mode: BaseMode.Mode = BaseMode.Mode.Sandbox
 var creating_problem: Problem = Problem.new()
+var creating_problem_set_file: String = ''
 var load_problem_set: ProblemSet = ProblemSet.new()
+var problem_selection_menu_position: Vector2
+var problem_selection_menu_showing: bool
 
 #0 photon, 1 gluon, 2 Z, 3 H, 4 W,
 #5 lepton, 6 electron, 7 muon, 8 tau,
@@ -301,6 +307,7 @@ var PARTICLE_MASSES: Dictionary = {
 	Particle.bottom: 4.18e3
 }
 
+const MIN_INTERACTION_STRENGTH: float = 1e-3
 var INTERACTION_STRENGTHS: Array = [
 	[
 		[abs(QUANTUM_NUMBERS[Particle.up][QuantumNumber.charge]*ALPHA_EM)],
@@ -507,11 +514,82 @@ func _ready():
 				if file_name.ends_with('.png'):
 					PARTICLE_TEXTURES[file_name.trim_suffix('.png')] = ResourceLoader.load(folder_path + file_name)
 
+func get_unique_file_name(folder_path: String, suffix: String = '.txt') -> String:
+	var random_hex : String = "%x" % (randi() % 4095)
+	
+	var files: Array[String] = get_files_in_folder(folder_path)
+	
+	while folder_path + random_hex + suffix in files:
+		random_hex = "%x" % (randi() % 4095)
+	
+	return folder_path + random_hex + suffix
+
+func create_file(path: String) -> void:
+	var file = FileAccess.open(path, FileAccess.WRITE)
+	file.store_string("")
+	file = null
+
+func create_text_file(data: String, path: String) -> void:
+	if DirAccess.dir_exists_absolute(path):
+		return
+	
+	create_file(path)
+	
+	var file: FileAccess = FileAccess.open(path, FileAccess.WRITE)
+	file.store_var(data)
+	file.close()
+
+func get_resource_save_data(resource: Resource) -> String:
+	return var_to_str(resource)
+
+func save_data(data: Resource, path: String = "res://saves/") -> Error:
+	return ResourceSaver.save(data, path)
+
+func load_data(path: String) -> Resource:
+	if ResourceLoader.exists(path):
+		return ResourceLoader.load(path)
+	
+	return null
+
+func save(p_obj: Resource, p_path: String) -> void:
+	var file = FileAccess.open(p_path, FileAccess.WRITE)
+	
+	if !file: return
+	
+	file.store_var(var_to_str(p_obj))
+	file.close()
+
+func load(p_path: String) -> Resource:
+	var file = FileAccess.open(p_path, FileAccess.READ)
+	var obj: Resource = str_to_var(file.get_var())
+	file.close()
+	return obj
+
+func delete_file(path: String) -> Error:
+	return DirAccess.remove_absolute(path)
+
+func get_files_in_folder(folder_path: String) -> Array[String]:
+	var files : Array[String] = []
+	var dir := DirAccess.open(folder_path)
+	dir.list_dir_begin()
+
+	while true:
+		var file = dir.get_next()
+		if file == "":
+			break
+		elif not file.begins_with("."):
+			files.append(folder_path + file)
+
+	return files
+
 func get_particle_name(particle: int):
 	return Particle.keys()[Particle.values().find(particle)]
 
 func get_particle_texture(particle: int):
 	return PARTICLE_TEXTURES[Particle.keys()[Particle.values().find(particle)]]
+
+func get_particle_icon(particle: int) -> Texture2D:
+	return load("res://Textures/Buttons/icons/Particles/" + get_particle_name(particle) + ".png")
 
 func get_hadron_texture(hadron: Hadrons):
 	return PARTICLE_TEXTURES[HADRON_NAMES[hadron]]
@@ -537,12 +615,15 @@ func set_interaction_strength_limits() -> void:
 	var minimum_strength: float = 1
 	var maximum_strength: float = 0
 	
-	for interaction_type in INTERACTION_STRENGTHS:
-		for interaction_strength in interaction_type:
-			if interaction_strength[0] > maximum_strength:
-				maximum_strength = interaction_strength[0]
-			elif interaction_strength[0] < minimum_strength:
-				minimum_strength = interaction_strength[0]
+	for i in INTERACTION_STRENGTHS.size():
+		for j in INTERACTION_STRENGTHS[i].size():
+			INTERACTION_STRENGTHS[i][j][0] = max(INTERACTION_STRENGTHS[i][j][0], MIN_INTERACTION_STRENGTH)
+			var interaction_strength: float = INTERACTION_STRENGTHS[i][j][0]
+			
+			if interaction_strength > maximum_strength:
+				maximum_strength = interaction_strength
+			elif interaction_strength < minimum_strength:
+				minimum_strength = interaction_strength
 	
 	MAXIMUM_INTERACTION_STRENGTH = maximum_strength
 	MINIMUM_INTERACTION_STRENGTH = minimum_strength

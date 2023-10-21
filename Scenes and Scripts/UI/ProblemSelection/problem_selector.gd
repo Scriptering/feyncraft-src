@@ -9,19 +9,30 @@ signal modify
 signal play
 
 var problem: Problem
+var index: int: set = _set_index
 
-func update() -> void:
-	return
-
-func toggle_edit_visiblity(can_edit: bool) -> void:
-	$HBoxContainer/PanelContainer/HBoxContainer/Delete.visible = can_edit
-	$HBoxContainer/PanelContainer/HBoxContainer/Modify.visible = can_edit
-
-func set_index(index: int) -> void:
+func _set_index(new_value: int) -> void:
+	index = new_value
+	
 	$HBoxContainer/Index.text = str(index+1)
 	
 	Down.disabled = index == get_parent().get_child_count() - 1
 	Up.disabled = index == 0
+	
+func update() -> void:
+	return
+
+func toggle_play_disabled(toggle: bool) -> void:
+	$HBoxContainer/PanelContainer/HBoxContainer/Play.disabled = toggle
+
+func toggle_completed(toggle: bool) -> void:
+	$HBoxContainer/Completed.visible = toggle
+
+func toggle_edit_visiblity(can_edit: bool) -> void:
+	$HBoxContainer/PanelContainer/HBoxContainer/Delete.visible = can_edit
+	$HBoxContainer/PanelContainer/HBoxContainer/Modify.visible = can_edit
+	$HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer.visible = can_edit
+
 
 func load_problem(_problem: Problem) -> void:
 	problem = _problem
@@ -41,3 +52,8 @@ func _on_modify_pressed() -> void:
 
 func _on_play_pressed() -> void:
 	play.emit(problem)
+
+func is_empty() -> bool:
+	return problem.state_interactions.all(
+		func(state_interaction: Array): return state_interaction.size() == 0
+	)

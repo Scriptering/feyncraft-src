@@ -5,12 +5,9 @@ signal clicked_on
 signal request_deletion
 signal show_information_box
 
-@onready var Ball = get_node("Ball")
-@onready var Level := get_node("/root/World")
-@onready var StateManager = Level.get_node('state_manager')
-
-@onready var Dot = get_node("Dot")
-@onready var InfoNumberLabel = get_node('InfoNumberLabel')
+@onready var Ball: AnimatedSprite2D = $Ball
+@onready var Dot: AnimatedSprite2D = $Dot
+@onready var InfoNumberLabel: Label = $InfoNumberLabel
 @export var information_box_offset := Vector2(0, 0)
 
 static var used_information_numbers: Array[int] = []
@@ -25,6 +22,7 @@ var Diagram: MainDiagram
 var Initial: StateLine
 var Final: StateLine
 var Crosshair: Node
+var StateManager: Node
 
 var InformationBox := preload("res://Scenes and Scripts/UI/Info/interaction_information.tscn")
 var information_id: int
@@ -37,6 +35,7 @@ var connected_base_particles: Array[GLOBALS.Particle] : get = _get_connected_bas
 var connected_colour_lines: Array[ParticleLine] : get = _get_connected_colour_lines
 var connected_shade_lines: Array[ParticleLine] : get = _get_connected_shade_lines
 var dimensionality: float : get = _get_dimensionality
+var degree: int = 0 : get = _get_degree
 
 var information_visible: bool = false
 var information_box
@@ -49,7 +48,7 @@ func _ready():
 	super._ready()
 	
 	show_information_box.connect(EVENTBUS.add_floating_menu)
-	request_deletion.connect(Diagram.delete_interaction)
+	request_deletion.connect(Diagram.recursive_delete_interaction)
 	
 	for line in Diagram.get_particle_lines():
 		if position in line.points and !line in connected_lines:
@@ -59,21 +58,19 @@ func _ready():
 	
 	update_interaction()
 
-	Diagram.check_split_lines()
-	Diagram.update_statelines()
-
 func init(diagram: MainDiagram) -> void:
 	Diagram = diagram
 	Initial = diagram.StateLines[StateLine.StateType.Initial]
 	Final = diagram.StateLines[StateLine.StateType.Final]
 	Crosshair = diagram.Crosshair
+	StateManager = diagram.StateManager
 
-func _process(_delta: float) -> void:
-	if old_connected_lines != connected_lines:
-		update_interaction()
-		old_connected_lines = connected_lines.duplicate(true)
-	if connected_lines.size() == 0 and not grabbed and StateManager.state != BaseState.State.Drawing:
-		queue_free()
+#func _process(_delta: float) -> void:
+#	if old_connected_lines != connected_lines:
+#		update_interaction()
+#		old_connected_lines = connected_lines.duplicate(true)
+#	if connected_lines.size() == 0 and not grabbed and StateManager.state != BaseState.State.Drawing:
+#		queue_free()
 
 func _grab_area_hovered_changed(new_value: bool):
 	self.hovering = new_value
@@ -82,15 +79,18 @@ func _grab_area_hovered_changed(new_value: bool):
 func _input(event: InputEvent) -> void:
 	super._input(event)
 	if Input.is_action_just_pressed("click") and hovering:
-		emit_signal("clicked_on", self)
+		clicked_on.emit(self)
 
 func _set_hovering(new_value: bool):
+	hovering = new_value
+	
+	if grabbed:
+		return
+	
 	if new_value:
 		Ball.frame = HIGHLIGHT
 	else:
 		Ball.frame = NORMAL
-
-	hovering = new_value
 
 func _set_valid(new_valid: bool) -> void:
 	valid = new_valid
@@ -99,10 +99,6 @@ func _set_valid(new_valid: bool) -> void:
 func _set_valid_colourless(new_valid_colourless: bool) -> void:
 	valid_colourless = new_valid_colourless
 	update_valid_visual()
-
-func crosshair_moved(_current_position: Vector2, _old_position: Vector2):
-	if grabbed:
-		update_interaction()
 
 func update_valid_visual() -> void:
 	var current_ball_frame: int = Ball.frame
@@ -124,6 +120,10 @@ func update_dot_visual() -> void:
 	if get_on_state_line() != StateLine.StateType.None:
 		Dot.frame = 1
 		Dot.visible = true
+		return
+	
+	if degree == 2:
+		Dot.frame = 2
 	else:
 		Dot.frame = 0
 
@@ -142,12 +142,14 @@ func get_on_state_line() -> StateLine.StateType:
 func update_interaction() -> void:
 	if grabbed:
 		move_interaction()
+		return
+		
 	elif should_request_deletion():
-		emit_signal("request_deletion", self)
+		request_deletion.emit(self)
 		return
 	update_dot_visual()
 	update_ball_hovering()
-	if connected_lines.size() < INTERACTION_SIZE_MINIMUM and information_visible:
+	if connected_lines.size() < 2 and information_visible:
 		close_information_box()
 	
 	if information_visible:
@@ -155,7 +157,7 @@ func update_interaction() -> void:
 	
 	set_shader_parameters()
 	
-	valid = connected_lines.size() < INTERACTION_SIZE_MINIMUM or validate()
+	valid = validate()
 
 func update_ball_hovering() -> void:
 	self.hovering = self.hovering
@@ -198,6 +200,16 @@ func _get_connected_base_particles() -> Array[GLOBALS.Particle]:
 		connected_base_particles.append(line.base_particle)
 	return connected_base_particles
 
+func _get_degree() -> int:
+	var connected_count: int = connected_lines.size()
+	
+	if connected_count < INTERACTION_SIZE_MINIMUM:
+		return 0
+	elif connected_count == INTERACTION_SIZE_MINIMUM:
+		return 1
+	
+	return 2
+
 func should_request_deletion() -> bool:
 	if connected_lines.size() == 0:
 		return true
@@ -213,6 +225,9 @@ func has_base_particle_connected(base_particle: GLOBALS.Particle):
 	return base_particle in self.connected_base_particles
 
 func validate() -> bool:
+	if connected_lines.size() < 2:
+		return true
+	
 	if !is_dimensionality_valid():
 		return false
 
@@ -249,7 +264,7 @@ func get_invalid_quantum_numbers() -> Array[GLOBALS.QuantumNumber]:
 				invalid_quantum_numbers.append(quantum_number)
 				continue
 			
-		elif !interaction_in_list:
+		elif !interaction_in_list and connected_lines.size() >= INTERACTION_SIZE_MINIMUM:
 			invalid_quantum_numbers.append(quantum_number)
 	
 	return invalid_quantum_numbers
@@ -349,7 +364,7 @@ func open_information_box() -> void:
 	information_box.ConnectedInteraction = self
 	information_box.ID = information_id
 	information_box.position = Diagram.position + position + information_box_offset
-	emit_signal("show_information_box", information_box)
+	show_information_box.emit(information_box)
 	
 	InfoNumberLabel.text = str(information_id)
 	InfoNumberLabel.show()
@@ -366,7 +381,7 @@ func _on_information_button_pressed():
 		(StateManager.state == BaseState.State.Idle or
 		(StateManager.state == BaseState.State.Drawing and
 		!StateManager.states[BaseState.State.Drawing].drawing)) and
-		connected_lines.size() >= INTERACTION_SIZE_MINIMUM
+		connected_lines.size() >= 2
 	):
 		if information_visible:
 			close_information_box()
@@ -385,6 +400,7 @@ func drop() -> void:
 	super.drop()
 	
 	update_dot_visual()
+	self.hovering = hovering
 	Diagram.update_statelines()
 
 func get_interaction_index() -> Array[int]:

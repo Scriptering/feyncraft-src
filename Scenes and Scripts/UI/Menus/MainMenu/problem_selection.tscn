@@ -1,37 +1,66 @@
-[gd_scene load_steps=8 format=3 uid="uid://dtllx04gp77mu"]
+[gd_scene load_steps=10 format=3 uid="uid://dtllx04gp77mu"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/MainMenu/problem_selection.gd" id="1_aqrhn"]
 [ext_resource type="PackedScene" uid="uid://b8jrtk1lv0oo0" path="res://Scenes and Scripts/UI/ProblemSelection/problem_list.tscn" id="1_gfl8q"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/MainMenu/problem_selection_control.gd" id="1_qn5hj"]
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="2_bvxeb"]
 [ext_resource type="PackedScene" uid="uid://c3m8fesktmd85" path="res://Scenes and Scripts/UI/ProblemSelection/problem_set_list.tscn" id="3_chpqf"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q3cex"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ra0kh"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hxwmd"]
 resource_local_to_scene = true
 shader = ExtResource("2_bvxeb")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3b0mg"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wh5uq"]
 resource_local_to_scene = true
 shader = ExtResource("2_bvxeb")
 
-[node name="ProblemSelection" type="TabContainer"]
-offset_right = 294.0
-offset_bottom = 200.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k11wx"]
+size = Vector2(87, 25.5)
+
+[node name="Control" type="Control" node_paths=PackedStringArray("GrabAreas")]
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("1_qn5hj")
+GrabAreas = [NodePath("ProblemSelection"), NodePath("TitleArea")]
+
+[node name="ProblemSelection" type="TabContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -106.0
+offset_top = -100.0
+offset_right = 106.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_q3cex")
 tabs_visible = false
-use_hidden_tabs_for_min_size = true
 script = ExtResource("1_aqrhn")
 
-[node name="ProblemSetList" parent="." instance=ExtResource("3_chpqf")]
-material = SubResource("ShaderMaterial_ra0kh")
+[node name="ProblemSetList" parent="ProblemSelection" instance=ExtResource("3_chpqf")]
+material = SubResource("ShaderMaterial_hxwmd")
 layout_mode = 2
+mouse_filter = 1
 
-[node name="ProblemList" parent="." instance=ExtResource("1_gfl8q")]
+[node name="ProblemList" parent="ProblemSelection" instance=ExtResource("1_gfl8q")]
 visible = false
-material = SubResource("ShaderMaterial_3b0mg")
+material = SubResource("ShaderMaterial_wh5uq")
 layout_mode = 2
 
-[connection signal="back" from="ProblemSetList" to="." method="_on_problem_set_list_back"]
-[connection signal="enter_problem_set" from="ProblemSetList" to="." method="_on_problem_set_list_enter_problem_set"]
-[connection signal="back" from="ProblemList" to="." method="_on_problem_list_back"]
+[node name="TitleArea" type="Area2D" parent="."]
+position = Vector2(-1, -110)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TitleArea"]
+position = Vector2(0.5, -0.25)
+shape = SubResource("RectangleShape2D_k11wx")
+
+[connection signal="close" from="ProblemSelection/ProblemSetList" to="ProblemSelection" method="_on_problem_set_list_close"]
+[connection signal="enter_problem_set" from="ProblemSelection/ProblemSetList" to="ProblemSelection" method="_on_problem_set_list_enter_problem_set"]
+[connection signal="back" from="ProblemSelection/ProblemList" to="ProblemSelection" method="_on_problem_list_back"]
+[connection signal="problem_deleted" from="ProblemSelection/ProblemList" to="ProblemSelection" method="_on_problem_list_problem_deleted"]

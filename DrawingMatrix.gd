@@ -1,9 +1,9 @@
 class_name DrawingMatrix
 extends ConnectionMatrix
 
-var split_hadron_ids : Array = []
-var normalised_interaction_positions : PackedVector2Array = []
-var state_line_positions : PackedInt32Array = [0, 20]
+@export var split_hadron_ids : Array = []
+@export var normalised_interaction_positions : Array[Vector2] = []
+@export var state_line_positions : Array[int] = [0, 20]
 
 func initialise_from_connection_matrix(from_connection_matrix: ConnectionMatrix) -> void:
 	connection_matrix = from_connection_matrix.connection_matrix.duplicate(true)
@@ -33,17 +33,6 @@ func add_interaction_with_position(
 
 	add_interaction(interaction_state, id)
 	add_interaction_position(interaction_position, grid_size, id)
-
-func duplicate() -> DrawingMatrix:
-	var new_drawing_matrix: DrawingMatrix = DrawingMatrix.new()
-	new_drawing_matrix.split_hadron_ids = split_hadron_ids.duplicate(true)
-	new_drawing_matrix.normalised_interaction_positions = normalised_interaction_positions.duplicate()
-	new_drawing_matrix.state_line_positions = state_line_positions.duplicate()
-	new_drawing_matrix.connection_matrix = connection_matrix.duplicate(true)
-	new_drawing_matrix.state_count = state_count.duplicate()
-	new_drawing_matrix.matrix_size = connection_matrix.size()
-	
-	return new_drawing_matrix
 
 func make_drawable() -> void:
 	split_hadrons()
@@ -104,6 +93,37 @@ func split_hadrons() -> void:
 		var to_split_hadron_id : int = get_hadron_ids()[0]
 		
 		split_hadron(to_split_hadron_id)
+
+func reach_ids(id: int, reached_ids: PackedInt32Array, bidirectional: bool) -> PackedInt32Array:
+	reached_ids.push_back(id)
+	
+	for jd in matrix_size:
+		if jd in reached_ids:
+			continue
+		
+		if are_interactions_connected(id, jd, bidirectional) or are_ids_in_same_hadron(id, jd):
+			reached_ids = reach_ids(jd, reached_ids, bidirectional)
+		
+	return reached_ids
+
+func are_ids_in_same_hadron(id: int, jd: int) -> bool:
+	return split_hadron_ids.any(
+		func(hadron: PackedInt32Array) -> bool:
+			return id in hadron and jd in hadron
+	)
+
+func are_interactions_connected(
+	from_id: int, to_id: int, bidirectional: bool = false, particle: GLOBALS.Particle = GLOBALS.Particle.none, reverse: bool = false
+) -> bool:
+	if reverse:
+		var temp_id: int = from_id
+		from_id = to_id
+		to_id = temp_id
+	
+	if particle == GLOBALS.Particle.none:
+		return connection_matrix[from_id][to_id].size() != 0 or (bidirectional and connection_matrix[to_id][from_id].size() != 0)
+	else:
+		return particle in connection_matrix[from_id][to_id] or (bidirectional and particle in connection_matrix[to_id][from_id])
 
 func split_hadron(hadron_id: int) -> void:
 	var new_interaction_id := hadron_id + 1
@@ -235,7 +255,7 @@ func rejoin_hadron(hadron_ids: PackedInt32Array) -> void:
 	from_ids.sort()
 	from_ids.reverse()
 	
-	for hadron_id in hadron_ids.slice(1):
+	for hadron_id in from_ids:
 		var connected_id: int = get_connected_ids(hadron_id, true)[0]
 		var reverse: bool = !are_interactions_connected(hadron_id, connected_id)
 		
@@ -243,11 +263,11 @@ func rejoin_hadron(hadron_ids: PackedInt32Array) -> void:
 			hadron_id, connected_id, true
 		).front()
 		
-		disconnect_interactions(to_id, connected_id, connection_particle, false, reverse)
+		disconnect_interactions(hadron_id, connected_id, connection_particle, false, reverse)
 		connect_interactions(to_id, connected_id, connection_particle, false, reverse)
 
 func reduce_to_connection_matrix() -> ConnectionMatrix:
-	var reduced_drawing_matrix : DrawingMatrix = duplicate()
+	var reduced_drawing_matrix : DrawingMatrix = duplicate(true)
 	
 	reduced_drawing_matrix.rejoin_hadrons()
 	reduced_drawing_matrix.rejoin_double_connections()
@@ -264,7 +284,7 @@ func get_connection_matrix() -> ConnectionMatrix:
 	return new_connection_matrix
 
 func get_reduced_matrix(particle_test_function: Callable):
-	var reduced_matrix: DrawingMatrix = duplicate()
+	var reduced_matrix: DrawingMatrix = duplicate(true)
 	
 	for id in range(matrix_size):
 		for connection in get_connections(id) + get_connections(id, true):

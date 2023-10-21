@@ -16,7 +16,7 @@ var grid_width: int:
 
 var grid_height: int:
 	get:
-		return size.y
+		return int(size.y)
 
 var grid_centre: int:
 	get:
@@ -42,10 +42,10 @@ func draw_raw_diagram(connection_matrix : ConnectionMatrix) -> void:
 	draw_diagram(drawable_matrix)
 
 func get_interactions() -> Array:
-	return Interactions.get_children().filter(func(interaction): return !interaction.is_queued_for_deletion())
+	return Interactions.get_children().filter(func(interaction): return !interaction.is_queued_for_deletion() and interaction.is_inside_tree())
 
 func get_particle_lines() -> Array:
-	return ParticleLines.get_children().filter(func(particle_line): return !particle_line.is_queued_for_deletion())
+	return ParticleLines.get_children().filter(func(particle_line): return !particle_line.is_queued_for_deletion() and particle_line.is_inside_tree())
 
 func get_hadron_joints() -> Array:
 	return HadronJoints.get_children()
@@ -113,7 +113,7 @@ func create_middle_diagram_interaction_positions(drawing_matrix: DrawingMatrix) 
 		degree_pos.append(i * degree_step + degree_start)
 		
 	var radius : float = snapped(min(grid_width, grid_height) / 2 - grid_size, grid_size)
-	var circle_y_start : int = snapped(grid_height / 2, grid_size)
+	var circle_y_start : int = snapped(int(grid_height) / 2, grid_size)
 	var circle_x : int = grid_centre
 
 	for j in range(drawing_matrix.get_state_count(StateLine.StateType.None)):
@@ -141,8 +141,7 @@ func create_state_diagram_interaction_positions(drawing_matrix: DrawingMatrix, s
 			Vector2(StateLines[state].position.x, current_y), grid_size
 		)
 
-func place_interaction(interaction_position: Vector2) -> void:
-	var interaction = InteractionInstance.instantiate()
+func place_interaction(interaction_position: Vector2, interaction: Node = InteractionInstance.instantiate()) -> void:
 	interaction.position = interaction_position
 	interaction.init(self)
 	Interactions.add_child(interaction)

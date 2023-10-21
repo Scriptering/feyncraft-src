@@ -15,6 +15,7 @@ layout_mode = 3
 anchors_preset = 0
 script = ExtResource("2")
 GrabAreas = [NodePath("Line/GrabTop"), NodePath("Line/GrabBottom")]
+follow_cursor = false
 
 [node name="Line" type="VBoxContainer" parent="."]
 use_parent_material = true

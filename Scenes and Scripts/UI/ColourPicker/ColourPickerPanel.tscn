@@ -12,7 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://cgfs1pdopjbh" path="res://Textures/Buttons/icons/close_hover.png" id="6_ytwn5"]
 [ext_resource type="Script" path="res://Scenes and Scripts/Classes/line_edit.gd" id="7_85uwg"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3augo"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1kore"]
 resource_local_to_scene = true
 shader = ExtResource("6_kwlog")
 
@@ -77,7 +77,7 @@ hex_visible = false
 presets_visible = false
 
 [node name="ColourSampler" parent="VBoxContainer/PanelContainer/VBoxContainer" instance=ExtResource("5_8vrca")]
-material = SubResource("ShaderMaterial_3augo")
+material = SubResource("ShaderMaterial_1kore")
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_7k5dl")
 

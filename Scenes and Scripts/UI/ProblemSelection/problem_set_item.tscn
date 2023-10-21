@@ -1,5 +1,6 @@
-[gd_scene load_steps=18 format=3 uid="uid://b6go021ha3ocr"]
+[gd_scene load_steps=21 format=3 uid="uid://b6go021ha3ocr"]
 
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_b04gi"]
 [ext_resource type="StyleBox" uid="uid://dvu7f5h7snggp" path="res://Scenes and Scripts/UI/Menus/panelContainer.tres" id="1_g4bto"]
 [ext_resource type="FontFile" uid="uid://dohkbu7ekkfx8" path="res://Textures/Fonts/pixeltype/Pixeltype.ttf" id="1_qnpxi"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/ProblemSelection/problem_set_item.gd" id="3_1cbyy"]
@@ -9,24 +10,10 @@
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="6_plt5e"]
 [ext_resource type="Texture2D" uid="uid://cms1u4elh5bo3" path="res://Textures/Buttons/icons/delete.png" id="7_dyt28"]
 [ext_resource type="Texture2D" uid="uid://d16opu3dyhri7" path="res://Textures/Buttons/eye/eye_open.png" id="7_f5yhf"]
-[ext_resource type="Texture2D" uid="uid://bvdr8f7dmjpmi" path="res://Textures/Buttons/icons/upload.png" id="9_772ct"]
-
-[sub_resource type="Shader" id="Shader_tmadl"]
-code = "shader_type canvas_item;
-
-global uniform sampler2D colour_scheme: filter_nearest;
-uniform float alpha: hint_range(0.0, 1.0);
-
-void fragment() {
-	vec4 color = texture(TEXTURE, UV);
-	COLOR = vec4(texture(colour_scheme, vec2(color.r, color.g)).rgb, color.a * alpha);
-}
-"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_p05i4"]
-resource_local_to_scene = true
-shader = SubResource("Shader_tmadl")
-shader_parameter/alpha = 1.0
+[ext_resource type="PackedScene" uid="uid://7kmcsryae7lw" path="res://Scenes and Scripts/UI/Buttons/load_button.tscn" id="10_6kia2"]
+[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="11_l46c8"]
+[ext_resource type="Texture2D" uid="uid://qxw17ji0dvra" path="res://Textures/Buttons/icons/share.png" id="13_4yitn"]
+[ext_resource type="Texture2D" uid="uid://co7w81osg53kf" path="res://Textures/UI/Information/valid.png" id="14_xqm6y"]
 
 [sub_resource type="FontVariation" id="FontVariation_5o2co"]
 base_font = ExtResource("1_qnpxi")
@@ -45,8 +32,12 @@ LineEdit/styles/read_only = SubResource("StyleBoxEmpty_0snhi")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qxe7s"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mffu3"]
+resource_local_to_scene = true
+shader = ExtResource("11_l46c8")
+
 [node name="ProblemSetItem" type="PanelContainer"]
-material = SubResource("ShaderMaterial_p05i4")
+material = ExtResource("1_b04gi")
 offset_right = 12.0
 offset_bottom = 12.0
 theme = SubResource("Theme_kr54n")
@@ -58,10 +49,11 @@ use_parent_material = true
 layout_mode = 2
 
 [node name="Index" type="Label" parent="HBoxContainer"]
-custom_minimum_size = Vector2(24, 2.08165e-12)
+material = ExtResource("1_b04gi")
+custom_minimum_size = Vector2(16, 2.08165e-12)
 layout_mode = 2
 theme_override_font_sizes/font_size = 15
-text = "1"
+text = "99"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -77,6 +69,7 @@ layout_mode = 2
 use_parent_material = true
 custom_minimum_size = Vector2(100, 2.08165e-12)
 layout_mode = 2
+theme_override_font_sizes/font_size = 12
 placeholder_text = "[Enter Title]"
 alignment = 1
 max_length = 18
@@ -109,7 +102,6 @@ action_mode = 1
 tooltip = "View Problems"
 
 [node name="Delete" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("4_dol4y")]
-visible = false
 material = null
 layout_mode = 2
 mouse_filter = 1
@@ -122,27 +114,30 @@ action_mode = 1
 [node name="Tooltip" parent="HBoxContainer/PanelContainer/HBoxContainer/Delete" instance=ExtResource("6_plt5e")]
 tooltip = "Delete"
 
-[node name="Upload" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("4_dol4y")]
-visible = false
-material = null
+[node name="Upload" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("10_6kia2")]
+material = SubResource("ShaderMaterial_mffu3")
 layout_mode = 2
-mouse_filter = 1
-icon = ExtResource("9_772ct")
+mode = 1
+icon = ExtResource("13_4yitn")
 minimum_size = Vector2(22, 22)
 expand_icon = true
-icon_use_parent_material = true
-action_mode = 1
-
-[node name="Tooltip" parent="HBoxContainer/PanelContainer/HBoxContainer/Upload" instance=ExtResource("6_plt5e")]
-tooltip = "Upload "
+flip_icon_v = false
 
 [node name="IndexLabel" type="Label" parent="HBoxContainer/PanelContainer/HBoxContainer"]
 custom_minimum_size = Vector2(32, 2.08165e-12)
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 9
 text = "0/0"
 horizontal_alignment = 1
-vertical_alignment = 2
+vertical_alignment = 1
+
+[node name="Completed" type="TextureRect" parent="HBoxContainer"]
+custom_minimum_size = Vector2(7, 2.08165e-12)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("14_xqm6y")
+expand_mode = 5
+stretch_mode = 5
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
@@ -150,3 +145,4 @@ vertical_alignment = 2
 [connection signal="pressed" from="HBoxContainer/PanelContainer/HBoxContainer/Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="HBoxContainer/PanelContainer/HBoxContainer/View" to="." method="_on_view_pressed"]
 [connection signal="pressed" from="HBoxContainer/PanelContainer/HBoxContainer/Delete" to="." method="_on_delete_pressed"]
+[connection signal="toggled" from="HBoxContainer/PanelContainer/HBoxContainer/Upload" to="." method="_on_upload_toggled"]

@@ -1,24 +1,58 @@
 extends Control
 
-var level := preload("res://Scenes and Scripts/Levels/world.tscn")
+signal sandbox_pressed
 
-func _ready() -> void:
-	EVENTBUS.signal_enter_game.connect(enter_game)
+@export var PaletteMenu: GrabbableControl
 
-func _process(_delta: float) -> void:
-	update_cursor()
+var Level = preload("res://Scenes and Scripts/Levels/world.tscn")
+var placing: bool = false
+
+@onready var problem_selection: Control = $FloatingMenus/ProblemSelection
+@onready var Diagram: MainDiagram = $Diagram
+@onready var MenuTab: Control = $MenuTab
+
+var ControlsTab: Control
+var StateManager: Node
+var PaletteList: GrabbableControl
+
+func _ready():
+	EVENTBUS.signal_exit_game.connect(_on_exit_game)
+
+func reload_problem_selection() -> void:
+	problem_selection.reload()
+
+func init(state_manager: Node, controls_tab: Control, palette_list: GrabbableControl):
+	StateManager = state_manager
+	ControlsTab = controls_tab
+	PaletteList = palette_list
 	
-func update_cursor() -> void:
-	var hovering_disabled := get_tree().get_nodes_in_group("button").any(
-		func(button: PanelButton): return button.disabled and button.is_hovered
-	)
+	MenuTab.init(PaletteMenu)
+	PaletteList.closed.connect(_on_PaletteList_closed)
+	problem_selection.closed.connect(_on_problem_selection_closed)
+	$Diagram.init($ParticleButtons, ControlsTab, $VisionButton, $Algorithms/PathFinding, StateManager)
+	$Algorithms/PathFinding.init($Diagram, $Diagram.StateLines)
+	$Algorithms/ProblemGeneration.init($Algorithms/SolutionGeneration)
 	
-	if hovering_disabled:
-		$Cursor.change_cursor(GLOBALS.CURSOR.disabled)
-	elif Input.is_action_pressed("click"):
-		$Cursor.change_cursor(GLOBALS.CURSOR.press)
-	else:
-		$Cursor.change_cursor(GLOBALS.CURSOR.default)
+	Diagram.draw_diagram(GLOBALS.TitleDiagram)
 
-func enter_game() -> void:
-	get_tree().change_scene_to_packed(level)
+func _on_sandbox_pressed() -> void:
+	sandbox_pressed.emit()
+
+func _on_palettes_toggled(button_pressed) -> void:
+	PaletteList.visible = button_pressed
+	
+	PaletteList.set_anchors_preset(Control.PRESET_CENTER)
+
+func _on_problem_sets_toggled(button_pressed) -> void:
+	problem_selection.visible = button_pressed
+	
+	problem_selection.set_anchors_preset(Control.PRESET_CENTER)
+
+func _on_PaletteList_closed() -> void:
+	$Center/VBoxContainer/HBoxContainer/Palettes.button_pressed = false
+
+func _on_problem_selection_closed() -> void:
+	$Center/VBoxContainer/ProblemSets.button_pressed = false
+
+func _on_exit_game(_mode: BaseMode.Mode, _problem: Problem) -> void:
+	return

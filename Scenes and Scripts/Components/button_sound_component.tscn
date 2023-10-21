@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dorw3vr2amuy3"]
+
+[ext_resource type="Script" path="res://Scenes and Scripts/Components/ButtonSoundComponent.gd" id="1_0uwyn"]
+
+[node name="ButtonSoundComponent" type="Node"]
+script = ExtResource("1_0uwyn")

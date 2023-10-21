@@ -1,8 +1,11 @@
 extends Node
 
+enum HadronFrequency {Always, Allowed, Never}
+
+const MAX_REQUIRED_SOLUTION_COUNT : int = 4
+
 const MAX_NEXT_INTERACTION_ATTEMPTS : int = 100
-const MAX_INTERACTION_GENERATION_ATTEMPTS : int = 100
-const MAX_SOLUTION_GENERATION_ATTEMPTS : int = 100
+const MAX_INTERACTION_GENERATION_ATTEMPTS : int = 1000
 
 var SolutionGeneration: Node
 
@@ -10,37 +13,80 @@ func init(solution_generation: Node) -> void:
 	SolutionGeneration = solution_generation
 
 func generate(
-	use_hadrons: bool, min_degree: int, max_degree: int, useable_particles: Array[GLOBALS.Particle] = get_all_particles()
+	min_particle_count: int = 3, max_particle_count: int = 6, use_hadrons: HadronFrequency = HadronFrequency.Allowed,
+	useable_particles: Array[GLOBALS.Particle] = get_all_particles()
 ) -> Problem:
 	var problem := Problem.new()
 	
 	var state_interactions : Array
-	for _interaction_generation_attempt in range(MAX_INTERACTION_GENERATION_ATTEMPTS):
-		state_interactions = generate_state_interactions(
-			get_useable_state_interactions(use_hadrons, useable_particles),
-			randi_range(min_degree, max_degree)
-		)
+	var useable_state_interactions: Array = get_useable_state_interactions(use_hadrons, useable_particles)
+	
+	for _interaction_generation_attempt in MAX_INTERACTION_GENERATION_ATTEMPTS:
+		print("problem generation attempt")
+		
+		for _attempt in MAX_INTERACTION_GENERATION_ATTEMPTS:
+			state_interactions = generate_state_interactions(min_particle_count, max_particle_count, useable_state_interactions, use_hadrons)
+
+			if state_interactions != [] and is_energy_conserved(state_interactions):
+				break
 		
 		if state_interactions == []:
-			continue
-		
-		var solution_found: bool = true
-		for _solution_generation_attempt in range(MAX_SOLUTION_GENERATION_ATTEMPTS):
-			if SolutionGeneration.generate_diagrams(
-				state_interactions[StateLine.StateType.Initial], state_interactions[StateLine.StateType.Final], min_degree, max_degree,
-				SolutionGeneration.generate_useable_interactions_from_particles(useable_particles), SolutionGeneration.Find.One
-			) == [null]:
-				solution_found = false
-			
 			break
 		
-		if solution_found:
+		if SolutionGeneration.generate_diagrams(
+			state_interactions[StateLine.StateType.Initial], state_interactions[StateLine.StateType.Final], 0, 6,
+			SolutionGeneration.generate_useable_interactions_from_particles(useable_particles), SolutionGeneration.Find.One
+		) != [null]:
 			break
 	
 	problem.state_interactions = state_interactions
 	problem.allowed_particles = useable_particles
 	
+	print("problem found")
+	
 	return problem
+
+func get_useable_particles_from_interaction_checks(checks: Array[bool]) -> Array[GLOBALS.Particle]:
+	var useable_particles: Array[GLOBALS.Particle] = []
+	
+	useable_particles += GLOBALS.FERMIONS
+	
+	if checks[0]:
+		useable_particles.append(GLOBALS.Particle.photon)
+	if checks[1]:
+		useable_particles.append(GLOBALS.Particle.gluon)
+	if checks[2]:
+		useable_particles.append(GLOBALS.Particle.W)
+	if checks[3]:
+		useable_particles.append(GLOBALS.Particle.Z)
+		useable_particles.append(GLOBALS.Particle.H)
+	
+	return useable_particles
+
+func is_energy_conserved(state_interactions: Array) -> bool:
+	if state_interactions.all(func(state_interaction): return state_interaction.size() != 1):
+		return true
+	
+	var state_base_particles: Array = state_interactions.map(
+		func(state_interaction): return GLOBALS.flatten(state_interaction).map(
+			func(particle): return abs(particle)
+		)
+	)
+	
+	var state_masses: Array = state_base_particles.map(
+		func(base_particles: Array): return base_particles.reduce(
+			func(accum: float, particle: GLOBALS.Particle) -> float: return accum + GLOBALS.PARTICLE_MASSES[particle], 0.0
+		)
+	)
+	
+	for state_type in [StateLine.StateType.Initial, StateLine.StateType.Final]:
+		if state_base_particles[state_type].size() != 1:
+			continue
+		
+		if state_masses[state_type] < state_masses[(state_type + 1) % 2] - 0.005:
+			return false
+	
+	return true
 
 func get_all_particles() -> Array[GLOBALS.Particle]:
 	var all_particles: Array[GLOBALS.Particle] = []
@@ -65,7 +111,7 @@ func anti_particle(particle: GLOBALS.Particle) -> GLOBALS.Particle:
 func base_particle(particle: GLOBALS.Particle) -> GLOBALS.Particle:
 	return abs(particle)
 
-func get_useable_state_interactions(use_hadrons: bool, useable_particles: Array[GLOBALS.Particle]) -> Array:
+func get_useable_state_interactions(use_hadrons: HadronFrequency, useable_particles: Array[GLOBALS.Particle]) -> Array:
 	
 	var useable_state_interactions: Array = []
 	
@@ -75,7 +121,7 @@ func get_useable_state_interactions(use_hadrons: bool, useable_particles: Array[
 		if particle in GLOBALS.SHADED_PARTICLES:
 			useable_state_interactions.push_back([anti_particle(particle)])
 	
-	if !use_hadrons:
+	if use_hadrons == HadronFrequency.Never:
 		return useable_state_interactions
 	
 	useable_state_interactions.append_array(get_useable_hadrons(useable_particles))
@@ -90,7 +136,7 @@ func get_useable_hadrons(useable_particles: Array[GLOBALS.Particle]) -> Array:
 	
 	for hadron in GLOBALS.Hadrons.values():
 		for hadron_content in GLOBALS.HADRON_QUARK_CONTENT[hadron]:
-			if hadron_content.all(func(quark: GLOBALS.Particle): return quark in useable_particles):
+			if hadron_content.all(func(quark: GLOBALS.Particle): return abs(quark) in useable_particles):
 				useable_hadrons.push_back(hadron_content)
 	
 	return useable_hadrons
@@ -98,29 +144,41 @@ func get_useable_hadrons(useable_particles: Array[GLOBALS.Particle]) -> Array:
 func get_possible_interaction_count(degree: int) -> Array:
 	return range(ceil(3*degree/2.0), 3*degree, 2)
 
-func generate_state_interactions(useable_state_interactions: Array, degree: int) -> Array:
-	var interaction_count : int = get_possible_interaction_count(degree).pick_random()
+func generate_state_interactions(
+	min_particle_count: int, max_particle_count: int, useable_state_interactions: Array, use_hadrons: HadronFrequency
+) -> Array:
 	var quantum_number_difference: Array = []
 	quantum_number_difference.resize(GLOBALS.QuantumNumber.size())
 	quantum_number_difference.fill(0)
 	
+	var interaction_count: int = randi_range(min_particle_count, max_particle_count)
+	var interaction_count_left: int = interaction_count
 	var state_interactions : Array = [[], []]
-	var current_state : StateLine.StateType = [StateLine.StateType.Initial, StateLine.StateType.Final].pick_random()
-	var interaction_count_left : int = interaction_count
+	var current_state : StateLine.StateType = StateLine.StateType.Initial
 	var W_count : int = 0
 	
-	for _attempt in range(MAX_NEXT_INTERACTION_ATTEMPTS):
+	for particle_count in max_particle_count:
 		var state_factor : int = StateLine.state_factor[current_state]
-		var next_state_interaction := get_next_state_interaction(
-			quantum_number_difference, useable_state_interactions, interaction_count, interaction_count_left, W_count, state_factor
-		)
+		
+		var next_state_interaction: Array
+		if particle_count == 0 and use_hadrons == HadronFrequency.Always:
+			next_state_interaction = get_next_state_interaction(
+				quantum_number_difference, useable_state_interactions.filter(
+					func(state_interaction: Array): return state_interaction.size() > 1
+				), interaction_count_left, W_count, state_factor
+			)
+
+		else:
+			next_state_interaction = get_next_state_interaction(
+				quantum_number_difference, useable_state_interactions, interaction_count_left, W_count, state_factor
+			)
 		
 		current_state = (current_state + 1) % 2 as StateLine.StateType
 		
 		if next_state_interaction == []:
-			continue
+			return []
 		
-		interaction_count_left -= next_state_interaction.size()
+		interaction_count_left -= 1
 		quantum_number_difference = accum_state_interaction_quantum_numbers(next_state_interaction, quantum_number_difference, state_factor)
 		state_interactions[current_state].push_back(next_state_interaction)
 		W_count += calc_W_count(state_factor, next_state_interaction)
@@ -131,14 +189,14 @@ func generate_state_interactions(useable_state_interactions: Array, degree: int)
 	return []
 
 func get_next_state_interaction(
-	quantum_number_difference: Array, useable_state_interactions: Array, interaction_count: int, interaction_count_left: int,
+	quantum_number_difference: Array, useable_state_interactions: Array, interaction_count_left: int,
 	W_count: int, state_factor: int
 ) -> Array:
 	
 	var possible_next_state_interactions := useable_state_interactions.filter(
 		func(state_interaction: Array):
 			return is_state_interaction_possible(
-				state_interaction, quantum_number_difference, interaction_count, interaction_count_left, W_count, state_factor
+				state_interaction, quantum_number_difference, interaction_count_left, W_count, state_factor
 			)
 	)
 	
@@ -156,17 +214,11 @@ func accum_state_interaction_quantum_numbers(state_interaction: Array, accum_qua
 	return new_quantum_numbers
 
 func is_state_interaction_possible(
-	state_interaction: Array, quantum_number_difference: Array, interaction_count: int, interaction_count_left: int,
-	W_count: int, state_factor: int
+	state_interaction: Array, quantum_number_difference: Array, interaction_count_left: int, W_count: int,
+	state_factor: int
 ) -> bool:
 	
-	if interaction_count == interaction_count_left and state_interaction.size() == interaction_count_left:
-		return false
-	
-	if interaction_count_left < state_interaction.size():
-		return false
-	
-	var new_interaction_count_left : int = interaction_count_left - state_interaction.size()
+	var new_interaction_count_left : int = interaction_count_left - 1
 	var new_quantum_number_difference := accum_state_interaction_quantum_numbers(state_interaction, quantum_number_difference, state_factor)
 	var new_W_count = W_count + calc_W_count(state_factor, state_interaction)
 	
@@ -184,12 +236,44 @@ func is_quantum_number_difference_possible(
 	
 	var can_be_different: bool = quantum_number in GLOBALS.WEAK_QUANTUM_NUMBERS and W_count != 0
 	
-	if abs(quantum_number_difference) > state_interaction_count_left + int(can_be_different) * abs(W_count):
+	var difference_allowed: int = 1 if quantum_number in [GLOBALS.QuantumNumber.electron, GLOBALS.QuantumNumber.muon, GLOBALS.QuantumNumber.tau] else 3
+	
+	if abs(quantum_number_difference) > state_interaction_count_left * difference_allowed + int(can_be_different) * abs(W_count):
 		return false
 	
 	return true
 
+func setup_new_problem(problem: Problem) -> Problem:
+	var min_degree: int = problem.degree if problem.custom_degree else 1
+	var max_degree: int = problem.degree if problem.custom_degree else 6
+	
+	var find: int = SolutionGeneration.Find.One if problem.state_interactions.any(
+		func(state_interaction: Array): return state_interaction.any(
+			func(interaction: Array): return interaction.size() > 1
+		)
+	) else SolutionGeneration.Find.LowestOrder
+	
+	var generated_solutions: Array[ConnectionMatrix] = SolutionGeneration.generate_diagrams(
+		problem.state_interactions[StateLine.StateType.Initial],
+		problem.state_interactions[StateLine.StateType.Final],
+		min_degree, max_degree,
+		SolutionGeneration.get_useable_interactions_from_particles(problem.allowed_particles),
+		find
+	)
+	
+	if generated_solutions == [null]:
+		return null
+	
+	problem.degree = generated_solutions.front().state_count[StateLine.StateType.None]
+	problem.solution_count = calculate_solution_count(problem.degree, generated_solutions.size())
+	
+	return problem
 
+func calculate_solution_count(degree: int, generated_solution_count: int) -> int:
+	if degree <= 4:
+		return min(generated_solution_count, MAX_REQUIRED_SOLUTION_COUNT)
+	
+	return 1
 
 
 

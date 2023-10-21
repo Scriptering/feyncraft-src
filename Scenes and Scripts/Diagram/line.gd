@@ -33,6 +33,7 @@ var Final: StateLine
 var Crosshair: Node
 
 var points := PackedVector2Array([[0, 0], [0, 0]]) : set = _set_points
+var prev_points := PackedVector2Array([[0, 0], [0, 0]])
 var line_vector : Vector2 = Vector2.ZERO:
 	get: return points[Point.End] - points[Point.Start]
 
@@ -83,6 +84,7 @@ var texture_dict: Array = [
 'Particle']
 
 var line_texture
+var show_labels: bool = true
 
 func _ready():
 	self.connect("request_deletion", Callable(Diagram, "delete_line"))
@@ -101,9 +103,6 @@ func _ready():
 		place()
 	
 	update_line()
-
-	Text.visible = true
-	
 	connect_to_interactions()
 
 func init(diagram: MainDiagram) -> void:
@@ -114,7 +113,7 @@ func init(diagram: MainDiagram) -> void:
 
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("click") and hovering:
-		emit_signal("clicked_on", self)
+		clicked_on.emit(self)
 
 func _get_particle() -> GLOBALS.Particle:
 	return (anti * base_particle) as GLOBALS.Particle
@@ -127,8 +126,6 @@ func _get_quantum_numbers() -> Array:
 
 func _set_anti(new_value: int) -> void:
 	anti = new_value
-	for interaction in self.connected_interactions:
-		interaction.update_interaction()
 
 func set_anti() -> void:
 	if base_particle in GLOBALS.SHADED_PARTICLES:
@@ -144,7 +141,6 @@ func _set_points(new_value: PackedVector2Array) -> void:
 	
 	if is_inside_tree() and !being_deleted:
 		connect_to_interactions()
-		Diagram.update_statelines()
 	
 func set_textures() -> void:
 	LineMiddle.texture = line_texture
@@ -158,10 +154,6 @@ func get_side_point(state: StateLine.StateType) -> Vector2:
 	if state == StateLine.StateType.Initial:
 		return left_point
 	return right_point
-
-func crosshair_moved(_new_position: Vector2, _old_position: Vector2):
-	if !is_placed:
-		update_line()
 
 func set_dimensionality() -> void:
 	if base_particle in GLOBALS.FERMIONS:
@@ -259,19 +251,24 @@ func get_unconnected_point(interaction: Interaction) -> Point:
 func update_line() -> void:
 	if !is_placed:
 		points[moving_point] = Crosshair.position
-	move_line()
-	
-	set_left_and_right_points()
-	set_anti()
-	
-	Arrow.visible = get_arrow_visiblity()
-	if Arrow.visible:
-		move_arrow()
 
-	move_click_area()
-	move_text()
+	if points != prev_points:
+		prev_points = points.duplicate()
+
+		move_line()
 	
-	set_text_texture()
+		set_left_and_right_points()
+		set_anti()
+	
+		Arrow.visible = get_arrow_visiblity()
+		if Arrow.visible:
+			move_arrow()
+
+		move_click_area()
+		set_text_texture()
+		
+	move_text()
+	set_text_visiblity()
 	
 func move_line() -> void:
 	LineJointStart.points[Point.Start] = points[Point.Start]
@@ -329,17 +326,13 @@ func move_text() -> void:
 		StateLine.StateType.Both:
 			Text.position = left_point + text_gap * Vector2.LEFT
 			SpareText.position = right_point + text_gap * Vector2.RIGHT
-			SpareText.show()
 			return
 		StateLine.StateType.Initial:
 			Text.position = left_point + text_gap * Vector2.LEFT
-			SpareText.hide()
 			return
 		StateLine.StateType.Final:
 			Text.position = right_point + text_gap * Vector2.RIGHT
-			SpareText.hide()
 			return
-	SpareText.hide()
 	
 	if points[Point.Start] == points[Point.End]:
 		Text.position = left_point + text_gap * Vector2.LEFT
@@ -356,6 +349,26 @@ func move_text() -> void:
 		text_gap * self.line_vector.orthogonal().normalized()
 	)
 
+func set_text_visiblity() -> void:
+	if GLOBALS.in_main_menu:
+		Text.hide()
+		SpareText.hide()
+		return
+	
+	match get_on_state_line():
+		StateLine.StateType.None:
+			if !show_labels:
+				Text.hide()
+				SpareText.hide()
+				return
+		StateLine.StateType.Both:
+			Text.show()
+			SpareText.show()
+			return
+	
+	Text.show()
+	SpareText.hide()
+
 func set_text_texture() -> void:
 	Text.texture = GLOBALS.PARTICLE_TEXTURES[self.particle_name]
 	SpareText.texture = GLOBALS.PARTICLE_TEXTURES[self.particle_name]
@@ -365,7 +378,7 @@ func set_text_texture() -> void:
 
 func place() -> void:
 	if !is_placement_valid():
-		emit_signal("request_deletion", self)
+		request_deletion.emit(self)
 		return
 	is_placed = true
 	connect_to_interactions()
@@ -415,6 +428,10 @@ func _on_click_area_mouse_entered():
 func _on_click_area_mouse_exited():
 	hovering = false
 
+func delete() -> void:
+	queue_free()
+	deconstructor()
+
 func deconstructor():
 	being_deleted = true
 	for interaction in self.connected_interactions:
@@ -422,9 +439,6 @@ func deconstructor():
 	Diagram.update_statelines()
 	points[Point.Start] = Vector2.LEFT
 	points[Point.End] = Vector2.LEFT
-
-func _on_tree_exiting():
-	deconstructor()
 
 func set_point_interaction_strength_alpha(point: Point, interaction_strength_alpha: float) -> void:
 	if point == Point.Start:

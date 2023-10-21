@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=3 uid="uid://7kmcsryae7lw"]
+
+[ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="1_l16xj"]
+[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="2_bspdm"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/Buttons/load_button.gd" id="3_vhhsg"]
+[ext_resource type="Texture2D" uid="uid://bfoxtqmre12qw" path="res://Textures/Buttons/icons/load.png" id="4_dxvp1"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rcwls"]
+resource_local_to_scene = true
+shader = ExtResource("2_bspdm")
+
+[node name="LoadButton" instance=ExtResource("1_l16xj")]
+material = SubResource("ShaderMaterial_rcwls")
+script = ExtResource("3_vhhsg")
+mode = 0
+icon = ExtResource("4_dxvp1")
+toggle_mode = true
+flip_icon_v = true
+
+[node name="Button" parent="." index="0"]
+toggle_mode = true
+
+[node name="HBoxContainer" parent="ContentContainer" index="0"]
+theme_override_constants/separation = 3
+
+[node name="ButtonIcon" parent="ContentContainer/HBoxContainer" index="1"]
+visible = true
+use_parent_material = true
+texture = ExtResource("4_dxvp1")
+flip_v = true

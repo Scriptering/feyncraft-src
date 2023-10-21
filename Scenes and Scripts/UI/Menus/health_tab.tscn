@@ -21,7 +21,7 @@ texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 expand_margin_top = 10.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ouvh3"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u72hv"]
 resource_local_to_scene = true
 shader = ExtResource("6_uctth")
 
@@ -100,6 +100,7 @@ size_flags_vertical = 8
 theme_override_styles/panel = SubResource("StyleBoxTexture_rciwt")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Tab"]
+use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 8
@@ -107,6 +108,7 @@ theme_override_constants/separation = 0
 alignment = 2
 
 [node name="DiagramValid" type="HBoxContainer" parent="VBoxContainer/Tab/VBoxContainer"]
+use_parent_material = true
 layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/Tab/VBoxContainer/DiagramValid"]
@@ -115,12 +117,14 @@ texture = ExtResource("4_l5lyb")
 stretch_mode = 5
 
 [node name="Label" type="Label" parent="VBoxContainer/Tab/VBoxContainer/DiagramValid"]
+use_parent_material = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 8
 text = "Diagram is not valid"
 vertical_alignment = 2
 
 [node name="DiagramConnected" type="HBoxContainer" parent="VBoxContainer/Tab/VBoxContainer"]
+use_parent_material = true
 layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/Tab/VBoxContainer/DiagramConnected"]
@@ -129,12 +133,14 @@ texture = ExtResource("4_q7src")
 stretch_mode = 5
 
 [node name="Label" type="Label" parent="VBoxContainer/Tab/VBoxContainer/DiagramConnected"]
+use_parent_material = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 8
 text = "Diagram is not connected"
 vertical_alignment = 2
 
 [node name="EnergyConservation" type="HBoxContainer" parent="VBoxContainer/Tab/VBoxContainer"]
+use_parent_material = true
 layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/Tab/VBoxContainer/EnergyConservation"]
@@ -143,6 +149,7 @@ texture = ExtResource("4_q7src")
 stretch_mode = 5
 
 [node name="Label" type="Label" parent="VBoxContainer/Tab/VBoxContainer/EnergyConservation"]
+use_parent_material = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 8
 text = "Energy is not conserved"
@@ -150,7 +157,7 @@ vertical_alignment = 2
 
 [node name="TabButton" parent="VBoxContainer" instance=ExtResource("5_vueuw")]
 z_index = 0
-material = SubResource("ShaderMaterial_ouvh3")
+material = SubResource("ShaderMaterial_u72hv")
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8

@@ -1,43 +1,35 @@
 extends PullOutTab
 
-@export var palette_menu_offset: Vector2 = Vector2(-100, -100)
+signal exit_pressed
+signal toggled_line_labels(button_pressed: bool)
 
 @onready var exit: PanelContainer = $MovingContainer/ContentContainer/HBoxContainer/Exit
 @onready var mute: PanelContainer = $MovingContainer/ContentContainer/HBoxContainer/Mute
 @onready var palettes: PanelContainer = $MovingContainer/ContentContainer/HBoxContainer/Palettes
 
-var PaletteMenu: PackedScene = preload("res://Scenes and Scripts/UI/ColourPicker/palette_list.tscn")
 var palette_menu: GrabbableControl
 
-func _ready() -> void:
-	super._ready()
-	mute.button_pressed = !AudioServer.is_bus_mute(0)
-	
-	await get_tree().process_frame
-	palette_menu = PaletteMenu.instantiate()
-	EVENTBUS.add_floating_menu(palette_menu)
+func init(_palette_menu) -> void:
+	palette_menu = _palette_menu
 	palette_menu.hide()
+	palette_menu.closed.connect(_on_palette_menu_closed)
 	
-
 func _on_exit_pressed() -> void:
-	pass # Replace with function body.
+	EVENTBUS.signal_change_scene.emit(GLOBALS.Scene.MainMenu)
 
-func _on_mute_toggled(button_pressed: bool) -> void:
-	SOUNDBUS.mute(!button_pressed)
-	
-	if button_pressed:
-		mute.icon = load("res://Textures/Buttons/icons/unmute.png")
-	else:
-		mute.icon = load("res://Textures/Buttons/icons/mute.png")
-
-func _on_palettes_toggled(button_pressed: bool) -> void:
-	if !button_pressed:
+func toggle_palette_menu(toggle: bool) -> void:
+	if !toggle:
 		palette_menu.hide()
 		return
 	
 	palette_menu.show()
-	palette_menu.position = get_global_position() + palette_menu_offset
+	palette_menu.position = get_viewport_rect().size / 2
 	
-	
-	
-	
+func _on_palettes_toggled(button_pressed: bool) -> void:
+	toggle_palette_menu(button_pressed)
+
+func _on_palette_menu_closed() -> void:
+	palettes.button_pressed = false
+
+func _on_show_labels_toggled(button_pressed: bool) -> void:
+	toggled_line_labels.emit(button_pressed)

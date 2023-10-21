@@ -5,8 +5,8 @@ signal grab_area_clicked
 signal picked_up
 signal dropped
 
-@export
-var GrabAreas: Array[Node]
+@export var GrabAreas: Array[Node]
+@export var follow_cursor: bool = true
 
 var grabbed: bool = false: set = _grabbed_changed
 var grab_area_hovered: bool = false: set = _grab_area_hovered_changed
@@ -22,20 +22,20 @@ func _ready():
 
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("click") and grab_area_hovered:
-		emit_signal("grab_area_clicked", self)
+		grab_area_clicked.emit(self)
 
 func _process(_delta:float):
-	if grabbed:
+	if grabbed and follow_cursor:
 		position = get_global_mouse_position() + drag_vector_start
 
 func pick_up() -> void:
 	grabbed = true
 	drag_vector_start = position - get_global_mouse_position()
-	emit_signal("picked_up", self)
+	picked_up.emit(self)
 
 func drop() -> void:
 	grabbed = false
-	emit_signal("dropped", self)
+	dropped.emit(self)
 
 func can_be_grabbed() -> bool:
 	return grabbable and grab_area_hovered
@@ -54,4 +54,3 @@ func _grab_area_hovered_changed(new_value: bool) -> void:
 
 func _grabbable_changed(new_value: bool) -> void:
 	grabbable = new_value
-

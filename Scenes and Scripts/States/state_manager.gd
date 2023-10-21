@@ -38,6 +38,17 @@ func init(Diagram: DiagramBase, Controls: Node) -> void:
 	self.state_changed.connect(Callable(crosshair, "_state_changed"))
 	change_state(BaseState.State.Idle)
 
+func change_scene(Diagram: DiagramBase, Controls: Node) -> void:
+	var crosshair = Diagram.get_node("DiagramArea/Crosshair")
+	
+	for child in get_children():
+		child.Diagram = Diagram
+		child.Controls = Controls
+		child.crosshair = crosshair
+	
+	if !crosshair.moved.is_connected(crosshair_moved):
+		crosshair.moved.connect(crosshair_moved)
+
 func _input(event: InputEvent) -> void:
 	var new_state = current_state.input(event)
 	if new_state != BaseState.State.Null:

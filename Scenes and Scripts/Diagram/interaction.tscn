@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://bhi4xq3qdbt4d"]
+[gd_scene load_steps=23 format=3 uid="uid://bhi4xq3qdbt4d"]
 
 [ext_resource type="Texture2D" uid="uid://dujsq82ocy6bp" path="res://Textures/Interactions/Interaction.png" id="1"]
 [ext_resource type="Shader" path="res://Resources/Shaders/interaction_shader.gdshader" id="1_2fxik"]
@@ -62,22 +62,29 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="AtlasTexture" id="9"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_pfd30"]
 atlas = ExtResource("4")
 region = Rect2(0, 0, 12, 12)
 
-[sub_resource type="AtlasTexture" id="10"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_fgjox"]
 atlas = ExtResource("4")
 region = Rect2(12, 0, 12, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7k1fr"]
+atlas = ExtResource("4")
+region = Rect2(24, 0, 12, 12)
 
 [sub_resource type="SpriteFrames" id="11"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("9")
+"texture": SubResource("AtlasTexture_pfd30")
 }, {
 "duration": 1.0,
-"texture": SubResource("10")
+"texture": SubResource("AtlasTexture_fgjox")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7k1fr")
 }],
 "loop": false,
 "name": &"default",

@@ -16,9 +16,12 @@ signal closed
 var diagrams: Array[DrawingMatrix] = []
 var current_index: int = 0:
 	set(new_value):
-		var clamped_value = clamp(new_value, 0, diagrams.size() - 1)
+		var clamped_value = clamp(new_value, 0, max(0, diagrams.size() - 1))
 		current_index = clamped_value
-		Diagram.draw_diagram(diagrams[current_index])
+		
+		if diagrams.size() != 0:
+			Diagram.draw_diagram(diagrams[current_index])
+
 		update_index_label()
 
 @onready var Diagram : MiniDiagram = $VBoxContainer/PanelContainer/VBoxContainer/CenterContainer/MiniDiagramContainer/MiniDiagram
@@ -47,14 +50,17 @@ func toggle_visible() -> void:
 	self.current_index = 0
 
 func store_diagram(matrix) -> void:
-	if matrix is ConnectionMatrix:
+	if matrix is DrawingMatrix:
+		diagrams.push_back(matrix)
+	elif matrix is ConnectionMatrix:
 		var drawing_matrix := DrawingMatrix.new()
 		drawing_matrix.initialise_from_connection_matrix(matrix)
 		Diagram.create_diagram_interaction_positions(drawing_matrix)
 		diagrams.push_back(drawing_matrix)
 	
-	elif matrix is DrawingMatrix:
-		diagrams.push_back(matrix)
+	self.current_index = current_index
+	
+	update_diagram_visibility()
 
 func store_diagrams(matrices: Array) -> void:
 	clear()
@@ -72,6 +78,9 @@ func update_index_label() -> void:
 		str(label_index) + "/" + str(diagrams.size())
 	)
 
+func update_diagram_visibility() -> void:
+	Diagram.visible = diagrams.size() > 0
+
 func update_delete_button() -> void:
 	$VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Delete.disabled = diagrams.size() == 0
 
@@ -86,6 +95,7 @@ func remove_diagram(index: int = current_index) -> void:
 	
 	update_index_label()
 	update_delete_button()
+	update_diagram_visibility()
 
 func get_diagram_count() -> int:
 	return diagrams.size()
