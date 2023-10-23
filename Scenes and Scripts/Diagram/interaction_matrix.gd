@@ -35,6 +35,17 @@ func connect_interactions(
 	unconnected_matrix[to_id].erase(particle)
 	unconnected_particle_count[get_state_from_id(to_id)] -= 1
 
+func connect_in_out_interactions(
+	from_id: int, to_id: int, particle: int = ParticleData.PARTICLE.none, bidirectional: bool = false, reverse: bool = false
+) -> void:
+	super.connect_interactions(from_id, to_id, particle, bidirectional, reverse)
+	
+	unconnected_matrix[from_id].erase(particle)
+	unconnected_particle_count[get_state_from_id(from_id)] -= 1
+	
+	unconnected_matrix[to_id].erase(-particle)
+	unconnected_particle_count[get_state_from_id(to_id)] -= 1
+
 func insert_connection(connection: Array) -> void:
 	connect_interactions(connection[Connection.from_id], connection[Connection.to_id], connection[Connection.particle])
 	

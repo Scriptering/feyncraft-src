@@ -30,7 +30,7 @@ default_font = ExtResource("3_ksjpd")
 default_font_size = 10
 LineEdit/font_sizes/font_size = 11
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0liva"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k1bi3"]
 resource_local_to_scene = true
 shader = ExtResource("10_f4opp")
 
@@ -240,7 +240,7 @@ text = "  Never"
 horizontal_alignment = 1
 
 [node name="Tab" parent="HBoxContainer" instance=ExtResource("9_2kx5m")]
-material = SubResource("ShaderMaterial_0liva")
+material = SubResource("ShaderMaterial_k1bi3")
 layout_mode = 2
 TabIcon = ExtResource("11_01uho")
 icon_use_parent_material = true

@@ -1,5 +1,27 @@
 extends Node
 
+@onready var PARTICLE_TEXTURES = {}
+
+func _ready():
+	sort_interactions()
+	sort_hadrons()
+	set_interaction_strength_limits()
+
+	for folder_path in ['res://Textures/ParticlesAndLines/', 'res://Textures/ParticlesAndLines/Hadrons/', 'res://Textures/Cursors/']:
+		var dir = DirAccess.open(folder_path)
+		dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
+
+		while true:
+			var file = dir.get_next()
+			if file == "":
+				break
+			
+			if (GLOBALS.is_on_build and file.ends_with('.import')) or (!GLOBALS.is_on_build and file.ends_with('.png')):
+				var file_name : String = file.trim_suffix('.import')
+			
+				if file_name.ends_with('.png'):
+					ParticleData.PARTICLE_TEXTURES[file_name.trim_suffix('.png')] = ResourceLoader.load(folder_path + file_name)
+
 #0 photon, 1 gluon, 2 Z, 3 H, 4 W,
 #5 lepton, 6 electron, 7 muon, 8 tau,
 #9 lepton_neutrino, 10 electron_neutrino, 11 muon_neutrino, 12 tau_neutrino,
@@ -15,6 +37,12 @@ enum Particle {
 	anti_tau, anti_muon, anti_electron, anti_lepton,
 	anti_W,
 	none = 100}
+
+const BASE_PARTICLES: Array[Particle] = [
+	Particle.photon, Particle.gluon, Particle.Z, Particle.H, Particle.W, Particle.lepton, Particle.electron, Particle.muon, Particle.tau,
+	Particle.lepton_neutrino, Particle.electron_neutrino, Particle.muon_neutrino, Particle.tau_neutrino,
+	Particle.bright_quark, Particle.up, Particle.charm, Particle.top, Particle.dark_quark, Particle.down, Particle.strange, Particle.bottom
+]
 
 enum Hadrons {Proton, AntiProton, Neutron, AntiNeutron, DeltaPlusPlus, DeltaPlus, Delta0, DeltaMinus,
 AntiDeltaPlusPlus, AntiDeltaPlus, AntiDelta0, AntiDeltaMinus, Epsilon0, EpsilonMinus, AntiEpsilon0, AntiEpsilonMinus,
@@ -72,6 +100,10 @@ const BOSONS : Array[ParticleData.Particle] = [Particle.photon, Particle.gluon, 
 const COLOUR_PARTICLES : Array[ParticleData.Particle] = [
 	Particle.gluon,
 	Particle.bright_quark, Particle.dark_quark, Particle.up, Particle.down, Particle.charm, Particle.strange, Particle.top, Particle.bottom
+]
+
+const UNSHADED_PARTICLES : Array[ParticleData.Particle] = [
+	Particle.photon, Particle.gluon, Particle.Z, Particle.H
 ]
 
 const SHADED_PARTICLES : Array[ParticleData.Particle] = [
@@ -491,24 +523,157 @@ func set_interaction_strength_limits() -> void:
 	MAXIMUM_INTERACTION_STRENGTH = maximum_strength
 	MINIMUM_INTERACTION_STRENGTH = minimum_strength
 
-@onready var PARTICLE_TEXTURES = {}
 
-func _ready():
-	sort_interactions()
-	sort_hadrons()
-	set_interaction_strength_limits()
+#0 photon, 1 gluon, 2 Z, 3 H, 4 W,
+#5 lepton, 6 electron, 7 muon, 8 tau,
+#9 lepton_neutrino, 10 electron_neutrino, 11 muon_neutrino, 12 tau_neutrino,
+#13 bright_quark, 14 up, 15 charm, 16 top, 17 dark_quark, 18 down, 19 strange, 20 bottom,
 
-	for folder_path in ['res://Textures/ParticlesAndLines/', 'res://Textures/ParticlesAndLines/Hadrons/', 'res://Textures/Cursors/']:
-		var dir = DirAccess.open(folder_path)
-		dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
-
-		while true:
-			var file = dir.get_next()
-			if file == "":
-				break
-			
-			if (GLOBALS.is_on_build and file.ends_with('.import')) or (!GLOBALS.is_on_build and file.ends_with('.png')):
-				var file_name : String = file.trim_suffix('.import')
-			
-				if file_name.ends_with('.png'):
-					ParticleData.PARTICLE_TEXTURES[file_name.trim_suffix('.png')] = ResourceLoader.load(folder_path + file_name)
+var PARTICLE_INTERACTIONS : Dictionary = {
+	Particle.photon : [
+		[Particle.bright_quark, Particle.bright_quark],
+		[Particle.dark_quark, Particle.dark_quark],
+		[Particle.lepton, Particle.lepton],
+		[Particle.W, Particle.W],
+		[Particle.W, Particle.W, Particle.photon],
+		[Particle.W, Particle.W, Particle.Z]
+	],
+	Particle.gluon : [
+		[Particle.bright_quark, Particle.bright_quark],
+		[Particle.dark_quark, Particle.dark_quark],
+		[Particle.gluon, Particle.gluon],
+		[Particle.gluon, Particle.gluon, Particle.gluon]
+	],
+	Particle.Z : [
+		[Particle.bright_quark, Particle.bright_quark],
+		[Particle.dark_quark, Particle.dark_quark],
+		[Particle.lepton, Particle.lepton],
+		[Particle.lepton_neutrino, Particle.lepton_neutrino],
+		[Particle.W, Particle.W],
+		[Particle.W, Particle.W, Particle.Z],
+		[Particle.W, Particle.W, Particle.photon],
+		[Particle.H, Particle.Z],
+		[Particle.H, Particle.H, Particle.Z],
+	],
+	Particle.H : [
+		[Particle.bright_quark, Particle.bright_quark],
+		[Particle.dark_quark, Particle.dark_quark],
+		[Particle.lepton, Particle.lepton],
+		[Particle.lepton_neutrino, Particle.lepton_neutrino],
+		[Particle.Z, Particle.Z],
+		[Particle.H, Particle.H, Particle.H],
+		[Particle.H, Particle.Z, Particle.Z],
+		[Particle.H, Particle.W, Particle.W]
+	],
+	Particle.W : [
+		[Particle.lepton, Particle.lepton_neutrino],
+		[Particle.bright_quark, Particle.dark_quark],
+		[Particle.W, Particle.Z],
+		[Particle.W, Particle.photon],
+		[Particle.W, Particle.W, Particle.W],
+		[Particle.W, Particle.Z, Particle.Z],
+		[Particle.W, Particle.photon, Particle.photon],
+		[Particle.W, Particle.Z, Particle.photon],
+		[Particle.H, Particle.H, Particle.W]
+	],
+	Particle.lepton : [
+		[Particle.lepton, Particle.photon],
+		[Particle.lepton, Particle.Z],
+		[Particle.lepton, Particle.H],
+		[Particle.lepton_neutrino, Particle.W],
+	],
+	Particle.electron : [
+		[Particle.electron, Particle.photon],
+		[Particle.electron, Particle.Z],
+		[Particle.electron, Particle.H],
+		[Particle.electron_neutrino, Particle.W],
+	],
+	Particle.muon : [
+		[Particle.muon, Particle.photon],
+		[Particle.muon, Particle.Z],
+		[Particle.muon, Particle.H],
+		[Particle.muon_neutrino, Particle.W],
+	],
+	Particle.tau : [
+		[Particle.tau, Particle.photon],
+		[Particle.tau, Particle.Z],
+		[Particle.tau, Particle.H],
+		[Particle.tau_neutrino, Particle.W],
+	],
+	Particle.lepton_neutrino : [
+		[Particle.lepton_neutrino, Particle.Z],
+		[Particle.lepton_neutrino, Particle.H],
+		[Particle.lepton, -Particle.W],
+	],
+	Particle.electron_neutrino : [
+		[Particle.electron_neutrino, Particle.Z],
+		[Particle.electron_neutrino, Particle.H],
+		[Particle.electron, -Particle.W],
+	],
+	Particle.muon_neutrino : [
+		[Particle.muon_neutrino, Particle.Z],
+		[Particle.muon_neutrino, Particle.H],
+		[Particle.muon, -Particle.W],
+	],
+	Particle.tau_neutrino : [
+		[Particle.tau_neutrino, Particle.Z],
+		[Particle.tau_neutrino, Particle.H],
+		[Particle.tau, -Particle.W],
+	],
+	Particle.bright_quark : [
+		[Particle.bright_quark, Particle.photon],
+		[Particle.bright_quark, Particle.gluon],
+		[Particle.bright_quark, Particle.Z],
+		[Particle.bright_quark, Particle.H],
+		[Particle.dark_quark, -Particle.W],
+	],
+	Particle.up : [
+		[Particle.up, Particle.photon],
+		[Particle.up, Particle.gluon],
+		[Particle.up, Particle.Z],
+		[Particle.up, Particle.H],
+		[Particle.down, -Particle.W],
+	],
+	Particle.charm : [
+		[Particle.charm, Particle.photon],
+		[Particle.charm, Particle.gluon],
+		[Particle.charm, Particle.Z],
+		[Particle.charm, Particle.H],
+		[Particle.strange, -Particle.W],
+	],
+	Particle.top : [
+		[Particle.top, Particle.photon],
+		[Particle.top, Particle.gluon],
+		[Particle.top, Particle.Z],
+		[Particle.top, Particle.H],
+		[Particle.bottom, -Particle.W],
+	],
+	Particle.dark_quark : [
+		[Particle.dark_quark, Particle.photon],
+		[Particle.dark_quark, Particle.gluon],
+		[Particle.dark_quark, Particle.Z],
+		[Particle.dark_quark, Particle.H],
+		[Particle.bright_quark, Particle.W],
+	],
+	Particle.down : [
+		[Particle.down, Particle.photon],
+		[Particle.down, Particle.gluon],
+		[Particle.down, Particle.Z],
+		[Particle.down, Particle.H],
+		[Particle.up, Particle.W],
+	],
+	Particle.strange : [
+		[Particle.strange, Particle.photon],
+		[Particle.strange, Particle.gluon],
+		[Particle.strange, Particle.Z],
+		[Particle.strange, Particle.H],
+		[Particle.charm, Particle.W],
+	],
+	Particle.bottom : [
+		[Particle.bottom, Particle.photon],
+		[Particle.bottom, Particle.gluon],
+		[Particle.bottom, Particle.Z],
+		[Particle.bottom, Particle.H],
+		[Particle.top, Particle.W],
+	]
+}

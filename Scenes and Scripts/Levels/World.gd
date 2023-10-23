@@ -126,7 +126,7 @@ func enter_sandbox() -> void:
 	Diagram.set_title_editable(false)
 	Diagram.set_title_visible(false)
 
-	load_problem(generate_new_problem())
+#	load_problem(generate_new_problem())
 
 func enter_problem_solving() -> void:
 	ParticleButtons.show()

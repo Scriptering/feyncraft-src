@@ -47,43 +47,43 @@ expand_margin_top = 1.0
 expand_margin_right = 1.0
 expand_margin_bottom = 1.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_yg41m"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ohqrm"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ti4d6"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ejkpu"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_j1lkj"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ifexy"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_edlqm"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_erf31"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_t7vhb"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s5d4n"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_nmbpl"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0lk0s"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_exmto"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qag56"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_j2v53"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p4k25"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_l4dvd"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hw24t"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4gvsn"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mee8y"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
@@ -302,7 +302,7 @@ z_index = 2
 use_parent_material = true
 
 [node name="CreationInformation" parent="FloatingMenus" instance=ExtResource("31_l3pqm")]
-material = SubResource("ShaderMaterial_yg41m")
+material = SubResource("ShaderMaterial_ohqrm")
 offset_left = 496.0
 offset_top = 144.0
 offset_right = 496.0
@@ -310,7 +310,7 @@ offset_bottom = 144.0
 
 [node name="GeneratedDiagrams" parent="FloatingMenus" instance=ExtResource("27_laye5")]
 visible = false
-material = SubResource("ShaderMaterial_ti4d6")
+material = SubResource("ShaderMaterial_ejkpu")
 offset_left = 177.0
 offset_top = 51.0
 offset_right = 177.0
@@ -319,7 +319,7 @@ title = "Generated Diagrams"
 
 [node name="SubmittedDiagrams" parent="FloatingMenus" instance=ExtResource("27_laye5")]
 visible = false
-material = SubResource("ShaderMaterial_j1lkj")
+material = SubResource("ShaderMaterial_ifexy")
 offset_left = 177.0
 offset_top = 51.0
 offset_right = 177.0
@@ -331,14 +331,14 @@ z_index = 3
 use_parent_material = true
 
 [node name="VisionButton" parent="PullOutTabs" instance=ExtResource("3_hqsoq")]
-material = SubResource("ShaderMaterial_edlqm")
+material = SubResource("ShaderMaterial_erf31")
 offset_left = 612.0
 offset_top = 60.0
 offset_right = 634.0
 offset_bottom = 120.0
 
 [node name="ParticleButtons" parent="PullOutTabs" instance=ExtResource("24_lunb1")]
-material = SubResource("ShaderMaterial_t7vhb")
+material = SubResource("ShaderMaterial_s5d4n")
 anchors_preset = 7
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -350,21 +350,21 @@ grow_vertical = 0
 size_flags_horizontal = 4
 
 [node name="GenerationButton" parent="PullOutTabs" instance=ExtResource("22_u64s1")]
-material = SubResource("ShaderMaterial_nmbpl")
+material = SubResource("ShaderMaterial_0lk0s")
 offset_left = -141.0
 offset_top = 59.0
 offset_right = -141.0
 offset_bottom = 59.0
 
 [node name="PuzzleUI" parent="PullOutTabs" instance=ExtResource("23_v0dtx")]
-material = SubResource("ShaderMaterial_exmto")
+material = SubResource("ShaderMaterial_qag56")
 offset_left = -140.0
 offset_top = 109.0
 offset_right = -140.0
 offset_bottom = 109.0
 
 [node name="ProblemTab" parent="PullOutTabs" instance=ExtResource("20_uaeg6")]
-material = SubResource("ShaderMaterial_j2v53")
+material = SubResource("ShaderMaterial_p4k25")
 use_parent_material = true
 offset_left = 157.0
 offset_top = -26.0
@@ -372,14 +372,14 @@ offset_right = 157.0
 offset_bottom = -26.0
 
 [node name="MenuTab" parent="PullOutTabs" instance=ExtResource("24_f5s2a")]
-material = SubResource("ShaderMaterial_l4dvd")
+material = SubResource("ShaderMaterial_hw24t")
 offset_left = 515.0
 offset_top = 339.0
 offset_right = 515.0
 offset_bottom = 339.0
 
 [node name="HealthTab" parent="PullOutTabs" instance=ExtResource("31_f28gh")]
-material = SubResource("ShaderMaterial_4gvsn")
+material = SubResource("ShaderMaterial_mee8y")
 offset_left = 501.0
 offset_top = -39.0
 offset_right = 501.0
