@@ -18,7 +18,3 @@ func _on_undo_pressed() -> void:
 
 func _on_redo_pressed() -> void:
 	redo.emit()
-
-func release_buttons() -> void:
-	for control_button in [Snip, Grab]:
-		control_button.button_pressed = false

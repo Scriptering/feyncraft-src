@@ -639,7 +639,7 @@ func is_energy_conserved() -> bool:
 	)
 	
 	for state_type in [StateLine.StateType.Initial, StateLine.StateType.Final]:
-		if state_base_particles[state_type].size() != 1:
+		if state_base_particles[state_type].size() > 1:
 			continue
 		
 		if state_masses[state_type] < state_masses[(state_type + 1) % 2] - MASS_PRECISION:

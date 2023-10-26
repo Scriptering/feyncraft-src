@@ -11,19 +11,12 @@ func exit() -> void:
 	disconnect_grabbable()
 
 func input(_event: InputEvent) -> State:
-	if Input.is_action_just_released("editing") and !Controls.Grab.button_pressed:
-		if Controls.Snip.is_just_pressed:
-			return State.Deleting
+	if Input.is_action_just_released("editing"):
 		return State.Idle
 
 	return State.Null
 
-func process(_delta: float) -> State:
-	if Controls.Grab.is_just_released:
-		if Controls.Snip.is_just_pressed:
-			return State.Deleting
-		return State.Idle
-	
+func process(_delta: float) -> State:	
 	if start_placing:
 		start_placing = false
 		return State.Placing

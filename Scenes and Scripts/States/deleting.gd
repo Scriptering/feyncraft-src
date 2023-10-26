@@ -10,14 +10,6 @@ func exit() -> void:
 	super.exit()
 	disconnect_deletable()
 
-func process(_delta: float) -> State:
-	if Controls.Snip.is_just_released:
-		if Controls.Grab.is_just_pressed:
-			return State.Hovering
-		return State.Idle
-	
-	return State.Null
-
 func connect_deletable() -> void:
 	for line in get_tree().get_nodes_in_group("lines"):
 		line.clicked_on.connect(line_deletion)
@@ -31,15 +23,13 @@ func disconnect_deletable() -> void:
 		interaction.clicked_on.disconnect(interaction_deletion)
 
 func input(_event: InputEvent) -> State:
-	if Input.is_action_just_released("deleting") and !Controls.Snip.button_pressed:
-		if Controls.Grab.is_just_pressed:
-			return State.Hovering
+	if Input.is_action_just_released("deleting"):
 		return State.Idle
 		
 	elif Input.is_action_just_pressed("click"):
-		emit_signal("change_cursor", GLOBALS.CURSOR.snipped)
+		change_cursor.emit(GLOBALS.CURSOR.snipped)
 	elif Input.is_action_just_released("click"):
-		emit_signal("change_cursor", GLOBALS.CURSOR.snip)
+		change_cursor.emit(GLOBALS.CURSOR.snip)
 
 	return State.Null
 

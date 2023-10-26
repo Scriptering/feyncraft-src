@@ -37,7 +37,7 @@ func _ready() -> void:
 	
 	Level.init(StateManager, ControlsTab, PaletteMenu)
 	MainMenu.init(StateManager, ControlsTab, PaletteMenu)
-	StateManager.init(MainMenu.Diagram, MainMenu.ControlsTab)
+	StateManager.init(MainMenu.Diagram)
 
 func add_floating_menu(menu: Control) -> void:
 	$FloatingMenus.add_child(menu)
@@ -45,10 +45,9 @@ func add_floating_menu(menu: Control) -> void:
 func change_scene(scene: Scene, args: Array = []) -> void:
 	for child in $FloatingMenus.get_children():
 		child.hide()
-	ControlsTab.release_buttons()
 	
 	switch_child_scene(scene)
-	StateManager.change_scene(scenes[scene].Diagram, scenes[scene].ControlsTab)
+	StateManager.change_scene(scenes[scene].Diagram)
 	
 	enter_funcs[scene].call(args)
 	EVENTBUS.change_cursor(GLOBALS.CURSOR.default)

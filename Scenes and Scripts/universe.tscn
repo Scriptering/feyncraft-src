@@ -1,5 +1,6 @@
-[gd_scene load_steps=13 format=3 uid="uid://cnc7r7d27yn5c"]
+[gd_scene load_steps=18 format=3 uid="uid://cnc7r7d27yn5c"]
 
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_as5lx"]
 [ext_resource type="Script" path="res://Scenes and Scripts/universe.gd" id="1_f3b25"]
 [ext_resource type="PackedScene" uid="uid://blu0n6lwfysjf" path="res://Scenes and Scripts/UI/Menus/MainMenu/main_menu.tscn" id="1_qkr4k"]
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="2_6gvvu"]
@@ -8,34 +9,39 @@
 [ext_resource type="PackedScene" uid="uid://b65u1c7v5mbh6" path="res://Scenes and Scripts/UI/Menus/controls_tab.tscn" id="6_a8qlc"]
 [ext_resource type="PackedScene" uid="uid://cv3ttwhplgav" path="res://Scenes and Scripts/States/state_manager.tscn" id="6_qca7e"]
 [ext_resource type="PackedScene" uid="uid://brd5auomhnn6l" path="res://Scenes and Scripts/UI/Cursor.tscn" id="7_s5a7m"]
+[ext_resource type="Texture2D" uid="uid://btjrj2wemfwjq" path="res://Textures/Buttons/move_touch_button_normal.png" id="10_ihkyb"]
+[ext_resource type="Texture2D" uid="uid://db6rdb3r8el1a" path="res://Textures/Buttons/move_touch_button_pressed.png" id="11_ojt0j"]
+[ext_resource type="Texture2D" uid="uid://dbbrv15cfsttg" path="res://Textures/Buttons/cut_touch_button_normal.png" id="12_560ih"]
+[ext_resource type="Texture2D" uid="uid://n2w0tydjaa33" path="res://Textures/Buttons/cut_touch_button_pressed.png" id="13_gqnb4"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_i4np0"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2vie0"]
 resource_local_to_scene = true
 shader = ExtResource("2_6gvvu")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_nlwt0"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ihtk4"]
 resource_local_to_scene = true
 shader = ExtResource("2_6gvvu")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_cmhj3"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e7ua8"]
 resource_local_to_scene = true
 shader = ExtResource("2_6gvvu")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_k28hu"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2iqgj"]
 resource_local_to_scene = true
 shader = ExtResource("2_6gvvu")
 
 [node name="Universe" type="Node2D"]
+material = ExtResource("1_as5lx")
 script = ExtResource("1_f3b25")
 
 [node name="MainMenu" parent="." node_paths=PackedStringArray("PaletteMenu") instance=ExtResource("1_qkr4k")]
-material = SubResource("ShaderMaterial_i4np0")
+material = SubResource("ShaderMaterial_2vie0")
 offset_right = 640.0
 offset_bottom = 360.0
 PaletteMenu = NodePath("../FloatingMenus/PaletteMenu")
 
 [node name="World" parent="." instance=ExtResource("3_m7wj1")]
-material = SubResource("ShaderMaterial_nlwt0")
+material = SubResource("ShaderMaterial_ihtk4")
 
 [node name="FloatingMenus" type="Control" parent="."]
 z_index = 1
@@ -45,7 +51,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="PaletteMenu" parent="FloatingMenus" instance=ExtResource("5_yvg3b")]
-material = SubResource("ShaderMaterial_cmhj3")
+material = SubResource("ShaderMaterial_e7ua8")
 layout_mode = 1
 offset_left = 318.0
 offset_top = 171.0
@@ -59,12 +65,12 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="ControlsTab" parent="PullOutTabs" instance=ExtResource("6_a8qlc")]
-material = SubResource("ShaderMaterial_k28hu")
+material = SubResource("ShaderMaterial_2iqgj")
 layout_mode = 1
-offset_left = 599.0
-offset_top = 154.0
-offset_right = 559.0
-offset_bottom = 114.0
+offset_left = 4.0
+offset_top = -45.0
+offset_right = -36.0
+offset_bottom = -85.0
 
 [node name="state_manager" parent="." instance=ExtResource("6_qca7e")]
 
@@ -99,6 +105,25 @@ layout_mode = 0
 offset_left = -98.0
 offset_top = -2.0
 offset_bottom = 360.0
+
+[node name="TouchScreenButtons" type="Node2D" parent="."]
+top_level = true
+use_parent_material = true
+position = Vector2(4, -2)
+
+[node name="Move" type="TouchScreenButton" parent="TouchScreenButtons"]
+material = ExtResource("1_as5lx")
+position = Vector2(11, 311)
+texture_normal = ExtResource("10_ihkyb")
+texture_pressed = ExtResource("11_ojt0j")
+action = "editing"
+
+[node name="Delete" type="TouchScreenButton" parent="TouchScreenButtons"]
+material = ExtResource("1_as5lx")
+position = Vector2(57, 311)
+texture_normal = ExtResource("12_560ih")
+texture_pressed = ExtResource("13_gqnb4")
+action = "deleting"
 
 [connection signal="tree_exited" from="." to="." method="_on_tree_exited"]
 [connection signal="problem_submitted" from="World" to="." method="_on_world_problem_submitted"]
