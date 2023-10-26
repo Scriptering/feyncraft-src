@@ -1,7 +1,5 @@
 extends GrabbableControl
 
-@onready var Row = preload("res://Scenes and Scripts/UI/Info/InfoRow.tscn")
-
 signal closed_button_pressed
 
 enum Tab {QuantumNumbers, Other}
@@ -25,7 +23,7 @@ var property_names = [['charge', 'lepton num.', 'electron num.', 'muon num.', 't
 func _ready():
 	super._ready()
 	
-	self.connect("closed_button_pressed", Callable(ConnectedInteraction, "close_information_box"))
+	closed_button_pressed.connect(ConnectedInteraction.close_information_box)
 	
 	$PanelContainer/NumberContainer/Number.text = str(ID)
 	
@@ -83,6 +81,7 @@ func build_other_tab() -> void:
 func add_label(container: GridContainer, text: String) -> void:
 	var label = Label.new()
 	label.text = text
+	label.use_parent_material = true
 	
 	if container.get_child_count()%container.columns != 0:
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

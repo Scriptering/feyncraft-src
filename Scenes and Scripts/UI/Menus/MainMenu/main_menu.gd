@@ -1,6 +1,7 @@
 extends Control
 
 signal sandbox_pressed
+signal tutorial_pressed
 
 @export var PaletteMenu: GrabbableControl
 
@@ -25,7 +26,7 @@ func init(state_manager: Node, controls_tab: Control, palette_list: GrabbableCon
 	StateManager = state_manager
 	ControlsTab = controls_tab
 	PaletteList = palette_list
-	
+
 	MenuTab.init(PaletteMenu)
 	PaletteList.closed.connect(_on_PaletteList_closed)
 	problem_selection.closed.connect(_on_problem_selection_closed)
@@ -34,6 +35,7 @@ func init(state_manager: Node, controls_tab: Control, palette_list: GrabbableCon
 	$Algorithms/ProblemGeneration.init($Algorithms/SolutionGeneration)
 	
 	Diagram.draw_diagram(GLOBALS.TitleDiagram)
+	Diagram.can_draw_diagrams = false
 
 func _on_sandbox_pressed() -> void:
 	sandbox_pressed.emit()
@@ -56,3 +58,6 @@ func _on_problem_selection_closed() -> void:
 
 func _on_exit_game(_mode: BaseMode.Mode, _problem: Problem) -> void:
 	return
+
+func _on_tutorial_pressed() -> void:
+	tutorial_pressed.emit()

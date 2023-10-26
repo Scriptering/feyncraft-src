@@ -29,22 +29,37 @@ func connect_interactions(
 ) -> void:
 	super.connect_interactions(from_id, to_id, particle, bidirectional, reverse)
 	
-	unconnected_matrix[from_id].erase(particle)
-	unconnected_particle_count[get_state_from_id(from_id)] -= 1
+	if particle in unconnected_matrix[from_id]:
+		unconnected_matrix[from_id].erase(particle)
+		unconnected_particle_count[get_state_from_id(from_id)] -= 1
 	
-	unconnected_matrix[to_id].erase(particle)
-	unconnected_particle_count[get_state_from_id(to_id)] -= 1
+	if particle in unconnected_matrix[to_id]:
+		unconnected_matrix[to_id].erase(particle)
+		unconnected_particle_count[get_state_from_id(to_id)] -= 1
 
 func connect_in_out_interactions(
 	from_id: int, to_id: int, particle: int = ParticleData.PARTICLE.none, bidirectional: bool = false, reverse: bool = false
 ) -> void:
+	
+	reverse = particle < 0
+	particle = abs(particle)
+	
 	super.connect_interactions(from_id, to_id, particle, bidirectional, reverse)
 	
-	unconnected_matrix[from_id].erase(particle)
-	unconnected_particle_count[get_state_from_id(from_id)] -= 1
+	var temp_id: int = from_id
+	if reverse:
+		from_id = to_id
+		to_id = temp_id
 	
-	unconnected_matrix[to_id].erase(-particle)
-	unconnected_particle_count[get_state_from_id(to_id)] -= 1
+	if particle in unconnected_matrix[from_id]:
+		unconnected_matrix[from_id].erase(particle)
+		unconnected_particle_count[get_state_from_id(from_id)] -= 1
+	
+	var in_particle: ParticleData.Particle = particle if particle in ParticleData.UNSHADED_PARTICLES else -particle
+	
+	if in_particle in unconnected_matrix[to_id]:
+		unconnected_matrix[to_id].erase(in_particle)
+		unconnected_particle_count[get_state_from_id(to_id)] -= 1
 
 func insert_connection(connection: Array) -> void:
 	connect_interactions(connection[Connection.from_id], connection[Connection.to_id], connection[Connection.particle])
@@ -64,7 +79,15 @@ func disconnect_interactions(
 func remove_connection(connection: Array) -> void:
 	disconnect_interactions(connection[Connection.from_id], connection[Connection.to_id], connection[Connection.particle])
 
-func get_unconnected_particle_count(state: StateLine.StateType) -> int:
+func get_unconnected_particle_count() -> int:
+	var particle_count: int = 0
+	
+	for state_count in unconnected_particle_count:
+		particle_count += state_count
+	
+	return particle_count
+
+func get_unconnected_state_particle_count(state: StateLine.StateType) -> int:
 	if state == StateLine.StateType.Both:
 		return unconnected_particle_count[StateLine.StateType.Initial] + unconnected_particle_count[StateLine.StateType.Final]
 
@@ -231,3 +254,29 @@ func has_same_unconnected_matrix(comparison_matrix: InteractionMatrix) -> bool:
 		return false
 	
 	return true
+
+func has_same_connection_matrix(comparison_matrix: InteractionMatrix) -> bool:
+	if connection_matrix == comparison_matrix.connection_matrix:
+		return true
+	
+	if connection_matrix.size() != comparison_matrix.connection_matrix.size():
+		return false
+	
+	if connection_matrix.any(func(interaction): return interaction not in comparison_matrix.connection_matrix):
+		return false
+	
+	if comparison_matrix.connection_matrix.any(func(interaction): return interaction not in connection_matrix):
+		return false
+	
+	return true
+
+func is_duplicate_interaction_matrix(compare_interaction_matrix: InteractionMatrix) -> bool:
+	if !has_same_unconnected_matrix(compare_interaction_matrix):
+		return false
+	
+	if !has_same_connection_matrix(compare_interaction_matrix):
+		return false
+	
+	return true
+	
+	

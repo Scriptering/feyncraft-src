@@ -29,10 +29,12 @@ func _process(delta: float) -> void:
 func set_title() -> void:
 	$VBoxContainer/TitleContainer/Title.text = InfoContainer.get_current_tab_control().title
 	
-func init(diagram: MainDiagram, level: Node2D) -> void:
+func init(diagram: MainDiagram, level: Node2D, problem_tab: Node) -> void:
 	Diagram = diagram
 	Level = level
 	set_title()
+	
+	$VBoxContainer/TabContainer/SolutionCreationInfo.init(problem_tab)
 	
 	Diagram.action_taken.connect(
 		$VBoxContainer/TabContainer/ProblemCreationInfo.hide_no_solutions_found

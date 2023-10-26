@@ -9,6 +9,7 @@ enum Mode {
 	SolutionCreation,
 	Sandbox,
 	ProblemSolving,
+	Tutorial,
 	Null
 }
 

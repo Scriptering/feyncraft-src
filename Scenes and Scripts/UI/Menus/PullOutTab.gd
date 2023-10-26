@@ -60,6 +60,13 @@ func readjust() -> void:
 	
 	MovingContainer.position = get_pull_out_position()
 
+func close() -> void:
+	if !tab_out:
+		return
+	
+	self.tab_out = false
+	MovingContainer.position = starting_moving_container_position
+
 func stay_out_timer_finished() -> void:
 	if tab_out_changed:
 		return

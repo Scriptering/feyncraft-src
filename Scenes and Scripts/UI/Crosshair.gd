@@ -8,13 +8,14 @@ signal moved(current_position, old_position)
 const Z_INDEX_IDLE := 0
 const Z_INDEX_DRAWING := 0
 
-var can_draw: bool
+var can_draw: bool: get = _get_can_draw
 var old_position: Vector2 = Vector2.ZERO
 var clamp_left : float
 var clamp_right : float
 var clamp_up : float
 var clamp_down : float
 var on_state_line : bool
+var is_inside_diagram : bool = false
 
 var Diagram: DiagramBase
 var Initial: StateLine
@@ -46,7 +47,7 @@ func move_crosshair() -> void:
 	if is_try_position_valid(try_position):
 		position = try_position
 		if position != old_position:
-			emit_signal("moved", position, old_position)
+			moved.emit(position, old_position)
 		old_position = position
 
 func get_try_position() -> Vector2:
@@ -62,6 +63,18 @@ func get_try_position() -> Vector2:
 	)
 	
 	return try_position
+
+func _get_can_draw() -> bool:
+	if !is_inside_diagram:
+		return false
+	
+	return is_start_drawing_position_valid()
+
+func is_start_drawing_position_valid() -> bool:
+	if is_crosshair_on_state_interaction(position):
+		return false
+	
+	return true
 
 func is_same_state_line(position1: Vector2, position2: Vector2) -> bool:
 	if position1.x == Initial.position.x and position2.x == Initial.position.x:
@@ -126,12 +139,12 @@ func is_on_interaction(test_position: Vector2 = position) -> bool:
 
 func DiagramMouseEntered():
 	show()
-	can_draw = true
+	is_inside_diagram = true
 
 func DiagramMouseExited():
 	if StateManager.state != BaseState.State.Placing and StateManager.state != BaseState.State.Drawing:
 		hide()
-	can_draw = false
+	is_inside_diagram = false
 
 func _state_changed(new_state: BaseState.State, _old_state: BaseState.State) -> void: 
 	if new_state == BaseState.State.Idle:

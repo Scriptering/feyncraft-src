@@ -54,7 +54,7 @@ func generate_vision_matrix(vision: GLOBALS.Vision, diagram: DrawingMatrix, shad
 
 func generate_shade_matrix(shade: Shade, diagram: DrawingMatrix) -> DrawingMatrix:
 	var shade_matrix: DrawingMatrix = diagram.get_reduced_matrix(
-		func(particle: ParticleData.Particle): return particle in GLOBALS.SHADE_PARTICLES[shade]
+		func(particle: ParticleData.Particle): return particle in ParticleData.SHADE_PARTICLES[shade]
 	)
 
 	if shade == Shade.Dark or shade == Shade.Both:

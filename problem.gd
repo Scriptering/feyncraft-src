@@ -18,8 +18,11 @@ var custom_degree: bool = false:
 @export var degree : int = LOWEST_ORDER
 @export var solution_count : int = 0:
 	get:
+		print(custom_solutions)
 		if custom_solutions:
+			print(solutions.size())
 			return solutions.size()
+		print(solution_count)
 		return solution_count
 
 func is_submission_valid(submission: DrawingMatrix) -> bool:

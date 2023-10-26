@@ -245,7 +245,5 @@ layout_mode = 2
 TabIcon = ExtResource("11_01uho")
 icon_use_parent_material = true
 
-[connection signal="mouse_entered" from="HBoxContainer/ContentContainer" to="." method="_on_PanelContainer_mouse_entered"]
-[connection signal="mouse_exited" from="HBoxContainer/ContentContainer" to="." method="_on_PanelContainer_mouse_exited"]
 [connection signal="value_changed" from="HBoxContainer/ContentContainer/OptionsContainer/StateParticleCountContainer/VBoxContainer/DegreeContainer/MinParticleCount" to="." method="_on_min_particle_count_value_changed"]
 [connection signal="value_changed" from="HBoxContainer/ContentContainer/OptionsContainer/StateParticleCountContainer/VBoxContainer/DegreeContainer/MaxParticleCount" to="." method="_on_max_particle_count_value_changed"]

@@ -15,7 +15,7 @@ func init(_palette_menu) -> void:
 	palette_menu.closed.connect(_on_palette_menu_closed)
 	
 func _on_exit_pressed() -> void:
-	EVENTBUS.signal_change_scene.emit(GLOBALS.Scene.MainMenu)
+	exit_pressed.emit()
 
 func toggle_palette_menu(toggle: bool) -> void:
 	if !toggle:

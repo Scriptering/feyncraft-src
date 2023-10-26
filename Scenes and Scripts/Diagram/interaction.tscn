@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bhi4xq3qdbt4d"]
+[gd_scene load_steps=26 format=3 uid="uid://bhi4xq3qdbt4d"]
 
 [ext_resource type="Texture2D" uid="uid://dujsq82ocy6bp" path="res://Textures/Interactions/Interaction.png" id="1"]
 [ext_resource type="Shader" path="res://Resources/Shaders/interaction_shader.gdshader" id="1_2fxik"]
@@ -7,6 +7,8 @@
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="3_vtri8"]
 [ext_resource type="Texture2D" uid="uid://cb746tuycm36s" path="res://Textures/Interactions/dot.png" id="4"]
 [ext_resource type="Texture2D" uid="uid://cj4e63vquy3u6" path="res://Textures/Interactions/interaction_background.png" id="4_0yoxg"]
+[ext_resource type="Shader" path="res://Scenes and Scripts/Diagram/outline_palette_swap.gdshader" id="8_8xhlq"]
+[ext_resource type="PackedScene" uid="uid://dorw3vr2amuy3" path="res://Scenes and Scripts/Components/button_sound_component.tscn" id="9_b7d5g"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_a466d"]
 resource_local_to_scene = true
@@ -91,6 +93,11 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_86yu2"]
+shader = ExtResource("8_8xhlq")
+shader_parameter/line_color = Color(0, 0, 0, 1)
+shader_parameter/line_thickness = 2.0
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_usurp"]
 size = Vector2(12, 12)
 
@@ -127,14 +134,12 @@ use_parent_material = true
 sprite_frames = SubResource("11")
 
 [node name="InfoNumberLabel" type="Label" parent="."]
+material = SubResource("ShaderMaterial_86yu2")
 offset_left = 7.0
-offset_top = -4.0
+offset_top = -6.0
 offset_right = 47.0
-offset_bottom = 12.0
-theme_override_colors/font_color = Color(0.219608, 0.223529, 0.188235, 1)
-theme_override_colors/font_outline_color = Color(0.901961, 0.803922, 0.611765, 1)
-theme_override_constants/outline_size = 4
-theme_override_font_sizes/font_size = 9
+offset_bottom = 10.0
+theme_override_font_sizes/font_size = 11
 
 [node name="GrabArea" type="Area2D" parent="."]
 
@@ -151,6 +156,9 @@ mouse_filter = 1
 theme_override_styles/normal = SubResource("StyleBoxEmpty_38m1t")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_p04yt")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_lgs61")
+
+[node name="ButtonSoundComponent" parent="InformationButton" instance=ExtResource("9_b7d5g")]
+on_pressed = true
 
 [connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
 [connection signal="pressed" from="InformationButton" to="." method="_on_information_button_pressed"]

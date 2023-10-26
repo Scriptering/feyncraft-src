@@ -24,6 +24,9 @@ func clear_diagram() -> void:
 	
 	for line in ParticleLines.get_children():
 		line.queue_free()
+	
+	for hadron_joint in HadronJoints.get_children():
+		hadron_joint.queue_free()
 
 func show_interaction_dots(drawing_matrix: DrawingMatrix) -> void:
 	for id in drawing_matrix.get_state_ids(StateLine.StateType.Both):

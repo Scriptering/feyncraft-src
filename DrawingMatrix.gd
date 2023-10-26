@@ -242,10 +242,10 @@ func rejoin_double_connections() -> void:
 	remove_empty_rows()
 
 func rejoin_hadrons() -> void:
-	for i in range(split_hadron_ids.size()):
+	for i in split_hadron_ids.size():
 		rejoin_hadron(split_hadron_ids[i])
-		split_hadron_ids.clear()
 	
+	split_hadron_ids.clear()
 	remove_empty_rows()
 
 func rejoin_hadron(hadron_ids: PackedInt32Array) -> void:

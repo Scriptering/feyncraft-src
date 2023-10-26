@@ -22,7 +22,7 @@ func load_state_symbols(state: StateLine.StateType, state_interactions: Array) -
 	clear_equation(state)
 	for i in range(state_interactions.size()):
 		var interaction: Array = state_interactions[i]
-		
+		interaction.sort()
 		if i != 0:
 			StateEquations[state].add_child(create_plus())
 		

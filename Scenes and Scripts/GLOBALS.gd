@@ -84,12 +84,14 @@ func save(p_obj: Resource, p_path: String) -> void:
 	
 	if !file: return
 	
-	file.store_var(var_to_str(p_obj))
+	var var_as_str: String = var_to_str(p_obj)
+	
+	file.store_string(var_as_str)
 	file.close()
 
 func load(p_path: String) -> Resource:
 	var file = FileAccess.open(p_path, FileAccess.READ)
-	var obj: Resource = str_to_var(file.get_var())
+	var obj: Resource = str_to_var(file.get_as_text())
 	file.close()
 	return obj
 

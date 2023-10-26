@@ -36,12 +36,14 @@ var diagram_future: Array[DrawingMatrix] = []
 var current_diagram: DrawingMatrix = null
 var diagram_added_to_history: bool = false
 
+var can_draw_diagrams: bool = true
+
 func _ready() -> void:
 	Crosshair.moved.connect(_crosshair_moved)
-	connect("mouse_entered", Callable(Crosshair, "DiagramMouseEntered"))
-	connect("mouse_exited", Callable(Crosshair, "DiagramMouseExited"))
-	EVENTBUS.connect("signal_draw_diagram", Callable(self, "draw_diagram"))
-	EVENTBUS.connect("signal_draw_raw_diagram", Callable(self, "draw_raw_diagram"))
+	mouse_entered.connect(Crosshair.DiagramMouseEntered)
+	mouse_exited.connect(Crosshair.DiagramMouseExited)
+	EVENTBUS.signal_draw_raw_diagram.connect(draw_raw_diagram)
+	EVENTBUS.signal_draw_diagram.connect(draw_diagram)
 	
 	for state_line in StateLines:
 		state_line.init(self)
@@ -494,6 +496,9 @@ func place_line(
 	ParticleLines.add_child(line)
 
 func draw_raw_diagram(connection_matrix : ConnectionMatrix) -> void:
+	if !can_draw_diagrams:
+		return
+	
 	add_diagram_to_history()
 	
 	super.draw_raw_diagram(connection_matrix)
@@ -520,6 +525,9 @@ func draw_diagram_particles(drawing_matrix: DrawingMatrix) -> Array:
 	return drawing_lines
 
 func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
+	if !can_draw_diagrams:
+		return
+	
 	line_diagram_actions = false
 	
 	clear_diagram()
