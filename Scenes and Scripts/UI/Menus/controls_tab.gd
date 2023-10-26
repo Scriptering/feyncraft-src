@@ -1,7 +1,5 @@
 extends PullOutTab
 
-@onready var Snip : PanelButton = $MovingContainer/ContentContainer/GridContainer/Snip
-@onready var Grab : PanelButton = $MovingContainer/ContentContainer/GridContainer/Grab
 @onready var Clear : PanelButton = $MovingContainer/ContentContainer/GridContainer/Reset
 @onready var Undo : PanelButton = $MovingContainer/ContentContainer/GridContainer/Undo
 @onready var Redo : PanelButton = $MovingContainer/ContentContainer/GridContainer/Redo

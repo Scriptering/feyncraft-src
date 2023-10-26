@@ -131,7 +131,7 @@ func split_hadron(hadron_id: int) -> void:
 	
 	while get_connected_count(hadron_id, true) > 1:
 		var connection_ids := get_connected_ids(hadron_id, true)
-		var connection_id := connection_ids[randi() % connection_ids.size()]
+		var connection_id := connection_ids[0]
 		
 		add_interaction(get_state_from_id(hadron_id), new_interaction_id)
 		split_hadron_ids[-1].append(new_interaction_id)
