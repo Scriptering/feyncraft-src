@@ -13,8 +13,8 @@ extends Control
 @onready var Cursor = Level.get_node('Cursor')
 @onready var OptionsContainer = get_node('VBoxContainer/PanelContainer/VBoxContainer/OptionsContainer')
 
-@export var InitialState : Array[GLOBALS.Particle]
-@export var FinalState : Array[GLOBALS.Particle]
+@export var InitialState : Array[ParticleData.Particle]
+@export var FinalState : Array[ParticleData.Particle]
 
 
 @export var min_degree : int = -1
@@ -135,13 +135,13 @@ func set_checks(state_connections : Array):
 	for line in state_connections:
 		particles.append(line.antitype())
 	
-	if GLOBALS.Particle.photon in particles:
+	if ParticleData.Particle.photon in particles:
 		EM_check.button_pressed = true
-	if GLOBALS.Particle.gluon in particles:
+	if ParticleData.Particle.gluon in particles:
 		strong_check.button_pressed = true
-	if GLOBALS.Particle.W in particles or GLOBALS.Particle.anti_W in particles:
+	if ParticleData.Particle.W in particles or ParticleData.Particle.anti_W in particles:
 		weak_check.button_pressed = true
-	if GLOBALS.Particle.H in particles or GLOBALS.Particle.Z in particles:
+	if ParticleData.Particle.H in particles or ParticleData.Particle.Z in particles:
 		electroweak_check.button_pressed = true
 		_on_electroweak_pressed()
 

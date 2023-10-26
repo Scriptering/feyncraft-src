@@ -36,12 +36,14 @@ var diagram_future: Array[DrawingMatrix] = []
 var current_diagram: DrawingMatrix = null
 var diagram_added_to_history: bool = false
 
+var can_draw_diagrams: bool = true
+
 func _ready() -> void:
 	Crosshair.moved.connect(_crosshair_moved)
-	connect("mouse_entered", Callable(Crosshair, "DiagramMouseEntered"))
-	connect("mouse_exited", Callable(Crosshair, "DiagramMouseExited"))
-	EVENTBUS.connect("signal_draw_diagram", Callable(self, "draw_diagram"))
-	EVENTBUS.connect("signal_draw_raw_diagram", Callable(self, "draw_raw_diagram"))
+	mouse_entered.connect(Crosshair.DiagramMouseEntered)
+	mouse_exited.connect(Crosshair.DiagramMouseExited)
+	EVENTBUS.signal_draw_raw_diagram.connect(draw_raw_diagram)
+	EVENTBUS.signal_draw_diagram.connect(draw_diagram)
 	
 	for state_line in StateLines:
 		state_line.init(self)
@@ -99,8 +101,8 @@ func are_quantum_numbers_matching(ignore_weak_quantum_numbers: bool = true) -> b
 	var initial_quantum_numbers: PackedFloat32Array = StateLines[StateLine.StateType.Initial].get_quantum_numbers()
 	var final_quantum_numbers: PackedFloat32Array = StateLines[StateLine.StateType.Final].get_quantum_numbers()
 	
-	for quantum_number in GLOBALS.QuantumNumber.values():
-		if ignore_weak_quantum_numbers and quantum_number in GLOBALS.WEAK_QUANTUM_NUMBERS:
+	for quantum_number in ParticleData.QuantumNumber.values():
+		if ignore_weak_quantum_numbers and quantum_number in ParticleData.WEAK_QUANTUM_NUMBERS:
 			continue
 		
 		if !is_zero_approx(initial_quantum_numbers[quantum_number]-final_quantum_numbers[quantum_number]):
@@ -140,8 +142,8 @@ func sort_drawing_interactions(interaction1: Interaction, interaction2: Interact
 	if state1 == StateLine.StateType.None:
 		return pos_y1 < pos_y2
 	
-	var particle1: GLOBALS.Particle = interaction1.connected_particles.front()
-	var particle2: GLOBALS.Particle = interaction2.connected_particles.front()
+	var particle1: ParticleData.Particle = interaction1.connected_particles.front()
+	var particle2: ParticleData.Particle = interaction2.connected_particles.front()
 	
 	if particle1 != particle2:
 		return particle1 < particle2
@@ -318,7 +320,7 @@ func get_particle_lines() -> Array[ParticleLine]:
 			particle_lines.append(particle_line)
 	return particle_lines
 
-func get_selected_particle() -> GLOBALS.Particle:
+func get_selected_particle() -> ParticleData.Particle:
 	return ParticleButtons.selected_particle
 
 func action() -> void:
@@ -414,7 +416,7 @@ func can_rejoin_lines(line1: ParticleLine, line2: ParticleLine) -> bool:
 	if line1.base_particle != line2.base_particle:
 		return false
 	
-	if line1.base_particle in GLOBALS.FERMIONS and line1.particle != line2.particle:
+	if line1.base_particle in ParticleData.FERMIONS and line1.particle != line2.particle:
 		return false
 
 	if (
@@ -477,7 +479,7 @@ func can_place_interaction(test_position: Vector2, test_interaction: Interaction
 
 func place_line(
 	start_position: Vector2, end_position: Vector2 = Vector2.ZERO,
-	base_particle: GLOBALS.Particle = ParticleButtons.selected_particle
+	base_particle: ParticleData.Particle = ParticleButtons.selected_particle
 ) -> void:
 	var line : ParticleLine = create_particle_line()
 	line.init(self)
@@ -494,6 +496,9 @@ func place_line(
 	ParticleLines.add_child(line)
 
 func draw_raw_diagram(connection_matrix : ConnectionMatrix) -> void:
+	if !can_draw_diagrams:
+		return
+	
 	add_diagram_to_history()
 	
 	super.draw_raw_diagram(connection_matrix)
@@ -520,6 +525,9 @@ func draw_diagram_particles(drawing_matrix: DrawingMatrix) -> Array:
 	return drawing_lines
 
 func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
+	if !can_draw_diagrams:
+		return
+	
 	line_diagram_actions = false
 	
 	clear_diagram()
@@ -626,7 +634,7 @@ func is_energy_conserved() -> bool:
 	
 	var state_masses: Array = state_base_particles.map(
 		func(base_particles: Array): return base_particles.reduce(
-			func(accum: float, particle: GLOBALS.Particle) -> float: return accum + GLOBALS.PARTICLE_MASSES[particle], 0.0
+			func(accum: float, particle: ParticleData.Particle) -> float: return accum + ParticleData.PARTICLE_MASSES[particle], 0.0
 		)
 	)
 	

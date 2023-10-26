@@ -71,13 +71,13 @@ func set_checks(state_interactions : Array) -> void:
 	for state_interaction in state_interactions:
 		particles += state_interaction
 	
-	if GLOBALS.Particle.photon in particles:
+	if ParticleData.Particle.photon in particles:
 		EM_check.button_pressed = true
-	if GLOBALS.Particle.gluon in particles:
+	if ParticleData.Particle.gluon in particles:
 		strong_check.button_pressed = true
-	if GLOBALS.Particle.W in particles or GLOBALS.Particle.anti_W in particles:
+	if ParticleData.Particle.W in particles or ParticleData.Particle.anti_W in particles:
 		weak_check.button_pressed = true
-	if GLOBALS.Particle.H in particles or GLOBALS.Particle.Z in particles:
+	if ParticleData.Particle.H in particles or ParticleData.Particle.Z in particles:
 		set_electroweak_check(true)
 
 func _diagram_deleted(_index: int) -> void:

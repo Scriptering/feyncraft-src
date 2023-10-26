@@ -110,6 +110,8 @@ func submit_diagram() -> void:
 	update_view_submission_button()
 	
 	NextProblem.disabled = !in_sandbox and submitted_diagrams.size() < current_problem.solution_count
+	
+	EVENTBUS.signal_diagram_submitted.emit(submission, submitted_diagrams)
 
 func generate_solution() -> ConnectionMatrix:
 	return(SolutionGeneration.generate_diagrams(
@@ -151,7 +153,10 @@ func set_next_problem_disabled(disable: bool) -> void:
 	NextProblem.disabled = disable
 	
 func _on_solution_pressed() -> void:
-	EVENTBUS.draw_diagram_raw(generate_solution())
+	if current_problem.custom_solutions:
+		EVENTBUS.draw_diagram(current_problem.solutions.pick_random())
+	else:
+		EVENTBUS.draw_diagram_raw(generate_solution())
 
 func _on_rewind_pressed() -> void:
 	prev_problem_pressed.emit()
@@ -177,3 +182,5 @@ func toggle_finish_icon(toggle: bool) -> void:
 	else:
 		NextProblem.icon = load("res://Textures/Buttons/icons/next.png")
 
+func _on_tree_exiting() -> void:
+	SubmissionFeedback.close()

@@ -47,7 +47,7 @@ func get_highest_line() -> ParticleLine:
 	return highest_line
 
 func place_label() -> void:
-	HadronLabel.texture = GLOBALS.get_hadron_texture(hadron.hadron)
+	HadronLabel.texture = ParticleData.get_hadron_texture(hadron.hadron)
 	
 	if state == StateLine.StateType.Initial:
 		HadronLabel.position.x = -label_seperation

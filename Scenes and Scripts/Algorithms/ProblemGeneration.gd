@@ -14,7 +14,7 @@ func init(solution_generation: Node) -> void:
 
 func generate(
 	min_particle_count: int = 3, max_particle_count: int = 6, use_hadrons: HadronFrequency = HadronFrequency.Allowed,
-	useable_particles: Array[GLOBALS.Particle] = get_all_particles()
+	useable_particles: Array[ParticleData.Particle] = get_all_particles()
 ) -> Problem:
 	var problem := Problem.new()
 	
@@ -46,20 +46,20 @@ func generate(
 	
 	return problem
 
-func get_useable_particles_from_interaction_checks(checks: Array[bool]) -> Array[GLOBALS.Particle]:
-	var useable_particles: Array[GLOBALS.Particle] = []
+func get_useable_particles_from_interaction_checks(checks: Array[bool]) -> Array[ParticleData.Particle]:
+	var useable_particles: Array[ParticleData.Particle] = []
 	
-	useable_particles += GLOBALS.FERMIONS
+	useable_particles += ParticleData.FERMIONS
 	
 	if checks[0]:
-		useable_particles.append(GLOBALS.Particle.photon)
+		useable_particles.append(ParticleData.Particle.photon)
 	if checks[1]:
-		useable_particles.append(GLOBALS.Particle.gluon)
+		useable_particles.append(ParticleData.Particle.gluon)
 	if checks[2]:
-		useable_particles.append(GLOBALS.Particle.W)
+		useable_particles.append(ParticleData.Particle.W)
 	if checks[3]:
-		useable_particles.append(GLOBALS.Particle.Z)
-		useable_particles.append(GLOBALS.Particle.H)
+		useable_particles.append(ParticleData.Particle.Z)
+		useable_particles.append(ParticleData.Particle.H)
 	
 	return useable_particles
 
@@ -75,7 +75,7 @@ func is_energy_conserved(state_interactions: Array) -> bool:
 	
 	var state_masses: Array = state_base_particles.map(
 		func(base_particles: Array): return base_particles.reduce(
-			func(accum: float, particle: GLOBALS.Particle) -> float: return accum + GLOBALS.PARTICLE_MASSES[particle], 0.0
+			func(accum: float, particle: ParticleData.Particle) -> float: return accum + ParticleData.PARTICLE_MASSES[particle], 0.0
 		)
 	)
 	
@@ -88,37 +88,37 @@ func is_energy_conserved(state_interactions: Array) -> bool:
 	
 	return true
 
-func get_all_particles() -> Array[GLOBALS.Particle]:
-	var all_particles: Array[GLOBALS.Particle] = []
+func get_all_particles() -> Array[ParticleData.Particle]:
+	var all_particles: Array[ParticleData.Particle] = []
 	
-	for particle in GLOBALS.Particle.values():
-		if particle == GLOBALS.Particle.none:
+	for particle in ParticleData.Particle.values():
+		if particle == ParticleData.Particle.none:
 			continue
 		
-		if base_particle(particle) in GLOBALS.GENERAL_PARTICLES:
+		if base_particle(particle) in ParticleData.GENERAL_PARTICLES:
 			continue
 		
 		all_particles.push_back(particle)
 	
 	return all_particles
 
-func anti(particle: GLOBALS.Particle) -> int:
+func anti(particle: ParticleData.Particle) -> int:
 	return sign(particle)
 
-func anti_particle(particle: GLOBALS.Particle) -> GLOBALS.Particle:
-	return -particle as GLOBALS.Particle
+func anti_particle(particle: ParticleData.Particle) -> ParticleData.Particle:
+	return -particle as ParticleData.Particle
 
-func base_particle(particle: GLOBALS.Particle) -> GLOBALS.Particle:
+func base_particle(particle: ParticleData.Particle) -> ParticleData.Particle:
 	return abs(particle)
 
-func get_useable_state_interactions(use_hadrons: HadronFrequency, useable_particles: Array[GLOBALS.Particle]) -> Array:
+func get_useable_state_interactions(use_hadrons: HadronFrequency, useable_particles: Array[ParticleData.Particle]) -> Array:
 	
 	var useable_state_interactions: Array = []
 	
 	for particle in useable_particles:
 		useable_state_interactions.push_back([particle])
 		
-		if particle in GLOBALS.SHADED_PARTICLES:
+		if particle in ParticleData.SHADED_PARTICLES:
 			useable_state_interactions.push_back([anti_particle(particle)])
 	
 	if use_hadrons == HadronFrequency.Never:
@@ -129,14 +129,14 @@ func get_useable_state_interactions(use_hadrons: HadronFrequency, useable_partic
 	return useable_state_interactions
 
 func calc_W_count(state_factor: int, state_interaction: Array) -> int:
-	return state_factor * (state_interaction.count(GLOBALS.Particle.W) - state_interaction.count(GLOBALS.Particle.anti_W))
+	return state_factor * (state_interaction.count(ParticleData.Particle.W) - state_interaction.count(ParticleData.Particle.anti_W))
 
-func get_useable_hadrons(useable_particles: Array[GLOBALS.Particle]) -> Array:
+func get_useable_hadrons(useable_particles: Array[ParticleData.Particle]) -> Array:
 	var useable_hadrons : Array = []
 	
-	for hadron in GLOBALS.Hadrons.values():
-		for hadron_content in GLOBALS.HADRON_QUARK_CONTENT[hadron]:
-			if hadron_content.all(func(quark: GLOBALS.Particle): return abs(quark) in useable_particles):
+	for hadron in ParticleData.Hadrons.values():
+		for hadron_content in ParticleData.HADRON_QUARK_CONTENT[hadron]:
+			if hadron_content.all(func(quark: ParticleData.Particle): return abs(quark) in useable_particles):
 				useable_hadrons.push_back(hadron_content)
 	
 	return useable_hadrons
@@ -148,7 +148,7 @@ func generate_state_interactions(
 	min_particle_count: int, max_particle_count: int, useable_state_interactions: Array, use_hadrons: HadronFrequency
 ) -> Array:
 	var quantum_number_difference: Array = []
-	quantum_number_difference.resize(GLOBALS.QuantumNumber.size())
+	quantum_number_difference.resize(ParticleData.QuantumNumber.size())
 	quantum_number_difference.fill(0)
 	
 	var interaction_count: int = randi_range(min_particle_count, max_particle_count)
@@ -206,9 +206,9 @@ func accum_state_interaction_quantum_numbers(state_interaction: Array, accum_qua
 	var new_quantum_numbers := accum_quantum_numbers.duplicate(true)
 	
 	for particle in state_interaction:
-		for quantum_number in GLOBALS.QuantumNumber.values():
+		for quantum_number in ParticleData.QuantumNumber.values():
 			new_quantum_numbers[quantum_number] += (
-				anti(particle) * state_factor * GLOBALS.QUANTUM_NUMBERS[base_particle(particle)][quantum_number]
+				anti(particle) * state_factor * ParticleData.QUANTUM_NUMBERS[base_particle(particle)][quantum_number]
 			)
 	
 	return new_quantum_numbers
@@ -222,7 +222,7 @@ func is_state_interaction_possible(
 	var new_quantum_number_difference := accum_state_interaction_quantum_numbers(state_interaction, quantum_number_difference, state_factor)
 	var new_W_count = W_count + calc_W_count(state_factor, state_interaction)
 	
-	for quantum_number in GLOBALS.QuantumNumber.values():
+	for quantum_number in ParticleData.QuantumNumber.values():
 		if !is_quantum_number_difference_possible(
 			new_quantum_number_difference[quantum_number], quantum_number, new_interaction_count_left, new_W_count
 		):
@@ -231,12 +231,12 @@ func is_state_interaction_possible(
 	return true
 
 func is_quantum_number_difference_possible(
-	quantum_number_difference: float, quantum_number: GLOBALS.QuantumNumber, state_interaction_count_left: int, W_count: int
+	quantum_number_difference: float, quantum_number: ParticleData.QuantumNumber, state_interaction_count_left: int, W_count: int
 ) -> bool:
 	
-	var can_be_different: bool = quantum_number in GLOBALS.WEAK_QUANTUM_NUMBERS and W_count != 0
+	var can_be_different: bool = quantum_number in ParticleData.WEAK_QUANTUM_NUMBERS and W_count != 0
 	
-	var difference_allowed: int = 1 if quantum_number in [GLOBALS.QuantumNumber.electron, GLOBALS.QuantumNumber.muon, GLOBALS.QuantumNumber.tau] else 3
+	var difference_allowed: int = 1 if quantum_number in [ParticleData.QuantumNumber.electron, ParticleData.QuantumNumber.muon, ParticleData.QuantumNumber.tau] else 3
 	
 	if abs(quantum_number_difference) > state_interaction_count_left * difference_allowed + int(can_be_different) * abs(W_count):
 		return false

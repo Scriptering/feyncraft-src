@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://buskwt83mql4x"]
+[gd_scene load_steps=18 format=3 uid="uid://buskwt83mql4x"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_622tk"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/ProblemSelection/particle_selection_info.gd" id="2_ojpnu"]
@@ -9,7 +9,11 @@
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="6_5gy8v"]
 [ext_resource type="Texture2D" uid="uid://dvx430022t0ua" path="res://Textures/Buttons/icons/next.png" id="8_rm0tq"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8i7im"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_415an"]
+resource_local_to_scene = true
+shader = ExtResource("4_8p7ty")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bngr0"]
 resource_local_to_scene = true
 shader = ExtResource("4_8p7ty")
 
@@ -25,7 +29,7 @@ shader = ExtResource("4_8p7ty")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_uhdxj"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_6ohxa"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fcvhd"]
 resource_local_to_scene = true
 shader = ExtResource("4_8p7ty")
 
@@ -67,13 +71,13 @@ layout_mode = 2
 theme_override_constants/separation = 0
 
 [node name="ToggleOn" parent="VBoxContainer/VBoxContainer/VBoxContainer/HBoxContainer" instance=ExtResource("3_qv0n1")]
-material = SubResource("ShaderMaterial_8i7im")
+material = SubResource("ShaderMaterial_415an")
 layout_mode = 2
 text = "Toggle On"
 minimum_size = Vector2(56, 24)
 
 [node name="ToggleOff" parent="VBoxContainer/VBoxContainer/VBoxContainer/HBoxContainer" instance=ExtResource("3_qv0n1")]
-material = SubResource("ShaderMaterial_8i7im")
+material = SubResource("ShaderMaterial_bngr0")
 layout_mode = 2
 text = "Toggle Off"
 minimum_size = Vector2(56, 24)
@@ -108,7 +112,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="NextStep" parent="VBoxContainer/VBoxContainer/Buttons" instance=ExtResource("3_qv0n1")]
-material = SubResource("ShaderMaterial_6ohxa")
+material = SubResource("ShaderMaterial_fcvhd")
 layout_mode = 2
 icon = ExtResource("8_rm0tq")
 minimum_size = Vector2(24, 21)

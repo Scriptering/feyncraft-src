@@ -4,7 +4,7 @@ extends Node2D
 
 @export var label_seperation : float = 20
 var state : StateLine.StateType
-var hadron: GLOBALS.Hadrons
+var hadron: ParticleData.Hadrons
 var interaction_ys: PackedInt32Array
 
 var Diagram: MiniDiagram
@@ -38,7 +38,7 @@ func get_hadron_seperation() -> float:
 	return interaction_ys[-1] - interaction_ys[0]
 
 func place_label() -> void:
-	HadronLabel.texture = GLOBALS.get_hadron_texture(hadron)
+	HadronLabel.texture = ParticleData.get_hadron_texture(hadron)
 	
 	if state == StateLine.StateType.Initial:
 		HadronLabel.position.x = -label_seperation + 5

@@ -51,7 +51,7 @@ expand_margin_left = 15.0
 default_font = ExtResource("5_mj4tj")
 default_font_size = 11
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_np5g2"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y6bg3"]
 resource_local_to_scene = true
 shader = ExtResource("5_7m8xa")
 
@@ -67,12 +67,12 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hxup8"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rr1y7"]
 resource_local_to_scene = true
 shader = SubResource("Shader_tmadl")
 shader_parameter/alpha = null
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_q5u0d"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vn6nv"]
 resource_local_to_scene = true
 shader = SubResource("Shader_tmadl")
 shader_parameter/alpha = null
@@ -95,12 +95,12 @@ frame_5/duration = 1.0
 frame_6/texture = ExtResource("14_e77pa")
 frame_6/duration = 1.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_bctl0"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_aw7f0"]
 resource_local_to_scene = true
 shader = SubResource("Shader_tmadl")
 shader_parameter/alpha = null
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_mod4l"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6yfwr"]
 resource_local_to_scene = true
 shader = SubResource("Shader_tmadl")
 shader_parameter/alpha = null
@@ -354,7 +354,7 @@ text = "E. WEAK"
 [node name="ButtonSoundComponent" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/electro_weak" instance=ExtResource("6_aanob")]
 
 [node name="Equation" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer" instance=ExtResource("4_ovcff")]
-material = SubResource("ShaderMaterial_np5g2")
+material = SubResource("ShaderMaterial_y6bg3")
 custom_minimum_size = Vector2(120, 21)
 layout_mode = 2
 
@@ -365,7 +365,7 @@ theme_override_constants/separation = 2
 alignment = 1
 
 [node name="Save" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("8_ihypl")]
-material = SubResource("ShaderMaterial_hxup8")
+material = SubResource("ShaderMaterial_rr1y7")
 layout_mode = 2
 icon = ExtResource("5_rmc36")
 icon_use_parent_material = true
@@ -374,7 +374,7 @@ icon_use_parent_material = true
 tooltip = "Save states"
 
 [node name="Generate" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("8_ihypl")]
-material = SubResource("ShaderMaterial_q5u0d")
+material = SubResource("ShaderMaterial_vn6nv")
 layout_mode = 2
 icon = SubResource("AnimatedTexture_ikf5r")
 minimum_size = Vector2(29, 24)
@@ -386,7 +386,7 @@ icon_use_parent_material = true
 tooltip = "Generate"
 
 [node name="View" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("8_ihypl")]
-material = SubResource("ShaderMaterial_bctl0")
+material = SubResource("ShaderMaterial_aw7f0")
 layout_mode = 2
 icon = ExtResource("6_e14j5")
 minimum_size = Vector2(24, 23)
@@ -396,7 +396,7 @@ disabled = true
 tooltip = "View generated diagrams"
 
 [node name="Tab" parent="MovingContainer/MovingContainer" instance=ExtResource("6_7e8c8")]
-material = SubResource("ShaderMaterial_mod4l")
+material = SubResource("ShaderMaterial_6yfwr")
 layout_mode = 2
 TabIcon = ExtResource("4_xnawx")
 icon_use_parent_material = true

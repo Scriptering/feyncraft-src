@@ -74,7 +74,7 @@ func input(event: InputEvent) -> State:
 func can_draw() -> bool:
 	if !crosshair.can_draw:
 		return false
-	if Diagram.get_selected_particle() == GLOBALS.Particle.none:
+	if Diagram.get_selected_particle() == ParticleData.Particle.none:
 		return false
 	return true
 

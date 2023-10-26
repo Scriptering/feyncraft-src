@@ -25,8 +25,8 @@ var Initial: Control
 var Final: Control
 
 var anti := 1 : set = _set_anti
-var base_particle := GLOBALS.Particle.none
-var particle := GLOBALS.Particle.none : get = _get_particle
+var base_particle := ParticleData.Particle.none
+var particle := ParticleData.Particle.none : get = _get_particle
 var left_point: Vector2
 var right_point: Vector2
 var points := PackedVector2Array([[0, 0], [0, 0]]) : set = _set_points
@@ -77,20 +77,20 @@ func init(diagram: MiniDiagram) -> void:
 
 func set_textures() -> void:
 	LineMiddle.texture = line_texture
-	Text.texture = GLOBALS.PARTICLE_TEXTURES[self.particle_name]
-	SpareText.texture = GLOBALS.PARTICLE_TEXTURES[self.particle_name]
+	Text.texture = ParticleData.PARTICLE_TEXTURES[self.particle_name]
+	SpareText.texture = ParticleData.PARTICLE_TEXTURES[self.particle_name]
 
-func _get_particle() -> GLOBALS.Particle:
-	return (anti * base_particle) as GLOBALS.Particle
+func _get_particle() -> ParticleData.Particle:
+	return (anti * base_particle) as ParticleData.Particle
 
 func _set_anti(new_value: int) -> void:
 	anti = new_value
 
 func _get_particle_name() -> String:
-	return GLOBALS.Particle.keys()[GLOBALS.Particle.values().find(self.particle)]
+	return ParticleData.Particle.keys()[ParticleData.Particle.values().find(self.particle)]
 
 func set_anti() -> void:
-	if base_particle in GLOBALS.SHADED_PARTICLES:
+	if base_particle in ParticleData.SHADED_PARTICLES:
 		if points[Point.Start].x <= points[Point.End].x:
 			anti = Anti.noanti
 		else:
@@ -136,7 +136,7 @@ func move_line() -> void:
 	
 	LineJointStart.points[Point.End] = points[Point.Start] + line_joint_start_length * self.line_vector.normalized() 
 	
-	if base_particle == GLOBALS.Particle.gluon:
+	if base_particle == ParticleData.Particle.gluon:
 		var number_of_gluon_loops : int = floor((self.line_vector.length() - line_joint_start_length - line_joint_end_length) / gluon_loop_length)
 		
 		LineJointEnd.points[Point.Start] = (
@@ -151,10 +151,10 @@ func move_line() -> void:
 
 func set_line_width() -> void:
 	match base_particle:
-		GLOBALS.Particle.gluon:
+		ParticleData.Particle.gluon:
 			LineMiddle.width = gluon_line_width
 			return
-		GLOBALS.Particle.photon:
+		ParticleData.Particle.photon:
 			LineMiddle.width = photon_line_width
 			return
 	
@@ -164,10 +164,10 @@ func get_arrow_visiblity() -> bool:
 	if points[Point.Start] == points[Point.End]:
 		return false
 	
-	if base_particle == GLOBALS.Particle.W:
+	if base_particle == ParticleData.Particle.W:
 		return false
 	
-	if base_particle in GLOBALS.BOSONS:
+	if base_particle in ParticleData.BOSONS:
 		return false
 		
 	return true
@@ -253,8 +253,8 @@ func move_text() -> void:
 	)
 
 func set_text_texture() -> void:
-	Text.texture = GLOBALS.PARTICLE_TEXTURES[self.particle_name]
-	SpareText.texture = GLOBALS.PARTICLE_TEXTURES[self.particle_name]
+	Text.texture = ParticleData.PARTICLE_TEXTURES[self.particle_name]
+	SpareText.texture = ParticleData.PARTICLE_TEXTURES[self.particle_name]
 
-	if points[Point.End].x == points[Point.Start].x and base_particle == GLOBALS.Particle.W:
-		Text.texture = GLOBALS.PARTICLE_TEXTURES['W_0']
+	if points[Point.End].x == points[Point.Start].x and base_particle == ParticleData.Particle.W:
+		Text.texture = ParticleData.PARTICLE_TEXTURES['W_0']

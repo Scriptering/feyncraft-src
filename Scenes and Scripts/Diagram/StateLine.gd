@@ -23,7 +23,7 @@ var joints : Array[HadronJoint] = []
 var old_quark_groups: Array = [[]]
 var old_position_x: int
 
-var connected_lone_particles : Array[GLOBALS.Particle] : get = _get_connected_lone_particles
+var connected_lone_particles : Array[ParticleData.Particle] : get = _get_connected_lone_particles
 
 func init(diagram: MainDiagram) -> void:
 	Diagram = diagram
@@ -87,8 +87,8 @@ func create_hadron_joint(hadron: Hadron) -> void:
 func create_hadrons(quark_groups: Array) -> void:
 	for i in range(quark_groups.size()):
 		var quark_group:Array = quark_groups[i]
-		var group_hadron : GLOBALS.Hadrons = get_quark_group_hadron(quark_group)
-		if group_hadron == GLOBALS.Hadrons.Invalid:
+		var group_hadron : ParticleData.Hadrons = get_quark_group_hadron(quark_group)
+		if group_hadron == ParticleData.Hadrons.Invalid:
 			continue
 		var hadron = Hadron.new()
 		hadron.init(quark_group, group_hadron)
@@ -100,24 +100,24 @@ func get_quantum_numbers() -> PackedFloat32Array:
 	)
 	
 	var quantum_sum: PackedFloat32Array = []
-	quantum_sum.resize(GLOBALS.QuantumNumber.size())
+	quantum_sum.resize(ParticleData.QuantumNumber.size())
 	quantum_sum.fill(0)
 	
 	for connected_quantum_number in connected_quantum_numbers:
-		for quantum_number in GLOBALS.QuantumNumber.values():
+		for quantum_number in ParticleData.QuantumNumber.values():
 			quantum_sum[quantum_number] += connected_quantum_number[quantum_number]
 	
 	return quantum_sum
 
-func get_quark_group_hadron(quark_group: Array) -> GLOBALS.Hadrons:
-	var quarks : Array[GLOBALS.Particle] = []
+func get_quark_group_hadron(quark_group: Array) -> ParticleData.Hadrons:
+	var quarks : Array[ParticleData.Particle] = []
 	for line in quark_group:
 		quarks.append(line.particle)
 	
-	for hadron in GLOBALS.Hadrons.values():
-		if quarks in GLOBALS.HADRON_QUARK_CONTENT[hadron]:
+	for hadron in ParticleData.Hadrons.values():
+		if quarks in ParticleData.HADRON_QUARK_CONTENT[hadron]:
 			return hadron
-	return GLOBALS.Hadrons.Invalid
+	return ParticleData.Hadrons.Invalid
 
 func sort_quark_groups(quark_groups: Array) -> Array:
 	for quark_group in quark_groups:
@@ -149,7 +149,7 @@ func group_connected_quarks(sorted_connected_lines: Array) -> Array:
 	var current_y_point : float
 	var current_group := []
 	for line in sorted_connected_lines:
-		if !line.base_particle in GLOBALS.QUARKS:
+		if !line.base_particle in ParticleData.QUARKS:
 			continue
 		if current_group.size() == 0:
 			current_group.append(line)
@@ -168,12 +168,12 @@ func group_connected_quarks(sorted_connected_lines: Array) -> Array:
 
 	return grouped_connected_lines
 
-func _get_connected_lone_particles() -> Array[GLOBALS.Particle]:
+func _get_connected_lone_particles() -> Array[ParticleData.Particle]:
 	var connected_lines := get_connected_lines()
-	var lone_connected_particles : Array[GLOBALS.Particle] = []
+	var lone_connected_particles : Array[ParticleData.Particle] = []
 	
 	for connected_line in connected_lines:
-		if !connected_line.base_particle in GLOBALS.QUARKS:
+		if !connected_line.base_particle in ParticleData.QUARKS:
 			lone_connected_particles.append(connected_line.particle)
 			continue
 		
@@ -186,8 +186,8 @@ func _get_connected_lone_particles() -> Array[GLOBALS.Particle]:
 	
 	return lone_connected_particles
 
-func get_connected_base_particles() -> Array[GLOBALS.Particle]:
-	var connected_base_particles: Array[GLOBALS.Particle] = []
+func get_connected_base_particles() -> Array[ParticleData.Particle]:
+	var connected_base_particles: Array[ParticleData.Particle] = []
 	
 	for particle_line in get_connected_lines():
 		connected_base_particles.push_back(particle_line.base_particle)

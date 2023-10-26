@@ -1,11 +1,11 @@
-[gd_scene load_steps=28 format=3 uid="uid://b65u1c7v5mbh6"]
+[gd_scene load_steps=29 format=3 uid="uid://b65u1c7v5mbh6"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_ihga5"]
 [ext_resource type="FontFile" uid="uid://cq27s0444iwkg" path="res://Textures/Fonts/ConnectionIi-2wj8.otf" id="2_a54w8"]
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="2_kvqmk"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/controls_tab.gd" id="4_1fcak"]
-[ext_resource type="PackedScene" uid="uid://ctj2f7ofdkrr1" path="res://Scenes and Scripts/UI/Buttons/pull_out_tab_button_up.tscn" id="4_ojgvm"]
 [ext_resource type="Texture2D" uid="uid://cl230tlreommx" path="res://Textures/Buttons/icons/controller.png" id="5_6w65b"]
+[ext_resource type="PackedScene" uid="uid://c842ueypoq88x" path="res://Scenes and Scripts/UI/Buttons/pull_out_tab_button_left.tscn" id="5_ux6n2"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="6_4bdyr"]
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="6_fyb0f"]
 [ext_resource type="Texture2D" uid="uid://pl51mlb5h4gr" path="res://Textures/Cursors/cursor_snip.png" id="7_rmxk8"]
@@ -30,11 +30,23 @@ Label/font_sizes/font_size = 16
 Label/fonts/font = ExtResource("2_a54w8")
 PanelContainer/styles/panel = SubResource("StyleBoxTexture_4ap8b")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0unwj"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_31lnv"]
 resource_local_to_scene = true
 shader = ExtResource("6_fyb0f")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_28jqf"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_kkki1"]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+texture = ExtResource("2_kvqmk")
+texture_margin_left = 6.0
+texture_margin_top = 6.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+expand_margin_right = 20.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_isust"]
 resource_local_to_scene = true
 shader = ExtResource("6_fyb0f")
 
@@ -49,25 +61,25 @@ texture_margin_top = 6.0
 texture_margin_right = 5.0
 texture_margin_bottom = 5.0
 
-[sub_resource type="Theme" id="Theme_p0ro2"]
-Button/styles/pressed = SubResource("StyleBoxTexture_bauei")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_l8jkb"]
-resource_local_to_scene = true
-shader = ExtResource("6_fyb0f")
-
 [sub_resource type="Theme" id="Theme_tkvjt"]
 Button/styles/pressed = SubResource("StyleBoxTexture_bauei")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_adosw"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1j7dw"]
 resource_local_to_scene = true
 shader = ExtResource("6_fyb0f")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ailrl"]
+[sub_resource type="Theme" id="Theme_p0ro2"]
+Button/styles/pressed = SubResource("StyleBoxTexture_bauei")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vlbar"]
 resource_local_to_scene = true
 shader = ExtResource("6_fyb0f")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_pwvc7"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m1kh8"]
+resource_local_to_scene = true
+shader = ExtResource("6_fyb0f")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0h66x"]
 resource_local_to_scene = true
 shader = ExtResource("6_fyb0f")
 
@@ -84,70 +96,44 @@ grow_vertical = 2
 theme = SubResource("Theme_jad7o")
 script = ExtResource("4_1fcak")
 ContentContainer = NodePath("MovingContainer/ContentContainer")
-TabButton = NodePath("MovingContainer/TabButton")
+TabButton = NodePath("MovingContainer/Tab")
 MovingContainer = NodePath("MovingContainer")
-move_direction = 1
 
-[node name="MovingContainer" type="VBoxContainer" parent="."]
+[node name="MovingContainer" type="HBoxContainer" parent="."]
 use_parent_material = true
 layout_mode = 0
 offset_right = 27.0
 offset_bottom = 16.0
+mouse_filter = 2
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="TabButton" parent="MovingContainer" instance=ExtResource("4_ojgvm")]
-material = SubResource("ShaderMaterial_0unwj")
-use_parent_material = true
+[node name="Tab" parent="MovingContainer" instance=ExtResource("5_ux6n2")]
+material = SubResource("ShaderMaterial_31lnv")
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_bottom = 38
 TabIcon = ExtResource("5_6w65b")
-TabMinimumSize = Vector2(39, 32)
+TabMinimumSize = Vector2(2.08165e-12, 50)
 icon_use_parent_material = true
 
 [node name="ContentContainer" type="PanelContainer" parent="MovingContainer"]
 use_parent_material = true
 layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_kkki1")
 
 [node name="GridContainer" type="GridContainer" parent="MovingContainer/ContentContainer"]
 use_parent_material = true
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/h_separation = 4
 theme_override_constants/v_separation = 2
 columns = 2
 
-[node name="Snip" parent="MovingContainer/ContentContainer/GridContainer" instance=ExtResource("6_4bdyr")]
-material = SubResource("ShaderMaterial_28jqf")
-layout_mode = 2
-theme = SubResource("Theme_p0ro2")
-icon = ExtResource("7_rmxk8")
-minimum_size = Vector2(30, 30)
-toggle_mode = true
-expand_icon = true
-button_group = ExtResource("13_vhilf")
-
-[node name="Tooltip" parent="MovingContainer/ContentContainer/GridContainer/Snip" instance=ExtResource("8_fff00")]
-tooltip = "Delete"
-
-[node name="SnipLabel" type="HBoxContainer" parent="MovingContainer/ContentContainer/GridContainer"]
-layout_mode = 2
-theme_override_constants/separation = -4
-
-[node name="Colon" type="Label" parent="MovingContainer/ContentContainer/GridContainer/SnipLabel"]
-layout_mode = 2
-text = ":"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="SnipLabel" type="Label" parent="MovingContainer/ContentContainer/GridContainer/SnipLabel"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "X"
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="Grab" parent="MovingContainer/ContentContainer/GridContainer" instance=ExtResource("6_4bdyr")]
-material = SubResource("ShaderMaterial_l8jkb")
+material = SubResource("ShaderMaterial_isust")
 layout_mode = 2
 theme = SubResource("Theme_tkvjt")
 icon = ExtResource("9_6aili")
@@ -160,24 +146,62 @@ button_group = ExtResource("13_vhilf")
 tooltip = "Move"
 
 [node name="GrabLabel" type="HBoxContainer" parent="MovingContainer/ContentContainer/GridContainer"]
+use_parent_material = true
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = -4
 
 [node name="Colon" type="Label" parent="MovingContainer/ContentContainer/GridContainer/GrabLabel"]
+use_parent_material = true
 layout_mode = 2
 text = ":"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="SnipLabel" type="Label" parent="MovingContainer/ContentContainer/GridContainer/GrabLabel"]
+use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "W"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Snip" parent="MovingContainer/ContentContainer/GridContainer" instance=ExtResource("6_4bdyr")]
+material = SubResource("ShaderMaterial_1j7dw")
+layout_mode = 2
+theme = SubResource("Theme_p0ro2")
+icon = ExtResource("7_rmxk8")
+minimum_size = Vector2(30, 30)
+toggle_mode = true
+expand_icon = true
+button_group = ExtResource("13_vhilf")
+
+[node name="Tooltip" parent="MovingContainer/ContentContainer/GridContainer/Snip" instance=ExtResource("8_fff00")]
+tooltip = "Delete"
+
+[node name="SnipLabel" type="HBoxContainer" parent="MovingContainer/ContentContainer/GridContainer"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = -4
+
+[node name="Colon" type="Label" parent="MovingContainer/ContentContainer/GridContainer/SnipLabel"]
+use_parent_material = true
+layout_mode = 2
+text = ":"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SnipLabel" type="Label" parent="MovingContainer/ContentContainer/GridContainer/SnipLabel"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "X"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Reset" parent="MovingContainer/ContentContainer/GridContainer" instance=ExtResource("6_4bdyr")]
-material = SubResource("ShaderMaterial_adosw")
+material = SubResource("ShaderMaterial_vlbar")
 layout_mode = 2
 icon = ExtResource("10_d874e")
 minimum_size = Vector2(30, 30)
@@ -188,16 +212,20 @@ icon_use_parent_material = true
 tooltip = "Reset"
 
 [node name="ResetLabel" type="HBoxContainer" parent="MovingContainer/ContentContainer/GridContainer"]
+use_parent_material = true
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = -4
 
 [node name="Colon" type="Label" parent="MovingContainer/ContentContainer/GridContainer/ResetLabel"]
+use_parent_material = true
 layout_mode = 2
 text = ":"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="SnipLabel" type="Label" parent="MovingContainer/ContentContainer/GridContainer/ResetLabel"]
+use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "C"
@@ -205,7 +233,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Undo" parent="MovingContainer/ContentContainer/GridContainer" instance=ExtResource("6_4bdyr")]
-material = SubResource("ShaderMaterial_ailrl")
+material = SubResource("ShaderMaterial_m1kh8")
 layout_mode = 2
 icon = ExtResource("11_a0bdl")
 minimum_size = Vector2(30, 30)
@@ -216,7 +244,7 @@ icon_use_parent_material = true
 tooltip = "Undo"
 
 [node name="Redo" parent="MovingContainer/ContentContainer/GridContainer" instance=ExtResource("6_4bdyr")]
-material = SubResource("ShaderMaterial_pwvc7")
+material = SubResource("ShaderMaterial_0h66x")
 layout_mode = 2
 icon = ExtResource("12_3t38n")
 minimum_size = Vector2(30, 30)

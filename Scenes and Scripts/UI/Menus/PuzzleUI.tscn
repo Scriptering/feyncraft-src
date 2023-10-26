@@ -30,7 +30,7 @@ default_font = ExtResource("3_ksjpd")
 default_font_size = 10
 LineEdit/font_sizes/font_size = 11
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0liva"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k1bi3"]
 resource_local_to_scene = true
 shader = ExtResource("10_f4opp")
 
@@ -240,12 +240,10 @@ text = "  Never"
 horizontal_alignment = 1
 
 [node name="Tab" parent="HBoxContainer" instance=ExtResource("9_2kx5m")]
-material = SubResource("ShaderMaterial_0liva")
+material = SubResource("ShaderMaterial_k1bi3")
 layout_mode = 2
 TabIcon = ExtResource("11_01uho")
 icon_use_parent_material = true
 
-[connection signal="mouse_entered" from="HBoxContainer/ContentContainer" to="." method="_on_PanelContainer_mouse_entered"]
-[connection signal="mouse_exited" from="HBoxContainer/ContentContainer" to="." method="_on_PanelContainer_mouse_exited"]
 [connection signal="value_changed" from="HBoxContainer/ContentContainer/OptionsContainer/StateParticleCountContainer/VBoxContainer/DegreeContainer/MinParticleCount" to="." method="_on_min_particle_count_value_changed"]
 [connection signal="value_changed" from="HBoxContainer/ContentContainer/OptionsContainer/StateParticleCountContainer/VBoxContainer/DegreeContainer/MaxParticleCount" to="." method="_on_max_particle_count_value_changed"]

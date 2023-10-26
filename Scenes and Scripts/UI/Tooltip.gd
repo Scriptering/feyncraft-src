@@ -17,6 +17,7 @@ extends Node
 func _ready() -> void:
 	Parent.mouse_entered.connect(_on_parent_mouse_entered)
 	Parent.mouse_exited.connect(_on_parent_mouse_exited)
+	Parent.visibility_changed.connect(_on_parent_visibility_changed)
 	
 	if Parent.get_signal_list().any(
 		func(signal_dict: Dictionary): return signal_dict['name'] == "hide_tooltip"
@@ -35,7 +36,8 @@ func _on_parent_mouse_exited() -> void:
 	hide_tooltip()
 
 func _on_tooltip_timer_timeout() -> void:
-	show_tooltip()
+	if Parent.visible:
+		show_tooltip()
 
 func show_tooltip() -> void:
 	if tooltip == "" and TooltipContainer.get_child_count() == 1:
@@ -61,3 +63,6 @@ func remove_content() -> void:
 			pass
 		
 		child.queue_free()
+
+func _on_parent_visibility_changed() -> void:
+	hide_tooltip()

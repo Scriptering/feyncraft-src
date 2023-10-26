@@ -54,14 +54,14 @@ func generate_vision_matrix(vision: GLOBALS.Vision, diagram: DrawingMatrix, shad
 
 func generate_shade_matrix(shade: Shade, diagram: DrawingMatrix) -> DrawingMatrix:
 	var shade_matrix: DrawingMatrix = diagram.get_reduced_matrix(
-		func(particle: GLOBALS.Particle): return particle in GLOBALS.SHADE_PARTICLES[shade]
+		func(particle: ParticleData.Particle): return particle in ParticleData.SHADE_PARTICLES[shade]
 	)
 
 	if shade == Shade.Dark or shade == Shade.Both:
 		return shade_matrix
 	
 	for connection in shade_matrix.get_all_connections():
-		if connection[shade_matrix.Connection.particle] == GLOBALS.Particle.W:
+		if connection[shade_matrix.Connection.particle] == ParticleData.Particle.W:
 			shade_matrix.reverse_connection(connection)
 	
 	for id in range(shade_matrix.matrix_size):
@@ -147,7 +147,7 @@ func find_colourless_hadron_interactions(
 		return colourless_hadron_interactions
 	
 	var quark_paths: Array[PackedInt32Array] = generate_paths(
-		vision_matrix.get_reduced_matrix(func(particle: GLOBALS.Particle): return particle in GLOBALS.QUARKS), pick_next_colour_point
+		vision_matrix.get_reduced_matrix(func(particle: ParticleData.Particle): return particle in ParticleData.QUARKS), pick_next_colour_point
 	)
 	
 	for hadron in hadrons:
@@ -172,7 +172,7 @@ func get_quark_path_gluon_points(
 			if !IGNORE_COLOURLESS_GROUP_GLUONS and connected_id in colourless_group_interactions:
 				continue
 			
-			if vision_matrix.are_interactions_connected(point, connected_id, false, GLOBALS.Particle.gluon):
+			if vision_matrix.are_interactions_connected(point, connected_id, false, ParticleData.Particle.gluon):
 				gluon_points.push_back(point)
 
 	return gluon_points
@@ -250,7 +250,7 @@ func find_colourless_group_interaction(path: PackedInt32Array, vision_matrix: Dr
 	var test_point: int = repeated_points[test_index]
 
 	var test_vision_matrix: DrawingMatrix = vision_matrix.duplicate(true)
-	test_vision_matrix.disconnect_interactions(repeated_points[test_index-1], repeated_points[test_index], GLOBALS.Particle.gluon, true)
+	test_vision_matrix.disconnect_interactions(repeated_points[test_index-1], repeated_points[test_index], ParticleData.Particle.gluon, true)
 
 	for reached_point in test_vision_matrix.reach_ids(test_point, [], true):
 		if reached_point == test_point:
@@ -390,14 +390,14 @@ func colour_meson(meson: Array, path_colours: Array[Colour], paths: Array[Packed
 
 func generate_colour_matrix(drawing_matrix: DrawingMatrix) -> DrawingMatrix:
 	var colour_matrix : DrawingMatrix = drawing_matrix.get_reduced_matrix(
-		func(particle: GLOBALS.Particle): return particle in GLOBALS.COLOUR_PARTICLES
+		func(particle: ParticleData.Particle): return particle in ParticleData.COLOUR_PARTICLES
 	)
 	
 	var gluon_connections: Array = []
 	for id in range(colour_matrix.matrix_size):
 		for connected_id in colour_matrix.get_connected_ids(id):
-			if colour_matrix.get_connection_particles(id, connected_id).front() == GLOBALS.Particle.gluon:
-				gluon_connections.push_back([connected_id, id, GLOBALS.Particle.gluon])
+			if colour_matrix.get_connection_particles(id, connected_id).front() == ParticleData.Particle.gluon:
+				gluon_connections.push_back([connected_id, id, ParticleData.Particle.gluon])
 	
 	for gluon_connection in gluon_connections:
 		colour_matrix.insert_connection(gluon_connection)
@@ -414,7 +414,7 @@ func pick_next_colour_point(current_point: int, available_points: PackedInt32Arr
 		return NOT_FOUND
 
 	for available_point in available_points:
-		if GLOBALS.Particle.gluon in connections.get_connection_particles(current_point, available_point, false, true):
+		if ParticleData.Particle.gluon in connections.get_connection_particles(current_point, available_point, false, true):
 			gluon_points.push_back(available_point)
 	
 	if gluon_points.size() == 0:

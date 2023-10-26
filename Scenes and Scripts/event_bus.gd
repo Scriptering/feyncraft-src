@@ -14,6 +14,7 @@ signal signal_problem_modified(problem_item)
 signal signal_problem_set_played(problem_set: ProblemSet, index: int)
 signal toggle_scene
 signal signal_save_files
+signal signal_diagram_submitted(diagram: DrawingMatrix, submissions: Array[DrawingMatrix])
 
 func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 	signal_draw_diagram.emit(drawing_matrix)
@@ -64,3 +65,6 @@ func problem_set_played(problem_set: ProblemSet, index: int) -> void:
 
 func save_files() -> void:
 	signal_save_files.emit()
+
+func diagram_submitted(diagram: DrawingMatrix, submissions: Array[DrawingMatrix]) -> void:
+	signal_diagram_submitted.emit(diagram, submissions)

@@ -25,6 +25,7 @@ var enter_funcs: Dictionary = {
 
 func _ready() -> void:
 	MainMenu.sandbox_pressed.connect(_on_sandbox_pressed)
+	MainMenu.tutorial_pressed.connect(_on_tutorial_pressed)
 	
 	remove_child(Level)
 	
@@ -69,6 +70,9 @@ func enter_main_menu(_args: Array = []) -> void:
 
 func _on_sandbox_pressed() -> void:
 	change_scene(Scene.Level, [BaseMode.Mode.Sandbox])
+
+func _on_tutorial_pressed() -> void:
+	change_scene(Scene.Level, [BaseMode.Mode.Tutorial])
 
 func _on_world_problem_submitted() -> void:
 	GLOBALS.save(GLOBALS.load_problem_set, GLOBALS.creating_problem_set_file)

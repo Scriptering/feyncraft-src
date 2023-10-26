@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://c7n4o6dbkwilh"]
+[gd_scene load_steps=79 format=3 uid="uid://c7n4o6dbkwilh"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/Levels/World.gd" id="1"]
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="1_ovngh"]
@@ -25,8 +25,12 @@
 [ext_resource type="PackedScene" uid="uid://wgw4km4uc7fh" path="res://Scenes and Scripts/UI/Menus/menu_tab.tscn" id="24_f5s2a"]
 [ext_resource type="PackedScene" uid="uid://ds2iet11sv3ty" path="res://Scenes and Scripts/UI/Buttons/particle_buttons.tscn" id="24_lunb1"]
 [ext_resource type="PackedScene" uid="uid://dcpcxfh7umytq" path="res://Scenes and Scripts/UI/MiniDiagram/mini_diagram_viewer.tscn" id="27_laye5"]
+[ext_resource type="Script" path="res://Scenes and Scripts/Levels/Tutorial.gd" id="28_soh5r"]
+[ext_resource type="PackedScene" uid="uid://bjmi5sukccoma" path="res://Scenes and Scripts/tutorial/TutorialInfo.tscn" id="30_2684v"]
 [ext_resource type="PackedScene" uid="uid://dxeg8j8rmil8t" path="res://Scenes and Scripts/UI/Menus/health_tab.tscn" id="31_f28gh"]
 [ext_resource type="PackedScene" uid="uid://c5scpc4iadf17" path="res://Scenes and Scripts/UI/ProblemSelection/creation_information.tscn" id="31_l3pqm"]
+[ext_resource type="Script" path="res://Scenes and Scripts/Levels/Hadrons.gd" id="31_rb52u"]
+[ext_resource type="Script" path="res://Scenes and Scripts/tutorial/TutorialStep.gd" id="31_t51na"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ue1rd"]
 resource_local_to_scene = true
@@ -47,43 +51,175 @@ expand_margin_top = 1.0
 expand_margin_right = 1.0
 expand_margin_bottom = 1.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_yg41m"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lqh60"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ti4d6"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rfitf"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_j1lkj"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rc81s"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_edlqm"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ksxfp"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_t7vhb"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yd5fg"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_nmbpl"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w6ddf"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_exmto"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rsku4"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_j2v53"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_psn4e"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_l4dvd"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_45raw"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4gvsn"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3f73u"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l0d5b"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o3lvq"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lynp0"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ii2b1"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_02w2u"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_utxbo"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mka4l"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tato1"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bldd2"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ua1yt"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ef22d"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1f3rh"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0xcow"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uf6r2"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gkkv2"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_osxd0"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p4vfe"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h77ef"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_01t1m"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h0tg6"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gt61x"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h6gef"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_na2e7"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c185j"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hrw55"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_omnwb"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_forka"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4khis"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cdjxo"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fiw3n"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_aps2y"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d32gk"]
+resource_local_to_scene = true
+shader = ExtResource("1_ovngh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xbucc"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
@@ -302,7 +438,8 @@ z_index = 2
 use_parent_material = true
 
 [node name="CreationInformation" parent="FloatingMenus" instance=ExtResource("31_l3pqm")]
-material = SubResource("ShaderMaterial_yg41m")
+visible = false
+material = SubResource("ShaderMaterial_lqh60")
 offset_left = 496.0
 offset_top = 144.0
 offset_right = 496.0
@@ -310,7 +447,7 @@ offset_bottom = 144.0
 
 [node name="GeneratedDiagrams" parent="FloatingMenus" instance=ExtResource("27_laye5")]
 visible = false
-material = SubResource("ShaderMaterial_ti4d6")
+material = SubResource("ShaderMaterial_rfitf")
 offset_left = 177.0
 offset_top = 51.0
 offset_right = 177.0
@@ -319,7 +456,7 @@ title = "Generated Diagrams"
 
 [node name="SubmittedDiagrams" parent="FloatingMenus" instance=ExtResource("27_laye5")]
 visible = false
-material = SubResource("ShaderMaterial_j1lkj")
+material = SubResource("ShaderMaterial_rc81s")
 offset_left = 177.0
 offset_top = 51.0
 offset_right = 177.0
@@ -331,14 +468,14 @@ z_index = 3
 use_parent_material = true
 
 [node name="VisionButton" parent="PullOutTabs" instance=ExtResource("3_hqsoq")]
-material = SubResource("ShaderMaterial_edlqm")
+material = SubResource("ShaderMaterial_ksxfp")
 offset_left = 612.0
-offset_top = 60.0
+offset_top = 45.0
 offset_right = 634.0
-offset_bottom = 120.0
+offset_bottom = 105.0
 
 [node name="ParticleButtons" parent="PullOutTabs" instance=ExtResource("24_lunb1")]
-material = SubResource("ShaderMaterial_t7vhb")
+material = SubResource("ShaderMaterial_yd5fg")
 anchors_preset = 7
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -349,37 +486,137 @@ offset_bottom = 334.0
 grow_vertical = 0
 size_flags_horizontal = 4
 
-[node name="GenerationButton" parent="PullOutTabs" instance=ExtResource("22_u64s1")]
-material = SubResource("ShaderMaterial_nmbpl")
-offset_left = -141.0
-offset_top = 59.0
-offset_right = -141.0
-offset_bottom = 59.0
+[node name="PullOutTabButtonUp" parent="PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer" index="0"]
+material = SubResource("ShaderMaterial_w6ddf")
+
+[node name="TabButton" parent="PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer/PullOutTabButtonUp" index="0"]
+material = SubResource("ShaderMaterial_rsku4")
+
+[node name="electron" parent="PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer/Tab/Leptons" index="0"]
+material = SubResource("ShaderMaterial_psn4e")
+
+[node name="muon" parent="PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer/Tab/Leptons" index="1"]
+material = SubResource("ShaderMaterial_45raw")
+
+[node name="tau" parent="PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer/Tab/Leptons" index="2"]
+material = SubResource("ShaderMaterial_3f73u")
+
+[node name="electron_neutrino" parent="PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer/Tab/Leptons" index="3"]
+material = SubResource("ShaderMaterial_l0d5b")
+
+[node name="muon_neutrino" parent="PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer/Tab/Leptons" index="4"]
+material = SubResource("ShaderMaterial_o3lvq")
+
+[node name="tau_neutrino" parent="PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer/Tab/Leptons" index="5"]
+material = SubResource("ShaderMaterial_lynp0")
+
+[node name="PullOutTabButtonUp" parent="PullOutTabs/ParticleButtons/HBoxContainer/Bosons/MovingContainer" index="0"]
+material = SubResource("ShaderMaterial_ii2b1")
+
+[node name="photon" parent="PullOutTabs/ParticleButtons/HBoxContainer/Bosons/MovingContainer/Tab/Bosons" index="0"]
+material = SubResource("ShaderMaterial_02w2u")
+
+[node name="gluon" parent="PullOutTabs/ParticleButtons/HBoxContainer/Bosons/MovingContainer/Tab/Bosons" index="1"]
+material = SubResource("ShaderMaterial_utxbo")
+
+[node name="W" parent="PullOutTabs/ParticleButtons/HBoxContainer/Bosons/MovingContainer/Tab/Bosons" index="2"]
+material = SubResource("ShaderMaterial_mka4l")
+
+[node name="Z" parent="PullOutTabs/ParticleButtons/HBoxContainer/Bosons/MovingContainer/Tab/Bosons" index="3"]
+material = SubResource("ShaderMaterial_tato1")
+
+[node name="H" parent="PullOutTabs/ParticleButtons/HBoxContainer/Bosons/MovingContainer/Tab/Bosons" index="4"]
+material = SubResource("ShaderMaterial_bldd2")
+
+[node name="PullOutTabButtonUp" parent="PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer" index="0"]
+material = SubResource("ShaderMaterial_ua1yt")
+
+[node name="up" parent="PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer/Tab/Quarks" index="0"]
+material = SubResource("ShaderMaterial_ef22d")
+
+[node name="charm" parent="PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer/Tab/Quarks" index="1"]
+material = SubResource("ShaderMaterial_1f3rh")
+
+[node name="top" parent="PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer/Tab/Quarks" index="2"]
+material = SubResource("ShaderMaterial_0xcow")
+
+[node name="down" parent="PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer/Tab/Quarks" index="3"]
+material = SubResource("ShaderMaterial_uf6r2")
+
+[node name="strange" parent="PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer/Tab/Quarks" index="4"]
+material = SubResource("ShaderMaterial_gkkv2")
+
+[node name="bottom" parent="PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer/Tab/Quarks" index="5"]
+material = SubResource("ShaderMaterial_osxd0")
+
+[node name="PullOutTabButtonUp" parent="PullOutTabs/ParticleButtons/HBoxContainer/General/MovingContainer" index="0"]
+material = SubResource("ShaderMaterial_p4vfe")
+
+[node name="lepton" parent="PullOutTabs/ParticleButtons/HBoxContainer/General/MovingContainer/Tab/General" index="0"]
+material = SubResource("ShaderMaterial_h77ef")
+
+[node name="bright_quark" parent="PullOutTabs/ParticleButtons/HBoxContainer/General/MovingContainer/Tab/General" index="1"]
+material = SubResource("ShaderMaterial_01t1m")
+
+[node name="lepton_neutrino" parent="PullOutTabs/ParticleButtons/HBoxContainer/General/MovingContainer/Tab/General" index="2"]
+material = SubResource("ShaderMaterial_h0tg6")
+
+[node name="dark_quark" parent="PullOutTabs/ParticleButtons/HBoxContainer/General/MovingContainer/Tab/General" index="3"]
+material = SubResource("ShaderMaterial_gt61x")
 
 [node name="PuzzleUI" parent="PullOutTabs" instance=ExtResource("23_v0dtx")]
-material = SubResource("ShaderMaterial_exmto")
+visible = false
+material = SubResource("ShaderMaterial_h6gef")
 offset_left = -140.0
-offset_top = 109.0
+offset_top = 143.0
 offset_right = -140.0
-offset_bottom = 109.0
+offset_bottom = 143.0
+
+[node name="GenerationButton" parent="PullOutTabs" instance=ExtResource("22_u64s1")]
+material = SubResource("ShaderMaterial_na2e7")
+offset_left = -141.0
+offset_top = 43.0
+offset_right = -141.0
+offset_bottom = 43.0
 
 [node name="ProblemTab" parent="PullOutTabs" instance=ExtResource("20_uaeg6")]
-material = SubResource("ShaderMaterial_j2v53")
+material = SubResource("ShaderMaterial_c185j")
 use_parent_material = true
 offset_left = 157.0
 offset_top = -26.0
 offset_right = 157.0
 offset_bottom = -26.0
 
+[node name="Rewind" parent="PullOutTabs/ProblemTab/MovingContainer/VBoxContainer/Tab/HBoxContainer" index="0"]
+material = SubResource("ShaderMaterial_hrw55")
+
+[node name="Solution" parent="PullOutTabs/ProblemTab/MovingContainer/VBoxContainer/Tab/HBoxContainer" index="1"]
+material = SubResource("ShaderMaterial_omnwb")
+
+[node name="Equation" parent="PullOutTabs/ProblemTab/MovingContainer/VBoxContainer/Tab/HBoxContainer" index="3"]
+material = SubResource("ShaderMaterial_forka")
+
+[node name="ViewSubmissions" parent="PullOutTabs/ProblemTab/MovingContainer/VBoxContainer/Tab/HBoxContainer" index="4"]
+material = SubResource("ShaderMaterial_4khis")
+
+[node name="Submit" parent="PullOutTabs/ProblemTab/MovingContainer/VBoxContainer/Tab/HBoxContainer" index="5"]
+material = SubResource("ShaderMaterial_cdjxo")
+
+[node name="NextProblem" parent="PullOutTabs/ProblemTab/MovingContainer/VBoxContainer/Tab/HBoxContainer" index="6"]
+material = SubResource("ShaderMaterial_fiw3n")
+
+[node name="PullOutTabButtonDown" parent="PullOutTabs/ProblemTab/MovingContainer/VBoxContainer" index="1"]
+material = SubResource("ShaderMaterial_aps2y")
+
 [node name="MenuTab" parent="PullOutTabs" instance=ExtResource("24_f5s2a")]
-material = SubResource("ShaderMaterial_l4dvd")
+material = SubResource("ShaderMaterial_d32gk")
 offset_left = 515.0
 offset_top = 339.0
 offset_right = 515.0
 offset_bottom = 339.0
 
 [node name="HealthTab" parent="PullOutTabs" instance=ExtResource("31_f28gh")]
-material = SubResource("ShaderMaterial_4gvsn")
+material = SubResource("ShaderMaterial_xbucc")
 offset_left = 501.0
 offset_top = -39.0
 offset_right = 501.0
@@ -395,13 +632,158 @@ script = ExtResource("2")
 
 [node name="vision_manager" type="Node" parent="."]
 
+[node name="Tutorial" type="Node2D" parent="."]
+visible = false
+z_index = 6
+script = ExtResource("28_soh5r")
+
+[node name="CanvasGroup" type="CanvasGroup" parent="Tutorial"]
+
+[node name="Shadow" type="ColorRect" parent="Tutorial/CanvasGroup"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 640.0
+offset_bottom = 360.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.431373)
+metadata/_edit_lock_ = true
+
+[node name="Spotlights" type="Control" parent="Tutorial/CanvasGroup"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+
+[node name="TutorialInfo" parent="Tutorial" instance=ExtResource("30_2684v")]
+offset_left = 292.0
+offset_top = 76.0
+offset_right = 292.0
+offset_bottom = 76.0
+
+[node name="Steps" type="Node" parent="Tutorial"]
+
+[node name="Welcome" type="Node" parent="Tutorial/Steps"]
+script = ExtResource("31_t51na")
+text = "Welcome to FeynCraft! Here you will be able to draw, create, and generate Feynman diagram problems.
+
+Click next below to get started."
+
+[node name="Controls" type="Node" parent="Tutorial/Steps"]
+script = ExtResource("31_t51na")
+text = "This is the controls tab.
+
+To move objects such as interactions and menus (including this one), either hold W and drag, or toggle the button and drag.
+
+After moving this menu about, press next."
+focus_controls = true
+
+[node name="ParticleSelection" type="Node" parent="Tutorial/Steps" node_paths=PackedStringArray("FocusObjects")]
+script = ExtResource("31_t51na")
+text = "These are your particles. To select one to draw, first click the category to open it, then click on a particle button. Then click next."
+FocusObjects = [NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Bosons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/General/MovingContainer")]
+
+[node name="Diagram" type="Node" parent="Tutorial/Steps" node_paths=PackedStringArray("FocusObjects")]
+script = ExtResource("31_t51na")
+text = "Particles can only be drawn within the diagram area, on and between the initial and final state lines.
+
+Particles are drawn by clicking and dragging.
+
+Inside you controls tab you can also find buttons to move and delete particles.
+
+Try drawing some particles, then click next"
+FocusObjects = [NodePath("../../../Diagram"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/General/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Bosons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer")]
+focus_controls = true
+
+[node name="Interactions" type="Node" parent="Tutorial/Steps" node_paths=PackedStringArray("FocusObjects")]
+script = ExtResource("31_t51na")
+text = "Interactions are created by joining particles.
+
+The number of dots shown is its 'degree'.
+
+To move interactions, hold down W and click and drag, or toggle the move button in the control tab.
+
+Interactions can also be deleted.
+
+Try creating, moving, and deleting interactions, then click next."
+FocusObjects = [NodePath("../../../Diagram"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/General/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Bosons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer")]
+focus_controls = true
+
+[node name="InteractionInformation" type="Node" parent="Tutorial/Steps" node_paths=PackedStringArray("FocusObjects")]
+script = ExtResource("31_t51na")
+text = "Invalid interactions are marked in red, to find out why, you can click on interaction to see more information. Click next when ready."
+FocusObjects = [NodePath("../../../Diagram"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/General/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Bosons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer")]
+focus_controls = true
+
+[node name="ProblemTab" type="Node" parent="Tutorial/Steps" node_paths=PackedStringArray("FocusObjects")]
+script = ExtResource("31_t51na")
+text = "Now let's solve a problem. This is the problem tab, open it, then click next."
+FocusObjects = [NodePath("../../../PullOutTabs/ProblemTab/MovingContainer/VBoxContainer")]
+
+[node name="Problem" type="Node" parent="Tutorial/Steps" node_paths=PackedStringArray("FocusObjects")]
+script = ExtResource("31_t51na")
+text = "This is the current problem you need to draw a diagram for, as well as the required degree.
+
+Click next."
+FocusObjects = [NodePath("../../../PullOutTabs/ProblemTab/MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer")]
+
+[node name="PreviousProblem" type="Node" parent="Tutorial/Steps" node_paths=PackedStringArray("FocusObjects")]
+script = ExtResource("31_t51na")
+text = "This button will load the previous problem.
+
+Click next."
+FocusObjects = [NodePath("../../../PullOutTabs/ProblemTab/MovingContainer/VBoxContainer/Tab/HBoxContainer/Rewind")]
+
+[node name="Solution" type="Node" parent="Tutorial/Steps" node_paths=PackedStringArray("FocusObjects")]
+script = ExtResource("31_t51na")
+text = "This button will show a solution to the current problem.
+
+Click next."
+FocusObjects = [NodePath("../../../PullOutTabs/ProblemTab/MovingContainer/VBoxContainer/Tab/HBoxContainer/Solution")]
+
+[node name="Submission" type="Node" parent="Tutorial/Steps" node_paths=PackedStringArray("FocusObjects")]
+script = ExtResource("31_t51na")
+text = "The right button submits the drawn diagram. It also shows the number of submissions required.
+
+On the left, you can view your correct submissions.
+
+Click next."
+FocusObjects = [NodePath("../../../PullOutTabs/ProblemTab/MovingContainer/VBoxContainer/Tab/HBoxContainer/Solution")]
+
+[node name="NextProblem" type="Node" parent="Tutorial/Steps" node_paths=PackedStringArray("FocusObjects")]
+script = ExtResource("31_t51na")
+text = "Once you have submitted all required diagrams, you can click this button to go to the next problem.
+
+Click next."
+FocusObjects = [NodePath("../../../PullOutTabs/ProblemTab/MovingContainer/VBoxContainer/Tab/HBoxContainer/Solution")]
+
+[node name="ProblemCompletion" type="Node" parent="Tutorial/Steps" node_paths=PackedStringArray("FocusObjects")]
+script = ExtResource("31_t51na")
+text = "Try completing this problem, or generate solutions, and submit them.
+Then click the next problem button."
+FocusObjects = [NodePath("../../../PullOutTabs/ProblemTab/MovingContainer/VBoxContainer/Tab/HBoxContainer/Solution")]
+enable_spotlight = false
+
+[node name="Hadrons" type="Node" parent="Tutorial/Steps"]
+script = ExtResource("31_rb52u")
+text = "This problem requires you to draw hadrons. As shown, hadrons can be created by drawing quarks next to each other on state lines."
+enable_spotlight = false
+
 [connection signal="mouse_entered" from="Diagram" to="Diagram" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="Diagram" to="Diagram" method="_on_mouse_exited"]
 [connection signal="text_changed" from="Diagram/TitleContainer/Title" to="Diagram/TitleContainer/Title" method="_on_text_changed"]
 [connection signal="text_submitted" from="Diagram/TitleContainer/Title" to="Diagram" method="_on_title_text_submitted"]
 [connection signal="submit_problem" from="FloatingMenus/CreationInformation" to="." method="_on_creation_information_submit_problem"]
 [connection signal="toggle_all" from="FloatingMenus/CreationInformation" to="." method="_on_creation_information_toggle_all"]
+[connection signal="next_pressed" from="Tutorial/TutorialInfo" to="Tutorial" method="_on_tutorial_info_next_pressed"]
+[connection signal="prev_pressed" from="Tutorial/TutorialInfo" to="Tutorial" method="_on_tutorial_info_prev_pressed"]
 
 [editable path="Diagram/DiagramArea/Initial"]
 [editable path="Diagram/DiagramArea/Final"]
 [editable path="Algorithms/SolutionGeneration"]
+[editable path="PullOutTabs/ParticleButtons"]
+[editable path="PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer/PullOutTabButtonUp"]
+[editable path="PullOutTabs/ProblemTab"]

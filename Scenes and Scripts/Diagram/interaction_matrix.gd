@@ -25,21 +25,47 @@ func add_unconnected_interaction(
 	unconnected_particle_count[interaction_state] += unconnected_particles.size()
 
 func connect_interactions(
-	from_id: int, to_id: int, particle: int = GLOBALS.PARTICLE.none, bidirectional: bool = false, reverse: bool = false
+	from_id: int, to_id: int, particle: int = ParticleData.PARTICLE.none, bidirectional: bool = false, reverse: bool = false
 ) -> void:
 	super.connect_interactions(from_id, to_id, particle, bidirectional, reverse)
 	
-	unconnected_matrix[from_id].erase(particle)
-	unconnected_particle_count[get_state_from_id(from_id)] -= 1
+	if particle in unconnected_matrix[from_id]:
+		unconnected_matrix[from_id].erase(particle)
+		unconnected_particle_count[get_state_from_id(from_id)] -= 1
 	
-	unconnected_matrix[to_id].erase(particle)
-	unconnected_particle_count[get_state_from_id(to_id)] -= 1
+	if particle in unconnected_matrix[to_id]:
+		unconnected_matrix[to_id].erase(particle)
+		unconnected_particle_count[get_state_from_id(to_id)] -= 1
+
+func connect_in_out_interactions(
+	from_id: int, to_id: int, particle: int = ParticleData.PARTICLE.none, bidirectional: bool = false, reverse: bool = false
+) -> void:
+	
+	reverse = particle < 0
+	particle = abs(particle)
+	
+	super.connect_interactions(from_id, to_id, particle, bidirectional, reverse)
+	
+	var temp_id: int = from_id
+	if reverse:
+		from_id = to_id
+		to_id = temp_id
+	
+	if particle in unconnected_matrix[from_id]:
+		unconnected_matrix[from_id].erase(particle)
+		unconnected_particle_count[get_state_from_id(from_id)] -= 1
+	
+	var in_particle: ParticleData.Particle = particle if particle in ParticleData.UNSHADED_PARTICLES else -particle
+	
+	if in_particle in unconnected_matrix[to_id]:
+		unconnected_matrix[to_id].erase(in_particle)
+		unconnected_particle_count[get_state_from_id(to_id)] -= 1
 
 func insert_connection(connection: Array) -> void:
 	connect_interactions(connection[Connection.from_id], connection[Connection.to_id], connection[Connection.particle])
 	
 func disconnect_interactions(
-	from_id: int, to_id: int, particle: int = GLOBALS.PARTICLE.none, bidirectional: bool = false, reverse: bool = false
+	from_id: int, to_id: int, particle: int = ParticleData.PARTICLE.none, bidirectional: bool = false, reverse: bool = false
 ) -> void:
 	super.disconnect_interactions(from_id, to_id, particle, bidirectional, reverse)
 
@@ -53,13 +79,21 @@ func disconnect_interactions(
 func remove_connection(connection: Array) -> void:
 	disconnect_interactions(connection[Connection.from_id], connection[Connection.to_id], connection[Connection.particle])
 
-func get_unconnected_particle_count(state: StateLine.StateType) -> int:
+func get_unconnected_particle_count() -> int:
+	var particle_count: int = 0
+	
+	for state_count in unconnected_particle_count:
+		particle_count += state_count
+	
+	return particle_count
+
+func get_unconnected_state_particle_count(state: StateLine.StateType) -> int:
 	if state == StateLine.StateType.Both:
 		return unconnected_particle_count[StateLine.StateType.Initial] + unconnected_particle_count[StateLine.StateType.Final]
 
 	return unconnected_particle_count[state]
 
-func find_unconnected_particle(particle: GLOBALS.Particle) -> PackedInt32Array:
+func find_unconnected_particle(particle: ParticleData.Particle) -> PackedInt32Array:
 	var found_ids: PackedInt32Array = []
 	for id in range(unconnected_matrix.size()):
 		if particle in unconnected_matrix[id]:
@@ -67,7 +101,7 @@ func find_unconnected_particle(particle: GLOBALS.Particle) -> PackedInt32Array:
 
 	return found_ids
 
-func find_all_unconnected_state_particle(particle: GLOBALS.Particle, state: StateLine.StateType) -> PackedInt32Array:
+func find_all_unconnected_state_particle(particle: ParticleData.Particle, state: StateLine.StateType) -> PackedInt32Array:
 	var found_ids: PackedInt32Array = []
 	for id in range(get_starting_state_id(state), get_ending_state_id(state)):
 		for unconnected_particle in unconnected_matrix[id]:
@@ -90,8 +124,8 @@ func get_unconnected_base_particles() -> Array:
 func get_unconnected_state(state: StateLine.StateType) -> Array:
 	return unconnected_matrix.slice(get_starting_state_id(state), get_ending_state_id(state))
 
-func is_extreme_particle(particle: GLOBALS.Particle, entry_factor: EntryFactor, state_id: int) -> bool:
-	if abs(particle) not in GLOBALS.SHADED_PARTICLES:
+func is_extreme_particle(particle: ParticleData.Particle, entry_factor: EntryFactor, state_id: int) -> bool:
+	if abs(particle) not in ParticleData.SHADED_PARTICLES:
 		return false
 
 	return entry_factor * state_factor[get_state_from_id(state_id)] * particle >= 0
@@ -100,7 +134,7 @@ func get_extreme_points(entry_factor: EntryFactor) -> PackedInt32Array:
 	var extreme_points: PackedInt32Array = []
 
 	for state_id in get_state_ids(StateLine.StateType.Both):
-		if unconnected_matrix[state_id].any(func(particle: GLOBALS.Particle): return is_extreme_particle(particle, entry_factor, state_id)):
+		if unconnected_matrix[state_id].any(func(particle: ParticleData.Particle): return is_extreme_particle(particle, entry_factor, state_id)):
 			extreme_points.push_back(state_id)
 			continue
 
@@ -111,7 +145,7 @@ func get_extreme_states(entry_factor: EntryFactor) -> Array:
 	
 	for state_id in get_state_ids(StateLine.StateType.Both):
 		extreme_states.push_back(unconnected_matrix[state_id].filter(
-			func(particle: GLOBALS.Particle): return is_extreme_particle(particle, entry_factor, state_id)
+			func(particle: ParticleData.Particle): return is_extreme_particle(particle, entry_factor, state_id)
 		))
 	
 	return extreme_states
@@ -220,3 +254,29 @@ func has_same_unconnected_matrix(comparison_matrix: InteractionMatrix) -> bool:
 		return false
 	
 	return true
+
+func has_same_connection_matrix(comparison_matrix: InteractionMatrix) -> bool:
+	if connection_matrix == comparison_matrix.connection_matrix:
+		return true
+	
+	if connection_matrix.size() != comparison_matrix.connection_matrix.size():
+		return false
+	
+	if connection_matrix.any(func(interaction): return interaction not in comparison_matrix.connection_matrix):
+		return false
+	
+	if comparison_matrix.connection_matrix.any(func(interaction): return interaction not in connection_matrix):
+		return false
+	
+	return true
+
+func is_duplicate_interaction_matrix(compare_interaction_matrix: InteractionMatrix) -> bool:
+	if !has_same_unconnected_matrix(compare_interaction_matrix):
+		return false
+	
+	if !has_same_connection_matrix(compare_interaction_matrix):
+		return false
+	
+	return true
+	
+	
