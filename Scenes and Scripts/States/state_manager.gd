@@ -18,13 +18,13 @@ func change_state(new_state: BaseState.State) -> void:
 	if current_state:
 		current_state.exit()
 	
-	emit_signal("state_changed", new_state, state)
+	state_changed.emit(new_state, state)
 	previous_state = state
 	current_state = states[new_state]
 	state = new_state
 	current_state.enter()
 
-func init(Diagram: DiagramBase, Controls: Node) -> void:
+func init(Diagram: DiagramBase) -> void:
 	var crosshair = Diagram.get_node("DiagramArea/Crosshair")
 	
 	for child in get_children():
@@ -32,18 +32,16 @@ func init(Diagram: DiagramBase, Controls: Node) -> void:
 		child.state_manager = self
 		child.Diagram = Diagram
 		child.crosshair = crosshair
-		child.Controls = Controls
 		
 	crosshair.moved.connect(crosshair_moved)
-	self.state_changed.connect(Callable(crosshair, "_state_changed"))
+	state_changed.connect(crosshair._state_changed)
 	change_state(BaseState.State.Idle)
 
-func change_scene(Diagram: DiagramBase, Controls: Node) -> void:
+func change_scene(Diagram: DiagramBase) -> void:
 	var crosshair = Diagram.get_node("DiagramArea/Crosshair")
 	
 	for child in get_children():
 		child.Diagram = Diagram
-		child.Controls = Controls
 		child.crosshair = crosshair
 	
 	if !crosshair.moved.is_connected(crosshair_moved):

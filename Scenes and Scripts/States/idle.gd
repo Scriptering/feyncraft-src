@@ -15,20 +15,10 @@ func connect_button(button: PanelButton) -> void:
 
 	button.button_mouse_entered.connect(_on_button_mouse_entered)
 	button.mouse_exited.connect(_on_button_mouse_exited)
-#
-#func disconnect_button(button: PanelButton) -> void:
-#	if !button.button_mouse_entered.is_connected(_on_button_mouse_entered):
-#		return
-#	button.button_mouse_entered.disconnect(_on_button_mouse_entered)
-#	button.mouse_exited.disconnect(_on_button_mouse_exited)
-#
+
 func connect_buttons() -> void:
 	for button in get_tree().get_nodes_in_group('button'):
 		connect_button(button)
-#
-#func disconnect_buttons() -> void:
-#	for button in get_tree().get_nodes_in_group('button'):
-#		disconnect_button(button)
 
 func enter() -> void:
 	super.enter()
@@ -37,14 +27,6 @@ func enter() -> void:
 func exit() -> void:
 	super.exit()
 #	disconnect_buttons()
-
-func process(_delta: float) -> State:
-	if Controls.Snip.is_just_pressed:
-		return State.Deleting
-	elif Controls.Grab.is_just_pressed:
-		return State.Hovering
-	
-	return State.Null
 
 func input(event: InputEvent) -> State:
 	if Input.is_action_just_pressed("draw_history"):

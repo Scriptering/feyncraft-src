@@ -15,12 +15,11 @@ enum State {
 var crosshair : Node2D
 var state_manager : Node
 var Diagram : MainDiagram
-var Controls : Node
 
 @export var cursor_state : GLOBALS.CURSOR
 
 func enter() -> void:
-	emit_signal("change_cursor", cursor_state)
+	change_cursor.emit(cursor_state)
 
 func exit() -> void:
 	pass
