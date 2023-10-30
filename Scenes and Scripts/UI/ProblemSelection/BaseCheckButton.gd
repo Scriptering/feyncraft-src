@@ -3,7 +3,7 @@ extends CheckButton
 signal hide_tooltip
 
 func _toggled(button_pressed: bool) -> void:
-	emit_signal("hide_tooltip")
+	hide_tooltip.emit()
 	
 	match button_pressed:
 		true:
