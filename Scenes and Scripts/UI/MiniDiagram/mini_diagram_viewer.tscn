@@ -34,27 +34,27 @@ PanelContainer/styles/panel = SubResource("StyleBoxTexture_pkocb")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_05qsh"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3v2sb"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yor8s"]
 resource_local_to_scene = true
 shader = ExtResource("7_nj3d4")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4cbvg"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fs78e"]
 resource_local_to_scene = true
 shader = ExtResource("7_nj3d4")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_1iamv"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sc576"]
 resource_local_to_scene = true
 shader = ExtResource("7_nj3d4")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4xhh1"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jg6n8"]
 resource_local_to_scene = true
 shader = ExtResource("7_nj3d4")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_tb7tq"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3rrss"]
 resource_local_to_scene = true
 shader = ExtResource("7_nj3d4")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_d8jbp"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_baevl"]
 resource_local_to_scene = true
 shader = ExtResource("7_nj3d4")
 
@@ -81,14 +81,25 @@ GrabAreas = [NodePath("VBoxContainer/HBoxContainer"), NodePath("VBoxContainer/Pa
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 use_parent_material = true
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -66.0
+offset_right = 122.0
+offset_bottom = -26.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/separation = -186
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 mouse_filter = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer"]
@@ -113,7 +124,7 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_05qsh")
 
 [node name="MiniDiagram" parent="VBoxContainer/PanelContainer/VBoxContainer/CenterContainer/MiniDiagramContainer" instance=ExtResource("6_y8o7g")]
-material = SubResource("ShaderMaterial_3v2sb")
+material = SubResource("ShaderMaterial_yor8s")
 use_parent_material = true
 layout_mode = 2
 
@@ -129,14 +140,14 @@ size_flags_horizontal = 3
 alignment = 1
 
 [node name="X" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/X_container" instance=ExtResource("6_r8qrn")]
-material = SubResource("ShaderMaterial_4cbvg")
+material = SubResource("ShaderMaterial_fs78e")
 layout_mode = 2
 icon = ExtResource("7_t41g2")
 minimum_size = Vector2(18, 18)
 icon_use_parent_material = true
 
 [node name="Left" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
-material = SubResource("ShaderMaterial_1iamv")
+material = SubResource("ShaderMaterial_sc576")
 layout_mode = 2
 mouse_filter = 1
 icon = ExtResource("8_g4oap")
@@ -144,7 +155,7 @@ minimum_size = Vector2(18, 2.08165e-12)
 icon_use_parent_material = true
 
 [node name="Load" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
-material = SubResource("ShaderMaterial_4xhh1")
+material = SubResource("ShaderMaterial_jg6n8")
 layout_mode = 2
 mouse_filter = 1
 icon = ExtResource("9_ulpnp")
@@ -156,7 +167,7 @@ icon_use_parent_material = true
 tooltip = "Load Diagram"
 
 [node name="Delete" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
-material = SubResource("ShaderMaterial_tb7tq")
+material = SubResource("ShaderMaterial_3rrss")
 layout_mode = 2
 mouse_filter = 1
 icon = ExtResource("11_5ck4b")
@@ -168,7 +179,7 @@ icon_use_parent_material = true
 tooltip = "Delete Diagram"
 
 [node name="Right" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
-material = SubResource("ShaderMaterial_d8jbp")
+material = SubResource("ShaderMaterial_baevl")
 layout_mode = 2
 mouse_filter = 1
 icon = ExtResource("9_4bpdd")

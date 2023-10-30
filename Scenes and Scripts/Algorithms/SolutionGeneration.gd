@@ -44,7 +44,7 @@ const shade_factor : Dictionary = {
 }
 
 var start_time : float
-var print_times := true
+var print_times := false
 
 var generated_matrix: InteractionMatrix
 

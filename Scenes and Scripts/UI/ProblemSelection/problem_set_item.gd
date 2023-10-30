@@ -8,11 +8,11 @@ var file_path: String
 var is_custom: bool
 
 func _ready() -> void:
-	toggle_edit_visibility(problem_set.is_custom)
+	toggle_edit_visibility(problem_set.is_custom, !problem_set.is_default)
 	update()
 
-func toggle_edit_visibility(can_edit: bool) -> void:
-	$HBoxContainer/PanelContainer/HBoxContainer/Title.editable = can_edit
+func toggle_edit_visibility(can_edit: bool, can_delete: bool = can_edit) -> void:
+	$HBoxContainer/PanelContainer/HBoxContainer/Title.editable = can_delete
 	$HBoxContainer/PanelContainer/HBoxContainer/Delete.visible = can_edit
 	$HBoxContainer/PanelContainer/HBoxContainer/Upload.visible = can_edit
 

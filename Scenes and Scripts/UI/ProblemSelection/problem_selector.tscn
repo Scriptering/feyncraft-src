@@ -15,15 +15,15 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qxe7s"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_xpp8a"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_iwmoh"]
 resource_local_to_scene = true
 shader = ExtResource("3_ifhvu")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_1b3bn"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_231i3"]
 resource_local_to_scene = true
 shader = ExtResource("3_ifhvu")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3q7fs"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_arno4"]
 resource_local_to_scene = true
 shader = ExtResource("3_ifhvu")
 
@@ -56,11 +56,16 @@ use_parent_material = true
 layout_mode = 2
 
 [node name="Equation" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("2_v0r42")]
-material = SubResource("ShaderMaterial_xpp8a")
-custom_minimum_size = Vector2(140.001, 21)
+material = SubResource("ShaderMaterial_iwmoh")
+custom_minimum_size = Vector2(180.001, 21)
 layout_mode = 2
 
-[node name="Play" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("2_yg01j")]
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/PanelContainer/HBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="Play" parent="HBoxContainer/PanelContainer/HBoxContainer/HBoxContainer" instance=ExtResource("2_yg01j")]
 material = null
 layout_mode = 2
 mouse_filter = 1
@@ -70,10 +75,10 @@ expand_icon = true
 icon_use_parent_material = true
 action_mode = 1
 
-[node name="Tooltip" parent="HBoxContainer/PanelContainer/HBoxContainer/Play" instance=ExtResource("4_c7up8")]
+[node name="Tooltip" parent="HBoxContainer/PanelContainer/HBoxContainer/HBoxContainer/Play" instance=ExtResource("4_c7up8")]
 tooltip = "Play"
 
-[node name="Delete" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("2_yg01j")]
+[node name="Delete" parent="HBoxContainer/PanelContainer/HBoxContainer/HBoxContainer" instance=ExtResource("2_yg01j")]
 material = null
 layout_mode = 2
 mouse_filter = 1
@@ -83,10 +88,10 @@ expand_icon = true
 icon_use_parent_material = true
 action_mode = 1
 
-[node name="Tooltip" parent="HBoxContainer/PanelContainer/HBoxContainer/Delete" instance=ExtResource("4_c7up8")]
+[node name="Tooltip" parent="HBoxContainer/PanelContainer/HBoxContainer/HBoxContainer/Delete" instance=ExtResource("4_c7up8")]
 tooltip = "Delete"
 
-[node name="Modify" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("2_yg01j")]
+[node name="Modify" parent="HBoxContainer/PanelContainer/HBoxContainer/HBoxContainer" instance=ExtResource("2_yg01j")]
 material = null
 layout_mode = 2
 mouse_filter = 1
@@ -96,7 +101,7 @@ expand_icon = true
 icon_use_parent_material = true
 action_mode = 1
 
-[node name="Tooltip" parent="HBoxContainer/PanelContainer/HBoxContainer/Modify" instance=ExtResource("4_c7up8")]
+[node name="Tooltip" parent="HBoxContainer/PanelContainer/HBoxContainer/HBoxContainer/Modify" instance=ExtResource("4_c7up8")]
 tooltip = "Modify"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/PanelContainer/HBoxContainer"]
@@ -105,14 +110,14 @@ layout_mode = 2
 theme_override_constants/separation = -6
 
 [node name="Up" parent="HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer" instance=ExtResource("2_yg01j")]
-material = SubResource("ShaderMaterial_1b3bn")
+material = SubResource("ShaderMaterial_231i3")
 layout_mode = 2
 icon = ExtResource("9_38yb2")
 minimum_size = Vector2(19, 15)
 icon_use_parent_material = true
 
 [node name="Down" parent="HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer" instance=ExtResource("2_yg01j")]
-material = SubResource("ShaderMaterial_3q7fs")
+material = SubResource("ShaderMaterial_arno4")
 layout_mode = 2
 icon = ExtResource("10_r0lbv")
 minimum_size = Vector2(19, 15)
@@ -126,8 +131,8 @@ texture = ExtResource("12_moc2h")
 expand_mode = 5
 stretch_mode = 5
 
-[connection signal="pressed" from="HBoxContainer/PanelContainer/HBoxContainer/Play" to="." method="_on_play_pressed"]
-[connection signal="pressed" from="HBoxContainer/PanelContainer/HBoxContainer/Delete" to="." method="_on_delete_pressed"]
-[connection signal="pressed" from="HBoxContainer/PanelContainer/HBoxContainer/Modify" to="." method="_on_modify_pressed"]
+[connection signal="pressed" from="HBoxContainer/PanelContainer/HBoxContainer/HBoxContainer/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="HBoxContainer/PanelContainer/HBoxContainer/HBoxContainer/Delete" to="." method="_on_delete_pressed"]
+[connection signal="pressed" from="HBoxContainer/PanelContainer/HBoxContainer/HBoxContainer/Modify" to="." method="_on_modify_pressed"]
 [connection signal="pressed" from="HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/Up" to="." method="_on_up_pressed"]
 [connection signal="pressed" from="HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/Down" to="." method="_on_down_pressed"]

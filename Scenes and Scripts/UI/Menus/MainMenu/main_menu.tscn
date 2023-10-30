@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://blu0n6lwfysjf"]
+[gd_scene load_steps=45 format=3 uid="uid://blu0n6lwfysjf"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_scc04"]
 [ext_resource type="Texture2D" uid="uid://c2myqhjupqo25" path="res://Textures/Background/tile.png" id="2_3tgej"]
@@ -18,11 +18,12 @@
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="12_nridv"]
 [ext_resource type="Texture2D" uid="uid://7ipru72d5e13" path="res://Textures/Buttons/icons/sandbox.png" id="13_21fnr"]
 [ext_resource type="Texture2D" uid="uid://cnenn4liabxxv" path="res://Textures/Buttons/icons/puzzle_piece_2.png" id="14_6sffg"]
+[ext_resource type="Texture2D" uid="uid://b20ltmcqk6xwh" path="res://Textures/Buttons/icons/question_mark.png" id="16_0rbva"]
 [ext_resource type="PackedScene" uid="uid://b4oiaq2nic3ig" path="res://Scenes and Scripts/UI/Buttons/MuteButton.tscn" id="16_1yq2b"]
 [ext_resource type="Texture2D" uid="uid://btu2jj1bbbbil" path="res://Textures/Buttons/icons/palette.png" id="17_cv4ds"]
-[ext_resource type="Texture2D" uid="uid://dvlwfy1unniw6" path="res://Textures/UI/Information/arrow.png" id="20_hipqk"]
 [ext_resource type="Texture2D" uid="uid://bxlc5rvpwjq8o" path="res://Textures/Buttons/icons/unmute.png" id="21_lu08p"]
 [ext_resource type="Theme" uid="uid://c7hk3afo5tria" path="res://Resources/Themes/toggle_button.tres" id="22_a8ikr"]
+[ext_resource type="Texture2D" uid="uid://co52c2vc04qom" path="res://Textures/Buttons/icons/credit.png" id="23_sgn8e"]
 [ext_resource type="PackedScene" uid="uid://ds2iet11sv3ty" path="res://Scenes and Scripts/UI/Buttons/particle_buttons.tscn" id="26_grnbf"]
 [ext_resource type="PackedScene" uid="uid://cv6hlxtiukmtc" path="res://Scenes and Scripts/UI/VisionButtons/vision_buttons.tscn" id="27_y0o8i"]
 [ext_resource type="PackedScene" uid="uid://nuajmillcsir" path="res://Scenes and Scripts/Algorithms/SolutionGeneration.tscn" id="28_4mci8"]
@@ -46,39 +47,43 @@ expand_margin_bottom = 1.0
 [sub_resource type="Theme" id="Theme_gyi6d"]
 Label/font_sizes/font_size = 16
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_l4kv5"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m38yr"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8jst6"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ywwxf"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_32uii"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_418m2"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_l27mt"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p7iib"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2y6pv"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ce7um"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_w315v"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w1vwv"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2tvas"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rdih1"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_eqf7f"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6htte"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_wjgyq"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_crtkh"]
+resource_local_to_scene = true
+shader = ExtResource("12_nridv")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y4elr"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
@@ -319,16 +324,16 @@ grow_horizontal = 2
 alignment = 1
 
 [node name="Tutorial" parent="Center/VBoxContainer" instance=ExtResource("11_t2od8")]
-material = SubResource("ShaderMaterial_l4kv5")
+material = SubResource("ShaderMaterial_m38yr")
 layout_mode = 2
-icon = ExtResource("20_hipqk")
+icon = ExtResource("16_0rbva")
 text = "Tutorial"
 minimum_size = Vector2(85, 2.08165e-12)
-expand_icon = true
+icon_use_parent_material = true
 icon_text_seperation = 4
 
 [node name="Sandbox" parent="Center/VBoxContainer" instance=ExtResource("11_t2od8")]
-material = SubResource("ShaderMaterial_8jst6")
+material = SubResource("ShaderMaterial_ywwxf")
 layout_mode = 2
 icon = ExtResource("13_21fnr")
 text = "Sandbox"
@@ -338,7 +343,7 @@ action_mode = 1
 icon_text_seperation = 4
 
 [node name="ProblemSets" parent="Center/VBoxContainer" instance=ExtResource("11_t2od8")]
-material = SubResource("ShaderMaterial_32uii")
+material = SubResource("ShaderMaterial_418m2")
 layout_mode = 2
 theme = ExtResource("22_a8ikr")
 icon = ExtResource("14_6sffg")
@@ -355,7 +360,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="MuteButton" parent="Center/VBoxContainer/HBoxContainer" instance=ExtResource("16_1yq2b")]
-material = SubResource("ShaderMaterial_l27mt")
+material = SubResource("ShaderMaterial_p7iib")
 layout_mode = 2
 size_flags_horizontal = 1
 size_flags_vertical = 1
@@ -363,12 +368,21 @@ icon = ExtResource("21_lu08p")
 toggle_mode = true
 
 [node name="Palettes" parent="Center/VBoxContainer/HBoxContainer" instance=ExtResource("11_t2od8")]
-material = SubResource("ShaderMaterial_2y6pv")
+material = SubResource("ShaderMaterial_ce7um")
 layout_mode = 2
 icon = ExtResource("17_cv4ds")
 minimum_size = Vector2(30, 30)
 toggle_mode = true
 expand_icon = true
+
+[node name="CreditButton" parent="Center/VBoxContainer/HBoxContainer" instance=ExtResource("11_t2od8")]
+material = SubResource("ShaderMaterial_w1vwv")
+layout_mode = 2
+icon = ExtResource("23_sgn8e")
+minimum_size = Vector2(30, 30)
+toggle_mode = true
+expand_icon = true
+icon_use_parent_material = true
 
 [node name="FloatingMenus" type="Control" parent="."]
 z_index = 1
@@ -384,9 +398,25 @@ offset_top = 32.0
 offset_right = 467.0
 offset_bottom = 332.0
 
+[node name="Credits" parent="FloatingMenus" instance=ExtResource("36_o748n")]
+visible = false
+material = SubResource("ShaderMaterial_rdih1")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 300.0
+offset_top = 160.0
+offset_right = 300.0
+offset_bottom = 160.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="ParticleButtons" parent="." instance=ExtResource("26_grnbf")]
 visible = false
-material = SubResource("ShaderMaterial_w315v")
+material = SubResource("ShaderMaterial_6htte")
 layout_mode = 1
 offset_left = -166.0
 offset_top = 508.0
@@ -395,7 +425,7 @@ offset_bottom = 508.0
 
 [node name="VisionButton" parent="." instance=ExtResource("27_y0o8i")]
 visible = false
-material = SubResource("ShaderMaterial_2tvas")
+material = SubResource("ShaderMaterial_crtkh")
 offset_left = 836.0
 offset_top = 4.0
 offset_right = 858.0
@@ -411,7 +441,7 @@ offset_bottom = 64.0
 
 [node name="MenuTab" parent="." instance=ExtResource("33_nabci")]
 visible = false
-material = SubResource("ShaderMaterial_eqf7f")
+material = SubResource("ShaderMaterial_y4elr")
 layout_mode = 1
 offset_left = 509.0
 offset_top = 338.0
@@ -421,19 +451,14 @@ offset_bottom = -22.0
 [node name="ShaderControl" type="Node" parent="."]
 script = ExtResource("34_pwybq")
 
-[node name="Credits" parent="." instance=ExtResource("36_o748n")]
-material = SubResource("ShaderMaterial_wjgyq")
-offset_left = 446.0
-offset_top = 354.0
-offset_right = 446.0
-offset_bottom = 354.0
-
 [connection signal="mouse_entered" from="Diagram" to="Diagram" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="Diagram" to="Diagram" method="_on_mouse_exited"]
 [connection signal="pressed" from="Center/VBoxContainer/Tutorial" to="." method="_on_tutorial_pressed"]
 [connection signal="pressed" from="Center/VBoxContainer/Sandbox" to="." method="_on_sandbox_pressed"]
 [connection signal="toggled" from="Center/VBoxContainer/ProblemSets" to="." method="_on_problem_sets_toggled"]
 [connection signal="toggled" from="Center/VBoxContainer/HBoxContainer/Palettes" to="." method="_on_palettes_toggled"]
+[connection signal="toggled" from="Center/VBoxContainer/HBoxContainer/CreditButton" to="." method="_on_credit_button_toggled"]
+[connection signal="closed" from="FloatingMenus/Credits" to="." method="_on_credits_closed"]
 
 [editable path="Diagram/DiagramArea/Initial"]
 [editable path="Diagram/DiagramArea/Final"]

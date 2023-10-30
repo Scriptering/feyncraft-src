@@ -16,7 +16,11 @@ func _ready() -> void:
 	$Steps/Hadrons.load_hadron_problem.connect(
 		func(): load_hadron_problem.emit()
 	)
+	
 	current_step = get_steps().front()
+
+func reset() -> void:
+	change_step(get_steps().front())
 
 func get_steps() -> Array[BaseTutorialStep]:
 	var steps: Array[BaseTutorialStep] = []
@@ -29,8 +33,11 @@ func get_steps() -> Array[BaseTutorialStep]:
 func init(world: Node2D) -> void:
 	for step in get_steps():
 		step.init(world)
+		step.draw_diagram.connect(
+			func(diagram: DrawingMatrix): EVENTBUS.signal_draw_diagram.emit(diagram)
+		)
 	
-	change_step(get_steps().front())
+	reset()
 
 func clear() -> void:
 	toggle_spotlight(false)
@@ -71,6 +78,16 @@ func change_step(step: BaseTutorialStep) -> void:
 	else:
 		toggle_spotlight(false)
 	
+	if current_step == get_steps().back():
+		TutorialInfo.hide_next()
+		TutorialInfo.show_finish()
+	elif current_step == get_steps().front():
+		TutorialInfo.hide_prev()
+	else:
+		TutorialInfo.show_prev()
+		TutorialInfo.show_next()
+		TutorialInfo.hide_finish()
+	
 	TutorialInfo.set_text(step.text)
 
 func _on_tutorial_info_next_pressed() -> void:
@@ -83,6 +100,7 @@ func _on_tutorial_info_next_pressed() -> void:
 func _on_tutorial_info_prev_pressed() -> void:
 	if current_index == 0:
 		return
-	
+		
 	TutorialInfo.show_next()
 	change_step(get_steps()[current_index - 1])
+

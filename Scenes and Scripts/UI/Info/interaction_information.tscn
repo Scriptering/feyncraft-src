@@ -187,6 +187,7 @@ texture_pressed = ExtResource("4_sw30l")
 texture_hover = ExtResource("4_sw30l")
 
 [node name="ButtonSoundComponent" parent="PanelContainer/MarginContainer/CloseButton" instance=ExtResource("9_vl7rp")]
+on_pressed = true
 
 [connection signal="child_entered_tree" from="PanelContainer/TabContainer" to="." method="_on_tab_container_child_entered_tree"]
 [connection signal="pressed" from="PanelContainer/MarginContainer/CloseButton" to="." method="_on_close_button_pressed"]

@@ -240,6 +240,9 @@ func validate() -> bool:
 	if get_invalid_quantum_numbers().size() > 0:
 		return false
 	
+	if !is_interaction_in_list() and connected_lines.size() >= INTERACTION_SIZE_MINIMUM:
+		return false
+	
 	return true
 
 func get_invalid_quantum_numbers() -> Array[ParticleData.QuantumNumber]:
@@ -262,10 +265,6 @@ func get_invalid_quantum_numbers() -> Array[ParticleData.QuantumNumber]:
 			
 			if !is_weak or quantum_number not in ParticleData.WEAK_QUANTUM_NUMBERS:
 				invalid_quantum_numbers.append(quantum_number)
-				continue
-			
-		elif !interaction_in_list and connected_lines.size() >= INTERACTION_SIZE_MINIMUM:
-			invalid_quantum_numbers.append(quantum_number)
 	
 	return invalid_quantum_numbers
 
@@ -303,7 +302,7 @@ func get_side_quantum_sum(side: Interaction.Side) -> Array[float]:
 			if line_is_W_0 and quantum_number == ParticleData.QuantumNumber.charge:
 				continue
 			
-			sum += line.quantum_numbers[quantum_number]
+			sum += line.get_quantum_number(quantum_number)
 
 		quantum_sum.append(sum)
 
@@ -319,13 +318,25 @@ func _get_dimensionality() -> float:
 	return dimensionality
 
 func has_neutral_photon() -> bool:
+	if ParticleData.Particle.photon not in connected_base_particles:
+		return false
+	
+	if connected_lines.size() == 2 and connected_particles.all(
+		func(particle):
+			return particle == ParticleData.Particle.photon
+	):
+		return false
+	
 	for line in connected_lines:
-		if line.quantum_numbers[ParticleData.QuantumNumber.charge] != 0:
+		if line.get_quantum_number(ParticleData.QuantumNumber.charge) != 0:
 			return false
 	
-	return is_interaction_in_list()
+	return true
 
 func has_colourless_gluon() -> bool:
+	if ParticleData.Particle.gluon not in connected_base_particles:
+		return false
+	
 	for line in connected_lines:
 		if !line.has_colour:
 			return true
@@ -385,8 +396,10 @@ func _on_information_button_pressed():
 	):
 		if information_visible:
 			close_information_box()
+			$InformationButton/ButtonSoundComponent.play_button_up()
 		else:
 			open_information_box()
+			$InformationButton/ButtonSoundComponent.play_button_down()
 
 func deconstructor() -> void:
 	if information_visible:

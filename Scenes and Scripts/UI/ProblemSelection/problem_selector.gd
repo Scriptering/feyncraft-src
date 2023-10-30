@@ -2,6 +2,9 @@ extends PanelContainer
 
 @onready var Down : PanelButton = $HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/Down
 @onready var Up : PanelButton = $HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/Up
+@onready var Play: PanelContainer = $HBoxContainer/PanelContainer/HBoxContainer/HBoxContainer/Play
+@onready var Delete: PanelContainer = $HBoxContainer/PanelContainer/HBoxContainer/HBoxContainer/Delete
+@onready var Modify: PanelContainer = $HBoxContainer/PanelContainer/HBoxContainer/HBoxContainer/Modify
 
 signal move
 signal deleted
@@ -23,16 +26,15 @@ func update() -> void:
 	return
 
 func toggle_play_disabled(toggle: bool) -> void:
-	$HBoxContainer/PanelContainer/HBoxContainer/Play.disabled = toggle
+	Play.disabled = toggle
 
 func toggle_completed(toggle: bool) -> void:
 	$HBoxContainer/Completed.visible = toggle
 
 func toggle_edit_visiblity(can_edit: bool) -> void:
-	$HBoxContainer/PanelContainer/HBoxContainer/Delete.visible = can_edit
-	$HBoxContainer/PanelContainer/HBoxContainer/Modify.visible = can_edit
+	Delete.visible = can_edit
+	Modify.visible = can_edit
 	$HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer.visible = can_edit
-
 
 func load_problem(_problem: Problem) -> void:
 	problem = _problem

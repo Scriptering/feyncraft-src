@@ -2,7 +2,7 @@ class_name DrawingMatrix
 extends ConnectionMatrix
 
 @export var split_hadron_ids : Array = []
-@export var normalised_interaction_positions : Array[Vector2] = []
+@export var normalised_interaction_positions : Array[Vector2i] = []
 @export var state_line_positions : Array[int] = [0, 20]
 
 func initialise_from_connection_matrix(from_connection_matrix: ConnectionMatrix) -> void:
@@ -23,11 +23,11 @@ func get_interaction_positions(grid_size: int = 1) -> PackedVector2Array:
 	
 	return interaction_positions
 
-func add_interaction_position(position: Vector2, grid_size: int, id: int = normalised_interaction_positions.size()) -> void:
+func add_interaction_position(position: Vector2i, grid_size: int, id: int = normalised_interaction_positions.size()) -> void:
 	normalised_interaction_positions.insert(id, position/grid_size)
 
 func add_interaction_with_position(
-	interaction_position: Vector2, grid_size: int, interaction_state: StateLine.StateType = StateLine.StateType.None,
+	interaction_position: Vector2i, grid_size: int, interaction_state: StateLine.StateType = StateLine.StateType.None,
 	id : int = calculate_new_interaction_id(interaction_state)
 ) -> void:
 

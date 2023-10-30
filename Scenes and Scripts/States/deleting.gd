@@ -27,9 +27,9 @@ func input(_event: InputEvent) -> State:
 		return State.Idle
 		
 	elif Input.is_action_just_pressed("click"):
-		change_cursor.emit(GLOBALS.CURSOR.snipped)
+		change_cursor.emit(GLOBALS.Cursor.snipped)
 	elif Input.is_action_just_released("click"):
-		change_cursor.emit(GLOBALS.CURSOR.snip)
+		change_cursor.emit(GLOBALS.Cursor.snip)
 
 	return State.Null
 

@@ -75,7 +75,7 @@ func load_palette(palette_path: String) -> void:
 	var new_palette: ListItem = preload("res://Scenes and Scripts/UI/ColourPicker/palette_list_item.tscn").instantiate()
 	new_palette.file_path = palette_path
 	
-	var palette: Palette = GLOBALS.load(palette_path)
+	var palette: Palette = GLOBALS.load_txt(palette_path)
 	if palette:
 		load_item(palette, new_palette)
 		load_result.emit(true)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bjmi5sukccoma"]
+[gd_scene load_steps=15 format=3 uid="uid://bjmi5sukccoma"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/tutorial/TutorialInfo.gd" id="1_6afw4"]
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="2_dbjjh"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://c3nrennubqoow" path="res://Textures/Buttons/icons/back.png" id="6_1qgbo"]
 [ext_resource type="Texture2D" uid="uid://dvx430022t0ua" path="res://Textures/Buttons/icons/next.png" id="6_ele4h"]
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="7_pgcfn"]
+[ext_resource type="Texture2D" uid="uid://qhabllbii547" path="res://Textures/Buttons/icons/finish.png" id="10_qnfej"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_khgyl"]
 content_margin_left = 8.0
@@ -21,11 +22,15 @@ texture_margin_top = 6.0
 texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ot5x4"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2ra2u"]
 resource_local_to_scene = true
 shader = ExtResource("5_2ymkv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_o5fqi"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ucbmt"]
+resource_local_to_scene = true
+shader = ExtResource("5_2ymkv")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xc18h"]
 resource_local_to_scene = true
 shader = ExtResource("5_2ymkv")
 
@@ -65,7 +70,7 @@ alignment = 1
 
 [node name="PrevStep" parent="TutorialPanel/VBoxContainer/Buttons" instance=ExtResource("4_3eia6")]
 visible = false
-material = SubResource("ShaderMaterial_ot5x4")
+material = SubResource("ShaderMaterial_2ra2u")
 layout_mode = 2
 icon = ExtResource("6_1qgbo")
 minimum_size = Vector2(24, 21)
@@ -75,7 +80,7 @@ icon_use_parent_material = true
 tooltip = "Prev Step"
 
 [node name="NextStep" parent="TutorialPanel/VBoxContainer/Buttons" instance=ExtResource("4_3eia6")]
-material = SubResource("ShaderMaterial_o5fqi")
+material = SubResource("ShaderMaterial_ucbmt")
 layout_mode = 2
 icon = ExtResource("6_ele4h")
 minimum_size = Vector2(24, 21)
@@ -84,5 +89,20 @@ icon_use_parent_material = true
 [node name="Tooltip" parent="TutorialPanel/VBoxContainer/Buttons/NextStep" instance=ExtResource("7_pgcfn")]
 tooltip = "Next Step"
 
+[node name="Finish" parent="TutorialPanel/VBoxContainer/Buttons" instance=ExtResource("4_3eia6")]
+visible = false
+material = SubResource("ShaderMaterial_xc18h")
+layout_mode = 2
+icon = ExtResource("10_qnfej")
+minimum_size = Vector2(24, 21)
+icon_use_parent_material = true
+
+[node name="Tooltip" parent="TutorialPanel/VBoxContainer/Buttons/Finish" node_paths=PackedStringArray("TooltipPanel", "TooltipLabel", "TooltipContainer") instance=ExtResource("7_pgcfn")]
+TooltipPanel = NodePath("../../NextStep/Tooltip/TooltipPanel")
+TooltipLabel = NodePath("../../NextStep/Tooltip/TooltipPanel/HBoxContainer/Label")
+TooltipContainer = NodePath("../../NextStep/Tooltip/TooltipPanel/HBoxContainer")
+tooltip = "Finish the tutorial"
+
 [connection signal="pressed" from="TutorialPanel/VBoxContainer/Buttons/PrevStep" to="." method="_on_prev_step_pressed"]
 [connection signal="pressed" from="TutorialPanel/VBoxContainer/Buttons/NextStep" to="." method="_on_next_step_pressed"]
+[connection signal="pressed" from="TutorialPanel/VBoxContainer/Buttons/Finish" to="." method="_on_finish_pressed"]

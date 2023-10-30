@@ -16,7 +16,7 @@ var crosshair : Node2D
 var state_manager : Node
 var Diagram : MainDiagram
 
-@export var cursor_state : GLOBALS.CURSOR
+@export var cursor_state : GLOBALS.Cursor
 
 func enter() -> void:
 	change_cursor.emit(cursor_state)

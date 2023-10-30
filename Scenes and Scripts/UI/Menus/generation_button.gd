@@ -7,7 +7,6 @@ var GeneratedDiagramViewer: MiniDiagramViewer
 
 @export var InitialState : Array
 @export var FinalState : Array
-@export var generated_diagram_viewer_offset : Vector2 = Vector2.ZERO
 @export var EM_check : CheckButton
 @export var strong_check: CheckButton
 @export var weak_check: CheckButton
@@ -156,7 +155,7 @@ func _on_save_pressed() -> void:
 
 func toggle_diagram_viewer() -> void:
 	GeneratedDiagramViewer.toggle_visible()
-	GeneratedDiagramViewer.position = generated_diagram_viewer_offset + position
+	GeneratedDiagramViewer.position = get_viewport_rect().size / 2
 
 func _on_view_pressed() -> void:
 	toggle_diagram_viewer()

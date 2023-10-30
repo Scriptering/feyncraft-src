@@ -7,6 +7,7 @@ signal close
 @export var LoadButton: PanelButton
 
 var problem_set_file_path: String = "res://saves/ProblemSets/"
+var web_problem_set_file_path: String = "user://saves/ProblemSets/"
 var ProblemSetItem: PackedScene = preload("res://Scenes and Scripts/UI/ProblemSelection/problem_set_item.tscn")
 
 @onready var problem_container: VBoxContainer = $VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/ProblemContainer
@@ -27,15 +28,26 @@ func reload() -> void:
 		problem_set_item.update()
 
 func load_problem_sets() -> void:
-	for file_path in GLOBALS.get_files_in_folder(problem_set_file_path + 'Custom/'):
-		load_problem_set(file_path)
+	load_default_problem_sets()
+	load_custom_problem_sets()
 	
 	update_index_labels()
 	update_problem_sets()
 
+func load_default_problem_sets() -> void:
+	for file_path in GLOBALS.get_files_in_folder(problem_set_file_path + 'Default/'):
+		load_problem_set(file_path)
+
+func load_custom_problem_sets() -> void:
+	for file_path in GLOBALS.get_files_in_folder(get_custom_file_path()):
+		load_problem_set(file_path)
+
 func clear_problem_sets() -> void:
 	for child in problem_container.get_children():
 		child.queue_free()
+
+func get_custom_file_path() -> String:
+	return (problem_set_file_path + 'Custom/') if GLOBALS.is_on_editor else (web_problem_set_file_path + 'Custom/')
 
 func add_problem_set(problem_set: ProblemSet, problem_set_item: ListItem = ProblemSetItem.instantiate()) -> void:
 	problem_set_item.load_problem_set(problem_set)
@@ -80,7 +92,7 @@ func create_problem_set() -> void:
 	add_problem_set(problem_set)
 
 func _on_add_problem_set_pressed() -> void:
-	create_new_problem_set(GLOBALS.get_unique_file_name(problem_set_file_path + "Custom/"))
+	create_new_problem_set(GLOBALS.get_unique_file_name(get_custom_file_path()))
 
 func _problem_set_viewed(problem_set_item: PanelContainer) -> void:
 	enter_problem_set.emit(problem_set_item.problem_set, problem_set_item.file_path)
@@ -99,7 +111,7 @@ func _on_close_pressed() -> void:
 	close.emit()
 
 func _on_load_button_submitted(submitted_text) -> void:
-	var file_path: String = GLOBALS.get_unique_file_name(problem_set_file_path + 'Custom/')
+	var file_path: String = GLOBALS.get_unique_file_name(get_custom_file_path())
 	GLOBALS.create_text_file(submitted_text, file_path)
 	load_problem_set(file_path)
 
@@ -110,7 +122,7 @@ func load_problem_set(problem_set_path: String) -> void:
 	var new_problem_set: ListItem = ProblemSetItem.instantiate()
 	new_problem_set.file_path = problem_set_path
 	
-	var problem_set: ProblemSet = GLOBALS.load(problem_set_path)
+	var problem_set: ProblemSet = GLOBALS.load_txt(problem_set_path)
 	if problem_set:
 		add_problem_set(problem_set, new_problem_set)
 		on_load_error(true)

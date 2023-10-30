@@ -9,11 +9,11 @@
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="6_5gy8v"]
 [ext_resource type="Texture2D" uid="uid://dvx430022t0ua" path="res://Textures/Buttons/icons/next.png" id="8_rm0tq"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_415an"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wj0ol"]
 resource_local_to_scene = true
 shader = ExtResource("4_8p7ty")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_bngr0"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kklmb"]
 resource_local_to_scene = true
 shader = ExtResource("4_8p7ty")
 
@@ -29,7 +29,7 @@ shader = ExtResource("4_8p7ty")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_uhdxj"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fcvhd"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_71yma"]
 resource_local_to_scene = true
 shader = ExtResource("4_8p7ty")
 
@@ -71,13 +71,13 @@ layout_mode = 2
 theme_override_constants/separation = 0
 
 [node name="ToggleOn" parent="VBoxContainer/VBoxContainer/VBoxContainer/HBoxContainer" instance=ExtResource("3_qv0n1")]
-material = SubResource("ShaderMaterial_415an")
+material = SubResource("ShaderMaterial_wj0ol")
 layout_mode = 2
 text = "Toggle On"
 minimum_size = Vector2(56, 24)
 
 [node name="ToggleOff" parent="VBoxContainer/VBoxContainer/VBoxContainer/HBoxContainer" instance=ExtResource("3_qv0n1")]
-material = SubResource("ShaderMaterial_bngr0")
+material = SubResource("ShaderMaterial_kklmb")
 layout_mode = 2
 text = "Toggle Off"
 minimum_size = Vector2(56, 24)
@@ -112,7 +112,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="NextStep" parent="VBoxContainer/VBoxContainer/Buttons" instance=ExtResource("3_qv0n1")]
-material = SubResource("ShaderMaterial_fcvhd")
+material = SubResource("ShaderMaterial_71yma")
 layout_mode = 2
 icon = ExtResource("8_rm0tq")
 minimum_size = Vector2(24, 21)
