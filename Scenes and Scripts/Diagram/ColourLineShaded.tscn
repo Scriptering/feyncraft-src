@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://cwxblsy2gyb04"]
-
-[ext_resource type="Material" uid="uid://iitnraau4c6m" path="res://Resources/Shaders/outline0.tres" id="1"]
-
-[node name="Node2D" type="Line2D"]
-material = ExtResource("1")
-points = PackedVector2Array(0, 0, 10, 10)
-width = 2.0
