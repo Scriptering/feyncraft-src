@@ -1,12 +1,10 @@
-[gd_resource type="Theme" load_steps=63 format=3 uid="uid://cfmbhoq8cuoge"]
+[gd_resource type="Theme" load_steps=62 format=3 uid="uid://cfmbhoq8cuoge"]
 
 [ext_resource type="FontFile" uid="uid://cq27s0444iwkg" path="res://Textures/Fonts/ConnectionIi-2wj8.otf" id="1_s2gkm"]
 [ext_resource type="Texture2D" uid="uid://bcwpdy0lmenue" path="res://Textures/Buttons/square_disabled.png" id="2_8m3bx"]
 [ext_resource type="Texture2D" uid="uid://bo1u07jlygktr" path="res://Textures/Buttons/square_hover.png" id="3_4f0vn"]
 [ext_resource type="Texture2D" uid="uid://s14bo7fcdam0" path="res://Textures/Buttons/square_normal.png" id="4_vxayc"]
 [ext_resource type="Texture2D" uid="uid://brb0ytbpqclrn" path="res://Textures/Buttons/square_pressed.png" id="5_1inkr"]
-[ext_resource type="Texture2D" uid="uid://1jam8wcw7bd3" path="res://Textures/UI/Information/checkbox/checked.png" id="6_chc85"]
-[ext_resource type="Texture2D" uid="uid://dvqoqr6r6f3bj" path="res://Textures/UI/Information/checkbox/check_box.png" id="7_45kj4"]
 [ext_resource type="Texture2D" uid="uid://cs50mifpalsrn" path="res://Textures/Buttons/CheckButton/checked.png" id="8_lb8ym"]
 [ext_resource type="Texture2D" uid="uid://cdfgpqy1srg8j" path="res://Textures/Buttons/CheckButton/unchecked.png" id="9_yjmwd"]
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="11_hhi3e"]
@@ -19,7 +17,6 @@
 [ext_resource type="Texture2D" uid="uid://dfh2bwspbmrs3" path="res://Textures/UI/Information/sliderH/slider.png" id="19_eac24"]
 [ext_resource type="Texture2D" uid="uid://bvfpoc03mh2yo" path="res://Textures/UI/radio_unchecked.png" id="19_etkwf"]
 [ext_resource type="Texture2D" uid="uid://bcf2qslps6l4s" path="res://Textures/UI/Equation/scroll_grabber_normal_v.png" id="19_oi3ee"]
-[ext_resource type="Texture2D" uid="uid://cym2rn34oj5s3" path="res://Textures/UI/Information/box.png" id="20_osile"]
 [ext_resource type="Texture2D" uid="uid://cgghpligriwhd" path="res://Textures/UI/Equation/scroll_grabber_highlight_v.png" id="20_ullcv"]
 [ext_resource type="Texture2D" uid="uid://c8iesbop3uqwa" path="res://Textures/Buttons/up_down.png" id="21_6b0wi"]
 [ext_resource type="Texture2D" uid="uid://f76yp8golmnh" path="res://Textures/UI/Equation/scroll_grabber_pressed_v.png" id="21_kuoaw"]
@@ -1517,8 +1514,11 @@ cache/0/12/0/kerning_overrides/12/0 = Vector2(0, 0)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rh83b"]
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_m6w67"]
+load_path = "res://.godot/imported/box.png-c86c19bc7431125c6349cb03bd7c01ea.ctex"
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_aix6r"]
-texture = ExtResource("20_osile")
+texture = SubResource("CompressedTexture2D_m6w67")
 texture_margin_left = 3.0
 texture_margin_top = 2.0
 texture_margin_right = 2.0
@@ -1537,7 +1537,7 @@ texture_margin_bottom = 6.0
 [sub_resource type="StyleBoxTexture" id="29"]
 content_margin_left = 2.0
 content_margin_right = 2.0
-texture = ExtResource("20_osile")
+texture = SubResource("CompressedTexture2D_m6w67")
 region_rect = Rect2(0, 0, 32, 32)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4dpbh"]
@@ -1873,10 +1873,13 @@ texture_margin_top = 6.0
 texture_margin_right = 5.0
 texture_margin_bottom = 5.0
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_bgmlq"]
+load_path = "res://.godot/imported/check_box.png-2ca1c1ecf73800944a0f868a2fae5664.ctex"
+
 [sub_resource type="StyleBoxTexture" id="28"]
 content_margin_top = 3.0
 content_margin_bottom = 5.0
-texture = ExtResource("7_45kj4")
+texture = SubResource("CompressedTexture2D_bgmlq")
 region_rect = Rect2(0, 0, 9, 9)
 
 [sub_resource type="StyleBoxTexture" id="1"]
@@ -1923,20 +1926,6 @@ Button/styles/focus = SubResource("StyleBoxEmpty_rmh60")
 Button/styles/hover = SubResource("StyleBoxTexture_g7eks")
 Button/styles/normal = SubResource("StyleBoxTexture_5xekb")
 Button/styles/pressed = SubResource("StyleBoxTexture_l2sol")
-CheckBox/colors/font_color = Color(0.219608, 0.223529, 0.188235, 1)
-CheckBox/colors/font_color_focus = Color(0.219608, 0.223529, 0.188235, 1)
-CheckBox/colors/font_color_hover = Color(0.219608, 0.223529, 0.188235, 1)
-CheckBox/colors/font_color_hover_pressed = Color(0.219608, 0.223529, 0.188235, 1)
-CheckBox/colors/font_color_pressed = Color(0.219608, 0.223529, 0.188235, 1)
-CheckBox/colors/font_focus_color = Color(0.219608, 0.223529, 0.188235, 1)
-CheckBox/colors/font_hover_color = Color(0.219608, 0.223529, 0.188235, 1)
-CheckBox/colors/font_hover_pressed_color = Color(0.219608, 0.223529, 0.188235, 1)
-CheckBox/colors/font_outline_color = Color(0.219608, 0.223529, 0.188235, 1)
-CheckBox/colors/font_pressed_color = Color(0.219608, 0.223529, 0.188235, 1)
-CheckBox/constants/check_v_offset = 3
-CheckBox/constants/h_separation = -4
-CheckBox/icons/checked = ExtResource("6_chc85")
-CheckBox/icons/unchecked = ExtResource("7_45kj4")
 CheckButton/icons/checked = ExtResource("8_lb8ym")
 CheckButton/icons/unchecked = ExtResource("9_yjmwd")
 CheckButton/styles/disabled = SubResource("34")
