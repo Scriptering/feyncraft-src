@@ -53,10 +53,10 @@ func connect_interactions(
 	
 	check_bounds([from_id, to_id])
 	
-	connection_matrix[from_id][to_id].append(particle)
+	connection_matrix[from_id][to_id].append(abs(particle))
 	
 	if bidirectional:
-		connection_matrix[to_id][from_id].append(particle)
+		connection_matrix[to_id][from_id].append(abs(particle))
 
 func swap_ids(id1: int, id2: int) -> void:
 	var id1_forward_connections: Array = get_connections(id1)

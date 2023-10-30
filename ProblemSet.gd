@@ -15,10 +15,8 @@ signal end_reached
 		return problems[current_index]
 	set(_new_value):
 		return
-@export var limited_particles: bool = false
-@export var custom_solutions: bool = false
-@export var hidden_particles: bool = false
 @export var is_custom: bool = true
+@export var is_default: bool = false
 
 func _set_current_index(new_value: int) -> void:
 	current_index = clamp(new_value, 0, problems.size()-1)

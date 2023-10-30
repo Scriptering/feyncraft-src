@@ -57,7 +57,8 @@ func crosshair_moved(current_position : Vector2, old_position : Vector2) -> void
 	start_drawing()
 
 func _on_delay_timeout():
-	start_drawing()
+	if state_manager.state == State.Drawing:
+		start_drawing()
 
 func end_drawing() -> void:
 	if !is_valid_end_position():

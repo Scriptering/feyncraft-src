@@ -1,6 +1,7 @@
 extends GrabbableControl
 
 var palette_file_path: String = "res://saves/Palettes/"
+var web_palette_file_path: String = "user://saves/Palettes/"
 signal closed
 
 func _ready() -> void:
@@ -17,8 +18,11 @@ func _ready() -> void:
 func _on_close_pressed() -> void:
 	closed.emit()
 
+func get_custom_file_path() -> String:
+	return (palette_file_path + 'Custom/') if GLOBALS.is_on_editor else (web_palette_file_path + 'Custom/')
+
 func load_palettes() -> void:
-	for file_path in GLOBALS.get_files_in_folder(palette_file_path + 'Custom/'):
+	for file_path in GLOBALS.get_files_in_folder(get_custom_file_path()):
 		$PaletteList.load_palette(file_path)
 
 func load_tea_stain() -> void:
@@ -28,10 +32,10 @@ func save_palettes() -> void:
 	$PaletteList.save_palettes()
 
 func _on_add_problem_pressed() -> void:
-	$PaletteList.create_new_palette(GLOBALS.get_unique_file_name(palette_file_path + 'Custom/'))
+	$PaletteList.create_new_palette(GLOBALS.get_unique_file_name(get_custom_file_path()))
 
 func _on_load_button_submitted(submitted_text) -> void:
-	var file_path: String = GLOBALS.get_unique_file_name(palette_file_path + 'Custom/')
+	var file_path: String = GLOBALS.get_unique_file_name(get_custom_file_path())
 	GLOBALS.create_text_file(submitted_text, file_path)
 	$PaletteList.load_palette(file_path)
 

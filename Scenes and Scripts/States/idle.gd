@@ -38,11 +38,11 @@ func input(event: InputEvent) -> State:
 	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and !hovering_disabled_button:
 		if event.pressed:
 			$minimum_press_timer.start()
-			change_cursor.emit(GLOBALS.CURSOR.press)
+			change_cursor.emit(GLOBALS.Cursor.press)
 			if can_draw():
 				return State.Drawing
 		elif !event.pressed and $minimum_press_timer.is_stopped():
-			change_cursor.emit(GLOBALS.CURSOR.default)
+			change_cursor.emit(GLOBALS.Cursor.default)
 	elif Input.is_action_just_pressed("clear") and !GLOBALS.in_main_menu:
 		Diagram.add_diagram_to_history()
 		Diagram.clear_diagram()
@@ -64,19 +64,19 @@ func _on_button_mouse_entered(button: PanelButton) -> void:
 	if !button.disabled or state_manager.state != State.Idle:
 		return
 	
-	change_cursor.emit(GLOBALS.CURSOR.disabled)
+	change_cursor.emit(GLOBALS.Cursor.disabled)
 	hovering_disabled_button = true
 
 func _on_button_mouse_exited() -> void:
 	if state_manager.state != State.Idle:
 		return
 	
-	change_cursor.emit(GLOBALS.CURSOR.default)
+	change_cursor.emit(GLOBALS.Cursor.default)
 	hovering_disabled_button = false
 
 func _on_minimum_press_timer_timeout():
 	if state_manager.state == State.Idle and !Input.is_action_pressed("click"):
-		change_cursor.emit(GLOBALS.CURSOR.default)
+		change_cursor.emit(GLOBALS.Cursor.default)
 
 func _button_created(button: PanelButton) -> void:
 	connect_button(button)

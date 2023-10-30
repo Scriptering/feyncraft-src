@@ -124,6 +124,9 @@ func _get_quantum_numbers() -> Array:
 		quantum_numbers_temp.append(anti*quantum_numbers[quantum_number])
 	return quantum_numbers_temp
 
+func get_quantum_number(quantum_number: ParticleData.QuantumNumber) -> float:
+	return anti * ParticleData.QUANTUM_NUMBERS[base_particle][quantum_number]
+
 func _set_anti(new_value: int) -> void:
 	anti = new_value
 
@@ -139,7 +142,7 @@ func set_anti() -> void:
 func _set_points(new_value: PackedVector2Array) -> void:
 	points = new_value
 	
-	if is_inside_tree() and !being_deleted:
+	if is_inside_tree() and !being_deleted and is_placed:
 		connect_to_interactions()
 	
 func set_textures() -> void:

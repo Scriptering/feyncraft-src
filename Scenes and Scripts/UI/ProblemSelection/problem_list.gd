@@ -40,7 +40,8 @@ func load_problem_set(_problem_set: ProblemSet, p_problem_set_file_path: String)
 	for problem in problem_set.problems:
 		add_problem(problem, problem_set.is_custom)
 	
-#	delete_empty_problems()
+	$VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/AddProblem.visible = problem_set.is_custom
+	
 	update_index_labels()
 
 func clear_problems() -> void:
@@ -55,9 +56,9 @@ func add_problem(problem: Problem, is_custom: bool = false) -> void:
 	problem_select.play.connect(_problem_played)
 	problem_select.modify.connect(_problem_modified)
 	
-	problem_select.toggle_edit_visiblity(problem_set.is_custom)
-	
 	problem_container.add_child(problem_select)
+	
+	problem_select.toggle_edit_visiblity(problem_set.is_custom)
 	
 	problem_select.load_problem(problem)
 	problem_select.index = get_problem_items().size()-1

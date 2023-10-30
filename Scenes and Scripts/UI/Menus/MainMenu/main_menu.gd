@@ -61,3 +61,9 @@ func _on_exit_game(_mode: BaseMode.Mode, _problem: Problem) -> void:
 
 func _on_tutorial_pressed() -> void:
 	tutorial_pressed.emit()
+
+func _on_credit_button_toggled(button_pressed) -> void:
+	$FloatingMenus/Credits.visible = button_pressed
+
+func _on_credits_closed() -> void:
+	$Center/VBoxContainer/HBoxContainer/CreditButton.button_pressed = false

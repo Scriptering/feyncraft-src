@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://be6i7fwmg5217"]
+[gd_scene load_steps=4 format=3 uid="uid://c2g8egnv84vv0"]
 
 [ext_resource type="Texture2D" uid="uid://l0tmxxp6t7bs" path="res://Textures/UI/ColourPicker/picker_bar.png" id="1_mmesr"]
 [ext_resource type="Texture2D" uid="uid://xmlsqgppxb1i" path="res://Textures/UI/ColourPicker/picker.png" id="2_41mou"]
@@ -6,13 +6,13 @@
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_l7k3f"]
 
 [node name="PickerPopupPanel" type="PopupPanel"]
-size = Vector2i(298, 272)
+size = Vector2i(290, 264)
 visible = true
 theme_override_styles/panel = SubResource("StyleBoxEmpty_l7k3f")
 
 [node name="ColorPicker" type="ColorPicker" parent="."]
-offset_right = 298.0
-offset_bottom = 272.0
+offset_right = 290.0
+offset_bottom = 264.0
 scale = Vector2(0.5, 0.5)
 theme_override_icons/bar_arrow = ExtResource("1_mmesr")
 theme_override_icons/picker_cursor = ExtResource("2_41mou")

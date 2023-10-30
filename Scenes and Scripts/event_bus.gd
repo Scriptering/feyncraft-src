@@ -25,7 +25,7 @@ func draw_diagram_raw(connection_matrix: ConnectionMatrix) -> void:
 func add_floating_menu(menu: Node) -> void:
 	signal_add_floating_menu.emit(menu)
 
-func change_cursor(new_cursor: GLOBALS.CURSOR) -> void:
+func change_cursor(new_cursor: GLOBALS.Cursor) -> void:
 	signal_change_cursor.emit(new_cursor)
 
 func enter_game(

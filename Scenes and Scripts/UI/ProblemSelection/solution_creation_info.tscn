@@ -30,11 +30,11 @@
 default_font = ExtResource("5_odh5n")
 default_font_size = 10
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_sj2j7"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j58c6"]
 resource_local_to_scene = true
 shader = ExtResource("3_ktptg")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_rad30"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4wpww"]
 resource_local_to_scene = true
 shader = ExtResource("3_ktptg")
 
@@ -65,6 +65,44 @@ text = "- Draw solutions to the problem.
 - Submit solutions using puzzle tab."
 autowrap_mode = 3
 
+[node name="PanelContainer2" type="PanelContainer" parent="VBoxContainer/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+
+[node name="CustomSolutions" type="CheckButton" parent="VBoxContainer/VBoxContainer/PanelContainer2"]
+use_parent_material = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_ghv2s")
+theme_override_font_sizes/font_size = 8
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1f1ao")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_ox6n2")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_blyae")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_lvqyk")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_t7fmk")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_2ys1n")
+text = "Custom solutions"
+
+[node name="ButtonSoundComponent" parent="VBoxContainer/VBoxContainer/PanelContainer2/CustomSolutions" instance=ExtResource("4_j2ks7")]
+
+[node name="NoSolutions" type="HBoxContainer" parent="VBoxContainer/VBoxContainer"]
+visible = false
+use_parent_material = true
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/NoSolutions"]
+layout_mode = 2
+texture = ExtResource("1_mp3ie")
+stretch_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/NoSolutions"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 8
+text = "No solutions created"
+autowrap_mode = 2
+
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
@@ -73,7 +111,7 @@ layout_mode = 2
 use_parent_material = true
 layout_mode = 2
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="CustomSolutionCount" type="CheckButton" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_ghv2s")
@@ -87,7 +125,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_2ys1n")
 text = "Custom required
 solution count"
 
-[node name="ButtonSoundComponent" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/CheckButton" instance=ExtResource("4_j2ks7")]
+[node name="ButtonSoundComponent" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/CustomSolutionCount" instance=ExtResource("4_j2ks7")]
 
 [node name="SolutionCountContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
 visible = false
@@ -117,32 +155,13 @@ value = 1.0
 alignment = 1
 script = ExtResource("7_aqn1d")
 
-[node name="InvalidDiagram" type="HBoxContainer" parent="VBoxContainer/VBoxContainer"]
-visible = false
-use_parent_material = true
-layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/InvalidDiagram"]
-layout_mode = 2
-texture = ExtResource("1_mp3ie")
-stretch_mode = 2
-
-[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/InvalidDiagram"]
-use_parent_material = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 1
-theme_override_font_sizes/font_size = 8
-text = "Invalid Diagram"
-autowrap_mode = 2
-
 [node name="Buttons" type="HBoxContainer" parent="VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
 alignment = 1
 
 [node name="PrevStep" parent="VBoxContainer/Buttons" instance=ExtResource("2_66fjv")]
-material = SubResource("ShaderMaterial_sj2j7")
+material = SubResource("ShaderMaterial_j58c6")
 layout_mode = 2
 icon = ExtResource("4_187qd")
 minimum_size = Vector2(24, 21)
@@ -152,7 +171,7 @@ icon_use_parent_material = true
 tooltip = "Previous Step"
 
 [node name="Submit" parent="VBoxContainer/Buttons" instance=ExtResource("2_66fjv")]
-material = SubResource("ShaderMaterial_rad30")
+material = SubResource("ShaderMaterial_4wpww")
 layout_mode = 2
 icon = ExtResource("6_eyill")
 minimum_size = Vector2(22, 22)
@@ -161,4 +180,5 @@ icon_use_parent_material = true
 [node name="Tooltip" parent="VBoxContainer/Buttons/Submit" instance=ExtResource("5_8fnwf")]
 tooltip = "Submit Problem"
 
-[connection signal="toggled" from="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/CheckButton" to="." method="_on_check_button_toggled"]
+[connection signal="toggled" from="VBoxContainer/VBoxContainer/PanelContainer2/CustomSolutions" to="." method="_on_custom_solutions_toggled"]
+[connection signal="toggled" from="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/CustomSolutionCount" to="." method="_on_check_button_toggled"]

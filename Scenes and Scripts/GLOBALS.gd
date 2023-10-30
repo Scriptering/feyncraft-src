@@ -1,6 +1,6 @@
 extends Node
 
-@onready var TitleDiagram : DrawingMatrix = ResourceLoader.load("res://saves/title_diagram.tres")
+@onready var TitleDiagram : DrawingMatrix = ResourceLoader.load("res://saves/Diagrams/title_diagram.tres")
 
 enum ColourScheme {TeaStain, SeaFoam, Professional}
 enum COLOURS {primary, secondary, pencil, primary_highlight, invalid, invalid_highlight}
@@ -17,16 +17,7 @@ var problem_selection_menu_showing: bool
 
 enum STATE_LINE {INITIAL, FINAL}
 
-enum CURSOR {default, point, hold, snip, snipped, middle, hover, press, disabled, sampler}
-
-const REPLACEMENT_SHADER := preload('res://Resources/Shaders/replacement_material.tres')
-
-const MISSING_COLOUR := Color('ff1bea')
-
-const COLOUR_SCHEMES : Array = [
-	[Color('e1cba0'), Color('d1bd97'), Color('383930'), Color('e3d3c0'), Color('df3e3e'), Color('e35959')],
-	[Color('FFFFFF'), Color('FFFFFF'), Color('000000'), Color('e3d3c0'), Color('df3e3e'), Color('e35959')]]
-
+enum Cursor {default, point, hold, snip, snipped, middle, hover, press, disabled, confused, loving}
 
 const VISION_COLOURS : Array = [
 	[Color('c13e3e'), Color('3ec13e'), Color('4057be')],
@@ -35,12 +26,14 @@ const VISION_COLOURS : Array = [
 
 @onready var PARTICLE_TEXTURES = {}
 
-var is_on_build: bool:
-	get:
-		return OS.has_feature("standalone")
+var is_on_editor: bool
 
 func _ready():
+	is_on_editor = OS.has_feature("editor")
 	load_problem_set.problems.push_back(creating_problem)
+
+func is_on_mobile() -> bool:
+	return OS.has_feature("web_android") or OS.has_feature("web_ios") or OS.has_feature("android") or OS.has_feature("ios")
 
 func get_unique_file_name(folder_path: String, suffix: String = '.txt') -> String:
 	var random_hex : String = "%x" % (randi() % 4095)
@@ -79,6 +72,12 @@ func load_data(path: String) -> Resource:
 	
 	return null
 
+func get_file_prefix() -> String:
+	if OS.has_feature("web"):
+		return "user://"
+	
+	return "res://"
+
 func save(p_obj: Resource, p_path: String) -> void:
 	var file = FileAccess.open(p_path, FileAccess.WRITE)
 	
@@ -89,7 +88,7 @@ func save(p_obj: Resource, p_path: String) -> void:
 	file.store_string(var_as_str)
 	file.close()
 
-func load(p_path: String) -> Resource:
+func load_txt(p_path: String) -> Resource:
 	var file = FileAccess.open(p_path, FileAccess.READ)
 	var obj: Resource = str_to_var(file.get_as_text())
 	file.close()

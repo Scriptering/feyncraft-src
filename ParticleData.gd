@@ -3,11 +3,12 @@ extends Node
 @onready var PARTICLE_TEXTURES = {}
 
 func _ready():
+	var is_on_editor = OS.has_feature("editor")
 	sort_interactions()
 	sort_hadrons()
 	set_interaction_strength_limits()
 
-	for folder_path in ['res://Textures/ParticlesAndLines/', 'res://Textures/ParticlesAndLines/Hadrons/', 'res://Textures/Cursors/']:
+	for folder_path in ['res://Textures/ParticlesAndLines/', 'res://Textures/ParticlesAndLines/Hadrons/']:
 		var dir = DirAccess.open(folder_path)
 		dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 
@@ -16,11 +17,11 @@ func _ready():
 			if file == "":
 				break
 			
-			if (GLOBALS.is_on_build and file.ends_with('.import')) or (!GLOBALS.is_on_build and file.ends_with('.png')):
+			if (!is_on_editor and file.ends_with('.import')) or (is_on_editor and file.ends_with('.png')):
 				var file_name : String = file.trim_suffix('.import')
 			
 				if file_name.ends_with('.png'):
-					ParticleData.PARTICLE_TEXTURES[file_name.trim_suffix('.png')] = ResourceLoader.load(folder_path + file_name)
+					PARTICLE_TEXTURES[file_name.trim_suffix('.png')] = ResourceLoader.load(folder_path + file_name)
 
 #0 photon, 1 gluon, 2 Z, 3 H, 4 W,
 #5 lepton, 6 electron, 7 muon, 8 tau,

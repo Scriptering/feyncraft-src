@@ -7,7 +7,6 @@ enum Scene {Level, MainMenu}
 @onready var MainMenu: Control = $MainMenu
 @onready var Level: Node2D = $World
 @onready var StateManager: Node = $state_manager
-@onready var Cursor: Sprite2D = $Cursor
 @onready var ControlsTab: Control = $PullOutTabs/ControlsTab
 @onready var PaletteMenu: GrabbableControl = $FloatingMenus/PaletteMenu
 
@@ -38,8 +37,14 @@ func _ready() -> void:
 	Level.init(StateManager, ControlsTab, PaletteMenu)
 	MainMenu.init(StateManager, ControlsTab, PaletteMenu)
 	StateManager.init(MainMenu.Diagram)
+	
+	$ControlsLayer/Buttons.visible = GLOBALS.is_on_mobile()
+	$ControlsLayer/Cursor.visible = !GLOBALS.is_on_mobile()
 
 func add_floating_menu(menu: Control) -> void:
+	if menu.position == Vector2.ZERO:
+		menu.position = get_viewport_rect().size / 2
+	
 	$FloatingMenus.add_child(menu)
 
 func change_scene(scene: Scene, args: Array = []) -> void:
@@ -50,7 +55,7 @@ func change_scene(scene: Scene, args: Array = []) -> void:
 	StateManager.change_scene(scenes[scene].Diagram)
 	
 	enter_funcs[scene].call(args)
-	EVENTBUS.change_cursor(GLOBALS.CURSOR.default)
+	EVENTBUS.change_cursor(GLOBALS.Cursor.default)
 
 func switch_child_scene(new_scene: Scene) -> void:
 	remove_child(scenes[(new_scene + 1) % 2])

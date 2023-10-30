@@ -1,10 +1,16 @@
-[gd_scene load_steps=7 format=3 uid="uid://bq0fc1t1qahge"]
+[gd_scene load_steps=7 format=3 uid="uid://bw5xpbunrnhso"]
 
-[ext_resource type="Script" path="res://Scenes and Scripts/UI/Equations/testEquationSymbol.gd" id="1_nsqcb"]
 [ext_resource type="Shader" path="res://Scenes and Scripts/Diagram/outline_palette_swap.gdshader" id="1_unhwe"]
 [ext_resource type="Texture2D" uid="uid://bhudxuhqjghi2" path="res://Textures/ParticlesAndLines/anti_down.png" id="2_1x5fo"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Equations/EquationSymbol.gd" id="3_h1i8q"]
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="4_u2s13"]
+
+[sub_resource type="GDScript" id="GDScript_7onhg"]
+script/source = "extends Control
+
+func _ready() -> void:
+	size = get_node(\"EquationSymbol\").size()
+"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_24p5n"]
 shader = ExtResource("1_unhwe")
@@ -16,11 +22,12 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("1_nsqcb")
+script = SubResource("GDScript_7onhg")
 
 [node name="EquationSymbol" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_24p5n")
 custom_minimum_size = Vector2(2.08165e-12, 2.08165e-12)
+layout_mode = 0
 offset_right = 16.3333
 offset_bottom = 28.0
 size_flags_horizontal = 3

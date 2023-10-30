@@ -66,7 +66,6 @@ func init(state_manager: Node, controls_tab: Control, palette_list: GrabbableCon
 	
 	ProblemTab.next_problem_pressed.connect(_on_next_problem_pressed)
 	ProblemTab.prev_problem_pressed.connect(_on_prev_problem_pressed)
-	Tutorial.load_hadron_problem.connect(_load_tutorial_hadron_problem)
 	
 	Tutorial.init(self)
 	MenuTab.init(PaletteMenu)
@@ -86,6 +85,9 @@ func init(state_manager: Node, controls_tab: Control, palette_list: GrabbableCon
 
 func _process(_delta):
 	FPS.text = str(Engine.get_frames_per_second())
+	
+	if Input.is_action_just_pressed("save"):
+		GLOBALS.save(Diagram.generate_drawing_matrix_from_diagram(), "res://saves/Diagrams/temp_diagram.txt")
 
 func _vision_button_toggled(current_vision: GLOBALS.Vision) -> void:
 	$ShaderControl.toggle_interaction_strength(current_vision == GLOBALS.Vision.Strength)
@@ -173,8 +175,9 @@ func enter_solution_creation() -> void:
 		CreationInformation.no_solutions_found()
 		return
 	
-	ProblemTab.load_problem(GLOBALS.creating_problem)
+	GLOBALS.creating_problem.custom_solutions = false
 	
+	ProblemTab.load_problem(GLOBALS.creating_problem)
 	ProblemTab.in_solution_creation = true
 
 func exit_sandbox() -> void:
@@ -199,6 +202,9 @@ func enter_tutorial() -> void:
 	VisionTab.hide()
 	CreationInformation.hide()
 	Tutorial.show()
+	
+	Tutorial.reset()
+	load_problem_set(GLOBALS.load_txt("res://saves/ProblemSets/tutorial.txt"), 0)
 
 func exit_tutorial() -> void:
 	Tutorial.clear()
@@ -206,9 +212,6 @@ func exit_tutorial() -> void:
 
 func _on_creation_information_submit_problem() -> void:
 	exit_current_mode()
-	
-	GLOBALS.creating_problem.solutions = ProblemTab.submitted_diagrams
-	
 	problem_submitted.emit()
 
 func _on_problem_set_end_reached() -> void:
@@ -248,13 +251,13 @@ func generate_new_problem() -> Problem:
 func _on_creation_information_toggle_all(toggle: bool) -> void:
 	ParticleButtons.toggle_buttons(toggle)
 
-func _load_tutorial_hadron_problem() -> void:
-	return
-
 func exit_current_mode() -> void:
 	if current_mode != BaseMode.Mode.Null:
 		mode_exit_funcs[current_mode].call()
 
 func _on_menu_exit_pressed() -> void:
 	exit_current_mode()
+	EVENTBUS.signal_change_scene.emit(GLOBALS.Scene.MainMenu)
+
+func _on_tutorial_info_finish_pressed() -> void:
 	EVENTBUS.signal_change_scene.emit(GLOBALS.Scene.MainMenu)

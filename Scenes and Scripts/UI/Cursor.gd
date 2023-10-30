@@ -9,21 +9,28 @@ extends Sprite2D
 var angry := false
 var glowing := false: set = _set_glowing
 var playing := false
-var current_cursor := GLOBALS.CURSOR.default
+var current_cursor : int = GLOBALS.Cursor.default
 
-var point := load('res://Textures/Cursors/cursor_point.png')
-var hold := load('res://Textures/Cursors/cursor_hold.png')
-var snip := load('res://Textures/Cursors/cursor_snip.png')
-var snipped := load('res://Textures/Cursors/cursor_snipped.png')
-var middle := load('res://Textures/Cursors/cursor_middle.png')
-var hover := load('res://Textures/Cursors/cursor_hover.png')
-var press := load('res://Textures/Cursors/cursor_press.png')
-var disabled := load('res://Textures/Cursors/cursor_disabled.png')
-var sampler: = load("res://Textures/Buttons/icons/sampler.png")
+const CURSOR_FOLDER_PATH : String = 'res://Textures/Cursors/'
 
-var cursors := [0, point, hold, snip, snipped, middle, hover, press, disabled, sampler]
+var point := load(CURSOR_FOLDER_PATH + 'cursor_point.png')
+
+var cursors: Dictionary = {
+	GLOBALS.Cursor.point: load(CURSOR_FOLDER_PATH + 'cursor_point.png'.trim_suffix(".import")),
+	GLOBALS.Cursor.hold : load(CURSOR_FOLDER_PATH + 'cursor_hold.png'.trim_suffix(".import")),
+	GLOBALS.Cursor.snip : load(CURSOR_FOLDER_PATH + 'cursor_snip.png'.trim_suffix(".import")),
+	GLOBALS.Cursor.snipped : load(CURSOR_FOLDER_PATH + 'cursor_snipped.png'.trim_suffix(".import")),
+	GLOBALS.Cursor.middle : load(CURSOR_FOLDER_PATH + 'cursor_middle.png'.trim_suffix(".import")),
+	GLOBALS.Cursor.hover : load(CURSOR_FOLDER_PATH + 'cursor_hover.png'.trim_suffix(".import")),
+	GLOBALS.Cursor.press : load(CURSOR_FOLDER_PATH + 'cursor_press.png'.trim_suffix(".import")),
+	GLOBALS.Cursor.disabled : load(CURSOR_FOLDER_PATH + 'cursor_disabled.png'.trim_suffix(".import")),
+	GLOBALS.Cursor.loving : load(CURSOR_FOLDER_PATH + 'loving.png'.trim_suffix(".import")),
+	GLOBALS.Cursor.confused : load(CURSOR_FOLDER_PATH + 'confused.png'.trim_suffix(".import")),
+}
 
 func _ready():
+	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
+	
 	Heart.visible = false
 	
 	scale = Vector2(Scale, Scale)
@@ -40,7 +47,7 @@ func _input(event: InputEvent) -> void:
 		
 		if check_anger():
 			self.angry = !angry
-			change_cursor(GLOBALS.CURSOR.default)
+			change_cursor(GLOBALS.Cursor.default)
 
 func check_anger() -> bool:
 	if !(
@@ -77,16 +84,27 @@ func _set_glowing(new_value : bool) -> void:
 	Heart.visible = new_value
 
 func _process(_delta):
-	position = get_global_mouse_position()
+	if visible:
+		position = get_global_mouse_position()
 
-func change_cursor(cursor: GLOBALS.CURSOR):
-	if cursor == GLOBALS.CURSOR.default:
-		if angry:
-			cursor = GLOBALS.CURSOR.middle
-		else:
-			cursor = GLOBALS.CURSOR.point
+func get_default_cursor() -> GLOBALS.Cursor:
+	if angry and glowing:
+		return GLOBALS.Cursor.confused
+	
+	if angry:
+		return GLOBALS.Cursor.middle
+
+	if glowing:
+		return GLOBALS.Cursor.loving
+	
+	return GLOBALS.Cursor.point
+
+func change_cursor(cursor: GLOBALS.Cursor):
+	if cursor == GLOBALS.Cursor.default:
+		cursor = get_default_cursor()
 	
 	if cursor != current_cursor:
 		texture = cursors[cursor]
-		Input.set_custom_mouse_cursor(cursors[cursor], Input.CURSOR_ARROW, Vector2(12, 6))
+		
+#		Input.set_custom_mouse_cursor(cursors[cursor], Input.CURSOR_ARROW, Vector2(12, 6))
 		current_cursor = cursor

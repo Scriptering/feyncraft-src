@@ -2,13 +2,9 @@ class_name Problem
 extends Resource
 
 const LOWEST_ORDER: int = -1
-var custom_solutions: bool = false:
-	get:
-		return solutions.size() > 0
-var custom_degree: bool = false:
-	get:
-		return degree != LOWEST_ORDER
 
+@export var custom_solutions: bool = false
+@export var custom_degree: bool = false
 @export var limited_particles: bool = false
 @export var hide_unavailable_particles: bool = false
 @export var title: String = ''

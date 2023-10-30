@@ -84,7 +84,7 @@ func _set_show_line_labels(new_value: bool) -> void:
 	show_line_labels = new_value
 	
 	for line in get_particle_lines():
-		line.show_labels = show_line_labels
+		line.show_labels = show_line_labels 
 		line.set_text_visiblity()
 
 func load_problem(problem: Problem, mode: BaseMode.Mode) -> void:
@@ -92,7 +92,7 @@ func load_problem(problem: Problem, mode: BaseMode.Mode) -> void:
 	
 	set_title(problem.title)
 	
-	var is_creating_problem: bool = mode not in [BaseMode.Mode.Sandbox, BaseMode.Mode.ProblemSolving]
+	var is_creating_problem: bool = mode in [BaseMode.Mode.ParticleSelection, BaseMode.Mode.ProblemCreation, BaseMode.Mode.SolutionCreation]
 	
 	set_title_visible(is_creating_problem or problem.title != '')
 	set_title_editable(is_creating_problem)
@@ -136,14 +136,17 @@ func sort_drawing_interactions(interaction1: Interaction, interaction2: Interact
 	if state1 != state2:
 		return state1 < state2
 	
-	var pos_y1: int = interaction1.position.y
-	var pos_y2: int = interaction2.position.y
+	var pos_y1: int = int(interaction1.position.y)
+	var pos_y2: int = int(interaction2.position.y)
 	
 	if state1 == StateLine.StateType.None:
 		return pos_y1 < pos_y2
 	
 	var particle1: ParticleData.Particle = interaction1.connected_particles.front()
 	var particle2: ParticleData.Particle = interaction2.connected_particles.front()
+	
+	if abs(particle1) != abs(particle2):
+		return abs(particle1) < abs(particle2)
 	
 	if particle1 != particle2:
 		return particle1 < particle2
@@ -324,11 +327,11 @@ func get_selected_particle() -> ParticleData.Particle:
 	return ParticleButtons.selected_particle
 
 func action() -> void:
-	for interaction in get_interactions():
-		interaction.update_interaction()
-	
 	for particle_line in get_particle_lines():
 		particle_line.update_line()
+		
+	for interaction in get_interactions():
+		interaction.update_interaction()
 	
 	var diagram: DrawingMatrix = generate_drawing_matrix_from_diagram()
 	update_vision(diagram)
@@ -496,7 +499,7 @@ func place_line(
 	ParticleLines.add_child(line)
 
 func draw_raw_diagram(connection_matrix : ConnectionMatrix) -> void:
-	if !can_draw_diagrams:
+	if !can_draw_diagrams or !is_inside_tree():
 		return
 	
 	add_diagram_to_history()
@@ -525,7 +528,7 @@ func draw_diagram_particles(drawing_matrix: DrawingMatrix) -> Array:
 	return drawing_lines
 
 func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
-	if !can_draw_diagrams:
+	if !can_draw_diagrams or !is_inside_tree():
 		return
 	
 	line_diagram_actions = false

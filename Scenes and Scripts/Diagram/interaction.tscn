@@ -158,7 +158,7 @@ theme_override_styles/hover = SubResource("StyleBoxEmpty_p04yt")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_lgs61")
 
 [node name="ButtonSoundComponent" parent="InformationButton" instance=ExtResource("9_b7d5g")]
-on_pressed = true
+manual = true
 
 [connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
 [connection signal="pressed" from="InformationButton" to="." method="_on_information_button_pressed"]
