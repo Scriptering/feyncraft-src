@@ -1,6 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://crm74x6wmll5l"]
+[gd_scene load_steps=4 format=3 uid="uid://detw0c8akx8y5"]
 
-[ext_resource type="PackedScene" uid="uid://lpbermjlr4kj" path="res://Scenes and Scripts/UI/Buttons/ButtonBase.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://cacvu84mf2h8b" path="res://Scenes and Scripts/UI/Buttons/ButtonBase.tscn" id="1"]
 [ext_resource type="Texture2D" uid="uid://d16opu3dyhri7" path="res://Textures/Buttons/eye/eye_open.png" id="2"]
 
 [sub_resource type="GDScript" id="GDScript_f8cmd"]

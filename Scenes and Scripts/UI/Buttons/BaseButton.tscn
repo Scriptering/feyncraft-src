@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://c2ikppvu16saf"]
+[gd_scene load_steps=4 format=3 uid="uid://dmqnqsrgk66x8"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_7u77y"]
 [ext_resource type="Theme" uid="uid://cs1gimklve0cr" path="res://Resources/Themes/Button.tres" id="1_q2pv0"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://d0norbmf3nrh4"]
+[gd_scene load_steps=3 format=3 uid="uid://buw14uljnggn0"]
 
 [ext_resource type="Theme" uid="uid://blqrcgdkw42vw" path="res://Resources/Themes/pull_out_tab.tres" id="1_80b40"]
 [ext_resource type="Texture2D" uid="uid://bryamn5jwtk0u" path="res://Textures/Buttons/Tabs/arrow_right.png" id="2_6gcmn"]

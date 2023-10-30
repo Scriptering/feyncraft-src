@@ -38,7 +38,7 @@ Button/styles/pressed = SubResource("StyleBoxTexture_xwugc")
 Label/font_sizes/font_size = 10
 Label/fonts/font = null
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ta45o"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6bc4m"]
 resource_local_to_scene = true
 shader = ExtResource("8_g25s6")
 
@@ -58,7 +58,7 @@ ArrowOut = ExtResource("3_fm075")
 TabMinimumSize = Vector2(15, 15)
 
 [node name="TabButton" parent="." instance=ExtResource("5_7o77k")]
-material = SubResource("ShaderMaterial_ta45o")
+material = SubResource("ShaderMaterial_6bc4m")
 layout_mode = 2
 minimum_size = Vector2(15, 14)
 mute = true
