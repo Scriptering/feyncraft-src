@@ -1,7 +1,32 @@
-[gd_scene load_steps=2 format=3 uid="uid://2bmlxxqq7na6"]
+[gd_scene load_steps=2 format=3 uid="uid://c2p2t54mngv4m"]
 
-[ext_resource type="Script" path="res://Scenes and Scripts/Modes/ParticleSelection.gd" id="1_5djqi"]
+[sub_resource type="GDScript" id="GDScript_1iycf"]
+script/source = "extends BaseMode
+
+func process(_delta: float) -> Mode:
+	if CreationInformation.submit.button_pressed:
+		return Mode.ProblemCreation
+	
+	return Mode.Null
+
+func enter() -> void:
+	super.enter()
+	
+	ParticleButtons.enter_particle_selection()
+
+func exit() -> void:
+	ParticleButtons.exit_particle_selection()
+
+func toggle_menu_visibility() -> void:
+	ParticleButtons.show()
+	
+	GenerationTab.hide()
+	ProblemTab.hide()
+	VisionTab.hide()
+
+
+"
 
 [node name="ParticleSelection" type="Node"]
-script = ExtResource("1_5djqi")
+script = SubResource("GDScript_1iycf")
 mode = 3
