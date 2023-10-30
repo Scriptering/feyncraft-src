@@ -2,7 +2,7 @@ extends PanelContainer
 
 @export var scale_factor: float = 1.0
 
-@onready var Symbol := preload("res://Scenes and Scripts/UI/Equations/EquationSymbol.tscn")
+@onready var Symbol := preload("res://Scenes and Scripts/UI/Equation/EquationSymbol.tscn")
 
 @onready var LeftEquation: HBoxContainer = $HBoxContainer/LeftMarginContainer/LeftScrollContainer/MarginContainer/LeftEquation
 @onready var RightEquation: HBoxContainer = $HBoxContainer/RightMarginContainer/RightScrollContainer/MarginContainer/RightEquation

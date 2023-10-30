@@ -4,7 +4,6 @@ class_name ParticleLine
 signal request_deletion
 signal clicked_on
 
-@onready var Level = get_tree().get_first_node_in_group('level')
 @onready var Text = get_node("text")
 @onready var SpareText = get_node("spareText")
 @onready var Arrow = $arrow
@@ -87,7 +86,7 @@ var line_texture
 var show_labels: bool = true
 
 func _ready():
-	self.connect("request_deletion", Callable(Diagram, "delete_line"))
+	request_deletion.connect(Diagram.delete_line)
 	
 	has_colour = base_particle in ParticleData.COLOUR_PARTICLES
 	has_shade = base_particle in ParticleData.SHADED_PARTICLES

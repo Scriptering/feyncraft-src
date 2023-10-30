@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://bgvo11j4kfjdc"]
+[gd_scene load_steps=31 format=3 uid="uid://bgvo11j4kfjdc"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_h3eo1"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/generation_button.gd" id="2_plgpl"]
@@ -17,13 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://dvx430022t0ua" path="res://Textures/Buttons/icons/next.png" id="7_dlb5i"]
 [ext_resource type="Texture2D" uid="uid://bf4xxweukjvsb" path="res://Textures/Buttons/icons/interaction.png" id="8_8ns2c"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="8_ihypl"]
-[ext_resource type="Texture2D" uid="uid://dbem4b1y0c1oc" path="res://Textures/Buttons/icons/Generate1.png" id="8_p4xyl"]
-[ext_resource type="Texture2D" uid="uid://dut0eoy13e2fu" path="res://Textures/Buttons/icons/Generate2.png" id="9_5q40q"]
-[ext_resource type="Texture2D" uid="uid://dt4mhuhyr6gta" path="res://Textures/Buttons/icons/Generate3.png" id="10_lldnn"]
-[ext_resource type="Texture2D" uid="uid://dl3tra6bd16i5" path="res://Textures/Buttons/icons/Generate4.png" id="11_8vydd"]
-[ext_resource type="Texture2D" uid="uid://rc7h4wbbbrjh" path="res://Textures/Buttons/icons/Generate5.png" id="12_cwk4y"]
-[ext_resource type="Texture2D" uid="uid://b3vk11moncacx" path="res://Textures/Buttons/icons/Generate6.png" id="13_5l033"]
-[ext_resource type="Texture2D" uid="uid://8c6sm3ls07o6" path="res://Textures/Buttons/icons/Generate7.png" id="14_e77pa"]
+[ext_resource type="Texture2D" uid="uid://ikybt5yg3l6m" path="res://Textures/Buttons/icons/Generate.png" id="17_gy2j5"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/PullOutTab.gd" id="25_jtb01"]
 [ext_resource type="Texture2D" uid="uid://tql14gtq05lf" path="res://Textures/UI/Information/invalid.png" id="26_mv20u"]
 
@@ -51,7 +45,7 @@ expand_margin_left = 15.0
 default_font = ExtResource("5_mj4tj")
 default_font_size = 11
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_q8vai"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j4116"]
 resource_local_to_scene = true
 shader = ExtResource("5_7m8xa")
 
@@ -67,39 +61,25 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0q6s2"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1g1u2"]
 resource_local_to_scene = true
 shader = SubResource("Shader_tmadl")
+shader_parameter/alpha = null
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_r0cdt"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cec86"]
 resource_local_to_scene = true
 shader = SubResource("Shader_tmadl")
+shader_parameter/alpha = null
 
-[sub_resource type="AnimatedTexture" id="AnimatedTexture_ikf5r"]
-frames = 7
-pause = true
-speed_scale = 10.0
-frame_0/texture = ExtResource("8_p4xyl")
-frame_1/texture = ExtResource("9_5q40q")
-frame_1/duration = 1.0
-frame_2/texture = ExtResource("10_lldnn")
-frame_2/duration = 1.0
-frame_3/texture = ExtResource("11_8vydd")
-frame_3/duration = 1.0
-frame_4/texture = ExtResource("12_cwk4y")
-frame_4/duration = 1.0
-frame_5/texture = ExtResource("13_5l033")
-frame_5/duration = 1.0
-frame_6/texture = ExtResource("14_e77pa")
-frame_6/duration = 1.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_5pse0"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2eyqs"]
 resource_local_to_scene = true
 shader = SubResource("Shader_tmadl")
+shader_parameter/alpha = null
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_mmin1"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0g7gg"]
 resource_local_to_scene = true
 shader = SubResource("Shader_tmadl")
+shader_parameter/alpha = null
 
 [node name="GenerationButton" type="Control" node_paths=PackedStringArray("EM_check", "strong_check", "weak_check", "electroweak_check", "SaveStates", "Generate", "ViewDiagrams", "MinDegree", "MaxDegree", "Equation", "NoStatesToSave", "StatesSaved", "NoDiagramsFound", "GenerationCompleted", "ContentContainer", "TabButton", "MovingContainer")]
 material = ExtResource("1_h3eo1")
@@ -350,7 +330,7 @@ text = "E. WEAK"
 [node name="ButtonSoundComponent" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/electro_weak" instance=ExtResource("6_aanob")]
 
 [node name="Equation" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer" instance=ExtResource("4_ovcff")]
-material = SubResource("ShaderMaterial_q8vai")
+material = SubResource("ShaderMaterial_j4116")
 custom_minimum_size = Vector2(120, 21)
 layout_mode = 2
 
@@ -361,7 +341,7 @@ theme_override_constants/separation = 2
 alignment = 1
 
 [node name="Save" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("8_ihypl")]
-material = SubResource("ShaderMaterial_0q6s2")
+material = SubResource("ShaderMaterial_1g1u2")
 layout_mode = 2
 icon = ExtResource("5_rmc36")
 icon_use_parent_material = true
@@ -370,9 +350,9 @@ icon_use_parent_material = true
 tooltip = "Save states"
 
 [node name="Generate" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("8_ihypl")]
-material = SubResource("ShaderMaterial_r0cdt")
+material = SubResource("ShaderMaterial_cec86")
 layout_mode = 2
-icon = SubResource("AnimatedTexture_ikf5r")
+icon = ExtResource("17_gy2j5")
 minimum_size = Vector2(29, 24)
 expand_icon = true
 disabled = true
@@ -382,7 +362,7 @@ icon_use_parent_material = true
 tooltip = "Generate"
 
 [node name="View" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("8_ihypl")]
-material = SubResource("ShaderMaterial_5pse0")
+material = SubResource("ShaderMaterial_2eyqs")
 layout_mode = 2
 icon = ExtResource("6_e14j5")
 minimum_size = Vector2(24, 23)
@@ -392,7 +372,7 @@ disabled = true
 tooltip = "View generated diagrams"
 
 [node name="Tab" parent="MovingContainer/MovingContainer" instance=ExtResource("6_7e8c8")]
-material = SubResource("ShaderMaterial_mmin1")
+material = SubResource("ShaderMaterial_0g7gg")
 layout_mode = 2
 TabIcon = ExtResource("4_xnawx")
 icon_use_parent_material = true

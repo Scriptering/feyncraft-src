@@ -5,11 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="1_q0chg"]
 [ext_resource type="Texture2D" uid="uid://b4w0nb2kv1et0" path="res://Textures/UI/Information/InfoTabFocus.png" id="3_y0k27"]
 [ext_resource type="Texture2D" uid="uid://d0eecxfakl8nn" path="res://Textures/UI/Information/InfoTabNormal.png" id="4_6bqre"]
-[ext_resource type="Texture2D" uid="uid://c37j3jcosixpo" path="res://Textures/UI/Information/scrollV/grabber.png" id="5_cml7c"]
 [ext_resource type="Texture2D" uid="uid://bw54k0fgw50is" path="res://Textures/UI/Information/InfoTabHover.png" id="5_lfin4"]
-[ext_resource type="Texture2D" uid="uid://ytdsqf2bmt4s" path="res://Textures/UI/Information/scrollV/grabber_highlight.png" id="6_vugw2"]
-[ext_resource type="Texture2D" uid="uid://lkb0vav81lsa" path="res://Textures/UI/Information/scrollV/grabber_grabbed.png" id="7_4g0vd"]
-[ext_resource type="Texture2D" uid="uid://bjpvqimrrjeat" path="res://Textures/UI/Information/scrollV/scroll.png" id="8_46sja"]
 [ext_resource type="FontFile" uid="uid://dohkbu7ekkfx8" path="res://Textures/Fonts/pixeltype/Pixeltype.ttf" id="12_5d4p8"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_om0v4"]
@@ -74,35 +70,47 @@ texture_margin_top = 4.0
 texture_margin_right = 5.0
 texture_margin_bottom = 2.0
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_tginn"]
+load_path = "res://.godot/imported/grabber.png-2a0608e4edd05fdf644a84013a8b1539.ctex"
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_k6it2"]
-texture = ExtResource("5_cml7c")
+texture = SubResource("CompressedTexture2D_tginn")
 texture_margin_left = 1.0
 texture_margin_top = 1.0
 texture_margin_right = 1.0
 texture_margin_bottom = 1.0
 region_rect = Rect2(2.08165e-12, 2.08165e-12, 4, 7)
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_n6et5"]
+load_path = "res://.godot/imported/grabber_highlight.png-735651e22e28929be899a53ca06d86a7.ctex"
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hp2nf"]
-texture = ExtResource("6_vugw2")
+texture = SubResource("CompressedTexture2D_n6et5")
 texture_margin_top = 10.0
 texture_margin_bottom = 10.0
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_yhwul"]
+load_path = "res://.godot/imported/grabber_grabbed.png-1ee82ca8ca1feb8d6e9c908cf43b611a.ctex"
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2kc6p"]
-texture = ExtResource("7_4g0vd")
+texture = SubResource("CompressedTexture2D_yhwul")
 texture_margin_top = 10.0
 texture_margin_bottom = 10.0
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_6j32p"]
+load_path = "res://.godot/imported/scroll.png-315458c36337a140fefc1923f97bbb1a.ctex"
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8jq6p"]
 content_margin_left = 0.0
 content_margin_top = 0.0
 content_margin_right = 0.0
 content_margin_bottom = 0.0
-texture = ExtResource("8_46sja")
+texture = SubResource("CompressedTexture2D_6j32p")
 texture_margin_top = 1.0
 texture_margin_bottom = 1.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1oi3l"]
-texture = ExtResource("8_46sja")
+texture = SubResource("CompressedTexture2D_6j32p")
 texture_margin_top = 1.0
 texture_margin_bottom = 1.0
 
@@ -113,7 +121,6 @@ Button/styles/hover = SubResource("StyleBoxTexture_om0v4")
 Button/styles/normal = SubResource("StyleBoxEmpty_ewhig")
 Button/styles/pressed = SubResource("StyleBoxTexture_qhm74")
 Panel/styles/panel = SubResource("StyleBoxTexture_f6v8l")
-TabBar/colors/font_hovered_color = Color(0, 0, 0, 1)
 TabContainer/colors/drop_mark_color = Color(0.219608, 0.223529, 0.188235, 1)
 TabContainer/colors/font_disabled_color = Color(0.219608, 0.223529, 0.188235, 1)
 TabContainer/colors/font_hovered_color = Color(0.219608, 0.223529, 0.188235, 1)

@@ -1,11 +1,56 @@
-[gd_scene load_steps=7 format=3 uid="uid://bug3v1xlp1gfr"]
+[gd_scene load_steps=16 format=3 uid="uid://bug3v1xlp1gfr"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_h2d1v"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Buttons/pull_out_tab_button.gd" id="1_q1nfy"]
 [ext_resource type="Texture2D" uid="uid://bryamn5jwtk0u" path="res://Textures/Buttons/Tabs/arrow_right.png" id="2_1y0ap"]
+[ext_resource type="Texture2D" uid="uid://bov3ra2ajt18n" path="res://Textures/Buttons/Tabs/tab_right_highlight.png" id="2_6de5b"]
+[ext_resource type="Texture2D" uid="uid://bisjcpxojnb1c" path="res://Textures/Buttons/Tabs/tab_right.png" id="3_peur1"]
 [ext_resource type="Texture2D" uid="uid://c3446mj2msohv" path="res://Textures/Buttons/Tabs/arrow_left.png" id="3_rljae"]
-[ext_resource type="Theme" uid="uid://dpgxidod8iu68" path="res://Resources/Themes/pull_out_tab_left.tres" id="4_mm2xc"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="6_f4bc6"]
+[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="8_o6ayo"]
+[ext_resource type="Theme" uid="uid://dapxuwt6hrjhh" path="res://Scenes and Scripts/UI/Buttons/pull_out_tab.tres" id="9_wqgnt"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tp8cq"]
+content_margin_left = 4.0
+texture = ExtResource("2_6de5b")
+texture_margin_left = 1.0
+texture_margin_top = 5.0
+texture_margin_right = 6.0
+texture_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_kska7"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 7.0
+content_margin_bottom = 4.0
+texture = ExtResource("3_peur1")
+texture_margin_left = 3.0
+texture_margin_top = 5.0
+texture_margin_right = 6.0
+texture_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m6l0d"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_24mum"]
+
+[sub_resource type="Theme" id="Theme_4me7f"]
+default_font_size = 12
+Button/colors/font_color = Color(1, 0.333333, 0, 1)
+Button/colors/font_disabled_color = Color(1, 0.333333, 0, 1)
+Button/colors/font_focus_color = Color(1, 0.333333, 0, 1)
+Button/colors/font_hover_color = Color(1, 0.333333, 0, 1)
+Button/colors/font_hover_pressed_color = Color(1, 0.333333, 0, 1)
+Button/colors/font_outline_color = Color(1, 0.333333, 0, 1)
+Button/colors/font_pressed_color = Color(1, 0.333333, 0, 1)
+Button/styles/hover = SubResource("StyleBoxTexture_tp8cq")
+Button/styles/normal = SubResource("StyleBoxTexture_kska7")
+Button/styles/pressed = SubResource("StyleBoxTexture_kska7")
+Panel/styles/panel = SubResource("StyleBoxEmpty_m6l0d")
+PanelContainer/styles/panel = SubResource("StyleBoxEmpty_24mum")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_22jqm"]
+resource_local_to_scene = true
+shader = ExtResource("8_o6ayo")
 
 [node name="Tab" type="MarginContainer"]
 material = ExtResource("1_h2d1v")
@@ -13,7 +58,7 @@ use_parent_material = true
 size_flags_horizontal = 0
 size_flags_vertical = 0
 mouse_filter = 2
-theme = ExtResource("4_mm2xc")
+theme = SubResource("Theme_4me7f")
 theme_override_constants/margin_left = -3
 theme_override_constants/margin_top = 6
 theme_override_constants/margin_bottom = 6
@@ -22,7 +67,9 @@ ArrowIn = ExtResource("2_1y0ap")
 ArrowOut = ExtResource("3_rljae")
 
 [node name="TabButton" parent="." instance=ExtResource("6_f4bc6")]
+material = SubResource("ShaderMaterial_22jqm")
 layout_mode = 2
+theme = ExtResource("9_wqgnt")
 minimum_size = Vector2(15, 15)
 mute = true
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://blu0n6lwfysjf"]
+[gd_scene load_steps=44 format=3 uid="uid://blu0n6lwfysjf"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_scc04"]
 [ext_resource type="Texture2D" uid="uid://c2myqhjupqo25" path="res://Textures/Background/tile.png" id="2_3tgej"]
@@ -11,16 +11,15 @@
 [ext_resource type="PackedScene" uid="uid://dtllx04gp77mu" path="res://Scenes and Scripts/UI/Menus/MainMenu/problem_selection.tscn" id="8_oursg"]
 [ext_resource type="Texture2D" uid="uid://doyaei3vq3cbb" path="res://Textures/Background/state_line_shadow_top.png" id="9_182u3"]
 [ext_resource type="Texture2D" uid="uid://basekc2ce6rmp" path="res://Textures/Background/state_line_shadow_tile.png" id="10_v50i2"]
-[ext_resource type="Texture2D" uid="uid://fw31lvdyemj2" path="res://Textures/UI/main menu/title.png" id="11_12tia"]
 [ext_resource type="PackedScene" uid="uid://pgnduadnvgfx" path="res://Scenes and Scripts/Diagram/StateLine.tscn" id="11_ed86s"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="11_t2od8"]
 [ext_resource type="PackedScene" uid="uid://besym8haj5qo4" path="res://Scenes and Scripts/UI/Crosshair.tscn" id="12_6wo74"]
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="12_nridv"]
 [ext_resource type="Texture2D" uid="uid://7ipru72d5e13" path="res://Textures/Buttons/icons/sandbox.png" id="13_21fnr"]
-[ext_resource type="Texture2D" uid="uid://cnenn4liabxxv" path="res://Textures/Buttons/icons/puzzle_piece_2.png" id="14_6sffg"]
 [ext_resource type="Texture2D" uid="uid://b20ltmcqk6xwh" path="res://Textures/Buttons/icons/question_mark.png" id="16_0rbva"]
 [ext_resource type="PackedScene" uid="uid://b4oiaq2nic3ig" path="res://Scenes and Scripts/UI/Buttons/MuteButton.tscn" id="16_1yq2b"]
 [ext_resource type="Texture2D" uid="uid://btu2jj1bbbbil" path="res://Textures/Buttons/icons/palette.png" id="17_cv4ds"]
+[ext_resource type="Texture2D" uid="uid://b3diapu0ec332" path="res://Textures/Buttons/icons/puzzle_piece.png" id="19_fbmws"]
 [ext_resource type="Texture2D" uid="uid://bxlc5rvpwjq8o" path="res://Textures/Buttons/icons/unmute.png" id="21_lu08p"]
 [ext_resource type="Theme" uid="uid://c7hk3afo5tria" path="res://Resources/Themes/toggle_button.tres" id="22_a8ikr"]
 [ext_resource type="Texture2D" uid="uid://co52c2vc04qom" path="res://Textures/Buttons/icons/credit.png" id="23_sgn8e"]
@@ -47,27 +46,27 @@ expand_margin_bottom = 1.0
 [sub_resource type="Theme" id="Theme_gyi6d"]
 Label/font_sizes/font_size = 16
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_m38yr"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xj4hu"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ywwxf"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hi6eq"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_418m2"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xbg73"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_p7iib"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7i7f5"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ce7um"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k4hax"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_w1vwv"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v5lmf"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
@@ -75,15 +74,15 @@ shader = ExtResource("12_nridv")
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_6htte"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_82o1d"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_crtkh"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jhchq"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_y4elr"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cq440"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
@@ -277,26 +276,6 @@ mouse_filter = 1
 use_parent_material = true
 anchors_preset = 0
 
-[node name="Titles" type="TextureRect" parent="."]
-visible = false
-custom_minimum_size = Vector2(458, 2.08165e-12)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -229.0
-offset_top = -137.0
-offset_right = 229.0
-offset_bottom = -27.6136
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 0
-texture = ExtResource("11_12tia")
-expand_mode = 5
-stretch_mode = 4
-
 [node name="Center" type="Control" parent="."]
 use_parent_material = true
 layout_mode = 1
@@ -324,7 +303,7 @@ grow_horizontal = 2
 alignment = 1
 
 [node name="Tutorial" parent="Center/VBoxContainer" instance=ExtResource("11_t2od8")]
-material = SubResource("ShaderMaterial_m38yr")
+material = SubResource("ShaderMaterial_xj4hu")
 layout_mode = 2
 icon = ExtResource("16_0rbva")
 text = "Tutorial"
@@ -333,7 +312,7 @@ icon_use_parent_material = true
 icon_text_seperation = 4
 
 [node name="Sandbox" parent="Center/VBoxContainer" instance=ExtResource("11_t2od8")]
-material = SubResource("ShaderMaterial_ywwxf")
+material = SubResource("ShaderMaterial_hi6eq")
 layout_mode = 2
 icon = ExtResource("13_21fnr")
 text = "Sandbox"
@@ -343,10 +322,10 @@ action_mode = 1
 icon_text_seperation = 4
 
 [node name="ProblemSets" parent="Center/VBoxContainer" instance=ExtResource("11_t2od8")]
-material = SubResource("ShaderMaterial_418m2")
+material = SubResource("ShaderMaterial_xbg73")
 layout_mode = 2
 theme = ExtResource("22_a8ikr")
-icon = ExtResource("14_6sffg")
+icon = ExtResource("19_fbmws")
 text = "Problem Sets"
 minimum_size = Vector2(144, 0)
 toggle_mode = true
@@ -360,7 +339,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="MuteButton" parent="Center/VBoxContainer/HBoxContainer" instance=ExtResource("16_1yq2b")]
-material = SubResource("ShaderMaterial_p7iib")
+material = SubResource("ShaderMaterial_7i7f5")
 layout_mode = 2
 size_flags_horizontal = 1
 size_flags_vertical = 1
@@ -368,7 +347,7 @@ icon = ExtResource("21_lu08p")
 toggle_mode = true
 
 [node name="Palettes" parent="Center/VBoxContainer/HBoxContainer" instance=ExtResource("11_t2od8")]
-material = SubResource("ShaderMaterial_ce7um")
+material = SubResource("ShaderMaterial_k4hax")
 layout_mode = 2
 icon = ExtResource("17_cv4ds")
 minimum_size = Vector2(30, 30)
@@ -376,7 +355,7 @@ toggle_mode = true
 expand_icon = true
 
 [node name="CreditButton" parent="Center/VBoxContainer/HBoxContainer" instance=ExtResource("11_t2od8")]
-material = SubResource("ShaderMaterial_w1vwv")
+material = SubResource("ShaderMaterial_v5lmf")
 layout_mode = 2
 icon = ExtResource("23_sgn8e")
 minimum_size = Vector2(30, 30)
@@ -416,7 +395,7 @@ grow_vertical = 2
 
 [node name="ParticleButtons" parent="." instance=ExtResource("26_grnbf")]
 visible = false
-material = SubResource("ShaderMaterial_6htte")
+material = SubResource("ShaderMaterial_82o1d")
 layout_mode = 1
 offset_left = -166.0
 offset_top = 508.0
@@ -425,7 +404,7 @@ offset_bottom = 508.0
 
 [node name="VisionButton" parent="." instance=ExtResource("27_y0o8i")]
 visible = false
-material = SubResource("ShaderMaterial_crtkh")
+material = SubResource("ShaderMaterial_jhchq")
 offset_left = 836.0
 offset_top = 4.0
 offset_right = 858.0
@@ -441,7 +420,7 @@ offset_bottom = 64.0
 
 [node name="MenuTab" parent="." instance=ExtResource("33_nabci")]
 visible = false
-material = SubResource("ShaderMaterial_y4elr")
+material = SubResource("ShaderMaterial_cq440")
 layout_mode = 1
 offset_left = 509.0
 offset_top = 338.0
