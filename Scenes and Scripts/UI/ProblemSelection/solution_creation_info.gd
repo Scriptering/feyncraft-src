@@ -38,5 +38,5 @@ func _exit() -> void:
 	
 	exit.emit()
 
-func _on_custom_solutions_toggled(button_pressed: bool) -> void:
+func _on_custom_solutions_toggled(_button_pressed: bool) -> void:
 	update_custom_solutions()
