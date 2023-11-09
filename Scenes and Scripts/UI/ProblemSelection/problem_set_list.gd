@@ -28,6 +28,8 @@ func reload() -> void:
 		problem_set_item.update()
 
 func load_problem_sets() -> void:
+	clear_problem_sets()
+	
 	load_default_problem_sets()
 	load_custom_problem_sets()
 	

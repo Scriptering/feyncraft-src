@@ -22,15 +22,15 @@ texture_margin_top = 6.0
 texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2ra2u"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_a0p1r"]
 resource_local_to_scene = true
 shader = ExtResource("5_2ymkv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ucbmt"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qkm25"]
 resource_local_to_scene = true
 shader = ExtResource("5_2ymkv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_xc18h"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ceyyr"]
 resource_local_to_scene = true
 shader = ExtResource("5_2ymkv")
 
@@ -57,7 +57,7 @@ use_parent_material = true
 layout_mode = 2
 size_flags_vertical = 1
 theme_override_fonts/font = ExtResource("3_o8url")
-theme_override_font_sizes/font_size = 8
+theme_override_font_sizes/font_size = 9
 text = "Welcome to FeynCraft! Here you will be able to draw, create, and generate Feynman diagram problems.
 
 Click next below to get started."
@@ -70,7 +70,7 @@ alignment = 1
 
 [node name="PrevStep" parent="TutorialPanel/VBoxContainer/Buttons" instance=ExtResource("4_3eia6")]
 visible = false
-material = SubResource("ShaderMaterial_2ra2u")
+material = SubResource("ShaderMaterial_a0p1r")
 layout_mode = 2
 icon = ExtResource("6_1qgbo")
 minimum_size = Vector2(24, 21)
@@ -80,7 +80,7 @@ icon_use_parent_material = true
 tooltip = "Prev Step"
 
 [node name="NextStep" parent="TutorialPanel/VBoxContainer/Buttons" instance=ExtResource("4_3eia6")]
-material = SubResource("ShaderMaterial_ucbmt")
+material = SubResource("ShaderMaterial_qkm25")
 layout_mode = 2
 icon = ExtResource("6_ele4h")
 minimum_size = Vector2(24, 21)
@@ -91,7 +91,7 @@ tooltip = "Next Step"
 
 [node name="Finish" parent="TutorialPanel/VBoxContainer/Buttons" instance=ExtResource("4_3eia6")]
 visible = false
-material = SubResource("ShaderMaterial_xc18h")
+material = SubResource("ShaderMaterial_ceyyr")
 layout_mode = 2
 icon = ExtResource("10_qnfej")
 minimum_size = Vector2(24, 21)

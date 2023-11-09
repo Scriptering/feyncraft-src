@@ -423,7 +423,7 @@ func get_state_interactions(state: StateLine.StateType) -> Array:
 		for to_id in matrix_size:
 			state_interaction += get_connection_particles(from_state_id, to_id, false, false, true).map(
 				func(base_particle: ParticleData.Particle): 
-					if base_particle in ParticleData.BOSONS:
+					if base_particle in ParticleData.UNSHADED_PARTICLES:
 						return base_particle
 					else:
 						return -1 * StateLine.state_factor[state] * base_particle
@@ -431,7 +431,7 @@ func get_state_interactions(state: StateLine.StateType) -> Array:
 			
 			state_interaction += get_connection_particles(from_state_id, to_id).map(
 				func(base_particle: ParticleData.Particle):
-					if base_particle in ParticleData.BOSONS:
+					if base_particle in ParticleData.UNSHADED_PARTICLES:
 						return base_particle
 					else:
 						return StateLine.state_factor[state] * base_particle

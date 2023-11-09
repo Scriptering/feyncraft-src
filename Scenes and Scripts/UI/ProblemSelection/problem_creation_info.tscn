@@ -32,11 +32,11 @@
 default_font = ExtResource("6_3hqhb")
 default_font_size = 10
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_oo7g8"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5kyu8"]
 resource_local_to_scene = true
 shader = ExtResource("5_bibin")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_j3fyw"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vxt66"]
 resource_local_to_scene = true
 shader = ExtResource("5_bibin")
 
@@ -64,7 +64,7 @@ size_flags_vertical = 3
 [node name="Body" type="Label" parent="VBoxContainer/VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 7
+theme_override_font_sizes/font_size = 9
 text = "- Draw the problem.
 - Only the drawn initial and final states matter."
 autowrap_mode = 3
@@ -140,7 +140,7 @@ use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
-theme_override_font_sizes/font_size = 8
+theme_override_font_sizes/font_size = 9
 text = "Quantum numbers don't match"
 autowrap_mode = 2
 
@@ -159,7 +159,7 @@ use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
-theme_override_font_sizes/font_size = 8
+theme_override_font_sizes/font_size = 9
 text = "Energy not conserved"
 autowrap_mode = 2
 
@@ -178,7 +178,7 @@ use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
-theme_override_font_sizes/font_size = 8
+theme_override_font_sizes/font_size = 9
 text = "No particles"
 autowrap_mode = 2
 
@@ -197,7 +197,7 @@ use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
-theme_override_font_sizes/font_size = 8
+theme_override_font_sizes/font_size = 9
 text = "No Solutions Found"
 autowrap_mode = 2
 
@@ -207,7 +207,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="PrevStep" parent="VBoxContainer/Buttons" instance=ExtResource("4_5sf8a")]
-material = SubResource("ShaderMaterial_oo7g8")
+material = SubResource("ShaderMaterial_5kyu8")
 layout_mode = 2
 icon = ExtResource("6_1wu7s")
 minimum_size = Vector2(24, 21)
@@ -217,7 +217,7 @@ icon_use_parent_material = true
 tooltip = "Previous Step"
 
 [node name="NextStep" parent="VBoxContainer/Buttons" instance=ExtResource("4_5sf8a")]
-material = SubResource("ShaderMaterial_j3fyw")
+material = SubResource("ShaderMaterial_vxt66")
 layout_mode = 2
 icon = ExtResource("8_2yrn2")
 minimum_size = Vector2(24, 21)

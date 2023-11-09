@@ -29,6 +29,9 @@ func _process(_event):
 func init(diagram: DiagramBase, state_lines: Array, gridsize: int) -> void:
 	Diagram = diagram
 	StateManager = diagram.StateManager
+	
+	StateManager.state_changed.connect(_state_changed)
+	
 	Initial = state_lines[StateLine.StateType.Initial]
 	Final = state_lines[StateLine.StateType.Final]
 	grid_size = gridsize
@@ -138,15 +141,25 @@ func is_on_interaction(test_position: Vector2 = position) -> bool:
 	return false
 
 func DiagramMouseEntered():
-	show()
 	is_inside_diagram = true
+	visible = get_state_visible(StateManager.state)
 
 func DiagramMouseExited():
-	if StateManager.state != BaseState.State.Placing and StateManager.state != BaseState.State.Drawing:
-		hide()
 	is_inside_diagram = false
+	visible = get_state_visible(StateManager.state)
 
 func _state_changed(new_state: BaseState.State, _old_state: BaseState.State) -> void: 
+	if !is_inside_tree():
+		return
+	
+	visible = get_state_visible(new_state)
+
+func get_state_visible(new_state: BaseState.State) -> bool:
 	if new_state == BaseState.State.Idle:
-		visible = can_draw
-		
+		return can_draw
+	
+	if new_state == BaseState.State.Drawing:
+		return true
+	
+	return false
+

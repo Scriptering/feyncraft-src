@@ -4,6 +4,7 @@ extends Resource
 const LOWEST_ORDER: int = -1
 
 @export var custom_solutions: bool = false
+@export var custom_solution_count: bool = false
 @export var custom_degree: bool = false
 @export var limited_particles: bool = false
 @export var hide_unavailable_particles: bool = false
@@ -14,12 +15,10 @@ const LOWEST_ORDER: int = -1
 @export var degree : int = LOWEST_ORDER
 @export var solution_count : int = 0:
 	get:
-		print(custom_solutions)
-		if custom_solutions:
-			print(solutions.size())
-			return solutions.size()
-		print(solution_count)
-		return solution_count
+		if custom_solution_count or !custom_solutions:
+			return solution_count
+		
+		return solutions.size()
 
 func is_submission_valid(submission: DrawingMatrix) -> bool:
 	if !is_submission_solution(submission):

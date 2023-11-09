@@ -79,13 +79,11 @@ func _on_tutorial_pressed() -> void:
 	change_scene(Scene.Level, [BaseMode.Mode.Tutorial])
 
 func _on_world_problem_submitted() -> void:
-	GLOBALS.save(GLOBALS.load_problem_set, GLOBALS.creating_problem_set_file)
+	save_files.emit()
 	modifying_problem_item.load_problem(GLOBALS.creating_problem)
 	
 	change_scene(Scene.MainMenu)
-	
-	save_files.emit()
-	
+
 func _on_problem_modified(problem_item) -> void:
 	modifying_problem_item = problem_item
 	
@@ -96,6 +94,3 @@ func _on_problem_modified(problem_item) -> void:
 func _on_problem_set_played(problem_set: ProblemSet, index: int) -> void:
 	change_scene(Scene.Level, [BaseMode.Mode.ProblemSolving])
 	Level.load_problem_set(problem_set, index)
-
-func _on_tree_exited() -> void:
-	save_files.emit()

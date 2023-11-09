@@ -30,11 +30,11 @@
 default_font = ExtResource("5_odh5n")
 default_font_size = 10
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_j58c6"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3rgyf"]
 resource_local_to_scene = true
 shader = ExtResource("3_ktptg")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4wpww"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0qb5x"]
 resource_local_to_scene = true
 shader = ExtResource("3_ktptg")
 
@@ -61,6 +61,7 @@ size_flags_vertical = 3
 [node name="Body" type="Label" parent="VBoxContainer/VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 9
 text = "- Draw solutions to the problem.
 - Submit solutions using puzzle tab."
 autowrap_mode = 3
@@ -99,7 +100,7 @@ use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
-theme_override_font_sizes/font_size = 8
+theme_override_font_sizes/font_size = 9
 text = "No solutions created"
 autowrap_mode = 2
 
@@ -161,7 +162,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="PrevStep" parent="VBoxContainer/Buttons" instance=ExtResource("2_66fjv")]
-material = SubResource("ShaderMaterial_j58c6")
+material = SubResource("ShaderMaterial_3rgyf")
 layout_mode = 2
 icon = ExtResource("4_187qd")
 minimum_size = Vector2(24, 21)
@@ -171,7 +172,7 @@ icon_use_parent_material = true
 tooltip = "Previous Step"
 
 [node name="Submit" parent="VBoxContainer/Buttons" instance=ExtResource("2_66fjv")]
-material = SubResource("ShaderMaterial_4wpww")
+material = SubResource("ShaderMaterial_0qb5x")
 layout_mode = 2
 icon = ExtResource("6_eyill")
 minimum_size = Vector2(22, 22)

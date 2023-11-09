@@ -24,6 +24,10 @@ func get_custom_file_path() -> String:
 func load_palettes() -> void:
 	for file_path in GLOBALS.get_files_in_folder(get_custom_file_path()):
 		$PaletteList.load_palette(file_path)
+	
+	var seasonal_palette: String = get_seasonal_palette()
+	if seasonal_palette != '':
+		$PaletteList.load_palette("res://saves/Palettes/Seasonal/" + seasonal_palette)
 
 func load_tea_stain() -> void:
 	$PaletteList.get_items().front().is_selected = true
@@ -42,3 +46,34 @@ func _on_load_button_submitted(submitted_text) -> void:
 func _on_load_result(valid: bool) -> void:
 	($PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/HBoxContainer/LoadButton
 	.load_result(valid))
+
+func get_seasonal_palette() -> String:
+	var datetime: Dictionary = Time.get_datetime_dict_from_system()
+	
+	var day: int = datetime["day"]
+	var month: int = datetime["month"]
+	
+	if month == Time.MONTH_OCTOBER:
+		return "halloween"
+	
+	if month == Time.MONTH_DECEMBER and day == 25:
+		return "christmas"
+	
+	if month == Time.MONTH_DECEMBER:
+		return "winter"
+	
+	if month == Time.MONTH_FEBRUARY and day < 15:
+		return "valentine"
+	
+	if month == Time.MONTH_APRIL and day < 21:
+		return "easter"
+	
+	if (
+		(month == Time.MONTH_JANUARY and day < 25) or 
+		(month == Time.MONTH_MAY and day > 18) or
+		(month == Time.MONTH_JUNE and day < 7)
+	):
+		return "exam"
+	
+	return ''
+	

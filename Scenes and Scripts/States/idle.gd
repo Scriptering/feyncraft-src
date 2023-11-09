@@ -20,14 +20,6 @@ func connect_buttons() -> void:
 	for button in get_tree().get_nodes_in_group('button'):
 		connect_button(button)
 
-func enter() -> void:
-	super.enter()
-#	connect_buttons()
-
-func exit() -> void:
-	super.exit()
-#	disconnect_buttons()
-
 func input(event: InputEvent) -> State:
 	if Input.is_action_just_pressed("draw_history"):
 		Diagram.draw_history()

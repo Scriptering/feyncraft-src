@@ -34,7 +34,6 @@ func init(Diagram: DiagramBase) -> void:
 		child.crosshair = crosshair
 		
 	crosshair.moved.connect(crosshair_moved)
-	state_changed.connect(crosshair._state_changed)
 	change_state(BaseState.State.Idle)
 
 func change_scene(Diagram: DiagramBase) -> void:
