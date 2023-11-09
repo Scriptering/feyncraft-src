@@ -13,7 +13,6 @@ enum Index {
 @export var title: String = ''
 @export var is_custom: bool = true
 @export var colours: Array[Color] = []
-@export var changed_colours: Array[ColourIndex] = []
 
 const palette_size: int = 5
 
@@ -77,15 +76,10 @@ func get_random_colours() -> Array[Color]:
 	elif lumin < min_lumin:
 		random_start_colour = random_start_colour.lightened(randf_range(min_lumin - lumin, max_lumin - lumin))
 	
-	print(random_start_colour.get_luminance())
 	var new_colours: Array[Color] = make_palette(random_start_colour)
 	
-	print("Random")
 	for i in range(new_colours.size()):
 		new_colours[i].s = random_saturation + randf_range(-rand_saturation_offset, rand_saturation_offset)
-		
-		print("\n Random Saturation: ", new_colours[i].s)
-		print("Random Lumin: ", new_colours[i].get_luminance())
 	
 	return get_custom_colours(new_colours[Index.A], new_colours[Index.B], new_colours[Index.C])
 

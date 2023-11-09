@@ -31,11 +31,26 @@ var is_on_editor: bool
 func _ready():
 	is_on_editor = OS.has_feature("editor")
 	load_problem_set.problems.push_back(creating_problem)
+	
+	if !is_on_editor and !DirAccess.dir_exists_absolute("User://saves/"):
+		create_save_folders()
+
+func create_save_folders() -> void:
+	print("creating save folders")
+	
+	print(DirAccess.make_dir_absolute("user://saves/"))
+	print(DirAccess.make_dir_absolute("user://saves/Palettes"))
+	print(DirAccess.make_dir_absolute("user://saves/Palettes/Custom"))
+	print(DirAccess.make_dir_absolute("user://saves/ProblemSets"))
+	print(DirAccess.make_dir_absolute("user://saves/ProblemSets/Custom"))
 
 func is_on_mobile() -> bool:
 	return OS.has_feature("web_android") or OS.has_feature("web_ios") or OS.has_feature("android") or OS.has_feature("ios")
 
 func get_unique_file_name(folder_path: String, suffix: String = '.txt') -> String:
+	print("getting unique file name")
+	print(folder_path)
+	
 	var random_hex : String = "%x" % (randi() % 4095)
 	
 	var files: Array[String] = get_files_in_folder(folder_path)
@@ -43,27 +58,39 @@ func get_unique_file_name(folder_path: String, suffix: String = '.txt') -> Strin
 	while folder_path + random_hex + suffix in files:
 		random_hex = "%x" % (randi() % 4095)
 	
+	print(folder_path + random_hex + suffix)
+	
 	return folder_path + random_hex + suffix
 
 func create_file(path: String) -> void:
+	print("creating file")
+	print(path)
+	
 	var file = FileAccess.open(path, FileAccess.WRITE)
+	print(file.get_error())
 	file.store_string("")
 	file = null
 
 func create_text_file(data: String, path: String) -> void:
+	print("creating text file")
+	print(path)
+	
 	if DirAccess.dir_exists_absolute(path):
 		return
 	
-	create_file(path)
-	
 	var file: FileAccess = FileAccess.open(path, FileAccess.WRITE)
-	file.store_var(data)
+	print(file.get_error())
+	file.store_string(data)
 	file.close()
 
 func get_resource_save_data(resource: Resource) -> String:
 	return var_to_str(resource)
 
 func save_data(data: Resource, path: String = "res://saves/") -> Error:
+	print("saving data")
+	print(data)
+	print(path)
+	
 	return ResourceSaver.save(data, path)
 
 func load_data(path: String) -> Resource:
@@ -89,7 +116,10 @@ func save(p_obj: Resource, p_path: String) -> void:
 	file.close()
 
 func load_txt(p_path: String) -> Resource:
+	print("loading txt")
+	print(p_path)
 	var file = FileAccess.open(p_path, FileAccess.READ)
+	print(file.get_as_text())
 	var obj: Resource = str_to_var(file.get_as_text())
 	file.close()
 	return obj
@@ -98,6 +128,8 @@ func delete_file(path: String) -> Error:
 	return DirAccess.remove_absolute(path)
 
 func get_files_in_folder(folder_path: String) -> Array[String]:
+	print("getting files in folder")
+	
 	var files : Array[String] = []
 	var dir := DirAccess.open(folder_path)
 	dir.list_dir_begin()
@@ -108,6 +140,8 @@ func get_files_in_folder(folder_path: String) -> Array[String]:
 			break
 		elif not file.begins_with("."):
 			files.append(folder_path + file)
+	
+	print(files)
 
 	return files
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://dscxljxdt3y5q"]
+[gd_scene load_steps=17 format=3 uid="uid://dscxljxdt3y5q"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_xotca"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/ColourPicker/PickerPanel.gd" id="2_5qwg5"]
@@ -11,8 +11,9 @@
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="6_kwlog"]
 [ext_resource type="Texture2D" uid="uid://cgfs1pdopjbh" path="res://Textures/Buttons/icons/close_hover.png" id="6_ytwn5"]
 [ext_resource type="Script" path="res://Scenes and Scripts/Classes/line_edit.gd" id="7_85uwg"]
+[ext_resource type="PackedScene" uid="uid://dorw3vr2amuy3" path="res://Scenes and Scripts/Components/button_sound_component.tscn" id="12_kgt14"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_xak16"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u0e4e"]
 resource_local_to_scene = true
 shader = ExtResource("6_kwlog")
 
@@ -43,7 +44,7 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 0
-theme_override_constants/separation = -166
+theme_override_constants/separation = -168
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
 use_parent_material = true
@@ -77,7 +78,7 @@ hex_visible = false
 presets_visible = false
 
 [node name="ColourSampler" parent="VBoxContainer/PanelContainer/VBoxContainer" instance=ExtResource("5_8vrca")]
-material = SubResource("ShaderMaterial_xak16")
+material = SubResource("ShaderMaterial_u0e4e")
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_7k5dl")
 
@@ -134,6 +135,8 @@ layout_mode = 2
 texture_normal = ExtResource("5_6ue4d")
 texture_pressed = ExtResource("5_6ue4d")
 texture_hover = ExtResource("6_ytwn5")
+
+[node name="ButtonSoundComponent" parent="VBoxContainer/TitleContainer/HBoxContainer/VBoxContainer/Close" instance=ExtResource("12_kgt14")]
 
 [connection signal="color_changed" from="VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/ColorPicker" to="." method="_on_color_picker_color_changed"]
 [connection signal="sample_submitted" from="VBoxContainer/PanelContainer/VBoxContainer/ColourSampler" to="." method="_on_colour_sampler_sample_submitted"]

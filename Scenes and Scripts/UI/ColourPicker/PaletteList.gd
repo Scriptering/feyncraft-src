@@ -30,12 +30,14 @@ func load_items(_items_data: Array) -> void:
 		load_item(item_data)
 
 func load_item(item_data = null, new_item: ListItem = Item.instantiate()) -> void:
+	ItemContainer.add_child(new_item)
+	
 	if item_data:
 		new_item.load_data(item_data)
 
+	new_item.init()
 	new_item.index = ItemContainer.get_child_count() + 1
 	new_item.deleted.connect(_item_deleted)
-	ItemContainer.add_child(new_item)
 
 func create_new_item() -> void:
 	load_item()
@@ -89,12 +91,12 @@ func save_palettes() -> void:
 		if !palette.palette.is_custom:
 			continue
 		
-		GLOBALS.save(palette.palette, palette.file_path)
+		palette.save()
 
 func create_new_palette(palette_path: String) -> void:
 	var new_palette: ListItem = Item.instantiate()
 	new_palette.file_path = palette_path
-	GLOBALS.create_file(palette_path)
-	GLOBALS.save_data(new_palette.palette, palette_path)
 	load_item(Palette.new(), new_palette)
 	new_palette.randomise()
+	
+	GLOBALS.save(new_palette.palette, palette_path)

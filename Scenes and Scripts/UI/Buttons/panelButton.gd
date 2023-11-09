@@ -49,21 +49,6 @@ var previous_button_pressed : bool
 var is_hovered: bool:
 	get:
 		return button.is_hovered()
-var is_just_pressed: bool:
-	get:
-		return just_pressed_counter > 0
-var just_pressed_counter: int = 0
-var is_just_released: bool:
-	get:
-		return just_released_counter > 0
-var just_released_counter: int = 0
-
-func _process(_delta: float) -> void:
-	if just_pressed_counter > 0:
-		just_pressed_counter -= 1
-	
-	if just_released_counter > 0:
-		just_released_counter -= 1
 
 func _ready() -> void:
 	add_to_group("button", true)
@@ -194,8 +179,6 @@ func _on_button_button_down():
 	set_content_margins(ButtonState[PRESSED])
 	
 	button_down.emit()
-	
-	just_pressed_counter += 2
 
 func _on_button_button_up():
 	if toggle_mode:
@@ -208,8 +191,6 @@ func _on_button_button_up():
 	
 	button_up.emit()
 
-	just_released_counter += 2
-
 func _on_button_theme_changed():
 	set_content_margins(ButtonState[NORMAL])
 
@@ -219,10 +200,6 @@ func get_button() -> Button:
 func _on_button_toggled(button_pressed_state: bool) -> void:
 	button_toggled.emit(button_pressed_state, self)
 	toggled.emit(button_pressed_state)
-	if button_pressed_state:
-		just_pressed_counter += 2
-	else:
-		just_released_counter += 2
 	
 	if button_pressed_state == previous_button_pressed:
 		return

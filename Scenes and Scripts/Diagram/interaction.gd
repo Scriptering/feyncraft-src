@@ -65,13 +65,6 @@ func init(diagram: MainDiagram) -> void:
 	Crosshair = diagram.Crosshair
 	StateManager = diagram.StateManager
 
-#func _process(_delta: float) -> void:
-#	if old_connected_lines != connected_lines:
-#		update_interaction()
-#		old_connected_lines = connected_lines.duplicate(true)
-#	if connected_lines.size() == 0 and not grabbed and StateManager.state != BaseState.State.Drawing:
-#		queue_free()
-
 func _grab_area_hovered_changed(new_value: bool):
 	self.hovering = new_value
 	grab_area_hovered = new_value

@@ -18,6 +18,7 @@ picker_offset = Vector2(0, 0)
 icon_colour = Color(0, 0, 0, 1)
 icon = ExtResource("4_3mh40")
 minimum_size = Vector2(20, 20)
+toggle_mode = true
 
 [node name="Button" parent="." index="0"]
 custom_minimum_size = Vector2(20, 20)
