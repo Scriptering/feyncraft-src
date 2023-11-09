@@ -19,6 +19,11 @@ func delete_empty_problems() -> void:
 			delete_problem(problem_item)
 
 func reload() -> void:
+	if !problem_set:
+		return
+	
+	load_problem_set(GLOBALS.load_txt(problem_set_file), problem_set_file)
+	
 	for problem_item in get_problem_items():
 		problem_item.toggle_completed(!problem_set.is_custom and problem_item.index < problem_set.highest_index_reached)
 		problem_item.toggle_play_disabled(!problem_set.is_custom and problem_item.index > problem_set.highest_index_reached)

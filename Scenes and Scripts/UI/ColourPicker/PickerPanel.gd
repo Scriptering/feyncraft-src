@@ -39,6 +39,8 @@ func _on_sampler_toggled(button_pressed: bool) -> void:
 	self.sampling = button_pressed
 
 func _on_line_edit_text_submitted(new_text: String) -> void:
+	new_text.trim_prefix('#')
+	
 	if new_text.is_valid_hex_number():
 		self.colour = Color(new_text)
 

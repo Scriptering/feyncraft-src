@@ -3,7 +3,9 @@ extends Node2D
 signal problem_submitted
 signal initialised
 
-@onready var FPS = get_node('FPS')
+@export var test_initial_state: Array = []
+@export var test_final_state: Array = []
+
 @onready var Pathfinding = $Algorithms/PathFinding
 @onready var SolutionGeneration = $Algorithms/SolutionGeneration
 @onready var ProblemGeneration = $Algorithms/ProblemGeneration
@@ -83,14 +85,22 @@ func init(state_manager: Node, controls_tab: Control, palette_list: GrabbableCon
 	
 	initialised.emit()
 
-func _process(_delta):
-	FPS.text = str(Engine.get_frames_per_second())
-	
-	if Input.is_action_just_pressed("save"):
-		GLOBALS.save(Diagram.generate_drawing_matrix_from_diagram(), "res://saves/Diagrams/temp_diagram.txt")
-
 func _vision_button_toggled(current_vision: GLOBALS.Vision) -> void:
 	$ShaderControl.toggle_interaction_strength(current_vision == GLOBALS.Vision.Strength)
+
+func load_test_problem() -> void:
+	var test_problem: Problem = Problem.new()
+	
+	test_initial_state = [[-4], [12]]
+	test_final_state = [[12], [12], [-8]]
+	
+	var test_allowed_particles: Array[ParticleData.Particle]
+	test_allowed_particles.assign(ParticleData.Particle.values())
+	
+	test_problem.allowed_particles = test_allowed_particles
+	test_problem.state_interactions = [test_initial_state, test_final_state]
+	
+	load_problem(ProblemGeneration.setup_new_problem(test_problem))
 
 func load_problem(problem: Problem) -> void:
 	Diagram.load_problem(problem, current_mode)
@@ -138,8 +148,9 @@ func enter_sandbox() -> void:
 	
 	Diagram.set_title_editable(false)
 	Diagram.set_title_visible(false)
-
-	load_problem(generate_new_problem())
+	
+	load_test_problem()
+#	load_problem(generate_new_problem())
 
 func enter_problem_solving() -> void:
 	ParticleButtons.show()

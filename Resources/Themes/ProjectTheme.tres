@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=62 format=3 uid="uid://cfmbhoq8cuoge"]
+[gd_resource type="Theme" load_steps=61 format=3 uid="uid://cfmbhoq8cuoge"]
 
 [ext_resource type="FontFile" uid="uid://cq27s0444iwkg" path="res://Textures/Fonts/ConnectionIi-2wj8.otf" id="1_s2gkm"]
 [ext_resource type="Texture2D" uid="uid://bcwpdy0lmenue" path="res://Textures/Buttons/square_disabled.png" id="2_8m3bx"]
@@ -22,7 +22,6 @@
 [ext_resource type="Texture2D" uid="uid://f76yp8golmnh" path="res://Textures/UI/Equation/scroll_grabber_pressed_v.png" id="21_kuoaw"]
 [ext_resource type="Texture2D" uid="uid://c0muhs2tnd6ew" path="res://Textures/UI/Equation/scrollbar_v.png" id="22_blifg"]
 [ext_resource type="Texture2D" uid="uid://cea5mj3u65016" path="res://Textures/Buttons/square_pressed_active.png" id="25_0wrbn"]
-[ext_resource type="FontFile" uid="uid://y4axnib64du5" path="res://Textures/Fonts/FandaBlack-vm6E.ttf" id="30_qrn5f"]
 
 [sub_resource type="FontFile" id="15"]
 fallbacks = Array[Font]([ExtResource("1_s2gkm")])
@@ -1912,7 +1911,6 @@ texture_margin_right = 9.0
 [sub_resource type="StyleBoxEmpty" id="27"]
 
 [resource]
-default_font = ExtResource("30_qrn5f")
 default_font_size = 6
 Button/colors/font_color = Color(0.666667, 0.333333, 0, 1)
 Button/colors/font_color_disabled = Color(0.666667, 0.333333, 0, 1)

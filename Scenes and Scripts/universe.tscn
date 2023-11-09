@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cnc7r7d27yn5c"]
+[gd_scene load_steps=19 format=3 uid="uid://cnc7r7d27yn5c"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_as5lx"]
 [ext_resource type="Script" path="res://Scenes and Scripts/universe.gd" id="1_f3b25"]
@@ -13,20 +13,21 @@
 [ext_resource type="Texture2D" uid="uid://db6rdb3r8el1a" path="res://Textures/Buttons/move_touch_button_pressed.png" id="11_ojt0j"]
 [ext_resource type="Texture2D" uid="uid://dbbrv15cfsttg" path="res://Textures/Buttons/cut_touch_button_normal.png" id="12_560ih"]
 [ext_resource type="Texture2D" uid="uid://n2w0tydjaa33" path="res://Textures/Buttons/cut_touch_button_pressed.png" id="13_gqnb4"]
+[ext_resource type="Script" path="res://Scenes and Scripts/fps.gd" id="14_jxbry"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_6pdgy"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wne8l"]
 resource_local_to_scene = true
 shader = ExtResource("2_6gvvu")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fc3qf"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qjb1u"]
 resource_local_to_scene = true
 shader = ExtResource("2_6gvvu")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_dqfcf"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_eu4q6"]
 resource_local_to_scene = true
 shader = ExtResource("2_6gvvu")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2hlep"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bsuyw"]
 resource_local_to_scene = true
 shader = ExtResource("2_6gvvu")
 
@@ -35,13 +36,13 @@ material = ExtResource("1_as5lx")
 script = ExtResource("1_f3b25")
 
 [node name="MainMenu" parent="." node_paths=PackedStringArray("PaletteMenu") instance=ExtResource("1_qkr4k")]
-material = SubResource("ShaderMaterial_6pdgy")
+material = SubResource("ShaderMaterial_wne8l")
 offset_right = 640.0
 offset_bottom = 360.0
 PaletteMenu = NodePath("../FloatingMenus/PaletteMenu")
 
 [node name="World" parent="." instance=ExtResource("3_m7wj1")]
-material = SubResource("ShaderMaterial_fc3qf")
+material = SubResource("ShaderMaterial_qjb1u")
 
 [node name="FloatingMenus" type="Control" parent="."]
 z_index = 1
@@ -51,7 +52,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="PaletteMenu" parent="FloatingMenus" instance=ExtResource("5_yvg3b")]
-material = SubResource("ShaderMaterial_dqfcf")
+material = SubResource("ShaderMaterial_eu4q6")
 layout_mode = 1
 offset_left = 318.0
 offset_top = 171.0
@@ -65,7 +66,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="ControlsTab" parent="PullOutTabs" instance=ExtResource("6_a8qlc")]
-material = SubResource("ShaderMaterial_2hlep")
+material = SubResource("ShaderMaterial_bsuyw")
 layout_mode = 1
 offset_left = 4.0
 offset_top = -45.0
@@ -121,6 +122,14 @@ position = Vector2(61, 309)
 texture_normal = ExtResource("12_560ih")
 texture_pressed = ExtResource("13_gqnb4")
 action = "deleting"
+
+[node name="Label" type="Label" parent="."]
+offset_left = 41.0
+offset_top = 31.0
+offset_right = 81.0
+offset_bottom = 40.0
+theme_override_font_sizes/font_size = 10
+script = ExtResource("14_jxbry")
 
 [connection signal="tree_exited" from="." to="." method="_on_tree_exited"]
 [connection signal="problem_submitted" from="World" to="." method="_on_world_problem_submitted"]
