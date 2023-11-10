@@ -127,11 +127,7 @@ func _on_generate_pressed() -> void:
 		electroweak_check.button_pressed
 	]
 	
-	Generate.icon.pause = false
-	
 	generate(checks)
-	
-	Generate.icon.pause = true
 
 func show_feedback() -> void:
 	Feedback.pull_out()
