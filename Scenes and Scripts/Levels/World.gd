@@ -27,6 +27,7 @@ var PaletteMenu: GrabbableControl
 
 var previous_mode: BaseMode.Mode = BaseMode.Mode.Null
 var current_mode: BaseMode.Mode = BaseMode.Mode.Null: set = _set_current_mode
+var current_problem: Problem = null
 var problem_set: ProblemSet
 var problem_history: Array[Problem] = []
 
@@ -103,6 +104,8 @@ func load_test_problem() -> void:
 	load_problem(ProblemGeneration.setup_new_problem(test_problem))
 
 func load_problem(problem: Problem) -> void:
+	current_problem = problem
+	
 	Diagram.load_problem(problem, current_mode)
 	ProblemTab.load_problem(problem)
 	ParticleButtons.load_problem(problem)
@@ -231,11 +234,14 @@ func _on_problem_set_end_reached() -> void:
 	EVENTBUS.signal_change_scene.emit(GLOBALS.Scene.MainMenu)
 
 func _on_next_problem_pressed() -> void:
+	problem_history.push_back(current_problem)
+	
 	match current_mode:
 		BaseMode.Mode.ProblemSolving:
 			load_problem(problem_set.next_problem())
 			ProblemTab.set_next_problem_disabled(problem_set.current_index >= problem_set.highest_index_reached)
 		BaseMode.Mode.Sandbox:
+			var new_problem: Problem = generate_new_problem()
 			load_problem(generate_new_problem())
 	
 	Diagram.clear_diagram()

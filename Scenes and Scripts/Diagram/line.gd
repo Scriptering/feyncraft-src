@@ -2,7 +2,6 @@ extends Node2D
 class_name ParticleLine
 
 signal request_deletion
-signal clicked_on
 
 @onready var Text = get_node("text")
 @onready var SpareText = get_node("spareText")
@@ -109,10 +108,6 @@ func init(diagram: MainDiagram) -> void:
 	Initial = diagram.StateLines[StateLine.StateType.Initial]
 	Final = diagram.StateLines[StateLine.StateType.Final]
 	Crosshair = diagram.Crosshair
-
-func _input(_event: InputEvent) -> void:
-	if Input.is_action_just_pressed("click") and hovering:
-		clicked_on.emit(self)
 
 func _get_particle() -> ParticleData.Particle:
 	return (anti * base_particle) as ParticleData.Particle
