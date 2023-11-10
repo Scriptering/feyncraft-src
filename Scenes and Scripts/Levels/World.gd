@@ -152,7 +152,7 @@ func enter_sandbox() -> void:
 	Diagram.set_title_editable(false)
 	Diagram.set_title_visible(false)
 	
-	load_test_problem()
+#	load_test_problem()
 #	load_problem(generate_new_problem())
 
 func enter_problem_solving() -> void:
@@ -245,7 +245,7 @@ func _on_next_problem_pressed() -> void:
 			load_problem(generate_new_problem())
 	
 	Diagram.clear_diagram()
-	ProblemTab.set_prev_problem_disabled(false)
+	ProblemTab.set_prev_problem_disabled(problem_history.size() == 0)
 
 func _on_prev_problem_pressed() -> void:
 	match current_mode:

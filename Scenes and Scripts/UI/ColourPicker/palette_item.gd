@@ -7,6 +7,7 @@ signal selected
 @onready var UseButton: PanelButton = $HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Use
 @onready var MoreColoursButton: PanelButton = $HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/More
 @onready var MoreColoursContainer: Container = $HBoxContainer/PanelContainer/VBoxContainer/MoreContainer
+@onready var ClearButton: PanelContainer = $HBoxContainer/PanelContainer/VBoxContainer/MoreContainer/HBoxContainer/Clear
 
 @onready var PrimaryColourButton: ColourButton = $HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Colours/Primary
 @onready var GridColourButton: ColourButton = $HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Colours/Grid
@@ -33,7 +34,6 @@ signal selected
 var file_path: String
 var is_selected: bool = false: set = _set_is_selected
 var main_colours: Array[Palette.ColourIndex] = [Palette.ColourIndex.Primary, Palette.ColourIndex.Grid, Palette.ColourIndex.Secondary]
-var changed_colours: Array[Palette.ColourIndex] = []
 
 func _ready() -> void:
 	if !palette.is_custom:
@@ -45,12 +45,11 @@ func init() -> void:
 	for colour_button in ColourButtonDict.values():
 		colour_button.colour_changed.connect(_on_colour_button_colour_changed)
 	
+	ClearButton.visible = palette.advanced_colours
 	set_buttons_disabled(!palette.is_custom)
 	update_button_colours()
 	set_custom_button_visibility()
 	$HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Title.text = palette.title
-
-
 
 func _on_more_toggled(button_pressed: bool) -> void:
 	toggle_more_colours(button_pressed)
@@ -99,26 +98,23 @@ func set_custom_button_visibility() -> void:
 	$HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Buttons/Upload.visible = palette.is_custom
 
 func update_custom_palette() -> void:
+	if palette.advanced_colours:
+		return
+	
 	var custom_colours: Array[Color] = palette.get_custom_colours()
 	
 	for i in range(Palette.ColourIndex.size()):
-		if i in changed_colours:
-			continue
-		
 		palette.colours[i] = custom_colours[i]
 	
 	update_button_colours()
 
 func load_saved_palette() -> void:
-	changed_colours.clear()
 	palette = GLOBALS.load_txt(file_path)
 
 func update_shader() -> void:
 	EVENTBUS.signal_change_palette.emit(palette.generate_palette_texture())
 
 func randomise() -> void:
-	changed_colours.clear()
-	
 	palette.colours = palette.get_random_colours()
 	update_button_colours()
 
@@ -127,14 +123,13 @@ func _on_randomise_pressed() -> void:
 
 func _on_colour_button_colour_changed(colour_button: ColourButton, new_colour: Color) -> void:
 	var colour_index: Palette.ColourIndex = ColourButtonDict.find_key(colour_button)
-	
-	if colour_index not in changed_colours:
-		changed_colours.push_back(colour_index)
-	
 	palette.colours[colour_index] = new_colour
 	
 	if colour_index in main_colours:
 		update_custom_palette()
+	else:
+		ClearButton.show()
+		palette.advanced_colours = true
 	
 	update_button_colours()
  
@@ -170,5 +165,6 @@ func save() -> void:
 	GLOBALS.save(palette, file_path)
 
 func _on_clear_pressed() -> void:
-	changed_colours.clear()
+	palette.advanced_colours = false
+	ClearButton.hide()
 	update_custom_palette()

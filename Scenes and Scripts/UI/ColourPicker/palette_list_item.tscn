@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://wfo6boyk67m8"]
+[gd_scene load_steps=43 format=3 uid="uid://wfo6boyk67m8"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_ablgk"]
 [ext_resource type="Script" path="res://Scenes and Scripts/Classes/line_edit.gd" id="1_ju25l"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="3_18hol"]
 [ext_resource type="Texture2D" uid="uid://bo1u07jlygktr" path="res://Textures/Buttons/square_hover.png" id="3_34n3s"]
 [ext_resource type="Texture2D" uid="uid://s14bo7fcdam0" path="res://Textures/Buttons/square_normal.png" id="4_7adso"]
+[ext_resource type="FontFile" uid="uid://cq27s0444iwkg" path="res://Textures/Fonts/ConnectionIi-2wj8.otf" id="5_27e76"]
 [ext_resource type="Texture2D" uid="uid://cea5mj3u65016" path="res://Textures/Buttons/square_pressed_active.png" id="5_xyfo5"]
 [ext_resource type="Texture2D" uid="uid://d16opu3dyhri7" path="res://Textures/Buttons/eye/eye_open.png" id="6_5d7ij"]
 [ext_resource type="ButtonGroup" uid="uid://dqe1qlfngy1ia" path="res://Resources/ButtonGroups/palette.tres" id="7_g18ib"]
@@ -34,6 +35,10 @@ texture_margin_left = 6.0
 texture_margin_top = 6.0
 texture_margin_right = 6.0
 texture_margin_bottom = 6.0
+
+[sub_resource type="FontVariation" id="FontVariation_fgo3n"]
+base_font = ExtResource("5_27e76")
+spacing_bottom = -1
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kubuy"]
 
@@ -76,47 +81,51 @@ Button/styles/hover = SubResource("StyleBoxTexture_n0u2h")
 Button/styles/normal = SubResource("StyleBoxTexture_kxnlx")
 Button/styles/pressed = SubResource("StyleBoxTexture_pbk00")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ucgfo"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2ohn1"]
 resource_local_to_scene = true
 shader = ExtResource("10_y84kw")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_kncoo"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_klean"]
 resource_local_to_scene = true
 shader = ExtResource("10_y84kw")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_bml4y"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g76cf"]
 resource_local_to_scene = true
 shader = ExtResource("10_y84kw")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_dmg5c"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yms0e"]
 resource_local_to_scene = true
 shader = ExtResource("10_y84kw")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_g7rwf"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6ojqj"]
 resource_local_to_scene = true
 shader = ExtResource("10_y84kw")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_mtjoc"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ouf55"]
 resource_local_to_scene = true
 shader = ExtResource("10_y84kw")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gvdf5"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vfyml"]
 resource_local_to_scene = true
 shader = ExtResource("10_y84kw")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_y6e2o"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qdmaa"]
 resource_local_to_scene = true
 shader = ExtResource("10_y84kw")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_v2uqn"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mpaqv"]
 resource_local_to_scene = true
 shader = ExtResource("10_y84kw")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_cviu6"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xkvwl"]
 resource_local_to_scene = true
 shader = ExtResource("10_y84kw")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_e5ur6"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6xdit"]
+resource_local_to_scene = true
+shader = ExtResource("10_y84kw")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2o277"]
 resource_local_to_scene = true
 shader = ExtResource("10_y84kw")
 
@@ -164,6 +173,7 @@ theme_override_constants/separation = 2
 use_parent_material = true
 custom_minimum_size = Vector2(80, 22)
 layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_fgo3n")
 theme_override_font_sizes/font_size = 8
 placeholder_text = "[Enter Title]"
 alignment = 1
@@ -191,21 +201,21 @@ layout_mode = 2
 theme_override_constants/separation = -1
 
 [node name="Primary" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Colours" instance=ExtResource("9_vjhyi")]
-material = SubResource("ShaderMaterial_ucgfo")
+material = SubResource("ShaderMaterial_2ohn1")
 layout_mode = 2
 
 [node name="Tooltip" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Colours/Primary" instance=ExtResource("8_pa48w")]
 tooltip = "Background"
 
 [node name="Grid" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Colours" instance=ExtResource("9_vjhyi")]
-material = SubResource("ShaderMaterial_kncoo")
+material = SubResource("ShaderMaterial_klean")
 layout_mode = 2
 
 [node name="Tooltip" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Colours/Grid" instance=ExtResource("8_pa48w")]
 tooltip = "Grid"
 
 [node name="Secondary" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Colours" instance=ExtResource("9_vjhyi")]
-material = SubResource("ShaderMaterial_bml4y")
+material = SubResource("ShaderMaterial_g76cf")
 layout_mode = 2
 
 [node name="Tooltip" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Colours/Secondary" instance=ExtResource("8_pa48w")]
@@ -231,7 +241,7 @@ action_mode = 1
 tooltip = "Delete"
 
 [node name="Upload" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Buttons" instance=ExtResource("13_gyqq1")]
-material = SubResource("ShaderMaterial_dmg5c")
+material = SubResource("ShaderMaterial_yms0e")
 layout_mode = 2
 theme = ExtResource("14_ylj5d")
 mode = 1
@@ -269,37 +279,37 @@ theme_override_constants/v_separation = 2
 columns = 3
 
 [node name="Text" parent="HBoxContainer/PanelContainer/VBoxContainer/MoreContainer/GridContainer" instance=ExtResource("9_vjhyi")]
-material = SubResource("ShaderMaterial_g7rwf")
+material = SubResource("ShaderMaterial_6ojqj")
 layout_mode = 2
 text = "Text"
 minimum_size = Vector2(45, 20)
 
 [node name="GridShadow" parent="HBoxContainer/PanelContainer/VBoxContainer/MoreContainer/GridContainer" instance=ExtResource("9_vjhyi")]
-material = SubResource("ShaderMaterial_mtjoc")
+material = SubResource("ShaderMaterial_ouf55")
 layout_mode = 2
 text = "Grid Shadow"
 minimum_size = Vector2(82, 20)
 
 [node name="Active" parent="HBoxContainer/PanelContainer/VBoxContainer/MoreContainer/GridContainer" instance=ExtResource("9_vjhyi")]
-material = SubResource("ShaderMaterial_gvdf5")
+material = SubResource("ShaderMaterial_vfyml")
 layout_mode = 2
 text = "Active"
 minimum_size = Vector2(55, 20)
 
 [node name="Shadow1" parent="HBoxContainer/PanelContainer/VBoxContainer/MoreContainer/GridContainer" instance=ExtResource("9_vjhyi")]
-material = SubResource("ShaderMaterial_y6e2o")
+material = SubResource("ShaderMaterial_qdmaa")
 layout_mode = 2
 text = "Shadow 1"
 minimum_size = Vector2(65, 20)
 
 [node name="Shadow2" parent="HBoxContainer/PanelContainer/VBoxContainer/MoreContainer/GridContainer" instance=ExtResource("9_vjhyi")]
-material = SubResource("ShaderMaterial_v2uqn")
+material = SubResource("ShaderMaterial_mpaqv")
 layout_mode = 2
 text = "Shadow2"
 minimum_size = Vector2(66, 20)
 
 [node name="Disabled" parent="HBoxContainer/PanelContainer/VBoxContainer/MoreContainer/GridContainer" instance=ExtResource("9_vjhyi")]
-material = SubResource("ShaderMaterial_cviu6")
+material = SubResource("ShaderMaterial_xkvwl")
 layout_mode = 2
 text = "Disabled"
 minimum_size = Vector2(62, 20)
@@ -310,14 +320,15 @@ layout_mode = 2
 alignment = 1
 
 [node name="Clear" parent="HBoxContainer/PanelContainer/VBoxContainer/MoreContainer/HBoxContainer" instance=ExtResource("2_j3oiu")]
-material = SubResource("ShaderMaterial_e5ur6")
+visible = false
+material = SubResource("ShaderMaterial_6xdit")
 layout_mode = 2
 icon = ExtResource("16_8spqa")
 minimum_size = Vector2(49, 21)
 icon_use_parent_material = true
 
 [node name="Randomise" parent="HBoxContainer/PanelContainer/VBoxContainer/MoreContainer/HBoxContainer" instance=ExtResource("2_j3oiu")]
-material = SubResource("ShaderMaterial_e5ur6")
+material = SubResource("ShaderMaterial_2o277")
 layout_mode = 2
 icon = ExtResource("17_xlgvh")
 minimum_size = Vector2(49, 21)

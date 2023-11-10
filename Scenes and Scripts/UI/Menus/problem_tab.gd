@@ -57,7 +57,12 @@ func _on_diagram_action() -> void:
 	update_degree_label()
 
 func update_degree_label() -> void:
-	DegreeLabel.text = str(Diagram.get_degree()) + "/" + str(current_problem.degree)
+	var problem_degree: int = 0 if !current_problem else current_problem.degree
+	
+	if !current_problem:
+		return
+	
+	DegreeLabel.text = str(Diagram.get_degree()) + "/" + str(problem_degree)
 
 func _on_submit_pressed() -> void:
 	submit_diagram()
@@ -93,8 +98,10 @@ func update_view_submission_button() -> void:
 func update_submitted_solution_count() -> void:
 	SubmitButton.text = str(submitted_diagrams.size())
 	
+	var solution_count: int = 0 if !current_problem else current_problem.solution_count
+	
 	if !in_solution_creation:
-		SubmitButton.text += "/" + str(current_problem.solution_count)
+		SubmitButton.text += "/" + str(solution_count)
 
 func submit_diagram() -> void:
 	var submission: DrawingMatrix = Diagram.generate_drawing_matrix_from_diagram()
@@ -172,6 +179,7 @@ func _exit_solution_creation() -> void:
 
 func _enter_sandbox() -> void:
 	in_sandbox = true
+	NextProblem.disabled = false
 
 func _exit_sandbox() -> void:
 	in_sandbox = false
