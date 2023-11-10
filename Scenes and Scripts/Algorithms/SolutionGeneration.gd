@@ -397,53 +397,86 @@ func connect_particle(
 		if interaction_index == current_point:
 			continue
 		
+		if unconnected_interaction_matrix.unconnected_matrix[interaction_index].size() == 0:
+			continue
+		
 		for connection_particle in get_possible_connection_particles(
 			particle, unconnected_interaction_matrix.unconnected_matrix[interaction_index]
 		):
 			var connected_matrix: InteractionMatrix = unconnected_interaction_matrix.duplicate(true)
-			connected_matrix.connect_in_out_interactions(current_point, interaction_index, connection_particle)
+			
+			connected_matrix.connect_asymmetric_interactions(
+				current_point, interaction_index, particle, connection_particle, base_particle(connection_particle)
+			)
+			
+#			connected_matrix.connect_in_out_interactions(current_point, interaction_index, connection_particle)
 			connected_matrices.push_back(connected_matrix)
 	
 	return connected_matrices
 
-func get_possible_connection_particles(
-	particle: ParticleData.Particle, unconnected_particles: Array
-) -> Array:
-	
+func get_possible_connection_particles(particle: ParticleData.Particle, unconnected_particles: Array) -> Array:
 	var possible_connection_particles: Array = []
-	
+
 	if particle in ParticleData.UNSHADED_PARTICLES:
 		return [particle] if particle in unconnected_particles else []
 	
-	elif particle in ParticleData.GENERAL_PARTICLES:
-		possible_connection_particles += ParticleData.GENERAL_CONVERSION[particle].filter(
-			func(conv_particle: ParticleData.Particle) -> bool: return -conv_particle in unconnected_particles
+	if -particle in unconnected_particles:
+		possible_connection_particles.push_back(-particle)
+	
+	if particle in ParticleData.GENERAL_PARTICLES:
+		possible_connection_particles += unconnected_particles.filter(
+			func(unconnected_particle: ParticleData.Particle): return -unconnected_particle in ParticleData.GENERAL_CONVERSION[particle]
 		)
 	
-	return [particle] if -particle in unconnected_particles else []
+	return possible_connection_particles
 
 func can_particle_connect(particle: ParticleData.Particle, unconnected_particles: Array) -> bool:
 	if particle in ParticleData.UNSHADED_PARTICLES:
 		return particle in unconnected_particles
+	
+	if particle in ParticleData.GENERAL_PARTICLES:
+		return (
+			-particle in unconnected_particles or
+			unconnected_particles.any(
+				func(unconnected_particle: ParticleData.Particle): return -unconnected_particle in ParticleData.GENERAL_CONVERSION[particle]
+			)
+		)
 	
 	return -particle in unconnected_particles
 
 func get_useable_particle_interactions(useable_interactions: Array) -> Dictionary:
 	var useable_particle_interactions : Dictionary = {}
 	var useable_general_interactions: Array = convert_interactions_to_general(useable_interactions)
+	var useable_particles: Array[ParticleData.Particle] = get_useable_particles_from_interactions(
+		useable_interactions + useable_general_interactions
+	)
 	
 	for particle in ParticleData.BASE_PARTICLES:
+		if particle not in useable_particles:
+			useable_particle_interactions[particle] = []
+			continue
+		
 		useable_particle_interactions[particle] = ParticleData.PARTICLE_INTERACTIONS[particle].filter(
 			func(interaction):
-				var sorted_base_interaction: Array = interaction.duplicate()
-				sorted_base_interaction = sorted_base_interaction.map(
-					func(particle): return base_particle(particle)
+				return interaction.all(
+					func(particle: ParticleData.Particle): return base_particle(particle) in useable_particles
 				)
-				sorted_base_interaction.sort()
-				return sorted_base_interaction in useable_interactions or sorted_base_interaction in useable_general_interactions
 		)
 	
 	return useable_particle_interactions
+
+func get_useable_particles_from_interactions(interactions: Array) -> Array[ParticleData.Particle]:
+	var useable_particles: Array[ParticleData.Particle] = []
+	
+	for interaction in interactions:
+		for particle in interaction:
+			if base_particle(particle) in useable_particles:
+				continue
+			
+			useable_particles.push_back(base_particle(particle))
+	
+	return useable_particles
+	
 
 func anti_particle(particle: ParticleData.Particle) -> ParticleData.Particle:
 	if base_particle(particle) in ParticleData.SHADED_PARTICLES:

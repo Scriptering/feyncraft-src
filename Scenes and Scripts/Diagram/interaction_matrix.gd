@@ -25,7 +25,7 @@ func add_unconnected_interaction(
 	unconnected_particle_count[interaction_state] += unconnected_particles.size()
 
 func connect_interactions(
-	from_id: int, to_id: int, particle: int = ParticleData.PARTICLE.none, bidirectional: bool = false, reverse: bool = false
+	from_id: int, to_id: int, particle: int = ParticleData.Particle.none, bidirectional: bool = false, reverse: bool = false
 ) -> void:
 	super.connect_interactions(from_id, to_id, particle, bidirectional, reverse)
 	
@@ -37,29 +37,16 @@ func connect_interactions(
 		unconnected_matrix[to_id].erase(particle)
 		unconnected_particle_count[get_state_from_id(to_id)] -= 1
 
-func connect_in_out_interactions(
-	from_id: int, to_id: int, particle: int = ParticleData.PARTICLE.none, bidirectional: bool = false, reverse: bool = false
+func connect_asymmetric_interactions(
+	from_id: int, to_id: int, from_particle: ParticleData.Particle, to_particle: ParticleData.Particle, connection_particle: ParticleData.Particle
 ) -> void:
+	super.connect_interactions(from_id, to_id, connection_particle)
 	
-	reverse = particle < 0
-	particle = abs(particle)
+	unconnected_matrix[from_id].erase(from_particle)
+	unconnected_particle_count[get_state_from_id(from_id)] -= 1
 	
-	super.connect_interactions(from_id, to_id, particle, bidirectional, reverse)
-	
-	var temp_id: int = from_id
-	if reverse:
-		from_id = to_id
-		to_id = temp_id
-	
-	if particle in unconnected_matrix[from_id]:
-		unconnected_matrix[from_id].erase(particle)
-		unconnected_particle_count[get_state_from_id(from_id)] -= 1
-	
-	var in_particle: ParticleData.Particle = particle if particle in ParticleData.UNSHADED_PARTICLES else -particle
-	
-	if in_particle in unconnected_matrix[to_id]:
-		unconnected_matrix[to_id].erase(in_particle)
-		unconnected_particle_count[get_state_from_id(to_id)] -= 1
+	unconnected_matrix[to_id].erase(to_particle)
+	unconnected_particle_count[get_state_from_id(to_id)] -= 1
 
 func insert_connection(connection: Array) -> void:
 	connect_interactions(connection[Connection.from_id], connection[Connection.to_id], connection[Connection.particle])
