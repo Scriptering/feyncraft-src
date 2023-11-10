@@ -4,7 +4,6 @@ signal selected
 
 @export var palette: Palette = Palette.new()
 
-@onready var SaveButton: PanelContainer = $HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Buttons/Save
 @onready var UseButton: PanelButton = $HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Use
 @onready var MoreColoursButton: PanelButton = $HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/More
 @onready var MoreColoursContainer: Container = $HBoxContainer/PanelContainer/VBoxContainer/MoreContainer
@@ -51,6 +50,8 @@ func init() -> void:
 	set_custom_button_visibility()
 	$HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Title.text = palette.title
 
+
+
 func _on_more_toggled(button_pressed: bool) -> void:
 	toggle_more_colours(button_pressed)
 
@@ -68,6 +69,8 @@ func update_button_colours() -> void:
 	
 	if is_selected:
 		update_shader()
+	
+	save()
 
 func get_button_colours() -> Array[Color]:
 	var button_colours: Array[Color] = []
@@ -110,14 +113,6 @@ func load_saved_palette() -> void:
 	changed_colours.clear()
 	palette = GLOBALS.load_txt(file_path)
 
-func _on_reset_pressed() -> void:
-	changed_colours.clear()
-	
-	load_saved_palette()
-	update_button_colours()
-	
-	SaveButton.hide()
-
 func update_shader() -> void:
 	EVENTBUS.signal_change_palette.emit(palette.generate_palette_texture())
 
@@ -129,7 +124,6 @@ func randomise() -> void:
 
 func _on_randomise_pressed() -> void:
 	randomise()
-	SaveButton.show()
 
 func _on_colour_button_colour_changed(colour_button: ColourButton, new_colour: Color) -> void:
 	var colour_index: Palette.ColourIndex = ColourButtonDict.find_key(colour_button)
@@ -143,9 +137,6 @@ func _on_colour_button_colour_changed(colour_button: ColourButton, new_colour: C
 		update_custom_palette()
 	
 	update_button_colours()
-	
-	if !SaveButton.visible:
-		SaveButton.show()
  
 func _on_use_toggled(button_pressed: bool) -> void:
 	self.is_selected = button_pressed
@@ -175,9 +166,9 @@ func _on_upload_toggled(button_pressed) -> void:
 	
 	$HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Buttons/Upload.set_text(GLOBALS.get_resource_save_data(palette))
 
-func _on_save_pressed() -> void:
-	save()
-	SaveButton.hide()
-
 func save() -> void:
 	GLOBALS.save(palette, file_path)
+
+func _on_clear_pressed() -> void:
+	changed_colours.clear()
+	update_custom_palette()

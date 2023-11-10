@@ -132,9 +132,6 @@ func generate_diagrams(
 		
 		generated_connection_matrices += completed_state_connection_matrices
 		
-		if (find == Find.One or find == Find.LowestOrder) and generated_connection_matrices.size() != 0:
-			break
-			
 		for i in state_connected_matrices.size():
 			state_connected_matrices[i] = convert_interaction_matrix_to_normal(state_connected_matrices[i])
 		
@@ -164,7 +161,10 @@ func generate_diagrams(
 		return [null]
 	
 	print("Generation Completed: " + get_print_time())
-
+	
+	if find == Find.One:
+		return [generated_connection_matrices.pick_random()]
+	
 	return generated_connection_matrices
 
 

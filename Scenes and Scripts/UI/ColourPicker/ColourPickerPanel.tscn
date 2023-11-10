@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dscxljxdt3y5q"]
+[gd_scene load_steps=17 format=3 uid="uid://dscxljxdt3y5q"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_xotca"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/ColourPicker/PickerPanel.gd" id="2_5qwg5"]
@@ -13,16 +13,11 @@
 [ext_resource type="Script" path="res://Scenes and Scripts/Classes/line_edit.gd" id="7_85uwg"]
 [ext_resource type="PackedScene" uid="uid://dorw3vr2amuy3" path="res://Scenes and Scripts/Components/button_sound_component.tscn" id="12_kgt14"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_tgt4x"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ef6vh"]
 resource_local_to_scene = true
 shader = ExtResource("6_kwlog")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7k5dl"]
-
-[sub_resource type="FontVariation" id="FontVariation_2tvqq"]
-base_font = ExtResource("3_p5j7l")
-spacing_top = -2
-spacing_bottom = -3
 
 [sub_resource type="FontVariation" id="FontVariation_f0v4l"]
 base_font = ExtResource("3_p5j7l")
@@ -49,7 +44,7 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 0
-theme_override_constants/separation = -172
+theme_override_constants/separation = -173
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
 use_parent_material = true
@@ -83,7 +78,7 @@ hex_visible = false
 presets_visible = false
 
 [node name="ColourSampler" parent="VBoxContainer/PanelContainer/VBoxContainer" instance=ExtResource("5_8vrca")]
-material = SubResource("ShaderMaterial_tgt4x")
+material = SubResource("ShaderMaterial_ef6vh")
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_7k5dl")
 
@@ -103,8 +98,7 @@ vertical_alignment = 1
 use_parent_material = true
 custom_minimum_size = Vector2(82, 22)
 layout_mode = 2
-theme_override_fonts/font = SubResource("FontVariation_2tvqq")
-theme_override_font_sizes/font_size = 8
+theme_override_font_sizes/font_size = 9
 placeholder_text = "[Enter Hex]"
 alignment = 1
 select_all_on_focus = true
@@ -129,13 +123,13 @@ use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_fonts/font = SubResource("FontVariation_f0v4l")
-theme_override_font_sizes/font_size = 8
+theme_override_font_sizes/font_size = 9
 theme_override_styles/normal = SubResource("StyleBoxEmpty_atfhl")
 text = "Colour Name"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TitleContainer/HBoxContainer"]
 layout_mode = 2
-alignment = 2
+alignment = 1
 
 [node name="Close" type="TextureButton" parent="VBoxContainer/TitleContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
