@@ -2,7 +2,7 @@
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_b04gi"]
 [ext_resource type="StyleBox" uid="uid://dvu7f5h7snggp" path="res://Scenes and Scripts/UI/Menus/panelContainer.tres" id="1_g4bto"]
-[ext_resource type="FontFile" uid="uid://dohkbu7ekkfx8" path="res://Textures/Fonts/pixeltype/Pixeltype.ttf" id="1_qnpxi"]
+[ext_resource type="FontFile" uid="uid://cq27s0444iwkg" path="res://Textures/Fonts/ConnectionIi-2wj8.otf" id="2_fqu2n"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/ProblemSelection/problem_set_item.gd" id="3_1cbyy"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="4_dol4y"]
 [ext_resource type="Script" path="res://Scenes and Scripts/Classes/line_edit.gd" id="4_ylu82"]
@@ -16,8 +16,8 @@
 [ext_resource type="Texture2D" uid="uid://co7w81osg53kf" path="res://Textures/UI/Information/valid.png" id="14_xqm6y"]
 
 [sub_resource type="FontVariation" id="FontVariation_5o2co"]
-base_font = ExtResource("1_qnpxi")
-spacing_bottom = -2
+base_font = ExtResource("2_fqu2n")
+spacing_bottom = -1
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vtmen"]
 
@@ -69,7 +69,7 @@ layout_mode = 2
 use_parent_material = true
 custom_minimum_size = Vector2(100, 2.08165e-12)
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 8
 placeholder_text = "[Enter Title]"
 alignment = 1
 max_length = 18

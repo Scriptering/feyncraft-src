@@ -13,7 +13,7 @@ enum Index {
 @export var title: String = ''
 @export var is_custom: bool = true
 @export var colours: Array[Color] = []
-@export var changed_colours: Array[ColourIndex] = []
+@export var advanced_colours: bool = false
 
 const palette_size: int = 5
 

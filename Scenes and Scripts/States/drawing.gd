@@ -68,6 +68,7 @@ func end_drawing() -> void:
 	for line in Diagram.get_particle_lines():
 		if !line.is_placed:
 			line.place()
+
 	Diagram.place_interaction(crosshair.position)
 
 func is_valid_end_position() -> bool:

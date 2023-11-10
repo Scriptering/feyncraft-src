@@ -153,6 +153,17 @@ func sort_drawing_interactions(interaction1: Interaction, interaction2: Interact
 	
 	return pos_y1 < pos_y2
 
+func is_valid_vision_interaction(interaction: Interaction) -> bool:
+	if !interaction.valid:
+		return false
+	
+	if StateManager.state != BaseState.State.Drawing:
+		return true
+	
+	return interaction.connected_lines.all(
+		func(particle_line: ParticleLine): return particle_line.is_placed
+	)
+
 func generate_drawing_matrix_from_diagram(get_only_valid: bool = false) -> DrawingMatrix:
 	var generated_matrix := DrawingMatrix.new()
 	var interactions: Array[Interaction] = get_interactions()
@@ -171,7 +182,7 @@ func generate_drawing_matrix_from_diagram(get_only_valid: bool = false) -> Drawi
 		if StateManager.state == BaseState.State.Drawing and !line.is_placed:
 			continue
 		
-		if get_only_valid and line.connected_interactions.any(func(interaction: Interaction): return !interaction.valid):
+		if get_only_valid and !line.connected_interactions.all(is_valid_vision_interaction):
 			continue
 		
 		generated_matrix.connect_interactions(
@@ -333,8 +344,7 @@ func action() -> void:
 	for interaction in get_interactions():
 		interaction.update_interaction()
 	
-	var diagram: DrawingMatrix = generate_drawing_matrix_from_diagram()
-	update_vision(diagram)
+	update_vision(generate_drawing_matrix_from_diagram(true))
 	update_statelines()
 	
 	action_taken.emit()
@@ -389,8 +399,8 @@ func check_split_lines() -> void:
 	if !line_diagram_actions:
 		return
 
-	for interaction in Interactions.get_children():
-		for line in get_tree().get_nodes_in_group('lines'):
+	for interaction in get_interactions():
+		for line in get_particle_lines():
 			if !line.is_placed:
 				continue
 			if line in interaction.connected_lines:
@@ -466,6 +476,23 @@ func place_interaction(
 	
 	if is_action:
 		action()
+
+func split_interaction(interaction: Interaction) -> void:
+	if interaction.connected_lines.size() == 1:
+		return
+	
+	var picked_particle_line: ParticleLine = interaction.connected_lines.back()
+	
+	interaction.connected_lines.clear()
+	interaction.connected_lines.push_back(picked_particle_line)
+	
+	var new_interaction: Interaction = InteractionInstance.instantiate()
+	new_interaction.dropped.connect(_on_interaction_dropped)
+	super.place_interaction(interaction.position, new_interaction)
+	
+	new_interaction.connected_lines.erase(picked_particle_line)
+	
+	picked_particle_line.is_placed = false
 
 func can_place_interaction(test_position: Vector2, test_interaction: Interaction = null) -> bool:
 	for interaction in Interactions.get_children():

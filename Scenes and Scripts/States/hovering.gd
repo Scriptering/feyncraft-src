@@ -16,7 +16,7 @@ func input(_event: InputEvent) -> State:
 
 	return State.Null
 
-func process(_delta: float) -> State:	
+func process(_delta: float) -> State:
 	if start_placing:
 		start_placing = false
 		return State.Placing
@@ -31,7 +31,15 @@ func disconnect_grabbable() -> void:
 		object.grab_area_clicked.disconnect(_grabbable_object_clicked)
 
 func _grabbable_object_clicked(object: Node) -> void:
+	if !object.can_be_grabbed():
+		return
+
 	start_placing = true
-	if object.can_be_grabbed():
+	
+	if object is Interaction:
 		Diagram.add_diagram_to_history()
-		object.pick_up()
+		
+		if Input.is_action_pressed("split_interaction"):
+			Diagram.split_interaction(object)
+
+	object.pick_up()
