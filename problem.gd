@@ -4,6 +4,7 @@ extends Resource
 const LOWEST_ORDER: int = -1
 
 @export var custom_solutions: bool = false
+@export var allow_other_solutions: bool = false
 @export var custom_solution_count: bool = false
 @export var custom_degree: bool = false
 @export var limited_particles: bool = false
@@ -29,7 +30,7 @@ func is_submission_valid(submission: DrawingMatrix) -> bool:
 func is_submission_solution(submission: DrawingMatrix) -> bool:
 	var reduced_submission: ConnectionMatrix = submission.reduce_to_connection_matrix()
 	
-	if !custom_solutions:
+	if allow_other_solutions:
 		return is_matching_states(reduced_submission)
 	
 	return solutions.any(

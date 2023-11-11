@@ -110,7 +110,7 @@ func load_problem(problem: Problem) -> void:
 	ProblemTab.load_problem(problem)
 	ParticleButtons.load_problem(problem)
 
-	if current_mode == BaseMode.Mode.ProblemSolving:
+	if current_mode == BaseMode.Mode.ProblemSolving or current_mode == BaseMode.Mode.Tutorial:
 		ProblemTab.toggle_finish_icon(problem_set.current_index == problem_set.problems.size() - 1)
 
 func load_problem_set(p_problem_set: ProblemSet, index: int) -> void:
@@ -151,9 +151,6 @@ func enter_sandbox() -> void:
 	
 	Diagram.set_title_editable(false)
 	Diagram.set_title_visible(false)
-	
-#	load_test_problem()
-#	load_problem(generate_new_problem())
 
 func enter_problem_solving() -> void:
 	ParticleButtons.show()
@@ -223,6 +220,8 @@ func enter_tutorial() -> void:
 func exit_tutorial() -> void:
 	Tutorial.clear()
 	Tutorial.hide()
+	
+	problem_set.highest_index_reached = 0
 
 func _on_creation_information_submit_problem() -> void:
 	exit_current_mode()
@@ -237,6 +236,9 @@ func _on_next_problem_pressed() -> void:
 	problem_history.push_back(current_problem)
 	
 	match current_mode:
+		BaseMode.Mode.Tutorial:
+			load_problem(problem_set.next_problem())
+			ProblemTab.set_next_problem_disabled(problem_set.current_index >= problem_set.highest_index_reached)
 		BaseMode.Mode.ProblemSolving:
 			load_problem(problem_set.next_problem())
 			ProblemTab.set_next_problem_disabled(problem_set.current_index >= problem_set.highest_index_reached)
@@ -249,6 +251,9 @@ func _on_next_problem_pressed() -> void:
 
 func _on_prev_problem_pressed() -> void:
 	match current_mode:
+		BaseMode.Mode.Tutorial:
+			load_problem(problem_set.previous_problem())
+			ProblemTab.set_prev_problem_disabled(problem_set.current_index == 0)
 		BaseMode.Mode.ProblemSolving:
 			load_problem(problem_set.previous_problem())
 			ProblemTab.set_prev_problem_disabled(problem_set.current_index == 0)

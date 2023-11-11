@@ -38,9 +38,10 @@ func connect_interactions(
 		unconnected_particle_count[get_state_from_id(to_id)] -= 1
 
 func connect_asymmetric_interactions(
-	from_id: int, to_id: int, from_particle: ParticleData.Particle, to_particle: ParticleData.Particle, connection_particle: ParticleData.Particle
+	from_id: int, to_id: int, from_particle: ParticleData.Particle, to_particle: ParticleData.Particle,
+	connection_particle: ParticleData.Particle, reverse: bool = false
 ) -> void:
-	super.connect_interactions(from_id, to_id, connection_particle)
+	super.connect_interactions(from_id, to_id, connection_particle, false, reverse)
 	
 	unconnected_matrix[from_id].erase(from_particle)
 	unconnected_particle_count[get_state_from_id(from_id)] -= 1

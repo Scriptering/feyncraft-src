@@ -15,19 +15,19 @@
 [ext_resource type="Texture2D" uid="uid://n2w0tydjaa33" path="res://Textures/Buttons/cut_touch_button_pressed.png" id="13_gqnb4"]
 [ext_resource type="Script" path="res://Scenes and Scripts/fps.gd" id="14_jxbry"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_wne8l"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xq08a"]
 resource_local_to_scene = true
 shader = ExtResource("2_6gvvu")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qjb1u"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7aoms"]
 resource_local_to_scene = true
 shader = ExtResource("2_6gvvu")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_eu4q6"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i1iiu"]
 resource_local_to_scene = true
 shader = ExtResource("2_6gvvu")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_bsuyw"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_08j3t"]
 resource_local_to_scene = true
 shader = ExtResource("2_6gvvu")
 
@@ -36,13 +36,13 @@ material = ExtResource("1_as5lx")
 script = ExtResource("1_f3b25")
 
 [node name="MainMenu" parent="." node_paths=PackedStringArray("PaletteMenu") instance=ExtResource("1_qkr4k")]
-material = SubResource("ShaderMaterial_wne8l")
+material = SubResource("ShaderMaterial_xq08a")
 offset_right = 640.0
 offset_bottom = 360.0
 PaletteMenu = NodePath("../FloatingMenus/PaletteMenu")
 
 [node name="World" parent="." instance=ExtResource("3_m7wj1")]
-material = SubResource("ShaderMaterial_qjb1u")
+material = SubResource("ShaderMaterial_7aoms")
 
 [node name="FloatingMenus" type="Control" parent="."]
 z_index = 1
@@ -52,7 +52,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="PaletteMenu" parent="FloatingMenus" instance=ExtResource("5_yvg3b")]
-material = SubResource("ShaderMaterial_eu4q6")
+material = SubResource("ShaderMaterial_i1iiu")
 layout_mode = 1
 offset_left = 318.0
 offset_top = 171.0
@@ -66,7 +66,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="ControlsTab" parent="PullOutTabs" instance=ExtResource("6_a8qlc")]
-material = SubResource("ShaderMaterial_bsuyw")
+material = SubResource("ShaderMaterial_08j3t")
 layout_mode = 1
 offset_left = 4.0
 offset_top = -45.0

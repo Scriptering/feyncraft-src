@@ -30,11 +30,11 @@
 default_font = ExtResource("5_odh5n")
 default_font_size = 10
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3rgyf"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mcu07"]
 resource_local_to_scene = true
 shader = ExtResource("3_ktptg")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0qb5x"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ey0uo"]
 resource_local_to_scene = true
 shader = ExtResource("3_ktptg")
 
@@ -70,7 +70,11 @@ autowrap_mode = 3
 use_parent_material = true
 layout_mode = 2
 
-[node name="CustomSolutions" type="CheckButton" parent="VBoxContainer/VBoxContainer/PanelContainer2"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/VBoxContainer/PanelContainer2"]
+use_parent_material = true
+layout_mode = 2
+
+[node name="CustomSolutions" type="CheckButton" parent="VBoxContainer/VBoxContainer/PanelContainer2/VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_ghv2s")
@@ -83,7 +87,24 @@ theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_t7fmk")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_2ys1n")
 text = "Custom solutions"
 
-[node name="ButtonSoundComponent" parent="VBoxContainer/VBoxContainer/PanelContainer2/CustomSolutions" instance=ExtResource("4_j2ks7")]
+[node name="ButtonSoundComponent" parent="VBoxContainer/VBoxContainer/PanelContainer2/VBoxContainer/CustomSolutions" instance=ExtResource("4_j2ks7")]
+
+[node name="AllowOtherSolutions" type="CheckButton" parent="VBoxContainer/VBoxContainer/PanelContainer2/VBoxContainer"]
+visible = false
+use_parent_material = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_ghv2s")
+theme_override_font_sizes/font_size = 8
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1f1ao")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_ox6n2")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_blyae")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_lvqyk")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_t7fmk")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_2ys1n")
+text = "Allow other
+solutions"
+
+[node name="ButtonSoundComponent" parent="VBoxContainer/VBoxContainer/PanelContainer2/VBoxContainer/AllowOtherSolutions" instance=ExtResource("4_j2ks7")]
 
 [node name="NoSolutions" type="HBoxContainer" parent="VBoxContainer/VBoxContainer"]
 visible = false
@@ -162,7 +183,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="PrevStep" parent="VBoxContainer/Buttons" instance=ExtResource("2_66fjv")]
-material = SubResource("ShaderMaterial_3rgyf")
+material = SubResource("ShaderMaterial_mcu07")
 layout_mode = 2
 icon = ExtResource("4_187qd")
 minimum_size = Vector2(24, 21)
@@ -172,7 +193,7 @@ icon_use_parent_material = true
 tooltip = "Previous Step"
 
 [node name="Submit" parent="VBoxContainer/Buttons" instance=ExtResource("2_66fjv")]
-material = SubResource("ShaderMaterial_0qb5x")
+material = SubResource("ShaderMaterial_ey0uo")
 layout_mode = 2
 icon = ExtResource("6_eyill")
 minimum_size = Vector2(22, 22)
@@ -181,5 +202,6 @@ icon_use_parent_material = true
 [node name="Tooltip" parent="VBoxContainer/Buttons/Submit" instance=ExtResource("5_8fnwf")]
 tooltip = "Submit Problem"
 
-[connection signal="toggled" from="VBoxContainer/VBoxContainer/PanelContainer2/CustomSolutions" to="." method="_on_custom_solutions_toggled"]
+[connection signal="toggled" from="VBoxContainer/VBoxContainer/PanelContainer2/VBoxContainer/CustomSolutions" to="." method="_on_custom_solutions_toggled"]
+[connection signal="toggled" from="VBoxContainer/VBoxContainer/PanelContainer2/VBoxContainer/AllowOtherSolutions" to="." method="_on_custom_solutions_toggled"]
 [connection signal="toggled" from="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/CustomSolutionCount" to="." method="_on_check_button_toggled"]
