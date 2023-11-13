@@ -25,8 +25,7 @@ func _ready() -> void:
 
 func reload() -> void:
 	for problem_set_item in problem_container.get_children():
-		problem_set_item.update()
-	
+		problem_set_item.reload()
 
 func load_problem_sets() -> void:
 	clear_problem_sets()
@@ -38,8 +37,11 @@ func load_problem_sets() -> void:
 	update_problem_sets()
 
 func load_default_problem_sets() -> void:
-	for file_path in GLOBALS.get_files_in_folder(problem_set_file_path + 'Default/'):
-		load_problem_set(file_path)
+	var file_path: String = problem_set_file_path if GLOBALS.is_on_editor else web_problem_set_file_path
+	
+	load_problem_set(file_path + 'Default/electromagnetic.txt')
+	load_problem_set(file_path + 'Default/strong.txt')
+	load_problem_set(file_path + 'Default/hadronic.txt')
 
 func load_custom_problem_sets() -> void:
 	for file_path in GLOBALS.get_files_in_folder(get_custom_file_path()):

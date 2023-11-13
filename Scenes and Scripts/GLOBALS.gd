@@ -34,6 +34,7 @@ func _ready():
 	
 	if !is_on_editor and !DirAccess.dir_exists_absolute("User://saves/"):
 		create_save_folders()
+		create_default_problem_sets()
 
 func create_save_folders() -> void:
 	print("creating save folders")
@@ -43,6 +44,19 @@ func create_save_folders() -> void:
 	print(DirAccess.make_dir_absolute("user://saves/Palettes/Custom"))
 	print(DirAccess.make_dir_absolute("user://saves/ProblemSets"))
 	print(DirAccess.make_dir_absolute("user://saves/ProblemSets/Custom"))
+	print(DirAccess.make_dir_absolute("user://saves/ProblemSets/Default"))
+
+func create_default_problem_sets() -> void:
+	for file_path in get_files_in_folder("res://saves/ProblemSets/Default/"):
+		var default_file = FileAccess.open(file_path, FileAccess.READ)
+		create_text_file(
+			default_file.get_as_text(), "user://saves/ProblemSets/Default/" + file_path.trim_prefix("res://saves/ProblemSets/Default/")
+		)
+		default_file.close()
+	
+	await get_tree().process_frame
+	
+	print(get_files_in_folder("user://saves/ProblemSets/Default/"))
 
 func is_on_mobile() -> bool:
 	return OS.has_feature("web_android") or OS.has_feature("web_ios") or OS.has_feature("android") or OS.has_feature("ios")

@@ -39,6 +39,10 @@ func update() -> void:
 	
 	update_problem_index()
 
+func reload() -> void:
+	problem_set = GLOBALS.load_data(file_path)
+	update()
+
 func _on_delete_pressed() -> void:
 	deleted.emit(self)
 

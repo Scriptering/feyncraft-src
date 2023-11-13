@@ -52,6 +52,8 @@ func move_crosshair() -> void:
 		if position != old_position:
 			moved.emit(position, old_position)
 		old_position = position
+	
+	visible = get_state_visible(StateManager.state)
 
 func get_try_position() -> Vector2:
 	var mouse_position = get_parent().get_local_mouse_position()
@@ -142,11 +144,10 @@ func is_on_interaction(test_position: Vector2 = position) -> bool:
 
 func DiagramMouseEntered():
 	is_inside_diagram = true
-	visible = get_state_visible(StateManager.state)
 
 func DiagramMouseExited():
 	is_inside_diagram = false
-	visible = get_state_visible(StateManager.state)
+
 
 func _state_changed(new_state: BaseState.State, _old_state: BaseState.State) -> void: 
 	if !is_inside_tree():
