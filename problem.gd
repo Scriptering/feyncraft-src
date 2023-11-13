@@ -30,7 +30,7 @@ func is_submission_valid(submission: DrawingMatrix) -> bool:
 func is_submission_solution(submission: DrawingMatrix) -> bool:
 	var reduced_submission: ConnectionMatrix = submission.reduce_to_connection_matrix()
 	
-	if allow_other_solutions:
+	if !custom_solutions or custom_solutions and allow_other_solutions:
 		return is_matching_states(reduced_submission)
 	
 	return solutions.any(

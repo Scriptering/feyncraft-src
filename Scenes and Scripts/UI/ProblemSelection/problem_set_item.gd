@@ -12,8 +12,8 @@ func _ready() -> void:
 	update()
 
 func toggle_edit_visibility(can_edit: bool, can_delete: bool = can_edit) -> void:
-	$HBoxContainer/PanelContainer/HBoxContainer/Title.editable = can_delete
-	$HBoxContainer/PanelContainer/HBoxContainer/Delete.visible = can_edit
+	$HBoxContainer/PanelContainer/HBoxContainer/Delete.visible = can_delete
+	$HBoxContainer/PanelContainer/HBoxContainer/Title.editable = can_edit
 	$HBoxContainer/PanelContainer/HBoxContainer/Upload.visible = can_edit
 
 func set_index(new_index: int) -> void:
@@ -40,7 +40,10 @@ func update() -> void:
 	update_problem_index()
 
 func reload() -> void:
-	problem_set = GLOBALS.load_data(file_path)
+	problem_set = GLOBALS.load_txt(file_path)
+	
+	await get_tree().process_frame
+	
 	update()
 
 func _on_delete_pressed() -> void:

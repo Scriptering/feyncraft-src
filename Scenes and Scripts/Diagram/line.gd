@@ -85,7 +85,7 @@ var line_texture
 var show_labels: bool = true
 
 func _ready():
-	request_deletion.connect(Diagram.delete_line)
+	request_deletion.connect(Diagram.recursive_delete_line)
 	
 	has_colour = base_particle in ParticleData.COLOUR_PARTICLES
 	has_shade = base_particle in ParticleData.SHADED_PARTICLES
@@ -206,16 +206,19 @@ func is_point_connected(point: Vector2) -> bool:
 			return true
 	return false
 
+func is_vec_zero_approx(vec: Vector2) -> bool:
+	return is_zero_approx(vec.x) and is_zero_approx(vec.y)
+
 func is_position_on_line(test_position: Vector2) -> bool:
 	var split_vector: Vector2 = test_position-points[Point.Start]
 	
 	if test_position in points:
 		return false
 	
-	if split_vector.normalized() != self.line_vector.normalized():
+	if !is_vec_zero_approx(split_vector.normalized() - line_vector.normalized()):
 		return false
 
-	if split_vector.length() >= self.line_vector.length():
+	if split_vector.length() >= line_vector.length():
 		return false
 	
 	return true

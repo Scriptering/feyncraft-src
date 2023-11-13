@@ -11,7 +11,7 @@ signal closed
 	set(new_value):
 		print("title set")
 		title = new_value
-		get_node("VBoxContainer/HBoxContainer/Title").text = new_value
+		Title.text = new_value
 
 var diagrams: Array[DrawingMatrix] = []
 var current_index: int = 0:
@@ -25,6 +25,7 @@ var current_index: int = 0:
 		update_index_label()
 
 @onready var Diagram : MiniDiagram = $VBoxContainer/PanelContainer/VBoxContainer/CenterContainer/MiniDiagramContainer/MiniDiagram
+@onready var Title: Label = $VBoxContainer/TitleContainer/HBoxContainer/Title
 
 func _ready() -> void:
 	super._ready()
@@ -61,6 +62,7 @@ func store_diagram(matrix) -> void:
 	self.current_index = current_index
 	
 	update_diagram_visibility()
+	update_delete_button()
 
 func store_diagrams(matrices: Array) -> void:
 	clear()
@@ -87,7 +89,7 @@ func update_delete_button() -> void:
 func remove_diagram(index: int = current_index) -> void:
 	diagrams.remove_at(index)
 	
-	emit_signal("diagram_deleted", index)
+	diagram_deleted.emit(index)
 	
 	current_index = clamp(current_index, 0, diagrams.size()-1)
 	
@@ -103,5 +105,5 @@ func get_diagram_count() -> int:
 func _on_delete_pressed() -> void:
 	remove_diagram()
 
-func _on_x_pressed() -> void:
-	emit_signal("closed")
+func _on_close_pressed() -> void:
+	closed.emit()

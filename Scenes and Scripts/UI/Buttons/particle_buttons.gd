@@ -90,6 +90,8 @@ func load_problem(problem: Problem) -> void:
 		disable_buttons(true)
 		toggle_button_visiblity(true)
 		disable_buttons(false, problem.allowed_particles)
+	else:
+		disable_buttons(false)
 	
 	if problem.hide_unavailable_particles:
 		toggle_button_visiblity(false)

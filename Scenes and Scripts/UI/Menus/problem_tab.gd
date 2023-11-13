@@ -72,6 +72,7 @@ func submitted_diagram_deleted(index: int) -> void:
 	submitted_diagrams.remove_at(index)
 	
 	update_view_submission_button()
+	update_submitted_solution_count()
 
 func check_submission(submission: DrawingMatrix) -> bool:
 	for child in $MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer.get_children():
@@ -129,15 +130,18 @@ func generate_solution() -> ConnectionMatrix:
 
 func is_submission_duplicate(submission: DrawingMatrix) -> bool:
 	var reduced_submission: ConnectionMatrix = submission.reduce_to_connection_matrix()
+	reduced_submission.reindex()
 	
 	return submitted_diagrams.any(
 		func(submitted_diagram: DrawingMatrix):
-			return submitted_diagram.reduce_to_connection_matrix().is_duplicate(reduced_submission)
+			var reindexed_submission: ConnectionMatrix = submitted_diagram.reduce_to_connection_matrix()
+			reindexed_submission.reindex()
+			
+			return reindexed_submission.is_duplicate(reduced_submission)
 	)
 
 func toggle_diagram_viewer() -> void:
 	SubmittedDiagramViewer.visible = !SubmittedDiagramViewer.visible
-	SubmittedDiagramViewer.position = diagram_viewer_offset + position
 
 func _on_view_submissions_pressed() -> void:
 	toggle_diagram_viewer()
@@ -146,6 +150,7 @@ func load_problem(problem: Problem) -> void:
 	current_problem = problem
 	
 	submitted_diagrams.clear()
+	SubmittedDiagramViewer.clear()
 	Equation.load_problem(problem)
 	
 	update_degree_label()

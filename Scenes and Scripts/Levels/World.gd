@@ -171,6 +171,17 @@ func enter_problem_creation() -> void:
 	CreationInformation.show()
 	
 	ParticleButtons.load_problem(GLOBALS.creating_problem)
+	
+	if GLOBALS.creating_problem.state_interactions != [[],[]]:
+		EVENTBUS.draw_diagram_raw(
+			SolutionGeneration.generate_diagrams(
+				GLOBALS.creating_problem.state_interactions[StateLine.StateType.Initial],
+				GLOBALS.creating_problem.state_interactions[StateLine.StateType.Final],
+				GLOBALS.creating_problem.degree, GLOBALS.creating_problem.degree,
+				SolutionGeneration.get_useable_interactions_from_particles(GLOBALS.creating_problem.allowed_particles),
+				SolutionGeneration.Find.One
+		).front()
+		)
 
 func enter_solution_creation() -> void:
 	ParticleButtons.show()
@@ -186,6 +197,7 @@ func enter_solution_creation() -> void:
 	
 	if !ProblemGeneration.setup_new_problem(creating_problem):
 		CreationInformation.no_solutions_found()
+		CreationInformation.prev_mode()
 		return
 	
 	GLOBALS.creating_problem.custom_solutions = false
@@ -247,7 +259,11 @@ func _on_next_problem_pressed() -> void:
 			save_problem_set.emit()
 		BaseMode.Mode.Sandbox:
 			var new_problem: Problem = generate_new_problem()
-			load_problem(generate_new_problem())
+			
+			if !new_problem:
+				return
+			
+			load_problem(new_problem)
 	
 	Diagram.clear_diagram()
 	ProblemTab.set_prev_problem_disabled(problem_history.size() == 0)

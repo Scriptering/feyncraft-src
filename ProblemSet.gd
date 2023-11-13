@@ -7,7 +7,7 @@ signal end_reached
 @export var problems: Array[Problem] = []
 @export var highest_index_reached: int = 0
 @export var current_index: int: set = _set_current_index
-@export var current_problem: Problem:
+var current_problem: Problem:
 	get:
 		if problems.size() == 0:
 			return null

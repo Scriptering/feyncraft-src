@@ -179,7 +179,7 @@ func reorder_hadrons() -> void:
 			breakpoint
 	
 	for i in range(directly_connected_ids.size()):
-		var from_id: int = directly_connected_ids[i]
+		var from_id: int =  get_directly_connected_ids()[i]
 		var to_id: int = get_connected_ids(from_id)[0]
 		
 		var from_hadron_index: int = get_id_hadron_index(from_id)
