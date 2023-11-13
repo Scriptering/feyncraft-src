@@ -26,6 +26,7 @@ func _ready() -> void:
 func reload() -> void:
 	for problem_set_item in problem_container.get_children():
 		problem_set_item.update()
+	
 
 func load_problem_sets() -> void:
 	clear_problem_sets()

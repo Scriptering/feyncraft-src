@@ -42,9 +42,6 @@ func update() -> void:
 func _on_delete_pressed() -> void:
 	deleted.emit(self)
 
-func _on_title_text_changed(new_text: String) -> void:
-	problem_set.title = new_text
-
 func _on_view_pressed() -> void:
 	view.emit(self)
 
@@ -64,3 +61,10 @@ func _on_upload_toggled(button_pressed) -> void:
 	$HBoxContainer/PanelContainer/HBoxContainer/Upload.set_text(
 		GLOBALS.get_resource_save_data(uploading_problem_set)
 	)
+
+func save() -> void:
+	GLOBALS.save(problem_set, file_path)
+
+func _on_title_text_submitted(new_text: String) -> void:
+	problem_set.title = new_text
+	save()

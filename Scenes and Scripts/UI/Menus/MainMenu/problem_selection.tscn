@@ -8,11 +8,11 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q3cex"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fj0qn"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q83xh"]
 resource_local_to_scene = true
 shader = ExtResource("2_bvxeb")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3kduq"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uxc5r"]
 resource_local_to_scene = true
 shader = ExtResource("2_bvxeb")
 
@@ -44,13 +44,13 @@ tabs_visible = false
 script = ExtResource("1_aqrhn")
 
 [node name="ProblemSetList" parent="ProblemSelection" instance=ExtResource("3_chpqf")]
-material = SubResource("ShaderMaterial_fj0qn")
+material = SubResource("ShaderMaterial_q83xh")
 layout_mode = 2
 mouse_filter = 1
 
 [node name="ProblemList" parent="ProblemSelection" instance=ExtResource("1_gfl8q")]
 visible = false
-material = SubResource("ShaderMaterial_3kduq")
+material = SubResource("ShaderMaterial_uxc5r")
 layout_mode = 2
 
 [node name="TitleArea" type="Area2D" parent="."]

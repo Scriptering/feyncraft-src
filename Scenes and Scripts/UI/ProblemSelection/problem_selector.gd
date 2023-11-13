@@ -10,6 +10,7 @@ signal move
 signal deleted
 signal modify
 signal play
+signal save_problem_set
 
 var problem: Problem
 var index: int: set = _set_index
@@ -39,6 +40,7 @@ func toggle_edit_visiblity(can_edit: bool) -> void:
 func load_problem(_problem: Problem) -> void:
 	problem = _problem
 	$HBoxContainer/PanelContainer/HBoxContainer/Equation.load_problem(problem)
+	
 
 func _on_up_pressed() -> void:
 	move.emit(self, -1)
@@ -59,3 +61,6 @@ func is_empty() -> bool:
 	return problem.state_interactions.all(
 		func(state_interaction: Array): return state_interaction.size() == 0
 	)
+
+func save() -> void:
+	save_problem_set.emit(self)

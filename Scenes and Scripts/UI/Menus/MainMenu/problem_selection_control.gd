@@ -8,5 +8,5 @@ func _ready() -> void:
 	$ProblemSelection.closed.connect(func(): closed.emit())
 
 func reload() -> void:
+	$ProblemSelection/ProblemSetList.load_problem_sets()
 	$ProblemSelection/ProblemList.reload()
-	$ProblemSelection/ProblemSetList.reload()

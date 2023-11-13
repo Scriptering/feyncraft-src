@@ -47,7 +47,7 @@ func init() -> void:
 	
 	ClearButton.visible = palette.advanced_colours
 	set_buttons_disabled(!palette.is_custom)
-	update_button_colours()
+	update_button_colours(false)
 	set_custom_button_visibility()
 	$HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Title.text = palette.title
 
@@ -62,14 +62,15 @@ func toggle_more_colours(toggle: bool) -> void:
 	else:
 		MoreColoursButton.icon = load("res://Textures/Buttons/Tabs/arrow_down.png")
 
-func update_button_colours() -> void:
+func update_button_colours(save: bool = true) -> void:
 	for key in ColourButtonDict.keys():
 		ColourButtonDict[key].icon_colour = palette.get_colour(key)
 	
 	if is_selected:
 		update_shader()
 	
-	save()
+	if save:
+		save()
 
 func get_button_colours() -> Array[Color]:
 	var button_colours: Array[Color] = []

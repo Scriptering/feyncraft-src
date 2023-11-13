@@ -86,13 +86,6 @@ func create_text_file(data: String, path: String) -> void:
 func get_resource_save_data(resource: Resource) -> String:
 	return var_to_str(resource)
 
-func save_data(data: Resource, path: String = "res://saves/") -> Error:
-	print("saving data")
-	print(data)
-	print(path)
-	
-	return ResourceSaver.save(data, path)
-
 func load_data(path: String) -> Resource:
 	if ResourceLoader.exists(path):
 		return ResourceLoader.load(path)

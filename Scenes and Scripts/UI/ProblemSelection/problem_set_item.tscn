@@ -139,7 +139,7 @@ texture = ExtResource("14_xqm6y")
 expand_mode = 5
 stretch_mode = 5
 
-[connection signal="text_changed" from="HBoxContainer/PanelContainer/HBoxContainer/Title" to="." method="_on_title_text_changed"]
+[connection signal="text_submitted" from="HBoxContainer/PanelContainer/HBoxContainer/Title" to="." method="_on_title_text_submitted"]
 [connection signal="pressed" from="HBoxContainer/PanelContainer/HBoxContainer/Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="HBoxContainer/PanelContainer/HBoxContainer/View" to="." method="_on_view_pressed"]
 [connection signal="pressed" from="HBoxContainer/PanelContainer/HBoxContainer/Delete" to="." method="_on_delete_pressed"]

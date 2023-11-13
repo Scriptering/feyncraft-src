@@ -86,17 +86,15 @@ func toggle_button_group_visibility() -> void:
 		)
 
 func load_problem(problem: Problem) -> void:
-	disable_buttons(true)
-	toggle_button_visiblity(true)
-	disable_buttons(false, problem.allowed_particles)
+	if problem.allowed_particles.size() > 0:
+		disable_buttons(true)
+		toggle_button_visiblity(true)
+		disable_buttons(false, problem.allowed_particles)
 	
 	if problem.hide_unavailable_particles:
 		toggle_button_visiblity(false)
 		toggle_button_visiblity(true, problem.allowed_particles)
 		toggle_button_group_visibility()
-		
-#		for particle_control in ParticleControls:
-#			particle_control.readjust()
 
 func toggle_buttons(button_pressed: bool, particles: Array = ParticleData.Particle.values()) -> void:
 	toggle_button_mute(true)

@@ -27,7 +27,7 @@ func load_palettes() -> void:
 	
 	var seasonal_palette: String = get_seasonal_palette()
 	if seasonal_palette != '':
-		$PaletteList.load_palette("res://saves/Palettes/Seasonal/" + seasonal_palette)
+		$PaletteList.load_palette("res://saves/Palettes/Seasonal/" + seasonal_palette + '.txt')
 
 func load_tea_stain() -> void:
 	$PaletteList.get_items().front().is_selected = true
@@ -64,9 +64,6 @@ func get_seasonal_palette() -> String:
 	
 	if month == Time.MONTH_FEBRUARY and day < 15:
 		return "valentine"
-	
-	if month == Time.MONTH_APRIL and day < 21:
-		return "easter"
 	
 	if (
 		(month == Time.MONTH_JANUARY and day < 25) or 

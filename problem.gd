@@ -1,7 +1,7 @@
 class_name Problem
 extends Resource
 
-const LOWEST_ORDER: int = -1
+const LOWEST_ORDER: int = 0
 
 @export var custom_solutions: bool = false
 @export var allow_other_solutions: bool = false

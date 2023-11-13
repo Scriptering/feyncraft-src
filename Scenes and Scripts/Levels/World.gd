@@ -1,5 +1,6 @@
 extends Node2D
 
+signal save_problem_set
 signal problem_submitted
 signal initialised
 
@@ -146,8 +147,9 @@ func enter_sandbox() -> void:
 	VisionTab.show()
 	CreationInformation.hide()
 	PuzzleOptions.show()
-
+	
 	ProblemTab._enter_sandbox()
+	load_problem(Problem.new())
 	
 	Diagram.set_title_editable(false)
 	Diagram.set_title_visible(false)
@@ -242,6 +244,7 @@ func _on_next_problem_pressed() -> void:
 		BaseMode.Mode.ProblemSolving:
 			load_problem(problem_set.next_problem())
 			ProblemTab.set_next_problem_disabled(problem_set.current_index >= problem_set.highest_index_reached)
+			save_problem_set.emit()
 		BaseMode.Mode.Sandbox:
 			var new_problem: Problem = generate_new_problem()
 			load_problem(generate_new_problem())

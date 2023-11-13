@@ -28,7 +28,7 @@ func connect_grabbable() -> void:
 
 func disconnect_grabbable() -> void:
 	for object in get_tree().get_nodes_in_group("grabbable"):
-		if object.grab_area_clicked.connected(_grabbable_object_clicked):
+		if object.grab_area_clicked.is_connected(_grabbable_object_clicked):
 			object.grab_area_clicked.disconnect(_grabbable_object_clicked)
 
 func _grabbable_object_clicked(object: Node) -> void:

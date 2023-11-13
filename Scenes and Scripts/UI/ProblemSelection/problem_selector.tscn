@@ -37,6 +37,7 @@ script = ExtResource("2_7m7ny")
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 use_parent_material = true
 layout_mode = 2
+theme_override_constants/separation = 0
 
 [node name="Index" type="Label" parent="HBoxContainer"]
 use_parent_material = true
@@ -57,7 +58,7 @@ layout_mode = 2
 
 [node name="Equation" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("2_v0r42")]
 material = SubResource("ShaderMaterial_c8rw5")
-custom_minimum_size = Vector2(180.001, 21)
+custom_minimum_size = Vector2(184.001, 21)
 layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/PanelContainer/HBoxContainer"]
