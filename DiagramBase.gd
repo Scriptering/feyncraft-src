@@ -66,6 +66,13 @@ func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 		if drawing_matrix.get_connected_count(id) > 1:
 			breakpoint
 
+func get_on_stateline(test_position: Vector2) -> StateLine.StateType:
+	var on_stateline: StateLine.StateType = GLOBALS.find_var(
+		StateLines, func(state_line: StateLine): return is_zero_approx(state_line.position.x - test_position.x)
+	)
+	
+	return on_stateline
+	
 func generate_drawing_matrix_from_diagram() -> DrawingMatrix:
 	var generated_matrix := DrawingMatrix.new()
 	var interactions: Array = get_interactions()

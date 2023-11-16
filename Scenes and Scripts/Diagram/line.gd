@@ -206,16 +206,13 @@ func is_point_connected(point: Vector2) -> bool:
 			return true
 	return false
 
-func is_vec_zero_approx(vec: Vector2) -> bool:
-	return is_zero_approx(vec.x) and is_zero_approx(vec.y)
-
 func is_position_on_line(test_position: Vector2) -> bool:
 	var split_vector: Vector2 = test_position-points[Point.Start]
 	
 	if test_position in points:
 		return false
 	
-	if !is_vec_zero_approx(split_vector.normalized() - line_vector.normalized()):
+	if !GLOBALS.is_vec_zero_approx(split_vector.normalized() - line_vector.normalized()):
 		return false
 
 	if split_vector.length() >= line_vector.length():

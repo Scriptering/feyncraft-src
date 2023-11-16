@@ -155,6 +155,9 @@ func get_files_in_folder(folder_path: String) -> Array[String]:
 
 	return files
 
+func is_vec_zero_approx(vec: Vector2) -> bool:
+	return is_zero_approx(vec.x) and is_zero_approx(vec.y)
+
 func flatten(array: Array) -> Array:
 	var flat_array: Array = []
 	

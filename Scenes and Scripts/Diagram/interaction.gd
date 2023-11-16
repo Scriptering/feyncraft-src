@@ -47,6 +47,8 @@ var hovering := false : set = _set_hovering
 func _ready():
 	super._ready()
 	
+	grab_area_hovered = is_grab_area_hovered()
+	
 	show_information_box.connect(EVENTBUS.add_floating_menu)
 	request_deletion.connect(Diagram.recursive_delete_interaction)
 	
@@ -92,6 +94,9 @@ func _set_valid(new_valid: bool) -> void:
 func _set_valid_colourless(new_valid_colourless: bool) -> void:
 	valid_colourless = new_valid_colourless
 	update_valid_visual()
+
+func is_grab_area_hovered() -> bool:
+	return $GrabArea/CollisionShape2D.shape.get_rect().has_point(get_local_mouse_position())
 
 func update_valid_visual() -> void:
 	var current_ball_frame: int = Ball.frame
