@@ -82,6 +82,7 @@ func init(state_manager: Node, controls_tab: Control, palette_list: GrabbableCon
 	HealthTab.init(Diagram)
 	$Algorithms/PathFinding.init(Diagram, Diagram.StateLines)
 	$Algorithms/ProblemGeneration.init($Algorithms/SolutionGeneration)
+	$Algorithms/SolutionGeneration.init($Algorithms/PathFinding)
 	
 	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
 	
