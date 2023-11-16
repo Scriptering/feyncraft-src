@@ -9,6 +9,8 @@ const INTERACTION_SIZE = 3.0
 var INTERACTIONS := ParticleData.INTERACTIONS
 var TOTAL_INTERACTIONS : Array
 
+var Vision: Node
+
 enum Find {All, One, LowestOrder}
 
 enum INDEX {unconnected, connected, ID = 0, TYPE, START = 0, END, INTERACTION = 0, CONNECTION_COUNT, CONNECTION_PARTICLES = 1}
@@ -47,6 +49,9 @@ var start_time : float
 var print_times := false
 
 var generated_matrix: InteractionMatrix
+
+func init(vision: Node) -> void:
+	Vision = vision
 
 func get_useable_interactions_from_particles(allowed_particles: Array) -> Array:
 	var useable_interactions: Array = []
@@ -162,11 +167,39 @@ func generate_diagrams(
 	
 	print("Generation Completed: " + get_print_time())
 	
+	generated_connection_matrices = cut_colourless_matrices(generated_connection_matrices)
+	
 	if find == Find.One:
 		return [generated_connection_matrices.pick_random()]
 	
 	return generated_connection_matrices
 
+func cut_colourless_matrices(matrices: Array[ConnectionMatrix]) -> Array[ConnectionMatrix]:
+	var valid_matrices: Array[ConnectionMatrix] = []
+	
+	for matrix in matrices:
+		if is_matrix_colourless(matrix):
+			continue
+		
+		valid_matrices.push_back(matrix)
+	
+	return valid_matrices
+
+func is_matrix_colourless(matrix: ConnectionMatrix) -> bool:
+	var has_gluon: bool = !matrix.find_first_id(
+		func(id: int): return ParticleData.Particle.gluon in matrix.get_connected_particles(id)
+	) == matrix.matrix_size
+	
+	if !has_gluon:
+		return false
+	
+	var drawing_matrix := DrawingMatrix.new()
+	drawing_matrix.initialise_from_connection_matrix(matrix)
+	
+	var vision_matrix : DrawingMatrix = Vision.generate_colour_matrix(drawing_matrix)
+	var zip: Array = Vision.generate_colour_paths(vision_matrix, true)
+	
+	return Vision.find_colourless_interactions(zip.front(), zip.back(), vision_matrix, true).size() > 0
 
 func generate_unique_state_connected_interaction_matrices(
 	base_interaction_matrix: InteractionMatrix, degree: int, possible_hadron_connections: Array,
