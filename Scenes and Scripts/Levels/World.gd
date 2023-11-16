@@ -151,6 +151,7 @@ func enter_sandbox() -> void:
 	ProblemTab._enter_sandbox()
 	load_problem(Problem.new())
 	
+	Diagram.clear_diagram()
 	Diagram.set_title_editable(false)
 	Diagram.set_title_visible(false)
 

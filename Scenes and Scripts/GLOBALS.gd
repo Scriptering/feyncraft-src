@@ -34,7 +34,10 @@ func _ready():
 	
 	if !is_on_editor and !DirAccess.dir_exists_absolute("User://saves/"):
 		create_save_folders()
-		create_default_problem_sets()
+		
+		if !FileAccess.file_exists("user://saves/ProblemSets/Default/electromagnetic.txt"):
+			create_default_problem_sets()
+
 
 func create_save_folders() -> void:
 	print("creating save folders")

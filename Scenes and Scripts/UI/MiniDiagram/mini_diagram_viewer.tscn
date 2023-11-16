@@ -68,7 +68,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = SubResource("Theme_x8r6v")
 script = ExtResource("4_o6nlg")
-GrabAreas = [NodePath(""), NodePath("VBoxContainer/PanelContainer")]
+GrabAreas = [NodePath("VBoxContainer/PanelContainer"), NodePath("VBoxContainer/TitleContainer")]
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 use_parent_material = true
@@ -191,7 +191,6 @@ theme_override_styles/panel = ExtResource("13_5bwpc")
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_constants/separation = 0
 alignment = 1
 
 [node name="Close" type="TextureButton" parent="VBoxContainer/TitleContainer/HBoxContainer"]

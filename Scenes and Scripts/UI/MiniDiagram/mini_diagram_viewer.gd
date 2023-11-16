@@ -9,9 +9,8 @@ signal closed
 
 @export var title: String:
 	set(new_value):
-		print("title set")
 		title = new_value
-		Title.text = new_value
+		$VBoxContainer/TitleContainer/HBoxContainer/Title.text = new_value
 
 var diagrams: Array[DrawingMatrix] = []
 var current_index: int = 0:
@@ -25,7 +24,6 @@ var current_index: int = 0:
 		update_index_label()
 
 @onready var Diagram : MiniDiagram = $VBoxContainer/PanelContainer/VBoxContainer/CenterContainer/MiniDiagramContainer/MiniDiagram
-@onready var Title: Label = $VBoxContainer/TitleContainer/HBoxContainer/Title
 
 func _ready() -> void:
 	super._ready()
@@ -33,7 +31,7 @@ func _ready() -> void:
 	load_diagram.connect(EVENTBUS.draw_diagram)
 
 func _on_load_pressed() -> void:
-	emit_signal("load_diagram", diagrams[current_index])
+	load_diagram.emit(diagrams[current_index])
 
 func _on_left_pressed() -> void:
 	self.current_index -= 1

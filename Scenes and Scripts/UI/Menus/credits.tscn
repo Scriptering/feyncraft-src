@@ -35,7 +35,7 @@ offset_left = -67.0
 offset_top = -51.0
 offset_right = 71.0
 offset_bottom = 11.0
-theme_override_constants/separation = -151
+theme_override_constants/separation = -145
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
 use_parent_material = true

@@ -97,6 +97,9 @@ func load_problem(problem: Problem) -> void:
 		toggle_button_visiblity(false)
 		toggle_button_visiblity(true, problem.allowed_particles)
 		toggle_button_group_visibility()
+	else:
+		toggle_button_visiblity(true)
+		toggle_button_group_visibility()
 
 func toggle_buttons(button_pressed: bool, particles: Array = ParticleData.Particle.values()) -> void:
 	toggle_button_mute(true)
