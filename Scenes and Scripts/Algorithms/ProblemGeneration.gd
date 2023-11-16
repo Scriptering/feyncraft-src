@@ -17,9 +17,12 @@ func generate(
 	useable_particles: Array[ParticleData.Particle] = get_all_particles()
 ) -> Problem:
 	var problem := Problem.new()
-	
+
 	var state_interactions : Array
 	var useable_state_interactions: Array = get_useable_state_interactions(use_hadrons, useable_particles)
+	
+	if !useable_particles.any(func(particle): return particle in ParticleData.BOSONS):
+		return null
 	
 	for _interaction_generation_attempt in MAX_INTERACTION_GENERATION_ATTEMPTS:
 		print("problem generation attempt")
@@ -244,6 +247,9 @@ func is_quantum_number_difference_possible(
 	return true
 
 func setup_new_problem(problem: Problem) -> Problem:
+	if !problem:
+		return null
+	
 	var min_degree: int = problem.degree if problem.custom_degree else 1
 	var max_degree: int = problem.degree if problem.custom_degree else 6
 	

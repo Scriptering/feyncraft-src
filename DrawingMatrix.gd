@@ -37,7 +37,7 @@ func add_interaction_with_position(
 func make_drawable() -> void:
 	split_hadrons()
 	seperate_double_connections()
-	reorder_hadrons()
+#	reorder_hadrons()
 
 func seperate_double_connections() -> void:
 	for i in range(matrix_size):
@@ -173,18 +173,18 @@ func get_id_hadron_index(id: int) -> int:
 
 func reorder_hadrons() -> void:
 	var directly_connected_ids: PackedInt32Array = get_directly_connected_ids()
-	
+
 	for id in get_state_ids(StateLine.StateType.Both):
 		if get_connected_count(id, true) > 1:
 			breakpoint
-	
+
 	for i in range(directly_connected_ids.size()):
-		var from_id: int = directly_connected_ids[i]
+		var from_id: int =  get_directly_connected_ids()[i]
 		var to_id: int = get_connected_ids(from_id)[0]
-		
+
 		var from_hadron_index: int = get_id_hadron_index(from_id)
 		var to_hadron_index: int = get_id_hadron_index(to_id)
-		
+
 		var swap_id: int
 		if from_hadron_index == to_hadron_index:
 			continue
@@ -192,9 +192,9 @@ func reorder_hadrons() -> void:
 			swap_id = from_id
 		else:
 			swap_id = to_id
-		
+
 		swap_ids(swap_id, swap_id + abs(from_hadron_index - to_hadron_index))
-	
+
 	for id in get_state_ids(StateLine.StateType.Both):
 		if get_connected_count(id, true) > 1:
 			breakpoint

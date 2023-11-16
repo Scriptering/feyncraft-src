@@ -41,6 +41,13 @@ func _ready() -> void:
 	$ControlsLayer/Buttons.visible = GLOBALS.is_on_mobile()
 	$ControlsLayer/Cursor.visible = !GLOBALS.is_on_mobile()
 
+func _process(delta: float) -> void:
+	if Input.is_action_just_pressed("C"):
+		for file_path in GLOBALS.get_files_in_folder("user://saves/ProblemSets/Default/"):
+			var file = FileAccess.open(file_path, FileAccess.READ)
+			print(file.get_as_text())
+			file.close()
+
 func add_floating_menu(menu: Control) -> void:
 	if menu.position == Vector2.ZERO:
 		menu.position = get_viewport_rect().size / 2
@@ -70,6 +77,7 @@ func enter_main_menu(_args: Array = []) -> void:
 	GLOBALS.in_main_menu = true
 	modifying_problem_item = null
 	
+	await get_tree().process_frame
 	MainMenu.reload_problem_selection()
 
 func _on_sandbox_pressed() -> void:
@@ -79,8 +87,7 @@ func _on_tutorial_pressed() -> void:
 	change_scene(Scene.Level, [BaseMode.Mode.Tutorial])
 
 func _on_world_problem_submitted() -> void:
-	save_files.emit()
-	modifying_problem_item.load_problem(GLOBALS.creating_problem)
+	modifying_problem_item.save()
 	
 	change_scene(Scene.MainMenu)
 
@@ -94,3 +101,6 @@ func _on_problem_modified(problem_item) -> void:
 func _on_problem_set_played(problem_set: ProblemSet, index: int) -> void:
 	change_scene(Scene.Level, [BaseMode.Mode.ProblemSolving])
 	Level.load_problem_set(problem_set, index)
+
+func _on_world_save_problem_set() -> void:
+	save_files.emit()

@@ -493,6 +493,8 @@ func split_interaction(interaction: Interaction) -> void:
 	new_interaction.connected_lines.erase(picked_particle_line)
 	
 	picked_particle_line.is_placed = false
+	
+	interaction.update_dot_visual()
 
 func can_place_interaction(test_position: Vector2, test_interaction: Interaction = null) -> bool:
 	for interaction in Interactions.get_children():

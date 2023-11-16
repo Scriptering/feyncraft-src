@@ -16,7 +16,7 @@ func enter_problem_set(problem_set: ProblemSet, problem_set_file_path: String) -
 
 func _on_problem_list_back() -> void:
 	current_tab = Tab.ProblemSetList
-	ProblemSetList.update()
+	ProblemSetList.reload()
 
 func _on_problem_set_list_close() -> void:
 	closed.emit()

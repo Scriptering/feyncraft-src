@@ -1,1 +1,0 @@
-Object(Resource,"resource_local_to_scene":false,"resource_name":"","script":Resource("res://ProblemSet.gd"),"title":"","problems":Array[Resource("res://problem.gd")]([]),"highest_index_reached":0,"current_index":0,"current_problem":null,"is_custom":true,"is_default":false)

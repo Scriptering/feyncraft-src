@@ -13,7 +13,7 @@
 [ext_resource type="Script" path="res://Scenes and Scripts/Classes/line_edit.gd" id="7_85uwg"]
 [ext_resource type="PackedScene" uid="uid://dorw3vr2amuy3" path="res://Scenes and Scripts/Components/button_sound_component.tscn" id="12_kgt14"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ef6vh"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_344lr"]
 resource_local_to_scene = true
 shader = ExtResource("6_kwlog")
 
@@ -78,7 +78,7 @@ hex_visible = false
 presets_visible = false
 
 [node name="ColourSampler" parent="VBoxContainer/PanelContainer/VBoxContainer" instance=ExtResource("5_8vrca")]
-material = SubResource("ShaderMaterial_ef6vh")
+material = SubResource("ShaderMaterial_344lr")
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_7k5dl")
 

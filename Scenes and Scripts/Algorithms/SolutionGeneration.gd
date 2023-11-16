@@ -406,7 +406,7 @@ func connect_particle(
 			var connected_matrix: InteractionMatrix = unconnected_interaction_matrix.duplicate(true)
 			
 			connected_matrix.connect_asymmetric_interactions(
-				current_point, interaction_index, particle, connection_particle, base_particle(connection_particle)
+				current_point, interaction_index, particle, connection_particle, base_particle(connection_particle), connection_particle >= 0
 			)
 			
 #			connected_matrix.connect_in_out_interactions(current_point, interaction_index, connection_particle)

@@ -16,7 +16,7 @@
 base_font = ExtResource("9_t01cb")
 spacing_bottom = -2
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_uucp0"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2t1t4"]
 resource_local_to_scene = true
 shader = ExtResource("3_da0v7")
 
@@ -35,7 +35,7 @@ offset_left = -67.0
 offset_top = -51.0
 offset_right = 71.0
 offset_bottom = 11.0
-theme_override_constants/separation = -151
+theme_override_constants/separation = -145
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
 use_parent_material = true
@@ -92,7 +92,7 @@ text = "Aseprite"
 horizontal_alignment = 1
 
 [node name="Donate" parent="VBoxContainer/PanelContainer/VBoxContainer" instance=ExtResource("2_rnov3")]
-material = SubResource("ShaderMaterial_uucp0")
+material = SubResource("ShaderMaterial_2t1t4")
 layout_mode = 2
 icon = ExtResource("4_6crf1")
 text = "Donate on KoFi "
@@ -136,4 +136,7 @@ text = "Credits"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/GridContainer/GodotIcon" to="." method="_on_godot_icon_pressed"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/GridContainer/AsepriteIcon" to="." method="_on_aseprite_icon_pressed"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/Donate" to="." method="_on_donate_pressed"]
 [connection signal="pressed" from="VBoxContainer/TitleContainer/HBoxContainer/Close" to="." method="_on_close_pressed"]

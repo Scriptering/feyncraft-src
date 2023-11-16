@@ -9,9 +9,8 @@ signal closed
 
 @export var title: String:
 	set(new_value):
-		print("title set")
 		title = new_value
-		get_node("VBoxContainer/HBoxContainer/Title").text = new_value
+		$VBoxContainer/TitleContainer/HBoxContainer/Title.text = new_value
 
 var diagrams: Array[DrawingMatrix] = []
 var current_index: int = 0:
@@ -32,7 +31,7 @@ func _ready() -> void:
 	load_diagram.connect(EVENTBUS.draw_diagram)
 
 func _on_load_pressed() -> void:
-	emit_signal("load_diagram", diagrams[current_index])
+	load_diagram.emit(diagrams[current_index])
 
 func _on_left_pressed() -> void:
 	self.current_index -= 1
@@ -61,6 +60,7 @@ func store_diagram(matrix) -> void:
 	self.current_index = current_index
 	
 	update_diagram_visibility()
+	update_delete_button()
 
 func store_diagrams(matrices: Array) -> void:
 	clear()
@@ -87,7 +87,7 @@ func update_delete_button() -> void:
 func remove_diagram(index: int = current_index) -> void:
 	diagrams.remove_at(index)
 	
-	emit_signal("diagram_deleted", index)
+	diagram_deleted.emit(index)
 	
 	current_index = clamp(current_index, 0, diagrams.size()-1)
 	
@@ -103,5 +103,5 @@ func get_diagram_count() -> int:
 func _on_delete_pressed() -> void:
 	remove_diagram()
 
-func _on_x_pressed() -> void:
-	emit_signal("closed")
+func _on_close_pressed() -> void:
+	closed.emit()

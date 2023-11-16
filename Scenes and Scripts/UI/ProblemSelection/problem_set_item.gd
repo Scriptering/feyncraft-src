@@ -12,8 +12,8 @@ func _ready() -> void:
 	update()
 
 func toggle_edit_visibility(can_edit: bool, can_delete: bool = can_edit) -> void:
-	$HBoxContainer/PanelContainer/HBoxContainer/Title.editable = can_delete
-	$HBoxContainer/PanelContainer/HBoxContainer/Delete.visible = can_edit
+	$HBoxContainer/PanelContainer/HBoxContainer/Delete.visible = can_delete
+	$HBoxContainer/PanelContainer/HBoxContainer/Title.editable = can_edit
 	$HBoxContainer/PanelContainer/HBoxContainer/Upload.visible = can_edit
 
 func set_index(new_index: int) -> void:
@@ -39,11 +39,15 @@ func update() -> void:
 	
 	update_problem_index()
 
+func reload() -> void:
+	problem_set = GLOBALS.load_txt(file_path)
+	
+	await get_tree().process_frame
+	
+	update()
+
 func _on_delete_pressed() -> void:
 	deleted.emit(self)
-
-func _on_title_text_changed(new_text: String) -> void:
-	problem_set.title = new_text
 
 func _on_view_pressed() -> void:
 	view.emit(self)
@@ -64,3 +68,10 @@ func _on_upload_toggled(button_pressed) -> void:
 	$HBoxContainer/PanelContainer/HBoxContainer/Upload.set_text(
 		GLOBALS.get_resource_save_data(uploading_problem_set)
 	)
+
+func save() -> void:
+	GLOBALS.save(problem_set, file_path)
+
+func _on_title_text_submitted(new_text: String) -> void:
+	problem_set.title = new_text
+	save()

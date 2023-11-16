@@ -38,19 +38,19 @@ texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 expand_margin_top = 20.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_egq54"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nxke7"]
 resource_local_to_scene = true
 shader = ExtResource("6_fyb0f")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_khjwp"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2u8q4"]
 resource_local_to_scene = true
 shader = ExtResource("6_fyb0f")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_1g1ug"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t7wr8"]
 resource_local_to_scene = true
 shader = ExtResource("6_fyb0f")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_a8kf8"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_at0ey"]
 resource_local_to_scene = true
 shader = ExtResource("6_fyb0f")
 
@@ -69,7 +69,7 @@ script = ExtResource("4_1fcak")
 ContentContainer = NodePath("MovingContainer/ContentContainer")
 TabButton = NodePath("MovingContainer/PullOutTabButtonDown")
 MovingContainer = NodePath("MovingContainer")
-moving_container_margins = Vector2(2.08165e-12, -10)
+moving_container_margins = Vector2(2.08165e-12, -8)
 move_direction = 3
 
 [node name="MovingContainer" type="VBoxContainer" parent="."]
@@ -115,7 +115,7 @@ text = "CTRL-Y"
 vertical_alignment = 2
 
 [node name="Undo" parent="MovingContainer/ContentContainer/GridContainer" instance=ExtResource("6_4bdyr")]
-material = SubResource("ShaderMaterial_egq54")
+material = SubResource("ShaderMaterial_nxke7")
 layout_mode = 2
 icon = ExtResource("11_a0bdl")
 minimum_size = Vector2(25, 25)
@@ -126,7 +126,7 @@ icon_use_parent_material = true
 tooltip = "Undo"
 
 [node name="Reset" parent="MovingContainer/ContentContainer/GridContainer" instance=ExtResource("6_4bdyr")]
-material = SubResource("ShaderMaterial_khjwp")
+material = SubResource("ShaderMaterial_2u8q4")
 layout_mode = 2
 icon = ExtResource("10_d874e")
 minimum_size = Vector2(25, 25)
@@ -137,7 +137,7 @@ icon_use_parent_material = true
 tooltip = "Reset"
 
 [node name="Redo" parent="MovingContainer/ContentContainer/GridContainer" instance=ExtResource("6_4bdyr")]
-material = SubResource("ShaderMaterial_1g1ug")
+material = SubResource("ShaderMaterial_t7wr8")
 layout_mode = 2
 icon = ExtResource("12_3t38n")
 minimum_size = Vector2(25, 25)
@@ -147,8 +147,27 @@ icon_use_parent_material = true
 [node name="Tooltip" parent="MovingContainer/ContentContainer/GridContainer/Redo" instance=ExtResource("8_fff00")]
 tooltip = "Redo"
 
+[node name="Label4" type="Label" parent="MovingContainer/ContentContainer/GridContainer"]
+use_parent_material = true
+layout_mode = 2
+text = "W: MOVE"
+vertical_alignment = 2
+
+[node name="Label5" type="Label" parent="MovingContainer/ContentContainer/GridContainer"]
+use_parent_material = true
+layout_mode = 2
+text = "SHIFT: SPLIT"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="Label6" type="Label" parent="MovingContainer/ContentContainer/GridContainer"]
+use_parent_material = true
+layout_mode = 2
+text = "X: DELETE"
+vertical_alignment = 2
+
 [node name="PullOutTabButtonDown" parent="MovingContainer" instance=ExtResource("11_nha8c")]
-material = SubResource("ShaderMaterial_a8kf8")
+material = SubResource("ShaderMaterial_at0ey")
 layout_mode = 2
 size_flags_horizontal = 4
 TabIcon = ExtResource("12_8scxb")

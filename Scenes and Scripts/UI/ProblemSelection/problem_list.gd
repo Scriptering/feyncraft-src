@@ -37,7 +37,9 @@ func load_problem_set(_problem_set: ProblemSet, p_problem_set_file_path: String)
 	problem_set = _problem_set
 	problem_set_file = p_problem_set_file_path
 	
-	if problem_set.title != '':
+	if problem_set.title == '':
+		$VBoxContainer/TitleContainer/HBoxContainer/Title.text = 'Problem Set'
+	else:
 		$VBoxContainer/TitleContainer/HBoxContainer/Title.text = problem_set.title
 	
 	clear_problems()
@@ -60,6 +62,7 @@ func add_problem(problem: Problem, is_custom: bool = false) -> void:
 	problem_select.deleted.connect(_problem_deleted)
 	problem_select.play.connect(_problem_played)
 	problem_select.modify.connect(_problem_modified)
+	problem_select.save_problem_set.connect(_problem_saved)
 	
 	problem_container.add_child(problem_select)
 	
@@ -96,6 +99,7 @@ func _problem_moved(problem_select: PanelContainer, index_change: int) -> void:
 	problem_set.problems[current_index] = temp_problem
 	
 	update_index_labels()
+	save()
 
 func delete_problem(problem_select: PanelContainer) -> void:
 	var index: int = get_problem_items().find(problem_select)
@@ -105,6 +109,7 @@ func delete_problem(problem_select: PanelContainer) -> void:
 	
 	update_index_labels()
 	problem_deleted.emit()
+	save()
 
 func _problem_deleted(problem_select: PanelContainer) -> void:
 	delete_problem(problem_select)
@@ -125,3 +130,9 @@ func _on_back_pressed() -> void:
 
 func _problem_modified(problem_item) -> void:
 	EVENTBUS.problem_modified(problem_item)
+
+func _problem_saved(problem_item) -> void:
+	save()
+
+func save() -> void:
+	GLOBALS.save(problem_set, problem_set_file)

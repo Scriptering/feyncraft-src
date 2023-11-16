@@ -1,5 +1,6 @@
 extends Node2D
 
+signal save_problem_set
 signal problem_submitted
 signal initialised
 
@@ -110,7 +111,7 @@ func load_problem(problem: Problem) -> void:
 	ProblemTab.load_problem(problem)
 	ParticleButtons.load_problem(problem)
 
-	if current_mode == BaseMode.Mode.ProblemSolving:
+	if current_mode == BaseMode.Mode.ProblemSolving or current_mode == BaseMode.Mode.Tutorial:
 		ProblemTab.toggle_finish_icon(problem_set.current_index == problem_set.problems.size() - 1)
 
 func load_problem_set(p_problem_set: ProblemSet, index: int) -> void:
@@ -146,14 +147,13 @@ func enter_sandbox() -> void:
 	VisionTab.show()
 	CreationInformation.hide()
 	PuzzleOptions.show()
-
-	ProblemTab._enter_sandbox()
 	
+	ProblemTab._enter_sandbox()
+	load_problem(Problem.new())
+	
+	Diagram.clear_diagram()
 	Diagram.set_title_editable(false)
 	Diagram.set_title_visible(false)
-	
-#	load_test_problem()
-#	load_problem(generate_new_problem())
 
 func enter_problem_solving() -> void:
 	ParticleButtons.show()
@@ -172,6 +172,17 @@ func enter_problem_creation() -> void:
 	CreationInformation.show()
 	
 	ParticleButtons.load_problem(GLOBALS.creating_problem)
+	
+	if GLOBALS.creating_problem.state_interactions != [[],[]]:
+		EVENTBUS.draw_diagram_raw(
+			SolutionGeneration.generate_diagrams(
+				GLOBALS.creating_problem.state_interactions[StateLine.StateType.Initial],
+				GLOBALS.creating_problem.state_interactions[StateLine.StateType.Final],
+				GLOBALS.creating_problem.degree, GLOBALS.creating_problem.degree,
+				SolutionGeneration.get_useable_interactions_from_particles(GLOBALS.creating_problem.allowed_particles),
+				SolutionGeneration.Find.One
+		).front()
+		)
 
 func enter_solution_creation() -> void:
 	ParticleButtons.show()
@@ -187,6 +198,7 @@ func enter_solution_creation() -> void:
 	
 	if !ProblemGeneration.setup_new_problem(creating_problem):
 		CreationInformation.no_solutions_found()
+		CreationInformation.prev_mode()
 		return
 	
 	GLOBALS.creating_problem.custom_solutions = false
@@ -223,6 +235,8 @@ func enter_tutorial() -> void:
 func exit_tutorial() -> void:
 	Tutorial.clear()
 	Tutorial.hide()
+	
+	problem_set.highest_index_reached = 0
 
 func _on_creation_information_submit_problem() -> void:
 	exit_current_mode()
@@ -237,18 +251,29 @@ func _on_next_problem_pressed() -> void:
 	problem_history.push_back(current_problem)
 	
 	match current_mode:
+		BaseMode.Mode.Tutorial:
+			load_problem(problem_set.next_problem())
+			ProblemTab.set_next_problem_disabled(problem_set.current_index >= problem_set.highest_index_reached)
 		BaseMode.Mode.ProblemSolving:
 			load_problem(problem_set.next_problem())
 			ProblemTab.set_next_problem_disabled(problem_set.current_index >= problem_set.highest_index_reached)
+			save_problem_set.emit()
 		BaseMode.Mode.Sandbox:
 			var new_problem: Problem = generate_new_problem()
-			load_problem(generate_new_problem())
+			
+			if !new_problem:
+				return
+			
+			load_problem(new_problem)
 	
 	Diagram.clear_diagram()
 	ProblemTab.set_prev_problem_disabled(problem_history.size() == 0)
 
 func _on_prev_problem_pressed() -> void:
 	match current_mode:
+		BaseMode.Mode.Tutorial:
+			load_problem(problem_set.previous_problem())
+			ProblemTab.set_prev_problem_disabled(problem_set.current_index == 0)
 		BaseMode.Mode.ProblemSolving:
 			load_problem(problem_set.previous_problem())
 			ProblemTab.set_prev_problem_disabled(problem_set.current_index == 0)

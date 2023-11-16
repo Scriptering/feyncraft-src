@@ -1,6 +1,7 @@
 extends InfoPanel
 
-@onready var custom_solutions: CheckButton = $VBoxContainer/VBoxContainer/PanelContainer2/CustomSolutions
+@onready var custom_solutions: CheckButton = $VBoxContainer/VBoxContainer/PanelContainer2/VBoxContainer/CustomSolutions
+@onready var allow_other_solutions: CheckButton = $VBoxContainer/VBoxContainer/PanelContainer2/VBoxContainer/AllowOtherSolutions
 @onready var custom_solution_count: CheckButton = $VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/CustomSolutionCount
 @onready var solution_count: SpinBox = $VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/SolutionCountContainer/SolutionCountContainer/SolutionCount
 
@@ -29,15 +30,17 @@ func _process(_delta: float) -> void:
 
 func _exit() -> void:
 	GLOBALS.creating_problem.custom_solutions = custom_solutions.button_pressed
+	GLOBALS.creating_problem.allow_other_solutions = allow_other_solutions.button_pressed
 	GLOBALS.creating_problem.custom_solution_count = custom_solution_count.button_pressed
-	
+
 	if custom_solutions.button_pressed:
 		GLOBALS.creating_problem.solutions = ProblemTab.submitted_diagrams
-	
+
 	if custom_solution_count.button_pressed:
 		GLOBALS.creating_problem.solution_count = int(solution_count.value)
-	
+
 	exit.emit()
 
-func _on_custom_solutions_toggled(_button_pressed: bool) -> void:
+func _on_custom_solutions_toggled(button_pressed: bool) -> void:
+	allow_other_solutions.visible = button_pressed
 	update_custom_solutions()
