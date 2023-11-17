@@ -613,7 +613,7 @@ func convert_general_matrices(general_connection_matrices: Array[ConnectionMatri
 	for matrix in general_connection_matrices:
 		var has_general_particles: bool = matrix.find_first_id(func(id): return matrix.get_connected_particles(id, true).any(
 			func(particle): return particle in ParticleData.GENERAL_PARTICLES)
-		) == matrix.matrix_size
+		) != matrix.matrix_size
 		
 		if !has_general_particles:
 			converted_matrices.push_back(matrix)
@@ -631,7 +631,7 @@ func convert_general_matrix(matrix: ConnectionMatrix) -> ConnectionMatrix:
 		if id_needs_converting(id, matrix):
 			matrix = convert_general_id(id, matrix)
 
-	return null
+	return matrix
 
 func convert_general_id(id: int, matrix: ConnectionMatrix) -> ConnectionMatrix:
 	var connected_particles: Array = matrix.get_connected_particles(id, true)
@@ -645,13 +645,23 @@ func convert_general_id(id: int, matrix: ConnectionMatrix) -> ConnectionMatrix:
 	for connected_id in matrix.get_connected_ids(id, true):
 		var connection_particles: Array = matrix.get_connection_particles(id, connected_id, true)
 		
-		if (
-			matrix.get_state_from_id(connected_id) != StateLine.StateType.None and
-			connection_particles.any(func(particle): particle in ParticleData.GENERAL_PARTICLES)
-		):
+		if general_particle not in connection_particles:
+			continue
+			
+		var is_reverse_connection: bool = general_particle not in matrix.get_connection_particles(id, connected_id)
+		
+		if matrix.get_state_from_id(connected_id) != StateLine.StateType.None:
 			return null
 		
+		matrix.disconnect_interactions(id, connected_id, general_particle, false, is_reverse_connection)
+		matrix.connect_interactions(id, connected_id, non_general_particle, false, is_reverse_connection)
 		
+		if id_needs_converting(connected_id, matrix):
+			matrix = convert_general_id(connected_id, matrix)
+			if !matrix:
+				return null
+		
+	return matrix
 
 func id_needs_converting(id: int, matrix: ConnectionMatrix) -> bool:
 	var connected_particles: Array = matrix.get_connected_particles(id, true)
