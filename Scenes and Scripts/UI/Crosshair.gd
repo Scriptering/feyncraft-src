@@ -122,18 +122,12 @@ func is_placing_position_valid(try_position: Vector2) -> bool:
 	
 	var moving_line_count: int = grabbed_interaction.connected_lines.size()
 	
-	if is_on_stateline(try_position):
-		if StateManager.state == BaseState.State.Placing and moving_line_count > 1:
+	var on_stateline: StateLine.StateType = Diagram.get_on_stateline(try_position)
+	if moving_line_count > 1 and on_stateline != StateLine.StateType.None:
+		if StateManager.state == BaseState.State.Placing:
 			return false
 			
 		if StateManager.state == BaseState.State.Hovering and !Input.is_action_pressed("split_interaction"):
-			return false
-			
-	
-		if grabbed_interaction.connected_lines.any(
-			func(particle_line: ParticleLine):
-				return particle_line.get_on_state_line() == Diagram.get_on_stateline(try_position)
-		):
 			return false
 	
 	return true
@@ -175,10 +169,11 @@ func is_on_interaction(test_position: Vector2 = position) -> bool:
 
 func DiagramMouseEntered():
 	is_inside_diagram = true
+	visible = get_state_visible(StateManager.state)
 
 func DiagramMouseExited():
 	is_inside_diagram = false
-
+	visible = get_state_visible(StateManager.state)
 
 func _state_changed(new_state: BaseState.State, _old_state: BaseState.State) -> void: 
 	if !is_inside_tree():

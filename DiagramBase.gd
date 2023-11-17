@@ -48,7 +48,7 @@ func get_particle_lines() -> Array:
 	return ParticleLines.get_children().filter(func(particle_line): return !particle_line.is_queued_for_deletion() and particle_line.is_inside_tree())
 
 func get_hadron_joints() -> Array:
-	return HadronJoints.get_children()
+	return HadronJoints.get_children().filter(func(hadron_joint): return !hadron_joint.is_queued_for_deletion() and hadron_joint.is_inside_tree())
 
 func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 	clear_diagram()

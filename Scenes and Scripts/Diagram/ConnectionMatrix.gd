@@ -451,6 +451,9 @@ func get_unique(array: Array) -> Array:
 	return unique_elements
 
 func is_duplicate(comparison_matrix: Variant) -> bool:
+	if matrix_size != comparison_matrix.matrix_size:
+		return false
+	
 	for i in matrix_size:
 		for j in matrix_size:
 			if get_sorted_connection_particles(i, j, false, true) != comparison_matrix.get_sorted_connection_particles(i, j, false, true):

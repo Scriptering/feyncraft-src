@@ -281,10 +281,12 @@ func colour_other_paths(path_colours: Array[Colour]) -> Array[Colour]:
 	return path_colours
 
 func is_hadron_restricted(hadron: PackedInt32Array, path_colours: Array[Colour], paths: Array[PackedInt32Array]) -> bool:
-	return (
-		get_hadron_colours(hadron, path_colours, paths).any(func(colour: Colour) -> bool: return colour != Colour.None) and
-		get_hadron_colours(hadron, path_colours, paths).any(func(colour: Colour) -> bool: return colour == Colour.None)
-	)
+	return get_hadron_colours(hadron, path_colours, paths).count(Colour.None) == 1
+	
+#	return (
+#		get_hadron_colours(hadron, path_colours, paths).any(func(colour: Colour) -> bool: return colour != Colour.None) and
+#		get_hadron_colours(hadron, path_colours, paths).any(func(colour: Colour) -> bool: return colour == Colour.None)
+#	)
 
 func colour_hadron(hadron: PackedInt32Array, path_colours: Array[Colour], paths: Array[PackedInt32Array]) -> Array[Colour]:
 	if hadron.size() == 2:

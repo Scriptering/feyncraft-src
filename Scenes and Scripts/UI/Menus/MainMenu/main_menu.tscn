@@ -46,27 +46,27 @@ expand_margin_bottom = 1.0
 [sub_resource type="Theme" id="Theme_gyi6d"]
 Label/font_sizes/font_size = 16
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_63pdg"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nj443"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ip8sf"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_habxn"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gwwkh"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w2k1c"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_n3kc6"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mryei"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2b2b3"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c7rw0"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8x4q0"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mmt3i"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
@@ -74,15 +74,15 @@ shader = ExtResource("12_nridv")
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_c4il8"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wgsp6"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_q4lp0"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_igyhd"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_bm0nk"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2t35v"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
@@ -303,7 +303,7 @@ grow_horizontal = 2
 alignment = 1
 
 [node name="Tutorial" parent="Center/VBoxContainer" instance=ExtResource("11_t2od8")]
-material = SubResource("ShaderMaterial_63pdg")
+material = SubResource("ShaderMaterial_nj443")
 layout_mode = 2
 icon = ExtResource("16_0rbva")
 text = "Tutorial"
@@ -312,7 +312,7 @@ icon_use_parent_material = true
 icon_text_seperation = 4
 
 [node name="Sandbox" parent="Center/VBoxContainer" instance=ExtResource("11_t2od8")]
-material = SubResource("ShaderMaterial_ip8sf")
+material = SubResource("ShaderMaterial_habxn")
 layout_mode = 2
 icon = ExtResource("13_21fnr")
 text = "Sandbox"
@@ -322,7 +322,7 @@ action_mode = 1
 icon_text_seperation = 4
 
 [node name="ProblemSets" parent="Center/VBoxContainer" instance=ExtResource("11_t2od8")]
-material = SubResource("ShaderMaterial_gwwkh")
+material = SubResource("ShaderMaterial_w2k1c")
 layout_mode = 2
 theme = ExtResource("22_a8ikr")
 icon = ExtResource("19_fbmws")
@@ -339,7 +339,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="MuteButton" parent="Center/VBoxContainer/HBoxContainer" instance=ExtResource("16_1yq2b")]
-material = SubResource("ShaderMaterial_n3kc6")
+material = SubResource("ShaderMaterial_mryei")
 layout_mode = 2
 size_flags_horizontal = 1
 size_flags_vertical = 1
@@ -347,7 +347,7 @@ icon = ExtResource("21_lu08p")
 toggle_mode = true
 
 [node name="Palettes" parent="Center/VBoxContainer/HBoxContainer" instance=ExtResource("11_t2od8")]
-material = SubResource("ShaderMaterial_2b2b3")
+material = SubResource("ShaderMaterial_c7rw0")
 layout_mode = 2
 icon = ExtResource("17_cv4ds")
 minimum_size = Vector2(30, 30)
@@ -355,7 +355,7 @@ toggle_mode = true
 expand_icon = true
 
 [node name="CreditButton" parent="Center/VBoxContainer/HBoxContainer" instance=ExtResource("11_t2od8")]
-material = SubResource("ShaderMaterial_8x4q0")
+material = SubResource("ShaderMaterial_mmt3i")
 layout_mode = 2
 icon = ExtResource("23_sgn8e")
 minimum_size = Vector2(30, 30)
@@ -395,7 +395,7 @@ grow_vertical = 2
 
 [node name="ParticleButtons" parent="." instance=ExtResource("26_grnbf")]
 visible = false
-material = SubResource("ShaderMaterial_c4il8")
+material = SubResource("ShaderMaterial_wgsp6")
 layout_mode = 1
 offset_left = -166.0
 offset_top = 508.0
@@ -404,7 +404,7 @@ offset_bottom = 508.0
 
 [node name="VisionButton" parent="." instance=ExtResource("27_y0o8i")]
 visible = false
-material = SubResource("ShaderMaterial_q4lp0")
+material = SubResource("ShaderMaterial_igyhd")
 offset_left = 836.0
 offset_top = 4.0
 offset_right = 858.0
@@ -420,7 +420,7 @@ offset_bottom = 64.0
 
 [node name="MenuTab" parent="." instance=ExtResource("33_nabci")]
 visible = false
-material = SubResource("ShaderMaterial_bm0nk")
+material = SubResource("ShaderMaterial_2t35v")
 layout_mode = 1
 offset_left = 509.0
 offset_top = 338.0

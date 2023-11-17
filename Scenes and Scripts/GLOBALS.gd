@@ -178,6 +178,15 @@ func filter(array: Array, test_func: Callable) -> Array:
 func any(array: Array, test_func: Callable) -> bool:
 	return array.any(test_func)
 
+func count_var(array: Array, test_func: Callable, start_index: int = 0) -> int:
+	var count: int = 0
+	
+	for i in range(start_index, array.size()):
+		if test_func.call(array[i]):
+			count += 1
+	
+	return count
+
 func find_var(array: Array, test_func: Callable, start_index: int = 0) -> int:
 	for i in range(start_index, array.size()):
 		if test_func.call(array[i]):

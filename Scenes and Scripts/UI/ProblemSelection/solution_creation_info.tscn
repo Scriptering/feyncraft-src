@@ -30,11 +30,11 @@
 default_font = ExtResource("5_odh5n")
 default_font_size = 10
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_a0665"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s8x50"]
 resource_local_to_scene = true
 shader = ExtResource("3_ktptg")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ph1n8"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w5i34"]
 resource_local_to_scene = true
 shader = ExtResource("3_ktptg")
 
@@ -183,7 +183,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="PrevStep" parent="VBoxContainer/Buttons" instance=ExtResource("2_66fjv")]
-material = SubResource("ShaderMaterial_a0665")
+material = SubResource("ShaderMaterial_s8x50")
 layout_mode = 2
 icon = ExtResource("4_187qd")
 minimum_size = Vector2(24, 21)
@@ -193,7 +193,7 @@ icon_use_parent_material = true
 tooltip = "Previous Step"
 
 [node name="Submit" parent="VBoxContainer/Buttons" instance=ExtResource("2_66fjv")]
-material = SubResource("ShaderMaterial_ph1n8")
+material = SubResource("ShaderMaterial_w5i34")
 layout_mode = 2
 icon = ExtResource("6_eyill")
 minimum_size = Vector2(22, 22)

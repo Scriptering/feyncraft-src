@@ -22,15 +22,15 @@ texture_margin_top = 6.0
 texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_x0und"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0en4b"]
 resource_local_to_scene = true
 shader = ExtResource("5_2ymkv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_maxu3"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_io7th"]
 resource_local_to_scene = true
 shader = ExtResource("5_2ymkv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_krlp2"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vrc7a"]
 resource_local_to_scene = true
 shader = ExtResource("5_2ymkv")
 
@@ -70,7 +70,7 @@ alignment = 1
 
 [node name="PrevStep" parent="TutorialPanel/VBoxContainer/Buttons" instance=ExtResource("4_3eia6")]
 visible = false
-material = SubResource("ShaderMaterial_x0und")
+material = SubResource("ShaderMaterial_0en4b")
 layout_mode = 2
 icon = ExtResource("6_1qgbo")
 minimum_size = Vector2(24, 21)
@@ -80,7 +80,7 @@ icon_use_parent_material = true
 tooltip = "Prev Step"
 
 [node name="NextStep" parent="TutorialPanel/VBoxContainer/Buttons" instance=ExtResource("4_3eia6")]
-material = SubResource("ShaderMaterial_maxu3")
+material = SubResource("ShaderMaterial_io7th")
 layout_mode = 2
 icon = ExtResource("6_ele4h")
 minimum_size = Vector2(24, 21)
@@ -91,7 +91,7 @@ tooltip = "Next Step"
 
 [node name="Finish" parent="TutorialPanel/VBoxContainer/Buttons" instance=ExtResource("4_3eia6")]
 visible = false
-material = SubResource("ShaderMaterial_krlp2")
+material = SubResource("ShaderMaterial_vrc7a")
 layout_mode = 2
 icon = ExtResource("10_qnfej")
 minimum_size = Vector2(24, 21)

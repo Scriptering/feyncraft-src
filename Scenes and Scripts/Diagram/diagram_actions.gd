@@ -42,6 +42,7 @@ func _ready() -> void:
 	mouse_exited.connect(Crosshair.DiagramMouseExited)
 	EVENTBUS.signal_draw_raw_diagram.connect(draw_raw_diagram)
 	EVENTBUS.signal_draw_diagram.connect(draw_diagram)
+	action_taken.connect(EVENTBUS.action_taken)
 	
 	for state_line in StateLines:
 		state_line.init(self)
@@ -342,8 +343,8 @@ func action() -> void:
 	for interaction in get_interactions():
 		interaction.update_interaction()
 	
-	update_vision(generate_drawing_matrix_from_diagram(true))
 	update_statelines()
+	update_vision(generate_drawing_matrix_from_diagram(true))
 	
 	action_taken.emit()
 
@@ -598,7 +599,8 @@ func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 
 	line_diagram_actions = true
 	
-	update_statelines()
+	action()
+	
 
 func undo() -> void:
 	if !is_inside_tree():
