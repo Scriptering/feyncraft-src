@@ -4,9 +4,11 @@ class_name MiniDiagramViewer
 extends GrabbableControl
 
 signal diagram_deleted
+signal diagram_resaved
 signal load_diagram
 signal closed
 
+@export var allow_resaving: bool = false
 @export var title: String:
 	set(new_value):
 		title = new_value
@@ -29,6 +31,8 @@ var current_index: int = 0:
 
 func _ready() -> void:
 	super._ready()
+	
+	$VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Resave.visible = allow_resaving
 	
 	BigDiagram.action_taken.connect(update_resave_button)
 	load_diagram.connect(EVENTBUS.draw_diagram)
@@ -88,7 +92,7 @@ func update_diagram_visibility() -> void:
 	Diagram.visible = diagrams.size() > 0
 
 func update_resave_button(drawn_diagram: DrawingMatrix = BigDiagram.generate_drawing_matrix_from_diagram()) -> void:
-	if !visible:
+	if !visible or !allow_resaving:
 		return
 	
 	$VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Resave.disabled = !drawn_diagram.is_duplicate(diagrams[current_index])
@@ -128,6 +132,8 @@ func resave_diagram(new_diagram: DrawingMatrix) -> void:
 	diagrams.remove_at(current_index)
 	diagrams.insert(current_index, new_diagram)
 	Diagram.draw_diagram(new_diagram)
+	
+	diagram_resaved.emit(current_index)
 	
 	await get_tree().process_frame
 	
