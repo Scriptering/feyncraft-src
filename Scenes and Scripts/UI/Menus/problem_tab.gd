@@ -49,6 +49,7 @@ func init(
 	current_problem = _current_problem
 	SubmittedDiagramViewer = submitted_diagrams_viewer
 	SubmittedDiagramViewer.diagram_deleted.connect(submitted_diagram_deleted)
+	SubmittedDiagramViewer.diagram_resaved.connect(submitted_diagram_resaved)
 	SubmittedDiagramViewer.closed.connect(toggle_diagram_viewer)
 	ProblemGeneration = problem_generation
 	SolutionGeneration = _solution_generation
@@ -73,6 +74,9 @@ func submitted_diagram_deleted(index: int) -> void:
 	
 	update_view_submission_button()
 	update_submitted_solution_count()
+
+func submitted_diagram_resaved(index: int) -> void:
+	submitted_diagrams[index] = SubmittedDiagramViewer.diagrams[index]
 
 func check_submission(submission: DrawingMatrix) -> bool:
 	for child in $MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer.get_children():
