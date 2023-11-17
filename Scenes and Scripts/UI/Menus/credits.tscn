@@ -16,7 +16,7 @@
 base_font = ExtResource("9_t01cb")
 spacing_bottom = -2
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2t1t4"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ivv0b"]
 resource_local_to_scene = true
 shader = ExtResource("3_da0v7")
 
@@ -92,7 +92,7 @@ text = "Aseprite"
 horizontal_alignment = 1
 
 [node name="Donate" parent="VBoxContainer/PanelContainer/VBoxContainer" instance=ExtResource("2_rnov3")]
-material = SubResource("ShaderMaterial_2t1t4")
+material = SubResource("ShaderMaterial_ivv0b")
 layout_mode = 2
 icon = ExtResource("4_6crf1")
 text = "Donate on KoFi "

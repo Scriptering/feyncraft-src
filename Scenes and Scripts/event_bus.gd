@@ -66,5 +66,8 @@ func problem_set_played(problem_set: ProblemSet, index: int) -> void:
 func save_files() -> void:
 	signal_save_files.emit()
 
+func action_taken() -> void:
+	signal_diagram_action_taken.emit()
+
 func diagram_submitted(diagram: DrawingMatrix, submissions: Array[DrawingMatrix]) -> void:
 	signal_diagram_submitted.emit(diagram, submissions)

@@ -34,6 +34,16 @@ func add_interaction_with_position(
 	add_interaction(interaction_state, id)
 	add_interaction_position(interaction_position, grid_size, id)
 
+func is_duplicate(comparison_matrix: Variant) -> bool:
+	var reindexed_connection_matrix: ConnectionMatrix = reduce_to_connection_matrix()
+	var comparison_connection_matrix: ConnectionMatrix = comparison_matrix.reduce_to_connection_matrix()
+	
+	reindexed_connection_matrix.reindex()
+	comparison_connection_matrix.reindex()
+	
+	return reindexed_connection_matrix.is_duplicate(comparison_connection_matrix)
+	
+
 func make_drawable() -> void:
 	split_hadrons()
 	seperate_double_connections()

@@ -8,6 +8,7 @@ signal dropped(object: GrabbableNode2D)
 @export
 var GrabArea: Node
 
+var start_grab_position: Vector2 = Vector2.ZERO
 var grabbed: bool = false: set = _grabbed_changed
 var grab_area_hovered: bool = false: set = _grab_area_hovered_changed
 var grabbable: bool = true: set = _grabbable_changed
@@ -24,6 +25,7 @@ func _input(_event: InputEvent) -> void:
 func pick_up() -> void:
 	if !grabbed:
 		grabbed = true
+		start_grab_position = position
 		picked_up.emit(self)
 
 func drop() -> void:

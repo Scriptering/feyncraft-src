@@ -92,9 +92,12 @@ func is_try_position_valid(try_position: Vector2) -> bool:
 	if StateManager.state == BaseState.State.Drawing:
 		return is_drawing_position_valid(try_position)
 	
-	elif StateManager.state == BaseState.State.Placing:
+	if (
+		StateManager.state == BaseState.State.Placing or
+		(StateManager.state == BaseState.State.Hovering and StateManager.current_state.grabbed_interaction)
+	):
 		return is_placing_position_valid(try_position)
-
+	
 	return true
 
 func is_drawing_position_valid(try_position: Vector2) -> bool:
@@ -112,10 +115,32 @@ func is_placing_position_valid(try_position: Vector2) -> bool:
 	if is_crosshair_on_state_interaction(try_position):
 		return false
 	
-	var particle_lines := Diagram.get_particle_lines()
-	var moving_line_count = particle_lines.reduce(
-		func(accum: int, particle_line: ParticleLine): return accum + int(!particle_line.is_placed), 0
-	)
+	var grabbed_interaction: Interaction = StateManager.current_state.grabbed_interaction
+	
+	if !grabbed_interaction:
+		return true
+	
+	var moving_line_count: int = grabbed_interaction.connected_lines.size()
+	
+	var on_stateline: StateLine.StateType = Diagram.get_on_stateline(try_position)
+	if moving_line_count > 1 and on_stateline != StateLine.StateType.None:
+		if StateManager.state == BaseState.State.Placing:
+			return false
+			
+		if StateManager.state == BaseState.State.Hovering and !Input.is_action_pressed("split_interaction"):
+			return false
+	
+	return true
+
+func is_hovering_position_valid(try_position: Vector2) -> bool:
+	if is_crosshair_on_state_interaction(try_position):
+		return false
+	
+	var grabbed_interaction: Interaction = StateManager.current_state.grabbed_interaction
+	var moving_line_count: int = grabbed_interaction.connected_lines.size()
+	
+	if Input.is_action_pressed("split_interaction"):
+		return true
 	
 	if is_on_stateline(try_position) and moving_line_count > 1:
 		return false
@@ -144,10 +169,11 @@ func is_on_interaction(test_position: Vector2 = position) -> bool:
 
 func DiagramMouseEntered():
 	is_inside_diagram = true
+	visible = get_state_visible(StateManager.state)
 
 func DiagramMouseExited():
 	is_inside_diagram = false
-
+	visible = get_state_visible(StateManager.state)
 
 func _state_changed(new_state: BaseState.State, _old_state: BaseState.State) -> void: 
 	if !is_inside_tree():

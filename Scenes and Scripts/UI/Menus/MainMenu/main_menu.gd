@@ -35,7 +35,6 @@ func init(state_manager: Node, controls_tab: Control, palette_list: GrabbableCon
 	$Algorithms/ProblemGeneration.init($Algorithms/SolutionGeneration)
 	
 	Diagram.draw_diagram(GLOBALS.TitleDiagram)
-	Diagram.can_draw_diagrams = false
 
 func _on_sandbox_pressed() -> void:
 	sandbox_pressed.emit()

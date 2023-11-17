@@ -30,7 +30,7 @@ var Initial: StateLine
 var Final: StateLine
 var Crosshair: Node
 
-var points := PackedVector2Array([[0, 0], [0, 0]]) : set = _set_points
+var points := PackedVector2Array([Vector2.LEFT, Vector2.LEFT]) : set = _set_points
 var prev_points := PackedVector2Array([[0, 0], [0, 0]])
 var line_vector : Vector2 = Vector2.ZERO:
 	get: return points[Point.End] - points[Point.Start]
@@ -53,8 +53,8 @@ var has_shade := false
 
 var hovering: bool = false
 
-var left_point: Vector2
-var right_point: Vector2
+var left_point: Vector2 = Vector2.LEFT
+var right_point: Vector2 = Vector2.LEFT
 
 var moving_point : Point = Point.End
 
@@ -206,16 +206,13 @@ func is_point_connected(point: Vector2) -> bool:
 			return true
 	return false
 
-func is_vec_zero_approx(vec: Vector2) -> bool:
-	return is_zero_approx(vec.x) and is_zero_approx(vec.y)
-
 func is_position_on_line(test_position: Vector2) -> bool:
 	var split_vector: Vector2 = test_position-points[Point.Start]
 	
 	if test_position in points:
 		return false
 	
-	if !is_vec_zero_approx(split_vector.normalized() - line_vector.normalized()):
+	if !GLOBALS.is_vec_zero_approx(split_vector.normalized() - line_vector.normalized()):
 		return false
 
 	if split_vector.length() >= line_vector.length():
@@ -393,7 +390,16 @@ func is_placement_valid() -> bool:
 	if is_line_overlapping():
 		return false
 	
+	if are_both_points_on_same_state_line():
+		return false
+	
 	return true
+
+func are_both_points_on_same_state_line() -> bool:
+	if get_on_state_line() == StateLine.StateType.None:
+		return false
+	
+	return Diagram.get_on_stateline(points[Point.Start]) == Diagram.get_on_stateline(points[Point.End])
 
 func pick_up(point_index_to_pick_up: Point) -> void:
 	is_placed = false

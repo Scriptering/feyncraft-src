@@ -12,6 +12,7 @@ signal closed
 		title = new_value
 		$VBoxContainer/TitleContainer/HBoxContainer/Title.text = new_value
 
+@export var BigDiagram: MainDiagram
 var diagrams: Array[DrawingMatrix] = []
 var current_index: int = 0:
 	set(new_value):
@@ -22,13 +23,18 @@ var current_index: int = 0:
 			Diagram.draw_diagram(diagrams[current_index])
 
 		update_index_label()
+		update_resave_button()
 
 @onready var Diagram : MiniDiagram = $VBoxContainer/PanelContainer/VBoxContainer/CenterContainer/MiniDiagramContainer/MiniDiagram
 
 func _ready() -> void:
 	super._ready()
 	
+	BigDiagram.action_taken.connect(update_resave_button)
 	load_diagram.connect(EVENTBUS.draw_diagram)
+
+func init(big_diagram: MainDiagram) -> void:
+	BigDiagram = big_diagram
 
 func _on_load_pressed() -> void:
 	load_diagram.emit(diagrams[current_index])
@@ -81,6 +87,12 @@ func update_index_label() -> void:
 func update_diagram_visibility() -> void:
 	Diagram.visible = diagrams.size() > 0
 
+func update_resave_button(drawn_diagram: DrawingMatrix = BigDiagram.generate_drawing_matrix_from_diagram()) -> void:
+	if !visible:
+		return
+	
+	$VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Resave.disabled = !drawn_diagram.is_duplicate(diagrams[current_index])
+
 func update_delete_button() -> void:
 	$VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Delete.disabled = diagrams.size() == 0
 
@@ -89,7 +101,7 @@ func remove_diagram(index: int = current_index) -> void:
 	
 	diagram_deleted.emit(index)
 	
-	current_index = clamp(current_index, 0, diagrams.size()-1)
+	self.current_index = clamp(current_index, 0, diagrams.size()-1)
 	
 	await get_tree().process_frame
 	
@@ -105,3 +117,20 @@ func _on_delete_pressed() -> void:
 
 func _on_close_pressed() -> void:
 	closed.emit()
+
+func _on_resave_pressed() -> void:
+	var new_diagram: DrawingMatrix = BigDiagram.generate_drawing_matrix_from_diagram()
+	
+	if new_diagram.is_duplicate(diagrams[current_index]):
+		resave_diagram(new_diagram)
+
+func resave_diagram(new_diagram: DrawingMatrix) -> void:
+	diagrams.remove_at(current_index)
+	diagrams.insert(current_index, new_diagram)
+	Diagram.draw_diagram(new_diagram)
+	
+	await get_tree().process_frame
+	
+	update_index_label()
+	update_delete_button()
+	update_diagram_visibility()

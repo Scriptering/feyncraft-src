@@ -38,19 +38,19 @@ texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 expand_margin_top = 20.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_nxke7"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_342je"]
 resource_local_to_scene = true
 shader = ExtResource("6_fyb0f")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2u8q4"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ikcsa"]
 resource_local_to_scene = true
 shader = ExtResource("6_fyb0f")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_t7wr8"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b21sf"]
 resource_local_to_scene = true
 shader = ExtResource("6_fyb0f")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_at0ey"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q3jqi"]
 resource_local_to_scene = true
 shader = ExtResource("6_fyb0f")
 
@@ -115,7 +115,7 @@ text = "CTRL-Y"
 vertical_alignment = 2
 
 [node name="Undo" parent="MovingContainer/ContentContainer/GridContainer" instance=ExtResource("6_4bdyr")]
-material = SubResource("ShaderMaterial_nxke7")
+material = SubResource("ShaderMaterial_342je")
 layout_mode = 2
 icon = ExtResource("11_a0bdl")
 minimum_size = Vector2(25, 25)
@@ -126,7 +126,7 @@ icon_use_parent_material = true
 tooltip = "Undo"
 
 [node name="Reset" parent="MovingContainer/ContentContainer/GridContainer" instance=ExtResource("6_4bdyr")]
-material = SubResource("ShaderMaterial_2u8q4")
+material = SubResource("ShaderMaterial_ikcsa")
 layout_mode = 2
 icon = ExtResource("10_d874e")
 minimum_size = Vector2(25, 25)
@@ -137,7 +137,7 @@ icon_use_parent_material = true
 tooltip = "Reset"
 
 [node name="Redo" parent="MovingContainer/ContentContainer/GridContainer" instance=ExtResource("6_4bdyr")]
-material = SubResource("ShaderMaterial_t7wr8")
+material = SubResource("ShaderMaterial_b21sf")
 layout_mode = 2
 icon = ExtResource("12_3t38n")
 minimum_size = Vector2(25, 25)
@@ -167,7 +167,7 @@ text = "X: DELETE"
 vertical_alignment = 2
 
 [node name="PullOutTabButtonDown" parent="MovingContainer" instance=ExtResource("11_nha8c")]
-material = SubResource("ShaderMaterial_at0ey")
+material = SubResource("ShaderMaterial_q3jqi")
 layout_mode = 2
 size_flags_horizontal = 4
 TabIcon = ExtResource("12_8scxb")

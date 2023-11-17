@@ -168,6 +168,7 @@ func generate_diagrams(
 	print("Generation Completed: " + get_print_time())
 	
 	generated_connection_matrices = cut_colourless_matrices(generated_connection_matrices)
+	generated_connection_matrices = convert_general_matrices(generated_connection_matrices)
 	
 	if find == Find.One:
 		return [generated_connection_matrices.pick_random()]
@@ -606,107 +607,76 @@ func convert_interaction_to_general(interaction: Array) -> Array:
 			)
 	)
 
-func convert_general_matrices(general_connection_matrices: Array[ConnectionMatrix], state_interactions: Array) -> Array[ConnectionMatrix]:
-	
+func convert_general_matrices(general_connection_matrices: Array[ConnectionMatrix]) -> Array[ConnectionMatrix]:
 	var converted_matrices: Array[ConnectionMatrix] = []
 	
-	for general_connection_matrix in general_connection_matrices:
-		converted_matrices.push_back(convert_general_matrix(general_connection_matrix, state_interactions))
+	for matrix in general_connection_matrices:
+		var has_general_particles: bool = matrix.find_first_id(func(id): return matrix.get_connected_particles(id, true).any(
+			func(particle): return particle in ParticleData.GENERAL_PARTICLES)
+		) != matrix.matrix_size
+		
+		if !has_general_particles:
+			converted_matrices.push_back(matrix)
+			continue
+		
+		var converted_matrix: ConnectionMatrix = convert_general_matrix(matrix)
+		
+		if converted_matrix:
+			converted_matrices.push_back(converted_matrix)
 	
 	return converted_matrices
 
-func convert_general_matrix(general_connection_matrix: ConnectionMatrix, state_interactions: Array) -> ConnectionMatrix:
-	
-	var entry_points : PackedInt32Array = general_connection_matrix.get_entry_points()
-	var exit_points : PackedInt32Array = general_connection_matrix.get_exit_points()
-	
-	for entry_point in entry_points:
-		general_connection_matrix = convert_general_state_paths(
-			general_connection_matrix, entry_point, state_interactions, entry_points, exit_points
-		)
-	
-	for exit_point in exit_points:
-		general_connection_matrix = convert_general_state_paths(
-			general_connection_matrix, exit_point, state_interactions, entry_points, exit_points, true
-		)
+func convert_general_matrix(matrix: ConnectionMatrix) -> ConnectionMatrix:
+	for id in matrix.get_state_ids(StateLine.StateType.None):
+		if id_needs_converting(id, matrix):
+			matrix = convert_general_id(id, matrix)
 
-	return general_connection_matrix
+	return matrix
 
-func convert_general_state_paths(
-	general_connection_matrix: ConnectionMatrix, extreme_point: int, state_interactions: Array, entry_points: PackedInt32Array,
-	exit_points: PackedInt32Array, reverse: bool = false
-) -> ConnectionMatrix:
+func convert_general_id(id: int, matrix: ConnectionMatrix) -> ConnectionMatrix:
+	var connected_particles: Array = matrix.get_connected_particles(id, true)
+	var general_particle: ParticleData.Particle = connected_particles[GLOBALS.find_var(
+		connected_particles, func(particle): return particle in ParticleData.GENERAL_PARTICLES
+	)]
+	var non_general_particle: ParticleData.Particle = connected_particles[GLOBALS.find_var(
+		connected_particles, func(particle): return particle in ParticleData.FERMIONS and particle not in ParticleData.GENERAL_PARTICLES
+	)]
 	
-	var to_particles : Array = state_interactions[extreme_point].filter(
-		func(particle: ParticleData.Particle):
-			return (
-				(base_particle(particle) not in ParticleData.GENERAL_PARTICLES and base_particle(particle) not in ParticleData.BOSONS) and
-				(
-					sign(particle) *
-					StateLine.state_factor[general_connection_matrix.get_state_from_id(extreme_point)] *
-					(int(reverse)*2 - 1) < 0
-				)
-			)
-	)
-	
-	to_particles = to_particles.map(
-		func(particle: ParticleData.Particle):
-			return base_particle(particle)
-	)
-	
-	var possible_from_particles : Array = general_connection_matrix.get_connected_particles(extreme_point, false, false, reverse).filter(
-		func(particle: ParticleData.Particle):
-			return particle in ParticleData.GENERAL_PARTICLES
-	)
-	
-	if possible_from_particles.size() == 0:
-		return general_connection_matrix
-	
-	for to_particle in to_particles:
-		var from_particle: ParticleData.Particle = ParticleData.Particle.none
+	for connected_id in matrix.get_connected_ids(id, true):
+		var connection_particles: Array = matrix.get_connection_particles(id, connected_id, true)
 		
-		for general_particle in possible_from_particles:
-			if to_particle in ParticleData.GENERAL_CONVERSION[general_particle]:
-				from_particle = general_particle
-				break
-		
-		possible_from_particles.erase(from_particle)
-		
-		if from_particle == ParticleData.Particle.none:
+		if general_particle not in connection_particles:
 			continue
+			
+		var is_reverse_connection: bool = general_particle not in matrix.get_connection_particles(id, connected_id)
+		
+		if matrix.get_state_from_id(connected_id) != StateLine.StateType.None:
+			return null
+		
+		matrix.disconnect_interactions(id, connected_id, general_particle, false, is_reverse_connection)
+		matrix.connect_interactions(id, connected_id, non_general_particle, false, is_reverse_connection)
+		
+		if id_needs_converting(connected_id, matrix):
+			matrix = convert_general_id(connected_id, matrix)
+			if !matrix:
+				return null
+		
+	return matrix
 
-		convert_general_path(general_connection_matrix, extreme_point, from_particle, to_particle, entry_points, exit_points, reverse)
+func id_needs_converting(id: int, matrix: ConnectionMatrix) -> bool:
+	var connected_particles: Array = matrix.get_connected_particles(id, true)
 	
-	return general_connection_matrix
-
-func convert_general_path(
-	general_connection_matrix: ConnectionMatrix, start_point: int, from_particle: ParticleData.Particle, to_particle: ParticleData.Particle,
-	entry_points: PackedInt32Array, exit_points: PackedInt32Array, reverse: bool = false
-) -> ConnectionMatrix:
+	if connected_particles.has(ParticleData.Particle.W):
+		return false
 	
-	var current_point : int = start_point
+	if connected_particles.all(func(particle): return particle not in ParticleData.FERMIONS):
+		return false
 	
-	for step in MAX_PATH_STEPS:
-		var connected_ids := general_connection_matrix.get_connected_ids(current_point, false, from_particle, reverse)
-		
-		var path_finished: bool = step != 0 and (
-			current_point in entry_points + exit_points or
-			ParticleData.Particle.W in general_connection_matrix.get_connected_particles(current_point, true)
-		)
-		
-		if path_finished:
-			return general_connection_matrix
-		
-		var next_point : int = connected_ids[0]
-		
-		general_connection_matrix.disconnect_interactions(current_point, next_point, from_particle, false, reverse)
-		general_connection_matrix.connect_interactions(current_point, next_point, to_particle, false, reverse)
-		
-		current_point = next_point
+	if GLOBALS.count_var(connected_particles, func(particle): return particle in ParticleData.GENERAL_PARTICLES) != 1:
+		return false
 	
-	return null
-
-
+	return true
+	
 func convert_interactions_to_general(interactions: Array) -> Array:
 	var converted_interactions : Array = interactions.map(convert_interaction_to_general)
 	

@@ -36,14 +36,13 @@ var diagram_future: Array[DrawingMatrix] = []
 var current_diagram: DrawingMatrix = null
 var diagram_added_to_history: bool = false
 
-var can_draw_diagrams: bool = true
-
 func _ready() -> void:
 	Crosshair.moved.connect(_crosshair_moved)
 	mouse_entered.connect(Crosshair.DiagramMouseEntered)
 	mouse_exited.connect(Crosshair.DiagramMouseExited)
 	EVENTBUS.signal_draw_raw_diagram.connect(draw_raw_diagram)
 	EVENTBUS.signal_draw_diagram.connect(draw_diagram)
+	action_taken.connect(EVENTBUS.action_taken)
 	
 	for state_line in StateLines:
 		state_line.init(self)
@@ -344,8 +343,8 @@ func action() -> void:
 	for interaction in get_interactions():
 		interaction.update_interaction()
 	
-	update_vision(generate_drawing_matrix_from_diagram(true))
 	update_statelines()
+	update_vision(generate_drawing_matrix_from_diagram(true))
 	
 	action_taken.emit()
 
@@ -481,7 +480,7 @@ func split_interaction(interaction: Interaction) -> void:
 	if interaction.connected_lines.size() == 1:
 		return
 	
-	var picked_particle_line: ParticleLine = interaction.connected_lines.back()
+	var picked_particle_line: ParticleLine = choose_split_particle_line(interaction)
 	
 	interaction.connected_lines.clear()
 	interaction.connected_lines.push_back(picked_particle_line)
@@ -495,6 +494,31 @@ func split_interaction(interaction: Interaction) -> void:
 	picked_particle_line.is_placed = false
 	
 	interaction.update_dot_visual()
+	interaction.valid = interaction.validate()
+	
+	check_rejoin_lines()
+
+func choose_split_particle_line(splitting_interaction: Interaction) -> ParticleLine:
+	var interaction_position: Vector2 = splitting_interaction.position
+	var mouse_position: Vector2 = Interactions.get_local_mouse_position()
+	var interaction_to_mouse_vector: Vector2 = (mouse_position - interaction_position).normalized()
+	
+	var smallest_angle: float = 2*PI
+	
+	var chosen_particle_line: ParticleLine
+	
+	for particle_line in splitting_interaction.connected_lines:
+		var line_vector: Vector2 = splitting_interaction.get_unconnected_line_vector(particle_line).normalized()
+		var angle: float = min(
+			min(line_vector.angle_to(interaction_to_mouse_vector), interaction_to_mouse_vector.angle_to(line_vector)),
+			min(line_vector.angle_to(-interaction_to_mouse_vector), (-interaction_to_mouse_vector).angle_to(line_vector))
+		)
+		
+		if angle <= smallest_angle:
+			smallest_angle = angle
+			chosen_particle_line = particle_line
+	
+	return chosen_particle_line
 
 func can_place_interaction(test_position: Vector2, test_interaction: Interaction = null) -> bool:
 	for interaction in Interactions.get_children():
@@ -528,7 +552,7 @@ func place_line(
 	ParticleLines.add_child(line)
 
 func draw_raw_diagram(connection_matrix : ConnectionMatrix) -> void:
-	if !can_draw_diagrams or !is_inside_tree():
+	if !is_inside_tree():
 		return
 	
 	add_diagram_to_history()
@@ -557,7 +581,7 @@ func draw_diagram_particles(drawing_matrix: DrawingMatrix) -> Array:
 	return drawing_lines
 
 func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
-	if !can_draw_diagrams or !is_inside_tree():
+	if !is_inside_tree():
 		return
 	
 	line_diagram_actions = false
@@ -575,7 +599,8 @@ func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 
 	line_diagram_actions = true
 	
-	update_statelines()
+	action()
+	
 
 func undo() -> void:
 	if !is_inside_tree():
