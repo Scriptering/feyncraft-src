@@ -326,6 +326,9 @@ func colour_hadrons(path_colours: Array[Colour], paths: Array[PackedInt32Array],
 				break
 			
 			colour_hadron(hadrons[restricted_hadron_index], path_colours, paths)
+		
+		if !path_colours.any(func(colour: Colour) -> bool: return colour == Colour.None):
+			break
 	
 	return path_colours
 
