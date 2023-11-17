@@ -41,13 +41,6 @@ func _ready() -> void:
 	$ControlsLayer/Buttons.visible = GLOBALS.is_on_mobile()
 	$ControlsLayer/Cursor.visible = !GLOBALS.is_on_mobile()
 
-func _process(delta: float) -> void:
-	if Input.is_action_just_pressed("C"):
-		for file_path in GLOBALS.get_files_in_folder("user://saves/ProblemSets/Default/"):
-			var file = FileAccess.open(file_path, FileAccess.READ)
-			print(file.get_as_text())
-			file.close()
-
 func add_floating_menu(menu: Control) -> void:
 	if menu.position == Vector2.ZERO:
 		menu.position = get_viewport_rect().size / 2

@@ -36,8 +36,6 @@ var diagram_future: Array[DrawingMatrix] = []
 var current_diagram: DrawingMatrix = null
 var diagram_added_to_history: bool = false
 
-var can_draw_diagrams: bool = true
-
 func _ready() -> void:
 	Crosshair.moved.connect(_crosshair_moved)
 	mouse_entered.connect(Crosshair.DiagramMouseEntered)
@@ -528,7 +526,7 @@ func place_line(
 	ParticleLines.add_child(line)
 
 func draw_raw_diagram(connection_matrix : ConnectionMatrix) -> void:
-	if !can_draw_diagrams or !is_inside_tree():
+	if !is_inside_tree():
 		return
 	
 	add_diagram_to_history()
@@ -557,7 +555,7 @@ func draw_diagram_particles(drawing_matrix: DrawingMatrix) -> Array:
 	return drawing_lines
 
 func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
-	if !can_draw_diagrams or !is_inside_tree():
+	if !is_inside_tree():
 		return
 	
 	line_diagram_actions = false
