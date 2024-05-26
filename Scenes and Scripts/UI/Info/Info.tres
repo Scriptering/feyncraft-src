@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=25 format=3 uid="uid://6d80ndd154hq"]
+[gd_resource type="Theme" load_steps=26 format=3 uid="uid://6d80ndd154hq"]
 
 [ext_resource type="Texture2D" uid="uid://cnhffo703eacx" path="res://Textures/Buttons/X_button_hover.png" id="1_8i66c"]
 [ext_resource type="Texture2D" uid="uid://x7kuuopqw4yl" path="res://Textures/Buttons/X_button_highlight.png" id="1_866kd"]
@@ -36,6 +36,8 @@ texture_margin_top = 6.0
 texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 expand_margin_top = 4.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_44ibv"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3a8vk"]
 content_margin_left = 6.0
@@ -130,6 +132,7 @@ TabContainer/colors/font_unselected_color = Color(0.219608, 0.223529, 0.188235, 
 TabContainer/constants/side_margin = 12
 TabContainer/font_sizes/font_size = 12
 TabContainer/styles/panel = SubResource("StyleBoxTexture_8ssdj")
+TabContainer/styles/tab_focus = SubResource("StyleBoxEmpty_44ibv")
 TabContainer/styles/tab_hovered = SubResource("StyleBoxTexture_3a8vk")
 TabContainer/styles/tab_selected = SubResource("StyleBoxTexture_wlqb8")
 TabContainer/styles/tab_unselected = SubResource("StyleBoxTexture_otoj5")

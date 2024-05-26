@@ -6,7 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://bfoxtqmre12qw" path="res://Textures/Buttons/icons/load.png" id="4_dxvp1"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rcwls"]
-resource_local_to_scene = true
 shader = ExtResource("2_bspdm")
 
 [node name="LoadButton" instance=ExtResource("1_l16xj")]

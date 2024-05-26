@@ -228,6 +228,7 @@ func enter_tutorial() -> void:
 	ProblemTab.show()
 	VisionTab.hide()
 	CreationInformation.hide()
+	PuzzleOptions.hide()
 	Tutorial.show()
 	
 	Tutorial.reset()

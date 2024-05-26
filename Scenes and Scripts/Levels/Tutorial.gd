@@ -4,6 +4,8 @@ extends Node2D
 @onready var Spotlights: Control = $CanvasGroup/Spotlights
 @onready var TutorialInfo: GrabbableControl = $TutorialInfo
 
+@export var ProblemTab: PullOutTab
+
 var current_step: BaseTutorialStep
 
 var current_index: int:
@@ -104,3 +106,5 @@ func _on_tutorial_info_prev_pressed() -> void:
 	TutorialInfo.show_next()
 	change_step(get_steps()[current_index - 1])
 
+func _on_problem_tab_next_step() -> void:
+	ProblemTab.pull_out()

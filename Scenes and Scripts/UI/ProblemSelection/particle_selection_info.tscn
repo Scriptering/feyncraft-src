@@ -9,11 +9,11 @@
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="6_5gy8v"]
 [ext_resource type="Texture2D" uid="uid://dvx430022t0ua" path="res://Textures/Buttons/icons/next.png" id="8_rm0tq"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_126gm"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rx47t"]
 resource_local_to_scene = true
 shader = ExtResource("4_8p7ty")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_kwj3n"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f4sov"]
 resource_local_to_scene = true
 shader = ExtResource("4_8p7ty")
 
@@ -29,15 +29,16 @@ shader = ExtResource("4_8p7ty")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_uhdxj"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_s5bpt"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0k5mh"]
 resource_local_to_scene = true
 shader = ExtResource("4_8p7ty")
 
 [node name="ParticleSelectionInfo" type="PanelContainer" node_paths=PackedStringArray("next_button")]
 material = ExtResource("1_622tk")
 use_parent_material = true
-offset_right = 89.0
-offset_bottom = 76.0
+custom_minimum_size = Vector2(2.08165e-12, 150)
+offset_right = 124.0
+offset_bottom = 200.0
 script = ExtResource("2_ojpnu")
 title = "1. Particle Selection"
 next_button = NodePath("VBoxContainer/VBoxContainer/Buttons/NextStep")
@@ -71,13 +72,13 @@ layout_mode = 2
 theme_override_constants/separation = 0
 
 [node name="ToggleOn" parent="VBoxContainer/VBoxContainer/VBoxContainer/HBoxContainer" instance=ExtResource("3_qv0n1")]
-material = SubResource("ShaderMaterial_126gm")
+material = SubResource("ShaderMaterial_rx47t")
 layout_mode = 2
 text = "Toggle On"
 minimum_size = Vector2(56, 24)
 
 [node name="ToggleOff" parent="VBoxContainer/VBoxContainer/VBoxContainer/HBoxContainer" instance=ExtResource("3_qv0n1")]
-material = SubResource("ShaderMaterial_kwj3n")
+material = SubResource("ShaderMaterial_f4sov")
 layout_mode = 2
 text = "Toggle Off"
 minimum_size = Vector2(56, 24)
@@ -112,7 +113,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="NextStep" parent="VBoxContainer/VBoxContainer/Buttons" instance=ExtResource("3_qv0n1")]
-material = SubResource("ShaderMaterial_s5bpt")
+material = SubResource("ShaderMaterial_0k5mh")
 layout_mode = 2
 icon = ExtResource("8_rm0tq")
 minimum_size = Vector2(24, 21)

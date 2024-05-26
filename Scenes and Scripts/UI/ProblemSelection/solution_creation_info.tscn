@@ -30,19 +30,20 @@
 default_font = ExtResource("5_odh5n")
 default_font_size = 10
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gawgj"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_214qr"]
 resource_local_to_scene = true
 shader = ExtResource("3_ktptg")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_b7ms1"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j1p5a"]
 resource_local_to_scene = true
 shader = ExtResource("3_ktptg")
 
 [node name="SolutionCreationInfo" type="PanelContainer" node_paths=PackedStringArray("prev_button", "exit_button")]
 material = ExtResource("1_vwd38")
 use_parent_material = true
-offset_right = 89.0
-offset_bottom = 76.0
+custom_minimum_size = Vector2(2.08165e-12, 150)
+offset_right = 121.0
+offset_bottom = 200.0
 script = ExtResource("2_6e24i")
 title = "3. Solution Creation"
 prev_button = NodePath("VBoxContainer/Buttons/PrevStep")
@@ -175,6 +176,7 @@ min_value = 1.0
 max_value = 4.0
 value = 1.0
 alignment = 1
+update_on_text_changed = true
 script = ExtResource("7_aqn1d")
 
 [node name="Buttons" type="HBoxContainer" parent="VBoxContainer"]
@@ -183,7 +185,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="PrevStep" parent="VBoxContainer/Buttons" instance=ExtResource("2_66fjv")]
-material = SubResource("ShaderMaterial_gawgj")
+material = SubResource("ShaderMaterial_214qr")
 layout_mode = 2
 icon = ExtResource("4_187qd")
 minimum_size = Vector2(24, 21)
@@ -193,7 +195,7 @@ icon_use_parent_material = true
 tooltip = "Previous Step"
 
 [node name="Submit" parent="VBoxContainer/Buttons" instance=ExtResource("2_66fjv")]
-material = SubResource("ShaderMaterial_b7ms1")
+material = SubResource("ShaderMaterial_j1p5a")
 layout_mode = 2
 icon = ExtResource("6_eyill")
 minimum_size = Vector2(22, 22)

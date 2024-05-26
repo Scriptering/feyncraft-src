@@ -7,7 +7,6 @@
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Buttons/MuteButton.gd" id="3_yhqie"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_y0sah"]
-resource_local_to_scene = true
 shader = ExtResource("2_vekn2")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bauei"]

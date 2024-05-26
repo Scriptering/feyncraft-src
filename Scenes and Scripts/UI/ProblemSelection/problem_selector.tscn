@@ -15,15 +15,15 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qxe7s"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hr4hn"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lig0u"]
 resource_local_to_scene = true
 shader = ExtResource("3_ifhvu")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_eu33e"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l27b3"]
 resource_local_to_scene = true
 shader = ExtResource("3_ifhvu")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_xbm2o"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_78eji"]
 resource_local_to_scene = true
 shader = ExtResource("3_ifhvu")
 
@@ -57,7 +57,7 @@ use_parent_material = true
 layout_mode = 2
 
 [node name="Equation" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("2_v0r42")]
-material = SubResource("ShaderMaterial_hr4hn")
+material = SubResource("ShaderMaterial_lig0u")
 custom_minimum_size = Vector2(184.001, 21)
 layout_mode = 2
 
@@ -111,14 +111,14 @@ layout_mode = 2
 theme_override_constants/separation = -6
 
 [node name="Up" parent="HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer" instance=ExtResource("2_yg01j")]
-material = SubResource("ShaderMaterial_eu33e")
+material = SubResource("ShaderMaterial_l27b3")
 layout_mode = 2
 icon = ExtResource("9_38yb2")
 minimum_size = Vector2(19, 15)
 icon_use_parent_material = true
 
 [node name="Down" parent="HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer" instance=ExtResource("2_yg01j")]
-material = SubResource("ShaderMaterial_xbm2o")
+material = SubResource("ShaderMaterial_78eji")
 layout_mode = 2
 icon = ExtResource("10_r0lbv")
 minimum_size = Vector2(19, 15)

@@ -45,7 +45,7 @@ const BASE_PARTICLES: Array[Particle] = [
 	Particle.bright_quark, Particle.up, Particle.charm, Particle.top, Particle.dark_quark, Particle.down, Particle.strange, Particle.bottom
 ]
 
-enum Hadrons {Proton, AntiProton, Neutron, AntiNeutron, DeltaPlusPlus, DeltaPlus, Delta0, DeltaMinus,
+enum Hadrons {Proton = 101, AntiProton, Neutron, AntiNeutron, DeltaPlusPlus, DeltaPlus, Delta0, DeltaMinus,
 AntiDeltaPlusPlus, AntiDeltaPlus, AntiDelta0, AntiDeltaMinus, Epsilon0, EpsilonMinus, AntiEpsilon0, AntiEpsilonMinus,
 Lambda0, AntiLambda0, SigmaPlus, SigmaMinus, AntiSigmaPlus, AntiSigmaMinus, OmegaMinus, AntiOmegaMinus,
 DPlus, D0, AntiD0, DMinus, BPlus, B0, AntiB0, BMinus, JPsi, PionMinus, PionPlus, Pion0, KaonPlus, KaonMinus, Kaon0, Invalid}
@@ -252,6 +252,7 @@ var INTERACTIONS : Array = [
 		[Particle.electron_neutrino, Particle.electron_neutrino, Particle.Z],
 		[Particle.muon_neutrino, Particle.muon_neutrino, Particle.Z],
 		[Particle.tau_neutrino, Particle.tau_neutrino, Particle.Z],
+		[Particle.W, Particle.W, Particle.H],
 		[Particle.W, Particle.W, Particle.Z],
 		[Particle.W, Particle.W, Particle.photon],
 		[Particle.W, Particle.W, Particle.W, Particle.W],
@@ -271,6 +272,7 @@ var INTERACTIONS : Array = [
 		[Particle.muon_neutrino, Particle.muon_neutrino, Particle.H],
 		[Particle.tau_neutrino, Particle.tau_neutrino, Particle.H],
 		[Particle.H, Particle.Z, Particle.Z],
+		[Particle.H, Particle.H, Particle.H],
 		[Particle.H, Particle.H, Particle.H, Particle.H],
 		[Particle.H, Particle.H, Particle.Z, Particle.Z],
 		[Particle.H, Particle.H, Particle.W, Particle.W]
@@ -501,6 +503,16 @@ func get_particle_icon(particle: int) -> Texture2D:
 
 func get_hadron_texture(hadron: Hadrons):
 	return PARTICLE_TEXTURES[HADRON_NAMES[hadron]]
+
+func find_hadron(interaction: Array) -> Hadrons:
+	var sorted_interaction: Array = interaction.duplicate()
+	sorted_interaction.sort()
+	
+	for key in HADRON_QUARK_CONTENT.keys():
+		if sorted_interaction in HADRON_QUARK_CONTENT[key]:
+			return key
+	
+	return Hadrons.Invalid
 
 func sort_interactions() -> void:
 	for interaction_type in INTERACTIONS:

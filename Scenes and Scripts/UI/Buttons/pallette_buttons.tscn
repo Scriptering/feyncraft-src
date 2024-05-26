@@ -21,19 +21,19 @@ func _on_palette_button_pressed(button: PanelButton):
 	emit_signal(\"palette_changed\", button.icon)
 "
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_xngx4"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wk5tn"]
 resource_local_to_scene = true
 shader = ExtResource("3_7fxaj")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qqicy"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_aqdvo"]
 resource_local_to_scene = true
 shader = ExtResource("3_7fxaj")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_r3yqg"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wb2ek"]
 resource_local_to_scene = true
 shader = ExtResource("3_7fxaj")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_alm4h"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dlgb6"]
 resource_local_to_scene = true
 shader = ExtResource("3_7fxaj")
 
@@ -45,28 +45,28 @@ theme_override_constants/separation = -1
 script = SubResource("GDScript_khgme")
 
 [node name="TeaStain" parent="." instance=ExtResource("1_ad78p")]
-material = SubResource("ShaderMaterial_xngx4")
+material = SubResource("ShaderMaterial_wk5tn")
 custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
 toggle_mode = true
 expand_icon = true
 
 [node name="SeaFoam" parent="." instance=ExtResource("1_ad78p")]
-material = SubResource("ShaderMaterial_qqicy")
+material = SubResource("ShaderMaterial_aqdvo")
 layout_mode = 2
 minimum_size = Vector2(20, 20)
 toggle_mode = true
 expand_icon = true
 
 [node name="Professional" parent="." instance=ExtResource("1_ad78p")]
-material = SubResource("ShaderMaterial_r3yqg")
+material = SubResource("ShaderMaterial_wb2ek")
 layout_mode = 2
 minimum_size = Vector2(20, 20)
 toggle_mode = true
 expand_icon = true
 
 [node name="Picker" parent="." instance=ExtResource("1_ad78p")]
-material = SubResource("ShaderMaterial_alm4h")
+material = SubResource("ShaderMaterial_dlgb6")
 layout_mode = 2
 minimum_size = Vector2(20, 20)
 toggle_mode = true

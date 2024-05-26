@@ -135,8 +135,14 @@ func load_txt(p_path: String) -> Resource:
 	return obj
 
 func delete_file(path: String) -> Error:
-	return DirAccess.remove_absolute(path)
-
+	var error: Error = DirAccess.remove_absolute(path)
+	
+	if !is_on_editor:
+		var refresh_path: String = "user://saves/ProblemSets/Default/electromagnetic.txt"
+		save(load_txt(refresh_path), refresh_path)
+	
+	return error
+	
 func get_files_in_folder(folder_path: String) -> Array[String]:
 	print("getting files in folder")
 	

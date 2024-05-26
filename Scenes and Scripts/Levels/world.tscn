@@ -51,23 +51,23 @@ expand_margin_top = 1.0
 expand_margin_right = 1.0
 expand_margin_bottom = 1.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_rqgty"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wmqck"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_g0m4j"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_euoy7"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_vu5wx"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ruye6"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_iqwx6"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5n74u"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_7umku"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_85nmv"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
@@ -175,15 +175,15 @@ shader = ExtResource("1_ovngh")
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_uhljw"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hsfon"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hy7jy"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_13a7j"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ck6sl"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1yxi1"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
@@ -215,11 +215,11 @@ shader = ExtResource("1_ovngh")
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ds8rr"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xkwry"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hflxt"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uhxsj"]
 resource_local_to_scene = true
 shader = ExtResource("1_ovngh")
 
@@ -439,7 +439,7 @@ use_parent_material = true
 
 [node name="CreationInformation" parent="FloatingMenus" instance=ExtResource("31_l3pqm")]
 visible = false
-material = SubResource("ShaderMaterial_rqgty")
+material = SubResource("ShaderMaterial_wmqck")
 offset_left = 489.0
 offset_top = 87.0
 offset_right = 489.0
@@ -447,7 +447,7 @@ offset_bottom = 87.0
 
 [node name="SubmittedDiagrams" parent="FloatingMenus" node_paths=PackedStringArray("BigDiagram") instance=ExtResource("27_laye5")]
 visible = false
-material = SubResource("ShaderMaterial_g0m4j")
+material = SubResource("ShaderMaterial_euoy7")
 offset_left = 316.0
 offset_top = 160.0
 offset_right = 316.0
@@ -458,12 +458,11 @@ BigDiagram = NodePath("../../Diagram")
 
 [node name="GeneratedDiagrams" parent="FloatingMenus" node_paths=PackedStringArray("BigDiagram") instance=ExtResource("27_laye5")]
 visible = false
-material = SubResource("ShaderMaterial_vu5wx")
+material = SubResource("ShaderMaterial_ruye6")
 offset_left = 316.0
 offset_top = 160.0
 offset_right = 316.0
 offset_bottom = 160.0
-allow_resaving = false
 title = "Generated Diagrams"
 BigDiagram = NodePath("../../Diagram")
 
@@ -472,14 +471,14 @@ z_index = 3
 use_parent_material = true
 
 [node name="VisionButton" parent="PullOutTabs" instance=ExtResource("3_hqsoq")]
-material = SubResource("ShaderMaterial_iqwx6")
+material = SubResource("ShaderMaterial_5n74u")
 offset_left = 612.0
 offset_top = 45.0
 offset_right = 634.0
 offset_bottom = 105.0
 
 [node name="ParticleButtons" parent="PullOutTabs" instance=ExtResource("24_lunb1")]
-material = SubResource("ShaderMaterial_7umku")
+material = SubResource("ShaderMaterial_85nmv")
 anchors_preset = 7
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -569,21 +568,21 @@ material = SubResource("ShaderMaterial_h0tg6")
 material = SubResource("ShaderMaterial_gt61x")
 
 [node name="PuzzleUI" parent="PullOutTabs" instance=ExtResource("23_v0dtx")]
-material = SubResource("ShaderMaterial_uhljw")
+material = SubResource("ShaderMaterial_hsfon")
 offset_left = -140.0
 offset_top = 159.0
 offset_right = -140.0
 offset_bottom = 159.0
 
 [node name="GenerationButton" parent="PullOutTabs" instance=ExtResource("22_u64s1")]
-material = SubResource("ShaderMaterial_hy7jy")
+material = SubResource("ShaderMaterial_13a7j")
 offset_left = -141.0
 offset_top = 59.0
 offset_right = -141.0
 offset_bottom = 59.0
 
 [node name="ProblemTab" parent="PullOutTabs" instance=ExtResource("20_uaeg6")]
-material = SubResource("ShaderMaterial_ck6sl")
+material = SubResource("ShaderMaterial_1yxi1")
 use_parent_material = true
 offset_left = 157.0
 offset_top = -26.0
@@ -612,14 +611,14 @@ material = SubResource("ShaderMaterial_fiw3n")
 material = SubResource("ShaderMaterial_aps2y")
 
 [node name="MenuTab" parent="PullOutTabs" instance=ExtResource("24_f5s2a")]
-material = SubResource("ShaderMaterial_ds8rr")
+material = SubResource("ShaderMaterial_xkwry")
 offset_left = 515.0
 offset_top = 339.0
 offset_right = 515.0
 offset_bottom = 339.0
 
 [node name="HealthTab" parent="PullOutTabs" instance=ExtResource("31_f28gh")]
-material = SubResource("ShaderMaterial_hflxt")
+material = SubResource("ShaderMaterial_uhxsj")
 offset_left = 501.0
 offset_top = -39.0
 offset_right = 501.0
@@ -631,10 +630,11 @@ script = ExtResource("2")
 
 [node name="vision_manager" type="Node" parent="."]
 
-[node name="Tutorial" type="Node2D" parent="."]
+[node name="Tutorial" type="Node2D" parent="." node_paths=PackedStringArray("ProblemTab")]
 visible = false
 z_index = 6
 script = ExtResource("28_soh5r")
+ProblemTab = NodePath("../PullOutTabs/ProblemTab")
 
 [node name="CanvasGroup" type="CanvasGroup" parent="Tutorial"]
 
@@ -690,7 +690,6 @@ Particles are drawn by clicking and dragging.
 
 Try drawing some particles, then press next."
 FocusObjects = [NodePath("../../../Diagram"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/General/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Bosons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer")]
-focus_controls = true
 
 [node name="Interactions" type="Node" parent="Tutorial/Steps" node_paths=PackedStringArray("FocusObjects")]
 script = ExtResource("31_t51na")
@@ -708,7 +707,6 @@ Press next when ready.
 
 "
 FocusObjects = [NodePath("../../../Diagram"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/General/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Bosons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer")]
-focus_controls = true
 DiagramFilePath = "res://saves/Diagrams/interactions.txt"
 
 [node name="InteractionInformation" type="Node" parent="Tutorial/Steps" node_paths=PackedStringArray("FocusObjects")]
@@ -717,13 +715,12 @@ text = "Invalid interactions are marked in red, to find out why, you can press o
 
 Press next when ready."
 FocusObjects = [NodePath("../../../Diagram"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/General/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Bosons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer")]
-focus_controls = true
 DiagramFilePath = "res://saves/Diagrams/invalid_interactions.txt"
 
 [node name="ProblemTab" type="Node" parent="Tutorial/Steps" node_paths=PackedStringArray("FocusObjects")]
 script = ExtResource("31_t51na")
 text = "This is the problem tab, open it, then press next."
-FocusObjects = [NodePath("../../../PullOutTabs/ProblemTab/MovingContainer/VBoxContainer")]
+FocusObjects = [NodePath("../../../PullOutTabs/ProblemTab/MovingContainer/VBoxContainer/PullOutTabButtonDown")]
 
 [node name="Problem" type="Node" parent="Tutorial/Steps" node_paths=PackedStringArray("FocusObjects")]
 script = ExtResource("31_t51na")
@@ -775,6 +772,7 @@ enable_spotlight = false
 [connection signal="finish_pressed" from="Tutorial/TutorialInfo" to="." method="_on_tutorial_info_finish_pressed"]
 [connection signal="next_pressed" from="Tutorial/TutorialInfo" to="Tutorial" method="_on_tutorial_info_next_pressed"]
 [connection signal="prev_pressed" from="Tutorial/TutorialInfo" to="Tutorial" method="_on_tutorial_info_prev_pressed"]
+[connection signal="next_step" from="Tutorial/Steps/ProblemTab" to="Tutorial" method="_on_problem_tab_next_step"]
 
 [editable path="Diagram/DiagramArea/Initial"]
 [editable path="Diagram/DiagramArea/Final"]

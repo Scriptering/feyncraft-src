@@ -58,7 +58,7 @@ var right_point: Vector2 = Vector2.LEFT
 
 var moving_point : Point = Point.End
 
-var texture_dict: Array = [
+static var texture_dict: Array = [
 'Electroweak', 
 'loop',
 'Electroweak',
@@ -84,7 +84,7 @@ var texture_dict: Array = [
 var line_texture
 var show_labels: bool = true
 
-func _ready():
+func _ready() -> void:
 	request_deletion.connect(Diagram.recursive_delete_line)
 	
 	has_colour = base_particle in ParticleData.COLOUR_PARTICLES
@@ -249,25 +249,28 @@ func update_line() -> void:
 	if !is_placed:
 		points[moving_point] = Crosshair.position
 
-	if points != prev_points:
-		prev_points = points.duplicate()
+	if points == prev_points:
+		move_text()
+		set_text_visiblity()
+		return
 
-		move_line()
-	
-		set_left_and_right_points()
-		set_anti()
-	
-		Arrow.visible = get_arrow_visiblity()
-		if Arrow.visible:
-			move_arrow()
+	prev_points = points.duplicate()
 
-		move_click_area()
-		set_text_texture()
-		
-	move_text()
-	set_text_visiblity()
-	
+	move_line()
+
+	set_left_and_right_points()
+	set_anti()
+
+	Arrow.visible = get_arrow_visiblity()
+	if Arrow.visible:
+		move_arrow()
+
+	move_click_area()
+	set_text_texture()
+
+
 func move_line() -> void:
+	pass
 	LineJointStart.points[Point.Start] = points[Point.Start]
 	LineJointEnd.points[Point.End] = points[Point.End]
 	
@@ -428,10 +431,10 @@ func is_line_overlapping() -> bool:
 func is_hovered() -> bool:
 	return hovering
 
-func _on_click_area_mouse_entered():
+func _on_click_area_mouse_entered() -> void:
 	hovering = true
 
-func _on_click_area_mouse_exited():
+func _on_click_area_mouse_exited() -> void:
 	hovering = false
 
 func delete() -> void:

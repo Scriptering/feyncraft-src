@@ -40,8 +40,6 @@ var max_degree: int:
 	get:
 		return MaxDegree.value
 
-
-
 func _ready():
 	super._ready()
 	

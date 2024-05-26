@@ -59,7 +59,7 @@ func init(
 	Crosshair.init(self, StateLines, grid_size)
 	
 	Controls.clear_diagram.connect(
-		func(): 
+		func() -> void: 
 			add_diagram_to_history()
 			clear_diagram()
 	)
@@ -807,7 +807,13 @@ func calculate_vision_line_points(path: PackedInt32Array, vision_matrix: Drawing
 	return vision_line_points
 
 func draw_vision_line(points: PackedVector2Array, path_colour: Color) -> void:
+	var is_loop: bool = GLOBALS.is_vec_zero_approx(points[0] - points[-1])
 	var vision_line : Line2D = VisionLine.instantiate()
+	
+	vision_line.closed = is_loop
+	if is_loop:
+		points.remove_at(-1)
+	
 	vision_line.points = points
 	vision_line.colour = path_colour
 

@@ -6,7 +6,7 @@
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="2_v5p75"]
 [ext_resource type="Texture2D" uid="uid://ber05i7n5tlcd" path="res://Textures/Buttons/icons/sampler.png" id="4_ie3bn"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_cue22"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7alqc"]
 resource_local_to_scene = true
 shader = ExtResource("2_v5p75")
 
@@ -23,7 +23,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="Sampler" parent="SamplerContainer" instance=ExtResource("1_h2pt1")]
-material = SubResource("ShaderMaterial_cue22")
+material = SubResource("ShaderMaterial_7alqc")
 layout_mode = 2
 icon = ExtResource("4_ie3bn")
 minimum_size = Vector2(21, 20)

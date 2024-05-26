@@ -24,4 +24,4 @@ func enter() -> void:
 		draw_diagram.emit(drawing_matrix)
 
 func exit() -> void:
-	pass
+	next_step.emit()

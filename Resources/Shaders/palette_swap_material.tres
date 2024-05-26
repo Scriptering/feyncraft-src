@@ -3,5 +3,4 @@
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="1_2g61b"]
 
 [resource]
-resource_local_to_scene = true
 shader = ExtResource("1_2g61b")

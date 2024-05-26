@@ -90,7 +90,13 @@ func check_submission(submission: DrawingMatrix) -> bool:
 		DiagramDuplicate.show()
 		return false
 	
-	if !current_problem.is_submission_solution(submission):
+	if !(
+		current_problem.is_submission_solution(submission) and
+		Diagram.is_valid() and 
+		Diagram.is_fully_connected(true) and
+		Diagram.is_energy_conserved()
+		
+	):
 		DiagramNotSolution.show()
 		return false
 	
@@ -189,6 +195,7 @@ func _exit_solution_creation() -> void:
 func _enter_sandbox() -> void:
 	in_sandbox = true
 	NextProblem.disabled = false
+	toggle_finish_icon(false)
 
 func _exit_sandbox() -> void:
 	in_sandbox = false

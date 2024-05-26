@@ -22,12 +22,12 @@ func get_custom_file_path() -> String:
 	return (palette_file_path + 'Custom/') if GLOBALS.is_on_editor else (web_palette_file_path + 'Custom/')
 
 func load_palettes() -> void:
-	for file_path in GLOBALS.get_files_in_folder(get_custom_file_path()):
-		$PaletteList.load_palette(file_path)
-	
 	var seasonal_palette: String = get_seasonal_palette()
 	if seasonal_palette != '':
 		$PaletteList.load_palette("res://saves/Palettes/Seasonal/" + seasonal_palette + '.txt')
+	
+	for file_path in GLOBALS.get_files_in_folder(get_custom_file_path()):
+		$PaletteList.load_palette(file_path)
 
 func load_tea_stain() -> void:
 	$PaletteList.get_items().front().is_selected = true

@@ -32,7 +32,7 @@ LineEdit/styles/read_only = SubResource("StyleBoxEmpty_0snhi")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qxe7s"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qejv5"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hvnrk"]
 resource_local_to_scene = true
 shader = ExtResource("11_l46c8")
 
@@ -115,7 +115,7 @@ action_mode = 1
 tooltip = "Delete"
 
 [node name="Upload" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("10_6kia2")]
-material = SubResource("ShaderMaterial_qejv5")
+material = SubResource("ShaderMaterial_hvnrk")
 layout_mode = 2
 mode = 1
 icon = ExtResource("13_4yitn")

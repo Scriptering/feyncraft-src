@@ -32,19 +32,20 @@
 default_font = ExtResource("6_3hqhb")
 default_font_size = 10
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_wdcep"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qmx0p"]
 resource_local_to_scene = true
 shader = ExtResource("5_bibin")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_pumeg"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rkih5"]
 resource_local_to_scene = true
 shader = ExtResource("5_bibin")
 
 [node name="ProblemCreationInfo" type="PanelContainer" node_paths=PackedStringArray("next_button", "prev_button")]
 material = ExtResource("1_4tkmy")
 use_parent_material = true
-offset_right = 89.0
-offset_bottom = 76.0
+custom_minimum_size = Vector2(2.08165e-12, 150)
+offset_right = 114.0
+offset_bottom = 200.0
 theme = ExtResource("2_shmax")
 script = ExtResource("2_13y6g")
 title = "2. Problem Creation"
@@ -117,6 +118,7 @@ min_value = 1.0
 max_value = 6.0
 value = 1.0
 alignment = 1
+update_on_text_changed = true
 script = ExtResource("8_harlm")
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/DegreeContainer/DegreeContainer"]
@@ -207,7 +209,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="PrevStep" parent="VBoxContainer/Buttons" instance=ExtResource("4_5sf8a")]
-material = SubResource("ShaderMaterial_wdcep")
+material = SubResource("ShaderMaterial_qmx0p")
 layout_mode = 2
 icon = ExtResource("6_1wu7s")
 minimum_size = Vector2(24, 21)
@@ -217,7 +219,7 @@ icon_use_parent_material = true
 tooltip = "Previous Step"
 
 [node name="NextStep" parent="VBoxContainer/Buttons" instance=ExtResource("4_5sf8a")]
-material = SubResource("ShaderMaterial_pumeg")
+material = SubResource("ShaderMaterial_rkih5")
 layout_mode = 2
 icon = ExtResource("8_2yrn2")
 minimum_size = Vector2(24, 21)

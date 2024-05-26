@@ -42,6 +42,8 @@ func _ready() -> void:
 func init() -> void:
 	toggle_more_colours(false)
 	
+	UseButton.button_group = load("res://Resources/ButtonGroups/palette.tres")
+	
 	for colour_button in ColourButtonDict.values():
 		colour_button.colour_changed.connect(_on_colour_button_colour_changed)
 	
