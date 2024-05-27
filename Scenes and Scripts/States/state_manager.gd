@@ -2,7 +2,7 @@ extends Node
 
 signal state_changed
 
-@onready var states = {
+@onready var states := {
 	BaseState.State.Idle: $idle,
 	BaseState.State.Hovering: $hovering,
 	BaseState.State.Placing: $placing,
@@ -25,9 +25,9 @@ func change_state(new_state: BaseState.State) -> void:
 	current_state.enter()
 
 func init(Diagram: DiagramBase) -> void:
-	var crosshair = Diagram.get_node("DiagramArea/Crosshair")
+	var crosshair := Diagram.get_node("DiagramArea/Crosshair")
 	
-	for child in get_children():
+	for child:BaseState in get_children():
 		child.change_cursor.connect(Callable(EVENTBUS.change_cursor))
 		child.state_manager = self
 		child.Diagram = Diagram
@@ -37,9 +37,9 @@ func init(Diagram: DiagramBase) -> void:
 	change_state(BaseState.State.Idle)
 
 func change_scene(Diagram: DiagramBase) -> void:
-	var crosshair = Diagram.get_node("DiagramArea/Crosshair")
+	var crosshair := Diagram.get_node("DiagramArea/Crosshair")
 	
-	for child in get_children():
+	for child:BaseState in get_children():
 		child.Diagram = Diagram
 		child.crosshair = crosshair
 	
@@ -47,17 +47,17 @@ func change_scene(Diagram: DiagramBase) -> void:
 		crosshair.moved.connect(crosshair_moved)
 
 func _input(event: InputEvent) -> void:
-	var new_state = current_state.input(event)
+	var new_state := current_state.input(event)
 	if new_state != BaseState.State.Null:
 		change_state(new_state)
 
 func _process(delta: float) -> void:
-	var new_state = current_state.process(delta)
+	var new_state := current_state.process(delta)
 	if new_state != BaseState.State.Null:
 		change_state(new_state)
 
 func _physics_process(delta: float) -> void:
-	var new_state = current_state.physics_process(delta)
+	var new_state := current_state.physics_process(delta)
 	if new_state != BaseState.State.Null:
 		change_state(new_state)
 

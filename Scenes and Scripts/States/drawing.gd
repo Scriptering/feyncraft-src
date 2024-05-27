@@ -2,8 +2,8 @@ extends BaseState
 
 @onready var delay_timer := $delay
 @export var delay_time: float = 0.3: set = _set_delay_time
-@onready var Interaction := preload("res://Scenes and Scripts/Diagram/interaction.tscn")
-@onready var Line := preload("res://Scenes and Scripts/Diagram/line.tscn")
+@onready var interaction_scene := preload("res://Scenes and Scripts/Diagram/interaction.tscn")
+@onready var particle_line_scene := preload("res://Scenes and Scripts/Diagram/line.tscn")
 
 var drawing : bool = false
 var start_crosshair_position : Vector2 = Vector2(0, 0)
@@ -56,7 +56,7 @@ func crosshair_moved(current_position : Vector2, old_position : Vector2) -> void
 	
 	start_drawing()
 
-func _on_delay_timeout():
+func _on_delay_timeout() -> void:
 	if state_manager.state == State.Drawing:
 		start_drawing()
 
@@ -65,9 +65,9 @@ func end_drawing() -> void:
 		cancel_placement()
 		return
 	
-	for line in Diagram.get_particle_lines():
-		if !line.is_placed:
-			line.place()
+	for particle_line:ParticleLine in Diagram.get_particle_lines():
+		if !particle_line.is_placed:
+			particle_line.place()
 
 	Diagram.place_interaction(crosshair.position)
 
@@ -78,7 +78,7 @@ func is_valid_end_position() -> bool:
 
 func cancel_placement() -> void:
 	Diagram.remove_last_diagram_from_history()
-	for line in Diagram.get_particle_lines():
-		if !line.is_placed:
-			Diagram.delete_line(line)
+	for particle_line:ParticleLine in Diagram.get_particle_lines():
+		if !particle_line.is_placed:
+			Diagram.delete_line(particle_line)
 

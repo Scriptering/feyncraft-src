@@ -7,7 +7,7 @@ signal pressed
 signal on_pressed
 signal button_toggled(button_pressed: bool, button: PanelButton)
 signal toggled(button_pressed: bool)
-signal button_mouse_entered(button)
+signal button_mouse_entered(button: PanelButton)
 signal button_mouse_exited
 signal button_down
 signal button_up
@@ -38,9 +38,9 @@ signal button_up
 		flat = new_value
 		get_node("Button").flat = flat
 
-@onready var button = $Button
-@onready var label = $ContentContainer/HBoxContainer/ButtonText
-@onready var iconSprite = $ContentContainer/HBoxContainer/ButtonIcon
+@onready var button := $Button
+@onready var label := $ContentContainer/HBoxContainer/ButtonText
+@onready var iconSprite := $ContentContainer/HBoxContainer/ButtonIcon
 
 enum {NORMAL, PRESSED}
 const ButtonState : Array[String] = ['normal', 'pressed']
@@ -59,13 +59,13 @@ func _ready() -> void:
 	visibility_changed.connect(_on_visibility_changed)
 	
 	$Button.mouse_entered.connect(
-		func(): 
+		func() -> void:
 			mouse_entered.emit()
 			button_mouse_entered.emit(self)
 	)
 	
 	$Button.mouse_exited.connect(
-		func(): 
+		func() -> void: 
 			mouse_exited.emit()
 			button_mouse_exited.emit(self)
 	)
@@ -140,7 +140,7 @@ func _set_button_minimum_size(new_value: Vector2) -> void:
 	
 	$Button.set_custom_minimum_size(new_value)
 
-func _set_action_mode(new_value: Button.ActionMode):
+func _set_action_mode(new_value: Button.ActionMode) -> void:
 	action_mode = new_value
 	
 	get_node("Button").action_mode = new_value
@@ -169,7 +169,7 @@ func set_content_margins(button_state: String) -> void:
 		$Button.get_theme_stylebox(button_state).get_margin(SIDE_BOTTOM)
 	)
 
-func _on_button_button_down():
+func _on_button_button_down() -> void:
 	if toggle_mode:
 		return
 	
@@ -180,7 +180,7 @@ func _on_button_button_down():
 	
 	button_down.emit()
 
-func _on_button_button_up():
+func _on_button_button_up() -> void:
 	if toggle_mode:
 		return
 	
@@ -191,7 +191,7 @@ func _on_button_button_up():
 	
 	button_up.emit()
 
-func _on_button_theme_changed():
+func _on_button_theme_changed() -> void:
 	set_content_margins(ButtonState[NORMAL])
 
 func get_button() -> Button:

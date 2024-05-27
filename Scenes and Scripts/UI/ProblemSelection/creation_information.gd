@@ -22,7 +22,9 @@ func _process(delta: float) -> void:
 	
 	$VBoxContainer/TabContainer/ProblemCreationInfo.toggle_invalid_quantum_numbers(Diagram.are_quantum_numbers_matching())
 	$VBoxContainer/TabContainer/ProblemCreationInfo.toggle_no_particles(
-		Diagram.StateLines.any(func(state_line: StateLine): return state_line.get_connected_lines().size() > 0)
+		Diagram.StateLines.any(
+			func(state_line: StateLine) -> bool:
+				return state_line.get_connected_lines().size() > 0)
 	)
 	$VBoxContainer/TabContainer/ProblemCreationInfo.toggle_energy_not_conserved(Diagram.is_energy_conserved())
 

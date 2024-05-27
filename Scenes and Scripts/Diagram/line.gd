@@ -2,14 +2,14 @@ extends Node2D
 class_name ParticleLine
 
 signal request_deletion
+signal clicked_on()
 
-@onready var Text = get_node("text")
-@onready var SpareText = get_node("spareText")
-@onready var Arrow = $arrow
-@onready var ClickAreaShape = $clickArea/CollisionShape2D
-@onready var LineMiddle = $line_middle
-@onready var LineJointStart = $line_joint_start
-@onready var LineJointEnd = $line_joint_end
+@onready var Text := get_node("text")
+@onready var SpareText := get_node("spareText")
+@onready var Arrow := $arrow
+@onready var LineMiddle := $line_middle
+@onready var LineJointStart := $line_joint_start
+@onready var LineJointEnd := $line_joint_end
 
 @export var line_joint_start_length: float = 3.5
 @export var line_joint_end_length: float = 1
@@ -51,8 +51,6 @@ var being_deleted : bool = false
 var has_colour := false
 var has_shade := false
 
-var hovering: bool = false
-
 var left_point: Vector2 = Vector2.LEFT
 var right_point: Vector2 = Vector2.LEFT
 
@@ -81,7 +79,7 @@ static var texture_dict: Array = [
 'Particle',
 'Particle']
 
-var line_texture
+var line_texture: Texture2D
 var show_labels: bool = true
 
 func _ready() -> void:
@@ -103,6 +101,13 @@ func _ready() -> void:
 	update_line()
 	connect_to_interactions()
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		return
+	
+	#if event.button_index == MOUSE_BUTTON_LEFT and is_hovered():
+		#clicked_on.emit(event)
+
 func init(diagram: MainDiagram) -> void:
 	Diagram = diagram
 	Initial = diagram.StateLines[StateLine.StateType.Initial]
@@ -114,7 +119,7 @@ func _get_particle() -> ParticleData.Particle:
 
 func _get_quantum_numbers() -> Array:
 	var quantum_numbers_temp := []
-	for quantum_number in ParticleData.QuantumNumber.values():
+	for quantum_number:ParticleData.QuantumNumber in ParticleData.QuantumNumber:
 		quantum_numbers_temp.append(anti*quantum_numbers[quantum_number])
 	return quantum_numbers_temp
 
@@ -159,7 +164,7 @@ func set_dimensionality() -> void:
 		dimensionality = ParticleData.BOSON_DIMENSIONALITY
 
 func connect_to_interactions() -> void:
-	for interaction in Diagram.get_interactions():
+	for interaction:Interaction in Diagram.get_interactions():
 		if interaction.position in points and !self in interaction.connected_lines:
 			interaction.connected_lines.append(self)
 		elif !interaction.position in points:
@@ -187,7 +192,7 @@ func get_on_state_line() -> StateLine.StateType:
 
 func _get_connected_interactions() -> Array[Interaction]:
 	connected_interactions.clear()
-	for interaction in Diagram.get_interactions():
+	for interaction:Interaction in Diagram.get_interactions():
 		if self in interaction.connected_lines:
 			connected_interactions.append(interaction)
 
@@ -195,13 +200,13 @@ func _get_connected_interactions() -> Array[Interaction]:
 
 func get_interaction_at_point(point: Point) -> Interaction:
 	var interaction_at_point : Interaction
-	for interaction in self.connected_interactions:
+	for interaction:Interaction in self.connected_interactions:
 		if points[point] == interaction.position:
 			interaction_at_point = interaction
 	return interaction_at_point
 
 func is_point_connected(point: Vector2) -> bool:
-	for interaction in self.connected_interactions:
+	for interaction:Interaction in self.connected_interactions:
 		if point == interaction.position:
 			return true
 	return false
@@ -248,25 +253,23 @@ func get_unconnected_point(interaction: Interaction) -> Point:
 func update_line() -> void:
 	if !is_placed:
 		points[moving_point] = Crosshair.position
+	
+	if points != prev_points:
+		prev_points = points.duplicate()
 
-	if points == prev_points:
-		move_text()
-		set_text_visiblity()
-		return
+		move_line()
 
-	prev_points = points.duplicate()
+		set_left_and_right_points()
+		set_anti()
 
-	move_line()
+		Arrow.visible = get_arrow_visiblity()
+		if Arrow.visible:
+			move_arrow()
 
-	set_left_and_right_points()
-	set_anti()
-
-	Arrow.visible = get_arrow_visiblity()
-	if Arrow.visible:
-		move_arrow()
-
-	move_click_area()
-	set_text_texture()
+		set_text_texture()
+	
+	move_text()
+	set_text_visiblity()
 
 
 func move_line() -> void:
@@ -315,11 +318,6 @@ func get_arrow_visiblity() -> bool:
 func move_arrow() -> void:
 	Arrow.position = points[Point.Start] + self.line_vector / 2
 	Arrow.rotation = self.line_vector.angle()
-
-func move_click_area() -> void:
-	ClickAreaShape.position = self.line_vector / 2 + points[Point.Start]
-	ClickAreaShape.rotation = self.line_vector.angle()
-	ClickAreaShape.shape.size.x = self.line_vector.length()
 
 func move_text() -> void:
 	match get_on_state_line():
@@ -409,41 +407,49 @@ func pick_up(point_index_to_pick_up: Point) -> void:
 	moving_point = point_index_to_pick_up
 	
 func is_line_copy() -> bool:
-	for line in Diagram.get_particle_lines():
-		if line == self:
+	for particle_line:ParticleLine in Diagram.get_particle_lines():
+		if particle_line == self:
 			continue
-		if !line.is_placed:
+		if !particle_line.is_placed:
 			continue
-		if (points[Point.Start] in line.points and points[Point.End] in line.points and line != self):
+		if (points[Point.Start] in particle_line.points and points[Point.End] in particle_line.points and particle_line != self):
 			return true
 	return false
 
 func is_line_overlapping() -> bool:
-	for line in Diagram.get_particle_lines():
-		if !line.is_placed:
+	for particle_line:ParticleLine in Diagram.get_particle_lines():
+		if !particle_line.is_placed:
 			continue
-		if !points[Point.Start] in line.points:
+		if !points[Point.Start] in particle_line.points:
 			continue 
-		if line.is_position_on_line(points[Point.End]):
+		if particle_line.is_position_on_line(points[Point.End]):
 			return true
 	return false
 
 func is_hovered() -> bool:
-	return hovering
+	print(get_local_mouse_position())
+	
+	var v := line_vector.normalized();
+	var m := get_local_mouse_position() - points[Point.Start];
 
-func _on_click_area_mouse_entered() -> void:
-	hovering = true
+	var lambda := m.x*v.x + m.y*v.y
+	var rho :=   -m.x*v.y + m.y*v.x
 
-func _on_click_area_mouse_exited() -> void:
-	hovering = false
+	if lambda < 0 or lambda > line_vector.length():
+		return false
+	
+	if rho > click_area_width or rho < -click_area_width:
+		return false
+	
+	return true
 
 func delete() -> void:
 	queue_free()
 	deconstructor()
 
-func deconstructor():
+func deconstructor() -> void:
 	being_deleted = true
-	for interaction in self.connected_interactions:
+	for interaction:Interaction in self.connected_interactions:
 		interaction.connected_lines.erase(self)
 	Diagram.update_statelines()
 	points[Point.Start] = Vector2.LEFT

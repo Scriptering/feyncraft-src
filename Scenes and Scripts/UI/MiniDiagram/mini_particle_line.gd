@@ -1,4 +1,5 @@
 extends Node2D
+class_name MiniParticleLine
 
 enum Anti {anti = -1, noanti = +1}
 enum Point {Start = 0, End = 1, Invalid = -1}
@@ -13,12 +14,12 @@ enum PointsConnected {None, Left, Right, Both}
 @export var particle_line_width: float = 6
 @export var photon_line_width: float = 6
 
-@onready var Text = $text
-@onready var SpareText = $spareText
-@onready var Arrow = $arrow
-@onready var LineMiddle = $line_middle
-@onready var LineJointStart = $line_joint_start
-@onready var LineJointEnd = $line_joint_end
+@onready var Text := $text
+@onready var SpareText := $spareText
+@onready var Arrow := $arrow
+@onready var LineMiddle := $line_middle
+@onready var LineJointStart := $line_joint_start
+@onready var LineJointEnd := $line_joint_end
 
 var Diagram: MiniDiagram
 var Initial: Control
@@ -57,9 +58,9 @@ var texture_dict: Array = [
 'Particle',
 'Particle']
 
-var line_texture
+var line_texture : Texture2D
 
-func _ready():
+func _ready() -> void:
 	set_line_width()
 
 	line_texture = load('res://Textures/ParticlesAndLines/Lines/' + texture_dict[base_particle] + '.png')
@@ -124,7 +125,7 @@ func update_line() -> void:
 	set_text_texture()
 
 func connect_to_interactions() -> void:
-	for interaction in Diagram.get_interactions():
+	for interaction:Interaction in Diagram.get_interactions():
 		if interaction.position in points and !self in interaction.connected_lines:
 			interaction.connected_lines.append(self)
 		elif !interaction.position in points:
@@ -189,7 +190,7 @@ func get_on_state_line() -> StateLine.StateType:
 	return StateLine.StateType.None
 
 func is_point_connected(point: Vector2) -> bool:
-	for interaction in Diagram.get_interactions():
+	for interaction:Interaction in Diagram.get_interactions():
 		if point == interaction.position:
 			return true
 	return false

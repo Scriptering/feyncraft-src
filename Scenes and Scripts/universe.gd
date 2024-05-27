@@ -10,7 +10,7 @@ enum Scene {Level, MainMenu}
 @onready var ControlsTab: Control = $PullOutTabs/ControlsTab
 @onready var PaletteMenu: GrabbableControl = $FloatingMenus/PaletteMenu
 
-var modifying_problem_item = null
+var modifying_problem_item : PanelContainer = null
 
 var enter_funcs: Dictionary = {
 	Scene.Level: enter_level,
@@ -84,7 +84,7 @@ func _on_world_problem_submitted() -> void:
 	
 	change_scene(Scene.MainMenu)
 
-func _on_problem_modified(problem_item) -> void:
+func _on_problem_modified(problem_item: PanelContainer) -> void:
 	modifying_problem_item = problem_item
 	
 	GLOBALS.creating_problem = modifying_problem_item.problem

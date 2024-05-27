@@ -9,7 +9,7 @@ signal toggled_line_labels(button_pressed: bool)
 
 var palette_menu: GrabbableControl
 
-func init(_palette_menu) -> void:
+func init(_palette_menu: GrabbableControl) -> void:
 	palette_menu = _palette_menu
 	palette_menu.hide()
 	palette_menu.closed.connect(_on_palette_menu_closed)

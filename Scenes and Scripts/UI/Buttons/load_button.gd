@@ -39,7 +39,10 @@ func create_load_panel() -> void:
 	load_panel.mode = mode
 	load_panel.position = get_global_position()
 	load_panel.closed.connect(close_load_panel)
-	load_panel.submitted.connect(func(submitted_text: String): submitted.emit(submitted_text))
+	load_panel.submitted.connect(
+		func(submitted_text: String) -> void:
+			submitted.emit(submitted_text)
+	)
 	load_panel_created.emit(load_panel)
 
 func close_load_panel() -> void:

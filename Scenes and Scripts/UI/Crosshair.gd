@@ -2,8 +2,8 @@ extends Node2D
 
 @export var grid_margin: int
 
-signal moved(current_position, old_position)
-@onready var IdleCrosshair = $IdleCrosshair
+signal moved(current_position: Vector2, old_position: Vector2)
+@onready var IdleCrosshair := $IdleCrosshair
 
 const Z_INDEX_IDLE := 0
 const Z_INDEX_DRAWING := 0
@@ -23,7 +23,7 @@ var Final: StateLine
 var StateManager: Node
 var grid_size: int
 
-func _process(_event):
+func _process(_event: float) -> void:
 	move_crosshair()
 
 func init(diagram: DiagramBase, state_lines: Array, gridsize: int) -> void:
@@ -56,8 +56,8 @@ func move_crosshair() -> void:
 	visible = get_state_visible(StateManager.state)
 
 func get_try_position() -> Vector2:
-	var mouse_position = get_parent().get_local_mouse_position()
-	var try_position = Vector2(
+	var mouse_position : Vector2 = get_parent().get_local_mouse_position()
+	var try_position := Vector2(
 		snapped(mouse_position.x-clamp_left, grid_size)+clamp_left,
 		snapped(mouse_position.y-clamp_up, grid_size)+clamp_up
 	)
@@ -162,16 +162,16 @@ func is_on_stateline(test_position: Vector2 = position) -> bool:
 	return test_position.x == Initial.position.x or test_position.x == Final.position.x
 
 func is_on_interaction(test_position: Vector2 = position) -> bool:
-	for interaction in get_tree().get_nodes_in_group("interactions"):
+	for interaction:Interaction in get_tree().get_nodes_in_group("interactions"):
 		if test_position == interaction.position:
 			return true
 	return false
 
-func DiagramMouseEntered():
+func DiagramMouseEntered() -> void:
 	is_inside_diagram = true
 	visible = get_state_visible(StateManager.state)
 
-func DiagramMouseExited():
+func DiagramMouseExited() -> void:
 	is_inside_diagram = false
 	visible = get_state_visible(StateManager.state)
 

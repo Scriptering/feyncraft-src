@@ -51,7 +51,7 @@ func generate_palette_texture() -> ImageTexture:
 	var img := Image.create(palette_size, palette_size, false, Image.Format.FORMAT_RGBA8)
 	img.fill(Color.BLACK)
 	
-	for i in range(ColourIndex.size()):
+	for i:int in range(ColourIndex.size()):
 		img.set_pixelv(get_palette_index(i), colours[i])
 	
 	img.set_pixel(palette_size-1, palette_size-1, colours[ColourIndex.Text])
@@ -79,7 +79,7 @@ func get_random_colours() -> Array[Color]:
 	
 	var new_colours: Array[Color] = make_palette(random_start_colour)
 	
-	for i in range(new_colours.size()):
+	for i:int in range(new_colours.size()):
 		new_colours[i].s = random_saturation + randf_range(-rand_saturation_offset, rand_saturation_offset)
 	
 	return get_custom_colours(new_colours[Index.A], new_colours[Index.B], new_colours[Index.C])
@@ -120,27 +120,27 @@ func make_palette(A : Color, B: Color = Color.FUCHSIA, C: Color = Color.FUCHSIA)
 	if B == Color.FUCHSIA:
 		B = getB(A, C)
 	
-	var ab = get_secondary(A, B)
-	var bc = get_secondary(B, C)
-	var ca = get_secondary(C, A)
+	var ab: Color = get_secondary(A, B)
+	var bc: Color = get_secondary(B, C)
+	var ca: Color = get_secondary(C, A)
 	
 	return [A, ab, B, bc, C, ca]
 
-func getC(A) -> Color:
+func getC(A: Color) -> Color:
 	
-	var ch = fposmod(A.h + crad, 1.0)
-	var cs = A.s * cas
-	var cv = A.v
+	var ch: float = fposmod(A.h + crad, 1.0)
+	var cs: float = A.s * cas
+	var cv: float = A.v
 	
 	if contrastedC:
 		return contrast(Color.from_hsv(ch, cs, cv))
 
 	return Color.from_hsv(ch, cs, cv)
 
-func getB(A : Color, C : Color):
-	var bh
-	var bs
-	var bv
+func getB(A : Color, C : Color) -> Color:
+	var bh: float
+	var bs: float
+	var bv: float
 	if indieB:
 		bh = fposmod(A.h + brad, 1.0)
 		bs = A.s * bcs
@@ -154,20 +154,20 @@ func getB(A : Color, C : Color):
 		return contrast(Color.from_hsv(bh, bs, bv))
 	return Color.from_hsv(bh, bs, bv)
 
-func get_secondary(c1: Color, c2 : Color):
+func get_secondary(c1: Color, c2 : Color) -> Color:
 	if exactSecondary:
-		var c1r = Vector2(c1.s, 0).rotated(c1.h * TAU)
-		var c2r = Vector2(c2.s, 0).rotated(c2.h * TAU)
-		var secV = c1r + c1r.direction_to(c2r) * c1r.distance_to(c2r)/2
+		var c1r := Vector2(c1.s, 0).rotated(c1.h * TAU)
+		var c2r := Vector2(c2.s, 0).rotated(c2.h * TAU)
+		var secV := c1r + c1r.direction_to(c2r) * c1r.distance_to(c2r)/2
 		
-		var sec = Color.from_hsv(secV.angle() / TAU, secV.length(), lerp(c1.v, c2.v, 0.5))
+		var sec := Color.from_hsv(secV.angle() / TAU, secV.length(), lerp(c1.v, c2.v, 0.5))
 		
 		return sec
 		
 	else:
 		return lerp(c1, c2, 0.5)
 
-func randomizeSettings():
+func randomizeSettings() -> void:
 	cas = randf_range(0.8, 1.0)
 	bcs = randf_range(0.8, 1.0)
 	brad = randf_range(0.4, 0.8)

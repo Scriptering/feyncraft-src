@@ -13,7 +13,7 @@ var grab_area_hovered: bool = false: set = _grab_area_hovered_changed
 var grabbable: bool = true: set = _grabbable_changed
 var drag_vector_start: Vector2
 
-func _ready():
+func _ready() -> void:
 	add_to_group("grabbable")
 	
 	for GrabArea in GrabAreas:
@@ -24,7 +24,7 @@ func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("click") and grab_area_hovered:
 		grab_area_clicked.emit(self)
 
-func _process(_delta:float):
+func _process(_delta:float) -> void:
 	if grabbed and follow_cursor:
 		position = get_global_mouse_position() + drag_vector_start
 

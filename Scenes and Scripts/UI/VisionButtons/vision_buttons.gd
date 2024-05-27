@@ -31,7 +31,7 @@ func blink() -> void:
 	$AnimationPlayer.play_backwards("blink")
 
 func get_active_vision() -> GLOBALS.Vision:
-	for i in range(ButtonContainer.get_children().size()):
+	for i:int in range(ButtonContainer.get_children().size()):
 		if ButtonContainer.get_children()[i].button_pressed:
 			return i as GLOBALS.Vision
 	return GLOBALS.Vision.None

@@ -48,35 +48,35 @@ expand_margin_bottom = 1.0
 [sub_resource type="Theme" id="Theme_gyi6d"]
 Label/font_sizes/font_size = 16
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_s3k6c"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1xryr"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_vatr2"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d05ac"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hpd06"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u5fy3"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_34f0o"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kgdxq"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fmd6c"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v74a6"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hutae"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_heege"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_jvugc"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6ql67"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_1cc36"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sy06f"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
@@ -84,7 +84,7 @@ shader = ExtResource("12_nridv")
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_e5vrg"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xbp3w"]
 resource_local_to_scene = true
 shader = ExtResource("12_nridv")
 
@@ -131,7 +131,7 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_qgodk")
 script = ExtResource("5_3sh45")
 grid_size = 16
 InteractionInstance = ExtResource("6_x1gwm")
-Line = ExtResource("7_ts01x")
+particle_line_scene = ExtResource("7_ts01x")
 
 [node name="GridTiles" type="TextureRect" parent="Diagram"]
 z_index = -1
@@ -255,10 +255,8 @@ GrabAreas = [NodePath("Line/GrabTop"), NodePath("../Initial/Line/GrabBottom")]
 [node name="Line" parent="Diagram/DiagramArea/Final" index="0"]
 offset_bottom = 280.0
 
-[node name="ParticleLines" type="Control" parent="Diagram/DiagramArea"]
+[node name="ParticleLines" type="Node2D" parent="Diagram/DiagramArea"]
 use_parent_material = true
-anchors_preset = 0
-mouse_filter = 1
 
 [node name="Crosshair" parent="Diagram/DiagramArea" instance=ExtResource("12_6wo74")]
 use_parent_material = true
@@ -305,7 +303,7 @@ grow_horizontal = 2
 alignment = 1
 
 [node name="Tutorial" parent="Center/VBoxContainer" instance=ExtResource("11_t2od8")]
-material = SubResource("ShaderMaterial_s3k6c")
+material = SubResource("ShaderMaterial_1xryr")
 layout_mode = 2
 icon = ExtResource("16_0rbva")
 text = "Tutorial"
@@ -314,7 +312,7 @@ icon_use_parent_material = true
 icon_text_seperation = 4
 
 [node name="Sandbox" parent="Center/VBoxContainer" instance=ExtResource("11_t2od8")]
-material = SubResource("ShaderMaterial_vatr2")
+material = SubResource("ShaderMaterial_d05ac")
 layout_mode = 2
 icon = ExtResource("13_21fnr")
 text = "Sandbox"
@@ -324,7 +322,7 @@ action_mode = 1
 icon_text_seperation = 4
 
 [node name="ProblemSets" parent="Center/VBoxContainer" instance=ExtResource("11_t2od8")]
-material = SubResource("ShaderMaterial_hpd06")
+material = SubResource("ShaderMaterial_u5fy3")
 layout_mode = 2
 theme = ExtResource("22_a8ikr")
 icon = ExtResource("19_fbmws")
@@ -341,7 +339,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="MuteButton" parent="Center/VBoxContainer/HBoxContainer" instance=ExtResource("16_1yq2b")]
-material = SubResource("ShaderMaterial_34f0o")
+material = SubResource("ShaderMaterial_kgdxq")
 layout_mode = 2
 size_flags_horizontal = 1
 size_flags_vertical = 1
@@ -349,7 +347,7 @@ icon = ExtResource("21_lu08p")
 toggle_mode = true
 
 [node name="Palettes" parent="Center/VBoxContainer/HBoxContainer" instance=ExtResource("11_t2od8")]
-material = SubResource("ShaderMaterial_fmd6c")
+material = SubResource("ShaderMaterial_v74a6")
 layout_mode = 2
 icon = ExtResource("17_cv4ds")
 minimum_size = Vector2(30, 30)
@@ -357,7 +355,7 @@ toggle_mode = true
 expand_icon = true
 
 [node name="CreditButton" parent="Center/VBoxContainer/HBoxContainer" instance=ExtResource("11_t2od8")]
-material = SubResource("ShaderMaterial_hutae")
+material = SubResource("ShaderMaterial_heege")
 layout_mode = 2
 icon = ExtResource("23_sgn8e")
 minimum_size = Vector2(30, 30)
@@ -381,7 +379,7 @@ offset_bottom = 332.0
 
 [node name="Credits" parent="FloatingMenus" instance=ExtResource("36_o748n")]
 visible = false
-material = SubResource("ShaderMaterial_jvugc")
+material = SubResource("ShaderMaterial_6ql67")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -397,7 +395,7 @@ grow_vertical = 2
 
 [node name="ParticleButtons" parent="." instance=ExtResource("26_grnbf")]
 visible = false
-material = SubResource("ShaderMaterial_1cc36")
+material = SubResource("ShaderMaterial_sy06f")
 layout_mode = 1
 offset_left = -166.0
 offset_top = 508.0
@@ -422,7 +420,7 @@ offset_bottom = 64.0
 
 [node name="MenuTab" parent="." instance=ExtResource("33_nabci")]
 visible = false
-material = SubResource("ShaderMaterial_e5vrg")
+material = SubResource("ShaderMaterial_xbp3w")
 layout_mode = 1
 offset_left = 509.0
 offset_top = 338.0

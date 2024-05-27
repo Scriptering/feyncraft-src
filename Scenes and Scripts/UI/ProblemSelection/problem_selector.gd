@@ -59,7 +59,8 @@ func _on_play_pressed() -> void:
 
 func is_empty() -> bool:
 	return problem.state_interactions.all(
-		func(state_interaction: Array): return state_interaction.size() == 0
+		func(state_interaction: Array) -> bool:
+			return state_interaction.size() == 0
 	)
 
 func save() -> void:

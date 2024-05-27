@@ -24,7 +24,7 @@ theme_override_styles/panel = SubResource("StyleBoxEmpty_0vhit")
 script = ExtResource("3_j7ln7")
 grid_size = 8
 InteractionInstance = ExtResource("4_270y2")
-Line = ExtResource("6_8pfk1")
+particle_line_scene = ExtResource("6_8pfk1")
 
 [node name="GridContainer" type="Panel" parent="."]
 use_parent_material = true
@@ -124,10 +124,7 @@ mouse_filter = 2
 texture = ExtResource("5_q0inb")
 stretch_mode = 1
 
-[node name="ParticleLines" type="Control" parent="DiagramArea"]
-layout_mode = 2
-anchors_preset = 0
-mouse_filter = 2
+[node name="ParticleLines" type="Node2D" parent="DiagramArea"]
 
 [node name="Interactions" type="Control" parent="DiagramArea"]
 layout_mode = 2

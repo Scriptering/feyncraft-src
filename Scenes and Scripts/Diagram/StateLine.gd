@@ -1,7 +1,7 @@
 class_name StateLine
 extends GrabbableControl
 
-@onready var HadronJoint = preload("res://Scenes and Scripts/Diagram/Hadrons/HadronJoint.tscn")
+@onready var hadron_joint_scene := preload("res://Scenes and Scripts/Diagram/Hadrons/HadronJoint.tscn")
 
 @export var hadron_label_gap : int
 @export var state : StateType
@@ -30,18 +30,18 @@ func init(diagram: MainDiagram) -> void:
 	Crosshair = diagram.Crosshair
 
 class LineYSort:
-	static func InitialSorter(line1: ParticleLine, line2: ParticleLine):
+	static func InitialSorter(line1: ParticleLine, line2: ParticleLine) -> bool:
 		if line1.left_point.y < line2.left_point.y:
 			return true
 		return false
 		
-	static func FinalSorter(line1: ParticleLine, line2: ParticleLine):
+	static func FinalSorter(line1: ParticleLine, line2: ParticleLine) -> bool:
 		if line1.right_point.y < line2.right_point.y:
 			return true
 		return false
 
 class LineParticleSort:
-	static func ParticleSorter(line1: ParticleLine, line2: ParticleLine):
+	static func ParticleSorter(line1: ParticleLine, line2: ParticleLine) -> bool:
 		return line1.particle < line2.particle
 
 func update_stateline() -> void:
@@ -52,7 +52,7 @@ func update_stateline() -> void:
 
 	if quark_groups != old_quark_groups or position.x != old_position_x:
 		old_quark_groups = quark_groups.duplicate(true)
-		old_position_x = position.x
+		old_position_x = int(position.x)
 		update_hadrons(quark_groups)
 
 func get_quark_groups(connected_lines: Array = get_connected_lines()) -> Array:
@@ -73,11 +73,11 @@ func clear_hadrons() -> void:
 	joints.clear()
 
 func create_hadron_visuals() -> void:
-	for hadron in hadrons:
+	for hadron:Hadron in hadrons:
 		create_hadron_joint(hadron)
 
 func create_hadron_joint(hadron: Hadron) -> void:
-	var joint = HadronJoint.instantiate()
+	var joint := hadron_joint_scene.instantiate()
 	joint.hadron = hadron
 	joint.state = state
 	joint.init()
@@ -85,55 +85,51 @@ func create_hadron_joint(hadron: Hadron) -> void:
 	joints.append(joint)
 
 func create_hadrons(quark_groups: Array) -> void:
-	for i in range(quark_groups.size()):
+	for i:int in range(quark_groups.size()):
 		var quark_group:Array = quark_groups[i]
 		var group_hadron : ParticleData.Hadrons = get_quark_group_hadron(quark_group)
 		if group_hadron == ParticleData.Hadrons.Invalid:
 			continue
-		var hadron = Hadron.new()
+		var hadron := Hadron.new()
 		hadron.init(quark_group, group_hadron)
 		hadrons.append(hadron)
 
 func get_quantum_numbers() -> PackedFloat32Array:
-	var connected_quantum_numbers: Array = get_connected_lines().map(
-		func(particle_line: ParticleLine): return particle_line.quantum_numbers
-	)
-	
 	var quantum_sum: PackedFloat32Array = []
 	quantum_sum.resize(ParticleData.QuantumNumber.size())
 	quantum_sum.fill(0)
 	
-	for connected_quantum_number in connected_quantum_numbers:
-		for quantum_number in ParticleData.QuantumNumber.values():
-			quantum_sum[quantum_number] += connected_quantum_number[quantum_number]
+	for particle_line:ParticleLine in get_connected_lines():
+		for quantum_number:ParticleData.QuantumNumber in ParticleData.QuantumNumber.values():
+			quantum_sum[quantum_number] += particle_line.quantum_numbers[quantum_number]
 	
 	return quantum_sum
 
 func get_quark_group_hadron(quark_group: Array) -> ParticleData.Hadrons:
 	var quarks : Array[ParticleData.Particle] = []
-	for line in quark_group:
-		quarks.append(line.particle)
+	for particle_line:ParticleLine in quark_group:
+		quarks.append(particle_line.particle)
 	
-	for hadron in ParticleData.Hadrons.values():
+	for hadron:ParticleData.Hadrons in ParticleData.Hadrons.values():
 		if quarks in ParticleData.HADRON_QUARK_CONTENT[hadron]:
 			return hadron
 	return ParticleData.Hadrons.Invalid
 
 func sort_quark_groups(quark_groups: Array) -> Array:
-	for quark_group in quark_groups:
+	for quark_group: Array in quark_groups:
 		quark_group.sort_custom(Callable(LineParticleSort, "ParticleSorter"))
 	return quark_groups
 
 func get_connected_lines() -> Array[ParticleLine]:
 	var connected_lines: Array[ParticleLine] = []
-	for line in Diagram.get_particle_lines():
-		if line.is_queued_for_deletion():
+	for particle_line:ParticleLine in Diagram.get_particle_lines():
+		if particle_line.is_queued_for_deletion():
 			continue
 		
-		var line_state_line : StateType = line.get_on_state_line()
+		var line_state_line : StateType = particle_line.get_on_state_line()
 		var on_state_line : bool = line_state_line == state or line_state_line == StateType.Both
 		if on_state_line:
-			connected_lines.append(line)
+			connected_lines.append(particle_line)
 	return connected_lines
 
 func sort_connected_lines(connected_lines: Array) -> Array:
@@ -148,20 +144,20 @@ func group_connected_quarks(sorted_connected_lines: Array) -> Array:
 
 	var current_y_point : float
 	var current_group := []
-	for line in sorted_connected_lines:
-		if !line.base_particle in ParticleData.QUARKS:
+	for particle_line:ParticleLine in sorted_connected_lines:
+		if !particle_line.base_particle in ParticleData.QUARKS:
 			continue
 		if current_group.size() == 0:
-			current_group.append(line)
-		elif abs(line.get_side_point(state).y - current_y_point) == Diagram.grid_size:
-			current_group.append(line)
+			current_group.append(particle_line)
+		elif abs(particle_line.get_side_point(state).y - current_y_point) == Diagram.grid_size:
+			current_group.append(particle_line)
 		else:
 			if current_group.size() > 1:
 				grouped_connected_lines.append(current_group)
-			if line != sorted_connected_lines[-1]:
-				current_group = [line]
+			if particle_line != sorted_connected_lines[-1]:
+				current_group = [particle_line]
 				
-		current_y_point = line.get_side_point(state).y
+		current_y_point = particle_line.get_side_point(state).y
 
 	if current_group.size() > 1 and current_group not in grouped_connected_lines:
 		grouped_connected_lines.append(current_group)
@@ -178,7 +174,8 @@ func _get_connected_lone_particles() -> Array[ParticleData.Particle]:
 			continue
 		
 		if hadrons.any(
-			func(hadron): return connected_line in hadron.quark_lines
+			func(hadron: Hadron) -> bool:
+				return connected_line in hadron.quark_lines
 		):
 			continue
 
@@ -197,10 +194,10 @@ func get_connected_base_particles() -> Array[ParticleData.Particle]:
 func get_state_interactions() -> Array:
 	var state_interactions : Array = []
 	
-	for particle in connected_lone_particles:
+	for particle:ParticleData.Particle in connected_lone_particles:
 		state_interactions.append([particle])
 	
-	for hadron in hadrons:
+	for hadron:Hadron in hadrons:
 		state_interactions.append(hadron.quarks)
 		
 	return state_interactions

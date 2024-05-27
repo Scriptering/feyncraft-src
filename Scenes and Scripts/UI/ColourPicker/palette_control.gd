@@ -38,7 +38,7 @@ func save_palettes() -> void:
 func _on_add_problem_pressed() -> void:
 	$PaletteList.create_new_palette(GLOBALS.get_unique_file_name(get_custom_file_path()))
 
-func _on_load_button_submitted(submitted_text) -> void:
+func _on_load_button_submitted(submitted_text: String) -> void:
 	var file_path: String = GLOBALS.get_unique_file_name(get_custom_file_path())
 	GLOBALS.create_text_file(submitted_text, file_path)
 	$PaletteList.load_palette(file_path)

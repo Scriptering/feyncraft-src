@@ -33,14 +33,14 @@ var min_degree: int:
 	set(_new_value):
 		return
 	get:
-		return MinDegree.value
+		return int(MinDegree.value)
 var max_degree: int:
 	set(_new_value):
 		return
 	get:
-		return MaxDegree.value
+		return int(MaxDegree.value)
 
-func _ready():
+func _ready() -> void:
 	super._ready()
 	
 	can_generate = !(InitialState == [] and FinalState == [])
@@ -65,7 +65,7 @@ func update_view_button() -> void:
 
 func set_checks(state_interactions : Array) -> void:
 	var particles : Array = []
-	for state_interaction in state_interactions:
+	for state_interaction:Array in state_interactions:
 		particles += state_interaction
 	
 	if ParticleData.Particle.photon in particles:
@@ -80,7 +80,7 @@ func set_checks(state_interactions : Array) -> void:
 func _diagram_deleted(_index: int) -> void:
 	update_view_button()
 
-func _on_electroweak_toggled(button_pressed: bool):
+func _on_electroweak_toggled(button_pressed: bool) -> void:
 	set_electroweak_check(button_pressed)
 
 func electroweak_type_button_pressed(button_pressed: bool) -> void:
@@ -142,7 +142,7 @@ func _on_save_pressed() -> void:
 		StatesSaved.show()
 		set_checks(InitialState + FinalState)
 		
-		for state in StateLine.STATES:
+		for state:StateLine.StateType in StateLine.STATES:
 			Equation.load_state_symbols(state, [InitialState, FinalState][state])
 		
 	show_feedback()

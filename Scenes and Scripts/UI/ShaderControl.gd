@@ -3,7 +3,7 @@ extends Node
 func _ready() -> void:
 	EVENTBUS.signal_change_palette.connect(_on_palette_changed)
 
-func change_shaders(palette: ImageTexture):
+func change_shaders(palette: ImageTexture) -> void:
 	RenderingServer.global_shader_parameter_set("colour_scheme", palette)
 
 func _on_palette_changed(palette: ImageTexture) -> void:

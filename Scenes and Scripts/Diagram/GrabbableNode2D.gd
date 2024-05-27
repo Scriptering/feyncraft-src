@@ -13,7 +13,7 @@ var grabbed: bool = false: set = _grabbed_changed
 var grab_area_hovered: bool = false: set = _grab_area_hovered_changed
 var grabbable: bool = true: set = _grabbable_changed
 
-func _ready():
+func _ready() -> void:
 	add_to_group("grabbable")
 	GrabArea.mouse_entered.connect(_on_GrabArea_mouse_entered)
 	GrabArea.mouse_exited.connect(_on_GrabArea_mouse_exited)

@@ -10,7 +10,7 @@ signal signal_exit_game(mode: BaseMode.Mode, created_problem: Problem)
 signal signal_change_palette(palette: ImageTexture)
 signal signal_diagram_action_taken
 signal signal_button_created(button: PanelButton)
-signal signal_problem_modified(problem_item)
+signal signal_problem_modified(problem_item: PanelContainer)
 signal signal_problem_set_played(problem_set: ProblemSet, index: int)
 signal toggle_scene
 signal signal_save_files
@@ -57,7 +57,7 @@ func change_palette(palette: ImageTexture) -> void:
 func button_created(button: PanelButton) -> void:
 	signal_button_created.emit(button)
 
-func problem_modified(problem_item) -> void:
+func problem_modified(problem_item: PanelContainer) -> void:
 	signal_problem_modified.emit(problem_item)
 
 func problem_set_played(problem_set: ProblemSet, index: int) -> void:

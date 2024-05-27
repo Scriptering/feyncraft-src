@@ -1,4 +1,5 @@
 extends GrabbableControl
+class_name InteractionInformation
 
 signal closed_button_pressed
 
@@ -17,10 +18,10 @@ var invalid_icon := preload("res://Scenes and Scripts/UI/Info/invalid.tscn")
 var valid_icon := preload("res://Scenes and Scripts/UI/Info/valid.tscn")
 
 #1 charge, 2 lepton num., 3 e. num, 4 mu num., 5 tau num., 6 quark num., 7 up num., 8 down num., 9 charm num., 10 strange num., 11 top num., 12 bottom num., 13 colour
-var property_names = [['charge', 'lepton num.', 'electron num.', 'muon num.', 'tau num.', 'baryon num.', 'up num.', 'down num.', 'charm num.', 'strange num.', 'top num.', 'bottom num.', 'bright num.', 'dark num.'],
+var property_names := [['charge', 'lepton num.', 'electron num.', 'muon num.', 'tau num.', 'baryon num.', 'up num.', 'down num.', 'charm num.', 'strange num.', 'top num.', 'bottom num.', 'bright num.', 'dark num.'],
 ['degree', 'dimensionality', 'colourless gluon?', 'neutral photon?', 'colour', 'interaction invalid']]
 
-func _ready():
+func _ready() -> void:
 	super._ready()
 	
 	closed_button_pressed.connect(ConnectedInteraction.close_information_box)
@@ -36,7 +37,7 @@ func build_table() -> void:
 
 func clear_table() -> void:
 	for container in data_containers:
-		for i in range(container.get_children().size()):
+		for i:int in range(container.get_children().size()):
 			if i < container.columns:
 				continue
 			container.get_child(i).queue_free()
@@ -47,7 +48,7 @@ func build_quantum_number_tab() -> void:
 	var before_quantum_numbers : Array[float] = ConnectedInteraction.get_side_quantum_sum(Interaction.Side.Before)
 	var after_quantum_numbers : Array[float] = ConnectedInteraction.get_side_quantum_sum(Interaction.Side.After)
 	
-	for quantum_number in relevant_quantum_numbers:
+	for quantum_number:ParticleData.QuantumNumber in relevant_quantum_numbers:
 		add_label(data_containers[Tab.QuantumNumbers], property_names[Tab.QuantumNumbers][quantum_number])
 		add_label(data_containers[Tab.QuantumNumbers], fraction_to_string(before_quantum_numbers[quantum_number]))
 		add_label(data_containers[Tab.QuantumNumbers], fraction_to_string(after_quantum_numbers[quantum_number]))
@@ -93,7 +94,7 @@ func build_other_tab() -> void:
 		add_invalid(data_containers[Tab.Other], false)
 
 func add_label(container: GridContainer, text: String) -> void:
-	var label = Label.new()
+	var label := Label.new()
 	label.text = text
 	label.use_parent_material = true
 	
@@ -164,9 +165,9 @@ func get_relevant_quantum_numbers() -> Array[ParticleData.QuantumNumber]:
 func is_integer(test_float: float) -> bool:
 	return is_zero_approx(abs(test_float) - floor(abs(test_float)))
 
-func _on_close_button_pressed():
-	emit_signal("closed_button_pressed")
+func _on_close_button_pressed() -> void:
+	closed_button_pressed.emit()
 
-func _on_tab_container_child_entered_tree(node: Control):
+func _on_tab_container_child_entered_tree(node: Control) -> void:
 	node.material = load("res://Resources/Shaders/palette_swap_material.tres")
 	node.mouse_filter = Control.MOUSE_FILTER_PASS
