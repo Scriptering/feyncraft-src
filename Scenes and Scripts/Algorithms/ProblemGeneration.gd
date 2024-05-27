@@ -230,7 +230,7 @@ func accum_state_interaction_quantum_numbers(state_interaction: Array, accum_qua
 	var new_quantum_numbers := accum_quantum_numbers.duplicate(true)
 	
 	for particle:ParticleData.Particle in state_interaction:
-		for quantum_number in ParticleData.QuantumNumber.values():
+		for quantum_number:ParticleData.QuantumNumber in ParticleData.QuantumNumber:
 			new_quantum_numbers[quantum_number] += (
 				anti(particle) * state_factor * ParticleData.QUANTUM_NUMBERS[base_particle(particle)][quantum_number]
 			)
@@ -244,9 +244,9 @@ func is_state_interaction_possible(
 	
 	var new_interaction_count_left : int = interaction_count_left - 1
 	var new_quantum_number_difference := accum_state_interaction_quantum_numbers(state_interaction, quantum_number_difference, state_factor)
-	var new_W_count = W_count + calc_W_count(state_factor, state_interaction)
+	var new_W_count := W_count + calc_W_count(state_factor, state_interaction)
 	
-	for quantum_number in ParticleData.QuantumNumber.values():
+	for quantum_number:ParticleData.QuantumNumber in ParticleData.QuantumNumber:
 		if !is_quantum_number_difference_possible(
 			new_quantum_number_difference[quantum_number], quantum_number, new_interaction_count_left, new_W_count
 		):

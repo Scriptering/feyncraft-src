@@ -26,10 +26,10 @@ func load_items(_items_data: Array) -> void:
 	
 	clear_items()
 	
-	for item_data in items_data:
+	for item_data:Variant in items_data:
 		load_item(item_data)
 
-func load_item(item_data = null, new_item: ListItem = Item.instantiate()) -> void:
+func load_item(item_data : Variant = null, new_item: ListItem = Item.instantiate()) -> void:
 	ItemContainer.add_child(new_item)
 	
 	if item_data:

@@ -1,7 +1,7 @@
 extends PanelContainer
 
 signal enter_problem_set(problem_set: ProblemSet, problem_set_file_path: String)
-signal play_problem_set(mode, problem_set, problem)
+signal play_problem_set(mode: BaseMode.Mode, problem_set: ProblemSet, problem: Problem)
 signal close
 
 @export var LoadButton: PanelButton
@@ -115,7 +115,7 @@ func update() -> void:
 func _on_close_pressed() -> void:
 	close.emit()
 
-func _on_load_button_submitted(submitted_text) -> void:
+func _on_load_button_submitted(submitted_text: String) -> void:
 	var file_path: String = GLOBALS.get_unique_file_name(get_custom_file_path())
 	GLOBALS.create_text_file(submitted_text, file_path)
 	load_problem_set(file_path)

@@ -55,7 +55,7 @@ func _on_view_pressed() -> void:
 func _on_play_pressed() -> void:
 	play.emit(problem_set)
 
-func _on_upload_toggled(button_pressed) -> void:
+func _on_upload_toggled(button_pressed: bool) -> void:
 	if !button_pressed:
 		return
 	

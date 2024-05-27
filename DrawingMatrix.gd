@@ -173,7 +173,7 @@ func get_directly_connected_ids() -> PackedInt32Array:
 	return directly_connected_ids
 
 func get_id_hadron_index(id: int) -> int:
-	for hadron_ids in split_hadron_ids:
+	for hadron_ids:PackedInt32Array in split_hadron_ids:
 		if id not in hadron_ids:
 			continue
 		
@@ -293,7 +293,7 @@ func get_connection_matrix() -> ConnectionMatrix:
 	
 	return new_connection_matrix
 
-func get_reduced_matrix(particle_test_function: Callable):
+func get_reduced_matrix(particle_test_function: Callable) -> DrawingMatrix:
 	var reduced_matrix: DrawingMatrix = duplicate(true)
 	
 	for id:int in matrix_size:

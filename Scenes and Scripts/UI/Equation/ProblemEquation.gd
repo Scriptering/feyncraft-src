@@ -50,7 +50,7 @@ func get_particle_name(interaction: Array) -> String:
 	return ParticleData.HADRON_NAMES[get_hadron(interaction)]
 
 func get_hadron(interaction: Array) -> ParticleData.Hadrons:
-	for hadron in ParticleData.HADRON_QUARK_CONTENT.keys():
+	for hadron:ParticleData.Hadrons in ParticleData.HADRON_QUARK_CONTENT:
 		if interaction in ParticleData.HADRON_QUARK_CONTENT[hadron]:
 			return hadron
 	

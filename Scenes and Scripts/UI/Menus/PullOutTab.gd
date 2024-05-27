@@ -48,7 +48,7 @@ func pull_out() -> void:
 	
 	SOUNDBUS.pull_out_tab()
 	
-	var tween = get_tree().create_tween()
+	var tween := get_tree().create_tween()
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_SPRING)
 	tween.finished.connect(_on_pull_out_finished)
@@ -81,7 +81,7 @@ func push_in() -> void:
 	
 	SOUNDBUS.push_in_tab()
 	
-	var tween = get_tree().create_tween()
+	var tween := get_tree().create_tween()
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_SPRING)
 	tween.finished.connect(

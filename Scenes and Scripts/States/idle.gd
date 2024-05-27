@@ -66,7 +66,7 @@ func _on_button_mouse_exited() -> void:
 	change_cursor.emit(GLOBALS.Cursor.default)
 	hovering_disabled_button = false
 
-func _on_minimum_press_timer_timeout():
+func _on_minimum_press_timer_timeout() -> void:
 	if state_manager.state == State.Idle and !Input.is_action_pressed("click"):
 		change_cursor.emit(GLOBALS.Cursor.default)
 

@@ -1,8 +1,8 @@
 class_name ConnectionMatrix
 extends Resource
 
-signal interaction_added(point_id)
-signal interaction_removed(point_id)
+signal interaction_added(point_id: int)
+signal interaction_removed(point_id: int)
 
 enum {INVALID}
 enum Connection {from_id, to_id, particle}
@@ -164,7 +164,7 @@ func get_connections(id: int, reverse: bool = false) -> Array:
 	var connections: Array = []
 	
 	for connected_id in get_connected_ids(id, false, ParticleData.Particle.none, reverse):
-		for connection_particle in get_connection_particles(id, connected_id, false, false, reverse):
+		for connection_particle:ParticleData.Particle in get_connection_particles(id, connected_id, false, false, reverse):
 			if reverse:
 				connections.push_back([connected_id, id, connection_particle])
 			else:
@@ -372,7 +372,7 @@ func get_travel_matrix() -> Array[PackedInt32Array]:
 	
 	return travel_matrix
 
-func combine_matrix(new_matrix):
+func combine_matrix(new_matrix: Variant) -> void:
 	if !new_matrix is ConnectionMatrix:
 		push_error("Combining matrix of different type to connection matrix")
 		return
@@ -510,7 +510,7 @@ func get_further_reindex_points(reindexed_id: int, reindexed_ids: Array) -> Arra
 		return further_reindex_points
 	
 	var further_points_counts: Array = []
-	for non_reindexed_id in non_reindexed_ids:
+	for non_reindexed_id:int in non_reindexed_ids:
 		var further_further_points : Array = get_further_reindex_points(non_reindexed_id, reindexed_ids + non_reindexed_ids)
 		further_points_counts.push_back(further_further_points.size())
 		
@@ -530,7 +530,7 @@ func reindex_further_paths(reindex_dictionary: Dictionary, travel_matrix: Array[
 	var reindexed_ids : Array = reindex_dictionary.keys()
 	reindexed_ids.sort()
 	
-	for reindexed_id in reindexed_ids:
+	for reindexed_id:int in reindexed_ids:
 		var further_from_reindex_points: PackedInt32Array = get_further_reindex_points(reindexed_id, reindexed_ids)
 		
 		for further_point:int in further_from_reindex_points:
@@ -705,7 +705,7 @@ func generate_paths_from_point(
 	
 	return paths_from_current_point
 
-func get_reduced_matrix(particle_test_function: Callable):
+func get_reduced_matrix(particle_test_function: Callable) -> ConnectionMatrix:
 	var reduced_matrix: ConnectionMatrix = duplicate(true)
 	
 	for id:int in matrix_size:

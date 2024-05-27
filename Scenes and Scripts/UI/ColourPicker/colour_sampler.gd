@@ -25,7 +25,7 @@ func _process(_delta: float) -> void:
 		sample_submitted.emit($SamplerContainer/SamplerHint.color)
 		end_sampling()
 
-func _on_sampler_toggled(button_pressed) -> void:
+func _on_sampler_toggled(button_pressed: bool) -> void:
 	if button_pressed:
 		start_sampling()
 	else:

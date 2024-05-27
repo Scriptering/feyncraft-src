@@ -23,13 +23,13 @@ func _ready() -> void:
 
 var min_particle_count: int:
 	get:
-		return MinParticleCount.value
+		return int(MinParticleCount.value)
 var max_particle_count: int:
 	get:
-		return MaxParticleCount.value
+		return int(MaxParticleCount.value)
 var hadron_frequency: HadronFrequency:
 	get:
-		return int(HadronFrequencySlider.value)
+		return int(HadronFrequencySlider.value) as HadronFrequency
 
 func reset() -> void:
 	MinParticleCount.value = MINIMUM_PARTICLE_COUNT

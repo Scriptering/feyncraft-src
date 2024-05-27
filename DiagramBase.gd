@@ -8,7 +8,7 @@ extends Panel
 
 @export var grid_size: int
 @export var InteractionInstance : PackedScene
-@export var Line : PackedScene
+@export var particle_line_scene : PackedScene
 
 var grid_width: int:
 	get:
@@ -88,11 +88,11 @@ func generate_drawing_matrix_from_diagram() -> DrawingMatrix:
 	for interaction:Interaction in interactions:
 		generated_matrix.add_interaction_with_position(interaction.position, grid_size, interaction.get_on_state_line())
 
-	for line:ParticleLine in get_particle_lines():
+	for particle_line:ParticleLine in get_particle_lines():
 		generated_matrix.connect_interactions(
-			generated_matrix.get_interaction_positions().find(line.points[ParticleLine.Point.Start] / grid_size),
-			generated_matrix.get_interaction_positions().find(line.points[ParticleLine.Point.End] / grid_size),
-			line.base_particle
+			generated_matrix.get_interaction_positions().find(particle_line.points[ParticleLine.Point.Start] / grid_size),
+			generated_matrix.get_interaction_positions().find(particle_line.points[ParticleLine.Point.End] / grid_size),
+			particle_line.base_particle
 		)
 	
 	for state:StateLine.StateType in StateLine.STATES:
@@ -166,9 +166,9 @@ func place_interaction(interaction_position: Vector2, interaction: Node = Intera
 	Interactions.add_child(interaction)
 
 func create_particle_line() -> ParticleLine:
-	var line := Line.instantiate()
-	line.init(self)
-	return line
+	var particle_line := particle_line_scene.instantiate()
+	particle_line.init(self)
+	return particle_line
 
 func draw_diagram_particles(drawing_matrix: DrawingMatrix) -> Array:
 	var drawing_lines : Array = []

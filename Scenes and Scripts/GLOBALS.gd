@@ -24,7 +24,7 @@ const VISION_COLOURS : Array = [
 	[Color('ffffff'), Color('000000'), Color('727272')]
 ]
 
-@onready var PARTICLE_TEXTURES = {}
+@onready var PARTICLE_TEXTURES := {}
 
 var is_on_editor: bool
 
@@ -51,7 +51,7 @@ func create_save_folders() -> void:
 
 func create_default_problem_sets() -> void:
 	for file_path in get_files_in_folder("res://saves/ProblemSets/Default/"):
-		var default_file = FileAccess.open(file_path, FileAccess.READ)
+		var default_file := FileAccess.open(file_path, FileAccess.READ)
 		create_text_file(
 			default_file.get_as_text(), "user://saves/ProblemSets/Default/" + file_path.trim_prefix("res://saves/ProblemSets/Default/")
 		)
@@ -83,7 +83,7 @@ func create_file(path: String) -> void:
 	print("creating file")
 	print(path)
 	
-	var file = FileAccess.open(path, FileAccess.WRITE)
+	var file := FileAccess.open(path, FileAccess.WRITE)
 	print(file.get_error())
 	file.store_string("")
 	file = null
@@ -116,7 +116,7 @@ func get_file_prefix() -> String:
 	return "res://"
 
 func save(p_obj: Resource, p_path: String) -> void:
-	var file = FileAccess.open(p_path, FileAccess.WRITE)
+	var file := FileAccess.open(p_path, FileAccess.WRITE)
 	
 	if !file: return
 	
@@ -128,7 +128,7 @@ func save(p_obj: Resource, p_path: String) -> void:
 func load_txt(p_path: String) -> Resource:
 	print("loading txt")
 	print(p_path)
-	var file = FileAccess.open(p_path, FileAccess.READ)
+	var file := FileAccess.open(p_path, FileAccess.READ)
 	print(file.get_as_text())
 	var obj: Resource = str_to_var(file.get_as_text())
 	file.close()
@@ -151,7 +151,7 @@ func get_files_in_folder(folder_path: String) -> Array[String]:
 	dir.list_dir_begin()
 
 	while true:
-		var file = dir.get_next()
+		var file := dir.get_next()
 		if file == "":
 			break
 		elif not file.begins_with("."):

@@ -14,7 +14,7 @@ func _ready() -> void:
 	$VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer.get_v_scroll_bar().use_parent_material = true
 
 func delete_empty_problems() -> void:
-	for problem_item in get_problem_items():
+	for problem_item:PanelContainer in get_problem_items():
 		if problem_item.is_empty():
 			delete_problem(problem_item)
 
@@ -24,7 +24,7 @@ func reload() -> void:
 	
 	load_problem_set(GLOBALS.load_txt(problem_set_file), problem_set_file)
 	
-	for problem_item in get_problem_items():
+	for problem_item:PanelContainer in get_problem_items():
 		problem_item.toggle_completed(!problem_set.is_custom and problem_item.index < problem_set.highest_index_reached)
 		problem_item.toggle_play_disabled(!problem_set.is_custom and problem_item.index > problem_set.highest_index_reached)
 
@@ -53,7 +53,7 @@ func load_problem_set(_problem_set: ProblemSet, p_problem_set_file_path: String)
 	update_index_labels()
 
 func clear_problems() -> void:
-	for child in get_problem_items():
+	for child:PanelContainer in get_problem_items():
 		child.queue_free()
 
 func add_problem(problem: Problem, is_custom: bool = false) -> void:
@@ -80,8 +80,8 @@ func add_problem(problem: Problem, is_custom: bool = false) -> void:
 func update() -> void:
 	update_index_labels()
 	
-	for problem in get_problem_items():
-		problem.update()
+	for problem_item:PanelContainer in get_problem_items():
+		problem_item.update()
 
 func update_index_labels() -> void:
 	var index: int = 0
@@ -129,10 +129,10 @@ func _problem_played(problem: Problem) -> void:
 func _on_back_pressed() -> void:
 	back.emit()
 
-func _problem_modified(problem_item) -> void:
+func _problem_modified(problem_item: PanelContainer) -> void:
 	EVENTBUS.problem_modified(problem_item)
 
-func _problem_saved(problem_item) -> void:
+func _problem_saved(_problem_item: PanelContainer) -> void:
 	save()
 
 func save() -> void:

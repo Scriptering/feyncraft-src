@@ -4,12 +4,12 @@ class_name ParticleLine
 signal request_deletion
 signal clicked_on()
 
-@onready var Text = get_node("text")
-@onready var SpareText = get_node("spareText")
-@onready var Arrow = $arrow
-@onready var LineMiddle = $line_middle
-@onready var LineJointStart = $line_joint_start
-@onready var LineJointEnd = $line_joint_end
+@onready var Text := get_node("text")
+@onready var SpareText := get_node("spareText")
+@onready var Arrow := $arrow
+@onready var LineMiddle := $line_middle
+@onready var LineJointStart := $line_joint_start
+@onready var LineJointEnd := $line_joint_end
 
 @export var line_joint_start_length: float = 3.5
 @export var line_joint_end_length: float = 1
@@ -79,7 +79,7 @@ static var texture_dict: Array = [
 'Particle',
 'Particle']
 
-var line_texture
+var line_texture: Texture2D
 var show_labels: bool = true
 
 func _ready() -> void:
@@ -119,7 +119,7 @@ func _get_particle() -> ParticleData.Particle:
 
 func _get_quantum_numbers() -> Array:
 	var quantum_numbers_temp := []
-	for quantum_number in ParticleData.QuantumNumber.values():
+	for quantum_number:ParticleData.QuantumNumber in ParticleData.QuantumNumber:
 		quantum_numbers_temp.append(anti*quantum_numbers[quantum_number])
 	return quantum_numbers_temp
 
@@ -253,24 +253,23 @@ func get_unconnected_point(interaction: Interaction) -> Point:
 func update_line() -> void:
 	if !is_placed:
 		points[moving_point] = Crosshair.position
+	
+	if points != prev_points:
+		prev_points = points.duplicate()
 
-	if points == prev_points:
-		move_text()
-		set_text_visiblity()
-		return
+		move_line()
 
-	prev_points = points.duplicate()
+		set_left_and_right_points()
+		set_anti()
 
-	move_line()
+		Arrow.visible = get_arrow_visiblity()
+		if Arrow.visible:
+			move_arrow()
 
-	set_left_and_right_points()
-	set_anti()
-
-	Arrow.visible = get_arrow_visiblity()
-	if Arrow.visible:
-		move_arrow()
-
-	set_text_texture()
+		set_text_texture()
+	
+	move_text()
+	set_text_visiblity()
 
 
 func move_line() -> void:
@@ -408,22 +407,22 @@ func pick_up(point_index_to_pick_up: Point) -> void:
 	moving_point = point_index_to_pick_up
 	
 func is_line_copy() -> bool:
-	for line in Diagram.get_particle_lines():
-		if line == self:
+	for particle_line:ParticleLine in Diagram.get_particle_lines():
+		if particle_line == self:
 			continue
-		if !line.is_placed:
+		if !particle_line.is_placed:
 			continue
-		if (points[Point.Start] in line.points and points[Point.End] in line.points and line != self):
+		if (points[Point.Start] in particle_line.points and points[Point.End] in particle_line.points and particle_line != self):
 			return true
 	return false
 
 func is_line_overlapping() -> bool:
-	for line in Diagram.get_particle_lines():
-		if !line.is_placed:
+	for particle_line:ParticleLine in Diagram.get_particle_lines():
+		if !particle_line.is_placed:
 			continue
-		if !points[Point.Start] in line.points:
+		if !points[Point.Start] in particle_line.points:
 			continue 
-		if line.is_position_on_line(points[Point.End]):
+		if particle_line.is_position_on_line(points[Point.End]):
 			return true
 	return false
 
@@ -448,7 +447,7 @@ func delete() -> void:
 	queue_free()
 	deconstructor()
 
-func deconstructor():
+func deconstructor() -> void:
 	being_deleted = true
 	for interaction:Interaction in self.connected_interactions:
 		interaction.connected_lines.erase(self)

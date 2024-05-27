@@ -1,6 +1,6 @@
 extends Sprite2D
 
-@onready var Heart = get_node('Heart')
+@onready var Heart := get_node('Heart')
 
 @export var Scale : float = 1.0
 @export var normal_offset: Vector2
@@ -83,7 +83,7 @@ func _set_glowing(new_value : bool) -> void:
 	glowing = new_value
 	Heart.visible = new_value
 
-func _process(_delta):
+func _process(_delta: float) -> void:
 	if visible:
 		position = get_global_mouse_position()
 
@@ -99,12 +99,11 @@ func get_default_cursor() -> GLOBALS.Cursor:
 	
 	return GLOBALS.Cursor.point
 
-func change_cursor(cursor: GLOBALS.Cursor):
+func change_cursor(cursor: GLOBALS.Cursor) -> void:
 	if cursor == GLOBALS.Cursor.default:
 		cursor = get_default_cursor()
 	
 	if cursor != current_cursor:
 		texture = cursors[cursor]
-		
-#		Input.set_custom_mouse_cursor(cursors[cursor], Input.CURSOR_ARROW, Vector2(12, 6))
+
 		current_cursor = cursor

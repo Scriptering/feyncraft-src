@@ -5,10 +5,10 @@ var particle_buttons: Array[PanelButton] = []
 
 var particle_button_group: ButtonGroup
 
-@onready var Leptons = $HBoxContainer/Leptons/MovingContainer/Tab/Leptons
-@onready var Bosons = $HBoxContainer/Bosons/MovingContainer/Tab/Bosons
-@onready var Quarks = $HBoxContainer/Quarks/MovingContainer/Tab/Quarks
-@onready var General = $HBoxContainer/General/MovingContainer/Tab/General
+@onready var Leptons := $HBoxContainer/Leptons/MovingContainer/Tab/Leptons
+@onready var Bosons := $HBoxContainer/Bosons/MovingContainer/Tab/Bosons
+@onready var Quarks := $HBoxContainer/Quarks/MovingContainer/Tab/Quarks
+@onready var General := $HBoxContainer/General/MovingContainer/Tab/General
 
 @onready var ParticleButtonCategories : Array = [
 	Leptons, Bosons, Quarks, General
@@ -19,14 +19,14 @@ var particle_button_group: ButtonGroup
 ]
 
 func _ready() -> void:
-	for particle_button_category in ParticleButtonCategories:
-		for particle_button in particle_button_category.get_children():
+	for particle_button_category:Control in ParticleButtonCategories:
+		for particle_button:PanelButton in particle_button_category.get_children():
 			particle_buttons.append(particle_button)
 			particle_button.connect("on_pressed", Callable(self, "on_particle_button_pressed"))
 		
 	add_buttons_to_button_group()
 
-func on_particle_button_pressed(button) -> void:
+func on_particle_button_pressed(button:PanelButton) -> void:
 	selected_particle = button.particle
 
 func add_buttons_to_button_group() -> void:

@@ -9,7 +9,7 @@ enum {UNCONNECTED, CONNECTED}
 func add_interaction(
 	interaction_state : StateLine.StateType = StateLine.StateType.None,
 	id : int = calculate_new_interaction_id(interaction_state)
-):
+) -> void:
 	super.add_interaction(interaction_state, id)
 	
 	unconnected_matrix.insert(id, [])
@@ -70,8 +70,8 @@ func remove_connection(connection: Array) -> void:
 func get_unconnected_particle_count() -> int:
 	var particle_count: int = 0
 	
-	for state_count in unconnected_particle_count:
-		particle_count += state_count
+	for unconnected_count:int in unconnected_particle_count:
+		particle_count += unconnected_count
 	
 	return particle_count
 
@@ -92,7 +92,7 @@ func find_unconnected_particle(particle: ParticleData.Particle) -> PackedInt32Ar
 func find_all_unconnected_state_particle(particle: ParticleData.Particle, state: StateLine.StateType) -> PackedInt32Array:
 	var found_ids: PackedInt32Array = []
 	for id:int in range(get_starting_state_id(state), get_ending_state_id(state)):
-		for unconnected_particle in unconnected_matrix[id]:
+		for unconnected_particle:ParticleData.Particle in unconnected_matrix[id]:
 			if unconnected_particle == particle:
 				found_ids.append(id)
 	return found_ids
@@ -218,7 +218,7 @@ func reduce_to_base_particles() -> void:
 			)
 	))
 
-func get_combined_matrix(new_matrix):
+func get_combined_matrix(new_matrix:Variant) -> void:
 	if !new_matrix is InteractionMatrix:
 		push_error("Combining matrix of different type to interaction matrix")
 		return

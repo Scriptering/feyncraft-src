@@ -14,12 +14,12 @@ enum PointsConnected {None, Left, Right, Both}
 @export var particle_line_width: float = 6
 @export var photon_line_width: float = 6
 
-@onready var Text = $text
-@onready var SpareText = $spareText
-@onready var Arrow = $arrow
-@onready var LineMiddle = $line_middle
-@onready var LineJointStart = $line_joint_start
-@onready var LineJointEnd = $line_joint_end
+@onready var Text := $text
+@onready var SpareText := $spareText
+@onready var Arrow := $arrow
+@onready var LineMiddle := $line_middle
+@onready var LineJointStart := $line_joint_start
+@onready var LineJointEnd := $line_joint_end
 
 var Diagram: MiniDiagram
 var Initial: Control
@@ -58,7 +58,7 @@ var texture_dict: Array = [
 'Particle',
 'Particle']
 
-var line_texture
+var line_texture : Texture2D
 
 func _ready() -> void:
 	set_line_width()

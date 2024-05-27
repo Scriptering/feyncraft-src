@@ -4,8 +4,8 @@ enum Tab {ProblemSetList, ProblemList}
 
 signal closed
 
-@onready var ProblemSetList = $ProblemSetList
-@onready var ProblemList = $ProblemList
+@onready var ProblemSetList := $ProblemSetList
+@onready var ProblemList := $ProblemList
 
 func _on_problem_set_list_enter_problem_set(problem_set: ProblemSet, problem_set_file_path: String) -> void:
 	enter_problem_set(problem_set, problem_set_file_path)

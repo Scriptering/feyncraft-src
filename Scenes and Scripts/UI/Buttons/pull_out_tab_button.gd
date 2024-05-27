@@ -11,7 +11,7 @@ signal pressed
 @export var expand_icon: bool : set = _set_expand_icon
 @export var icon_use_parent_material: bool = false : set = _set_icon_use_parent_material
 
-@onready var TabButton = $TabButton
+@onready var TabButton := $TabButton
 
 func _ready() -> void:
 	if !TabButton.is_connected("pressed", Callable(self, "_on_tab_button_pressed")):
@@ -50,5 +50,5 @@ func _set_tab_minimum_size(new_value: Vector2) -> void:
 	$TabButton.minimum_size = new_value
 	
 
-func _on_tab_button_pressed():
-	emit_signal("pressed")
+func _on_tab_button_pressed() -> void:
+	pressed.emit()

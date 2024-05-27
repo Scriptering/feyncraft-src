@@ -18,7 +18,7 @@ signal closed
 var diagrams: Array[DrawingMatrix] = []
 var current_index: int = 0:
 	set(new_value):
-		var clamped_value = clamp(new_value, 0, max(0, diagrams.size() - 1))
+		var clamped_value : int = clamp(new_value, 0, max(0, diagrams.size() - 1))
 		current_index = clamped_value
 		
 		if diagrams.size() != 0:
@@ -58,7 +58,7 @@ func toggle_visible() -> void:
 	visible = !visible
 	self.current_index = 0
 
-func store_diagram(matrix) -> void:
+func store_diagram(matrix: Variant) -> void:
 	if matrix is DrawingMatrix:
 		diagrams.push_back(matrix)
 	elif matrix is ConnectionMatrix:
@@ -75,7 +75,7 @@ func store_diagram(matrix) -> void:
 func store_diagrams(matrices: Array) -> void:
 	clear()
 	
-	for matrix in matrices:
+	for matrix:Variant in matrices:
 		store_diagram(matrix)
 	
 	self.current_index = 0

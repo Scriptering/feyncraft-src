@@ -154,7 +154,7 @@ func find_colourless_hadron_interactions(
 			pick_next_colour_point
 	)
 	
-	for hadron in hadrons:
+	for hadron:PackedInt32Array in hadrons:
 		var colourless_hadron_interaction: int = find_colourless_hadron_interaction(
 			hadron, GLOBALS.flatten(hadrons), quark_paths, paths, path_colours, vision_matrix, colourless_group_interactions
 		)
@@ -314,7 +314,7 @@ func colour_hadrons(path_colours: Array[Colour], paths: Array[PackedInt32Array],
 			return is_hadron_in_paths(hadron, paths)
 	)
 	
-	for hadron in hadrons:
+	for hadron:PackedInt32Array in hadrons:
 		path_colours = colour_hadron(hadron, path_colours, paths)
 		
 		for i:int in range(MAX_RESTRICTED_HADRON_COUNT):

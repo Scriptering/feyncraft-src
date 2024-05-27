@@ -1,7 +1,7 @@
 extends Node2D
 class_name MiniHadronJoint
 
-@onready var HadronLabel = $HadronSprite
+@onready var HadronLabel := $HadronSprite
 
 @export var label_seperation : float = 20
 var state : StateLine.StateType
@@ -14,8 +14,8 @@ func _ready() -> void:
 	place_label()
 	interaction_ys.sort()
 
-func array_min(array: Array):
-	var min_element = array[0]
+func array_min(array: Array) -> Variant:
+	var min_element : Variant = array[0]
 	
 	for element:Variant in array:
 		if element < min_element:

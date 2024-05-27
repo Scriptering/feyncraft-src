@@ -44,7 +44,7 @@ func init() -> void:
 	
 	UseButton.button_group = load("res://Resources/ButtonGroups/palette.tres")
 	
-	for colour_button in ColourButtonDict.values():
+	for colour_button:ColourButton in ColourButtonDict.values():
 		colour_button.colour_changed.connect(_on_colour_button_colour_changed)
 	
 	ClearButton.visible = palette.advanced_colours
@@ -64,14 +64,14 @@ func toggle_more_colours(toggle: bool) -> void:
 	else:
 		MoreColoursButton.icon = load("res://Textures/Buttons/Tabs/arrow_down.png")
 
-func update_button_colours(save: bool = true) -> void:
-	for key in ColourButtonDict.keys():
+func update_button_colours(do_save: bool = true) -> void:
+	for key:int in ColourButtonDict.keys():
 		ColourButtonDict[key].icon_colour = palette.get_colour(key)
 	
 	if is_selected:
 		update_shader()
 	
-	if save:
+	if do_save:
 		save()
 
 func get_button_colours() -> Array[Color]:
@@ -87,7 +87,7 @@ func get_button_colours() -> Array[Color]:
 	return button_colours
 
 func set_buttons_disabled(disable: bool) -> void:
-	for colour_button in ColourButtonDict.values():
+	for colour_button:ColourButton in ColourButtonDict.values():
 		colour_button.disabled = disable
 
 func load_data(_palette: Palette) -> void:
@@ -156,7 +156,7 @@ func _on_title_text_changed(new_text: String) -> void:
 	palette.title = new_text
 	save()
 
-func _on_upload_toggled(button_pressed) -> void:
+func _on_upload_toggled(button_pressed:bool) -> void:
 	if !button_pressed:
 		return
 	

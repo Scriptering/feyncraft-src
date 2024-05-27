@@ -48,7 +48,7 @@ func build_quantum_number_tab() -> void:
 	var before_quantum_numbers : Array[float] = ConnectedInteraction.get_side_quantum_sum(Interaction.Side.Before)
 	var after_quantum_numbers : Array[float] = ConnectedInteraction.get_side_quantum_sum(Interaction.Side.After)
 	
-	for quantum_number in relevant_quantum_numbers:
+	for quantum_number:ParticleData.QuantumNumber in relevant_quantum_numbers:
 		add_label(data_containers[Tab.QuantumNumbers], property_names[Tab.QuantumNumbers][quantum_number])
 		add_label(data_containers[Tab.QuantumNumbers], fraction_to_string(before_quantum_numbers[quantum_number]))
 		add_label(data_containers[Tab.QuantumNumbers], fraction_to_string(after_quantum_numbers[quantum_number]))

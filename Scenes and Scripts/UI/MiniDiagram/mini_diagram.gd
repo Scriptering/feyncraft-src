@@ -1,7 +1,7 @@
 class_name MiniDiagram
 extends DiagramBase
 
-@onready var MiniHadronJoint := preload("res://Scenes and Scripts/UI/MiniDiagram/MiniHadronJoint.tscn")
+@onready var mini_hadron_joint := preload("res://Scenes and Scripts/UI/MiniDiagram/MiniHadronJoint.tscn")
 
 func generate_drawing_matrix_from_diagram() -> DrawingMatrix:
 	var generated_matrix := DrawingMatrix.new()
@@ -9,11 +9,11 @@ func generate_drawing_matrix_from_diagram() -> DrawingMatrix:
 	for interaction:MiniInteraction in get_interactions():
 		generated_matrix.add_interaction_with_position(interaction.position, grid_size, interaction.get_on_state_line())
 
-	for line in get_particle_lines():
+	for particle_line:ParticleLine in get_particle_lines():
 		generated_matrix.connect_interactions(
-			generated_matrix.get_interaction_positions().find(line.points[ParticleLine.Point.Start] / grid_size),
-			generated_matrix.get_interaction_positions().find(line.points[ParticleLine.Point.End] / grid_size),
-			line.base_particle
+			generated_matrix.get_interaction_positions().find(particle_line.points[ParticleLine.Point.Start] / grid_size),
+			generated_matrix.get_interaction_positions().find(particle_line.points[ParticleLine.Point.End] / grid_size),
+			particle_line.base_particle
 		)
 
 	return generated_matrix
@@ -22,8 +22,8 @@ func clear_diagram() -> void:
 	for interaction:MiniInteraction in get_interactions():
 		interaction.queue_free()
 	
-	for line:MiniParticleLine in get_particle_lines():
-		line.queue_free()
+	for particle_line:MiniParticleLine in get_particle_lines():
+		particle_line.queue_free()
 	
 	for hadron_joint:MiniHadronJoint in get_hadron_joints():
 		hadron_joint.queue_free()
@@ -37,7 +37,7 @@ func show_interaction_dots(drawing_matrix: DrawingMatrix) -> void:
 			Interactions.get_child(id).show_dot()
 
 func find_hadron(quarks: Array) -> ParticleData.Hadrons:
-	for hadron in ParticleData.HADRON_QUARK_CONTENT:
+	for hadron:ParticleData.Hadrons in ParticleData.HADRON_QUARK_CONTENT:
 		if quarks in ParticleData.HADRON_QUARK_CONTENT[hadron]:
 			return hadron
 	
@@ -54,19 +54,19 @@ func create_hadron_joint(drawing_matrix: DrawingMatrix, hadron_ids: PackedInt32A
 			quarks.append_array(drawing_matrix.get_connected_particles(id))
 			quarks.append_array(drawing_matrix.get_connected_particles(id, false, false, true).map(
 				func(particle: ParticleData.Particle) -> ParticleData.Particle:
-					return -particle
+					return -particle as ParticleData.Particle
 			))
 		
 		else:
 			quarks.append_array(drawing_matrix.get_connected_particles(id).map(
 				func(particle: ParticleData.Particle) -> ParticleData.Particle:
-					return -particle
+					return -particle as ParticleData.Particle
 			))
 			quarks.append_array(drawing_matrix.get_connected_particles(id, false, false, true))
 	
 	quarks.sort()
 	
-	var hadron_joint := MiniHadronJoint.instantiate()
+	var hadron_joint := mini_hadron_joint.instantiate()
 	hadron_joint.hadron = find_hadron(quarks)
 	
 	hadron_joint.interaction_ys = interaction_ys
@@ -86,6 +86,6 @@ func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 
 	show_interaction_dots(drawing_matrix)
 
-	for split_hadron in drawing_matrix.split_hadron_ids:
+	for split_hadron:PackedInt32Array in drawing_matrix.split_hadron_ids:
 		create_hadron_joint(drawing_matrix, split_hadron)
 

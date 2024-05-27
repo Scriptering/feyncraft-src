@@ -7,9 +7,9 @@ signal initialised
 @export var test_initial_state: Array = []
 @export var test_final_state: Array = []
 
-@onready var Pathfinding = $Algorithms/PathFinding
-@onready var SolutionGeneration = $Algorithms/SolutionGeneration
-@onready var ProblemGeneration = $Algorithms/ProblemGeneration
+@onready var Pathfinding := $Algorithms/PathFinding
+@onready var SolutionGeneration := $Algorithms/SolutionGeneration
+@onready var ProblemGeneration := $Algorithms/ProblemGeneration
 
 @onready var ParticleButtons := $PullOutTabs/ParticleButtons
 @onready var GenerationTab := $PullOutTabs/GenerationButton
@@ -50,14 +50,14 @@ var mode_exit_funcs : Dictionary = {
 	BaseMode.Mode.Tutorial: exit_tutorial
 }
 
-func _set_current_mode(new_value: BaseMode.Mode):
+func _set_current_mode(new_value: BaseMode.Mode) -> void:
 	exit_current_mode()
 
 	previous_mode = current_mode
 	current_mode = new_value
 	mode_enter_funcs[current_mode].call()
 
-func init(state_manager: Node, controls_tab: Control, palette_list: GrabbableControl):
+func init(state_manager: Node, controls_tab: Control, palette_list: GrabbableControl) -> void:
 	StateManager = state_manager
 	ControlsTab = controls_tab
 	PaletteMenu = palette_list
@@ -97,10 +97,7 @@ func load_test_problem() -> void:
 	test_initial_state = [[-4], [12]]
 	test_final_state = [[12], [12], [-8]]
 	
-	var test_allowed_particles: Array[ParticleData.Particle]
-	test_allowed_particles.assign(ParticleData.Particle.values())
-	
-	test_problem.allowed_particles = test_allowed_particles
+	test_problem.allowed_particles = ParticleData.Particle.values()
 	test_problem.state_interactions = [test_initial_state, test_final_state]
 	
 	load_problem(ProblemGeneration.setup_new_problem(test_problem))

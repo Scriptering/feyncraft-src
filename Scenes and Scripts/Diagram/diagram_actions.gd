@@ -82,9 +82,9 @@ func _crosshair_moved(_new_position: Vector2, _old_position: Vector2) -> void:
 func _set_show_line_labels(new_value: bool) -> void:
 	show_line_labels = new_value
 	
-	for line in get_particle_lines():
-		line.show_labels = show_line_labels 
-		line.set_text_visiblity()
+	for particle_line:ParticleLine in get_particle_lines():
+		particle_line.show_labels = show_line_labels 
+		particle_line.set_text_visiblity()
 
 func load_problem(problem: Problem, mode: BaseMode.Mode) -> void:
 	clear_diagram()
@@ -172,27 +172,27 @@ func generate_drawing_matrix_from_diagram(get_only_valid: bool = false) -> Drawi
 
 	for interaction:Interaction in interactions:
 		if StateManager.state == BaseState.State.Drawing and interaction.connected_lines.all(
-			func(line: ParticleLine) -> bool:
-				return !line.is_placed
+			func(particle_line: ParticleLine) -> bool:
+				return !particle_line.is_placed
 		):
 			continue
 
 		generated_matrix.add_interaction_with_position(interaction.position, grid_size, interaction.get_on_state_line())
 
-	for line in get_particle_lines():
-		if StateManager.state == BaseState.State.Drawing and !line.is_placed:
+	for particle_line:ParticleLine in get_particle_lines():
+		if StateManager.state == BaseState.State.Drawing and !particle_line.is_placed:
 			continue
 		
-		if get_only_valid and !line.connected_interactions.all(is_valid_vision_interaction):
+		if get_only_valid and !particle_line.connected_interactions.all(is_valid_vision_interaction):
 			continue
 		
 		generated_matrix.connect_interactions(
-			generated_matrix.get_interaction_positions().find(line.points[ParticleLine.Point.Start] / grid_size),
-			generated_matrix.get_interaction_positions().find(line.points[ParticleLine.Point.End] / grid_size),
-			line.base_particle
+			generated_matrix.get_interaction_positions().find(particle_line.points[ParticleLine.Point.Start] / grid_size),
+			generated_matrix.get_interaction_positions().find(particle_line.points[ParticleLine.Point.End] / grid_size),
+			particle_line.base_particle
 		)
 	
-	for state:StateLine.StateType in range(StateLines.size()):
+	for state:int in StateLines.size():
 		generated_matrix.state_line_positions[state] = int(StateLines[state].position.x / grid_size)
 	
 	var hadron_ids: Array[PackedInt32Array] = []
@@ -310,14 +310,14 @@ func get_movable_state_line_position(state: StateLine.StateType, interaction_x_p
 	return test_position
 
 func update_statelines() -> void:
-	for state_line in StateLines:
+	for state_line:StateLine in StateLines:
 		state_line.update_stateline()
 
 func place_objects() -> void:
 	get_tree().call_group("grabbable", "drop")
 	
-	for line in ParticleLines.get_children():
-		line.place()
+	for particle_line:ParticleLine in ParticleLines.get_children():
+		particle_line.place()
 	
 	check_split_lines()
 	check_rejoin_lines()
@@ -334,7 +334,7 @@ func get_interactions() -> Array[Interaction]:
 
 func get_particle_lines() -> Array[ParticleLine]:
 	var particle_lines : Array[ParticleLine] = []
-	for particle_line in super.get_particle_lines():
+	for particle_line:ParticleLine in super.get_particle_lines():
 		if particle_line is ParticleLine:
 			particle_lines.append(particle_line)
 	return particle_lines
@@ -354,10 +354,10 @@ func action() -> void:
 	
 	action_taken.emit()
 
-func delete_line(line: ParticleLine) -> void:
+func delete_line(particle_line: ParticleLine) -> void:
 	add_diagram_to_history()
 	
-	recursive_delete_line(line)
+	recursive_delete_line(particle_line)
 	
 	action()
 
@@ -368,9 +368,9 @@ func delete_interaction(interaction: Interaction) -> void:
 	
 	action()
 
-func recursive_delete_line(line: ParticleLine) -> void:
-	line.delete()
-	for interaction:Interaction in line.connected_interactions:
+func recursive_delete_line(particle_line: ParticleLine) -> void:
+	particle_line.delete()
+	for interaction:Interaction in particle_line.connected_interactions:
 		if interaction.connected_lines.size() == 0:
 			interaction.queue_free()
 	
@@ -379,17 +379,17 @@ func recursive_delete_line(line: ParticleLine) -> void:
 func recursive_delete_interaction(interaction: Interaction) -> void:
 	interaction.queue_free()
 	var connected_lines := interaction.connected_lines.duplicate()
-	for line in connected_lines:
-		if line.is_queued_for_deletion():
+	for particle_line:ParticleLine in connected_lines:
+		if particle_line.is_queued_for_deletion():
 			continue
 		
-		for connected_interaction in line.connected_interactions:
+		for connected_interaction in particle_line.connected_interactions:
 			if connected_interaction.is_queued_for_deletion():
 				continue
 			
 			if connected_interaction.connected_lines.size() == 1:
 				connected_interaction.queue_free()
-		recursive_delete_line(line)
+		recursive_delete_line(particle_line)
 	
 	check_rejoin_lines()
 
@@ -405,13 +405,13 @@ func check_split_lines() -> void:
 		return
 
 	for interaction:Interaction in get_interactions():
-		for line in get_particle_lines():
-			if !line.is_placed:
+		for particle_line:ParticleLine in get_particle_lines():
+			if !particle_line.is_placed:
 				continue
-			if line in interaction.connected_lines:
+			if particle_line in interaction.connected_lines:
 				continue
-			if line.is_position_on_line(interaction.position):
-				split_line(line, interaction.position)
+			if particle_line.is_position_on_line(interaction.position):
+				split_line(particle_line, interaction.position)
 
 func check_rejoin_lines() -> void:
 	if !line_diagram_actions:
@@ -421,8 +421,8 @@ func check_rejoin_lines() -> void:
 		if interaction.connected_lines.size() != 2:
 			continue
 		if interaction.connected_lines.any(
-			func(line) -> bool:
-				return !is_instance_valid(line)
+			func(particle_line:ParticleLine) -> bool:
+				return !is_instance_valid(particle_line)
 		):
 			continue
 		
@@ -546,19 +546,19 @@ func place_line(
 	start_position: Vector2, end_position: Vector2 = Vector2.ZERO,
 	base_particle: ParticleData.Particle = ParticleButtons.selected_particle
 ) -> void:
-	var line : ParticleLine = create_particle_line()
-	line.init(self)
+	var particle_line : ParticleLine = create_particle_line()
+	particle_line.init(self)
 	
-	line.points[line.Point.Start] = start_position
+	particle_line.points[particle_line.Point.Start] = start_position
 	
 	if end_position != Vector2.ZERO:
-		line.points[line.Point.End] = end_position
-		line.is_placed = true
+		particle_line.points[particle_line.Point.End] = end_position
+		particle_line.is_placed = true
 	
-	line.base_particle = base_particle
-	line.show_labels = show_line_labels
+	particle_line.base_particle = base_particle
+	particle_line.show_labels = show_line_labels
 	
-	ParticleLines.add_child(line)
+	ParticleLines.add_child(particle_line)
 
 func draw_raw_diagram(connection_matrix : ConnectionMatrix) -> void:
 	if !is_inside_tree():
@@ -575,7 +575,7 @@ func clear_vision_lines() -> void:
 func clear_diagram() -> void:
 	for interaction:Interaction in Interactions.get_children():
 		recursive_delete_interaction(interaction)
-	for state_line in StateLines:
+	for state_line:StateLine in StateLines:
 		state_line.clear_hadrons()
 	clear_vision_lines()
 	
@@ -584,7 +584,7 @@ func clear_diagram() -> void:
 func draw_diagram_particles(drawing_matrix: DrawingMatrix) -> Array:
 	var drawing_lines : Array = super.draw_diagram_particles(drawing_matrix)
 	
-	for drawing_line in drawing_lines:
+	for drawing_line:ParticleLine in drawing_lines:
 		drawing_line.is_placed = true
 
 	return drawing_lines
@@ -597,13 +597,13 @@ func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 	
 	clear_diagram()
 	
-	for state:StateLine.StateType in range(StateLines.size()):
+	for state:int in StateLines.size():
 		StateLines[state].position.x = drawing_matrix.state_line_positions[state] * grid_size
 
-	for drawing_particle in draw_diagram_particles(drawing_matrix):
+	for drawing_particle:ParticleLine in draw_diagram_particles(drawing_matrix):
 		ParticleLines.add_child(drawing_particle)
 	
-	for interaction_position in drawing_matrix.get_interaction_positions():
+	for interaction_position:Vector2 in drawing_matrix.get_interaction_positions():
 		place_interaction(interaction_position * grid_size, InteractionInstance.instantiate(), false)
 
 	line_diagram_actions = true
