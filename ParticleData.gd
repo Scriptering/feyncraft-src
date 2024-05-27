@@ -1,19 +1,19 @@
 extends Node
 
-@onready var PARTICLE_TEXTURES = {}
+@onready var PARTICLE_TEXTURES : Dictionary = {}
 
-func _ready():
-	var is_on_editor = OS.has_feature("editor")
+func _ready() -> void:
+	var is_on_editor := OS.has_feature("editor")
 	sort_interactions()
 	sort_hadrons()
 	set_interaction_strength_limits()
 
-	for folder_path in ['res://Textures/ParticlesAndLines/', 'res://Textures/ParticlesAndLines/Hadrons/']:
-		var dir = DirAccess.open(folder_path)
+	for folder_path : String in ['res://Textures/ParticlesAndLines/', 'res://Textures/ParticlesAndLines/Hadrons/']:
+		var dir := DirAccess.open(folder_path)
 		dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 
 		while true:
-			var file = dir.get_next()
+			var file := dir.get_next()
 			if file == "":
 				break
 			
@@ -492,44 +492,44 @@ const HADRON_NAMES : Dictionary = {
 	Hadrons.Invalid:"Invalid"
 }
 
-func get_particle_name(particle: int):
+func get_particle_name(particle: int) -> String:
 	return Particle.keys()[Particle.values().find(particle)]
 
-func get_particle_texture(particle: int):
+func get_particle_texture(particle: int) -> Texture2D:
 	return PARTICLE_TEXTURES[Particle.keys()[Particle.values().find(particle)]]
 
 func get_particle_icon(particle: int) -> Texture2D:
 	return load("res://Textures/Buttons/icons/Particles/" + get_particle_name(particle) + ".png")
 
-func get_hadron_texture(hadron: Hadrons):
+func get_hadron_texture(hadron: Hadrons) -> Texture2D:
 	return PARTICLE_TEXTURES[HADRON_NAMES[hadron]]
 
 func find_hadron(interaction: Array) -> Hadrons:
 	var sorted_interaction: Array = interaction.duplicate()
 	sorted_interaction.sort()
 	
-	for key in HADRON_QUARK_CONTENT.keys():
+	for key:Hadrons in HADRON_QUARK_CONTENT.keys():
 		if sorted_interaction in HADRON_QUARK_CONTENT[key]:
 			return key
 	
 	return Hadrons.Invalid
 
 func sort_interactions() -> void:
-	for interaction_type in INTERACTIONS:
-		for interaction in interaction_type:
+	for interaction_type:Array in INTERACTIONS:
+		for interaction:Array in interaction_type:
 			interaction.sort()
 	
-	for interaction_type in GENERAL_INTERACTIONS:
-		for interaction in interaction_type:
+	for interaction_type:Array in GENERAL_INTERACTIONS:
+		for interaction:Array in interaction_type:
 			interaction.sort()
 	
-	for particle in BASE_PARTICLES:
-		for interaction in PARTICLE_INTERACTIONS[particle]:
+	for particle:Particle in BASE_PARTICLES:
+		for interaction:Array in PARTICLE_INTERACTIONS[particle]:
 			interaction.sort()
 
 func sort_hadrons() -> void:
-	for key in HADRON_QUARK_CONTENT.keys():
-		for hadron in HADRON_QUARK_CONTENT[key]:
+	for key:Hadrons in HADRON_QUARK_CONTENT.keys():
+		for hadron:Array in HADRON_QUARK_CONTENT[key]:
 			hadron.sort()
 
 func is_vec_equal_approx(vector1 : Vector2, vector2 : Vector2) -> bool:
@@ -539,8 +539,8 @@ func set_interaction_strength_limits() -> void:
 	var minimum_strength: float = 1
 	var maximum_strength: float = 0
 	
-	for i in INTERACTION_STRENGTHS.size():
-		for j in INTERACTION_STRENGTHS[i].size():
+	for i:int in INTERACTION_STRENGTHS.size():
+		for j:int in INTERACTION_STRENGTHS[i].size():
 			INTERACTION_STRENGTHS[i][j][0] = max(INTERACTION_STRENGTHS[i][j][0], MIN_INTERACTION_STRENGTH)
 			var interaction_strength: float = INTERACTION_STRENGTHS[i][j][0]
 			

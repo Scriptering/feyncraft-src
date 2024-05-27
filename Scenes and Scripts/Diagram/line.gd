@@ -2,11 +2,11 @@ extends Node2D
 class_name ParticleLine
 
 signal request_deletion
+signal clicked_on()
 
 @onready var Text = get_node("text")
 @onready var SpareText = get_node("spareText")
 @onready var Arrow = $arrow
-@onready var ClickAreaShape = $clickArea/CollisionShape2D
 @onready var LineMiddle = $line_middle
 @onready var LineJointStart = $line_joint_start
 @onready var LineJointEnd = $line_joint_end
@@ -50,8 +50,6 @@ var being_deleted : bool = false
 
 var has_colour := false
 var has_shade := false
-
-var hovering: bool = false
 
 var left_point: Vector2 = Vector2.LEFT
 var right_point: Vector2 = Vector2.LEFT
@@ -102,6 +100,13 @@ func _ready() -> void:
 	
 	update_line()
 	connect_to_interactions()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		return
+	
+	#if event.button_index == MOUSE_BUTTON_LEFT and is_hovered():
+		#clicked_on.emit(event)
 
 func init(diagram: MainDiagram) -> void:
 	Diagram = diagram
@@ -159,7 +164,7 @@ func set_dimensionality() -> void:
 		dimensionality = ParticleData.BOSON_DIMENSIONALITY
 
 func connect_to_interactions() -> void:
-	for interaction in Diagram.get_interactions():
+	for interaction:Interaction in Diagram.get_interactions():
 		if interaction.position in points and !self in interaction.connected_lines:
 			interaction.connected_lines.append(self)
 		elif !interaction.position in points:
@@ -187,7 +192,7 @@ func get_on_state_line() -> StateLine.StateType:
 
 func _get_connected_interactions() -> Array[Interaction]:
 	connected_interactions.clear()
-	for interaction in Diagram.get_interactions():
+	for interaction:Interaction in Diagram.get_interactions():
 		if self in interaction.connected_lines:
 			connected_interactions.append(interaction)
 
@@ -195,13 +200,13 @@ func _get_connected_interactions() -> Array[Interaction]:
 
 func get_interaction_at_point(point: Point) -> Interaction:
 	var interaction_at_point : Interaction
-	for interaction in self.connected_interactions:
+	for interaction:Interaction in self.connected_interactions:
 		if points[point] == interaction.position:
 			interaction_at_point = interaction
 	return interaction_at_point
 
 func is_point_connected(point: Vector2) -> bool:
-	for interaction in self.connected_interactions:
+	for interaction:Interaction in self.connected_interactions:
 		if point == interaction.position:
 			return true
 	return false
@@ -265,7 +270,6 @@ func update_line() -> void:
 	if Arrow.visible:
 		move_arrow()
 
-	move_click_area()
 	set_text_texture()
 
 
@@ -315,11 +319,6 @@ func get_arrow_visiblity() -> bool:
 func move_arrow() -> void:
 	Arrow.position = points[Point.Start] + self.line_vector / 2
 	Arrow.rotation = self.line_vector.angle()
-
-func move_click_area() -> void:
-	ClickAreaShape.position = self.line_vector / 2 + points[Point.Start]
-	ClickAreaShape.rotation = self.line_vector.angle()
-	ClickAreaShape.shape.size.x = self.line_vector.length()
 
 func move_text() -> void:
 	match get_on_state_line():
@@ -429,13 +428,21 @@ func is_line_overlapping() -> bool:
 	return false
 
 func is_hovered() -> bool:
-	return hovering
+	print(get_local_mouse_position())
+	
+	var v := line_vector.normalized();
+	var m := get_local_mouse_position() - points[Point.Start];
 
-func _on_click_area_mouse_entered() -> void:
-	hovering = true
+	var lambda := m.x*v.x + m.y*v.y
+	var rho :=   -m.x*v.y + m.y*v.x
 
-func _on_click_area_mouse_exited() -> void:
-	hovering = false
+	if lambda < 0 or lambda > line_vector.length():
+		return false
+	
+	if rho > click_area_width or rho < -click_area_width:
+		return false
+	
+	return true
 
 func delete() -> void:
 	queue_free()
@@ -443,7 +450,7 @@ func delete() -> void:
 
 func deconstructor():
 	being_deleted = true
-	for interaction in self.connected_interactions:
+	for interaction:Interaction in self.connected_interactions:
 		interaction.connected_lines.erase(self)
 	Diagram.update_statelines()
 	points[Point.Start] = Vector2.LEFT

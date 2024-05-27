@@ -77,7 +77,7 @@ func update_button_colours(save: bool = true) -> void:
 func get_button_colours() -> Array[Color]:
 	var button_colours: Array[Color] = []
 	
-	for i in Palette.ColourIndex.values():
+	for i:int in Palette.ColourIndex.values():
 		if i not in ColourButtonDict.keys():
 			button_colours.push_back(Color.BLACK)
 			continue
@@ -106,7 +106,7 @@ func update_custom_palette() -> void:
 	
 	var custom_colours: Array[Color] = palette.get_custom_colours()
 	
-	for i in range(Palette.ColourIndex.size()):
+	for i:int in range(Palette.ColourIndex.size()):
 		palette.colours[i] = custom_colours[i]
 	
 	update_button_colours()

@@ -143,7 +143,7 @@ func is_submission_duplicate(submission: DrawingMatrix) -> bool:
 	reduced_submission.reindex()
 	
 	return submitted_diagrams.any(
-		func(submitted_diagram: DrawingMatrix):
+		func(submitted_diagram: DrawingMatrix) -> bool:
 			var reindexed_submission: ConnectionMatrix = submitted_diagram.reduce_to_connection_matrix()
 			reindexed_submission.reindex()
 			

@@ -34,7 +34,7 @@ func is_submission_solution(submission: DrawingMatrix) -> bool:
 		return is_matching_states(reduced_submission)
 	
 	return solutions.any(
-		func(solution: DrawingMatrix):
+		func(solution: DrawingMatrix) -> bool:
 			return solution.reduce_to_connection_matrix().is_duplicate(reduced_submission)
 	)
 
@@ -42,8 +42,8 @@ func get_state_interaction(state: StateLine.StateType) -> Array:
 	return state_interactions[state]
 
 func get_sorted_states(states: Array) -> Array:
-	return states.map(func(interactions):
-		return interactions.map(func(state_interaction):
+	return states.map(func(interactions:Array) -> Array:
+		return interactions.map(func(state_interaction: Array) -> ParticleData.Hadrons:
 			if state_interaction.size() == 1:
 				return state_interaction.front()
 			
@@ -58,15 +58,16 @@ func is_matching_states(reduced_submission: ConnectionMatrix) -> bool:
 	])
 	var sorted_states: Array = get_sorted_states(state_interactions)
 	
-	for state in [StateLine.StateType.Initial, StateLine.StateType.Final]:
+	for state:StateLine.StateType in StateLine.STATES:
 		if (
 			sorted_submitted_states[state].any(
-				func(state_interaction: Array): return state_interaction not in sorted_states[state]
-			) or
+				func(state_interaction: Array) -> bool:
+					return state_interaction not in sorted_states[state]
+		) or
 			sorted_states[state].any(
-				func(state_interaction: Array): return state_interaction not in sorted_submitted_states[state]
-			)
-		):
+				func(state_interaction: Array) -> bool:
+					return state_interaction not in sorted_submitted_states[state]
+		)):
 			return false
 	
 	return true

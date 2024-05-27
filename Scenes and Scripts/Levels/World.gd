@@ -194,7 +194,7 @@ func enter_solution_creation() -> void:
 	
 	var creating_problem: Problem = GLOBALS.creating_problem
 	var drawn_diagram: DrawingMatrix = Diagram.generate_drawing_matrix_from_diagram()
-	for state in [StateLine.StateType.Initial, StateLine.StateType.Final]:
+	for state:StateLine.StateType in StateLine.STATES:
 		GLOBALS.creating_problem.state_interactions[state] = drawn_diagram.reduce_to_connection_matrix().get_state_interactions(state)
 	
 	if !ProblemGeneration.setup_new_problem(creating_problem):

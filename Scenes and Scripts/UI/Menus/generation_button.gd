@@ -40,7 +40,7 @@ var max_degree: int:
 	get:
 		return MaxDegree.value
 
-func _ready():
+func _ready() -> void:
 	super._ready()
 	
 	can_generate = !(InitialState == [] and FinalState == [])
@@ -142,7 +142,7 @@ func _on_save_pressed() -> void:
 		StatesSaved.show()
 		set_checks(InitialState + FinalState)
 		
-		for state in StateLine.STATES:
+		for state:StateLine.StateType in StateLine.STATES:
 			Equation.load_state_symbols(state, [InitialState, FinalState][state])
 		
 	show_feedback()

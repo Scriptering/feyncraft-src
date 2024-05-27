@@ -11,7 +11,7 @@ func init(_hadron: ParticleData.Hadrons) -> void:
 	if hadron == ParticleData.Hadrons.Invalid:
 		return
 	
-	for i in range(ParticleData.HADRON_QUARK_CONTENT[hadron].size()):
+	for i:int in range(ParticleData.HADRON_QUARK_CONTENT[hadron].size()):
 		if i != 0:
 			$Tooltip.add_content(create_slash())
 		

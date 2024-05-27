@@ -21,7 +21,10 @@ func generate(
 	var state_interactions : Array
 	var useable_state_interactions: Array = get_useable_state_interactions(use_hadrons, useable_particles)
 	
-	if !useable_particles.any(func(particle): return particle in ParticleData.BOSONS):
+	if !useable_particles.any(
+		func(particle: ParticleData.Particle) -> bool:
+			return particle in ParticleData.BOSONS
+	):
 		return null
 	
 	for _interaction_generation_attempt in MAX_INTERACTION_GENERATION_ATTEMPTS:
@@ -67,26 +70,32 @@ func get_useable_particles_from_interaction_checks(checks: Array[bool]) -> Array
 	return useable_particles
 
 func is_energy_conserved(state_interactions: Array) -> bool:
-	if state_interactions.all(func(state_interaction): return state_interaction.size() != 1):
+	if state_interactions.all(
+		func(state_interaction: Array) -> bool:
+			return state_interaction.size() != 1
+	):
 		return true
 	
 	var state_base_particles: Array = state_interactions.map(
-		func(state_interaction): return GLOBALS.flatten(state_interaction).map(
-			func(particle): return abs(particle)
-		)
-	)
+		func(state_interaction: Array) -> Array:
+			return GLOBALS.flatten(state_interaction).map(
+			func(particle: ParticleData.Particle) -> ParticleData.Particle: 
+				return abs(particle) as ParticleData.Particle
+	))
 	
 	var state_masses: Array = state_base_particles.map(
-		func(base_particles: Array): return base_particles.reduce(
-			func(accum: float, particle: ParticleData.Particle) -> float: return accum + ParticleData.PARTICLE_MASSES[particle], 0.0
+		func(base_particles: Array) -> Array: 
+			return base_particles.reduce(
+				func(accum: float, particle: ParticleData.Particle) -> float:
+					return accum + ParticleData.PARTICLE_MASSES[particle], 0.0
 		)
 	)
 	
-	for state_type in [StateLine.StateType.Initial, StateLine.StateType.Final]:
-		if state_base_particles[state_type].size() != 1:
+	for state:StateLine.StateType in StateLine.STATES:
+		if state_base_particles[state].size() != 1:
 			continue
 		
-		if state_masses[state_type] < state_masses[(state_type + 1) % 2] - 0.005:
+		if state_masses[state] < state_masses[(state + 1) % 2] - 0.005:
 			return false
 	
 	return true
@@ -94,7 +103,7 @@ func is_energy_conserved(state_interactions: Array) -> bool:
 func get_all_particles() -> Array[ParticleData.Particle]:
 	var all_particles: Array[ParticleData.Particle] = []
 	
-	for particle in ParticleData.Particle.values():
+	for particle:ParticleData.Particle in ParticleData.Particle.values():
 		if particle == ParticleData.Particle.none:
 			continue
 		
@@ -118,7 +127,7 @@ func get_useable_state_interactions(use_hadrons: HadronFrequency, useable_partic
 	
 	var useable_state_interactions: Array = []
 	
-	for particle in useable_particles:
+	for particle:ParticleData.Particle in useable_particles:
 		useable_state_interactions.push_back([particle])
 		
 		if particle in ParticleData.SHADED_PARTICLES:
@@ -137,9 +146,12 @@ func calc_W_count(state_factor: int, state_interaction: Array) -> int:
 func get_useable_hadrons(useable_particles: Array[ParticleData.Particle]) -> Array:
 	var useable_hadrons : Array = []
 	
-	for hadron in ParticleData.Hadrons.values():
-		for hadron_content in ParticleData.HADRON_QUARK_CONTENT[hadron]:
-			if hadron_content.all(func(quark: ParticleData.Particle): return abs(quark) in useable_particles):
+	for hadron:ParticleData.Hadrons in ParticleData.Hadrons.values():
+		for hadron_content:Array in ParticleData.HADRON_QUARK_CONTENT[hadron]:
+			if hadron_content.all(
+				func(quark: ParticleData.Particle) -> bool:
+					return abs(quark) in useable_particles
+			):
 				useable_hadrons.push_back(hadron_content)
 	
 	return useable_hadrons
@@ -166,9 +178,14 @@ func generate_state_interactions(
 		var next_state_interaction: Array
 		if particle_count == 0 and use_hadrons == HadronFrequency.Always:
 			next_state_interaction = get_next_state_interaction(
-				quantum_number_difference, useable_state_interactions.filter(
-					func(state_interaction: Array): return state_interaction.size() > 1
-				), interaction_count_left, W_count, state_factor
+				quantum_number_difference,
+				useable_state_interactions.filter(
+					func(state_interaction: Array) -> bool:
+						return state_interaction.size() > 1
+			),
+			interaction_count_left,
+			W_count,
+			state_factor
 			)
 
 		else:
@@ -197,9 +214,13 @@ func get_next_state_interaction(
 ) -> Array:
 	
 	var possible_next_state_interactions := useable_state_interactions.filter(
-		func(state_interaction: Array):
+		func(state_interaction: Array) -> bool:
 			return is_state_interaction_possible(
-				state_interaction, quantum_number_difference, interaction_count_left, W_count, state_factor
+				state_interaction,
+				quantum_number_difference,
+				interaction_count_left,
+				W_count,
+				state_factor
 			)
 	)
 	
@@ -208,7 +229,7 @@ func get_next_state_interaction(
 func accum_state_interaction_quantum_numbers(state_interaction: Array, accum_quantum_numbers: Array, state_factor: int) -> Array:
 	var new_quantum_numbers := accum_quantum_numbers.duplicate(true)
 	
-	for particle in state_interaction:
+	for particle:ParticleData.Particle in state_interaction:
 		for quantum_number in ParticleData.QuantumNumber.values():
 			new_quantum_numbers[quantum_number] += (
 				anti(particle) * state_factor * ParticleData.QUANTUM_NUMBERS[base_particle(particle)][quantum_number]
@@ -254,10 +275,11 @@ func setup_new_problem(problem: Problem) -> Problem:
 	var max_degree: int = problem.degree if problem.custom_degree else 6
 	
 	var find: int = SolutionGeneration.Find.One if problem.state_interactions.any(
-		func(state_interaction: Array): return state_interaction.any(
-			func(interaction: Array): return interaction.size() > 1
-		)
-	) else SolutionGeneration.Find.LowestOrder
+		func(state_interaction: Array) -> bool:
+			return state_interaction.any(
+				func(interaction: Array) -> bool:
+					return interaction.size() > 1
+	)) else SolutionGeneration.Find.LowestOrder
 	
 	var generated_solutions: Array[ConnectionMatrix] = SolutionGeneration.generate_diagrams(
 		problem.state_interactions[StateLine.StateType.Initial],

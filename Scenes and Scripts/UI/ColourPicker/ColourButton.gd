@@ -38,7 +38,8 @@ func create_picker_panel() -> void:
 	picker_panel.position = get_global_position() + picker_offset
 	picker_panel.colour_changed.connect(_on_color_picker_color_changed)
 	picker_panel.closed.connect(
-		func(): self.button_pressed = false
+		func() -> void:
+			self.button_pressed = false
 	)
 	
 	await get_tree().process_frame

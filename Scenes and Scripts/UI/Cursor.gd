@@ -28,7 +28,7 @@ var cursors: Dictionary = {
 	GLOBALS.Cursor.confused : load(CURSOR_FOLDER_PATH + 'confused.png'.trim_suffix(".import")),
 }
 
-func _ready():
+func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 	
 	Heart.visible = false

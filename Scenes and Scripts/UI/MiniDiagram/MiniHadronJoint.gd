@@ -1,4 +1,5 @@
 extends Node2D
+class_name MiniHadronJoint
 
 @onready var HadronLabel = $HadronSprite
 
@@ -9,14 +10,14 @@ var interaction_ys: PackedInt32Array
 
 var Diagram: MiniDiagram
 
-func _ready():
+func _ready() -> void:
 	place_label()
 	interaction_ys.sort()
 
 func array_min(array: Array):
 	var min_element = array[0]
 	
-	for element in array:
+	for element:Variant in array:
 		if element < min_element:
 			min_element = element
 	
@@ -31,7 +32,11 @@ func init(position_x: int, _diagram: MiniDiagram) -> void:
 func get_hadron_interactions() -> Array:
 	return GLOBALS.find_all_var(
 		Diagram.get_interactions(),
-		func(interaction): return interaction.position.y in interaction_ys and interaction.get_on_state_line() == state
+		func(interaction: MiniInteraction) -> bool:
+			return (
+				interaction.position.y in interaction_ys and
+				interaction.get_on_state_line() == state
+			)
 	)
 
 func get_hadron_seperation() -> float:

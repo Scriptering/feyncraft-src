@@ -43,7 +43,7 @@ func generate_vision_matrix(vision: GLOBALS.Vision, diagram: DrawingMatrix, shad
 		GLOBALS.Vision.Shade:
 			vision_matrix = generate_shade_matrix(shade, diagram)
 	
-	for id in range(vision_matrix.matrix_size):
+	for id:int in range(vision_matrix.matrix_size):
 		if vision_matrix.is_extreme_point(id) or vision_matrix.is_lonely_extreme_point(id):
 			continue
 		
@@ -54,17 +54,18 @@ func generate_vision_matrix(vision: GLOBALS.Vision, diagram: DrawingMatrix, shad
 
 func generate_shade_matrix(shade: Shade, diagram: DrawingMatrix) -> DrawingMatrix:
 	var shade_matrix: DrawingMatrix = diagram.get_reduced_matrix(
-		func(particle: ParticleData.Particle): return particle in ParticleData.SHADE_PARTICLES[shade]
+		func(particle: ParticleData.Particle) -> bool:
+			return particle in ParticleData.SHADE_PARTICLES[shade]
 	)
 
 	if shade == Shade.Dark or shade == Shade.Both:
 		return shade_matrix
 	
-	for connection in shade_matrix.get_all_connections():
+	for connection:Array in shade_matrix.get_all_connections():
 		if connection[shade_matrix.Connection.particle] == ParticleData.Particle.W:
 			shade_matrix.reverse_connection(connection)
 	
-	for id in range(shade_matrix.matrix_size):
+	for id:int in range(shade_matrix.matrix_size):
 		if (
 			shade_matrix.is_extreme_point(id) or
 			shade_matrix.is_lonely_extreme_point(id, shade_matrix.EntryFactor.Entry) or
@@ -125,7 +126,7 @@ func find_colourless_interactions(
 	return colourless_interactions
 
 func path_has_repeated_point(path: PackedInt32Array) -> bool:
-	for point in path:
+	for point:int in path:
 		if path.count(point) > 1:
 			return true
 	
@@ -147,7 +148,10 @@ func find_colourless_hadron_interactions(
 		return colourless_hadron_interactions
 	
 	var quark_paths: Array[PackedInt32Array] = generate_paths(
-		vision_matrix.get_reduced_matrix(func(particle: ParticleData.Particle): return particle in ParticleData.QUARKS), pick_next_colour_point
+		vision_matrix.get_reduced_matrix(
+			func(particle: ParticleData.Particle) -> bool: 
+				return particle in ParticleData.QUARKS),
+			pick_next_colour_point
 	)
 	
 	for hadron in hadrons:
@@ -167,7 +171,7 @@ func get_quark_path_gluon_points(
 ) -> PackedInt32Array:
 	var gluon_points: PackedInt32Array = []
 	
-	for point in quark_path:
+	for point:int in quark_path:
 		for connected_id in vision_matrix.get_connected_ids(point):
 			if !IGNORE_COLOURLESS_GROUP_GLUONS and connected_id in colourless_group_interactions:
 				continue
@@ -185,7 +189,7 @@ func find_colourless_hadron_interaction(
 	var gluon_ids: PackedInt32Array = []
 	var counted_quark_paths: PackedInt32Array = []
 	
-	for hadron_point in hadron:
+	for hadron_point:int in hadron:
 		var quark_path_id: int = get_path_from_id(hadron_point, quark_paths)
 		
 		if quark_path_id in counted_quark_paths:
@@ -209,15 +213,7 @@ func find_colourless_hadron_interaction(
 func find_colourless_group_interactions(paths: Array[PackedInt32Array], vision_matrix: DrawingMatrix) -> PackedInt32Array:
 	var colourless_group_interactions: PackedInt32Array = []
 	
-	var possible_paths: Array[PackedInt32Array] = paths.filter(
-		func(path: PackedInt32Array): return path_has_repeated_point(path) and true 
-#		(
-#			GLOBALS.any(path, func(point: int): return vision_matrix.is_extreme_point(point)) or
-#			GLOBALS.any(path, func(point: int): return vision_matrix.is_lonely_extreme_point(point))
-#		)
-	)
-	
-	for path in possible_paths:
+	for path:PackedInt32Array in paths:
 		var colourless_group_interaction: int = find_colourless_group_interaction(path, vision_matrix)
 		
 		if colourless_group_interaction == NOT_FOUND:
@@ -230,7 +226,7 @@ func find_colourless_group_interactions(paths: Array[PackedInt32Array], vision_m
 func get_repeated_points_in_path(path: PackedInt32Array) -> PackedInt32Array:
 	var repeated_points: PackedInt32Array = []
 	
-	for point in path:
+	for point:int in path:
 		if path.count(point) > 1 and point not in repeated_points:
 			repeated_points.push_back(point)
 	
@@ -242,7 +238,12 @@ func find_colourless_group_interaction(path: PackedInt32Array, vision_matrix: Dr
 	if repeated_points.size() < 2:
 		return NOT_FOUND
 	
-	var test_index: int = GLOBALS.find_var(repeated_points, func(point: int): return vision_matrix.get_connected_ids(point, true).size() > 2, 1)
+	var test_index: int = GLOBALS.find_var(
+		repeated_points,
+		func(point: int) -> bool:
+			return vision_matrix.get_connected_ids(point, true).size() > 2,
+		1
+	)
 	
 	if test_index == repeated_points.size():
 		return NOT_FOUND
@@ -252,7 +253,7 @@ func find_colourless_group_interaction(path: PackedInt32Array, vision_matrix: Dr
 	var test_vision_matrix: DrawingMatrix = vision_matrix.duplicate(true)
 	test_vision_matrix.disconnect_interactions(repeated_points[test_index-1], repeated_points[test_index], ParticleData.Particle.gluon, true)
 
-	for reached_point in test_vision_matrix.reach_ids(test_point, [], true):
+	for reached_point:int in test_vision_matrix.reach_ids(test_point, [], true):
 		if reached_point == test_point:
 			continue
 		
@@ -316,24 +317,33 @@ func colour_hadrons(path_colours: Array[Colour], paths: Array[PackedInt32Array],
 	for hadron in hadrons:
 		path_colours = colour_hadron(hadron, path_colours, paths)
 		
-		for i in range(MAX_RESTRICTED_HADRON_COUNT):
+		for i:int in range(MAX_RESTRICTED_HADRON_COUNT):
 			var restricted_hadron_index : int = (
-				GLOBALS.find_var(hadrons, func(test_hadron: PackedInt32Array) -> bool:
-					return is_hadron_restricted(test_hadron, path_colours, paths))
-			)
+				GLOBALS.find_var(
+					hadrons,
+					func(test_hadron: PackedInt32Array) -> bool:
+						return is_hadron_restricted(test_hadron, path_colours, paths)
+			))
 			
 			if restricted_hadron_index == hadrons.size():
 				break
 			
 			colour_hadron(hadrons[restricted_hadron_index], path_colours, paths)
 		
-		if !path_colours.any(func(colour: Colour) -> bool: return colour == Colour.None):
+		if !path_colours.any(
+			func(colour: Colour) -> bool:
+				return colour == Colour.None
+		):
 			break
 	
 	return path_colours
 
 func get_path_from_id(id:int, paths: Array[PackedInt32Array]) -> int:
-	return GLOBALS.find_var(paths, func(path: PackedInt32Array): return id in path)
+	return GLOBALS.find_var(
+		paths,
+		func(path: PackedInt32Array) -> bool:
+			return id in path
+	)
 
 func get_colour_from_id(id: int, path_colours: Array[Colour], paths: Array[PackedInt32Array]) -> Colour:
 	return path_colours[get_path_from_id(id, paths)]
@@ -341,7 +351,7 @@ func get_colour_from_id(id: int, path_colours: Array[Colour], paths: Array[Packe
 func get_hadron_colours(hadron: Array, path_colours: Array[Colour], paths: Array[PackedInt32Array]) -> Array[Colour]:
 	var hadron_colours: Array[Colour] = []
 	
-	for hadron_point in hadron:
+	for hadron_point:int in hadron:
 		hadron_colours.push_back(get_colour_from_id(hadron_point, path_colours, paths))
 	
 	return hadron_colours
@@ -349,15 +359,21 @@ func get_hadron_colours(hadron: Array, path_colours: Array[Colour], paths: Array
 func colour_baryon(baryon: Array, path_colours: Array[Colour], paths: Array[PackedInt32Array]) -> Array[Colour]:
 	var used_colours: Array[Colour] = get_hadron_colours(baryon, path_colours, paths)
 	
-	if !used_colours.any(func(colour: Colour): return colour == Colour.None):
+	if !used_colours.any(
+		func(colour: Colour) -> bool: 
+			return colour == Colour.None
+	):
 		return path_colours
 	
-	for baryon_point in baryon:
+	for baryon_point:int in baryon:
 		if get_colour_from_id(baryon_point, path_colours, paths) != Colour.None:
 			continue
 		
-		var next_colour: Colour = colours[GLOBALS.find_var(
-			colours, func(colour: Colour): return colour not in used_colours
+		var next_colour: Colour = colours[
+			GLOBALS.find_var(
+				colours,
+				func(colour: Colour) -> bool:
+					return colour not in used_colours
 		)]
 		
 		used_colours[baryon.find(baryon_point)] = next_colour
@@ -379,7 +395,7 @@ func get_least_used_colour(path_colours: Array[Colour]) -> Colour:
 func colour_meson(meson: Array, path_colours: Array[Colour], paths: Array[PackedInt32Array]) -> Array[Colour]:
 	var meson_colours: Array[Colour] = get_hadron_colours(meson, path_colours, paths)
 	
-	for i in range(meson.size()):
+	for i:int in meson.size():
 		if meson_colours[i] == Colour.None:
 			continue
 		
@@ -388,23 +404,24 @@ func colour_meson(meson: Array, path_colours: Array[Colour], paths: Array[Packed
 		return path_colours
 	
 	var meson_colour: Colour = get_least_used_colour(path_colours)
-	for meson_point in meson:
+	for meson_point:int in meson:
 		path_colours[get_path_from_id(meson_point, paths)] = meson_colour
 
 	return path_colours
 
 func generate_colour_matrix(drawing_matrix: DrawingMatrix) -> DrawingMatrix:
 	var colour_matrix : DrawingMatrix = drawing_matrix.get_reduced_matrix(
-		func(particle: ParticleData.Particle): return particle in ParticleData.COLOUR_PARTICLES
+		func(particle: ParticleData.Particle) -> bool:
+			return particle in ParticleData.COLOUR_PARTICLES
 	)
 	
 	var gluon_connections: Array = []
-	for id in range(colour_matrix.matrix_size):
-		for connected_id in colour_matrix.get_connected_ids(id):
+	for id:int in colour_matrix.matrix_size:
+		for connected_id:int in colour_matrix.get_connected_ids(id):
 			if colour_matrix.get_connection_particles(id, connected_id).front() == ParticleData.Particle.gluon:
 				gluon_connections.push_back([connected_id, id, ParticleData.Particle.gluon])
 	
-	for gluon_connection in gluon_connections:
+	for gluon_connection:Array in gluon_connections:
 		colour_matrix.insert_connection(gluon_connection)
 	
 	return colour_matrix
@@ -418,7 +435,7 @@ func pick_next_colour_point(current_point: int, available_points: PackedInt32Arr
 	if available_points.size() == 0:
 		return NOT_FOUND
 
-	for available_point in available_points:
+	for available_point:int in available_points:
 		if ParticleData.Particle.gluon in connections.get_connection_particles(current_point, available_point, false, true):
 			gluon_points.push_back(available_point)
 	
@@ -427,7 +444,7 @@ func pick_next_colour_point(current_point: int, available_points: PackedInt32Arr
 	
 	var most_connections: int = 0
 	var highest_connection_gluon_point: int = -1
-	for gluon_point in gluon_points:
+	for gluon_point:int in gluon_points:
 		var connection_size: int = connections.get_connection_size(current_point, gluon_point, true)
 		if connection_size > most_connections:
 			highest_connection_gluon_point = gluon_point
@@ -462,7 +479,7 @@ func generate_state_paths(connections: DrawingMatrix, next_point_picker_function
 	
 	var paths: Array[PackedInt32Array] = []
 	
-	for start_point in start_points:
+	for start_point:int in start_points:
 		var new_path: PackedInt32Array = generate_path(connections, start_point, end_points, next_point_picker_function)
 		
 		if new_path.size() == 0:
@@ -478,14 +495,14 @@ func generate_loops(connections: DrawingMatrix, next_point_picker_function: Call
 	
 	for _loop in range(MAX_LOOP_COUNT):
 		var start_point: int =  connections.find_first_id(
-			func(id: int):
+			func(id: int) -> bool:
 				var connected_count: int = connections.get_connected_count(id, true)
 				return connected_count > 0 and connected_count < 3
 		)
 		
 		if start_point == connections.matrix_size:
 			start_point = connections.find_first_id(
-				func(id: int):
+				func(id: int) -> bool:
 					return connections.get_connected_count(id, true) > 0
 			)
 		
@@ -505,7 +522,7 @@ func get_next_point(current_point: int, path: PackedInt32Array, connections: Dra
 	var available_points: PackedInt32Array = connections.get_connected_ids(current_point)
 	var temp_available_points: PackedInt32Array = available_points.duplicate()
 	
-	for available_point in temp_available_points:
+	for available_point:int in temp_available_points:
 		if path.size() < 2:
 			continue
 		

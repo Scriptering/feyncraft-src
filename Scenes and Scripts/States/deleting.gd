@@ -16,7 +16,7 @@ func input(_event: InputEvent) -> State:
 	return State.Null
 
 func delete() -> void:
-	for interaction in Diagram.get_interactions():
+	for interaction:Interaction in Diagram.get_interactions():
 		if !interaction.hovering:
 			continue
 			
@@ -25,7 +25,7 @@ func delete() -> void:
 		return
 	
 	for particle_line in Diagram.get_particle_lines():
-		if !particle_line.hovering:
+		if !particle_line.is_hovered():
 			continue
 		
 		Diagram.delete_line(particle_line)

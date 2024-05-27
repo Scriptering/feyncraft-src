@@ -72,7 +72,7 @@ func clear_items() -> void:
 		item.queue_free()
 
 func update_index_labels() -> void:
-	for i in range(ItemContainer.get_child_count()):
+	for i:int in range(ItemContainer.get_child_count()):
 		var item: ListItem = ItemContainer.get_child(i)
 		
 		if item.is_queued_for_deletion():

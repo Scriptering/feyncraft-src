@@ -8,7 +8,7 @@ var state : StateLine.StateType
 var hadron : Hadron
 var hadron_lines : Array
 
-func _ready():
+func _ready() -> void:
 	place_label()
 
 func init() -> void:

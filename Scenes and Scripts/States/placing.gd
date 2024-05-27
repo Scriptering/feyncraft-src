@@ -35,7 +35,7 @@ func place_objects() -> void:
 	get_tree().call_group("grabbable", "drop")
 
 func get_grabbed_object() -> Node:
-	for object in get_tree().get_nodes_in_group("grabbable"):
+	for object:Variant in get_tree().get_nodes_in_group("grabbable"):
 		if object.grabbed:
 			return object
 	
@@ -43,7 +43,7 @@ func get_grabbed_object() -> Node:
 
 func is_interaction_grabbed() -> bool:
 	return get_tree().get_nodes_in_group("grabbable").any(
-		func(object):
+		func(object:Variant) -> bool:
 			return object.grabbed and object is Interaction
 	)
 

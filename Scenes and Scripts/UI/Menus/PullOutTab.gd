@@ -84,7 +84,10 @@ func push_in() -> void:
 	var tween = get_tree().create_tween()
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_SPRING)
-	tween.finished.connect(func(): push_in_finished.emit())
+	tween.finished.connect(
+		func() -> void:
+			push_in_finished.emit()
+	)
 	tween.tween_property(MovingContainer, "position", starting_moving_container_position, time_to_push_in)
 
 

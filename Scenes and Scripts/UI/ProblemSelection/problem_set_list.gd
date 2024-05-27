@@ -68,7 +68,7 @@ func add_problem_set(problem_set: ProblemSet, problem_set_item: ListItem = Probl
 
 func update_index_labels() -> void:
 	var index: int = 0
-	for i in range(problem_container.get_child_count()):
+	for i:int in range(problem_container.get_child_count()):
 		var problem_set: PanelContainer = problem_container.get_child(i)
 		
 		if problem_set.is_queued_for_deletion():

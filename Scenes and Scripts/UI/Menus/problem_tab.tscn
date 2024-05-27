@@ -47,11 +47,11 @@ texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 expand_margin_top = 10.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8jwl5"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_51clg"]
 resource_local_to_scene = true
 shader = ExtResource("8_w33hb")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_h8pia"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_eiuhv"]
 resource_local_to_scene = true
 shader = ExtResource("8_w33hb")
 
@@ -60,15 +60,15 @@ base_font = ExtResource("14_wsnu4")
 spacing_top = -3
 spacing_bottom = -5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0dgr6"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7w3y4"]
 resource_local_to_scene = true
 shader = ExtResource("8_w33hb")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_lwk0m"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s1pmj"]
 resource_local_to_scene = true
 shader = ExtResource("8_w33hb")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2qqop"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wtohc"]
 resource_local_to_scene = true
 shader = ExtResource("8_w33hb")
 
@@ -76,11 +76,11 @@ shader = ExtResource("8_w33hb")
 default_font = SubResource("FontVariation_vdd88")
 default_font_size = 14
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0h3gk"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uosso"]
 resource_local_to_scene = true
 shader = ExtResource("8_w33hb")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_bpd7e"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vcv48"]
 resource_local_to_scene = true
 shader = ExtResource("8_w33hb")
 
@@ -260,7 +260,7 @@ layout_mode = 2
 theme_override_constants/separation = 3
 
 [node name="Rewind" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
-material = SubResource("ShaderMaterial_8jwl5")
+material = SubResource("ShaderMaterial_51clg")
 layout_mode = 2
 icon = ExtResource("5_t5pc5")
 minimum_size = Vector2(25, 24)
@@ -272,7 +272,7 @@ icon_use_parent_material = true
 tooltip = "Load previous problem"
 
 [node name="Solution" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
-material = SubResource("ShaderMaterial_h8pia")
+material = SubResource("ShaderMaterial_eiuhv")
 layout_mode = 2
 icon = ExtResource("6_pp1px")
 minimum_size = Vector2(25, 24)
@@ -312,13 +312,13 @@ stretch_mode = 5
 tooltip = "Problem degree"
 
 [node name="Equation" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("3_7jee8")]
-material = SubResource("ShaderMaterial_0dgr6")
+material = SubResource("ShaderMaterial_7w3y4")
 use_parent_material = true
 layout_mode = 2
 scale_factor = 1.2
 
 [node name="ViewSubmissions" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
-material = SubResource("ShaderMaterial_lwk0m")
+material = SubResource("ShaderMaterial_s1pmj")
 layout_mode = 2
 icon = ExtResource("5_15poa")
 minimum_size = Vector2(24, 24)
@@ -329,7 +329,7 @@ disabled = true
 tooltip = "View submissions"
 
 [node name="Submit" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
-material = SubResource("ShaderMaterial_2qqop")
+material = SubResource("ShaderMaterial_wtohc")
 layout_mode = 2
 theme = SubResource("Theme_wmnb4")
 icon = ExtResource("8_2kr0t")
@@ -343,7 +343,7 @@ icon_text_seperation = 0
 tooltip = "Submit solution"
 
 [node name="NextProblem" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
-material = SubResource("ShaderMaterial_0h3gk")
+material = SubResource("ShaderMaterial_uosso")
 layout_mode = 2
 theme = SubResource("Theme_wmnb4")
 icon = ExtResource("16_leqlk")
@@ -356,7 +356,7 @@ tooltip = "Next Problem"
 
 [node name="PullOutTabButtonDown" parent="MovingContainer/VBoxContainer" instance=ExtResource("10_xn6km")]
 z_index = 0
-material = SubResource("ShaderMaterial_bpd7e")
+material = SubResource("ShaderMaterial_vcv48")
 layout_mode = 2
 size_flags_horizontal = 4
 theme = SubResource("Theme_d1tq1")

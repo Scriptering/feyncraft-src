@@ -51,7 +51,7 @@ func generate_palette_texture() -> ImageTexture:
 	var img := Image.create(palette_size, palette_size, false, Image.Format.FORMAT_RGBA8)
 	img.fill(Color.BLACK)
 	
-	for i in range(ColourIndex.size()):
+	for i:int in range(ColourIndex.size()):
 		img.set_pixelv(get_palette_index(i), colours[i])
 	
 	img.set_pixel(palette_size-1, palette_size-1, colours[ColourIndex.Text])
@@ -79,7 +79,7 @@ func get_random_colours() -> Array[Color]:
 	
 	var new_colours: Array[Color] = make_palette(random_start_colour)
 	
-	for i in range(new_colours.size()):
+	for i:int in range(new_colours.size()):
 		new_colours[i].s = random_saturation + randf_range(-rand_saturation_offset, rand_saturation_offset)
 	
 	return get_custom_colours(new_colours[Index.A], new_colours[Index.B], new_colours[Index.C])

@@ -20,7 +20,8 @@ func _ready() -> void:
 	Parent.visibility_changed.connect(_on_parent_visibility_changed)
 	
 	if Parent.get_signal_list().any(
-		func(signal_dict: Dictionary): return signal_dict['name'] == "hide_tooltip"
+		func(signal_dict: Dictionary) -> bool: 
+			return signal_dict['name'] == "hide_tooltip"
 	):
 		Parent.hide_tooltip.connect(_on_parent_hide_tooltip)
 

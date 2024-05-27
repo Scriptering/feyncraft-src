@@ -162,7 +162,7 @@ func is_on_stateline(test_position: Vector2 = position) -> bool:
 	return test_position.x == Initial.position.x or test_position.x == Final.position.x
 
 func is_on_interaction(test_position: Vector2 = position) -> bool:
-	for interaction in get_tree().get_nodes_in_group("interactions"):
+	for interaction:Interaction in get_tree().get_nodes_in_group("interactions"):
 		if test_position == interaction.position:
 			return true
 	return false

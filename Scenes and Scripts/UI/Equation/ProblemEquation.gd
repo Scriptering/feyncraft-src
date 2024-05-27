@@ -8,19 +8,17 @@ extends PanelContainer
 @onready var RightEquation: HBoxContainer = $HBoxContainer/RightMarginContainer/RightScrollContainer/MarginContainer/RightEquation
 @onready var StateEquations : Array[HBoxContainer] = [LeftEquation, RightEquation]
 
-const States = [StateLine.StateType.Initial, StateLine.StateType.Final]
-
 func load_problem(problem: Problem) -> void:
-	for state in States:
+	for state:StateLine.StateType in StateLine.STATES:
 		load_state_symbols(state, problem.get_state_interaction(state))
 
 func clear_equation(state: StateLine.StateType) -> void:
-	for child in StateEquations[state].get_children():
+	for child:HBoxContainer in StateEquations[state].get_children():
 		child.queue_free()
 
 func load_state_symbols(state: StateLine.StateType, state_interactions: Array) -> void:
 	clear_equation(state)
-	for i in range(state_interactions.size()):
+	for i:int in state_interactions.size():
 		var interaction: Array = state_interactions[i]
 		interaction.sort()
 		if i != 0:

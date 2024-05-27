@@ -18,7 +18,7 @@ var particle_button_group: ButtonGroup
 	$HBoxContainer/Leptons, $HBoxContainer/Bosons, $HBoxContainer/Quarks, $HBoxContainer/General
 ]
 
-func _ready():
+func _ready() -> void:
 	for particle_button_category in ParticleButtonCategories:
 		for particle_button in particle_button_category.get_children():
 			particle_buttons.append(particle_button)
@@ -73,16 +73,17 @@ func exit_particle_selection() -> void:
 func get_toggled_particles(toggled: bool) -> Array[ParticleData.Particle]:
 	var toggled_particles: Array[ParticleData.Particle] = []
 	
-	for particle_button in particle_buttons:
+	for particle_button:PanelButton in particle_buttons:
 		if particle_button.button_pressed == toggled:
 			toggled_particles.push_back(particle_button.particle)
 	
 	return toggled_particles
 
 func toggle_button_group_visibility() -> void:
-	for i in ParticleButtonCategories.size():
+	for i:int in ParticleButtonCategories.size():
 		ParticleControls[i].visible = ParticleButtonCategories[i].get_children().any(
-			func(button: PanelButton): return button.visible
+			func(button: PanelButton) -> bool:
+				return button.visible
 		)
 
 func load_problem(problem: Problem) -> void:

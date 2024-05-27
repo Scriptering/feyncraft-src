@@ -44,7 +44,7 @@ func _ready() -> void:
 	EVENTBUS.signal_draw_diagram.connect(draw_diagram)
 	action_taken.connect(EVENTBUS.action_taken)
 	
-	for state_line in StateLines:
+	for state_line:StateLine in StateLines:
 		state_line.init(self)
 
 func init(
@@ -69,7 +69,7 @@ func init(
 	vision_buttons.vision_button_toggled.connect(_on_vision_button_toggled)
 
 func _process(_delta: float) -> void:
-	for stateline in StateLines:
+	for stateline:StateLine in StateLines:
 		if stateline.grabbed:
 			move_stateline(stateline)
 
@@ -100,7 +100,7 @@ func are_quantum_numbers_matching(ignore_weak_quantum_numbers: bool = true) -> b
 	var initial_quantum_numbers: PackedFloat32Array = StateLines[StateLine.StateType.Initial].get_quantum_numbers()
 	var final_quantum_numbers: PackedFloat32Array = StateLines[StateLine.StateType.Final].get_quantum_numbers()
 	
-	for quantum_number in ParticleData.QuantumNumber.values():
+	for quantum_number:ParticleData.QuantumNumber in ParticleData.QuantumNumber.values():
 		if ignore_weak_quantum_numbers and quantum_number in ParticleData.WEAK_QUANTUM_NUMBERS:
 			continue
 		
@@ -112,7 +112,7 @@ func are_quantum_numbers_matching(ignore_weak_quantum_numbers: bool = true) -> b
 func convert_path_colours(path_colours: Array, vision: GLOBALS.Vision) -> Array[Color]:
 	var path_colors: Array[Color] = []
 	
-	for path_colour in path_colours:
+	for path_colour:Color in path_colours:
 		path_colors.push_back(GLOBALS.VISION_COLOURS[vision][path_colour])
 	
 	return path_colors
@@ -125,7 +125,7 @@ func update_colourless_interactions(
 
 	var colourless_interactions: PackedInt32Array = Vision.find_colourless_interactions(paths, path_colours, diagram, is_vision_matrix)
 	
-	for id in range(diagram.matrix_size):
+	for id:int in range(diagram.matrix_size):
 		get_interaction_from_matrix_id(id, diagram).valid_colourless = id not in colourless_interactions
 
 func sort_drawing_interactions(interaction1: Interaction, interaction2: Interaction) -> bool:
@@ -160,7 +160,8 @@ func is_valid_vision_interaction(interaction: Interaction) -> bool:
 		return true
 	
 	return interaction.connected_lines.all(
-		func(particle_line: ParticleLine): return particle_line.is_placed
+		func(particle_line: ParticleLine) -> bool:
+			return particle_line.is_placed
 	)
 
 func generate_drawing_matrix_from_diagram(get_only_valid: bool = false) -> DrawingMatrix:
@@ -169,9 +170,10 @@ func generate_drawing_matrix_from_diagram(get_only_valid: bool = false) -> Drawi
 	
 	interactions.sort_custom(sort_drawing_interactions)
 
-	for interaction in interactions:
+	for interaction:Interaction in interactions:
 		if StateManager.state == BaseState.State.Drawing and interaction.connected_lines.all(
-			func(line: ParticleLine): return !line.is_placed
+			func(line: ParticleLine) -> bool:
+				return !line.is_placed
 		):
 			continue
 
@@ -190,17 +192,21 @@ func generate_drawing_matrix_from_diagram(get_only_valid: bool = false) -> Drawi
 			line.base_particle
 		)
 	
-	for state in range(StateLines.size()):
+	for state:StateLine.StateType in range(StateLines.size()):
 		generated_matrix.state_line_positions[state] = int(StateLines[state].position.x / grid_size)
 	
 	var hadron_ids: Array[PackedInt32Array] = []
-	for hadron_joint in get_hadron_joints():
+	for hadron_joint:HadronJoint in get_hadron_joints():
 		var hadron_id: PackedInt32Array = []
-		for interaction in interactions.filter(
-			func(interaction: Interaction): return interaction in hadron_joint.get_hadron_interactions()
+		for interaction:Interaction in interactions.filter(
+			func(interaction: Interaction) -> bool: 
+				return interaction in hadron_joint.get_hadron_interactions()
 		):
-			hadron_id.push_back(GLOBALS.find_var(generated_matrix.get_interaction_positions(grid_size),
-				func(interaction_position: Vector2): return interaction.position == interaction_position
+			hadron_id.push_back(
+				GLOBALS.find_var(
+					generated_matrix.get_interaction_positions(grid_size),
+					func(interaction_position: Vector2) -> bool:
+						return interaction.position == interaction_position
 			))
 		hadron_ids.push_back(hadron_id)
 	generated_matrix.split_hadron_ids = hadron_ids
@@ -224,7 +230,7 @@ func update_colour(diagram: DrawingMatrix, current_vision: GLOBALS.Vision) -> vo
 
 func update_path_vision(diagram: DrawingMatrix, current_vision: GLOBALS.Vision) -> void:
 	var vision_matrix: DrawingMatrix = Vision.generate_vision_matrix(current_vision, diagram)
-	var zip = Vision.generate_vision_paths(current_vision, vision_matrix, true)
+	var zip : Array = Vision.generate_vision_paths(current_vision, vision_matrix, true)
 	
 	if zip == []:
 		return
@@ -257,23 +263,23 @@ func _on_vision_button_toggled(_vision: GLOBALS.Vision) -> void:
 
 func move_stateline(stateline: StateLine) -> void:
 	var non_state_interactions := get_interactions().filter(
-		func(interaction: Interaction):
+		func(interaction: Interaction) -> bool:
 			return interaction.get_on_state_line() == StateLine.StateType.None
 	)
 	
 	var state_interactions : Array[Interaction] = get_interactions().filter(
-		func(interaction: Interaction):
+		func(interaction: Interaction) -> bool:
 			return interaction.get_on_state_line() == stateline.state
 	)
 	
 	var interaction_x_positions := non_state_interactions.map(
-		func(interaction: Interaction):
+		func(interaction: Interaction) -> float:
 			return interaction.position.x
 	)
 	
 	stateline.position.x = get_movable_state_line_position(stateline.state, interaction_x_positions)
 	
-	for interaction in state_interactions:
+	for interaction:Interaction in state_interactions:
 		var interaction_position: Vector2 = interaction.position
 		interaction.position.x = stateline.position.x
 		
@@ -320,7 +326,7 @@ func place_objects() -> void:
 
 func get_interactions() -> Array[Interaction]:
 	var interactions : Array[Interaction] = []
-	for interaction in super.get_interactions():
+	for interaction:Interaction in super.get_interactions():
 		if interaction is Interaction:
 			interactions.append(interaction)
 	
@@ -340,7 +346,7 @@ func action() -> void:
 	for particle_line in get_particle_lines():
 		particle_line.update_line()
 		
-	for interaction in get_interactions():
+	for interaction:Interaction in get_interactions():
 		interaction.update_interaction()
 	
 	update_statelines()
@@ -364,7 +370,7 @@ func delete_interaction(interaction: Interaction) -> void:
 
 func recursive_delete_line(line: ParticleLine) -> void:
 	line.delete()
-	for interaction in line.connected_interactions:
+	for interaction:Interaction in line.connected_interactions:
 		if interaction.connected_lines.size() == 0:
 			interaction.queue_free()
 	
@@ -398,7 +404,7 @@ func check_split_lines() -> void:
 	if !line_diagram_actions:
 		return
 
-	for interaction in get_interactions():
+	for interaction:Interaction in get_interactions():
 		for line in get_particle_lines():
 			if !line.is_placed:
 				continue
@@ -411,10 +417,13 @@ func check_rejoin_lines() -> void:
 	if !line_diagram_actions:
 		return
 	
-	for interaction in get_interactions():
+	for interaction:Interaction in get_interactions():
 		if interaction.connected_lines.size() != 2:
 			continue
-		if interaction.connected_lines.any(func(line): return !is_instance_valid(line)):
+		if interaction.connected_lines.any(
+			func(line) -> bool:
+				return !is_instance_valid(line)
+		):
 			continue
 		
 		if can_rejoin_lines(interaction.connected_lines[0], interaction.connected_lines[1]):
@@ -521,7 +530,7 @@ func choose_split_particle_line(splitting_interaction: Interaction) -> ParticleL
 	return chosen_particle_line
 
 func can_place_interaction(test_position: Vector2, test_interaction: Interaction = null) -> bool:
-	for interaction in Interactions.get_children():
+	for interaction:Interaction in Interactions.get_children():
 		if interaction == test_interaction:
 			continue
 		
@@ -564,7 +573,7 @@ func clear_vision_lines() -> void:
 		vision_line.queue_free()
 
 func clear_diagram() -> void:
-	for interaction in Interactions.get_children():
+	for interaction:Interaction in Interactions.get_children():
 		recursive_delete_interaction(interaction)
 	for state_line in StateLines:
 		state_line.clear_hadrons()
@@ -588,7 +597,7 @@ func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 	
 	clear_diagram()
 	
-	for state in range(StateLines.size()):
+	for state:StateLine.StateType in range(StateLines.size()):
 		StateLines[state].position.x = drawing_matrix.state_line_positions[state] * grid_size
 
 	for drawing_particle in draw_diagram_particles(drawing_matrix):
@@ -677,25 +686,37 @@ func draw_history() -> void:
 		await get_tree().create_timer(0.5).timeout
 
 func is_valid() -> bool:
-	return get_interactions().all(func(interaction: Interaction): return interaction.valid)
+	return get_interactions().all(
+		func(interaction: Interaction) -> bool: 
+			return interaction.valid
+	)
 
 func is_fully_connected(bidirectional: bool) -> bool:
 	var diagram: DrawingMatrix = generate_drawing_matrix_from_diagram()
 	
-	return diagram.is_fully_connected(bidirectional) and diagram.get_lonely_extreme_points(ConnectionMatrix.EntryFactor.Both).size() == 0
+	return (
+		diagram.is_fully_connected(bidirectional) and
+		diagram.get_lonely_extreme_points(
+			ConnectionMatrix.EntryFactor.Both
+		).size() == 0
+	)
 
 func is_energy_conserved() -> bool:
 	var state_base_particles: Array = StateLines.map(
-		func(state_line: StateLine) -> Array: return state_line.get_connected_base_particles()
+		func(state_line: StateLine) -> Array:
+			return state_line.get_connected_base_particles()
 	)
 	
 	var state_masses: Array = state_base_particles.map(
-		func(base_particles: Array): return base_particles.reduce(
-			func(accum: float, particle: ParticleData.Particle) -> float: return accum + ParticleData.PARTICLE_MASSES[particle], 0.0
+		func(base_particles: Array) -> float:
+			return base_particles.reduce(
+				func(accum: float, particle: ParticleData.Particle) -> float:
+					return accum + ParticleData.PARTICLE_MASSES[particle],
+				0.0
 		)
 	)
 	
-	for state_type in [StateLine.StateType.Initial, StateLine.StateType.Final]:
+	for state_type:StateLine.StateType in StateLine.STATES:
 		if state_base_particles[state_type].size() > 1:
 			continue
 		
@@ -708,8 +729,11 @@ func get_interaction_from_matrix_id(id: int, matrix: DrawingMatrix) -> Interacti
 	var interaction_position: Vector2 = matrix.get_interaction_positions(grid_size)[id]
 	
 	return get_interactions()[
-		GLOBALS.find_var(get_interactions(), func(interaction: Interaction): return interaction.position == interaction_position)
-	]
+		GLOBALS.find_var(
+			get_interactions(),
+			func(interaction: Interaction) -> bool:
+				return interaction.position == interaction_position
+	)]
 
 func vector_intercept_factor(vec1_start: Vector2, vec1_dir: Vector2, vec2_start: Vector2, vec2_dir: Vector2) -> float:
 	var nominator: float = (vec2_dir.x * (vec2_start.y - vec1_start.y) + vec2_dir.y * (vec1_start.x - vec2_start.x))
@@ -787,7 +811,7 @@ func calculate_vision_line_points(path: PackedInt32Array, vision_matrix: Drawing
 	
 	var vision_line_points: PackedVector2Array = [current_position]
 	
-	for i in range(path.size() - 1):
+	for i:int in range(path.size() - 1):
 		var path_start: Vector2 = interaction_positions[path[i]]
 		var path_vector: Vector2 = interaction_positions[path[i+1]] - path_start
 		var vision_offset_vector: Vector2 = get_vision_offset_vector(i, path, interaction_positions, vision_matrix)
@@ -822,7 +846,7 @@ func draw_vision_line(points: PackedVector2Array, path_colour: Color) -> void:
 func draw_vision_lines(
 	paths: Array[PackedInt32Array], path_colours: Array[Color], vision_matrix: DrawingMatrix
 ) -> void:
-	for i in range(paths.size()):
+	for i:int in range(paths.size()):
 		draw_vision_line(calculate_vision_line_points(paths[i], vision_matrix), path_colours[i])
 
 func _on_mouse_entered() -> void:
@@ -846,7 +870,7 @@ func _on_title_text_submitted(new_text: String) -> void:
 func get_degree() -> int:
 	var degree: int = 0
 	
-	for interaction in get_interactions():
+	for interaction:Interaction in get_interactions():
 		degree += interaction.degree
 	
 	return degree

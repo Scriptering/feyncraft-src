@@ -16,7 +16,8 @@ signal load_hadron_problem
 
 func _ready() -> void:
 	$Steps/Hadrons.load_hadron_problem.connect(
-		func(): load_hadron_problem.emit()
+		func() -> void:
+			load_hadron_problem.emit()
 	)
 	
 	current_step = get_steps().front()
@@ -36,7 +37,8 @@ func init(world: Node2D) -> void:
 	for step in get_steps():
 		step.init(world)
 		step.draw_diagram.connect(
-			func(diagram: DrawingMatrix): EVENTBUS.signal_draw_diagram.emit(diagram)
+			func(diagram: DrawingMatrix) -> void:
+				EVENTBUS.signal_draw_diagram.emit(diagram)
 		)
 	
 	reset()

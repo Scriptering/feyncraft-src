@@ -30,7 +30,8 @@ func reload() -> void:
 
 func get_problem_items() -> Array:
 	return problem_container.get_children().filter(
-		func(child): return !child.is_queued_for_deletion()
+		func(child:PanelContainer) -> bool:
+			return !child.is_queued_for_deletion()
 	)
 
 func load_problem_set(_problem_set: ProblemSet, p_problem_set_file_path: String) -> void:
@@ -84,7 +85,7 @@ func update() -> void:
 
 func update_index_labels() -> void:
 	var index: int = 0
-	for i in get_problem_items().size():
+	for i:int in get_problem_items().size():
 		get_problem_items()[i].index = index
 		index += 1
 

@@ -38,13 +38,13 @@ var dimensionality: float : get = _get_dimensionality
 var degree: int = 0 : get = _get_degree
 
 var information_visible: bool = false
-var information_box
+var information_box: InteractionInformation
 
 var valid := true: set = _set_valid
 var valid_colourless := true: set = _set_valid_colourless
 var hovering := false : set = _set_hovering
 
-func _ready():
+func _ready() -> void:
 	super._ready()
 	
 	grab_area_hovered = is_grab_area_hovered()
@@ -67,7 +67,7 @@ func init(diagram: MainDiagram) -> void:
 	Crosshair = diagram.Crosshair
 	StateManager = diagram.StateManager
 
-func _grab_area_hovered_changed(new_value: bool):
+func _grab_area_hovered_changed(new_value: bool) -> void:
 	self.hovering = new_value
 	grab_area_hovered = new_value
 
@@ -76,7 +76,7 @@ func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("click") and hovering:
 		clicked_on.emit(self)
 
-func _set_hovering(new_value: bool):
+func _set_hovering(new_value: bool) -> void:
 	hovering = new_value
 	
 	if grabbed:
@@ -216,10 +216,10 @@ func should_request_deletion() -> bool:
 func move_interaction() -> void:
 	position = Crosshair.position
 
-func has_particle_connected(particle: ParticleData.Particle):
+func has_particle_connected(particle: ParticleData.Particle) -> bool:
 	return particle in self.connected_particles
 
-func has_base_particle_connected(base_particle: ParticleData.Particle):
+func has_base_particle_connected(base_particle: ParticleData.Particle) -> bool:
 	return base_particle in self.connected_base_particles
 
 func validate() -> bool:
@@ -246,14 +246,14 @@ func validate() -> bool:
 func get_invalid_quantum_numbers() -> Array[ParticleData.QuantumNumber]:
 	var is_weak: bool = has_base_particle_connected(ParticleData.Particle.W)
 	var has_W_0: bool = self.connected_lines.any(
-		func(line: ParticleLine): return line.line_vector.x == 0 and line.base_particle == ParticleData.Particle.W
+		func(line: ParticleLine) -> bool:
+			return line.line_vector.x == 0 and line.base_particle == ParticleData.Particle.W
 	)
 	var invalid_quantum_numbers: Array[ParticleData.QuantumNumber] = []
 	var before_quantum_sum : Array[float] = get_side_quantum_sum(Side.Before)
 	var after_quantum_sum : Array[float] = get_side_quantum_sum(Side.After)
-	var interaction_in_list := is_interaction_in_list()
-	
-	for quantum_number in ParticleData.QuantumNumber.values():
+
+	for quantum_number:ParticleData.QuantumNumber in ParticleData.QuantumNumber.values():
 		var quantum_number_difference := before_quantum_sum[quantum_number] - after_quantum_sum[quantum_number]
 		var quantum_numbers_equal := is_zero_approx(quantum_number_difference)
 		
@@ -292,7 +292,7 @@ func get_side_quantum_sum(side: Interaction.Side) -> Array[float]:
 	var quantum_sum : Array[float] = []
 	var side_connected_lines := get_side_connected_lines(side)
 	
-	for quantum_number in ParticleData.QuantumNumber.values():
+	for quantum_number:ParticleData.QuantumNumber in ParticleData.QuantumNumber.values():
 		var sum: float = 0
 		for line in side_connected_lines:
 			var line_is_W_0: bool = line.line_vector.x == 0 and line.base_particle == ParticleData.Particle.W
@@ -320,7 +320,7 @@ func has_neutral_photon() -> bool:
 		return false
 	
 	if connected_lines.size() == 2 and connected_particles.all(
-		func(particle):
+		func(particle:ParticleData.Particle) -> bool:
 			return particle == ParticleData.Particle.photon
 	):
 		return false
@@ -346,9 +346,14 @@ func is_interaction_in_list() -> bool:
 	sorted_connected_base_particles.sort()
 	
 	return (
-		ParticleData.INTERACTIONS.any(func(interaction_type: Array): return sorted_connected_base_particles in interaction_type) or
-		ParticleData.GENERAL_INTERACTIONS.any(func(interaction_type: Array): return sorted_connected_base_particles in interaction_type)
-	)
+		ParticleData.INTERACTIONS.any(
+			func(interaction_type: Array) -> bool:
+				return sorted_connected_base_particles in interaction_type
+	) or
+		ParticleData.GENERAL_INTERACTIONS.any(
+			func(interaction_type: Array) -> bool:
+				return sorted_connected_base_particles in interaction_type
+	))
 
 func is_hovered() -> bool:
 	return hovering
@@ -360,7 +365,7 @@ func pick_up() -> void:
 		line.pick_up(line.get_point_at_position(position))
 
 func get_new_information_id() -> int:
-	for i in range(1, INFORMATION_ID_MAXIMUM):
+	for i:int in range(1, INFORMATION_ID_MAXIMUM):
 		if !i in used_information_numbers:
 			return i
 	return -1
@@ -385,7 +390,7 @@ func close_information_box() -> void:
 	information_box.queue_free()
 	information_visible = false
 
-func _on_information_button_pressed():
+func _on_information_button_pressed() -> void:
 	if (
 		(StateManager.state == BaseState.State.Idle or
 		(StateManager.state == BaseState.State.Drawing and
@@ -404,7 +409,7 @@ func deconstructor() -> void:
 		close_information_box()
 	Diagram.update_statelines()
 
-func _on_tree_exiting():
+func _on_tree_exiting() -> void:
 	deconstructor()
 	
 func drop() -> void:
@@ -418,8 +423,8 @@ func get_interaction_index() -> Array[int]:
 	var sorted_connected_base_particles := self.connected_base_particles.duplicate(true)
 	sorted_connected_base_particles.sort()
 	
-	for i in range(ParticleData.INTERACTIONS.size()):
-		for j in range(ParticleData.INTERACTIONS[i].size()):
+	for i:int in range(ParticleData.INTERACTIONS.size()):
+		for j:int in range(ParticleData.INTERACTIONS[i].size()):
 			if sorted_connected_base_particles == ParticleData.INTERACTIONS[i][j]:
 				return [i, j]
 	
@@ -447,7 +452,7 @@ func calculate_interaction_strength_alpha(interaction_strength:float = get_inter
 	return proportional_strength
 
 func set_shader_parameters() -> void:
-	var interaction_strength_alpha = calculate_interaction_strength_alpha()
+	var interaction_strength_alpha := calculate_interaction_strength_alpha()
 	material.set_shader_parameter("interaction_strength_alpha", interaction_strength_alpha)
 	
 	set_connected_line_shader_parameters(interaction_strength_alpha)
@@ -467,7 +472,8 @@ func get_connected_vision_lines(vision: GLOBALS.Vision) -> Array[ParticleLine]:
 
 func get_vision_vectors(vision: GLOBALS.Vision) -> PackedVector2Array:
 	var vision_particle_line_vectors: PackedVector2Array = get_connected_vision_lines(vision).map(
-		func(vision_line: ParticleLine): return get_unconnected_line_vector(vision_line)
+		func(vision_line: ParticleLine) -> Vector2:
+			return get_unconnected_line_vector(vision_line)
 	)
 	
 	if vision_particle_line_vectors.size() == 1:
@@ -482,7 +488,7 @@ func get_vision_vectors(vision: GLOBALS.Vision) -> PackedVector2Array:
 		return [middle_vector, -middle_vector]
 	
 	var vision_vectors: PackedVector2Array = []
-	for i in range(vision_particle_line_vectors.size()):
+	for i:int in range(vision_particle_line_vectors.size()):
 		vision_vectors.push_back(
 			(vision_particle_line_vectors[i] + vision_particle_line_vectors[(i+1 % vision_particle_line_vectors.size())]).normalized()
 		)
