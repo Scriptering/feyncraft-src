@@ -24,10 +24,10 @@ config/windows_native_icon="res://Textures/game_icon.ico"
 
 [autoload]
 
-GLOBALS="*res://Scenes and Scripts/GLOBALS.gd"
+Globals="*res://Scenes and Scripts/Autoloads/Globals.gd"
 SOUNDBUS="*res://Scenes and Scripts/sound_bus.tscn"
-EVENTBUS="*res://Scenes and Scripts/event_bus.gd"
-ParticleData="*res://ParticleData.gd"
+EventBus="*res://Scenes and Scripts/Autoloads/EventBus.gd"
+ParticleData="*res://Scenes and Scripts/Autoloads/ParticleData.gd"
 
 [debug]
 

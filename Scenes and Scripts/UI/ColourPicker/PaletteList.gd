@@ -47,9 +47,9 @@ func _item_deleted(item: ListItem) -> void:
 	
 	print(deleted_path)
 	
-	print(GLOBALS.delete_file(deleted_path))
+	print(FileManager.delete_file(deleted_path))
 	
-	print(GLOBALS.get_files_in_folder("user://saves/Palettes/Custom/"))
+	print(FileManager.get_files_in_folder("user://saves/Palettes/Custom/"))
 	
 	items_data.remove_at(get_items().find(item))
 	item.queue_free()
@@ -57,7 +57,7 @@ func _item_deleted(item: ListItem) -> void:
 	if item.is_selected:
 		selected_palette_deleted.emit()
 	
-	print(GLOBALS.get_files_in_folder("user://saves/Palettes/Custom/"))
+	print(FileManager.get_files_in_folder("user://saves/Palettes/Custom/"))
 
 func get_items() -> Array[ListItem]:
 	var items: Array[ListItem] = []
@@ -84,13 +84,13 @@ func load_palette(palette_path: String) -> void:
 	var new_palette: ListItem = preload("res://Scenes and Scripts/UI/ColourPicker/palette_list_item.tscn").instantiate()
 	new_palette.file_path = palette_path
 	
-	var palette: Palette = GLOBALS.load_txt(palette_path)
+	var palette: Palette = FileManager.load_txt(palette_path)
 	if palette:
 		load_item(palette, new_palette)
 		load_result.emit(true)
 	else:
 		new_palette.queue_free()
-		GLOBALS.delete_file(palette_path)
+		FileManager.delete_file(palette_path)
 		load_result.emit(false)
 
 func save_palettes() -> void:
@@ -106,4 +106,4 @@ func create_new_palette(palette_path: String) -> void:
 	load_item(Palette.new(), new_palette)
 	new_palette.randomise()
 	
-	GLOBALS.save(new_palette.palette, palette_path)
+	FileManager.save(new_palette.palette, palette_path)

@@ -17,7 +17,7 @@ var StateManager: Node
 var PaletteList: GrabbableControl
 
 func _ready() -> void:
-	EVENTBUS.signal_exit_game.connect(_on_exit_game)
+	EventBus.signal_exit_game.connect(_on_exit_game)
 
 func reload_problem_selection() -> void:
 	problem_selection.reload()
@@ -34,7 +34,7 @@ func init(state_manager: Node, controls_tab: Control, palette_list: GrabbableCon
 	$Algorithms/PathFinding.init($Diagram, $Diagram.StateLines)
 	$Algorithms/ProblemGeneration.init($Algorithms/SolutionGeneration)
 	
-	Diagram.draw_diagram(GLOBALS.TitleDiagram)
+	Diagram.draw_diagram(Globals.TitleDiagram)
 
 func _on_sandbox_pressed() -> void:
 	sandbox_pressed.emit()

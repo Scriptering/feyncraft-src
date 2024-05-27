@@ -70,7 +70,7 @@ func _ready() -> void:
 			button_mouse_exited.emit(self)
 	)
 	
-	EVENTBUS.button_created(self)
+	EventBus.button_created(self)
 
 func _set_icon_use_parent_material(new_value: bool) -> void:
 	icon_use_parent_material = new_value

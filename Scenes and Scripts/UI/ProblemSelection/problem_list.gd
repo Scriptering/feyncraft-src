@@ -22,7 +22,7 @@ func reload() -> void:
 	if !problem_set:
 		return
 	
-	load_problem_set(GLOBALS.load_txt(problem_set_file), problem_set_file)
+	load_problem_set(FileManager.load_txt(problem_set_file), problem_set_file)
 	
 	for problem_item:PanelContainer in get_problem_items():
 		problem_item.toggle_completed(!problem_set.is_custom and problem_item.index < problem_set.highest_index_reached)
@@ -124,16 +124,16 @@ func _on_add_problem_pressed() -> void:
 	create_problem()
 
 func _problem_played(problem: Problem) -> void:
-	EVENTBUS.problem_set_played(problem_set, problem_set.problems.find(problem))
+	EventBus.problem_set_played(problem_set, problem_set.problems.find(problem))
 
 func _on_back_pressed() -> void:
 	back.emit()
 
 func _problem_modified(problem_item: PanelContainer) -> void:
-	EVENTBUS.problem_modified(problem_item)
+	EventBus.problem_modified(problem_item)
 
 func _problem_saved(_problem_item: PanelContainer) -> void:
 	save()
 
 func save() -> void:
-	GLOBALS.save(problem_set, problem_set_file)
+	FileManager.save(problem_set, problem_set_file)

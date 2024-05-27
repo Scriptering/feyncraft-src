@@ -75,7 +75,7 @@ func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 		place_interaction(interaction_position * grid_size)
 
 func get_on_stateline(test_position: Vector2) -> StateLine.StateType:
-	return GLOBALS.find_var(
+	return ArrayFuncs.find_var(
 		StateLines,
 		func(state_line: StateLine) -> bool:
 			return is_zero_approx(state_line.position.x - test_position.x)
@@ -106,7 +106,7 @@ func generate_drawing_matrix_from_diagram() -> DrawingMatrix:
 				return interaction in hadron_joint.get_hadron_interactions()
 		):
 			hadron_id.push_back(
-				GLOBALS.find_var(
+				ArrayFuncs.find_var(
 					generated_matrix.get_interaction_positions(grid_size),
 					func(interaction_position: Vector2) -> bool:
 						return interaction.position == interaction_position

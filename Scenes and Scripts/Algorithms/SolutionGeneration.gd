@@ -330,7 +330,7 @@ func convert_interaction_matrix_to_normal(interaction_matrix: InteractionMatrix)
 	return converted_matrix
 
 func can_exit(interaction_matrix: InteractionMatrix, fermion: ParticleData.Particle) -> bool:
-	return GLOBALS.find_all_var(
+	return ArrayFuncs.find_all_var(
 		interaction_matrix.get_unconnected_state(StateLine.StateType.Both),
 		func(exit_state:Array) -> bool:
 			return can_particle_connect(fermion, exit_state)
@@ -362,7 +362,7 @@ func connect_fermion_from_point(
 		var matrix: InteractionMatrix = further_matrices[i]
 		
 		var next_point: int = matrix.matrix_size - 1
-		var next_fermion_index: int = GLOBALS.find_var(
+		var next_fermion_index: int = ArrayFuncs.find_var(
 			matrix.unconnected_matrix[next_point],
 			func(particle: ParticleData.Particle) -> bool:
 				return particle in ParticleData.FERMIONS
@@ -650,11 +650,11 @@ func convert_general_matrix(matrix: ConnectionMatrix) -> ConnectionMatrix:
 
 func convert_general_id(id: int, matrix: ConnectionMatrix) -> ConnectionMatrix:
 	var connected_particles: Array = matrix.get_connected_particles(id, true)
-	var general_particle: ParticleData.Particle = connected_particles[GLOBALS.find_var(
+	var general_particle: ParticleData.Particle = connected_particles[ArrayFuncs.find_var(
 		connected_particles, func(particle:ParticleData.Particle) -> bool:
 			return particle in ParticleData.GENERAL_PARTICLES
 	)]
-	var non_general_particle: ParticleData.Particle = connected_particles[GLOBALS.find_var(
+	var non_general_particle: ParticleData.Particle = connected_particles[ArrayFuncs.find_var(
 		connected_particles, func(particle:ParticleData.Particle) -> bool:
 			return particle in ParticleData.FERMIONS and particle not in ParticleData.GENERAL_PARTICLES
 	)]
@@ -686,10 +686,17 @@ func id_needs_converting(id: int, matrix: ConnectionMatrix) -> bool:
 	if connected_particles.has(ParticleData.Particle.W):
 		return false
 	
-	if connected_particles.all(func(particle:ParticleData.Particle) -> bool: return particle not in ParticleData.FERMIONS):
+	if connected_particles.all(
+		func(particle:ParticleData.Particle) -> bool:
+			return particle not in ParticleData.FERMIONS
+	):
 		return false
 	
-	if GLOBALS.count_var(connected_particles, func(particle:ParticleData.Particle) -> bool: return particle in ParticleData.GENERAL_PARTICLES) != 1:
+	if ArrayFuncs.count_var(
+		connected_particles,
+		func(particle:ParticleData.Particle) -> bool:
+			return particle in ParticleData.GENERAL_PARTICLES
+	) != 1:
 		return false
 	
 	return true

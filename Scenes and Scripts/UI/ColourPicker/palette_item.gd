@@ -112,10 +112,10 @@ func update_custom_palette() -> void:
 	update_button_colours()
 
 func load_saved_palette() -> void:
-	palette = GLOBALS.load_txt(file_path)
+	palette = FileManager.load_txt(file_path)
 
 func update_shader() -> void:
-	EVENTBUS.signal_change_palette.emit(palette.generate_palette_texture())
+	EventBus.signal_change_palette.emit(palette.generate_palette_texture())
 
 func randomise() -> void:
 	palette.colours = palette.get_random_colours()
@@ -162,10 +162,10 @@ func _on_upload_toggled(button_pressed:bool) -> void:
 	
 	await get_tree().process_frame
 	
-	$HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Buttons/Upload.set_text(GLOBALS.get_resource_save_data(palette))
+	$HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Buttons/Upload.set_text(Globals.get_resource_save_data(palette))
 
 func save() -> void:
-	GLOBALS.save(palette, file_path)
+	FileManager.save(palette, file_path)
 
 func _on_clear_pressed() -> void:
 	palette.advanced_colours = false

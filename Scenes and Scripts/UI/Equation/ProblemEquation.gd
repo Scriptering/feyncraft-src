@@ -35,7 +35,7 @@ func create_plus() -> TextureRect:
 func create_particle_symbol(interaction: Array) -> TextureRect:
 	var particle := Symbol.instantiate()
 	
-	particle.texture = ParticleData.PARTICLE_TEXTURES[get_particle_name(interaction)]
+	particle.texture = ParticleData.particle_textures[get_particle_name(interaction)]
 	particle.custom_minimum_size = particle.texture.get_size() * scale_factor
 	
 	if interaction.size() != 1:

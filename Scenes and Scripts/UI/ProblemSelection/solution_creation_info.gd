@@ -29,15 +29,15 @@ func _process(_delta: float) -> void:
 			solution_count.max_value = 5
 
 func _exit() -> void:
-	GLOBALS.creating_problem.custom_solutions = custom_solutions.button_pressed
-	GLOBALS.creating_problem.allow_other_solutions = allow_other_solutions.button_pressed
-	GLOBALS.creating_problem.custom_solution_count = custom_solution_count.button_pressed
+	Globals.creating_problem.custom_solutions = custom_solutions.button_pressed
+	Globals.creating_problem.allow_other_solutions = allow_other_solutions.button_pressed
+	Globals.creating_problem.custom_solution_count = custom_solution_count.button_pressed
 
 	if custom_solutions.button_pressed:
-		GLOBALS.creating_problem.solutions = ProblemTab.submitted_diagrams
+		Globals.creating_problem.solutions = ProblemTab.submitted_diagrams
 
 	if custom_solution_count.button_pressed:
-		GLOBALS.creating_problem.solution_count = int(solution_count.value)
+		Globals.creating_problem.solution_count = int(solution_count.value)
 
 	exit.emit()
 

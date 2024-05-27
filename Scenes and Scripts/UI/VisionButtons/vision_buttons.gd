@@ -8,7 +8,7 @@ var eye_open := preload("res://Textures/Buttons/eye/eye_open.png")
 var eye_middle := preload("res://Textures/Buttons/eye/eye_middle.png")
 var eye_closed := preload("res://Textures/Buttons/eye/eye_closed.png")
 
-signal vision_button_toggled(active_vision: GLOBALS.Vision)
+signal vision_button_toggled(active_vision: Globals.Vision)
 
 var vision_button_group: ButtonGroup = ButtonGroup.new()
 
@@ -30,11 +30,11 @@ func blink() -> void:
 	$AnimationPlayer.play("blink")
 	$AnimationPlayer.play_backwards("blink")
 
-func get_active_vision() -> GLOBALS.Vision:
+func get_active_vision() -> Globals.Vision:
 	for i:int in range(ButtonContainer.get_children().size()):
 		if ButtonContainer.get_children()[i].button_pressed:
-			return i as GLOBALS.Vision
-	return GLOBALS.Vision.None
+			return i as Globals.Vision
+	return Globals.Vision.None
 
 func _vision_button_toggled(_button: Button) -> void:
 	vision_button_toggled.emit(get_active_vision())

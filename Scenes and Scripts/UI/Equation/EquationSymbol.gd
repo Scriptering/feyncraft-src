@@ -29,7 +29,7 @@ func create_slash() -> TextureRect:
 
 func create_particle_symbol(interaction: Array) -> TextureRect:
 	var particle := Symbol.instantiate()
-	particle.texture = ParticleData.PARTICLE_TEXTURES[get_particle_name(interaction)]
+	particle.texture = ParticleData.particle_textures[get_particle_name(interaction)]
 	particle.stretch_mode = STRETCH_KEEP
 	particle.expand_mode = EXPAND_KEEP_SIZE
 	particle.size_flags_vertical = SIZE_SHRINK_END

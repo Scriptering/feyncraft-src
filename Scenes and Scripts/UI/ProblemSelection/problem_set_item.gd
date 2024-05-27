@@ -40,7 +40,7 @@ func update() -> void:
 	update_problem_index()
 
 func reload() -> void:
-	problem_set = GLOBALS.load_txt(file_path)
+	problem_set = FileManager.load_txt(file_path)
 	
 	await get_tree().process_frame
 	
@@ -66,11 +66,11 @@ func _on_upload_toggled(button_pressed: bool) -> void:
 	uploading_problem_set.is_custom = false
 	
 	$HBoxContainer/PanelContainer/HBoxContainer/Upload.set_text(
-		GLOBALS.get_resource_save_data(uploading_problem_set)
+		Globals.get_resource_save_data(uploading_problem_set)
 	)
 
 func save() -> void:
-	GLOBALS.save(problem_set, file_path)
+	FileManager.save(problem_set, file_path)
 
 func _on_title_text_submitted(new_text: String) -> void:
 	problem_set.title = new_text

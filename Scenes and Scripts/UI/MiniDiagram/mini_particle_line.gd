@@ -78,8 +78,8 @@ func init(diagram: MiniDiagram) -> void:
 
 func set_textures() -> void:
 	LineMiddle.texture = line_texture
-	Text.texture = ParticleData.PARTICLE_TEXTURES[self.particle_name]
-	SpareText.texture = ParticleData.PARTICLE_TEXTURES[self.particle_name]
+	Text.texture = ParticleData.particle_textures[self.particle_name]
+	SpareText.texture = ParticleData.particle_textures[self.particle_name]
 
 func _get_particle() -> ParticleData.Particle:
 	return (anti * base_particle) as ParticleData.Particle
@@ -254,8 +254,8 @@ func move_text() -> void:
 	)
 
 func set_text_texture() -> void:
-	Text.texture = ParticleData.PARTICLE_TEXTURES[self.particle_name]
-	SpareText.texture = ParticleData.PARTICLE_TEXTURES[self.particle_name]
+	Text.texture = ParticleData.particle_textures[self.particle_name]
+	SpareText.texture = ParticleData.particle_textures[self.particle_name]
 
 	if points[Point.End].x == points[Point.Start].x and base_particle == ParticleData.Particle.W:
-		Text.texture = ParticleData.PARTICLE_TEXTURES['W_0']
+		Text.texture = ParticleData.particle_textures['W_0']

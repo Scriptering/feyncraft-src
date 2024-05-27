@@ -88,8 +88,8 @@ func init(state_manager: Node, controls_tab: Control, palette_list: GrabbableCon
 	
 	initialised.emit()
 
-func _vision_button_toggled(current_vision: GLOBALS.Vision) -> void:
-	$ShaderControl.toggle_interaction_strength(current_vision == GLOBALS.Vision.Strength)
+func _vision_button_toggled(current_vision: Globals.Vision) -> void:
+	$ShaderControl.toggle_interaction_strength(current_vision == Globals.Vision.Strength)
 
 func load_test_problem() -> void:
 	var test_problem: Problem = Problem.new()
@@ -129,12 +129,12 @@ func enter_particle_selection() -> void:
 	ProblemTab.hide()
 	VisionTab.hide()
 	
-	Diagram.load_problem(GLOBALS.creating_problem, current_mode)
-	ParticleButtons.enter_particle_selection(GLOBALS.creating_problem)
+	Diagram.load_problem(Globals.creating_problem, current_mode)
+	ParticleButtons.enter_particle_selection(Globals.creating_problem)
 	CreationInformation.reset()
 
 func exit_particle_selection() -> void:
-	GLOBALS.creating_problem.allowed_particles = ParticleButtons.get_toggled_particles(true)
+	Globals.creating_problem.allowed_particles = ParticleButtons.get_toggled_particles(true)
 	ParticleButtons.exit_particle_selection()
 	CreationInformation.hide()
 
@@ -169,15 +169,15 @@ func enter_problem_creation() -> void:
 	VisionTab.show()
 	CreationInformation.show()
 	
-	ParticleButtons.load_problem(GLOBALS.creating_problem)
+	ParticleButtons.load_problem(Globals.creating_problem)
 	
-	if GLOBALS.creating_problem.state_interactions != [[],[]]:
-		EVENTBUS.draw_diagram_raw(
+	if Globals.creating_problem.state_interactions != [[],[]]:
+		EventBus.draw_diagram_raw(
 			SolutionGeneration.generate_diagrams(
-				GLOBALS.creating_problem.state_interactions[StateLine.StateType.Initial],
-				GLOBALS.creating_problem.state_interactions[StateLine.StateType.Final],
-				GLOBALS.creating_problem.degree, GLOBALS.creating_problem.degree,
-				SolutionGeneration.get_useable_interactions_from_particles(GLOBALS.creating_problem.allowed_particles),
+				Globals.creating_problem.state_interactions[StateLine.StateType.Initial],
+				Globals.creating_problem.state_interactions[StateLine.StateType.Final],
+				Globals.creating_problem.degree, Globals.creating_problem.degree,
+				SolutionGeneration.get_useable_interactions_from_particles(Globals.creating_problem.allowed_particles),
 				SolutionGeneration.Find.One
 		).front()
 		)
@@ -189,19 +189,19 @@ func enter_solution_creation() -> void:
 	VisionTab.show()
 	CreationInformation.show()
 	
-	var creating_problem: Problem = GLOBALS.creating_problem
+	var creating_problem: Problem = Globals.creating_problem
 	var drawn_diagram: DrawingMatrix = Diagram.generate_drawing_matrix_from_diagram()
 	for state:StateLine.StateType in StateLine.STATES:
-		GLOBALS.creating_problem.state_interactions[state] = drawn_diagram.reduce_to_connection_matrix().get_state_interactions(state)
+		Globals.creating_problem.state_interactions[state] = drawn_diagram.reduce_to_connection_matrix().get_state_interactions(state)
 	
 	if !ProblemGeneration.setup_new_problem(creating_problem):
 		CreationInformation.no_solutions_found()
 		CreationInformation.prev_mode()
 		return
 	
-	GLOBALS.creating_problem.custom_solutions = false
+	Globals.creating_problem.custom_solutions = false
 	
-	ProblemTab.load_problem(GLOBALS.creating_problem)
+	ProblemTab.load_problem(Globals.creating_problem)
 	ProblemTab.in_solution_creation = true
 
 func exit_sandbox() -> void:
@@ -229,7 +229,7 @@ func enter_tutorial() -> void:
 	Tutorial.show()
 	
 	Tutorial.reset()
-	load_problem_set(GLOBALS.load_txt("res://saves/ProblemSets/tutorial.txt"), 0)
+	load_problem_set(FileManager.load_txt("res://saves/ProblemSets/tutorial.txt"), 0)
 
 func exit_tutorial() -> void:
 	Tutorial.clear()
@@ -244,7 +244,7 @@ func _on_creation_information_submit_problem() -> void:
 func _on_problem_set_end_reached() -> void:
 	problem_set.end_reached.disconnect(_on_problem_set_end_reached)
 	
-	EVENTBUS.signal_change_scene.emit(GLOBALS.Scene.MainMenu)
+	EventBus.signal_change_scene.emit(Globals.Scene.MainMenu)
 
 func _on_next_problem_pressed() -> void:
 	problem_history.push_back(current_problem)
@@ -298,7 +298,7 @@ func exit_current_mode() -> void:
 
 func _on_menu_exit_pressed() -> void:
 	exit_current_mode()
-	EVENTBUS.signal_change_scene.emit(GLOBALS.Scene.MainMenu)
+	EventBus.signal_change_scene.emit(Globals.Scene.MainMenu)
 
 func _on_tutorial_info_finish_pressed() -> void:
-	EVENTBUS.signal_change_scene.emit(GLOBALS.Scene.MainMenu)
+	EventBus.signal_change_scene.emit(Globals.Scene.MainMenu)

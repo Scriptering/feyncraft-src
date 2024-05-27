@@ -40,9 +40,9 @@ func _ready() -> void:
 	Crosshair.moved.connect(_crosshair_moved)
 	mouse_entered.connect(Crosshair.DiagramMouseEntered)
 	mouse_exited.connect(Crosshair.DiagramMouseExited)
-	EVENTBUS.signal_draw_raw_diagram.connect(draw_raw_diagram)
-	EVENTBUS.signal_draw_diagram.connect(draw_diagram)
-	action_taken.connect(EVENTBUS.action_taken)
+	EventBus.signal_draw_raw_diagram.connect(draw_raw_diagram)
+	EventBus.signal_draw_diagram.connect(draw_diagram)
+	action_taken.connect(EventBus.action_taken)
 	
 	for state_line:StateLine in StateLines:
 		state_line.init(self)
@@ -109,11 +109,11 @@ func are_quantum_numbers_matching(ignore_weak_quantum_numbers: bool = true) -> b
 	
 	return true
 
-func convert_path_colours(path_colours: Array, vision: GLOBALS.Vision) -> Array[Color]:
+func convert_path_colours(path_colours: Array, vision: Globals.Vision) -> Array[Color]:
 	var path_colors: Array[Color] = []
 	
 	for path_colour:Color in path_colours:
-		path_colors.push_back(GLOBALS.VISION_COLOURS[vision][path_colour])
+		path_colors.push_back(Globals.VISION_vision_colours[vision][path_colour])
 	
 	return path_colors
 
@@ -203,7 +203,7 @@ func generate_drawing_matrix_from_diagram(get_only_valid: bool = false) -> Drawi
 				return interaction in hadron_joint.get_hadron_interactions()
 		):
 			hadron_id.push_back(
-				GLOBALS.find_var(
+				ArrayFuncs.find_var(
 					generated_matrix.get_interaction_positions(grid_size),
 					func(interaction_position: Vector2) -> bool:
 						return interaction.position == interaction_position
@@ -213,9 +213,9 @@ func generate_drawing_matrix_from_diagram(get_only_valid: bool = false) -> Drawi
 	
 	return generated_matrix
 
-func update_colour(diagram: DrawingMatrix, current_vision: GLOBALS.Vision) -> void:
-	var colour_matrix: DrawingMatrix = Vision.generate_vision_matrix(GLOBALS.Vision.Colour, diagram)
-	var zip: Array = Vision.generate_vision_paths(GLOBALS.Vision.Colour, colour_matrix, true)
+func update_colour(diagram: DrawingMatrix, current_vision: Globals.Vision) -> void:
+	var colour_matrix: DrawingMatrix = Vision.generate_vision_matrix(Globals.Vision.Colour, diagram)
+	var zip: Array = Vision.generate_vision_paths(Globals.Vision.Colour, colour_matrix, true)
 	
 	if zip == []:
 		return
@@ -225,10 +225,10 @@ func update_colour(diagram: DrawingMatrix, current_vision: GLOBALS.Vision) -> vo
 	
 	update_colourless_interactions(colour_paths, colour_path_colours, colour_matrix, true)
 	
-	if current_vision == GLOBALS.Vision.Colour:
+	if current_vision == Globals.Vision.Colour:
 		draw_vision_lines(colour_paths, convert_path_colours(colour_path_colours, current_vision), colour_matrix)
 
-func update_path_vision(diagram: DrawingMatrix, current_vision: GLOBALS.Vision) -> void:
+func update_path_vision(diagram: DrawingMatrix, current_vision: Globals.Vision) -> void:
 	var vision_matrix: DrawingMatrix = Vision.generate_vision_matrix(current_vision, diagram)
 	var zip : Array = Vision.generate_vision_paths(current_vision, vision_matrix, true)
 	
@@ -244,7 +244,7 @@ func update_path_vision(diagram: DrawingMatrix, current_vision: GLOBALS.Vision) 
 	draw_vision_lines(paths, convert_path_colours(path_colours,current_vision), vision_matrix)
 
 func update_vision(
-	diagram: DrawingMatrix = generate_drawing_matrix_from_diagram(true), current_vision: GLOBALS.Vision = VisionButtons.get_active_vision()
+	diagram: DrawingMatrix = generate_drawing_matrix_from_diagram(true), current_vision: Globals.Vision = VisionButtons.get_active_vision()
 ) -> void:
 	
 	clear_vision_lines()
@@ -254,11 +254,11 @@ func update_vision(
 	
 	update_colour(diagram, current_vision)
 	
-	if current_vision in [GLOBALS.Vision.Shade]:
+	if current_vision in [Globals.Vision.Shade]:
 		update_path_vision(diagram,current_vision)
 		return
 
-func _on_vision_button_toggled(_vision: GLOBALS.Vision) -> void:
+func _on_vision_button_toggled(_vision: Globals.Vision) -> void:
 	update_vision()
 
 func move_stateline(stateline: StateLine) -> void:
@@ -729,7 +729,7 @@ func get_interaction_from_matrix_id(id: int, matrix: DrawingMatrix) -> Interacti
 	var interaction_position: Vector2 = matrix.get_interaction_positions(grid_size)[id]
 	
 	return get_interactions()[
-		GLOBALS.find_var(
+		ArrayFuncs.find_var(
 			get_interactions(),
 			func(interaction: Interaction) -> bool:
 				return interaction.position == interaction_position
@@ -831,7 +831,7 @@ func calculate_vision_line_points(path: PackedInt32Array, vision_matrix: Drawing
 	return vision_line_points
 
 func draw_vision_line(points: PackedVector2Array, path_colour: Color) -> void:
-	var is_loop: bool = GLOBALS.is_vec_zero_approx(points[0] - points[-1])
+	var is_loop: bool = ArrayFuncs.is_vec_zero_approx(points[0] - points[-1])
 	var vision_line : Line2D = VisionLine.instantiate()
 	
 	vision_line.closed = is_loop
@@ -865,7 +865,7 @@ func set_title(text: String) -> void:
 	Title.text = text
 
 func _on_title_text_submitted(new_text: String) -> void:
-	GLOBALS.creating_problem.title = new_text
+	Globals.creating_problem.title = new_text
 
 func get_degree() -> int:
 	var degree: int = 0

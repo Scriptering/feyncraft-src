@@ -146,8 +146,8 @@ func _set_points(new_value: PackedVector2Array) -> void:
 	
 func set_textures() -> void:
 	LineMiddle.texture = line_texture
-	Text.texture = ParticleData.PARTICLE_TEXTURES[self.particle_name]
-	SpareText.texture = ParticleData.PARTICLE_TEXTURES[self.particle_name]
+	Text.texture = ParticleData.particle_textures[self.particle_name]
+	SpareText.texture = ParticleData.particle_textures[self.particle_name]
 
 func _get_particle_name() -> String:
 	return ParticleData.Particle.keys()[ParticleData.Particle.values().find(self.particle)]
@@ -217,7 +217,7 @@ func is_position_on_line(test_position: Vector2) -> bool:
 	if test_position in points:
 		return false
 	
-	if !GLOBALS.is_vec_zero_approx(split_vector.normalized() - line_vector.normalized()):
+	if !ArrayFuncs.is_vec_zero_approx(split_vector.normalized() - line_vector.normalized()):
 		return false
 
 	if split_vector.length() >= line_vector.length():
@@ -348,7 +348,7 @@ func move_text() -> void:
 	)
 
 func set_text_visiblity() -> void:
-	if GLOBALS.in_main_menu:
+	if Globals.in_main_menu:
 		Text.hide()
 		SpareText.hide()
 		return
@@ -368,11 +368,11 @@ func set_text_visiblity() -> void:
 	SpareText.hide()
 
 func set_text_texture() -> void:
-	Text.texture = ParticleData.PARTICLE_TEXTURES[self.particle_name]
-	SpareText.texture = ParticleData.PARTICLE_TEXTURES[self.particle_name]
+	Text.texture = ParticleData.particle_textures[self.particle_name]
+	SpareText.texture = ParticleData.particle_textures[self.particle_name]
 
 	if points[Point.End].x == points[Point.Start].x and base_particle == ParticleData.Particle.W:
-		Text.texture = ParticleData.PARTICLE_TEXTURES['W_0']
+		Text.texture = ParticleData.particle_textures['W_0']
 
 func place() -> void:
 	if !is_placement_valid():
