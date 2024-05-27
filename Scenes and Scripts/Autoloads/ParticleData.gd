@@ -1,6 +1,6 @@
 extends Node
 
-@onready var PARTICLE_TEXTURES : Dictionary = {}
+@onready var particle_textures : Dictionary = {}
 
 func _ready() -> void:
 	var is_on_editor := OS.has_feature("editor")
@@ -21,7 +21,7 @@ func _ready() -> void:
 				var file_name : String = file.trim_suffix('.import')
 			
 				if file_name.ends_with('.png'):
-					PARTICLE_TEXTURES[file_name.trim_suffix('.png')] = ResourceLoader.load(folder_path + file_name)
+					particle_textures[file_name.trim_suffix('.png')] = ResourceLoader.load(folder_path + file_name)
 
 #0 photon, 1 gluon, 2 Z, 3 H, 4 W,
 #5 lepton, 6 electron, 7 muon, 8 tau,
@@ -496,13 +496,13 @@ func get_particle_name(particle: int) -> String:
 	return Particle.keys()[Particle.values().find(particle)]
 
 func get_particle_texture(particle: int) -> Texture2D:
-	return PARTICLE_TEXTURES[Particle.keys()[Particle.values().find(particle)]]
+	return particle_textures[Particle.keys()[Particle.values().find(particle)]]
 
 func get_particle_icon(particle: int) -> Texture2D:
 	return load("res://Textures/Buttons/icons/Particles/" + get_particle_name(particle) + ".png")
 
 func get_hadron_texture(hadron: Hadrons) -> Texture2D:
-	return PARTICLE_TEXTURES[HADRON_NAMES[hadron]]
+	return particle_textures[HADRON_NAMES[hadron]]
 
 func find_hadron(interaction: Array) -> Hadrons:
 	var sorted_interaction: Array = interaction.duplicate()

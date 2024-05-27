@@ -49,7 +49,7 @@ func _ready() -> void:
 	
 	grab_area_hovered = is_grab_area_hovered()
 	
-	show_information_box.connect(EVENTBUS.add_floating_menu)
+	show_information_box.connect(EventBus.add_floating_menu)
 	request_deletion.connect(Diagram.recursive_delete_interaction)
 	
 	for particle_line:ParticleLine in Diagram.get_particle_lines():
@@ -461,16 +461,16 @@ func set_connected_line_shader_parameters(interaction_strength_alpha: float) -> 
 	for particle_line:ParticleLine in connected_lines:
 		particle_line.set_point_interaction_strength_alpha(particle_line.get_point_at_position(position), interaction_strength_alpha)
 
-func get_connected_vision_lines(vision: GLOBALS.Vision) -> Array[ParticleLine]:
+func get_connected_vision_lines(vision: Globals.Vision) -> Array[ParticleLine]:
 	match vision:
-		GLOBALS.Vision.Colour:
+		Globals.Vision.Colour:
 			return self.connected_colour_lines
-		GLOBALS.Vision.Shade:
+		Globals.Vision.Shade:
 			return self.connected_shade_lines
 	
 	return []
 
-func get_vision_vectors(vision: GLOBALS.Vision) -> PackedVector2Array:
+func get_vision_vectors(vision: Globals.Vision) -> PackedVector2Array:
 	var vision_particle_line_vectors: PackedVector2Array = get_connected_vision_lines(vision).map(
 		func(vision_line: ParticleLine) -> Vector2:
 			return get_unconnected_line_vector(vision_line)

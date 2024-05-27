@@ -78,7 +78,7 @@ func is_energy_conserved(state_interactions: Array) -> bool:
 	
 	var state_base_particles: Array = state_interactions.map(
 		func(state_interaction: Array) -> Array:
-			return GLOBALS.flatten(state_interaction).map(
+			return Globals.flatten(state_interaction).map(
 			func(particle: ParticleData.Particle) -> ParticleData.Particle: 
 				return abs(particle) as ParticleData.Particle
 	))

@@ -23,23 +23,31 @@ var enter_funcs: Dictionary = {
 }
 
 func _ready() -> void:
+	Globals.load_problem_set.problems.push_back(Globals.creating_problem)
+	
+	if !Globals.is_on_editor and !DirAccess.dir_exists_absolute("User://saves/"):
+		create_save_folders()
+		
+		if !FileAccess.file_exists("user://saves/ProblemSets/Default/electromagnetic.txt"):
+			create_default_problem_sets()
+
 	MainMenu.sandbox_pressed.connect(_on_sandbox_pressed)
 	MainMenu.tutorial_pressed.connect(_on_tutorial_pressed)
 	
 	remove_child(Level)
 	
-	save_files.connect(EVENTBUS.save_files)
-	EVENTBUS.signal_change_scene.connect(change_scene)
-	EVENTBUS.signal_problem_modified.connect(_on_problem_modified)
-	EVENTBUS.signal_problem_set_played.connect(_on_problem_set_played)
-	EVENTBUS.signal_add_floating_menu.connect(add_floating_menu)
+	save_files.connect(EventBus.save_files)
+	EventBus.signal_change_scene.connect(change_scene)
+	EventBus.signal_problem_modified.connect(_on_problem_modified)
+	EventBus.signal_problem_set_played.connect(_on_problem_set_played)
+	EventBus.signal_add_floating_menu.connect(add_floating_menu)
 	
 	Level.init(StateManager, ControlsTab, PaletteMenu)
 	MainMenu.init(StateManager, ControlsTab, PaletteMenu)
 	StateManager.init(MainMenu.Diagram)
 	
-	$ControlsLayer/Buttons.visible = GLOBALS.is_on_mobile()
-	$ControlsLayer/Cursor.visible = !GLOBALS.is_on_mobile()
+	$ControlsLayer/Buttons.visible = Globals.is_on_mobile()
+	$ControlsLayer/Cursor.visible = !Globals.is_on_mobile()
 
 func add_floating_menu(menu: Control) -> void:
 	if menu.position == Vector2.ZERO:
@@ -55,7 +63,7 @@ func change_scene(scene: Scene, args: Array = []) -> void:
 	StateManager.change_scene(scenes[scene].Diagram)
 	
 	enter_funcs[scene].call(args)
-	EVENTBUS.change_cursor(GLOBALS.Cursor.default)
+	EventBus.change_cursor(Globals.Cursor.default)
 
 func switch_child_scene(new_scene: Scene) -> void:
 	remove_child(scenes[(new_scene + 1) % 2])
@@ -63,11 +71,11 @@ func switch_child_scene(new_scene: Scene) -> void:
 	move_child(scenes[new_scene], 0)
 
 func enter_level(args: Array = [BaseMode.Mode.Sandbox]) -> void:
-	GLOBALS.in_main_menu = false
+	Globals.in_main_menu = false
 	Level.current_mode = args[0]
 
 func enter_main_menu(_args: Array = []) -> void:
-	GLOBALS.in_main_menu = true
+	Globals.in_main_menu = true
 	modifying_problem_item = null
 	
 	await get_tree().process_frame
@@ -87,7 +95,7 @@ func _on_world_problem_submitted() -> void:
 func _on_problem_modified(problem_item: PanelContainer) -> void:
 	modifying_problem_item = problem_item
 	
-	GLOBALS.creating_problem = modifying_problem_item.problem
+	Globals.creating_problem = modifying_problem_item.problem
 
 	change_scene(Scene.Level, [BaseMode.Mode.ParticleSelection])
 
@@ -97,3 +105,23 @@ func _on_problem_set_played(problem_set: ProblemSet, index: int) -> void:
 
 func _on_world_save_problem_set() -> void:
 	save_files.emit()
+
+func create_save_folders() -> void:
+	print("creating save folders")
+	
+	DirAccess.make_dir_absolute("user://saves/")
+	DirAccess.make_dir_absolute("user://saves/Palettes")
+	DirAccess.make_dir_absolute("user://saves/Palettes/Custom")
+	DirAccess.make_dir_absolute("user://saves/ProblemSets")
+	DirAccess.make_dir_absolute("user://saves/ProblemSets/Custom")
+	DirAccess.make_dir_absolute("user://saves/ProblemSets/Default")
+
+func create_default_problem_sets() -> void:
+	for file_path:String in FileManager.get_files_in_folder("res://saves/ProblemSets/Default/"):
+		var default_file := FileAccess.open(file_path, FileAccess.READ)
+		FileManager.create_text_file(
+			default_file.get_as_text(), "user://saves/ProblemSets/Default/" + file_path.trim_prefix("res://saves/ProblemSets/Default/")
+		)
+		default_file.close()
+	
+	await get_tree().process_frame

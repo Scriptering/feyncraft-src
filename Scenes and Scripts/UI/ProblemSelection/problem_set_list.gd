@@ -15,9 +15,9 @@ var ProblemSetItem: PackedScene = preload("res://Scenes and Scripts/UI/ProblemSe
 var problem_sets: Array[ProblemSet]
 
 func _ready() -> void:
-	play_problem_set.connect(EVENTBUS.enter_game)
+	play_problem_set.connect(EventBus.enter_game)
 	
-	EVENTBUS.signal_save_files.connect(save_problem_sets)
+	EventBus.signal_save_files.connect(save_problem_sets)
 	
 	load_problem_sets()
 	
@@ -37,14 +37,14 @@ func load_problem_sets() -> void:
 	update_problem_sets()
 
 func load_default_problem_sets() -> void:
-	var file_path: String = problem_set_file_path if GLOBALS.is_on_editor else web_problem_set_file_path
+	var file_path: String = problem_set_file_path if Globals.is_on_editor else web_problem_set_file_path
 	
 	load_problem_set(file_path + 'Default/electromagnetic.txt')
 	load_problem_set(file_path + 'Default/strong.txt')
 	load_problem_set(file_path + 'Default/hadronic.txt')
 
 func load_custom_problem_sets() -> void:
-	for file_path in GLOBALS.get_files_in_folder(get_custom_file_path()):
+	for file_path in FileManager.get_files_in_folder(get_custom_file_path()):
 		load_problem_set(file_path)
 
 func clear_problem_sets() -> void:
@@ -52,7 +52,7 @@ func clear_problem_sets() -> void:
 		child.queue_free()
 
 func get_custom_file_path() -> String:
-	return (problem_set_file_path + 'Custom/') if GLOBALS.is_on_editor else (web_problem_set_file_path + 'Custom/')
+	return (problem_set_file_path + 'Custom/') if Globals.is_on_editor else (web_problem_set_file_path + 'Custom/')
 
 func add_problem_set(problem_set: ProblemSet, problem_set_item: ListItem = ProblemSetItem.instantiate()) -> void:
 	problem_set_item.load_problem_set(problem_set)
@@ -84,7 +84,7 @@ func update_problem_sets() -> void:
 
 func _problem_set_deleted(problem_set_item: PanelContainer) -> void:
 	var index: int = problem_container.get_children().find(problem_set_item)
-	GLOBALS.delete_file(problem_set_item.file_path)
+	FileManager.delete_file(problem_set_item.file_path)
 
 	problem_sets.remove_at(index)
 	problem_set_item.queue_free()
@@ -97,13 +97,13 @@ func create_problem_set() -> void:
 	add_problem_set(problem_set)
 
 func _on_add_problem_set_pressed() -> void:
-	create_new_problem_set(GLOBALS.get_unique_file_name(get_custom_file_path()))
+	create_new_problem_set(FileManager.get_unique_file_name(get_custom_file_path()))
 
 func _problem_set_viewed(problem_set_item: PanelContainer) -> void:
 	enter_problem_set.emit(problem_set_item.problem_set, problem_set_item.file_path)
 
 func _problem_set_resumed(problem_set: ProblemSet) -> void:
-	EVENTBUS.signal_problem_set_played.emit(
+	EventBus.signal_problem_set_played.emit(
 		problem_set, 
 		min(problem_set.highest_index_reached, problem_set.problems.size()-1)
 	)
@@ -116,8 +116,8 @@ func _on_close_pressed() -> void:
 	close.emit()
 
 func _on_load_button_submitted(submitted_text: String) -> void:
-	var file_path: String = GLOBALS.get_unique_file_name(get_custom_file_path())
-	GLOBALS.create_text_file(submitted_text, file_path)
+	var file_path: String = FileManager.get_unique_file_name(get_custom_file_path())
+	FileManager.create_text_file(submitted_text, file_path)
 	load_problem_set(file_path)
 
 func on_load_error(valid: bool) -> void:
@@ -127,23 +127,23 @@ func load_problem_set(problem_set_path: String) -> void:
 	var new_problem_set: ListItem = ProblemSetItem.instantiate()
 	new_problem_set.file_path = problem_set_path
 	
-	var problem_set: ProblemSet = GLOBALS.load_txt(problem_set_path)
+	var problem_set: ProblemSet = FileManager.load_txt(problem_set_path)
 	if problem_set:
 		add_problem_set(problem_set, new_problem_set)
 		on_load_error(true)
 	else:
 		new_problem_set.queue_free()
-		GLOBALS.delete_file(problem_set_path)
+		FileManager.delete_file(problem_set_path)
 		on_load_error(false)
 
 func save_problem_sets() -> void:
 	for problem_set in problem_container.get_children():
-		GLOBALS.save(problem_set.problem_set, problem_set.file_path)
+		FileManager.save(problem_set.problem_set, problem_set.file_path)
 	
 func create_new_problem_set(problem_set_path: String) -> void:
 	var new_problem_set: ListItem = ProblemSetItem.instantiate()
 	new_problem_set.file_path = problem_set_path
 	add_problem_set(ProblemSet.new(), new_problem_set)
 	
-	GLOBALS.create_file(problem_set_path)
-	GLOBALS.save(new_problem_set.problem_set, problem_set_path)
+	FileManager.create_file(problem_set_path)
+	FileManager.save(new_problem_set.problem_set, problem_set_path)

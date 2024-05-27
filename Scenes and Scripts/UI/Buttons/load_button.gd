@@ -24,7 +24,7 @@ var icon_dict: Dictionary = {
 func _ready() -> void:
 	super._ready()
 	self.mode = mode
-	load_panel_created.connect(EVENTBUS.add_floating_menu)
+	load_panel_created.connect(EventBus.add_floating_menu)
 
 func _on_button_toggled(button_pressed_state: bool) -> void:
 	super._on_button_toggled(button_pressed_state)

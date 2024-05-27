@@ -26,7 +26,7 @@ func input(_event: InputEvent) -> State:
 
 func place_objects() -> void:
 	if grabbed_interaction:
-		if GLOBALS.is_vec_zero_approx(grabbed_interaction.position - grabbed_interaction.start_grab_position):
+		if ArrayFuncs.is_vec_zero_approx(grabbed_interaction.position - grabbed_interaction.start_grab_position):
 			Diagram.remove_last_diagram_from_history()
 		
 		Diagram.place_objects()

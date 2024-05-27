@@ -9,23 +9,23 @@ extends Sprite2D
 var angry := false
 var glowing := false: set = _set_glowing
 var playing := false
-var current_cursor : int = GLOBALS.Cursor.default
+var current_cursor : int = Globals.Cursor.default
 
 const CURSOR_FOLDER_PATH : String = 'res://Textures/Cursors/'
 
 var point := load(CURSOR_FOLDER_PATH + 'cursor_point.png')
 
 var cursors: Dictionary = {
-	GLOBALS.Cursor.point: load(CURSOR_FOLDER_PATH + 'cursor_point.png'.trim_suffix(".import")),
-	GLOBALS.Cursor.hold : load(CURSOR_FOLDER_PATH + 'cursor_hold.png'.trim_suffix(".import")),
-	GLOBALS.Cursor.snip : load(CURSOR_FOLDER_PATH + 'cursor_snip.png'.trim_suffix(".import")),
-	GLOBALS.Cursor.snipped : load(CURSOR_FOLDER_PATH + 'cursor_snipped.png'.trim_suffix(".import")),
-	GLOBALS.Cursor.middle : load(CURSOR_FOLDER_PATH + 'cursor_middle.png'.trim_suffix(".import")),
-	GLOBALS.Cursor.hover : load(CURSOR_FOLDER_PATH + 'cursor_hover.png'.trim_suffix(".import")),
-	GLOBALS.Cursor.press : load(CURSOR_FOLDER_PATH + 'cursor_press.png'.trim_suffix(".import")),
-	GLOBALS.Cursor.disabled : load(CURSOR_FOLDER_PATH + 'cursor_disabled.png'.trim_suffix(".import")),
-	GLOBALS.Cursor.loving : load(CURSOR_FOLDER_PATH + 'loving.png'.trim_suffix(".import")),
-	GLOBALS.Cursor.confused : load(CURSOR_FOLDER_PATH + 'confused.png'.trim_suffix(".import")),
+	Globals.Cursor.point: load(CURSOR_FOLDER_PATH + 'cursor_point.png'.trim_suffix(".import")),
+	Globals.Cursor.hold : load(CURSOR_FOLDER_PATH + 'cursor_hold.png'.trim_suffix(".import")),
+	Globals.Cursor.snip : load(CURSOR_FOLDER_PATH + 'cursor_snip.png'.trim_suffix(".import")),
+	Globals.Cursor.snipped : load(CURSOR_FOLDER_PATH + 'cursor_snipped.png'.trim_suffix(".import")),
+	Globals.Cursor.middle : load(CURSOR_FOLDER_PATH + 'cursor_middle.png'.trim_suffix(".import")),
+	Globals.Cursor.hover : load(CURSOR_FOLDER_PATH + 'cursor_hover.png'.trim_suffix(".import")),
+	Globals.Cursor.press : load(CURSOR_FOLDER_PATH + 'cursor_press.png'.trim_suffix(".import")),
+	Globals.Cursor.disabled : load(CURSOR_FOLDER_PATH + 'cursor_disabled.png'.trim_suffix(".import")),
+	Globals.Cursor.loving : load(CURSOR_FOLDER_PATH + 'loving.png'.trim_suffix(".import")),
+	Globals.Cursor.confused : load(CURSOR_FOLDER_PATH + 'confused.png'.trim_suffix(".import")),
 }
 
 func _ready() -> void:
@@ -38,7 +38,7 @@ func _ready() -> void:
 	offset = Scale * normal_offset
 	Heart.offset = Scale * normal_heart_offset
 	
-	EVENTBUS.signal_change_cursor.connect(change_cursor)
+	EventBus.signal_change_cursor.connect(change_cursor)
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey:
@@ -47,7 +47,7 @@ func _input(event: InputEvent) -> void:
 		
 		if check_anger():
 			self.angry = !angry
-			change_cursor(GLOBALS.Cursor.default)
+			change_cursor(Globals.Cursor.default)
 
 func check_anger() -> bool:
 	if !(
@@ -87,20 +87,20 @@ func _process(_delta: float) -> void:
 	if visible:
 		position = get_global_mouse_position()
 
-func get_default_cursor() -> GLOBALS.Cursor:
+func get_default_cursor() -> Globals.Cursor:
 	if angry and glowing:
-		return GLOBALS.Cursor.confused
+		return Globals.Cursor.confused
 	
 	if angry:
-		return GLOBALS.Cursor.middle
+		return Globals.Cursor.middle
 
 	if glowing:
-		return GLOBALS.Cursor.loving
+		return Globals.Cursor.loving
 	
-	return GLOBALS.Cursor.point
+	return Globals.Cursor.point
 
-func change_cursor(cursor: GLOBALS.Cursor) -> void:
-	if cursor == GLOBALS.Cursor.default:
+func change_cursor(cursor: Globals.Cursor) -> void:
+	if cursor == Globals.Cursor.default:
 		cursor = get_default_cursor()
 	
 	if cursor != current_cursor:

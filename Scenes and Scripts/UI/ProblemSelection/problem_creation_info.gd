@@ -32,12 +32,12 @@ func _on_check_button_toggled(button_pressed: bool) -> void:
 	$VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/DegreeContainer.visible = button_pressed
 
 func _next() -> void:
-	GLOBALS.creating_problem.custom_degree = check_button.button_pressed
+	Globals.creating_problem.custom_degree = check_button.button_pressed
 	
 	if check_button.button_pressed:
-		GLOBALS.creating_problem.degree = int(Degree.value)
+		Globals.creating_problem.degree = int(Degree.value)
 	else:
-		GLOBALS.creating_problem.degree = Problem.LOWEST_ORDER
+		Globals.creating_problem.degree = Problem.LOWEST_ORDER
 	
 	next.emit()
 

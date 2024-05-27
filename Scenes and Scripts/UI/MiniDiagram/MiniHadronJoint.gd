@@ -30,7 +30,7 @@ func init(position_x: int, _diagram: MiniDiagram) -> void:
 	Diagram = _diagram
 
 func get_hadron_interactions() -> Array:
-	return GLOBALS.find_all_var(
+	return ArrayFuncs.find_all_var(
 		Diagram.get_interactions(),
 		func(interaction: MiniInteraction) -> bool:
 			return (

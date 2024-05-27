@@ -35,7 +35,7 @@ func _ready() -> void:
 	$VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Resave.visible = allow_resaving
 	
 	BigDiagram.action_taken.connect(update_resave_button)
-	load_diagram.connect(EVENTBUS.draw_diagram)
+	load_diagram.connect(EventBus.draw_diagram)
 
 func init(big_diagram: MainDiagram) -> void:
 	BigDiagram = big_diagram
