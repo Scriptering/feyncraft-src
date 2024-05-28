@@ -1,16 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://c062i5iscj5rd"]
+[gd_scene load_steps=4 format=3 uid="uid://c062i5iscj5rd"]
 
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="1_xrvbt"]
-[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="2_s3yiu"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/ColourPicker/ColourButton.gd" id="3_coarc"]
 [ext_resource type="Texture2D" uid="uid://ddv5m0qeqb5lp" path="res://Textures/UI/ColourPicker/colour_icon.png" id="4_3mh40"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qxnfj"]
-resource_local_to_scene = true
-shader = ExtResource("2_s3yiu")
-
 [node name="ColourButton" instance=ExtResource("1_xrvbt")]
-material = SubResource("ShaderMaterial_qxnfj")
 offset_right = -618.0
 offset_bottom = -338.0
 script = ExtResource("3_coarc")

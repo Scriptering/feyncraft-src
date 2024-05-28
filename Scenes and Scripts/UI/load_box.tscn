@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bk1gajbjms22h"]
+[gd_scene load_steps=18 format=3 uid="uid://bk1gajbjms22h"]
 
 [ext_resource type="Theme" uid="uid://cfmbhoq8cuoge" path="res://Resources/Themes/ProjectTheme.tres" id="1_qvc2w"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/LoadBox.gd" id="2_iws12"]
@@ -8,7 +8,6 @@
 [ext_resource type="StyleBox" uid="uid://bubm5sx3xn6q5" path="res://Resources/Themes/TitleLabel.tres" id="6_kbw8s"]
 [ext_resource type="FontFile" uid="uid://cq27s0444iwkg" path="res://Textures/Fonts/ConnectionIi-2wj8.otf" id="7_kqs0u"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="8_eom8q"]
-[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="9_3cb6c"]
 [ext_resource type="Texture2D" uid="uid://cvuwkc5eaq805" path="res://Textures/Buttons/icons/copy.png" id="10_wm7fa"]
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="11_3lrwy"]
 [ext_resource type="Texture2D" uid="uid://cg8lbpdjmqh84" path="res://Textures/Buttons/icons/paste.png" id="11_ne5rf"]
@@ -22,22 +21,6 @@
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_btth5"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f2w4s"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_dw81q"]
-resource_local_to_scene = true
-shader = ExtResource("9_3cb6c")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_a6iev"]
-resource_local_to_scene = true
-shader = ExtResource("9_3cb6c")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gjsnt"]
-resource_local_to_scene = true
-shader = ExtResource("9_3cb6c")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_7s8wr"]
-resource_local_to_scene = true
-shader = ExtResource("9_3cb6c")
 
 [node name="LoadBox" type="Control" node_paths=PackedStringArray("GrabAreas")]
 layout_mode = 3
@@ -131,7 +114,6 @@ layout_mode = 2
 size_flags_horizontal = 2
 
 [node name="Close" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HBoxContainer" instance=ExtResource("8_eom8q")]
-material = SubResource("ShaderMaterial_dw81q")
 layout_mode = 2
 icon = ExtResource("11_rg5fn")
 minimum_size = Vector2(24, 24)
@@ -142,7 +124,6 @@ icon_use_parent_material = true
 tooltip = "Close"
 
 [node name="Copy" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("8_eom8q")]
-material = SubResource("ShaderMaterial_a6iev")
 layout_mode = 2
 icon = ExtResource("10_wm7fa")
 minimum_size = Vector2(24, 24)
@@ -153,7 +134,6 @@ icon_use_parent_material = true
 tooltip = "Copy"
 
 [node name="Paste" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("8_eom8q")]
-material = SubResource("ShaderMaterial_gjsnt")
 layout_mode = 2
 icon = ExtResource("11_ne5rf")
 minimum_size = Vector2(24, 24)
@@ -170,7 +150,6 @@ size_flags_horizontal = 3
 alignment = 2
 
 [node name="Submit" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/SubmitContainer" instance=ExtResource("8_eom8q")]
-material = SubResource("ShaderMaterial_7s8wr")
 layout_mode = 2
 icon = ExtResource("12_buvla")
 minimum_size = Vector2(24, 24)

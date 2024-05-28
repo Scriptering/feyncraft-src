@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://dcpcxfh7umytq"]
+[gd_scene load_steps=21 format=3 uid="uid://dcpcxfh7umytq"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_gc6j6"]
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="2_o6xnf"]
@@ -6,7 +6,6 @@
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/MiniDiagram/mini_diagram_viewer.gd" id="4_o6nlg"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="6_r8qrn"]
 [ext_resource type="PackedScene" uid="uid://cktgoqxrvgsh0" path="res://Scenes and Scripts/UI/MiniDiagram/mini_diagram.tscn" id="6_y8o7g"]
-[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="7_nj3d4"]
 [ext_resource type="Texture2D" uid="uid://bm3ag65nskhpk" path="res://Textures/UI/MiniDiagram/arrow_left.png" id="8_g4oap"]
 [ext_resource type="Texture2D" uid="uid://cb6lapmtgwimd" path="res://Textures/UI/MiniDiagram/arrow_right.png" id="9_4bpdd"]
 [ext_resource type="Texture2D" uid="uid://bvdr8f7dmjpmi" path="res://Textures/Buttons/icons/upload.png" id="9_ulpnp"]
@@ -36,10 +35,6 @@ default_font_size = 16
 PanelContainer/styles/panel = SubResource("StyleBoxTexture_pkocb")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_05qsh"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_rrsl1"]
-resource_local_to_scene = true
-shader = ExtResource("7_nj3d4")
 
 [node name="MiniDiagramViewer" type="Control" node_paths=PackedStringArray("GrabAreas")]
 material = ExtResource("1_gc6j6")
@@ -101,7 +96,6 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_05qsh")
 
 [node name="MiniDiagram" parent="VBoxContainer/PanelContainer/VBoxContainer/CenterContainer/MiniDiagramContainer" instance=ExtResource("6_y8o7g")]
-material = SubResource("ShaderMaterial_rrsl1")
 use_parent_material = true
 layout_mode = 2
 

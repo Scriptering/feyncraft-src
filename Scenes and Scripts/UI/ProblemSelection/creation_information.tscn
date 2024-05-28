@@ -1,26 +1,13 @@
-[gd_scene load_steps=12 format=3 uid="uid://c5scpc4iadf17"]
+[gd_scene load_steps=8 format=3 uid="uid://c5scpc4iadf17"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_j0xio"]
 [ext_resource type="StyleBox" uid="uid://bubm5sx3xn6q5" path="res://Resources/Themes/TitleLabel.tres" id="2_4udne"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/ProblemSelection/creation_information.gd" id="2_sqpln"]
-[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="3_e86ap"]
 [ext_resource type="PackedScene" uid="uid://buskwt83mql4x" path="res://Scenes and Scripts/UI/ProblemSelection/particle_selection_info.tscn" id="3_gxgmm"]
 [ext_resource type="PackedScene" uid="uid://rtdlfrcuvhi8" path="res://Scenes and Scripts/UI/ProblemSelection/problem_creation_info.tscn" id="5_224cs"]
 [ext_resource type="PackedScene" uid="uid://bvn4ssrvphh28" path="res://Scenes and Scripts/UI/ProblemSelection/solution_creation_info.tscn" id="6_jjee5"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0pnha"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ere8h"]
-resource_local_to_scene = true
-shader = ExtResource("3_e86ap")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_rs86j"]
-resource_local_to_scene = true
-shader = ExtResource("3_e86ap")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_um0af"]
-resource_local_to_scene = true
-shader = ExtResource("3_e86ap")
 
 [node name="CreationInformation" type="Control" node_paths=PackedStringArray("GrabAreas")]
 material = ExtResource("1_j0xio")
@@ -65,19 +52,19 @@ tabs_visible = false
 tab_focus_mode = 0
 
 [node name="ParticleSelectionInfo" parent="VBoxContainer/TabContainer" instance=ExtResource("3_gxgmm")]
-material = SubResource("ShaderMaterial_ere8h")
+material = null
 layout_mode = 2
 mouse_filter = 1
 
 [node name="ProblemCreationInfo" parent="VBoxContainer/TabContainer" instance=ExtResource("5_224cs")]
 visible = false
-material = SubResource("ShaderMaterial_rs86j")
+material = null
 layout_mode = 2
 mouse_filter = 1
 
 [node name="SolutionCreationInfo" parent="VBoxContainer/TabContainer" instance=ExtResource("6_jjee5")]
 visible = false
-material = SubResource("ShaderMaterial_um0af")
+material = null
 layout_mode = 2
 mouse_filter = 1
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dxeg8j8rmil8t"]
+[gd_scene load_steps=16 format=3 uid="uid://dxeg8j8rmil8t"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_5tlm3"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/health_tab.gd" id="2_f6u4r"]
@@ -6,7 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://co7w81osg53kf" path="res://Textures/UI/Information/valid.png" id="4_l5lyb"]
 [ext_resource type="Texture2D" uid="uid://tql14gtq05lf" path="res://Textures/UI/Information/invalid.png" id="4_q7src"]
 [ext_resource type="PackedScene" uid="uid://80bi27me1iqr" path="res://Scenes and Scripts/UI/Buttons/pull_out_tab_button_down.tscn" id="5_vueuw"]
-[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="6_uctth"]
 [ext_resource type="Texture2D" uid="uid://djfkh4k2lcuyg" path="res://Textures/Buttons/Tabs/tab_down_highlight.png" id="7_hs0gf"]
 [ext_resource type="Texture2D" uid="uid://bw8jm82sn5nmq" path="res://Textures/Buttons/Tabs/tab_down.png" id="8_wtk80"]
 [ext_resource type="FontFile" uid="uid://dohkbu7ekkfx8" path="res://Textures/Fonts/pixeltype/Pixeltype.ttf" id="9_xnlj5"]
@@ -20,10 +19,6 @@ texture_margin_top = 6.0
 texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 expand_margin_top = 10.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_6fehg"]
-resource_local_to_scene = true
-shader = ExtResource("6_uctth")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_loeqa"]
 content_margin_left = 4.0
@@ -157,7 +152,6 @@ vertical_alignment = 2
 
 [node name="TabButton" parent="VBoxContainer" instance=ExtResource("5_vueuw")]
 z_index = 0
-material = SubResource("ShaderMaterial_6fehg")
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8

@@ -1,8 +1,8 @@
-[gd_scene load_steps=14 format=3 uid="uid://dutuwg10y2hwq"]
+[gd_scene load_steps=13 format=3 uid="uid://dutuwg10y2hwq"]
 
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_660a7"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/credits.gd" id="2_nu17t"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="2_rnov3"]
-[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="3_da0v7"]
 [ext_resource type="Texture2D" uid="uid://d38a3uriu26gx" path="res://Textures/Buttons/icons/donate.png" id="4_6crf1"]
 [ext_resource type="Texture2D" uid="uid://bs7yco7s5pg15" path="res://icon.png" id="4_84af4"]
 [ext_resource type="Texture2D" uid="uid://bwwdur67r0bgl" path="res://Textures/aseprite.png" id="5_e238y"]
@@ -16,11 +16,8 @@
 base_font = ExtResource("9_t01cb")
 spacing_bottom = -2
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_40hs1"]
-resource_local_to_scene = true
-shader = ExtResource("3_da0v7")
-
 [node name="Credits" type="Control" node_paths=PackedStringArray("GrabAreas")]
+material = ExtResource("1_660a7")
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -92,7 +89,6 @@ text = "Aseprite"
 horizontal_alignment = 1
 
 [node name="Donate" parent="VBoxContainer/PanelContainer/VBoxContainer" instance=ExtResource("2_rnov3")]
-material = SubResource("ShaderMaterial_40hs1")
 layout_mode = 2
 icon = ExtResource("4_6crf1")
 text = "Donate on KoFi "

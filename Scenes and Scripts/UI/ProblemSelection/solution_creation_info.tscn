@@ -1,11 +1,10 @@
-[gd_scene load_steps=23 format=3 uid="uid://bvn4ssrvphh28"]
+[gd_scene load_steps=20 format=3 uid="uid://bvn4ssrvphh28"]
 
 [ext_resource type="Texture2D" uid="uid://tql14gtq05lf" path="res://Textures/UI/Information/invalid.png" id="1_mp3ie"]
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_vwd38"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/ProblemSelection/solution_creation_info.gd" id="2_6e24i"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="2_66fjv"]
 [ext_resource type="FontFile" uid="uid://cq27s0444iwkg" path="res://Textures/Fonts/ConnectionIi-2wj8.otf" id="3_ghv2s"]
-[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="3_ktptg"]
 [ext_resource type="Texture2D" uid="uid://c3nrennubqoow" path="res://Textures/Buttons/icons/back.png" id="4_187qd"]
 [ext_resource type="PackedScene" uid="uid://dorw3vr2amuy3" path="res://Scenes and Scripts/Components/button_sound_component.tscn" id="4_j2ks7"]
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="5_8fnwf"]
@@ -29,14 +28,6 @@
 [sub_resource type="Theme" id="Theme_qjfhe"]
 default_font = ExtResource("5_odh5n")
 default_font_size = 10
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_214qr"]
-resource_local_to_scene = true
-shader = ExtResource("3_ktptg")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_j1p5a"]
-resource_local_to_scene = true
-shader = ExtResource("3_ktptg")
 
 [node name="SolutionCreationInfo" type="PanelContainer" node_paths=PackedStringArray("prev_button", "exit_button")]
 material = ExtResource("1_vwd38")
@@ -185,7 +176,6 @@ layout_mode = 2
 alignment = 1
 
 [node name="PrevStep" parent="VBoxContainer/Buttons" instance=ExtResource("2_66fjv")]
-material = SubResource("ShaderMaterial_214qr")
 layout_mode = 2
 icon = ExtResource("4_187qd")
 minimum_size = Vector2(24, 21)
@@ -195,7 +185,6 @@ icon_use_parent_material = true
 tooltip = "Previous Step"
 
 [node name="Submit" parent="VBoxContainer/Buttons" instance=ExtResource("2_66fjv")]
-material = SubResource("ShaderMaterial_j1p5a")
 layout_mode = 2
 icon = ExtResource("6_eyill")
 minimum_size = Vector2(22, 22)

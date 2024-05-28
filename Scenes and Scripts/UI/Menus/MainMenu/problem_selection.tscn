@@ -1,20 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://dtllx04gp77mu"]
+[gd_scene load_steps=7 format=3 uid="uid://dtllx04gp77mu"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/MainMenu/problem_selection.gd" id="1_aqrhn"]
 [ext_resource type="PackedScene" uid="uid://b8jrtk1lv0oo0" path="res://Scenes and Scripts/UI/ProblemSelection/problem_list.tscn" id="1_gfl8q"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/MainMenu/problem_selection_control.gd" id="1_qn5hj"]
-[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="2_bvxeb"]
 [ext_resource type="PackedScene" uid="uid://c3m8fesktmd85" path="res://Scenes and Scripts/UI/ProblemSelection/problem_set_list.tscn" id="3_chpqf"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q3cex"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_xj8vq"]
-resource_local_to_scene = true
-shader = ExtResource("2_bvxeb")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_klt0p"]
-resource_local_to_scene = true
-shader = ExtResource("2_bvxeb")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_k11wx"]
 size = Vector2(87, 25.5)
@@ -44,13 +35,11 @@ tabs_visible = false
 script = ExtResource("1_aqrhn")
 
 [node name="ProblemSetList" parent="ProblemSelection" instance=ExtResource("3_chpqf")]
-material = SubResource("ShaderMaterial_xj8vq")
 layout_mode = 2
 mouse_filter = 1
 
 [node name="ProblemList" parent="ProblemSelection" instance=ExtResource("1_gfl8q")]
 visible = false
-material = SubResource("ShaderMaterial_klt0p")
 layout_mode = 2
 
 [node name="TitleArea" type="Area2D" parent="."]

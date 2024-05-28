@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://b6go021ha3ocr"]
+[gd_scene load_steps=19 format=3 uid="uid://b6go021ha3ocr"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_b04gi"]
 [ext_resource type="StyleBox" uid="uid://dvu7f5h7snggp" path="res://Scenes and Scripts/UI/Menus/panelContainer.tres" id="1_g4bto"]
@@ -11,7 +11,6 @@
 [ext_resource type="Texture2D" uid="uid://cms1u4elh5bo3" path="res://Textures/Buttons/icons/delete.png" id="7_dyt28"]
 [ext_resource type="Texture2D" uid="uid://d16opu3dyhri7" path="res://Textures/Buttons/eye/eye_open.png" id="7_f5yhf"]
 [ext_resource type="PackedScene" uid="uid://7kmcsryae7lw" path="res://Scenes and Scripts/UI/Buttons/load_button.tscn" id="10_6kia2"]
-[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="11_l46c8"]
 [ext_resource type="Texture2D" uid="uid://qxw17ji0dvra" path="res://Textures/Buttons/icons/share.png" id="13_4yitn"]
 [ext_resource type="Texture2D" uid="uid://co7w81osg53kf" path="res://Textures/UI/Information/valid.png" id="14_xqm6y"]
 
@@ -31,10 +30,6 @@ LineEdit/styles/normal = ExtResource("1_g4bto")
 LineEdit/styles/read_only = SubResource("StyleBoxEmpty_0snhi")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qxe7s"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hvnrk"]
-resource_local_to_scene = true
-shader = ExtResource("11_l46c8")
 
 [node name="ProblemSetItem" type="PanelContainer"]
 material = ExtResource("1_b04gi")
@@ -77,7 +72,6 @@ editable = false
 script = ExtResource("4_ylu82")
 
 [node name="Play" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("4_dol4y")]
-material = null
 layout_mode = 2
 mouse_filter = 1
 icon = ExtResource("5_7dhmq")
@@ -90,7 +84,6 @@ action_mode = 1
 tooltip = "Resume"
 
 [node name="View" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("4_dol4y")]
-material = null
 layout_mode = 2
 mouse_filter = 1
 icon = ExtResource("7_f5yhf")
@@ -102,7 +95,6 @@ action_mode = 1
 tooltip = "View Problems"
 
 [node name="Delete" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("4_dol4y")]
-material = null
 layout_mode = 2
 mouse_filter = 1
 icon = ExtResource("7_dyt28")
@@ -115,7 +107,6 @@ action_mode = 1
 tooltip = "Delete"
 
 [node name="Upload" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("10_6kia2")]
-material = SubResource("ShaderMaterial_hvnrk")
 layout_mode = 2
 mode = 1
 icon = ExtResource("13_4yitn")

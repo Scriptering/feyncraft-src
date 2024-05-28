@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://b5pj0lanxu0o6"]
+[gd_scene load_steps=17 format=3 uid="uid://b5pj0lanxu0o6"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_3q1kk"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/ColourPicker/palette_control.gd" id="2_arvfv"]
@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://wfo6boyk67m8" path="res://Scenes and Scripts/UI/ColourPicker/palette_list_item.tscn" id="4_t1lxn"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="5_7aaw2"]
 [ext_resource type="Resource" uid="uid://i0gswa7oaher" path="res://saves/Palettes/teastain.tres" id="6_1gq2f"]
-[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="6_gw1gk"]
 [ext_resource type="Texture2D" uid="uid://1qi6lr05g0vt" path="res://Textures/Buttons/icons/add.png" id="7_bfw4j"]
 [ext_resource type="Resource" uid="uid://ovpgrpwbkp6q" path="res://saves/Palettes/Default/GameBoy.tres" id="7_gp7r5"]
 [ext_resource type="PackedScene" uid="uid://7kmcsryae7lw" path="res://Scenes and Scripts/UI/Buttons/load_button.tscn" id="8_sg02h"]
@@ -19,26 +18,6 @@
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rcifc"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c01uu"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_pqeqn"]
-resource_local_to_scene = true
-shader = ExtResource("6_gw1gk")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_msvgm"]
-resource_local_to_scene = true
-shader = ExtResource("6_gw1gk")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_w6hqi"]
-resource_local_to_scene = true
-shader = ExtResource("6_gw1gk")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_tlkcg"]
-resource_local_to_scene = true
-shader = ExtResource("6_gw1gk")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_rbhst"]
-resource_local_to_scene = true
-shader = ExtResource("6_gw1gk")
 
 [node name="PaletteMenu" type="Control" node_paths=PackedStringArray("GrabAreas")]
 material = ExtResource("1_3q1kk")
@@ -114,17 +93,14 @@ layout_mode = 2
 theme_override_constants/separation = 2
 
 [node name="TeaStain" parent="PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/ItemContainer" instance=ExtResource("4_t1lxn")]
-material = SubResource("ShaderMaterial_pqeqn")
 layout_mode = 2
 palette = ExtResource("6_1gq2f")
 
 [node name="GameBoy" parent="PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/ItemContainer" instance=ExtResource("4_t1lxn")]
-material = SubResource("ShaderMaterial_msvgm")
 layout_mode = 2
 palette = ExtResource("7_gp7r5")
 
 [node name="Mushroom" parent="PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/ItemContainer" instance=ExtResource("4_t1lxn")]
-material = SubResource("ShaderMaterial_w6hqi")
 layout_mode = 2
 palette = ExtResource("8_tcy7h")
 
@@ -141,7 +117,6 @@ layout_mode = 2
 alignment = 1
 
 [node name="AddProblem" parent="PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/HBoxContainer" instance=ExtResource("5_7aaw2")]
-material = SubResource("ShaderMaterial_tlkcg")
 layout_mode = 2
 size_flags_horizontal = 1
 icon = ExtResource("7_bfw4j")
@@ -150,7 +125,6 @@ icon_use_parent_material = true
 action_mode = 1
 
 [node name="LoadButton" parent="PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/HBoxContainer" instance=ExtResource("8_sg02h")]
-material = SubResource("ShaderMaterial_rbhst")
 layout_mode = 2
 minimum_size = Vector2(70, 28)
 
