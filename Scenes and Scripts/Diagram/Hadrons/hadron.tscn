@@ -1,9 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://bt7ftrwrqkbqc"]
+[gd_scene load_steps=2 format=3 uid="uid://bt7ftrwrqkbqc"]
 
-[ext_resource type="Material" uid="uid://iitnraau4c6m" path="res://Resources/Shaders/outline0.tres" id="1_30m7g"]
 [ext_resource type="Script" path="res://Scenes and Scripts/Diagram/Hadrons/hadron.gd" id="2_di4xc"]
 
 [node name="hadron" type="Node2D" groups=["hadron"]]
-material = ExtResource("1_30m7g")
 scale = Vector2(2, 2)
 script = ExtResource("2_di4xc")
