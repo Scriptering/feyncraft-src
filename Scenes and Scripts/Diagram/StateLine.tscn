@@ -1,16 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://pgnduadnvgfx"]
+[gd_scene load_steps=6 format=3 uid="uid://pgnduadnvgfx"]
 
-[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="1_7byww"]
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_p5bg8"]
 [ext_resource type="Script" path="res://Scenes and Scripts/Diagram/StateLine.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://ck7f7rh13bebq" path="res://Textures/Background/state_line_top.png" id="2_g0kfo"]
 [ext_resource type="Texture2D" uid="uid://b27ksgsygiqmd" path="res://Textures/Background/state_line_tile.png" id="2_p12ey"]
 [ext_resource type="Texture2D" uid="uid://cuwph3lsysfx8" path="res://Textures/Background/stateline_grab_area.png" id="3_4nkpf"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_rrm4r"]
-shader = ExtResource("1_7byww")
-
 [node name="StateLine" type="Control" node_paths=PackedStringArray("GrabAreas") groups=["state_lines"]]
-material = SubResource("ShaderMaterial_rrm4r")
+material = ExtResource("1_p5bg8")
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("2")

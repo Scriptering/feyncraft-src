@@ -4,7 +4,7 @@
 [ext_resource type="Shader" path="res://Resources/Shaders/particle_line.gdshader" id="1_x0i6p"]
 [ext_resource type="Texture2D" uid="uid://b8glr5vnlacpl" path="res://Textures/ParticlesAndLines/gluon_end.png" id="3_6ete1"]
 [ext_resource type="Texture2D" uid="uid://c1joju14fxw1n" path="res://Textures/ParticlesAndLines/Particle.png" id="4_wgcwh"]
-[ext_resource type="Shader" path="res://Scenes and Scripts/Diagram/outline_palette_swap.gdshader" id="5_2gn0a"]
+[ext_resource type="Shader" path="res://Resources/Shaders/outline_palette_swap.gdshader" id="5_2gn0a"]
 [ext_resource type="Texture2D" uid="uid://dya0nescxtd67" path="res://Textures/ParticlesAndLines/arrow.png" id="5_chfwe"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3ebw7"]

@@ -1,22 +1,14 @@
-[gd_scene load_steps=26 format=3 uid="uid://bhi4xq3qdbt4d"]
+[gd_scene load_steps=23 format=3 uid="uid://bhi4xq3qdbt4d"]
 
 [ext_resource type="Texture2D" uid="uid://dujsq82ocy6bp" path="res://Textures/Interactions/Interaction.png" id="1"]
-[ext_resource type="Shader" path="res://Resources/Shaders/interaction_shader.gdshader" id="1_2fxik"]
+[ext_resource type="Material" uid="uid://clhuw6cdr2tdj" path="res://Resources/Shaders/interaction.tres" id="1_151mx"]
 [ext_resource type="Script" path="res://Scenes and Scripts/Diagram/interaction.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://dn576br5tkdbc" path="res://Textures/Interactions/interaction_invalid.png" id="3"]
-[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="3_vtri8"]
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="3_3miel"]
 [ext_resource type="Texture2D" uid="uid://cb746tuycm36s" path="res://Textures/Interactions/dot.png" id="4"]
 [ext_resource type="Texture2D" uid="uid://cj4e63vquy3u6" path="res://Textures/Interactions/interaction_background.png" id="4_0yoxg"]
-[ext_resource type="Shader" path="res://Scenes and Scripts/Diagram/outline_palette_swap.gdshader" id="8_8xhlq"]
+[ext_resource type="Material" uid="uid://dc4rnoi735twf" path="res://Resources/Shaders/outline_palette_swap.tres" id="8_kmrm7"]
 [ext_resource type="PackedScene" uid="uid://dorw3vr2amuy3" path="res://Scenes and Scripts/Components/button_sound_component.tscn" id="9_b7d5g"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_a466d"]
-resource_local_to_scene = true
-shader = ExtResource("1_2fxik")
-shader_parameter/interaction_strength_alpha = null
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_iwh4e"]
-shader = ExtResource("3_vtri8")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5bmnj"]
 atlas = ExtResource("3")
@@ -93,11 +85,6 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_86yu2"]
-shader = ExtResource("8_8xhlq")
-shader_parameter/line_color = Color(0, 0, 0, 1)
-shader_parameter/line_thickness = 2.0
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_usurp"]
 size = Vector2(12, 12)
 
@@ -108,13 +95,13 @@ size = Vector2(12, 12)
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lgs61"]
 
 [node name="Interaction" type="Node2D" node_paths=PackedStringArray("GrabArea") groups=["grabbable", "interactions"]]
-material = SubResource("ShaderMaterial_a466d")
+material = ExtResource("1_151mx")
 script = ExtResource("2")
 information_box_offset = Vector2(-60, -75)
 GrabArea = NodePath("InformationButton")
 
 [node name="TextureRect" type="TextureRect" parent="."]
-material = SubResource("ShaderMaterial_iwh4e")
+material = ExtResource("3_3miel")
 offset_left = -5.0
 offset_top = -5.0
 offset_right = 5.0
@@ -134,7 +121,7 @@ use_parent_material = true
 sprite_frames = SubResource("11")
 
 [node name="InfoNumberLabel" type="Label" parent="."]
-material = SubResource("ShaderMaterial_86yu2")
+material = ExtResource("8_kmrm7")
 offset_left = 7.0
 offset_top = -6.0
 offset_right = 47.0
