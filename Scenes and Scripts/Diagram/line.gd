@@ -119,7 +119,7 @@ func _get_particle() -> ParticleData.Particle:
 
 func _get_quantum_numbers() -> Array:
 	var quantum_numbers_temp := []
-	for quantum_number:ParticleData.QuantumNumber in ParticleData.QuantumNumber:
+	for quantum_number:ParticleData.QuantumNumber in ParticleData.QuantumNumber.values():
 		quantum_numbers_temp.append(anti*quantum_numbers[quantum_number])
 	return quantum_numbers_temp
 

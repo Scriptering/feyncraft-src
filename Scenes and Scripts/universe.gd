@@ -4,7 +4,7 @@ signal save_files
 
 enum Scene {Level, MainMenu}
 
-@onready var MainMenu: Control = $MainMenu
+@onready var MainMenu: Node2D = $MainMenu
 @onready var Level: Node2D = $World
 @onready var StateManager: Node = $state_manager
 @onready var ControlsTab: Control = $PullOutTabs/ControlsTab

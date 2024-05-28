@@ -42,12 +42,12 @@ var information_box: InteractionInformation
 
 var valid := true: set = _set_valid
 var valid_colourless := true: set = _set_valid_colourless
-var hovering := false : set = _set_hovering
+var hovering := false:
+	get:
+		return grab_area_hovered
 
 func _ready() -> void:
 	super._ready()
-	
-	grab_area_hovered = is_grab_area_hovered()
 	
 	show_information_box.connect(EventBus.add_floating_menu)
 	request_deletion.connect(Diagram.recursive_delete_interaction)
@@ -68,16 +68,7 @@ func init(diagram: MainDiagram) -> void:
 	StateManager = diagram.StateManager
 
 func _grab_area_hovered_changed(new_value: bool) -> void:
-	self.hovering = new_value
 	grab_area_hovered = new_value
-
-func _input(event: InputEvent) -> void:
-	super._input(event)
-	if Input.is_action_just_pressed("click") and hovering:
-		clicked_on.emit(self)
-
-func _set_hovering(new_value: bool) -> void:
-	hovering = new_value
 	
 	if grabbed:
 		return
@@ -87,6 +78,14 @@ func _set_hovering(new_value: bool) -> void:
 	else:
 		Ball.frame = NORMAL
 
+func _input(event: InputEvent) -> void:
+	super._input(event)
+	if Input.is_action_just_pressed("click") and hovering:
+		clicked_on.emit(self)
+
+func _set_hovering(new_value: bool) -> void:
+	hovering = new_value
+
 func _set_valid(new_valid: bool) -> void:
 	valid = new_valid
 	update_valid_visual()
@@ -94,9 +93,6 @@ func _set_valid(new_valid: bool) -> void:
 func _set_valid_colourless(new_valid_colourless: bool) -> void:
 	valid_colourless = new_valid_colourless
 	update_valid_visual()
-
-func is_grab_area_hovered() -> bool:
-	return $GrabArea/CollisionShape2D.shape.get_rect().has_point(get_local_mouse_position())
 
 func update_valid_visual() -> void:
 	var current_ball_frame: int = Ball.frame
@@ -390,7 +386,7 @@ func close_information_box() -> void:
 	information_box.queue_free()
 	information_visible = false
 
-func _on_information_button_pressed() -> void:
+func _on_mouse_area_button_pressed() -> void:
 	if (
 		(StateManager.state == BaseState.State.Idle or
 		(StateManager.state == BaseState.State.Drawing and
@@ -399,10 +395,10 @@ func _on_information_button_pressed() -> void:
 	):
 		if information_visible:
 			close_information_box()
-			$InformationButton/ButtonSoundComponent.play_button_up()
+			$ButtonSoundComponent.play_button_up()
 		else:
 			open_information_box()
-			$InformationButton/ButtonSoundComponent.play_button_down()
+			$ButtonSoundComponent.play_button_down()
 
 func deconstructor() -> void:
 	if information_visible:
@@ -488,10 +484,9 @@ func get_vision_vectors(vision: Globals.Vision) -> PackedVector2Array:
 		return [middle_vector, -middle_vector]
 	
 	var vision_vectors: PackedVector2Array = []
-	for i:int in range(vision_particle_line_vectors.size()):
+	for i:int in vision_particle_line_vectors.size():
 		vision_vectors.push_back(
 			(vision_particle_line_vectors[i] + vision_particle_line_vectors[(i+1 % vision_particle_line_vectors.size())]).normalized()
 		)
 	
 	return vision_vectors
-	

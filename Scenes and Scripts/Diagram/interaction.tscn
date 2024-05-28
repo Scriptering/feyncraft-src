@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bhi4xq3qdbt4d"]
+[gd_scene load_steps=21 format=3 uid="uid://bhi4xq3qdbt4d"]
 
 [ext_resource type="Texture2D" uid="uid://dujsq82ocy6bp" path="res://Textures/Interactions/Interaction.png" id="1"]
 [ext_resource type="Material" uid="uid://clhuw6cdr2tdj" path="res://Resources/Shaders/interaction.tres" id="1_151mx"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://cb746tuycm36s" path="res://Textures/Interactions/dot.png" id="4"]
 [ext_resource type="Texture2D" uid="uid://cj4e63vquy3u6" path="res://Textures/Interactions/interaction_background.png" id="4_0yoxg"]
 [ext_resource type="Material" uid="uid://dc4rnoi735twf" path="res://Resources/Shaders/outline_palette_swap.tres" id="8_kmrm7"]
+[ext_resource type="PackedScene" uid="uid://bp22b2ydisdm0" path="res://Scenes and Scripts/Components/area_button.tscn" id="9_24vtf"]
 [ext_resource type="PackedScene" uid="uid://dorw3vr2amuy3" path="res://Scenes and Scripts/Components/button_sound_component.tscn" id="9_b7d5g"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5bmnj"]
@@ -88,17 +89,11 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_usurp"]
 size = Vector2(12, 12)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_38m1t"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p04yt"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lgs61"]
-
 [node name="Interaction" type="Node2D" node_paths=PackedStringArray("GrabArea") groups=["grabbable", "interactions"]]
 material = ExtResource("1_151mx")
 script = ExtResource("2")
 information_box_offset = Vector2(-60, -75)
-GrabArea = NodePath("InformationButton")
+GrabArea = NodePath("MouseAreaButton")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 material = ExtResource("3_3miel")
@@ -128,27 +123,18 @@ offset_right = 47.0
 offset_bottom = 10.0
 theme_override_font_sizes/font_size = 11
 
-[node name="GrabArea" type="Area2D" parent="."]
-collision_layer = 0
-collision_mask = 0
-monitoring = false
-monitorable = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="GrabArea"]
-shape = SubResource("RectangleShape2D_usurp")
-
-[node name="InformationButton" type="Button" parent="."]
-offset_left = -6.0
-offset_top = -6.0
-offset_right = 6.0
-offset_bottom = 6.0
-mouse_filter = 1
-theme_override_styles/normal = SubResource("StyleBoxEmpty_38m1t")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_p04yt")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_lgs61")
-
 [node name="ButtonSoundComponent" parent="." instance=ExtResource("9_b7d5g")]
 manual = true
 
+[node name="MouseAreaButton" parent="." instance=ExtResource("9_24vtf")]
+collision_layer = 1
+collision_mask = 1
+monitoring = true
+action_mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MouseAreaButton"]
+visible = false
+shape = SubResource("RectangleShape2D_usurp")
+
 [connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
-[connection signal="pressed" from="InformationButton" to="." method="_on_information_button_pressed"]
+[connection signal="pressed" from="MouseAreaButton" to="." method="_on_mouse_area_button_pressed"]

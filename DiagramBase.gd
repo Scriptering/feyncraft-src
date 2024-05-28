@@ -68,7 +68,7 @@ func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 	for state:StateLine.StateType in StateLine.STATES:
 		StateLines[state].position.x = drawing_matrix.state_line_positions[state] * grid_size
 
-	for drawing_particle:ParticleLine in draw_diagram_particles(drawing_matrix):
+	for drawing_particle:Variant in draw_diagram_particles(drawing_matrix):
 		ParticleLines.add_child(drawing_particle)
 	
 	for interaction_position:Vector2 in drawing_matrix.get_interaction_positions():

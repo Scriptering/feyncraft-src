@@ -67,7 +67,7 @@ static func load_txt(p_path: String) -> Resource:
 	#print(p_path)
 	
 	var file := FileAccess.open(p_path, FileAccess.READ)
-	print(file.get_as_text())
+	#print(file.get_as_text())
 	var obj: Resource = str_to_var(file.get_as_text())
 	file.close()
 	return obj

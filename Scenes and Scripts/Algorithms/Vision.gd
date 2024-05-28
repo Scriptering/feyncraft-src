@@ -156,7 +156,7 @@ func find_colourless_hadron_interactions(
 	
 	for hadron:PackedInt32Array in hadrons:
 		var colourless_hadron_interaction: int = find_colourless_hadron_interaction(
-			hadron, Globals.flatten(hadrons), quark_paths, paths, path_colours, vision_matrix, colourless_group_interactions
+			hadron, ArrayFuncs.flatten(hadrons), quark_paths, paths, path_colours, vision_matrix, colourless_group_interactions
 		)
 		
 		if colourless_hadron_interaction == NOT_FOUND:
@@ -458,7 +458,7 @@ func generate_paths(colour_matrix: DrawingMatrix, next_point_picker_function: Ca
 	
 	paths.append_array(generate_state_paths(colour_matrix, next_point_picker_function))
 	
-	for _attempt in range(MAX_LOOP_ATTEMPTS):
+	for _attempt in MAX_LOOP_ATTEMPTS:
 		var loop_matrix: DrawingMatrix = colour_matrix.duplicate(true)
 		var loops: Array[PackedInt32Array] = generate_loops(loop_matrix, next_point_picker_function)
 		
@@ -546,7 +546,7 @@ func generate_path(
 	var path: PackedInt32Array = []
 	var current_point: int = start_point
 	
-	for step in range(MAX_PATH_STEPS):
+	for step in MAX_PATH_STEPS:
 		path.push_back(current_point)
 		
 		if current_point in end_points and step != 0:

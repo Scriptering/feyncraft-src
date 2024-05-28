@@ -1570,7 +1570,7 @@ func is_connection_number_possible(unconnected_particle_count : int, interaction
 	return unconnected_particle_count <= interaction_count * INTERACTION_SIZE
 
 func compare_quantum_numbers(initial_state : Array, final_state : Array) -> int:
-	for quantum_number:ParticleData.QuantumNumber in ParticleData.QuantumNumber:
+	for quantum_number:ParticleData.QuantumNumber in ParticleData.QuantumNumber.values():
 		if !is_equal_approx(calculate_quantum_sum(quantum_number, initial_state), calculate_quantum_sum(quantum_number, final_state)):
 			if (
 				quantum_number == ParticleData.QuantumNumber.charge or

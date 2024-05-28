@@ -45,19 +45,12 @@ expand_margin_bottom = 1.0
 [sub_resource type="Theme" id="Theme_gyi6d"]
 Label/font_sizes/font_size = 16
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Node2D"]
 material = ExtResource("1_m8wv1")
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
 script = ExtResource("2_bknyf")
 
 [node name="Background" type="TextureRect" parent="."]
 use_parent_material = true
-layout_mode = 0
 offset_right = 640.0
 offset_bottom = 360.0
 mouse_filter = 2
@@ -67,7 +60,6 @@ stretch_mode = 1
 [node name="GridOutline" type="NinePatchRect" parent="."]
 z_index = 10
 use_parent_material = true
-layout_mode = 0
 offset_right = 640.0
 offset_bottom = 360.0
 texture = ExtResource("3_6hhsb")
@@ -78,12 +70,11 @@ patch_margin_bottom = 15
 
 [node name="Diagram" type="Panel" parent="."]
 use_parent_material = true
-layout_mode = 0
 offset_left = 48.0
 offset_top = 32.0
 offset_right = 592.0
 offset_bottom = 192.0
-mouse_filter = 1
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_qgodk")
 script = ExtResource("5_3sh45")
 grid_size = 16
@@ -97,6 +88,7 @@ layout_mode = 0
 offset_left = 16.0
 offset_right = 528.0
 offset_bottom = 160.0
+mouse_filter = 2
 texture = ExtResource("2_3tgej")
 stretch_mode = 1
 
@@ -106,7 +98,7 @@ anchors_preset = 0
 offset_left = 64.0
 offset_right = 384.0
 offset_bottom = 130.0
-mouse_filter = 1
+mouse_filter = 2
 
 [node name="InitialShadow" type="VBoxContainer" parent="Diagram/DiagramArea"]
 visible = false
@@ -235,28 +227,29 @@ anchors_preset = 0
 
 [node name="Center" type="Control" parent="."]
 use_parent_material = true
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_top = 22.0
-offset_bottom = 22.0
-grow_horizontal = 2
-grow_vertical = 2
+custom_minimum_size = Vector2(640, 360)
+layout_mode = 3
+anchors_preset = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
 theme = SubResource("Theme_gyi6d")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Center"]
 use_parent_material = true
 layout_mode = 1
-anchors_preset = 5
+anchors_preset = 7
 anchor_left = 0.5
+anchor_top = 1.0
 anchor_right = 0.5
-offset_left = -70.0
-offset_right = 70.0
-offset_bottom = 94.0
+anchor_bottom = 1.0
+offset_left = -76.0
+offset_top = -152.0
+offset_right = 76.0
+offset_bottom = -27.0
 grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
 alignment = 1
 
 [node name="Tutorial" parent="Center/VBoxContainer" instance=ExtResource("11_t2od8")]
@@ -322,9 +315,11 @@ icon_use_parent_material = true
 
 [node name="FloatingMenus" type="Control" parent="."]
 z_index = 1
+layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+mouse_filter = 2
 
 [node name="ProblemSelection" parent="FloatingMenus" instance=ExtResource("8_oursg")]
 visible = false
@@ -351,11 +346,11 @@ grow_vertical = 2
 
 [node name="ParticleButtons" parent="." instance=ExtResource("26_grnbf")]
 visible = false
-layout_mode = 1
 offset_left = -166.0
 offset_top = 508.0
 offset_right = -166.0
 offset_bottom = 508.0
+mouse_filter = 2
 
 [node name="VisionButton" parent="." instance=ExtResource("27_y0o8i")]
 visible = false
@@ -363,6 +358,7 @@ offset_left = 836.0
 offset_top = 4.0
 offset_right = 858.0
 offset_bottom = 64.0
+mouse_filter = 2
 
 [node name="Algorithms" type="Node" parent="."]
 
@@ -374,11 +370,11 @@ offset_bottom = 64.0
 
 [node name="MenuTab" parent="." instance=ExtResource("33_nabci")]
 visible = false
-layout_mode = 1
 offset_left = 509.0
 offset_top = 338.0
 offset_right = -131.0
 offset_bottom = -22.0
+mouse_filter = 2
 
 [node name="ShaderControl" type="Node" parent="."]
 script = ExtResource("34_pwybq")

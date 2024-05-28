@@ -1,6 +1,6 @@
 extends Node
 
-var ParentButton: BaseButton = null
+var ParentButton : Variant = null
 @export var mute: bool = false
 @export var on_pressed: bool = false
 @export var manual: bool = false

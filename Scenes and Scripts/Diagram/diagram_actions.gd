@@ -112,8 +112,8 @@ func are_quantum_numbers_matching(ignore_weak_quantum_numbers: bool = true) -> b
 func convert_path_colours(path_colours: Array, vision: Globals.Vision) -> Array[Color]:
 	var path_colors: Array[Color] = []
 	
-	for path_colour:Color in path_colours:
-		path_colors.push_back(Globals.VISION_vision_colours[vision][path_colour])
+	for path_colour:int in path_colours:
+		path_colors.push_back(Globals.vision_colours[vision][path_colour])
 	
 	return path_colors
 
