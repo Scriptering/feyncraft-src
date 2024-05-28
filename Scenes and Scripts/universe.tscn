@@ -17,7 +17,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qkvd0"]
 shader = ExtResource("2_6gvvu")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_l0l57"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d15wg"]
 resource_local_to_scene = true
 shader = ExtResource("2_6gvvu")
 
@@ -25,11 +25,11 @@ shader = ExtResource("2_6gvvu")
 resource_local_to_scene = true
 shader = ExtResource("2_6gvvu")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_mmtow"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4gmgu"]
 resource_local_to_scene = true
 shader = ExtResource("2_6gvvu")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_1ojqx"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y1nop"]
 resource_local_to_scene = true
 shader = ExtResource("2_6gvvu")
 
@@ -38,7 +38,7 @@ material = SubResource("ShaderMaterial_qkvd0")
 script = ExtResource("1_f3b25")
 
 [node name="MainMenu" parent="." node_paths=PackedStringArray("PaletteMenu") instance=ExtResource("1_qkr4k")]
-material = SubResource("ShaderMaterial_l0l57")
+material = SubResource("ShaderMaterial_d15wg")
 offset_right = 640.0
 offset_bottom = 360.0
 PaletteMenu = NodePath("../FloatingMenus/PaletteMenu")
@@ -54,7 +54,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="PaletteMenu" parent="FloatingMenus" instance=ExtResource("5_yvg3b")]
-material = SubResource("ShaderMaterial_mmtow")
+material = SubResource("ShaderMaterial_4gmgu")
 layout_mode = 1
 offset_left = 318.0
 offset_top = 171.0
@@ -68,7 +68,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="ControlsTab" parent="PullOutTabs" instance=ExtResource("6_a8qlc")]
-material = SubResource("ShaderMaterial_1ojqx")
+material = SubResource("ShaderMaterial_y1nop")
 layout_mode = 1
 offset_left = 4.0
 offset_top = -54.0
