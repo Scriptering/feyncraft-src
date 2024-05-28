@@ -1,4 +1,4 @@
-extends Control
+extends Node2D
 
 signal sandbox_pressed
 signal tutorial_pressed

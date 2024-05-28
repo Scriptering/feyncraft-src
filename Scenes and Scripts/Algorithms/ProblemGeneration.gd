@@ -78,13 +78,13 @@ func is_energy_conserved(state_interactions: Array) -> bool:
 	
 	var state_base_particles: Array = state_interactions.map(
 		func(state_interaction: Array) -> Array:
-			return Globals.flatten(state_interaction).map(
+			return ArrayFuncs.flatten(state_interaction).map(
 			func(particle: ParticleData.Particle) -> ParticleData.Particle: 
 				return abs(particle) as ParticleData.Particle
 	))
 	
 	var state_masses: Array = state_base_particles.map(
-		func(base_particles: Array) -> Array: 
+		func(base_particles: Array) -> float: 
 			return base_particles.reduce(
 				func(accum: float, particle: ParticleData.Particle) -> float:
 					return accum + ParticleData.PARTICLE_MASSES[particle], 0.0
@@ -230,7 +230,7 @@ func accum_state_interaction_quantum_numbers(state_interaction: Array, accum_qua
 	var new_quantum_numbers := accum_quantum_numbers.duplicate(true)
 	
 	for particle:ParticleData.Particle in state_interaction:
-		for quantum_number:ParticleData.QuantumNumber in ParticleData.QuantumNumber:
+		for quantum_number:ParticleData.QuantumNumber in ParticleData.QuantumNumber.values():
 			new_quantum_numbers[quantum_number] += (
 				anti(particle) * state_factor * ParticleData.QUANTUM_NUMBERS[base_particle(particle)][quantum_number]
 			)
@@ -246,7 +246,7 @@ func is_state_interaction_possible(
 	var new_quantum_number_difference := accum_state_interaction_quantum_numbers(state_interaction, quantum_number_difference, state_factor)
 	var new_W_count := W_count + calc_W_count(state_factor, state_interaction)
 	
-	for quantum_number:ParticleData.QuantumNumber in ParticleData.QuantumNumber:
+	for quantum_number:ParticleData.QuantumNumber in ParticleData.QuantumNumber.values():
 		if !is_quantum_number_difference_possible(
 			new_quantum_number_difference[quantum_number], quantum_number, new_interaction_count_left, new_W_count
 		):

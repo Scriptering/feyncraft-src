@@ -103,7 +103,6 @@ texture_pressed = ExtResource("13_gqnb4")
 action = "deleting"
 
 [node name="FPS" type="Label" parent="."]
-visible = false
 offset_left = 41.0
 offset_top = 31.0
 offset_right = 81.0

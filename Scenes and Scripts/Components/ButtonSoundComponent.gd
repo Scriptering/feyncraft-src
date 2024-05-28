@@ -1,13 +1,15 @@
 extends Node
 
-@onready var ParentButton: BaseButton = get_parent()
+var ParentButton : Variant = null
 @export var mute: bool = false
 @export var on_pressed: bool = false
 @export var manual: bool = false
 
 func _ready() -> void:
-	if !ParentButton: return
+	if get_parent() == null or manual:
+		return
 	
+	ParentButton = get_parent()
 	ParentButton.button_down.connect(_on_parent_button_down)
 	ParentButton.button_up.connect(_on_parent_button_up)
 	ParentButton.pressed.connect(_on_parent_button_pressed)
