@@ -1,17 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://diro6a1arcmc0"]
+[gd_scene load_steps=5 format=3 uid="uid://diro6a1arcmc0"]
 
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="1_ubmeo"]
-[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="2_yvc8w"]
 [ext_resource type="Theme" uid="uid://c7hk3afo5tria" path="res://Resources/Themes/toggle_button.tres" id="3_rxogd"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Buttons/ParticleButtons/ParticleButton.gd" id="5_pltn4"]
 [ext_resource type="Texture2D" uid="uid://c0fv0drhuu6cf" path="res://Textures/Buttons/icons/Particles/photon.png" id="5_q3x61"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ch4ec"]
-resource_local_to_scene = true
-shader = ExtResource("2_yvc8w")
-
 [node name="ParticleButton" instance=ExtResource("1_ubmeo")]
-material = SubResource("ShaderMaterial_ch4ec")
 offset_left = -6.0
 offset_top = -6.0
 offset_right = -616.0

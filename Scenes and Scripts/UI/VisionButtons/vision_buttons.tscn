@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://cv6hlxtiukmtc"]
+[gd_scene load_steps=30 format=3 uid="uid://cv6hlxtiukmtc"]
 
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="1_eukm1"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/VisionButtons/vision_buttons.gd" id="1_hjucs"]
@@ -21,10 +21,6 @@
 resource_local_to_scene = true
 shader = ExtResource("1_eukm1")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_i5k0x"]
-resource_local_to_scene = true
-shader = ExtResource("1_eukm1")
-
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ei2kr"]
 texture = ExtResource("4_hck84")
 texture_margin_left = 6.0
@@ -32,10 +28,6 @@ texture_margin_top = 6.0
 texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 expand_margin_right = 10.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_muq6q"]
-resource_local_to_scene = true
-shader = ExtResource("1_eukm1")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kubuy"]
 
@@ -78,21 +70,13 @@ Button/styles/hover = SubResource("StyleBoxTexture_8ny3c")
 Button/styles/normal = SubResource("StyleBoxTexture_ajrl4")
 Button/styles/pressed = SubResource("StyleBoxTexture_3hrye")
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_l4fok"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_oqx3s"]
 allow_unpress = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_l0hwr"]
-resource_local_to_scene = true
-shader = ExtResource("1_eukm1")
-
-[sub_resource type="ButtonGroup" id="ButtonGroup_3sqjg"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_1xhvc"]
 allow_unpress = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_345il"]
-resource_local_to_scene = true
-shader = ExtResource("1_eukm1")
-
-[sub_resource type="ButtonGroup" id="ButtonGroup_np8ts"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_yvoi8"]
 allow_unpress = true
 
 [sub_resource type="Animation" id="Animation_2er6j"]
@@ -153,7 +137,6 @@ offset_bottom = 40.0
 theme_override_constants/separation = 0
 
 [node name="TabButton" parent="MovingContainer" instance=ExtResource("3_08n6d")]
-material = SubResource("ShaderMaterial_i5k0x")
 layout_mode = 2
 TabIcon = ExtResource("10_qooab")
 TabMinimumSize = Vector2(2.08165e-12, 22)
@@ -172,34 +155,31 @@ size_flags_horizontal = 8
 theme_override_constants/separation = -3
 
 [node name="Colour" parent="MovingContainer/Tab/ButtonContainer" instance=ExtResource("5_tinf7")]
-material = SubResource("ShaderMaterial_muq6q")
 layout_mode = 2
 theme = SubResource("Theme_fuyn4")
 icon = ExtResource("6_v7snu")
 minimum_size = Vector2(26, 26)
 toggle_mode = true
 expand_icon = true
-button_group = SubResource("ButtonGroup_l4fok")
+button_group = SubResource("ButtonGroup_oqx3s")
 
 [node name="Shade" parent="MovingContainer/Tab/ButtonContainer" instance=ExtResource("5_tinf7")]
-material = SubResource("ShaderMaterial_l0hwr")
 layout_mode = 2
 theme = SubResource("Theme_fuyn4")
 icon = ExtResource("6_63enc")
 minimum_size = Vector2(26, 26)
 toggle_mode = true
 expand_icon = true
-button_group = SubResource("ButtonGroup_3sqjg")
+button_group = SubResource("ButtonGroup_1xhvc")
 
 [node name="Strength" parent="MovingContainer/Tab/ButtonContainer" instance=ExtResource("5_tinf7")]
-material = SubResource("ShaderMaterial_345il")
 layout_mode = 2
 theme = SubResource("Theme_fuyn4")
 icon = ExtResource("7_nx8nj")
 minimum_size = Vector2(26, 26)
 toggle_mode = true
 expand_icon = true
-button_group = SubResource("ButtonGroup_np8ts")
+button_group = SubResource("ButtonGroup_yvoi8")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

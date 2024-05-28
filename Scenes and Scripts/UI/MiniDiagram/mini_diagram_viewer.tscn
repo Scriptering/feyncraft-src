@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://dcpcxfh7umytq"]
+[gd_scene load_steps=23 format=3 uid="uid://dcpcxfh7umytq"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_gc6j6"]
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="2_o6xnf"]
@@ -37,27 +37,7 @@ PanelContainer/styles/panel = SubResource("StyleBoxTexture_pkocb")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_05qsh"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_tmgwt"]
-resource_local_to_scene = true
-shader = ExtResource("7_nj3d4")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_pvt61"]
-resource_local_to_scene = true
-shader = ExtResource("7_nj3d4")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_5iqob"]
-resource_local_to_scene = true
-shader = ExtResource("7_nj3d4")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8h3cf"]
-resource_local_to_scene = true
-shader = ExtResource("7_nj3d4")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_alvlo"]
-resource_local_to_scene = true
-shader = ExtResource("7_nj3d4")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_n4sjs"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rrsl1"]
 resource_local_to_scene = true
 shader = ExtResource("7_nj3d4")
 
@@ -113,6 +93,7 @@ theme_override_font_sizes/font_size = 16
 text = "No diagrams to show :("
 
 [node name="MiniDiagramContainer" type="PanelContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/CenterContainer"]
+material = ExtResource("1_gc6j6")
 use_parent_material = true
 custom_minimum_size = Vector2(230, 128)
 layout_mode = 2
@@ -120,7 +101,7 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_05qsh")
 
 [node name="MiniDiagram" parent="VBoxContainer/PanelContainer/VBoxContainer/CenterContainer/MiniDiagramContainer" instance=ExtResource("6_y8o7g")]
-material = SubResource("ShaderMaterial_tmgwt")
+material = SubResource("ShaderMaterial_rrsl1")
 use_parent_material = true
 layout_mode = 2
 
@@ -134,7 +115,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="Left" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
-material = SubResource("ShaderMaterial_pvt61")
 layout_mode = 2
 mouse_filter = 1
 icon = ExtResource("8_g4oap")
@@ -142,7 +122,6 @@ minimum_size = Vector2(18, 2.08165e-12)
 icon_use_parent_material = true
 
 [node name="Load" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
-material = SubResource("ShaderMaterial_5iqob")
 layout_mode = 2
 mouse_filter = 1
 icon = ExtResource("9_ulpnp")
@@ -155,7 +134,6 @@ tooltip = "Load Diagram"
 
 [node name="Resave" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
 visible = false
-material = SubResource("ShaderMaterial_8h3cf")
 layout_mode = 2
 mouse_filter = 1
 icon = ExtResource("11_tsyye")
@@ -166,7 +144,6 @@ icon_use_parent_material = true
 tooltip = "Resave diagram"
 
 [node name="Delete" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
-material = SubResource("ShaderMaterial_alvlo")
 layout_mode = 2
 mouse_filter = 1
 icon = ExtResource("11_5ck4b")
@@ -178,7 +155,6 @@ icon_use_parent_material = true
 tooltip = "Delete Diagram"
 
 [node name="Right" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
-material = SubResource("ShaderMaterial_n4sjs")
 layout_mode = 2
 mouse_filter = 1
 icon = ExtResource("9_4bpdd")
