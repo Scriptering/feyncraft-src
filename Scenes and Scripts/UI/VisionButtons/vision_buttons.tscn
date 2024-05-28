@@ -66,13 +66,13 @@ Button/styles/hover = SubResource("StyleBoxTexture_8ny3c")
 Button/styles/normal = SubResource("StyleBoxTexture_ajrl4")
 Button/styles/pressed = SubResource("StyleBoxTexture_3hrye")
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_ccdrt"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_eytuq"]
 allow_unpress = true
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_m1li0"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_xajxy"]
 allow_unpress = true
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_nwafd"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_m0uk6"]
 allow_unpress = true
 
 [sub_resource type="Animation" id="Animation_2er6j"]
@@ -157,7 +157,7 @@ icon = ExtResource("6_v7snu")
 minimum_size = Vector2(26, 26)
 toggle_mode = true
 expand_icon = true
-button_group = SubResource("ButtonGroup_ccdrt")
+button_group = SubResource("ButtonGroup_eytuq")
 
 [node name="Shade" parent="MovingContainer/Tab/ButtonContainer" instance=ExtResource("5_tinf7")]
 layout_mode = 2
@@ -166,7 +166,7 @@ icon = ExtResource("6_63enc")
 minimum_size = Vector2(26, 26)
 toggle_mode = true
 expand_icon = true
-button_group = SubResource("ButtonGroup_m1li0")
+button_group = SubResource("ButtonGroup_xajxy")
 
 [node name="Strength" parent="MovingContainer/Tab/ButtonContainer" instance=ExtResource("5_tinf7")]
 layout_mode = 2
@@ -175,7 +175,7 @@ icon = ExtResource("7_nx8nj")
 minimum_size = Vector2(26, 26)
 toggle_mode = true
 expand_icon = true
-button_group = SubResource("ButtonGroup_nwafd")
+button_group = SubResource("ButtonGroup_m0uk6")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

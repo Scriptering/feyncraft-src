@@ -79,7 +79,7 @@ Button/styles/hover = SubResource("StyleBoxTexture_n0u2h")
 Button/styles/normal = SubResource("StyleBoxTexture_kxnlx")
 Button/styles/pressed = SubResource("StyleBoxTexture_pbk00")
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_njfyb"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_3ui6k"]
 
 [node name="PaletteItem" type="PanelContainer"]
 material = ExtResource("1_ablgk")
@@ -142,7 +142,7 @@ icon = ExtResource("6_5d7ij")
 minimum_size = Vector2(20, 20)
 toggle_mode = true
 expand_icon = true
-button_group = SubResource("ButtonGroup_njfyb")
+button_group = SubResource("ButtonGroup_3ui6k")
 
 [node name="Tooltip" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Use" instance=ExtResource("8_pa48w")]
 tooltip = "Use"
