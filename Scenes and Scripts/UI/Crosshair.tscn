@@ -1,11 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://besym8haj5qo4"]
+[gd_scene load_steps=8 format=3 uid="uid://besym8haj5qo4"]
 
-[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="1_xhmi2"]
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_t2kot"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Crosshair.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://d35qxiccrmjj3" path="res://Textures/UI/crosshair/crosshair.png" id="2_s7cg1"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_722ac"]
-shader = ExtResource("1_xhmi2")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_txv08"]
 atlas = ExtResource("2_s7cg1")
@@ -33,7 +30,7 @@ animations = [{
 radius = 1.0
 
 [node name="Crosshair" type="Node2D"]
-material = SubResource("ShaderMaterial_722ac")
+material = ExtResource("1_t2kot")
 script = ExtResource("2")
 grid_margin = 16
 

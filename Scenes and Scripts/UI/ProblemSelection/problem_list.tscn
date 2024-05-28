@@ -1,9 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://b8jrtk1lv0oo0"]
+[gd_scene load_steps=10 format=3 uid="uid://b8jrtk1lv0oo0"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_a6eex"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/ProblemSelection/problem_list.gd" id="2_ycbub"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="3_tav84"]
-[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="4_sya5g"]
 [ext_resource type="Texture2D" uid="uid://1qi6lr05g0vt" path="res://Textures/Buttons/icons/add.png" id="5_6tky2"]
 [ext_resource type="Texture2D" uid="uid://c3nrennubqoow" path="res://Textures/Buttons/icons/back.png" id="5_6vt8q"]
 [ext_resource type="StyleBox" uid="uid://bubm5sx3xn6q5" path="res://Resources/Themes/TitleLabel.tres" id="7_2wbjf"]
@@ -12,10 +11,6 @@
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1o4m4"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vw46e"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gc4g1"]
-resource_local_to_scene = true
-shader = ExtResource("4_sya5g")
 
 [node name="ProblemList" type="PanelContainer"]
 material = ExtResource("1_a6eex")
@@ -61,7 +56,6 @@ size_flags_horizontal = 3
 layout_mode = 2
 
 [node name="AddProblem" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_tav84")]
-material = SubResource("ShaderMaterial_gc4g1")
 layout_mode = 2
 icon = ExtResource("5_6tky2")
 minimum_size = Vector2(154, 28)

@@ -1,8 +1,8 @@
-[gd_scene load_steps=19 format=3 uid="uid://cnc7r7d27yn5c"]
+[gd_scene load_steps=14 format=3 uid="uid://cnc7r7d27yn5c"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/universe.gd" id="1_f3b25"]
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_fbm6y"]
 [ext_resource type="PackedScene" uid="uid://blu0n6lwfysjf" path="res://Scenes and Scripts/UI/Menus/MainMenu/main_menu.tscn" id="1_qkr4k"]
-[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="2_6gvvu"]
 [ext_resource type="PackedScene" uid="uid://c7n4o6dbkwilh" path="res://Scenes and Scripts/Levels/world.tscn" id="3_m7wj1"]
 [ext_resource type="PackedScene" uid="uid://b5pj0lanxu0o6" path="res://Scenes and Scripts/UI/ColourPicker/palette_list.tscn" id="5_yvg3b"]
 [ext_resource type="PackedScene" uid="uid://b65u1c7v5mbh6" path="res://Scenes and Scripts/UI/Menus/controls_tab.tscn" id="6_a8qlc"]
@@ -14,37 +14,16 @@
 [ext_resource type="Texture2D" uid="uid://n2w0tydjaa33" path="res://Textures/Buttons/cut_touch_button_pressed.png" id="13_gqnb4"]
 [ext_resource type="Script" path="res://Scenes and Scripts/fps.gd" id="14_jxbry"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qkvd0"]
-shader = ExtResource("2_6gvvu")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_l0l57"]
-resource_local_to_scene = true
-shader = ExtResource("2_6gvvu")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_idx41"]
-resource_local_to_scene = true
-shader = ExtResource("2_6gvvu")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_mmtow"]
-resource_local_to_scene = true
-shader = ExtResource("2_6gvvu")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_1ojqx"]
-resource_local_to_scene = true
-shader = ExtResource("2_6gvvu")
-
 [node name="Universe" type="Node2D"]
-material = SubResource("ShaderMaterial_qkvd0")
+material = ExtResource("1_fbm6y")
 script = ExtResource("1_f3b25")
 
 [node name="MainMenu" parent="." node_paths=PackedStringArray("PaletteMenu") instance=ExtResource("1_qkr4k")]
-material = SubResource("ShaderMaterial_l0l57")
 offset_right = 640.0
 offset_bottom = 360.0
 PaletteMenu = NodePath("../FloatingMenus/PaletteMenu")
 
 [node name="World" parent="." instance=ExtResource("3_m7wj1")]
-material = SubResource("ShaderMaterial_idx41")
 
 [node name="FloatingMenus" type="Control" parent="."]
 z_index = 1
@@ -54,7 +33,6 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="PaletteMenu" parent="FloatingMenus" instance=ExtResource("5_yvg3b")]
-material = SubResource("ShaderMaterial_mmtow")
 layout_mode = 1
 offset_left = 318.0
 offset_top = 171.0
@@ -68,7 +46,6 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="ControlsTab" parent="PullOutTabs" instance=ExtResource("6_a8qlc")]
-material = SubResource("ShaderMaterial_1ojqx")
 layout_mode = 1
 offset_left = 4.0
 offset_top = -54.0
@@ -112,14 +89,14 @@ offset_bottom = 360.0
 [node name="Buttons" type="Node2D" parent="ControlsLayer"]
 
 [node name="Move" type="TouchScreenButton" parent="ControlsLayer/Buttons"]
-material = SubResource("ShaderMaterial_qkvd0")
+material = ExtResource("1_fbm6y")
 position = Vector2(15, 309)
 texture_normal = ExtResource("10_ihkyb")
 texture_pressed = ExtResource("11_ojt0j")
 action = "editing"
 
 [node name="Delete" type="TouchScreenButton" parent="ControlsLayer/Buttons"]
-material = SubResource("ShaderMaterial_qkvd0")
+material = ExtResource("1_fbm6y")
 position = Vector2(61, 309)
 texture_normal = ExtResource("12_560ih")
 texture_pressed = ExtResource("13_gqnb4")

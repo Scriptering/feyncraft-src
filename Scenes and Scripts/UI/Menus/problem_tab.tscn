@@ -1,5 +1,6 @@
-[gd_scene load_steps=40 format=3 uid="uid://bbkvwth6ke1is"]
+[gd_scene load_steps=32 format=3 uid="uid://bbkvwth6ke1is"]
 
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_x63u3"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/PullOutTab.gd" id="2_kmb27"]
 [ext_resource type="StyleBox" uid="uid://dvu7f5h7snggp" path="res://Scenes and Scripts/UI/Menus/panelContainer.tres" id="2_r3neh"]
 [ext_resource type="PackedScene" uid="uid://fl01bx28xqrn" path="res://Scenes and Scripts/UI/Equation/equation.tscn" id="3_7jee8"]
@@ -15,15 +16,11 @@
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="7_itf5n"]
 [ext_resource type="Texture2D" uid="uid://bcu6ptkd3fwfe" path="res://Textures/Buttons/icons/submit.png" id="8_2kr0t"]
 [ext_resource type="FontFile" uid="uid://dohkbu7ekkfx8" path="res://Textures/Fonts/pixeltype/Pixeltype.ttf" id="8_cwpoq"]
-[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="8_w33hb"]
 [ext_resource type="Texture2D" uid="uid://b3diapu0ec332" path="res://Textures/Buttons/icons/puzzle_piece.png" id="9_oqp5o"]
 [ext_resource type="PackedScene" uid="uid://80bi27me1iqr" path="res://Scenes and Scripts/UI/Buttons/pull_out_tab_button_down.tscn" id="10_xn6km"]
 [ext_resource type="FontFile" uid="uid://dtkr82iuj8ovy" path="res://Textures/Fonts/munro-font/Munro-2LYe.ttf" id="14_wsnu4"]
 [ext_resource type="Texture2D" uid="uid://bf4xxweukjvsb" path="res://Textures/Buttons/icons/interaction.png" id="15_5phct"]
 [ext_resource type="Texture2D" uid="uid://dvx430022t0ua" path="res://Textures/Buttons/icons/next.png" id="16_leqlk"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qkvd0"]
-shader = ExtResource("8_w33hb")
 
 [sub_resource type="Theme" id="Theme_rwvfw"]
 TooltipPanel/styles/panel = ExtResource("2_r3neh")
@@ -47,42 +44,14 @@ texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 expand_margin_top = 10.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_51clg"]
-resource_local_to_scene = true
-shader = ExtResource("8_w33hb")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_eiuhv"]
-resource_local_to_scene = true
-shader = ExtResource("8_w33hb")
-
 [sub_resource type="FontVariation" id="FontVariation_vdd88"]
 base_font = ExtResource("14_wsnu4")
 spacing_top = -3
 spacing_bottom = -5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_7w3y4"]
-resource_local_to_scene = true
-shader = ExtResource("8_w33hb")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_s1pmj"]
-resource_local_to_scene = true
-shader = ExtResource("8_w33hb")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_wtohc"]
-resource_local_to_scene = true
-shader = ExtResource("8_w33hb")
-
 [sub_resource type="Theme" id="Theme_wmnb4"]
 default_font = SubResource("FontVariation_vdd88")
 default_font_size = 14
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_uosso"]
-resource_local_to_scene = true
-shader = ExtResource("8_w33hb")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_vcv48"]
-resource_local_to_scene = true
-shader = ExtResource("8_w33hb")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3leac"]
 content_margin_left = 4.0
@@ -119,7 +88,7 @@ Label/font_sizes/font_size = 16
 Label/fonts/font = SubResource("FontVariation_ipn0w")
 
 [node name="ProblemTab" type="Control" node_paths=PackedStringArray("DegreeLabel", "SubmitButton", "NextProblem", "PrevProblem", "ContentContainer", "TabButton", "MovingContainer")]
-material = SubResource("ShaderMaterial_qkvd0")
+material = ExtResource("1_x63u3")
 layout_mode = 3
 anchors_preset = 0
 theme = SubResource("Theme_rwvfw")
@@ -260,7 +229,6 @@ layout_mode = 2
 theme_override_constants/separation = 3
 
 [node name="Rewind" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
-material = SubResource("ShaderMaterial_51clg")
 layout_mode = 2
 icon = ExtResource("5_t5pc5")
 minimum_size = Vector2(25, 24)
@@ -272,7 +240,6 @@ icon_use_parent_material = true
 tooltip = "Load previous problem"
 
 [node name="Solution" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
-material = SubResource("ShaderMaterial_eiuhv")
 layout_mode = 2
 icon = ExtResource("6_pp1px")
 minimum_size = Vector2(25, 24)
@@ -312,13 +279,11 @@ stretch_mode = 5
 tooltip = "Problem degree"
 
 [node name="Equation" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("3_7jee8")]
-material = SubResource("ShaderMaterial_7w3y4")
 use_parent_material = true
 layout_mode = 2
 scale_factor = 1.2
 
 [node name="ViewSubmissions" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
-material = SubResource("ShaderMaterial_s1pmj")
 layout_mode = 2
 icon = ExtResource("5_15poa")
 minimum_size = Vector2(24, 24)
@@ -329,7 +294,6 @@ disabled = true
 tooltip = "View submissions"
 
 [node name="Submit" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
-material = SubResource("ShaderMaterial_wtohc")
 layout_mode = 2
 theme = SubResource("Theme_wmnb4")
 icon = ExtResource("8_2kr0t")
@@ -343,7 +307,6 @@ icon_text_seperation = 0
 tooltip = "Submit solution"
 
 [node name="NextProblem" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
-material = SubResource("ShaderMaterial_uosso")
 layout_mode = 2
 theme = SubResource("Theme_wmnb4")
 icon = ExtResource("16_leqlk")
@@ -356,7 +319,6 @@ tooltip = "Next Problem"
 
 [node name="PullOutTabButtonDown" parent="MovingContainer/VBoxContainer" instance=ExtResource("10_xn6km")]
 z_index = 0
-material = SubResource("ShaderMaterial_vcv48")
 layout_mode = 2
 size_flags_horizontal = 4
 theme = SubResource("Theme_d1tq1")

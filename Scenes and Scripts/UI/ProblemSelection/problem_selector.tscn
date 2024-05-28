@@ -1,10 +1,9 @@
-[gd_scene load_steps=17 format=3 uid="uid://j70abl1nme6y"]
+[gd_scene load_steps=13 format=3 uid="uid://j70abl1nme6y"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_7ln54"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/ProblemSelection/problem_selector.gd" id="2_7m7ny"]
 [ext_resource type="PackedScene" uid="uid://cqfassynt86vn" path="res://Scenes and Scripts/UI/Equation/mini_equation.tscn" id="2_v0r42"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="2_yg01j"]
-[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="3_ifhvu"]
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="4_c7up8"]
 [ext_resource type="Texture2D" uid="uid://cb6lapmtgwimd" path="res://Textures/UI/MiniDiagram/arrow_right.png" id="6_prjng"]
 [ext_resource type="Texture2D" uid="uid://cms1u4elh5bo3" path="res://Textures/Buttons/icons/delete.png" id="8_moko8"]
@@ -14,18 +13,6 @@
 [ext_resource type="Texture2D" uid="uid://co7w81osg53kf" path="res://Textures/UI/Information/valid.png" id="12_moc2h"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qxe7s"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_yu860"]
-resource_local_to_scene = true
-shader = ExtResource("3_ifhvu")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_brv12"]
-resource_local_to_scene = true
-shader = ExtResource("3_ifhvu")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_o8yrq"]
-resource_local_to_scene = true
-shader = ExtResource("3_ifhvu")
 
 [node name="ProblemSelector" type="PanelContainer"]
 material = ExtResource("1_7ln54")
@@ -57,7 +44,6 @@ use_parent_material = true
 layout_mode = 2
 
 [node name="Equation" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("2_v0r42")]
-material = SubResource("ShaderMaterial_yu860")
 custom_minimum_size = Vector2(184.001, 21)
 layout_mode = 2
 
@@ -111,14 +97,14 @@ layout_mode = 2
 theme_override_constants/separation = -6
 
 [node name="Up" parent="HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer" instance=ExtResource("2_yg01j")]
-material = SubResource("ShaderMaterial_brv12")
+material = null
 layout_mode = 2
 icon = ExtResource("9_38yb2")
 minimum_size = Vector2(19, 15)
 icon_use_parent_material = true
 
 [node name="Down" parent="HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer" instance=ExtResource("2_yg01j")]
-material = SubResource("ShaderMaterial_o8yrq")
+material = null
 layout_mode = 2
 icon = ExtResource("10_r0lbv")
 minimum_size = Vector2(19, 15)

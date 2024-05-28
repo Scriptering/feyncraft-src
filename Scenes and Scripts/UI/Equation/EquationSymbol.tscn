@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://cahjgd6srxxhr"]
 
-[ext_resource type="Shader" path="res://Scenes and Scripts/Diagram/outline_palette_swap.gdshader" id="1_kqdmn"]
+[ext_resource type="Shader" path="res://Resources/Shaders/outline_palette_swap.gdshader" id="1_kqdmn"]
 [ext_resource type="Texture2D" uid="uid://bhudxuhqjghi2" path="res://Textures/ParticlesAndLines/anti_down.png" id="2_pf0qf"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Equation/EquationSymbol.gd" id="3_qmduv"]
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="4_omg7g"]

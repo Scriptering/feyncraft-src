@@ -1,7 +1,7 @@
-[gd_scene load_steps=79 format=3 uid="uid://c7n4o6dbkwilh"]
+[gd_scene load_steps=35 format=3 uid="uid://c7n4o6dbkwilh"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/Levels/World.gd" id="1"]
-[ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="1_ovngh"]
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_6ope2"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/ShaderControl.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://besym8haj5qo4" path="res://Scenes and Scripts/UI/Crosshair.tscn" id="3"]
 [ext_resource type="Texture2D" uid="uid://dvmhtrrnuhqrj" path="res://Textures/UI/grid_outline.png" id="3_fi1kg"]
@@ -32,10 +32,6 @@
 [ext_resource type="Script" path="res://Scenes and Scripts/Levels/Hadrons.gd" id="31_rb52u"]
 [ext_resource type="Script" path="res://Scenes and Scripts/tutorial/TutorialStep.gd" id="31_t51na"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ue1rd"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vcfy5"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o3sii"]
@@ -51,180 +47,8 @@ expand_margin_top = 1.0
 expand_margin_right = 1.0
 expand_margin_bottom = 1.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_f2fd8"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_sk1qm"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_78g5h"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_5n74u"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_wl76l"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_w6ddf"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_rsku4"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_psn4e"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_45raw"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3f73u"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_l0d5b"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_o3lvq"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_lynp0"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ii2b1"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_02w2u"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_utxbo"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_mka4l"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_tato1"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_bldd2"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ua1yt"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ef22d"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_1f3rh"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0xcow"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_uf6r2"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gkkv2"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_osxd0"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_p4vfe"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_h77ef"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_01t1m"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_h0tg6"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gt61x"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_xlcfp"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2tn3y"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_br4ff"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hrw55"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_omnwb"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_forka"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4khis"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_cdjxo"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fiw3n"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_aps2y"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_slq7h"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_rhjpa"]
-resource_local_to_scene = true
-shader = ExtResource("1_ovngh")
-
 [node name="World" type="Node2D" groups=["level"]]
-material = SubResource("ShaderMaterial_ue1rd")
+material = ExtResource("1_6ope2")
 script = ExtResource("1")
 
 [node name="Background" type="TextureRect" parent="."]
@@ -437,7 +261,6 @@ use_parent_material = true
 
 [node name="CreationInformation" parent="FloatingMenus" instance=ExtResource("31_l3pqm")]
 visible = false
-material = SubResource("ShaderMaterial_f2fd8")
 offset_left = 489.0
 offset_top = 87.0
 offset_right = 489.0
@@ -445,7 +268,6 @@ offset_bottom = 87.0
 
 [node name="SubmittedDiagrams" parent="FloatingMenus" node_paths=PackedStringArray("BigDiagram") instance=ExtResource("27_laye5")]
 visible = false
-material = SubResource("ShaderMaterial_sk1qm")
 offset_left = 316.0
 offset_top = 160.0
 offset_right = 316.0
@@ -456,7 +278,6 @@ BigDiagram = NodePath("../../Diagram")
 
 [node name="GeneratedDiagrams" parent="FloatingMenus" node_paths=PackedStringArray("BigDiagram") instance=ExtResource("27_laye5")]
 visible = false
-material = SubResource("ShaderMaterial_78g5h")
 offset_left = 316.0
 offset_top = 160.0
 offset_right = 316.0
@@ -469,14 +290,12 @@ z_index = 3
 use_parent_material = true
 
 [node name="VisionButton" parent="PullOutTabs" instance=ExtResource("3_hqsoq")]
-material = SubResource("ShaderMaterial_5n74u")
 offset_left = 612.0
 offset_top = 45.0
 offset_right = 634.0
 offset_bottom = 105.0
 
 [node name="ParticleButtons" parent="PullOutTabs" instance=ExtResource("24_lunb1")]
-material = SubResource("ShaderMaterial_wl76l")
 anchors_preset = 7
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -487,136 +306,32 @@ offset_bottom = 334.0
 grow_vertical = 0
 size_flags_horizontal = 4
 
-[node name="PullOutTabButtonUp" parent="PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer" index="0"]
-material = SubResource("ShaderMaterial_w6ddf")
-
-[node name="TabButton" parent="PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer/PullOutTabButtonUp" index="0"]
-material = SubResource("ShaderMaterial_rsku4")
-
-[node name="electron" parent="PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer/Tab/Leptons" index="0"]
-material = SubResource("ShaderMaterial_psn4e")
-
-[node name="muon" parent="PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer/Tab/Leptons" index="1"]
-material = SubResource("ShaderMaterial_45raw")
-
-[node name="tau" parent="PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer/Tab/Leptons" index="2"]
-material = SubResource("ShaderMaterial_3f73u")
-
-[node name="electron_neutrino" parent="PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer/Tab/Leptons" index="3"]
-material = SubResource("ShaderMaterial_l0d5b")
-
-[node name="muon_neutrino" parent="PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer/Tab/Leptons" index="4"]
-material = SubResource("ShaderMaterial_o3lvq")
-
-[node name="tau_neutrino" parent="PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer/Tab/Leptons" index="5"]
-material = SubResource("ShaderMaterial_lynp0")
-
-[node name="PullOutTabButtonUp" parent="PullOutTabs/ParticleButtons/HBoxContainer/Bosons/MovingContainer" index="0"]
-material = SubResource("ShaderMaterial_ii2b1")
-
-[node name="photon" parent="PullOutTabs/ParticleButtons/HBoxContainer/Bosons/MovingContainer/Tab/Bosons" index="0"]
-material = SubResource("ShaderMaterial_02w2u")
-
-[node name="gluon" parent="PullOutTabs/ParticleButtons/HBoxContainer/Bosons/MovingContainer/Tab/Bosons" index="1"]
-material = SubResource("ShaderMaterial_utxbo")
-
-[node name="W" parent="PullOutTabs/ParticleButtons/HBoxContainer/Bosons/MovingContainer/Tab/Bosons" index="2"]
-material = SubResource("ShaderMaterial_mka4l")
-
-[node name="Z" parent="PullOutTabs/ParticleButtons/HBoxContainer/Bosons/MovingContainer/Tab/Bosons" index="3"]
-material = SubResource("ShaderMaterial_tato1")
-
-[node name="H" parent="PullOutTabs/ParticleButtons/HBoxContainer/Bosons/MovingContainer/Tab/Bosons" index="4"]
-material = SubResource("ShaderMaterial_bldd2")
-
-[node name="PullOutTabButtonUp" parent="PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer" index="0"]
-material = SubResource("ShaderMaterial_ua1yt")
-
-[node name="up" parent="PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer/Tab/Quarks" index="0"]
-material = SubResource("ShaderMaterial_ef22d")
-
-[node name="charm" parent="PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer/Tab/Quarks" index="1"]
-material = SubResource("ShaderMaterial_1f3rh")
-
-[node name="top" parent="PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer/Tab/Quarks" index="2"]
-material = SubResource("ShaderMaterial_0xcow")
-
-[node name="down" parent="PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer/Tab/Quarks" index="3"]
-material = SubResource("ShaderMaterial_uf6r2")
-
-[node name="strange" parent="PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer/Tab/Quarks" index="4"]
-material = SubResource("ShaderMaterial_gkkv2")
-
-[node name="bottom" parent="PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer/Tab/Quarks" index="5"]
-material = SubResource("ShaderMaterial_osxd0")
-
-[node name="PullOutTabButtonUp" parent="PullOutTabs/ParticleButtons/HBoxContainer/General/MovingContainer" index="0"]
-material = SubResource("ShaderMaterial_p4vfe")
-
-[node name="lepton" parent="PullOutTabs/ParticleButtons/HBoxContainer/General/MovingContainer/Tab/General" index="0"]
-material = SubResource("ShaderMaterial_h77ef")
-
-[node name="bright_quark" parent="PullOutTabs/ParticleButtons/HBoxContainer/General/MovingContainer/Tab/General" index="1"]
-material = SubResource("ShaderMaterial_01t1m")
-
-[node name="lepton_neutrino" parent="PullOutTabs/ParticleButtons/HBoxContainer/General/MovingContainer/Tab/General" index="2"]
-material = SubResource("ShaderMaterial_h0tg6")
-
-[node name="dark_quark" parent="PullOutTabs/ParticleButtons/HBoxContainer/General/MovingContainer/Tab/General" index="3"]
-material = SubResource("ShaderMaterial_gt61x")
-
 [node name="PuzzleUI" parent="PullOutTabs" instance=ExtResource("23_v0dtx")]
-material = SubResource("ShaderMaterial_xlcfp")
 offset_left = -140.0
 offset_top = 159.0
 offset_right = -140.0
 offset_bottom = 159.0
 
 [node name="GenerationButton" parent="PullOutTabs" instance=ExtResource("22_u64s1")]
-material = SubResource("ShaderMaterial_2tn3y")
 offset_left = -141.0
 offset_top = 59.0
 offset_right = -141.0
 offset_bottom = 59.0
 
 [node name="ProblemTab" parent="PullOutTabs" instance=ExtResource("20_uaeg6")]
-material = SubResource("ShaderMaterial_br4ff")
 use_parent_material = true
 offset_left = 157.0
 offset_top = -26.0
 offset_right = 157.0
 offset_bottom = -26.0
 
-[node name="Rewind" parent="PullOutTabs/ProblemTab/MovingContainer/VBoxContainer/Tab/HBoxContainer" index="0"]
-material = SubResource("ShaderMaterial_hrw55")
-
-[node name="Solution" parent="PullOutTabs/ProblemTab/MovingContainer/VBoxContainer/Tab/HBoxContainer" index="1"]
-material = SubResource("ShaderMaterial_omnwb")
-
-[node name="Equation" parent="PullOutTabs/ProblemTab/MovingContainer/VBoxContainer/Tab/HBoxContainer" index="3"]
-material = SubResource("ShaderMaterial_forka")
-
-[node name="ViewSubmissions" parent="PullOutTabs/ProblemTab/MovingContainer/VBoxContainer/Tab/HBoxContainer" index="4"]
-material = SubResource("ShaderMaterial_4khis")
-
-[node name="Submit" parent="PullOutTabs/ProblemTab/MovingContainer/VBoxContainer/Tab/HBoxContainer" index="5"]
-material = SubResource("ShaderMaterial_cdjxo")
-
-[node name="NextProblem" parent="PullOutTabs/ProblemTab/MovingContainer/VBoxContainer/Tab/HBoxContainer" index="6"]
-material = SubResource("ShaderMaterial_fiw3n")
-
-[node name="PullOutTabButtonDown" parent="PullOutTabs/ProblemTab/MovingContainer/VBoxContainer" index="1"]
-material = SubResource("ShaderMaterial_aps2y")
-
 [node name="MenuTab" parent="PullOutTabs" instance=ExtResource("24_f5s2a")]
-material = SubResource("ShaderMaterial_slq7h")
 offset_left = 515.0
 offset_top = 339.0
 offset_right = 515.0
 offset_bottom = 339.0
 
 [node name="HealthTab" parent="PullOutTabs" instance=ExtResource("31_f28gh")]
-material = SubResource("ShaderMaterial_rhjpa")
 offset_left = 501.0
 offset_top = -39.0
 offset_right = 501.0
@@ -775,6 +490,3 @@ enable_spotlight = false
 [editable path="Diagram/DiagramArea/Initial"]
 [editable path="Diagram/DiagramArea/Final"]
 [editable path="Algorithms/SolutionGeneration"]
-[editable path="PullOutTabs/ParticleButtons"]
-[editable path="PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer/PullOutTabButtonUp"]
-[editable path="PullOutTabs/ProblemTab"]

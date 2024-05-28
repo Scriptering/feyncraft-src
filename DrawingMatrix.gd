@@ -99,7 +99,7 @@ func get_hadron_ids() -> PackedInt32Array:
 	return hadron_ids
 
 func split_hadrons() -> void:
-	for i:int in range(get_hadron_ids().size()):
+	for i:int in get_hadron_ids().size():
 		var to_split_hadron_id : int = get_hadron_ids()[0]
 		
 		split_hadron(to_split_hadron_id)
