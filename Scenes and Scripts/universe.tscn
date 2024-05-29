@@ -19,8 +19,6 @@ material = ExtResource("1_fbm6y")
 script = ExtResource("1_f3b25")
 
 [node name="MainMenu" parent="." node_paths=PackedStringArray("PaletteMenu") instance=ExtResource("1_qkr4k")]
-offset_right = 640.0
-offset_bottom = 360.0
 PaletteMenu = NodePath("../FloatingMenus/PaletteMenu")
 
 [node name="World" parent="." instance=ExtResource("3_m7wj1")]

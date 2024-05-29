@@ -215,7 +215,10 @@ func generate_drawing_matrix_from_diagram(get_only_valid: bool = false) -> Drawi
 
 func update_colour(diagram: DrawingMatrix, current_vision: Globals.Vision) -> void:
 	var colour_matrix: DrawingMatrix = Vision.generate_vision_matrix(Globals.Vision.Colour, diagram)
+	
+	var time := Time.get_ticks_usec()
 	var zip: Array = Vision.generate_vision_paths(Globals.Vision.Colour, colour_matrix, true)
+	
 	
 	if zip == []:
 		return
@@ -227,6 +230,7 @@ func update_colour(diagram: DrawingMatrix, current_vision: Globals.Vision) -> vo
 	
 	if current_vision == Globals.Vision.Colour:
 		draw_vision_lines(colour_paths, convert_path_colours(colour_path_colours, current_vision), colour_matrix)
+	print(Time.get_ticks_usec() - time)
 
 func update_path_vision(diagram: DrawingMatrix, current_vision: Globals.Vision) -> void:
 	var vision_matrix: DrawingMatrix = Vision.generate_vision_matrix(current_vision, diagram)

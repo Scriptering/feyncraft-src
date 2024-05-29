@@ -55,8 +55,10 @@ size_flags_vertical = 3
 
 [node name="Body" type="Label" parent="VBoxContainer/VBoxContainer"]
 use_parent_material = true
+custom_minimum_size = Vector2(1, 1)
 layout_mode = 2
-theme_override_font_sizes/font_size = 9
+theme_override_fonts/font = ExtResource("6_3hqhb")
+theme_override_font_sizes/font_size = 10
 text = "- Draw the problem.
 - Only the drawn initial and final states matter."
 autowrap_mode = 3
