@@ -8,17 +8,17 @@
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="6_5gy8v"]
 [ext_resource type="Texture2D" uid="uid://dvx430022t0ua" path="res://Textures/Buttons/icons/next.png" id="8_rm0tq"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ri466"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_njqff"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_uhdxj"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2ut4v"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tvsc3"]
-
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5dgn3"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_uhdxj"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tvsc3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_njqff"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ri466"]
 
 [node name="ParticleSelectionInfo" type="PanelContainer" node_paths=PackedStringArray("next_button")]
 material = ExtResource("1_622tk")
@@ -61,15 +61,15 @@ theme_override_constants/separation = 0
 [node name="ToggleOn" parent="VBoxContainer/VBoxContainer/VBoxContainer/HBoxContainer" instance=ExtResource("3_qv0n1")]
 layout_mode = 2
 text = "Toggle On"
-override_font_size = null
-font_size = null
+override_font_size = false
+font_size = 0
 minimum_size = Vector2(56, 24)
 
 [node name="ToggleOff" parent="VBoxContainer/VBoxContainer/VBoxContainer/HBoxContainer" instance=ExtResource("3_qv0n1")]
 layout_mode = 2
 text = "Toggle Off"
-override_font_size = null
-font_size = null
+override_font_size = false
+font_size = 0
 minimum_size = Vector2(56, 24)
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/VBoxContainer/VBoxContainer"]
@@ -85,12 +85,12 @@ use_parent_material = true
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_84wwo")
 theme_override_font_sizes/font_size = 8
-theme_override_styles/normal = SubResource("StyleBoxEmpty_ri466")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_njqff")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_2ut4v")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_tvsc3")
-theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_5dgn3")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_uhdxj")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_2ut4v")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_5dgn3")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_tvsc3")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_njqff")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ri466")
 text = "Hide unavailable
 particles"
 
@@ -104,8 +104,8 @@ alignment = 1
 [node name="NextStep" parent="VBoxContainer/VBoxContainer/Buttons" instance=ExtResource("3_qv0n1")]
 layout_mode = 2
 icon = ExtResource("8_rm0tq")
-override_font_size = null
-font_size = null
+override_font_size = false
+font_size = 0
 minimum_size = Vector2(24, 21)
 icon_use_parent_material = true
 

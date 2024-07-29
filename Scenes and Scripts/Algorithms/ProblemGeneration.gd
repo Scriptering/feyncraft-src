@@ -302,19 +302,3 @@ func calculate_solution_count(degree: int, generated_solution_count: int) -> int
 		return min(generated_solution_count, MAX_REQUIRED_SOLUTION_COUNT)
 	
 	return 1
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

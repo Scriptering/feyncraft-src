@@ -186,4 +186,3 @@ func get_state_visible(new_state: BaseState.State) -> bool:
 		return true
 	
 	return false
-

@@ -88,4 +88,3 @@ func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 
 	for split_hadron:PackedInt32Array in drawing_matrix.split_hadron_ids:
 		create_hadron_joint(drawing_matrix, split_hadron)
-

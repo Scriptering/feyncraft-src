@@ -98,6 +98,3 @@ static func get_files_in_folder(folder_path: String) -> Array[String]:
 	#print(files)
 
 	return files
-
-
-

@@ -35,4 +35,3 @@ func show_prev() -> void:
 
 func hide_prev() -> void:
 	$TutorialPanel/VBoxContainer/Buttons/PrevStep.hide()
-

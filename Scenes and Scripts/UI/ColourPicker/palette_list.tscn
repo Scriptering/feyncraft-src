@@ -118,14 +118,16 @@ alignment = 1
 layout_mode = 2
 size_flags_horizontal = 1
 icon = ExtResource("7_bfw4j")
-override_font_size = null
-font_size = null
+override_font_size = false
+font_size = 0
 minimum_size = Vector2(70, 28)
 icon_use_parent_material = true
 action_mode = 1
 
 [node name="LoadButton" parent="PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/HBoxContainer" instance=ExtResource("8_sg02h")]
 layout_mode = 2
+override_font_size = false
+font_size = 0
 minimum_size = Vector2(70, 28)
 
 [node name="TitleContainer" type="PanelContainer" parent="PaletteList/VBoxContainer"]

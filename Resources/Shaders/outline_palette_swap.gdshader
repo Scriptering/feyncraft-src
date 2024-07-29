@@ -16,7 +16,7 @@ vec4 add_outline(vec2 pixel_size, sampler2D Texture, vec2 uv)
 	outline += texture(Texture, uv + vec2(-size.x, -size.y)).a;
 	outline += texture(Texture, uv + vec2(size.x, -size.y)).a;
 	outline = min(outline, 1.0);
-	
+
 	vec4 color = texture(Texture, uv);
 	return mix(color, line_color, outline - color.a);
 }
@@ -25,7 +25,7 @@ void fragment()
 {
 	vec4 color = texture(TEXTURE, UV);
 	color = add_outline(TEXTURE_PIXEL_SIZE, TEXTURE, UV);
-	
+
 	COLOR = vec4(texture(colour_scheme, vec2(color.r, color.g)).rgb, color.a);
 }
 

@@ -15,6 +15,7 @@ dest_files=["res://.godot/imported/Apple Chancery.ttf-c5a6761ef22307e9365ce19c9b
 Rendering=null
 antialiasing=1
 generate_mipmaps=false
+disable_embedded_bitmaps=true
 multichannel_signed_distance_field=false
 msdf_pixel_range=8
 msdf_size=48

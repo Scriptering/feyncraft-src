@@ -20,8 +20,6 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_styles/panel = SubResource("StyleBoxEmpty_4oa4s")
 script = ExtResource("2_ns04d")
-override_font_size = null
-font_size = null
 
 [node name="Button" type="Button" parent="."]
 use_parent_material = true

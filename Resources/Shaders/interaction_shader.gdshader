@@ -11,12 +11,12 @@ vec4 swap_color(vec4 color)
 
 void fragment() {
 	vec4 color = texture(TEXTURE, UV);
-	
+
 	color = vec4(swap_color(color).rgb, color.a);
-	
+
 	if (color.a > 0.0001 && interaction_strength_showing) {
 		color = vec4(color.rgb, interaction_strength_alpha);
 	}
-	
+
 	COLOR = color;
 }
