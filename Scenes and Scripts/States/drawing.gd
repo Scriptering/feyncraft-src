@@ -3,7 +3,7 @@ extends BaseState
 @onready var delay_timer := $delay
 @export var delay_time: float = 0.3: set = _set_delay_time
 @onready var interaction_scene := preload("res://Scenes and Scripts/Diagram/interaction.tscn")
-@onready var particle_line_scene := preload("res://Scenes and Scripts/Diagram/line.tscn")
+@onready var particle_line_scene := preload("res://Scenes and Scripts/Diagram/particle_line.tscn")
 
 var drawing : bool = false
 var start_crosshair_position : Vector2 = Vector2(0, 0)
@@ -81,4 +81,3 @@ func cancel_placement() -> void:
 	for particle_line:ParticleLine in Diagram.get_particle_lines():
 		if !particle_line.is_placed:
 			Diagram.delete_line(particle_line)
-

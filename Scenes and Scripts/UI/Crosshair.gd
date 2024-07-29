@@ -2,8 +2,8 @@ extends Node2D
 
 @export var grid_margin: int
 
-signal moved_and_rested(current_position: Vector2, old_position: Vector2)
-signal moved(current_position: Vector2, old_position: Vector2)
+signal moved_and_rested(current_position: Vector2i, old_position: Vector2i)
+signal moved(current_position: Vector2i, old_position: Vector2i)
 @onready var IdleCrosshair := $IdleCrosshair
 
 var move_timer: Timer = Timer.new()
@@ -35,8 +35,8 @@ func init(diagram: DiagramBase, state_lines: Array, gridsize: int) -> void:
 	
 	StateManager.state_changed.connect(_state_changed)
 	
-	Initial = state_lines[StateLine.StateType.Initial]
-	Final = state_lines[StateLine.StateType.Final]
+	Initial = state_lines[StateLine.State.Initial]
+	Final = state_lines[StateLine.State.Final]
 	grid_size = gridsize
 	
 	clamp_left = Initial.position.x
@@ -123,7 +123,7 @@ func is_drawing_position_valid(try_position: Vector2) -> bool:
 	return true
 
 func is_placing_position_valid(try_position: Vector2) -> bool:
-	if Diagram.get_on_stateline(try_position) == StateLine.StateType.None:
+	if Diagram.get_on_stateline(try_position) == StateLine.State.None:
 		return true
 	
 	if is_crosshair_on_state_interaction(try_position):

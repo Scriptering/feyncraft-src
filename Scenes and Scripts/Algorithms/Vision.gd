@@ -530,7 +530,7 @@ func get_next_point(current_point: int, path: PackedInt32Array, connections: Dra
 		var is_u_turn_gluon: bool = (
 			current_point == path[1] and 
 			available_point == path[0] and 
-			connections.get_state_from_id(path[0]) == StateLine.StateType.None and
+			connections.get_state_from_id(path[0]) == StateLine.State.None and
 			!connections.is_lonely_extreme_point(path[0])
 		)
 		
@@ -568,5 +568,5 @@ func generate_path(
 
 func init(diagram: DiagramBase, state_lines: Array) -> void:
 	Diagram = diagram
-	Initial = state_lines[StateLine.StateType.Initial]
-	Final = state_lines[StateLine.StateType.Final]
+	Initial = state_lines[StateLine.State.Initial]
+	Final = state_lines[StateLine.State.Final]

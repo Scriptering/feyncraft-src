@@ -48,8 +48,8 @@ func _ready() -> void:
 	self.can_generate = can_generate
 
 func init(diagram: DiagramBase, generation: Node, generated_diagram_viewer: MiniDiagramViewer) -> void:
-	Initial = diagram.StateLines[StateLine.StateType.Initial]
-	Final = diagram.StateLines[StateLine.StateType.Final]
+	Initial = diagram.StateLines[StateLine.State.Initial]
+	Final = diagram.StateLines[StateLine.State.Final]
 	Generation = generation
 	GeneratedDiagramViewer = generated_diagram_viewer
 	
@@ -142,7 +142,7 @@ func _on_save_pressed() -> void:
 		StatesSaved.show()
 		set_checks(InitialState + FinalState)
 		
-		for state:StateLine.StateType in StateLine.STATES:
+		for state:StateLine.State in StateLine.STATES:
 			Equation.load_state_symbols(state, [InitialState, FinalState][state])
 		
 	show_feedback()

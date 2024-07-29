@@ -29,10 +29,10 @@ func clear_diagram() -> void:
 		hadron_joint.queue_free()
 
 func show_interaction_dots(drawing_matrix: DrawingMatrix) -> void:
-	for id:int in drawing_matrix.get_state_ids(StateLine.StateType.Both):
+	for id:int in drawing_matrix.get_state_ids(StateLine.State.Both):
 		Interactions.get_child(id).show_dot()
 	
-	for id:int in drawing_matrix.get_state_ids(StateLine.StateType.None):
+	for id:int in drawing_matrix.get_state_ids(StateLine.State.None):
 		if drawing_matrix.get_connected_count(id, true) >= Interaction.INTERACTION_SIZE_MINIMUM:
 			Interactions.get_child(id).show_dot()
 
@@ -50,7 +50,7 @@ func create_hadron_joint(drawing_matrix: DrawingMatrix, hadron_ids: PackedInt32A
 	for id:int in hadron_ids:
 		interaction_ys.push_back(int(drawing_matrix.normalised_interaction_positions[id].y*grid_size))
 		
-		if drawing_matrix.get_state_from_id(id) == StateLine.StateType.Initial:
+		if drawing_matrix.get_state_from_id(id) == StateLine.State.Initial:
 			quarks.append_array(drawing_matrix.get_connected_particles(id))
 			quarks.append_array(drawing_matrix.get_connected_particles(id, false, false, true).map(
 				func(particle: ParticleData.Particle) -> ParticleData.Particle:
@@ -71,7 +71,7 @@ func create_hadron_joint(drawing_matrix: DrawingMatrix, hadron_ids: PackedInt32A
 	
 	hadron_joint.interaction_ys = interaction_ys
 	
-	var state : StateLine.StateType = drawing_matrix.get_state_from_id(hadron_ids[0])
+	var state : StateLine.State = drawing_matrix.get_state_from_id(hadron_ids[0])
 	
 	hadron_joint.state = state
 	

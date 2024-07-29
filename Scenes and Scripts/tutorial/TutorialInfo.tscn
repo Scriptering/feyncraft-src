@@ -56,8 +56,6 @@ alignment = 1
 visible = false
 layout_mode = 2
 icon = ExtResource("6_1qgbo")
-override_font_size = false
-font_size = 0
 minimum_size = Vector2(24, 21)
 icon_use_parent_material = true
 
@@ -67,8 +65,6 @@ tooltip = "Prev Step"
 [node name="NextStep" parent="TutorialPanel/VBoxContainer/Buttons" instance=ExtResource("4_3eia6")]
 layout_mode = 2
 icon = ExtResource("6_ele4h")
-override_font_size = false
-font_size = 0
 minimum_size = Vector2(24, 21)
 icon_use_parent_material = true
 
@@ -79,8 +75,6 @@ tooltip = "Next Step"
 visible = false
 layout_mode = 2
 icon = ExtResource("10_qnfej")
-override_font_size = false
-font_size = 0
 minimum_size = Vector2(24, 21)
 icon_use_parent_material = true
 

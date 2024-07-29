@@ -12,7 +12,7 @@ extends Panel
 
 var grid_width: int:
 	get:
-		return snapped(StateLines[StateLine.StateType.Final].position.x - StateLines[StateLine.StateType.Initial].position.x, grid_size)
+		return snapped(StateLines[StateLine.State.Final].position.x - StateLines[StateLine.State.Initial].position.x, grid_size)
 
 var grid_height: int:
 	get:
@@ -21,7 +21,7 @@ var grid_height: int:
 var grid_centre: int:
 	get:
 		return snapped(
-			(StateLines[StateLine.StateType.Initial].position.x + StateLines[StateLine.StateType.Final].position.x) / 2, grid_size
+			(StateLines[StateLine.State.Initial].position.x + StateLines[StateLine.State.Final].position.x) / 2, grid_size
 		)
 
 func clear_diagram() -> void:
@@ -34,7 +34,7 @@ func draw_raw_diagram(connection_matrix : ConnectionMatrix) -> void:
 	var drawable_matrix := DrawingMatrix.new()
 	drawable_matrix.initialise_from_connection_matrix(connection_matrix)
 	
-	for id:int in drawable_matrix.get_state_ids(StateLine.StateType.Both):
+	for id:int in drawable_matrix.get_state_ids(StateLine.State.Both):
 		if drawable_matrix.get_connected_count(id) > 1:
 			breakpoint
 
@@ -65,7 +65,7 @@ func get_hadron_joints() -> Array:
 func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 	clear_diagram()
 	
-	for state:StateLine.StateType in StateLine.STATES:
+	for state:StateLine.State in StateLine.STATES:
 		StateLines[state].position.x = drawing_matrix.state_line_positions[state] * grid_size
 
 	for drawing_particle:Variant in draw_diagram_particles(drawing_matrix):
@@ -74,12 +74,12 @@ func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 	for interaction_position:Vector2 in drawing_matrix.get_interaction_positions():
 		place_interaction(interaction_position * grid_size)
 
-func get_on_stateline(test_position: Vector2) -> StateLine.StateType:
+func get_on_stateline(test_position: Vector2) -> StateLine.State:
 	return ArrayFuncs.find_var(
 		StateLines,
 		func(state_line: StateLine) -> bool:
 			return is_zero_approx(state_line.position.x - test_position.x)
-	) as StateLine.StateType
+	) as StateLine.State
 	
 func generate_drawing_matrix_from_diagram() -> DrawingMatrix:
 	var generated_matrix := DrawingMatrix.new()
@@ -95,7 +95,7 @@ func generate_drawing_matrix_from_diagram() -> DrawingMatrix:
 			particle_line.base_particle
 		)
 	
-	for state:StateLine.StateType in StateLine.STATES:
+	for state:StateLine.State in StateLine.STATES:
 		generated_matrix.state_line_positions[state] = StateLines[state].position.x / grid_size
 	
 	var hadron_ids: Array[PackedInt32Array] = []
@@ -118,34 +118,34 @@ func generate_drawing_matrix_from_diagram() -> DrawingMatrix:
 
 func create_diagram_interaction_positions(drawing_matrix: DrawingMatrix) -> void:
 
-	for state:StateLine.StateType in StateLine.STATES:
+	for state:StateLine.State in StateLine.STATES:
 		create_state_diagram_interaction_positions(drawing_matrix, state)
 	
 	create_middle_diagram_interaction_positions(drawing_matrix)
 
 func create_middle_diagram_interaction_positions(drawing_matrix: DrawingMatrix) -> void:
 	var degree_pos : Array[float] = []
-	var degree_step : float = 2 * PI / (drawing_matrix.get_state_count(StateLine.StateType.None))
+	var degree_step : float = 2 * PI / (drawing_matrix.get_state_count(StateLine.State.None))
 	var degree_start : float = randf() * 2 * PI
 	
-	for i:int in range(drawing_matrix.get_state_count(StateLine.StateType.None)):
+	for i:int in range(drawing_matrix.get_state_count(StateLine.State.None)):
 		degree_pos.append(i * degree_step + degree_start)
 		
 	var radius : float = snapped(min(grid_width, grid_height) / 2 - grid_size, grid_size)
 	var circle_y_start : int = snapped(grid_height / 2.0, grid_size)
 	var circle_x : int = grid_centre
 
-	for j:int in range(drawing_matrix.get_state_count(StateLine.StateType.None)):
+	for j:int in range(drawing_matrix.get_state_count(StateLine.State.None)):
 		drawing_matrix.add_interaction_position(Vector2(
 			snapped(circle_x + radius * cos(degree_pos[j]), grid_size),
 			snapped(circle_y_start + radius * sin(degree_pos[j]), grid_size)
 		), grid_size)
 
-func create_state_diagram_interaction_positions(drawing_matrix: DrawingMatrix, state: StateLine.StateType) -> void:
+func create_state_diagram_interaction_positions(drawing_matrix: DrawingMatrix, state: StateLine.State) -> void:
 	var current_y : int = 0
 	
 	for state_id:int in drawing_matrix.get_state_ids(state):
-		if drawing_matrix.get_state_from_id(state_id) == StateLine.StateType.None:
+		if drawing_matrix.get_state_from_id(state_id) == StateLine.State.None:
 			continue
 		
 		for hadron:Array[int] in drawing_matrix.split_hadron_ids:

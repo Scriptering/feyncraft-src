@@ -133,7 +133,7 @@ func submit_diagram() -> void:
 
 func generate_solution() -> ConnectionMatrix:
 	return(SolutionGeneration.generate_diagrams(
-		current_problem.state_interactions[StateLine.StateType.Initial], current_problem.state_interactions[StateLine.StateType.Final],
+		current_problem.state_interactions[StateLine.State.Initial], current_problem.state_interactions[StateLine.State.Final],
 		current_problem.degree, current_problem.degree, SolutionGeneration.generate_useable_interactions_from_particles(current_problem.allowed_particles),
 		SolutionGeneration.Find.LowestOrder
 	).pick_random())

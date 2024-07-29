@@ -4,7 +4,7 @@ class_name HadronJoint
 @onready var HadronLabel := $HadronSprite
 
 @export var label_seperation : float = 25
-var state : StateLine.StateType
+var state : StateLine.State
 var hadron : Hadron
 var hadron_lines : Array
 
@@ -49,7 +49,7 @@ func get_highest_line() -> ParticleLine:
 func place_label() -> void:
 	HadronLabel.texture = ParticleData.get_hadron_texture(hadron.hadron)
 	
-	if state == StateLine.StateType.Initial:
+	if state == StateLine.State.Initial:
 		HadronLabel.position.x = -label_seperation
 	else:
 		HadronLabel.position.x = label_seperation

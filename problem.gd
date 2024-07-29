@@ -38,7 +38,7 @@ func is_submission_solution(submission: DrawingMatrix) -> bool:
 			return solution.reduce_to_connection_matrix().is_duplicate(reduced_submission)
 	)
 
-func get_state_interaction(state: StateLine.StateType) -> Array:
+func get_state_interaction(state: StateLine.State) -> Array:
 	return state_interactions[state]
 
 func get_sorted_states(states: Array) -> Array:
@@ -53,12 +53,12 @@ func get_sorted_states(states: Array) -> Array:
 
 func is_matching_states(reduced_submission: ConnectionMatrix) -> bool:
 	var sorted_submitted_states: Array = get_sorted_states([
-		reduced_submission.get_state_interactions(StateLine.StateType.Initial),
-		reduced_submission.get_state_interactions(StateLine.StateType.Final)
+		reduced_submission.get_state_interactions(StateLine.State.Initial),
+		reduced_submission.get_state_interactions(StateLine.State.Final)
 	])
 	var sorted_states: Array = get_sorted_states(state_interactions)
 	
-	for state:StateLine.StateType in StateLine.STATES:
+	for state:StateLine.State in StateLine.STATES:
 		if (
 			sorted_submitted_states[state].any(
 				func(state_interaction: Array) -> bool:

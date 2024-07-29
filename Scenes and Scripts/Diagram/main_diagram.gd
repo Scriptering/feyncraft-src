@@ -41,6 +41,7 @@ var diagram_added_to_history: bool = false
 
 func _ready() -> void:
 	Crosshair.moved_and_rested.connect(_crosshair_moved)
+	Crosshair.moved.connect(_crosshair_moved)
 	mouse_entered.connect(Crosshair.DiagramMouseEntered)
 	mouse_exited.connect(Crosshair.DiagramMouseExited)
 	EventBus.signal_draw_raw_diagram.connect(draw_raw_diagram)
@@ -76,11 +77,39 @@ func _process(_delta: float) -> void:
 		if stateline.grabbed:
 			move_stateline(stateline)
 
-func _crosshair_moved(_new_position: Vector2, _old_position: Vector2) -> void:
-	if StateManager.state not in [BaseState.State.Drawing, BaseState.State.Placing]:
+func _crosshair_moved(new_position: Vector2i, old_position: Vector2i) -> void:
+	if (
+		StateManager.state != BaseState.State.Placing
+		&& StateManager.state != BaseState.State.Drawing
+	):
 		return
 	
-	action()
+	for interaction:Interaction in get_interactions():
+		if interaction.grabbed:
+			interaction.move(new_position)
+	
+	for particle_line:ParticleLine in get_particle_lines():
+		if !particle_line.is_placed:
+			particle_line.move(new_position)
+			particle_line.queue_update()
+	
+	for x_position:int in [new_position.x, old_position.x]:
+		var state_to_update := x_position_on_stateline(x_position)
+		
+		if state_to_update == StateLine.State.None:
+			continue
+		
+		StateLines[state_to_update].queue_update()
+	
+
+func x_position_on_stateline(x:int) -> StateLine.State:
+	if StateLines[StateLine.State.Initial].position.x == x:
+		return StateLine.State.Initial
+	
+	if StateLines[StateLine.State.Final].position.x == x:
+		return StateLine.State.Final
+	
+	return StateLine.State.None
 
 func _set_show_line_labels(new_value: bool) -> void:
 	show_line_labels = new_value
@@ -100,8 +129,8 @@ func load_problem(problem: Problem, mode: BaseMode.Mode) -> void:
 	set_title_editable(is_creating_problem)
 
 func are_quantum_numbers_matching(ignore_weak_quantum_numbers: bool = true) -> bool:
-	var initial_quantum_numbers: PackedFloat32Array = StateLines[StateLine.StateType.Initial].get_quantum_numbers()
-	var final_quantum_numbers: PackedFloat32Array = StateLines[StateLine.StateType.Final].get_quantum_numbers()
+	var initial_quantum_numbers: PackedFloat32Array = StateLines[StateLine.State.Initial].get_quantum_numbers()
+	var final_quantum_numbers: PackedFloat32Array = StateLines[StateLine.State.Final].get_quantum_numbers()
 	
 	for quantum_number:ParticleData.QuantumNumber in ParticleData.QuantumNumber.values():
 		if ignore_weak_quantum_numbers and quantum_number in ParticleData.WEAK_QUANTUM_NUMBERS:
@@ -132,8 +161,8 @@ func update_colourless_interactions(
 		get_interaction_from_matrix_id(id, diagram).valid_colourless = id not in colourless_interactions
 
 func sort_drawing_interactions(interaction1: Interaction, interaction2: Interaction) -> bool:
-	var state1: StateLine.StateType = interaction1.get_on_state_line()
-	var state2: StateLine.StateType = interaction2.get_on_state_line()
+	var state1: StateLine.State = interaction1.get_on_state_line()
+	var state2: StateLine.State = interaction2.get_on_state_line()
 	
 	if state1 != state2:
 		return state1 < state2
@@ -141,7 +170,7 @@ func sort_drawing_interactions(interaction1: Interaction, interaction2: Interact
 	var pos_y1: int = int(interaction1.position.y)
 	var pos_y2: int = int(interaction2.position.y)
 	
-	if state1 == StateLine.StateType.None:
+	if state1 == StateLine.State.None:
 		return pos_y1 < pos_y2
 	
 	var particle1: ParticleData.Particle = interaction1.connected_particles.front()
@@ -274,7 +303,7 @@ func _on_vision_button_toggled(_vision: Globals.Vision) -> void:
 func move_stateline(stateline: StateLine) -> void:
 	var non_state_interactions := get_interactions().filter(
 		func(interaction: Interaction) -> bool:
-			return interaction.get_on_state_line() == StateLine.StateType.None
+			return interaction.get_on_state_line() == StateLine.State.None
 	)
 	
 	var state_interactions : Array[Interaction] = get_interactions().filter(
@@ -295,22 +324,22 @@ func move_stateline(stateline: StateLine) -> void:
 		
 		for particle_line in interaction.connected_lines:
 			particle_line.points[particle_line.get_point_at_position(interaction_position)].x = stateline.position.x
-			particle_line.update_line()
+			particle_line.queue_update()
 		
-		interaction.update_interaction()
+		interaction.queue_update()
 
-func get_movable_state_line_position(state: StateLine.StateType, interaction_x_positions: Array) -> int:
+func get_movable_state_line_position(state: StateLine.State, interaction_x_positions: Array) -> int:
 	var test_position : int = snapped(get_local_mouse_position().x - DiagramArea.position.x, grid_size)
 	
 	match state:
-		StateLine.StateType.Initial:
-			test_position = min(test_position, StateLines[StateLine.StateType.Final].position.x - grid_size)
+		StateLine.State.Initial:
+			test_position = min(test_position, StateLines[StateLine.State.Final].position.x - grid_size)
 			
 			if interaction_x_positions.size() != 0:
 				test_position = min(test_position, interaction_x_positions.min() - grid_size)
 		
-		StateLine.StateType.Final:
-			test_position = max(test_position, StateLines[StateLine.StateType.Initial].position.x + grid_size)
+		StateLine.State.Final:
+			test_position = max(test_position, StateLines[StateLine.State.Initial].position.x + grid_size)
 			
 			if interaction_x_positions.size() != 0:
 				test_position = max(test_position, interaction_x_positions.max() + grid_size)
@@ -324,7 +353,7 @@ func update_statelines() -> void:
 		return
 	
 	for state_line:StateLine in StateLines:
-		state_line.update_stateline()
+		state_line.queue_update()
 
 func place_objects() -> void:
 	get_tree().call_group("grabbable", "drop")
@@ -364,11 +393,11 @@ func action() -> void:
 
 func update_particle_lines() -> void:
 	for particle_line:ParticleLine in get_particle_lines():
-		particle_line.update_line()
+		particle_line.queue_update()
 
 func update_interactions() -> void:
 	for interaction:Interaction in get_interactions():
-		interaction.update_interaction()
+		interaction.queue_update()
 
 func delete_line(particle_line: ParticleLine) -> void:
 	add_diagram_to_history()
@@ -414,7 +443,7 @@ func split_line(line_to_split: ParticleLine, split_point: Vector2) -> void:
 	line_to_split.points[ParticleLine.Point.Start] = split_point
 	place_line(new_start_point, split_point, line_to_split.base_particle)
 
-	line_to_split.update_line()
+	line_to_split.queue_update()
 
 func check_split_lines() -> void:
 	if !line_diagram_actions:
@@ -480,7 +509,7 @@ func rejoin_lines(line_to_extend: ParticleLine, line_to_delete: ParticleLine) ->
 	
 	line_to_extend.points[point_to_move] = line_to_delete.points[point_to_move_to]
 	recursive_delete_line(line_to_delete)
-	line_to_extend.update_line()
+	line_to_extend.queue_update()
 
 func _on_interaction_dropped(interaction: Interaction) -> void:
 	if can_place_interaction(interaction.position, interaction):
@@ -732,7 +761,7 @@ func is_energy_conserved() -> bool:
 		)
 	)
 	
-	for state_type:StateLine.StateType in StateLine.STATES:
+	for state_type:StateLine.State in StateLine.STATES:
 		if state_base_particles[state_type].size() > 1:
 			continue
 		
@@ -768,7 +797,7 @@ func get_starting_vision_offset_vector(
 	if vision_matrix.is_lonely_extreme_point(path[0]):
 		return (interaction_positions[path[1]] - interaction_positions[path[0]]).orthogonal().normalized() * vision_line_offset
 	
-	if vision_matrix.get_state_from_id(path[0]) != StateLine.StateType.None:
+	if vision_matrix.get_state_from_id(path[0]) != StateLine.State.None:
 		return (Vector2.UP * StateLine.state_factor[vision_matrix.get_state_from_id(path[0])]).normalized() * vision_line_offset
 	
 	var backward_vector: Vector2 = interaction_positions[path[-1]] - interaction_positions[path[-2]]
@@ -787,7 +816,7 @@ func get_vision_offset_vector(
 	if vision_matrix.is_lonely_extreme_point(path[current_point+1]):
 		return (interaction_positions[path[current_point+1]] - interaction_positions[path[current_point]]).orthogonal().normalized()
 	
-	if vision_matrix.get_state_from_id(path[current_point+1]) != StateLine.StateType.None:
+	if vision_matrix.get_state_from_id(path[current_point+1]) != StateLine.State.None:
 		return (Vector2.UP * StateLine.state_factor[vision_matrix.get_state_from_id(path[current_point+1])]).normalized()
 	
 	var look_ahead_count: int = 2 + int(current_point == path.size() - 2)

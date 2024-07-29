@@ -46,4 +46,3 @@ func is_interaction_grabbed() -> bool:
 		func(object:Variant) -> bool:
 			return object.grabbed and object is Interaction
 	)
-

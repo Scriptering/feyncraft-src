@@ -12,11 +12,11 @@ const MAX_REINDEX_ATTEMPTS : int = 100
 const MAX_PATH_STEPS : int = 100
 
 const state_factor : Dictionary = {
-	StateLine.StateType.Initial: +1,
-	StateLine.StateType.Final: -1
+	StateLine.State.Initial: +1,
+	StateLine.State.Final: -1
 }
 
-const States : Array[StateLine.StateType] = StateLine.STATES
+const States : Array[StateLine.State] = StateLine.STATES
 
 @export var connection_matrix : Array = []
 @export var state_count: Array[int] = [0, 0, 0]
@@ -26,7 +26,7 @@ const States : Array[StateLine.StateType] = StateLine.STATES
 const PREVIOUS_POINT: int = -2
 
 func init(new_size : int = 0, new_state_count: Array[int] = [0, 0, 0]) -> void:
-	if new_size < new_state_count[StateLine.StateType.Initial] + new_state_count[StateLine.StateType.Final]:
+	if new_size < new_state_count[StateLine.State.Initial] + new_state_count[StateLine.State.Final]:
 		push_error("Matrix size initiated less than state count.")
 	
 	state_count = new_state_count
@@ -101,7 +101,7 @@ func disconnect_interactions(
 		connection_matrix[to_id][from_id].erase(particle)
 
 func empty_interaction(id: int) -> void:
-	var state : StateLine.StateType = get_state_from_id(id)
+	var state : StateLine.State = get_state_from_id(id)
 	remove_interaction(id)
 	add_interaction(state, id)
 
@@ -122,7 +122,7 @@ func create_empty_array(array_size: int) -> Array:
 	return empty_array
 
 func add_interaction(
-	interaction_state: StateLine.StateType = StateLine.StateType.None,
+	interaction_state: StateLine.State = StateLine.State.None,
 	id : int = calculate_new_interaction_id(interaction_state)
 ) -> void:
 
@@ -138,14 +138,14 @@ func add_interaction(
 	
 	state_count[interaction_state] += 1
 
-func calculate_new_interaction_id(interaction_state: StateLine.StateType = StateLine.StateType.None) -> int:
+func calculate_new_interaction_id(interaction_state: StateLine.State = StateLine.State.None) -> int:
 	match interaction_state:
-		StateLine.StateType.None:
+		StateLine.State.None:
 			return matrix_size
-		StateLine.StateType.Initial:
-			return state_count[StateLine.StateType.Initial]
-		StateLine.StateType.Final:
-			return state_count[StateLine.StateType.Initial] + state_count[StateLine.StateType.Final]
+		StateLine.State.Initial:
+			return state_count[StateLine.State.Initial]
+		StateLine.State.Final:
+			return state_count[StateLine.State.Initial] + state_count[StateLine.State.Final]
 	return INVALID
 
 func remove_interaction(id: int) -> void:
@@ -295,15 +295,15 @@ func reach_ids(id: int, reached_ids: PackedInt32Array, bidirectional: bool) -> P
 		
 	return reached_ids
 
-func get_starting_state_id(state: StateLine.StateType) -> int:
+func get_starting_state_id(state: StateLine.State) -> int:
 	match state:
-		StateLine.StateType.None:
-			return state_count[StateLine.StateType.Initial] + state_count[StateLine.StateType.Final]
-		StateLine.StateType.Initial:
+		StateLine.State.None:
+			return state_count[StateLine.State.Initial] + state_count[StateLine.State.Final]
+		StateLine.State.Initial:
 			return 0
-		StateLine.StateType.Final:
-			return state_count[StateLine.StateType.Initial]
-		StateLine.StateType.Both:
+		StateLine.State.Final:
+			return state_count[StateLine.State.Initial]
+		StateLine.State.Both:
 			return 0
 	
 	return INVALID
@@ -321,7 +321,7 @@ func find_all_ids(test_function: Callable) -> PackedInt32Array:
 			return test_function.call(id)
 	)
 
-func find_all_state_ids(test_function: Callable, state: StateLine.StateType) -> PackedInt32Array:
+func find_all_state_ids(test_function: Callable, state: StateLine.State) -> PackedInt32Array:
 	var valid_state_ids: PackedInt32Array = []
 	
 	for id:int in get_state_ids(state):
@@ -330,33 +330,33 @@ func find_all_state_ids(test_function: Callable, state: StateLine.StateType) -> 
 	
 	return valid_state_ids
 
-func get_ending_state_id(state: StateLine.StateType) -> int:
+func get_ending_state_id(state: StateLine.State) -> int:
 	return get_starting_state_id(state) + get_state_count(state)
 
-func get_state_from_id(id: int) -> StateLine.StateType:
+func get_state_from_id(id: int) -> StateLine.State:
 	if id >= matrix_size:
 		push_error("id is greater than matrix size")
 	
-	if id < state_count[StateLine.StateType.Initial]:
-		return StateLine.StateType.Initial
-	elif id < state_count[StateLine.StateType.Initial] + state_count[StateLine.StateType.Final]:
-		return StateLine.StateType.Final
+	if id < state_count[StateLine.State.Initial]:
+		return StateLine.State.Initial
+	elif id < state_count[StateLine.State.Initial] + state_count[StateLine.State.Final]:
+		return StateLine.State.Final
 	
-	return StateLine.StateType.None
+	return StateLine.State.None
 
 func get_id_state_index(id: int) -> int:
 	return id - get_starting_state_id(get_state_from_id(id))
 
-func get_state_count(state: StateLine.StateType) -> int:
-	if state == StateLine.StateType.Both:
-		return state_count[StateLine.StateType.Initial] + state_count[StateLine.StateType.Final]
+func get_state_count(state: StateLine.State) -> int:
+	if state == StateLine.State.Both:
+		return state_count[StateLine.State.Initial] + state_count[StateLine.State.Final]
 	
 	return state_count[state]
 
-func get_states(state: StateLine.StateType) -> Array:
+func get_states(state: StateLine.State) -> Array:
 	return connection_matrix.slice(get_starting_state_id(state), get_ending_state_id(state))
 
-func get_state_ids(state: StateLine.StateType) -> PackedInt32Array:
+func get_state_ids(state: StateLine.State) -> PackedInt32Array:
 	return range(get_starting_state_id(state), get_ending_state_id(state))
 
 func get_travel_matrix() -> Array[PackedInt32Array]:
@@ -393,7 +393,7 @@ func is_empty() -> bool:
 	return true
 
 func is_extreme_point(id: int, entry_factor: EntryFactor = EntryFactor.Both) -> bool:
-	if get_state_from_id(id) == StateLine.StateType.None:
+	if get_state_from_id(id) == StateLine.State.None:
 		return false
 	
 	if entry_factor == EntryFactor.Both:
@@ -404,7 +404,7 @@ func is_extreme_point(id: int, entry_factor: EntryFactor = EntryFactor.Both) -> 
 func get_extreme_points(entry_factor: EntryFactor) -> PackedInt32Array:
 	var extreme_points: PackedInt32Array = []
 	
-	for state_id:int in get_state_ids(StateLine.StateType.Both):
+	for state_id:int in get_state_ids(StateLine.State.Both):
 		if is_extreme_point(state_id, entry_factor):
 			extreme_points.push_back(state_id)
 	
@@ -416,7 +416,7 @@ func get_entry_points() -> PackedInt32Array:
 func get_exit_points() -> PackedInt32Array:
 	return get_extreme_points(EntryFactor.Exit)
 
-func get_state_interactions(state: StateLine.StateType) -> Array:
+func get_state_interactions(state: StateLine.State) -> Array:
 	var state_interactions: Array = []
 	
 	for from_state_id:int in get_state_ids(state):
@@ -548,7 +548,7 @@ func reindex_further_paths(reindex_dictionary: Dictionary, travel_matrix: Array[
 func generate_reindex_dictionary() -> Dictionary:
 	var reindex_dictionary: Dictionary = {}
 	var travel_matrix: Array[PackedInt32Array] = get_travel_matrix()
-	var state_ids := get_state_ids(StateLine.StateType.Both)
+	var state_ids := get_state_ids(StateLine.State.Both)
 	
 	for state_id:int in state_ids:
 		reindex_dictionary[state_id] = state_id
@@ -640,7 +640,7 @@ func index_state_paths(reindex_dictionary: Dictionary, state_paths: Array) -> Di
 	return reindex_dictionary
 
 func index_state_ids(reindex_dict: Dictionary, state_paths: Array, state_id: int,
-	state_count_both := get_state_count(StateLine.StateType.Both),
+	state_count_both := get_state_count(StateLine.State.Both),
 ) -> void:
 	
 	reindex_dict[state_id] = state_id

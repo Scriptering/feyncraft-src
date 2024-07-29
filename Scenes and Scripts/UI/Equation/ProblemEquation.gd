@@ -9,14 +9,14 @@ extends PanelContainer
 @onready var StateEquations : Array[HBoxContainer] = [LeftEquation, RightEquation]
 
 func load_problem(problem: Problem) -> void:
-	for state:StateLine.StateType in StateLine.STATES:
+	for state:StateLine.State in StateLine.STATES:
 		load_state_symbols(state, problem.get_state_interaction(state))
 
-func clear_equation(state: StateLine.StateType) -> void:
+func clear_equation(state: StateLine.State) -> void:
 	for child:HBoxContainer in StateEquations[state].get_children():
 		child.queue_free()
 
-func load_state_symbols(state: StateLine.StateType, state_interactions: Array) -> void:
+func load_state_symbols(state: StateLine.State, state_interactions: Array) -> void:
 	clear_equation(state)
 	for i:int in state_interactions.size():
 		var interaction: Array = state_interactions[i]
