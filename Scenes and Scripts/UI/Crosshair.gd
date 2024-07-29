@@ -2,8 +2,11 @@ extends Node2D
 
 @export var grid_margin: int
 
+signal moved_and_rested(current_position: Vector2, old_position: Vector2)
 signal moved(current_position: Vector2, old_position: Vector2)
 @onready var IdleCrosshair := $IdleCrosshair
+
+var move_timer: Timer = Timer.new()
 
 const Z_INDEX_IDLE := 0
 const Z_INDEX_DRAWING := 0
@@ -40,6 +43,13 @@ func init(diagram: DiagramBase, state_lines: Array, gridsize: int) -> void:
 	clamp_right = Final.position.x
 	clamp_up = grid_size
 	clamp_down = Diagram.size.y - grid_size
+	
+	add_child(move_timer)
+	move_timer.wait_time = 0.01
+	move_timer.timeout.connect(
+		func() -> void:
+			moved_and_rested.emit(position, old_position)
+	)
 
 func move_crosshair() -> void:
 	var try_position: Vector2 = get_try_position()
@@ -50,9 +60,10 @@ func move_crosshair() -> void:
 	if is_try_position_valid(try_position):
 		position = try_position
 		if position != old_position:
+			move_timer.start()
 			moved.emit(position, old_position)
 		old_position = position
-	
+		
 	visible = get_state_visible(StateManager.state)
 
 func get_try_position() -> Vector2:
@@ -112,6 +123,9 @@ func is_drawing_position_valid(try_position: Vector2) -> bool:
 	return true
 
 func is_placing_position_valid(try_position: Vector2) -> bool:
+	if Diagram.get_on_stateline(try_position) == StateLine.StateType.None:
+		return true
+	
 	if is_crosshair_on_state_interaction(try_position):
 		return false
 	
@@ -121,29 +135,12 @@ func is_placing_position_valid(try_position: Vector2) -> bool:
 		return true
 	
 	var moving_line_count: int = grabbed_interaction.connected_lines.size()
-	
-	var on_stateline: StateLine.StateType = Diagram.get_on_stateline(try_position)
-	if moving_line_count > 1 and on_stateline != StateLine.StateType.None:
+	if moving_line_count > 1:
 		if StateManager.state == BaseState.State.Placing:
 			return false
 			
 		if StateManager.state == BaseState.State.Hovering and !Input.is_action_pressed("split_interaction"):
 			return false
-	
-	return true
-
-func is_hovering_position_valid(try_position: Vector2) -> bool:
-	if is_crosshair_on_state_interaction(try_position):
-		return false
-	
-	var grabbed_interaction: Interaction = StateManager.current_state.grabbed_interaction
-	var moving_line_count: int = grabbed_interaction.connected_lines.size()
-	
-	if Input.is_action_pressed("split_interaction"):
-		return true
-	
-	if is_on_stateline(try_position) and moving_line_count > 1:
-		return false
 	
 	return true
 

@@ -227,10 +227,8 @@ grid_margin = 0
 use_parent_material = true
 anchors_preset = 0
 
-[node name="Interactions" type="Control" parent="Diagram/DiagramArea"]
+[node name="Interactions" type="Node2D" parent="Diagram/DiagramArea"]
 use_parent_material = true
-anchors_preset = 0
-mouse_filter = 1
 
 [node name="HadronJoints" type="Control" parent="Diagram/DiagramArea"]
 use_parent_material = true

@@ -3,6 +3,9 @@ extends DiagramBase
 
 signal action_taken
 
+@export var freeze_vision: bool = false
+@export var freeze_statelines: bool = false
+
 @export var vision_line_offset: float = 6
 @export var min_vision_line_offset_factor: float = 5
 @export var max_vision_line_offset_factor: float = 15
@@ -37,7 +40,7 @@ var current_diagram: DrawingMatrix = null
 var diagram_added_to_history: bool = false
 
 func _ready() -> void:
-	Crosshair.moved.connect(_crosshair_moved)
+	Crosshair.moved_and_rested.connect(_crosshair_moved)
 	mouse_entered.connect(Crosshair.DiagramMouseEntered)
 	mouse_exited.connect(Crosshair.DiagramMouseExited)
 	EventBus.signal_draw_raw_diagram.connect(draw_raw_diagram)
@@ -251,6 +254,9 @@ func update_vision(
 	diagram: DrawingMatrix = generate_drawing_matrix_from_diagram(true), current_vision: Globals.Vision = VisionButtons.get_active_vision()
 ) -> void:
 	
+	if freeze_vision:
+		return
+	
 	clear_vision_lines()
 	
 	if get_interactions().size() == 0:
@@ -314,6 +320,9 @@ func get_movable_state_line_position(state: StateLine.StateType, interaction_x_p
 	return test_position
 
 func update_statelines() -> void:
+	if freeze_statelines:
+		return
+	
 	for state_line:StateLine in StateLines:
 		state_line.update_stateline()
 
@@ -347,16 +356,19 @@ func get_selected_particle() -> ParticleData.Particle:
 	return ParticleButtons.selected_particle
 
 func action() -> void:
-	for particle_line in get_particle_lines():
-		particle_line.update_line()
-		
-	for interaction:Interaction in get_interactions():
-		interaction.update_interaction()
-	
+	update_particle_lines()
+	update_interactions()
 	update_statelines()
 	update_vision(generate_drawing_matrix_from_diagram(true))
-	
 	action_taken.emit()
+
+func update_particle_lines() -> void:
+	for particle_line:ParticleLine in get_particle_lines():
+		particle_line.update_line()
+
+func update_interactions() -> void:
+	for interaction:Interaction in get_interactions():
+		interaction.update_interaction()
 
 func delete_line(particle_line: ParticleLine) -> void:
 	add_diagram_to_history()

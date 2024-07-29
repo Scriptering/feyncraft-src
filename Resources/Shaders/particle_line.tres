@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://c07rj23b21qlt"]
+
+[ext_resource type="Shader" path="res://Resources/Shaders/particle_line.gdshader" id="1_wavcr"]
+
+[resource]
+resource_local_to_scene = true
+shader = ExtResource("1_wavcr")
+shader_parameter/start_interaction_strength_alpha = 1.0
+shader_parameter/end_interaction_strength_alpha = 1.0
+shader_parameter/line_color = Color(0, 0, 0, 1)
+shader_parameter/line_thickness = 1.0

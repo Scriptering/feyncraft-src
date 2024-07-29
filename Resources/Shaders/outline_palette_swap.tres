@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dc4rnoi735twf"]
+
+[ext_resource type="Shader" path="res://Resources/Shaders/outline_palette_swap.gdshader" id="1_uta5d"]
+
+[resource]
+shader = ExtResource("1_uta5d")
+shader_parameter/line_color = Color(0, 0, 0, 1)
+shader_parameter/line_thickness = 2.0
