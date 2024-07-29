@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://dohkbu7ekkfx8"
-path="res://.godot/imported/Pixeltype.ttf-76d17f1dab358c866bf405fb517b1419.fontdata"
+uid="uid://b5b1mvicu07mm"
+path="res://.godot/imported/Munro_test.ttf-4e731e7a1f37e1c017163e205786249d.fontdata"
 
 [deps]
 
-source_file="res://Textures/Fonts/pixeltype/Pixeltype.ttf"
-dest_files=["res://.godot/imported/Pixeltype.ttf-76d17f1dab358c866bf405fb517b1419.fontdata"]
+source_file="res://Textures/Fonts/munro-font/Munro_test.ttf"
+dest_files=["res://.godot/imported/Munro_test.ttf-4e731e7a1f37e1c017163e205786249d.fontdata"]
 
 [params]
 
@@ -26,12 +26,13 @@ oversampling=0.0
 Fallbacks=null
 fallbacks=[]
 Compress=null
-compress=true
+compress=false
 preload=[{
 "chars": [],
 "glyphs": [],
 "name": "New Configuration",
-"size": Vector2i(16, 0)
+"size": Vector2i(16, 0),
+"variation_embolden": 0.0
 }]
 language_support={}
 script_support={}

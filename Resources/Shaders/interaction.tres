@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://clhuw6cdr2tdj"]
+
+[ext_resource type="Shader" path="res://Resources/Shaders/interaction_shader.gdshader" id="1_qkaek"]
+
+[resource]
+resource_local_to_scene = true
+shader = ExtResource("1_qkaek")
+shader_parameter/interaction_strength_alpha = null

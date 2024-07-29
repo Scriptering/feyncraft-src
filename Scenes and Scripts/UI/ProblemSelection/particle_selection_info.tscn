@@ -61,11 +61,15 @@ theme_override_constants/separation = 0
 [node name="ToggleOn" parent="VBoxContainer/VBoxContainer/VBoxContainer/HBoxContainer" instance=ExtResource("3_qv0n1")]
 layout_mode = 2
 text = "Toggle On"
+override_font_size = null
+font_size = null
 minimum_size = Vector2(56, 24)
 
 [node name="ToggleOff" parent="VBoxContainer/VBoxContainer/VBoxContainer/HBoxContainer" instance=ExtResource("3_qv0n1")]
 layout_mode = 2
 text = "Toggle Off"
+override_font_size = null
+font_size = null
 minimum_size = Vector2(56, 24)
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/VBoxContainer/VBoxContainer"]
@@ -100,6 +104,8 @@ alignment = 1
 [node name="NextStep" parent="VBoxContainer/VBoxContainer/Buttons" instance=ExtResource("3_qv0n1")]
 layout_mode = 2
 icon = ExtResource("8_rm0tq")
+override_font_size = null
+font_size = null
 minimum_size = Vector2(24, 21)
 icon_use_parent_material = true
 

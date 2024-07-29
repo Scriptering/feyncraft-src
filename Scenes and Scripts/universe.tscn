@@ -23,19 +23,10 @@ PaletteMenu = NodePath("../FloatingMenus/PaletteMenu")
 
 [node name="World" parent="." instance=ExtResource("3_m7wj1")]
 
-[node name="FloatingMenus" type="Control" parent="."]
-z_index = 1
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="FloatingMenus" type="CanvasLayer" parent="."]
 
 [node name="PaletteMenu" parent="FloatingMenus" instance=ExtResource("5_yvg3b")]
-layout_mode = 1
-offset_left = 318.0
-offset_top = 171.0
-offset_right = 278.0
-offset_bottom = 131.0
+mouse_filter = 2
 
 [node name="PullOutTabs" type="Control" parent="."]
 layout_mode = 3

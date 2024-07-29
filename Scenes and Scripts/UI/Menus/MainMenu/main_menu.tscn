@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://blu0n6lwfysjf"]
+[gd_scene load_steps=32 format=3 uid="uid://blu0n6lwfysjf"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_m8wv1"]
 [ext_resource type="Texture2D" uid="uid://c2myqhjupqo25" path="res://Textures/Background/tile.png" id="2_3tgej"]
@@ -42,9 +42,6 @@ expand_margin_top = 1.0
 expand_margin_right = 1.0
 expand_margin_bottom = 1.0
 
-[sub_resource type="Theme" id="Theme_gyi6d"]
-Label/font_sizes/font_size = 16
-
 [node name="MainMenu" type="Node2D"]
 material = ExtResource("1_m8wv1")
 script = ExtResource("2_bknyf")
@@ -77,6 +74,8 @@ offset_bottom = 192.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_qgodk")
 script = ExtResource("5_3sh45")
+freeze_vision = true
+freeze_statelines = true
 grid_size = 16
 InteractionInstance = ExtResource("6_x1gwm")
 particle_line_scene = ExtResource("7_ts01x")
@@ -216,10 +215,8 @@ grid_margin = 0
 use_parent_material = true
 anchors_preset = 0
 
-[node name="Interactions" type="Control" parent="Diagram/DiagramArea"]
+[node name="Interactions" type="Node2D" parent="Diagram/DiagramArea"]
 use_parent_material = true
-anchors_preset = 0
-mouse_filter = 1
 
 [node name="HadronJoints" type="Control" parent="Diagram/DiagramArea"]
 use_parent_material = true
@@ -233,7 +230,6 @@ anchors_preset = 0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 2
-theme = SubResource("Theme_gyi6d")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Center"]
 use_parent_material = true
@@ -257,7 +253,9 @@ material = null
 layout_mode = 2
 icon = ExtResource("16_0rbva")
 text = "Tutorial"
-minimum_size = Vector2(85, 2.08165e-12)
+override_font_size = true
+font_size = 10
+minimum_size = Vector2(100, 2.08165e-12)
 icon_use_parent_material = true
 icon_text_seperation = 4
 
@@ -266,7 +264,9 @@ material = null
 layout_mode = 2
 icon = ExtResource("13_21fnr")
 text = "Sandbox"
-minimum_size = Vector2(103, 2.08165e-12)
+override_font_size = true
+font_size = 10
+minimum_size = Vector2(110, 2.08165e-12)
 expand_icon = true
 action_mode = 1
 icon_text_seperation = 4
@@ -277,7 +277,9 @@ layout_mode = 2
 theme = ExtResource("22_a8ikr")
 icon = ExtResource("19_fbmws")
 text = "Problem Sets"
-minimum_size = Vector2(144, 0)
+override_font_size = true
+font_size = 10
+minimum_size = Vector2(164, 2.08165e-12)
 toggle_mode = true
 expand_icon = true
 icon_use_parent_material = true
@@ -294,12 +296,16 @@ layout_mode = 2
 size_flags_horizontal = 1
 size_flags_vertical = 1
 icon = ExtResource("21_lu08p")
+override_font_size = false
+font_size = 0
 toggle_mode = true
 
 [node name="Palettes" parent="Center/VBoxContainer/HBoxContainer" instance=ExtResource("11_t2od8")]
 material = null
 layout_mode = 2
 icon = ExtResource("17_cv4ds")
+override_font_size = false
+font_size = 0
 minimum_size = Vector2(30, 30)
 toggle_mode = true
 expand_icon = true
@@ -308,6 +314,8 @@ expand_icon = true
 material = null
 layout_mode = 2
 icon = ExtResource("23_sgn8e")
+override_font_size = false
+font_size = 0
 minimum_size = Vector2(30, 30)
 toggle_mode = true
 expand_icon = true

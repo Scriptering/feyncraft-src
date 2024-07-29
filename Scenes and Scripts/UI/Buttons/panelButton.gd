@@ -14,6 +14,8 @@ signal button_up
 
 @export var icon: Texture2D : set = _set_button_icon
 @export var text: String : set = _set_button_text
+@export var override_font_size: bool = false : set = _set_override_font_size
+@export var font_size: int : set = _set_font_size
 @export var minimum_size: Vector2 : set = _set_button_minimum_size
 @export var toggle_mode: bool : set = _set_toggle_mode
 @export var expand_icon: bool : set = _set_expand_icon
@@ -71,6 +73,24 @@ func _ready() -> void:
 	)
 	
 	EventBus.button_created(self)
+
+func update_font_size() -> void:
+	if override_font_size:
+		$ContentContainer/HBoxContainer/ButtonText.add_theme_font_size_override(
+			"font_size", font_size
+		)
+	else:
+		$ContentContainer/HBoxContainer/ButtonText.remove_theme_font_size_override(
+			"font_size"
+		)
+
+func _set_override_font_size(new_value: bool) -> void:
+	override_font_size = new_value
+	update_font_size()
+
+func _set_font_size(new_value: int) -> void:
+	font_size = new_value
+	update_font_size()
 
 func _set_icon_use_parent_material(new_value: bool) -> void:
 	icon_use_parent_material = new_value

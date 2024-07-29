@@ -31,6 +31,7 @@ func _ready() -> void:
 	ContentContainer.resized.connect(readjust)
 
 	starting_moving_container_position = MovingContainer.position
+	readjust()
 
 func _tab_button_pressed() -> void:
 	if tab_out:

@@ -2,7 +2,7 @@ class_name DiagramBase
 extends Panel
 
 @onready var StateLines: Array = [$DiagramArea/Initial, $DiagramArea/Final]
-@onready var Interactions: Control = $DiagramArea/Interactions
+@onready var Interactions: Node2D = $DiagramArea/Interactions
 @onready var ParticleLines: Node2D = $DiagramArea/ParticleLines
 @onready var HadronJoints: Control = $DiagramArea/HadronJoints
 

@@ -1,9 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://bjmi5sukccoma"]
+[gd_scene load_steps=10 format=3 uid="uid://bjmi5sukccoma"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/tutorial/TutorialInfo.gd" id="1_6afw4"]
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="2_dbjjh"]
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="3_gx624"]
-[ext_resource type="FontFile" uid="uid://cq27s0444iwkg" path="res://Textures/Fonts/ConnectionIi-2wj8.otf" id="3_o8url"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="4_3eia6"]
 [ext_resource type="Texture2D" uid="uid://c3nrennubqoow" path="res://Textures/Buttons/icons/back.png" id="6_1qgbo"]
 [ext_resource type="Texture2D" uid="uid://dvx430022t0ua" path="res://Textures/Buttons/icons/next.png" id="6_ele4h"]
@@ -43,8 +42,6 @@ layout_mode = 2
 use_parent_material = true
 layout_mode = 2
 size_flags_vertical = 1
-theme_override_fonts/font = ExtResource("3_o8url")
-theme_override_font_sizes/font_size = 9
 text = "Welcome to FeynCraft! Here you will be able to draw, create, and generate Feynman diagram problems.
 
 Click next below to get started."
@@ -59,6 +56,8 @@ alignment = 1
 visible = false
 layout_mode = 2
 icon = ExtResource("6_1qgbo")
+override_font_size = false
+font_size = 0
 minimum_size = Vector2(24, 21)
 icon_use_parent_material = true
 
@@ -68,6 +67,8 @@ tooltip = "Prev Step"
 [node name="NextStep" parent="TutorialPanel/VBoxContainer/Buttons" instance=ExtResource("4_3eia6")]
 layout_mode = 2
 icon = ExtResource("6_ele4h")
+override_font_size = false
+font_size = 0
 minimum_size = Vector2(24, 21)
 icon_use_parent_material = true
 
@@ -78,6 +79,8 @@ tooltip = "Next Step"
 visible = false
 layout_mode = 2
 icon = ExtResource("10_qnfej")
+override_font_size = false
+font_size = 0
 minimum_size = Vector2(24, 21)
 icon_use_parent_material = true
 

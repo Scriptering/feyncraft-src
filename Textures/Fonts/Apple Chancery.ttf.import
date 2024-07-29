@@ -2,18 +2,18 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://dohkbu7ekkfx8"
-path="res://.godot/imported/Pixeltype.ttf-76d17f1dab358c866bf405fb517b1419.fontdata"
+uid="uid://cojt7cbypp0f3"
+path="res://.godot/imported/Apple Chancery.ttf-c5a6761ef22307e9365ce19c9b3a393c.fontdata"
 
 [deps]
 
-source_file="res://Textures/Fonts/pixeltype/Pixeltype.ttf"
-dest_files=["res://.godot/imported/Pixeltype.ttf-76d17f1dab358c866bf405fb517b1419.fontdata"]
+source_file="res://Textures/Fonts/Apple Chancery.ttf"
+dest_files=["res://.godot/imported/Apple Chancery.ttf-c5a6761ef22307e9365ce19c9b3a393c.fontdata"]
 
 [params]
 
 Rendering=null
-antialiasing=0
+antialiasing=1
 generate_mipmaps=false
 multichannel_signed_distance_field=false
 msdf_pixel_range=8
@@ -21,12 +21,12 @@ msdf_size=48
 allow_system_fallback=true
 force_autohinter=false
 hinting=1
-subpixel_positioning=0
+subpixel_positioning=1
 oversampling=0.0
 Fallbacks=null
 fallbacks=[]
 Compress=null
-compress=true
+compress=false
 preload=[{
 "chars": [],
 "glyphs": [],
