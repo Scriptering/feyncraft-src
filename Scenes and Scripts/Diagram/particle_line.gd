@@ -84,7 +84,7 @@ var line_texture: Texture2D
 var show_labels: bool = true
 
 func _ready() -> void:
-	request_deletion.connect(Diagram.recursive_delete_line)
+	request_deletion.connect(Diagram.delete_line)
 	
 	has_colour = base_particle in ParticleData.COLOUR_PARTICLES
 	has_shade = base_particle in ParticleData.SHADED_PARTICLES
@@ -223,6 +223,9 @@ func is_position_on_line(test_position: Vector2i) -> bool:
 		return false
 	
 	return true
+
+func is_vertical() -> bool:
+	return points[Point.Start].x == points[Point.End].x
 
 func get_points_connected() -> PointsConnected:
 	if is_point_connected(left_point) and is_point_connected(right_point):
@@ -383,60 +386,38 @@ func set_text_texture() -> void:
 		Text.texture = ParticleData.particle_textures['W_0']
 
 func place() -> void:
-	if !is_placement_valid():
-		request_deletion.emit(self)
-		return
 	is_placed = true
 	connect_to_interactions()
-
-func is_placement_valid() -> bool:
-	if points[Point.Start] == points[Point.End]:
-		return false
-	
-	if is_line_copy():
-		return false
-	
-	if is_line_overlapping():
-		return false
-	
-	if are_both_points_on_same_state_line():
-		return false
-	
-	return true
-
-func are_both_points_on_same_state_line() -> bool:
-	if get_on_state_line() == StateLine.State.None:
-		return false
-	
-	return Diagram.get_on_stateline(points[Point.Start]) == Diagram.get_on_stateline(points[Point.End])
 
 func pick_up(point_index_to_pick_up: Point) -> void:
 	is_placed = false
 	moving_point = point_index_to_pick_up
-	
-func is_line_copy() -> bool:
-	for particle_line:ParticleLine in Diagram.get_particle_lines():
-		if particle_line == self:
-			continue
-		if !particle_line.is_placed:
-			continue
-		if (points[Point.Start] in particle_line.points and points[Point.End] in particle_line.points and particle_line != self):
-			return true
-	return false
 
-func is_line_overlapping() -> bool:
-	for particle_line:ParticleLine in Diagram.get_particle_lines():
-		if !particle_line.is_placed:
-			continue
-		if !points[Point.Start] in particle_line.points:
-			continue 
-		if particle_line.is_position_on_line(points[Point.End]):
-			return true
-	return false
+func is_duplicate(particle_line: ParticleLine) -> bool:
+	if particle_line == self:
+		return false
+	
+	if !(particle_line.points[Point.Start] in points):
+		return false
+	
+	if !(particle_line.points[Point.End] in points):
+		return false
+	
+	return true
+
+func is_overlapping(particle_line: ParticleLine) -> bool:
+	if particle_line == self:
+		return false
+	
+	if !(particle_line.points[ParticleLine.Point.Start] in points):
+		return false
+		
+	if !is_position_on_line(particle_line.points[ParticleLine.Point.End]):
+		return false
+		
+	return true
 
 func is_hovered() -> bool:
-	print(get_local_mouse_position())
-	
 	var v := line_vector.normalized();
 	var m := get_local_mouse_position() - Vector2(points[Point.Start]);
 

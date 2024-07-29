@@ -47,7 +47,7 @@ func start_drawing() -> void:
 	if Input.is_action_pressed("click") and !drawing:
 		drawing = true
 		Diagram.add_diagram_to_history()
-		Diagram.place_line(start_crosshair_position)
+		Diagram.draw_particle_line(start_crosshair_position)
 		Diagram.place_interaction(start_crosshair_position)
 
 func crosshair_moved(current_position : Vector2, old_position : Vector2) -> void:

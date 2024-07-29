@@ -93,8 +93,8 @@ func _crosshair_moved(new_position: Vector2i, old_position: Vector2i) -> void:
 			particle_line.move(new_position)
 			particle_line.queue_update()
 	
-	for x_position:int in [new_position.x, old_position.x]:
-		var state_to_update := x_position_on_stateline(x_position)
+	for pos:Vector2i in [new_position, old_position]:
+		var state_to_update := position_stateline(position)
 		
 		if state_to_update == StateLine.State.None:
 			continue
@@ -102,11 +102,11 @@ func _crosshair_moved(new_position: Vector2i, old_position: Vector2i) -> void:
 		StateLines[state_to_update].queue_update()
 	
 
-func x_position_on_stateline(x:int) -> StateLine.State:
-	if StateLines[StateLine.State.Initial].position.x == x:
+func position_stateline(pos: Vector2i) -> StateLine.State:
+	if StateLines[StateLine.State.Initial].position.x == pos.x:
 		return StateLine.State.Initial
 	
-	if StateLines[StateLine.State.Final].position.x == x:
+	if StateLines[StateLine.State.Final].position.x == pos.x:
 		return StateLine.State.Final
 	
 	return StateLine.State.None
@@ -358,13 +358,47 @@ func update_statelines() -> void:
 func place_objects() -> void:
 	get_tree().call_group("grabbable", "drop")
 	
-	for particle_line:ParticleLine in ParticleLines.get_children():
-		particle_line.place()
+	for particle_line:ParticleLine in get_particle_lines():
+		if particle_line.is_placed:
+			continue
+		place_line(particle_line)
 	
 	check_split_lines()
 	check_rejoin_lines()
 	
 	action()
+
+func place_line(particle_line: ParticleLine) -> void:
+	if !is_line_placement_valid(particle_line):
+		delete_line(particle_line, false)
+	particle_line.place()
+
+func is_line_placement_valid(particle_line: ParticleLine) -> bool:
+	if (
+		particle_line.points[ParticleLine.Point.Start]
+		== particle_line.points[ParticleLine.Point.End]
+	):
+		return false
+	
+	for comparison_particle_line:ParticleLine in get_particle_lines():
+		if particle_line.is_duplicate(comparison_particle_line):
+			return false
+		
+	for comparison_particle_line:ParticleLine in get_particle_lines():
+		if particle_line.is_overlapping(comparison_particle_line):
+			return false
+	
+	var start_stateline := position_stateline(particle_line.points[ParticleLine.Point.Start])
+	if (
+		start_stateline != StateLine.State.None
+		and (
+		start_stateline
+		== position_stateline(particle_line.points[ParticleLine.Point.End])
+		)
+	):
+		return false
+	
+	return true
 
 func get_interactions() -> Array[Interaction]:
 	var interactions : Array[Interaction] = []
@@ -399,11 +433,14 @@ func update_interactions() -> void:
 	for interaction:Interaction in get_interactions():
 		interaction.queue_update()
 
-func delete_line(particle_line: ParticleLine) -> void:
-	add_diagram_to_history()
+func delete_line(particle_line: ParticleLine, add_to_history:bool = true) -> void:
+	if add_to_history:
+		add_diagram_to_history()
 	
-	recursive_delete_line(particle_line)
-	
+	particle_line.delete()
+	remove_lonely_interactions(particle_line.connected_interactions)
+	check_rejoin_lines()
+
 	action()
 
 func delete_interaction(interaction: Interaction) -> void:
@@ -413,13 +450,10 @@ func delete_interaction(interaction: Interaction) -> void:
 	
 	action()
 
-func recursive_delete_line(particle_line: ParticleLine) -> void:
-	particle_line.delete()
-	for interaction:Interaction in particle_line.connected_interactions:
+func remove_lonely_interactions(interactions: Array[Interaction] = get_interactions()):
+	for interaction:Interaction in interactions:
 		if interaction.connected_lines.size() == 0:
 			interaction.queue_free()
-	
-	check_rejoin_lines()
 
 func recursive_delete_interaction(interaction: Interaction) -> void:
 	interaction.queue_free()
@@ -434,14 +468,14 @@ func recursive_delete_interaction(interaction: Interaction) -> void:
 			
 			if connected_interaction.connected_lines.size() == 1:
 				connected_interaction.queue_free()
-		recursive_delete_line(particle_line)
+		delete_line(particle_line, false)
 	
 	check_rejoin_lines()
 
 func split_line(line_to_split: ParticleLine, split_point: Vector2) -> void:
 	var new_start_point: Vector2 = line_to_split.points[ParticleLine.Point.Start]
 	line_to_split.points[ParticleLine.Point.Start] = split_point
-	place_line(new_start_point, split_point, line_to_split.base_particle)
+	draw_particle_line(new_start_point, split_point, line_to_split.base_particle)
 
 	line_to_split.queue_update()
 
@@ -508,7 +542,7 @@ func rejoin_lines(line_to_extend: ParticleLine, line_to_delete: ParticleLine) ->
 		point_to_move_to = ParticleLine.Point.Start
 	
 	line_to_extend.points[point_to_move] = line_to_delete.points[point_to_move_to]
-	recursive_delete_line(line_to_delete)
+	line_to_delete.delete()
 	line_to_extend.queue_update()
 
 func _on_interaction_dropped(interaction: Interaction) -> void:
@@ -587,7 +621,7 @@ func can_place_interaction(test_position: Vector2, test_interaction: Interaction
 
 	return true
 
-func place_line(
+func draw_particle_line(
 	start_position: Vector2, end_position: Vector2 = Vector2.ZERO,
 	base_particle: ParticleData.Particle = ParticleButtons.selected_particle
 ) -> void:
