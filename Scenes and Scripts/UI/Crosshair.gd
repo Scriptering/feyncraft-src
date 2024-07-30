@@ -66,6 +66,9 @@ func move_crosshair() -> void:
 		
 	visible = get_state_visible(StateManager.state)
 
+func positioni() -> Vector2i:
+	return position
+
 func get_try_position() -> Vector2:
 	var mouse_position : Vector2 = get_parent().get_local_mouse_position()
 	var try_position := Vector2(

@@ -50,18 +50,11 @@ func _ready() -> void:
 	super._ready()
 	
 	show_information_box.connect(EventBus.add_floating_menu)
-	request_deletion.connect(Diagram.recursive_delete_interaction)
-	
-	connect_to_lines()
+	request_deletion.connect(Diagram.delete_interaction)
 
 	Ball.frame = NORMAL
 	
 	queue_update()
-
-func connect_to_lines() -> void:
-	for particle_line:ParticleLine in Diagram.get_particle_lines():
-		if positioni() in particle_line.points and !particle_line in connected_lines:
-			connected_lines.append(particle_line)
 
 func _process(_delta: float) -> void:
 	if update_queued:
@@ -100,6 +93,17 @@ func _set_valid(new_valid: bool) -> void:
 func _set_valid_colourless(new_valid_colourless: bool) -> void:
 	valid_colourless = new_valid_colourless
 	update_valid_visual()
+
+func connect_line(particle_line:ParticleLine) -> void:
+	if particle_line in connected_lines:
+		return
+	
+	connected_lines.push_back(particle_line)
+	queue_update()
+
+func disconnect_line(particle_line:ParticleLine) -> void:
+	connected_lines.erase(particle_line)
+	queue_update()
 
 func update_valid_visual() -> void:
 	var current_ball_frame: int = Ball.frame
@@ -409,6 +413,9 @@ func _on_mouse_area_button_pressed() -> void:
 		else:
 			open_information_box()
 			$ButtonSoundComponent.play_button_down()
+
+func delete() -> void:
+	queue_free()
 
 func deconstructor() -> void:
 	if information_visible:

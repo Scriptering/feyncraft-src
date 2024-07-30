@@ -20,14 +20,9 @@ shader_parameter/line_thickness = 1.0
 [node name="particle" type="Node2D" groups=["lines"]]
 material = ExtResource("1_hvik3")
 script = ExtResource("1_4fl17")
-line_joint_start_length = null
-line_joint_end_length = null
 gluon_loop_length = 9
 click_area_width = 6.0
 text_gap = 14.0
-gluon_line_width = null
-particle_line_width = null
-photon_line_width = null
 
 [node name="line_joint_start" type="Line2D" parent="."]
 use_parent_material = true

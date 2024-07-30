@@ -37,12 +37,12 @@ func init(diagram: MainDiagram) -> void:
 
 class LineYSort:
 	static func InitialSorter(line1: ParticleLine, line2: ParticleLine) -> bool:
-		if line1.left_point.y < line2.left_point.y:
+		if line1.points[line1.left_point].y < line2.points[line2.left_point].y:
 			return true
 		return false
 		
 	static func FinalSorter(line1: ParticleLine, line2: ParticleLine) -> bool:
-		if line1.right_point.y < line2.right_point.y:
+		if line1.points[line1.right_point].y < line2.points[line1.right_point].y:
 			return true
 		return false
 
@@ -158,7 +158,7 @@ func group_connected_quarks(sorted_connected_lines: Array) -> Array:
 			continue
 		if current_group.size() == 0:
 			current_group.append(particle_line)
-		elif abs(particle_line.get_side_point(state).y - current_y_point) == Diagram.grid_size:
+		elif abs(particle_line.get_side_position(state).y - current_y_point) == Diagram.grid_size:
 			current_group.append(particle_line)
 		else:
 			if current_group.size() > 1:
@@ -166,7 +166,7 @@ func group_connected_quarks(sorted_connected_lines: Array) -> Array:
 			if particle_line != sorted_connected_lines[-1]:
 				current_group = [particle_line]
 				
-		current_y_point = particle_line.get_side_point(state).y
+		current_y_point = particle_line.get_side_position(state).y
 
 	if current_group.size() > 1 and current_group not in grouped_connected_lines:
 		grouped_connected_lines.append(current_group)
