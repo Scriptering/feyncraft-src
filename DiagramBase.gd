@@ -148,7 +148,7 @@ func create_state_diagram_interaction_positions(drawing_matrix: DrawingMatrix, s
 		if drawing_matrix.get_state_from_id(state_id) == StateLine.State.None:
 			continue
 		
-		for hadron:Array[int] in drawing_matrix.split_hadron_ids:
+		for hadron:Array in drawing_matrix.split_hadron_ids:
 			if state_id not in hadron:
 				continue
 		

@@ -30,7 +30,7 @@ var base_particle := ParticleData.Particle.none
 var particle := ParticleData.Particle.none : get = _get_particle
 var left_point: Vector2
 var right_point: Vector2
-var points := PackedVector2Array([[0, 0], [0, 0]]) : set = _set_points
+var points : Array[Vector2] = [Vector2.ZERO, Vector2.ZERO] : set = _set_points
 var line_vector : Vector2 = Vector2.ZERO:
 	get: return points[Point.End] - points[Point.Start]
 var particle_name : String : get = _get_particle_name
@@ -99,7 +99,7 @@ func set_anti() -> void:
 	else:
 		anti = Anti.noanti
 
-func _set_points(new_value: PackedVector2Array) -> void:
+func _set_points(new_value: Array[Vector2]) -> void:
 	points = new_value
 
 func set_left_and_right_points() -> void:

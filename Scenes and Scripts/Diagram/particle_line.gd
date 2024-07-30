@@ -31,7 +31,7 @@ var Initial: StateLine
 var Final: StateLine
 var Crosshair: Node
 
-var points : Array[Vector2i] = [Vector2i.LEFT, Vector2i.LEFT]
+var points : Array[Vector2i] = [Vector2i.LEFT, Vector2i.LEFT] : set = _set_points
 var prev_points : Array[Vector2i] = [Vector2i(0, 0), Vector2i(0, 0)]
 var line_vector : Vector2 = Vector2.ZERO:
 	get: return points[Point.End] - points[Point.Start]
@@ -95,17 +95,20 @@ func _ready() -> void:
 	line_texture = load('res://Textures/ParticlesAndLines/Lines/' + texture_dict[base_particle] + '.png')
 
 	set_textures()
-
-func _process(_delta: float) -> void:
-	if update_queued:
-		update_queued = false
-		update()
+	
+	set_anti()
+	set_left_and_right_points()
 
 func init(diagram: MainDiagram) -> void:
 	Diagram = diagram
 	Initial = diagram.StateLines[StateLine.State.Initial]
 	Final = diagram.StateLines[StateLine.State.Final]
 	Crosshair = diagram.Crosshair
+
+func _set_points(new_points: Array[Vector2i]) -> void:
+	points = new_points
+	set_anti()
+	set_left_and_right_points()
 
 func _get_particle() -> ParticleData.Particle:
 	return (anti * base_particle) as ParticleData.Particle
@@ -239,9 +242,6 @@ func update() -> void:
 		prev_points = points.duplicate()
 		
 		move_line()
-
-		set_left_and_right_points()
-		set_anti()
 
 		Arrow.visible = get_arrow_visiblity()
 		if Arrow.visible:

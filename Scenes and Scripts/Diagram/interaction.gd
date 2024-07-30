@@ -56,11 +56,6 @@ func _ready() -> void:
 	
 	queue_update()
 
-func _process(_delta: float) -> void:
-	if update_queued:
-		update_queued = false
-		update()
-
 func init(diagram: MainDiagram) -> void:
 	Diagram = diagram
 	Initial = diagram.StateLines[StateLine.State.Initial]
@@ -163,6 +158,9 @@ func update() -> void:
 	set_shader_parameters()
 	
 	valid = validate()
+	
+	if !valid:
+		pass
 
 func update_ball_hovering() -> void:
 	self.hovering = self.hovering
