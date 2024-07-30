@@ -30,7 +30,7 @@ var base_particle := ParticleData.Particle.none
 var particle := ParticleData.Particle.none : get = _get_particle
 var left_point: Vector2
 var right_point: Vector2
-var points := PackedVector2Array([[0, 0], [0, 0]]) : set = _set_points
+var points : Array[Vector2] = [Vector2.ZERO, Vector2.ZERO] : set = _set_points
 var line_vector : Vector2 = Vector2.ZERO:
 	get: return points[Point.End] - points[Point.Start]
 var particle_name : String : get = _get_particle_name
@@ -73,8 +73,8 @@ func _ready() -> void:
 
 func init(diagram: MiniDiagram) -> void:
 	Diagram = diagram
-	Initial = diagram.StateLines[StateLine.StateType.Initial]
-	Final = diagram.StateLines[StateLine.StateType.Final]
+	Initial = diagram.StateLines[StateLine.State.Initial]
+	Final = diagram.StateLines[StateLine.State.Final]
 
 func set_textures() -> void:
 	LineMiddle.texture = line_texture
@@ -99,7 +99,7 @@ func set_anti() -> void:
 	else:
 		anti = Anti.noanti
 
-func _set_points(new_value: PackedVector2Array) -> void:
+func _set_points(new_value: Array[Vector2]) -> void:
 	points = new_value
 
 func set_left_and_right_points() -> void:
@@ -177,17 +177,17 @@ func move_arrow() -> void:
 	Arrow.position = points[Point.Start] + self.line_vector / 2
 	Arrow.rotation = self.line_vector.angle()
 
-func get_on_state_line() -> StateLine.StateType:
+func get_on_state_line() -> StateLine.State:
 	if left_point.x == Initial.position.x and right_point.x == Final.position.x:
-		return StateLine.StateType.Both
+		return StateLine.State.Both
 		
 	if left_point.x == Initial.position.x:
-		return StateLine.StateType.Initial
+		return StateLine.State.Initial
 		
 	if right_point.x == Final.position.x:
-		return StateLine.StateType.Final
+		return StateLine.State.Final
 		
-	return StateLine.StateType.None
+	return StateLine.State.None
 
 func is_point_connected(point: Vector2) -> bool:
 	for interaction:Interaction in Diagram.get_interactions():
@@ -223,16 +223,16 @@ func get_points_connected() -> PointsConnected:
 
 func move_text() -> void:
 	match get_on_state_line():
-		StateLine.StateType.Both:
+		StateLine.State.Both:
 			Text.position = left_point + text_gap * Vector2.LEFT
 			SpareText.position = right_point + text_gap * Vector2.RIGHT
 			SpareText.show()
 			return
-		StateLine.StateType.Initial:
+		StateLine.State.Initial:
 			Text.position = left_point + text_gap * Vector2.LEFT
 			SpareText.hide()
 			return
-		StateLine.StateType.Final:
+		StateLine.State.Final:
 			Text.position = right_point + text_gap * Vector2.RIGHT
 			SpareText.hide()
 			return

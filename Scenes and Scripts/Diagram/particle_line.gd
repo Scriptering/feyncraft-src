@@ -22,6 +22,7 @@ signal clicked_on()
 
 enum Anti {anti = -1, noanti = +1}
 enum Point {Start = 0, End = 1, Invalid = -1}
+enum Side {left, right}
 enum PointsConnected {None, Left, Right, Both}
 enum Shade {Bright, Dark}
 
@@ -30,8 +31,8 @@ var Initial: StateLine
 var Final: StateLine
 var Crosshair: Node
 
-var points := PackedVector2Array([Vector2.LEFT, Vector2.LEFT]) : set = _set_points
-var prev_points := PackedVector2Array([[0, 0], [0, 0]])
+var points : Array[Vector2i] = [Vector2i.LEFT, Vector2i.LEFT] : set = _set_points
+var prev_points : Array[Vector2i] = [Vector2i(0, 0), Vector2i(0, 0)]
 var line_vector : Vector2 = Vector2.ZERO:
 	get: return points[Point.End] - points[Point.Start]
 
@@ -39,20 +40,20 @@ var base_particle := ParticleData.Particle.none
 var particle := ParticleData.Particle.none : get = _get_particle
 var particle_name : String : get = _get_particle_name
 
-var connected_interactions : Array[Interaction] : get = _get_connected_interactions
+var connected_interactions : Array[Interaction] = [null, null]
 
 var anti := 1 : set = _set_anti
-var is_placed := false
 var on_state_line := StateLine
 var quantum_numbers: Array : get = _get_quantum_numbers
 var dimensionality: float
 var being_deleted : bool = false
+var update_queued: bool = true
 
 var has_colour := false
 var has_shade := false
 
-var left_point: Vector2 = Vector2.LEFT
-var right_point: Vector2 = Vector2.LEFT
+var left_point: Point = Point.Start
+var right_point: Point = Point.End
 
 var moving_point : Point = Point.End
 
@@ -83,7 +84,7 @@ var line_texture: Texture2D
 var show_labels: bool = true
 
 func _ready() -> void:
-	request_deletion.connect(Diagram.recursive_delete_line)
+	request_deletion.connect(Diagram.delete_line)
 	
 	has_colour = base_particle in ParticleData.COLOUR_PARTICLES
 	has_shade = base_particle in ParticleData.SHADED_PARTICLES
@@ -95,24 +96,19 @@ func _ready() -> void:
 
 	set_textures()
 	
-	if is_placed:
-		place()
-	
-	update_line()
-	connect_to_interactions()
-
-func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton:
-		return
-	
-	#if event.button_index == MOUSE_BUTTON_LEFT and is_hovered():
-		#clicked_on.emit(event)
+	set_anti()
+	set_left_and_right_points()
 
 func init(diagram: MainDiagram) -> void:
 	Diagram = diagram
-	Initial = diagram.StateLines[StateLine.StateType.Initial]
-	Final = diagram.StateLines[StateLine.StateType.Final]
+	Initial = diagram.StateLines[StateLine.State.Initial]
+	Final = diagram.StateLines[StateLine.State.Final]
 	Crosshair = diagram.Crosshair
+
+func _set_points(new_points: Array[Vector2i]) -> void:
+	points = new_points
+	set_anti()
+	set_left_and_right_points()
 
 func _get_particle() -> ParticleData.Particle:
 	return (anti * base_particle) as ParticleData.Particle
@@ -137,12 +133,6 @@ func set_anti() -> void:
 			anti = Anti.anti
 	else:
 		anti = Anti.noanti
-
-func _set_points(new_value: PackedVector2Array) -> void:
-	points = new_value
-	
-	if is_inside_tree() and !being_deleted and is_placed:
-		connect_to_interactions()
 	
 func set_textures() -> void:
 	LineMiddle.texture = line_texture
@@ -152,10 +142,13 @@ func set_textures() -> void:
 func _get_particle_name() -> String:
 	return ParticleData.Particle.keys()[ParticleData.Particle.values().find(self.particle)]
 
-func get_side_point(state: StateLine.StateType) -> Vector2:
-	if state == StateLine.StateType.Initial:
+func get_side_point(side: Side) -> Point:
+	if side == Side.left:
 		return left_point
 	return right_point
+
+func get_side_position(side: int) -> Vector2i:
+	return points[get_side_point(side)]
 
 func set_dimensionality() -> void:
 	if base_particle in ParticleData.FERMIONS:
@@ -163,56 +156,44 @@ func set_dimensionality() -> void:
 	elif base_particle in ParticleData.BOSONS:
 		dimensionality = ParticleData.BOSON_DIMENSIONALITY
 
-func connect_to_interactions() -> void:
-	for interaction:Interaction in Diagram.get_interactions():
-		if interaction.position in points and !self in interaction.connected_lines:
-			interaction.connected_lines.append(self)
-		elif !interaction.position in points:
-			interaction.connected_lines.erase(self)
-
 func set_left_and_right_points() -> void:
 	if points[Point.Start].x <= points[Point.End].x:
-		left_point = points[Point.Start]
-		right_point = points[Point.End]
+		left_point = Point.Start
+		right_point = Point.End
 	else:
-		left_point = points[Point.End]
-		right_point = points[Point.Start]
+		left_point = Point.End
+		right_point = Point.Start
 
-func get_on_state_line() -> StateLine.StateType:
-	if left_point.x == Initial.position.x and right_point.x == Final.position.x:
-		return StateLine.StateType.Both
-		
-	if left_point.x == Initial.position.x:
-		return StateLine.StateType.Initial
-		
-	if right_point.x == Final.position.x:
-		return StateLine.StateType.Final
-		
-	return StateLine.StateType.None
+func connect_interaction(interaction: Interaction, point:Point = points.find(interaction.positioni())) -> void:
+	connected_interactions[point] = interaction
 
-func _get_connected_interactions() -> Array[Interaction]:
-	connected_interactions.clear()
-	for interaction:Interaction in Diagram.get_interactions():
-		if self in interaction.connected_lines:
-			connected_interactions.append(interaction)
-
-	return connected_interactions
+func get_on_state_line() -> StateLine.State:
+	if points[left_point].x == Initial.position.x and points[right_point].x == Final.position.x:
+		return StateLine.State.Both
+		
+	if points[left_point].x == Initial.position.x:
+		return StateLine.State.Initial
+		
+	if points[right_point].x == Final.position.x:
+		return StateLine.State.Final
+		
+	return StateLine.State.None
 
 func get_interaction_at_point(point: Point) -> Interaction:
 	var interaction_at_point : Interaction
 	for interaction:Interaction in self.connected_interactions:
-		if points[point] == interaction.position:
+		if points[point] == interaction.positioni():
 			interaction_at_point = interaction
 	return interaction_at_point
 
-func is_point_connected(point: Vector2) -> bool:
+func is_point_connected(point: Vector2i) -> bool:
 	for interaction:Interaction in self.connected_interactions:
-		if point == interaction.position:
+		if point == interaction.positioni():
 			return true
 	return false
 
-func is_position_on_line(test_position: Vector2) -> bool:
-	var split_vector: Vector2 = test_position-points[Point.Start]
+func is_position_on_line(test_position: Vector2i) -> bool:
+	var split_vector: Vector2 = test_position - points[Point.Start]
 	
 	if test_position in points:
 		return false
@@ -225,19 +206,22 @@ func is_position_on_line(test_position: Vector2) -> bool:
 	
 	return true
 
+func is_vertical() -> bool:
+	return points[Point.Start].x == points[Point.End].x
+
 func get_points_connected() -> PointsConnected:
-	if is_point_connected(left_point) and is_point_connected(right_point):
+	if connected_interactions[left_point] and connected_interactions[right_point]:
 		return PointsConnected.Both
-	
-	if is_point_connected(left_point):
+
+	if connected_interactions[left_point]:
 		return PointsConnected.Left
 	
-	if is_point_connected(right_point):
+	if connected_interactions[right_point]:
 		return PointsConnected.Right
 	
 	return PointsConnected.None
 
-func get_point_at_position(test_position: Vector2) -> Point:
+func get_point_at_position(test_position: Vector2i) -> Point:
 	if test_position == points[Point.Start]:
 		return Point.Start
 	elif test_position == points[Point.End]:
@@ -245,39 +229,41 @@ func get_point_at_position(test_position: Vector2) -> Point:
 	return Point.Invalid
 
 func get_connected_point(interaction: Interaction) -> Point:
-	return points.find(interaction.position) as Point
+	return connected_interactions.find(interaction) as Point
 
 func get_unconnected_point(interaction: Interaction) -> Point:
 	return (get_connected_point(interaction)+1)%2 as Point
 
-func update_line() -> void:
-	if !is_placed:
-		points[moving_point] = Crosshair.position
-	
+func queue_update() -> void:
+	update_queued = true
+
+func update() -> void:
 	if points != prev_points:
 		prev_points = points.duplicate()
-
+		
 		move_line()
-
-		set_left_and_right_points()
-		set_anti()
 
 		Arrow.visible = get_arrow_visiblity()
 		if Arrow.visible:
 			move_arrow()
 
-		set_text_texture()
-	
+	set_text_texture()
 	move_text()
 	set_text_visiblity()
 
+func move(point:Point, to_position: Vector2i) -> void:
+	points[point] = to_position
+	queue_update()
 
 func move_line() -> void:
-	pass
-	LineJointStart.points[Point.Start] = points[Point.Start]
-	LineJointEnd.points[Point.End] = points[Point.End]
+	LineJointStart.points[Point.Start] = Vector2(points[Point.Start])
+	LineJointEnd.points[Point.End] = Vector2(points[Point.End])
 	
-	LineJointStart.points[Point.End] = points[Point.Start] + line_joint_start_length * self.line_vector.normalized() 
+	LineJointStart.points[Point.End] = (
+		Vector2(points[Point.Start])
+		+ line_joint_start_length
+		* self.line_vector.normalized() 
+	)
 	
 	if base_particle == ParticleData.Particle.gluon:
 		var number_of_gluon_loops : int = floor((self.line_vector.length() - line_joint_start_length - line_joint_end_length) / gluon_loop_length)
@@ -287,7 +273,11 @@ func move_line() -> void:
 			gluon_loop_length * number_of_gluon_loops * self.line_vector.normalized()
 		)
 	else:
-		LineJointEnd.points[Point.Start] = points[Point.End] - line_joint_end_length * self.line_vector.normalized() 
+		LineJointEnd.points[Point.Start] = (
+			Vector2(points[Point.End])
+			- line_joint_end_length
+			* self.line_vector.normalized()
+		)
 	
 	LineMiddle.points[Point.Start] = LineJointStart.points[Point.End]
 	LineMiddle.points[Point.End] = LineJointEnd.points[Point.Start]
@@ -316,34 +306,34 @@ func get_arrow_visiblity() -> bool:
 	return true
 
 func move_arrow() -> void:
-	Arrow.position = points[Point.Start] + self.line_vector / 2
+	Arrow.position = Vector2(points[Point.Start]) + self.line_vector / 2
 	Arrow.rotation = self.line_vector.angle()
 
 func move_text() -> void:
 	match get_on_state_line():
-		StateLine.StateType.Both:
-			Text.position = left_point + text_gap * Vector2.LEFT
-			SpareText.position = right_point + text_gap * Vector2.RIGHT
+		StateLine.State.Both:
+			Text.position = Vector2(points[left_point]) + text_gap * Vector2.LEFT
+			SpareText.position = Vector2(points[right_point]) + text_gap * Vector2.RIGHT
 			return
-		StateLine.StateType.Initial:
-			Text.position = left_point + text_gap * Vector2.LEFT
+		StateLine.State.Initial:
+			Text.position = Vector2(points[left_point]) + text_gap * Vector2.LEFT
 			return
-		StateLine.StateType.Final:
-			Text.position = right_point + text_gap * Vector2.RIGHT
+		StateLine.State.Final:
+			Text.position = Vector2(points[right_point]) + text_gap * Vector2.RIGHT
 			return
 	
 	if points[Point.Start] == points[Point.End]:
-		Text.position = left_point + text_gap * Vector2.LEFT
+		Text.position = Vector2(points[left_point]) + text_gap * Vector2.LEFT
 		return
 	
 	match get_points_connected():
 		PointsConnected.Left:
-			Text.position = right_point + text_gap * Vector2.RIGHT
+			Text.position = Vector2(points[right_point]) + text_gap * Vector2.RIGHT
 		PointsConnected.Right:
-			Text.position = left_point + text_gap * Vector2.LEFT
+			Text.position = Vector2(points[left_point]) + text_gap * Vector2.LEFT
 	
 	Text.position = (
-		(right_point - left_point) / 2 + left_point +
+		(Vector2(points[right_point]) - Vector2(points[left_point])) / 2 + Vector2(points[left_point]) +
 		text_gap * self.line_vector.orthogonal().normalized()
 	)
 
@@ -354,12 +344,12 @@ func set_text_visiblity() -> void:
 		return
 	
 	match get_on_state_line():
-		StateLine.StateType.None:
+		StateLine.State.None:
 			if !show_labels:
 				Text.hide()
 				SpareText.hide()
 				return
-		StateLine.StateType.Both:
+		StateLine.State.Both:
 			Text.show()
 			SpareText.show()
 			return
@@ -374,63 +364,38 @@ func set_text_texture() -> void:
 	if points[Point.End].x == points[Point.Start].x and base_particle == ParticleData.Particle.W:
 		Text.texture = ParticleData.particle_textures['W_0']
 
-func place() -> void:
-	if !is_placement_valid():
-		request_deletion.emit(self)
-		return
-	is_placed = true
-	connect_to_interactions()
-
-func is_placement_valid() -> bool:
-	if points[Point.Start] == points[Point.End]:
+func is_duplicate(particle_line: ParticleLine) -> bool:
+	if particle_line == self:
 		return false
 	
-	if is_line_copy():
+	if !(particle_line.points[Point.Start] in points):
 		return false
 	
-	if is_line_overlapping():
-		return false
-	
-	if are_both_points_on_same_state_line():
+	if !(particle_line.points[Point.End] in points):
 		return false
 	
 	return true
 
-func are_both_points_on_same_state_line() -> bool:
-	if get_on_state_line() == StateLine.StateType.None:
+func is_overlapping(particle_line: ParticleLine) -> bool:
+	if particle_line == self:
 		return false
 	
-	return Diagram.get_on_stateline(points[Point.Start]) == Diagram.get_on_stateline(points[Point.End])
-
-func pick_up(point_index_to_pick_up: Point) -> void:
-	is_placed = false
-	moving_point = point_index_to_pick_up
+	if !(
+		particle_line.line_vector.normalized() == line_vector.normalized()
+		|| particle_line.line_vector.normalized() == -line_vector.normalized()
+	):
+		return false
 	
-func is_line_copy() -> bool:
-	for particle_line:ParticleLine in Diagram.get_particle_lines():
-		if particle_line == self:
-			continue
-		if !particle_line.is_placed:
-			continue
-		if (points[Point.Start] in particle_line.points and points[Point.End] in particle_line.points and particle_line != self):
-			return true
-	return false
-
-func is_line_overlapping() -> bool:
-	for particle_line:ParticleLine in Diagram.get_particle_lines():
-		if !particle_line.is_placed:
-			continue
-		if !points[Point.Start] in particle_line.points:
-			continue 
-		if particle_line.is_position_on_line(points[Point.End]):
-			return true
-	return false
+	return (
+		is_position_on_line(particle_line.points[ParticleLine.Point.Start])
+		|| is_position_on_line(particle_line.points[ParticleLine.Point.End])
+	)
+	
+	return true
 
 func is_hovered() -> bool:
-	print(get_local_mouse_position())
-	
 	var v := line_vector.normalized();
-	var m := get_local_mouse_position() - points[Point.Start];
+	var m := get_local_mouse_position() - Vector2(points[Point.Start]);
 
 	var lambda := m.x*v.x + m.y*v.y
 	var rho :=   -m.x*v.y + m.y*v.x
@@ -444,13 +409,11 @@ func is_hovered() -> bool:
 	return true
 
 func delete() -> void:
-	queue_free()
 	deconstructor()
+	queue_free()
 
 func deconstructor() -> void:
 	being_deleted = true
-	for interaction:Interaction in self.connected_interactions:
-		interaction.connected_lines.erase(self)
 	Diagram.update_statelines()
 	points[Point.Start] = Vector2.LEFT
 	points[Point.End] = Vector2.LEFT

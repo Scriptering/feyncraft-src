@@ -7,7 +7,7 @@ enum {UNCONNECTED, CONNECTED}
 @export var unconnected_particle_count: PackedInt32Array = [0, 0, 0]
 
 func add_interaction(
-	interaction_state : StateLine.StateType = StateLine.StateType.None,
+	interaction_state : StateLine.State = StateLine.State.None,
 	id : int = calculate_new_interaction_id(interaction_state)
 ) -> void:
 	super.add_interaction(interaction_state, id)
@@ -16,7 +16,7 @@ func add_interaction(
 
 func add_unconnected_interaction(
 	unconnected_particles: Array = [],
-	interaction_state: StateLine.StateType = StateLine.StateType.None,
+	interaction_state: StateLine.State = StateLine.State.None,
 	id : int = calculate_new_interaction_id(interaction_state)
 ) -> void:
 	super.add_interaction(interaction_state, id)
@@ -75,9 +75,9 @@ func get_unconnected_particle_count() -> int:
 	
 	return particle_count
 
-func get_unconnected_state_particle_count(state: StateLine.StateType) -> int:
-	if state == StateLine.StateType.Both:
-		return unconnected_particle_count[StateLine.StateType.Initial] + unconnected_particle_count[StateLine.StateType.Final]
+func get_unconnected_state_particle_count(state: StateLine.State) -> int:
+	if state == StateLine.State.Both:
+		return unconnected_particle_count[StateLine.State.Initial] + unconnected_particle_count[StateLine.State.Final]
 
 	return unconnected_particle_count[state]
 
@@ -89,7 +89,7 @@ func find_unconnected_particle(particle: ParticleData.Particle) -> PackedInt32Ar
 
 	return found_ids
 
-func find_all_unconnected_state_particle(particle: ParticleData.Particle, state: StateLine.StateType) -> PackedInt32Array:
+func find_all_unconnected_state_particle(particle: ParticleData.Particle, state: StateLine.State) -> PackedInt32Array:
 	var found_ids: PackedInt32Array = []
 	for id:int in range(get_starting_state_id(state), get_ending_state_id(state)):
 		for unconnected_particle:ParticleData.Particle in unconnected_matrix[id]:
@@ -112,7 +112,7 @@ func get_unconnected_base_particles() -> Array:
 			return abs(particle) as ParticleData.Particle
 	)
 
-func get_unconnected_state(state: StateLine.StateType) -> Array:
+func get_unconnected_state(state: StateLine.State) -> Array:
 	return unconnected_matrix.slice(get_starting_state_id(state), get_ending_state_id(state))
 
 func is_extreme_particle(particle: ParticleData.Particle, entry_factor: EntryFactor, state_id: int) -> bool:
@@ -124,7 +124,7 @@ func is_extreme_particle(particle: ParticleData.Particle, entry_factor: EntryFac
 func get_extreme_points(entry_factor: EntryFactor) -> PackedInt32Array:
 	var extreme_points: PackedInt32Array = []
 
-	for state_id:int in get_state_ids(StateLine.StateType.Both):
+	for state_id:int in get_state_ids(StateLine.State.Both):
 		if unconnected_matrix[state_id].any(
 			func(particle: ParticleData.Particle) -> bool:
 				return is_extreme_particle(particle, entry_factor, state_id)
@@ -137,7 +137,7 @@ func get_extreme_points(entry_factor: EntryFactor) -> PackedInt32Array:
 func get_extreme_states(entry_factor: EntryFactor) -> Array:
 	var extreme_states := []
 	
-	for state_id:int in get_state_ids(StateLine.StateType.Both):
+	for state_id:int in get_state_ids(StateLine.State.Both):
 		extreme_states.push_back(unconnected_matrix[state_id].filter(
 			func(particle: ParticleData.Particle) -> bool:
 				return is_extreme_particle(particle, entry_factor, state_id)

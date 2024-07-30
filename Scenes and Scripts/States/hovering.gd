@@ -68,6 +68,3 @@ func interaction_grabbed_and_moved() -> void:
 	start_placing = true
 	grabbed_interaction.pick_up()
 	grabbed_interaction.start_grab_position = grab_start_position
-	
-	Diagram.action()
-	

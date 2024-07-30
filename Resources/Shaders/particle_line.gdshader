@@ -31,7 +31,7 @@ vec4 add_outline(vec2 pixel_size, sampler2D Texture, vec2 uv)
 	outline += texture(Texture, uv + vec2(-size.x, -size.y)).a;
 	outline += texture(Texture, uv + vec2(size.x, -size.y)).a;
 	outline = min(outline, 1.0);
-	
+
 	vec4 color = texture(Texture, uv);
 	return mix(color, line_color, outline - color.a);
 }
@@ -39,19 +39,19 @@ vec4 add_outline(vec2 pixel_size, sampler2D Texture, vec2 uv)
 vec4 blend_transparency(vec4 color, vec2 uv)
 {
 	float alpha_difference = end_interaction_strength_alpha - start_interaction_strength_alpha;
-	
+
 	return vec4(color.xyz, start_interaction_strength_alpha + alpha_difference * uv.x);
 }
 
 void fragment()
 {
 	vec4 color = texture(SCREEN_TEXTURE, SCREEN_UV);
-	
+
 	color = add_outline(TEXTURE_PIXEL_SIZE, TEXTURE, UV);
-	
+
 	if (color.a > 0.0001 && interaction_strength_showing) {
 		color = blend_transparency(color, clamped_UV);
 	}
-	
+
 	COLOR = vec4(texture(colour_scheme, vec2(color.r, color.g)).rgb, color.a);
 }

@@ -12,11 +12,11 @@ func initialise_from_connection_matrix(from_connection_matrix: ConnectionMatrix)
 	
 	make_drawable()
 
-func get_interaction_positions(grid_size: int = 1) -> PackedVector2Array:
+func get_interaction_positions(grid_size: int = 1) -> Array[Vector2i]:
 	if grid_size == 1:
 		return normalised_interaction_positions
 	
-	var interaction_positions: PackedVector2Array = normalised_interaction_positions.duplicate()
+	var interaction_positions: Array[Vector2i] = normalised_interaction_positions.duplicate()
 	
 	for i:int in range(interaction_positions.size()):
 		interaction_positions[i] *= grid_size
@@ -27,7 +27,7 @@ func add_interaction_position(position: Vector2i, grid_size: int, id: int = norm
 	normalised_interaction_positions.insert(id, position/grid_size)
 
 func add_interaction_with_position(
-	interaction_position: Vector2i, grid_size: int, interaction_state: StateLine.StateType = StateLine.StateType.None,
+	interaction_position: Vector2i, grid_size: int, interaction_state: StateLine.State = StateLine.State.None,
 	id : int = calculate_new_interaction_id(interaction_state)
 ) -> void:
 
@@ -59,8 +59,8 @@ func seperate_double_connections() -> void:
 				continue
 			
 			var both_hadrons := (
-				get_state_from_id(i) != StateLine.StateType.None and
-				get_state_from_id(j) != StateLine.StateType.None
+				get_state_from_id(i) != StateLine.State.None and
+				get_state_from_id(j) != StateLine.State.None
 			)
 			
 			if both_hadrons:
@@ -77,7 +77,7 @@ func divert_connection(
 	var seperating_particle: ParticleData.Particle = connection_matrix[divert_from_id][divert_to_id][0]
 	
 	disconnect_interactions(divert_from_id, divert_to_id, seperating_particle)
-	add_interaction(StateLine.StateType.None, new_id)
+	add_interaction(StateLine.State.None, new_id)
 	connect_interactions(divert_from_id, new_id, seperating_particle)
 	connect_interactions(new_id, divert_to_id, seperating_particle)
 
@@ -92,7 +92,7 @@ func is_double_connection(from_id: int, to_id: int, bidirectional : bool = false
 
 func get_hadron_ids() -> PackedInt32Array:
 	var hadron_ids: PackedInt32Array = []
-	for state_id:int in get_state_count(StateLine.StateType.Both):
+	for state_id:int in get_state_count(StateLine.State.Both):
 		if get_connected_count(state_id, true) > 1:
 			hadron_ids.append(state_id)
 	
@@ -163,9 +163,9 @@ func split_hadron(hadron_id: int) -> void:
 func get_directly_connected_ids() -> PackedInt32Array:
 	var directly_connected_ids: PackedInt32Array = []
 	
-	for from_id in get_state_ids(StateLine.StateType.Both):
+	for from_id in get_state_ids(StateLine.State.Both):
 		for to_id in get_connected_ids(from_id):
-			if get_state_from_id(to_id) == StateLine.StateType.None:
+			if get_state_from_id(to_id) == StateLine.State.None:
 				continue
 			
 			directly_connected_ids.push_back(from_id)
@@ -184,7 +184,7 @@ func get_id_hadron_index(id: int) -> int:
 func reorder_hadrons() -> void:
 	var directly_connected_ids: PackedInt32Array = get_directly_connected_ids()
 
-	for id:int in get_state_ids(StateLine.StateType.Both):
+	for id:int in get_state_ids(StateLine.State.Both):
 		if get_connected_count(id, true) > 1:
 			breakpoint
 
@@ -205,12 +205,12 @@ func reorder_hadrons() -> void:
 
 		swap_ids(swap_id, swap_id + abs(from_hadron_index - to_hadron_index))
 
-	for id:int in get_state_ids(StateLine.StateType.Both):
+	for id:int in get_state_ids(StateLine.State.Both):
 		if get_connected_count(id, true) > 1:
 			breakpoint
 
 func add_interaction(
-	interaction_state: StateLine.StateType = StateLine.StateType.None,
+	interaction_state: StateLine.State = StateLine.State.None,
 	id : int = calculate_new_interaction_id(interaction_state)
 ) -> void:
 	super.add_interaction(interaction_state, id)
@@ -232,7 +232,7 @@ func remove_empty_rows() -> void:
 			remove_interaction(id)
 
 func rejoin_double_connections() -> void:
-	for id:int in get_state_ids(StateLine.StateType.None):
+	for id:int in get_state_ids(StateLine.State.None):
 		if !(get_connected_count(id) == 1 and get_connected_count(id, false, true) == 1):
 			continue
 		
@@ -330,7 +330,7 @@ func get_mesons() -> Array:
 	)
 
 func is_lonely_extreme_point(id: int, entry_factor: EntryFactor = EntryFactor.Both) -> bool:
-	if get_state_from_id(id) != StateLine.StateType.None or get_connected_ids(id, true).size() != 1:
+	if get_state_from_id(id) != StateLine.State.None or get_connected_ids(id, true).size() != 1:
 		return false
 	
 	if entry_factor == EntryFactor.Both:
@@ -341,7 +341,7 @@ func is_lonely_extreme_point(id: int, entry_factor: EntryFactor = EntryFactor.Bo
 func get_lonely_extreme_points(entry_factor: EntryFactor) -> PackedInt32Array:
 	var lonely_extreme_points: PackedInt32Array = []
 	
-	for id:int in get_state_ids(StateLine.StateType.None):
+	for id:int in get_state_ids(StateLine.State.None):
 		if is_lonely_extreme_point(id, entry_factor):
 			lonely_extreme_points.push_back(id)
 	
@@ -352,4 +352,3 @@ func get_lonely_entry_points() -> PackedInt32Array:
 
 func get_lonely_exit_points() -> PackedInt32Array:
 	return get_lonely_extreme_points(EntryFactor.Exit)
-

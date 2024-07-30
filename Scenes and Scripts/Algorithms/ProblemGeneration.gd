@@ -40,7 +40,7 @@ func generate(
 			break
 		
 		if SolutionGeneration.generate_diagrams(
-			state_interactions[StateLine.StateType.Initial], state_interactions[StateLine.StateType.Final], 0, 6,
+			state_interactions[StateLine.State.Initial], state_interactions[StateLine.State.Final], 0, 6,
 			SolutionGeneration.generate_useable_interactions_from_particles(useable_particles), SolutionGeneration.Find.One
 		) != [null]:
 			break
@@ -91,7 +91,7 @@ func is_energy_conserved(state_interactions: Array) -> bool:
 		)
 	)
 	
-	for state:StateLine.StateType in StateLine.STATES:
+	for state:StateLine.State in StateLine.STATES:
 		if state_base_particles[state].size() != 1:
 			continue
 		
@@ -169,7 +169,7 @@ func generate_state_interactions(
 	var interaction_count: int = randi_range(min_particle_count, max_particle_count)
 	var interaction_count_left: int = interaction_count
 	var state_interactions : Array = [[], []]
-	var current_state : StateLine.StateType = StateLine.StateType.Initial
+	var current_state : StateLine.State = StateLine.State.Initial
 	var W_count : int = 0
 	
 	for particle_count in max_particle_count:
@@ -193,7 +193,7 @@ func generate_state_interactions(
 				quantum_number_difference, useable_state_interactions, interaction_count_left, W_count, state_factor
 			)
 		
-		current_state = (current_state + 1) % 2 as StateLine.StateType
+		current_state = (current_state + 1) % 2 as StateLine.State
 		
 		if next_state_interaction == []:
 			return []
@@ -282,8 +282,8 @@ func setup_new_problem(problem: Problem) -> Problem:
 	)) else SolutionGeneration.Find.LowestOrder
 	
 	var generated_solutions: Array[ConnectionMatrix] = SolutionGeneration.generate_diagrams(
-		problem.state_interactions[StateLine.StateType.Initial],
-		problem.state_interactions[StateLine.StateType.Final],
+		problem.state_interactions[StateLine.State.Initial],
+		problem.state_interactions[StateLine.State.Final],
 		min_degree, max_degree,
 		SolutionGeneration.get_useable_interactions_from_particles(problem.allowed_particles),
 		find
@@ -292,7 +292,7 @@ func setup_new_problem(problem: Problem) -> Problem:
 	if generated_solutions == [null]:
 		return null
 	
-	problem.degree = generated_solutions.front().state_count[StateLine.StateType.None]
+	problem.degree = generated_solutions.front().state_count[StateLine.State.None]
 	problem.solution_count = calculate_solution_count(problem.degree, generated_solutions.size())
 	
 	return problem

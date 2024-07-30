@@ -174,8 +174,8 @@ func enter_problem_creation() -> void:
 	if Globals.creating_problem.state_interactions != [[],[]]:
 		EventBus.draw_diagram_raw(
 			SolutionGeneration.generate_diagrams(
-				Globals.creating_problem.state_interactions[StateLine.StateType.Initial],
-				Globals.creating_problem.state_interactions[StateLine.StateType.Final],
+				Globals.creating_problem.state_interactions[StateLine.State.Initial],
+				Globals.creating_problem.state_interactions[StateLine.State.Final],
 				Globals.creating_problem.degree, Globals.creating_problem.degree,
 				SolutionGeneration.get_useable_interactions_from_particles(Globals.creating_problem.allowed_particles),
 				SolutionGeneration.Find.One
@@ -191,7 +191,7 @@ func enter_solution_creation() -> void:
 	
 	var creating_problem: Problem = Globals.creating_problem
 	var drawn_diagram: DrawingMatrix = Diagram.generate_drawing_matrix_from_diagram()
-	for state:StateLine.StateType in StateLine.STATES:
+	for state:StateLine.State in StateLine.STATES:
 		Globals.creating_problem.state_interactions[state] = drawn_diagram.reduce_to_connection_matrix().get_state_interactions(state)
 	
 	if !ProblemGeneration.setup_new_problem(creating_problem):

@@ -21,7 +21,6 @@ const MAXIMUM_DIMENSIONALITY : float = 4
 var Diagram: MainDiagram
 var Initial: StateLine
 var Final: StateLine
-var Crosshair: Node
 var StateManager: Node
 
 var InformationBox := preload("res://Scenes and Scripts/UI/Info/interaction_information.tscn")
@@ -45,26 +44,22 @@ var valid_colourless := true: set = _set_valid_colourless
 var hovering := false:
 	get:
 		return grab_area_hovered
+var update_queued := true
 
 func _ready() -> void:
 	super._ready()
 	
 	show_information_box.connect(EventBus.add_floating_menu)
-	request_deletion.connect(Diagram.recursive_delete_interaction)
-	
-	for particle_line:ParticleLine in Diagram.get_particle_lines():
-		if position in particle_line.points and !particle_line in connected_lines:
-			connected_lines.append(particle_line)
+	request_deletion.connect(Diagram.delete_interaction)
 
 	Ball.frame = NORMAL
 	
-	update_interaction()
+	queue_update()
 
 func init(diagram: MainDiagram) -> void:
 	Diagram = diagram
-	Initial = diagram.StateLines[StateLine.StateType.Initial]
-	Final = diagram.StateLines[StateLine.StateType.Final]
-	Crosshair = diagram.Crosshair
+	Initial = diagram.StateLines[StateLine.State.Initial]
+	Final = diagram.StateLines[StateLine.State.Final]
 	StateManager = diagram.StateManager
 
 func _grab_area_hovered_changed(new_value: bool) -> void:
@@ -94,6 +89,17 @@ func _set_valid_colourless(new_valid_colourless: bool) -> void:
 	valid_colourless = new_valid_colourless
 	update_valid_visual()
 
+func connect_line(particle_line:ParticleLine) -> void:
+	if particle_line in connected_lines:
+		return
+	
+	connected_lines.push_back(particle_line)
+	queue_update()
+
+func disconnect_line(particle_line:ParticleLine) -> void:
+	connected_lines.erase(particle_line)
+	queue_update()
+
 func update_valid_visual() -> void:
 	var current_ball_frame: int = Ball.frame
 	
@@ -111,7 +117,7 @@ func update_dot_visual() -> void:
 		else:
 			Dot.visible = false
 	
-	if get_on_state_line() != StateLine.StateType.None:
+	if get_on_state_line() != StateLine.State.None:
 		Dot.frame = 1
 		Dot.visible = true
 		return
@@ -121,26 +127,26 @@ func update_dot_visual() -> void:
 	else:
 		Dot.frame = 0
 
-func get_on_state_line() -> StateLine.StateType:
+func get_on_state_line() -> StateLine.State:
 	if position.x == Initial.position.x and position.x == Final.position.x:
-		return StateLine.StateType.Both
+		return StateLine.State.Both
 		
 	if position.x == Initial.position.x:
-		return StateLine.StateType.Initial
+		return StateLine.State.Initial
 		
 	if position.x == Final.position.x:
-		return StateLine.StateType.Final
+		return StateLine.State.Final
 		
-	return StateLine.StateType.None
+	return StateLine.State.None
 
-func update_interaction() -> void:
-	if grabbed:
-		move_interaction()
-		return
-		
-	elif should_request_deletion():
+func queue_update() -> void:
+	update_queued = true
+
+func update() -> void:
+	if should_request_deletion():
 		request_deletion.emit(self)
 		return
+
 	update_dot_visual()
 	update_ball_hovering()
 	if connected_lines.size() < 2 and information_visible:
@@ -152,6 +158,9 @@ func update_interaction() -> void:
 	set_shader_parameters()
 	
 	valid = validate()
+	
+	if !valid:
+		pass
 
 func update_ball_hovering() -> void:
 	self.hovering = self.hovering
@@ -209,8 +218,8 @@ func should_request_deletion() -> bool:
 		return true
 	return false
 
-func move_interaction() -> void:
-	position = Crosshair.position
+func move(to_position: Vector2i) -> void:
+	position = to_position
 
 func has_particle_connected(particle: ParticleData.Particle) -> bool:
 	return particle in self.connected_particles
@@ -263,7 +272,7 @@ func get_invalid_quantum_numbers() -> Array[ParticleData.QuantumNumber]:
 	return invalid_quantum_numbers
 
 func get_unconnected_line_vector(particle_line: ParticleLine) -> Vector2:
-	return particle_line.points[particle_line.get_unconnected_point(self)] - position
+	return particle_line.points[particle_line.get_unconnected_point(self)] - positioni()
 
 func get_side_connected_lines(side: Interaction.Side) -> Array[ParticleLine]:
 	var side_connected_lines : Array[ParticleLine] = []
@@ -351,14 +360,11 @@ func is_interaction_in_list() -> bool:
 				return sorted_connected_base_particles in interaction_type
 	))
 
+func positioni() -> Vector2i:
+	return position
+
 func is_hovered() -> bool:
 	return hovering
-
-func pick_up() -> void:
-	super.pick_up()
-	
-	for particle_line:ParticleLine in connected_lines:
-		particle_line.pick_up(particle_line.get_point_at_position(position))
 
 func get_new_information_id() -> int:
 	for i:int in range(1, INFORMATION_ID_MAXIMUM):
@@ -399,6 +405,9 @@ func _on_mouse_area_button_pressed() -> void:
 		else:
 			open_information_box()
 			$ButtonSoundComponent.play_button_down()
+
+func delete() -> void:
+	queue_free()
 
 func deconstructor() -> void:
 	if information_visible:
@@ -473,7 +482,7 @@ func get_vision_vectors(vision: Globals.Vision) -> PackedVector2Array:
 	)
 	
 	if vision_particle_line_vectors.size() == 1:
-		if get_on_state_line() == StateLine.StateType.None:
+		if get_on_state_line() == StateLine.State.None:
 			var orthogonal_vector: Vector2 = vision_particle_line_vectors[0].orthogonal().normalized()
 			return [orthogonal_vector, -orthogonal_vector]
 		

@@ -4,26 +4,32 @@ extends GrabbableControl
 @onready var hadron_joint_scene := preload("res://Scenes and Scripts/Diagram/Hadrons/HadronJoint.tscn")
 
 @export var hadron_label_gap : int
-@export var state : StateType
+@export var state : State
 
 var Diagram: MainDiagram
 var Crosshair: Node
 
 enum {NOT_FOUND}
 
-enum StateType {Initial, Final, None, Both}
+enum State {Initial, Final, None, Both}
 const state_factor : Dictionary = {
-	StateType.Initial: +1,
-	StateType.Final: -1
+	State.Initial: +1,
+	State.Final: -1
 }
-const STATES : Array[StateType] = [StateType.Initial, StateType.Final]
+const STATES : Array[State] = [State.Initial, State.Final]
 
 var hadrons : Array[Hadron] = []
 var joints : Array[HadronJoint] = []
 var old_quark_groups: Array = [[]]
 var old_position_x: int
+var update_queued: bool = true
 
 var connected_lone_particles : Array[ParticleData.Particle] : get = _get_connected_lone_particles
+
+func _process(_delta: float) -> void:
+	if update_queued:
+		update_queued = false
+		update()
 
 func init(diagram: MainDiagram) -> void:
 	Diagram = diagram
@@ -31,12 +37,12 @@ func init(diagram: MainDiagram) -> void:
 
 class LineYSort:
 	static func InitialSorter(line1: ParticleLine, line2: ParticleLine) -> bool:
-		if line1.left_point.y < line2.left_point.y:
+		if line1.points[line1.left_point].y < line2.points[line2.left_point].y:
 			return true
 		return false
 		
 	static func FinalSorter(line1: ParticleLine, line2: ParticleLine) -> bool:
-		if line1.right_point.y < line2.right_point.y:
+		if line1.points[line1.right_point].y < line2.points[line1.right_point].y:
 			return true
 		return false
 
@@ -44,7 +50,10 @@ class LineParticleSort:
 	static func ParticleSorter(line1: ParticleLine, line2: ParticleLine) -> bool:
 		return line1.particle < line2.particle
 
-func update_stateline() -> void:
+func queue_update() -> void:
+	update_queued = true
+
+func update() -> void:
 	var connected_lines := get_connected_lines()
 	if connected_lines.size() == 0:
 		return
@@ -126,16 +135,16 @@ func get_connected_lines() -> Array[ParticleLine]:
 		if particle_line.is_queued_for_deletion():
 			continue
 		
-		var line_state_line : StateType = particle_line.get_on_state_line()
-		var on_state_line : bool = line_state_line == state or line_state_line == StateType.Both
+		var line_state_line : State = particle_line.get_on_state_line()
+		var on_state_line : bool = line_state_line == state or line_state_line == State.Both
 		if on_state_line:
 			connected_lines.append(particle_line)
 	return connected_lines
 
 func sort_connected_lines(connected_lines: Array) -> Array:
-	if state == StateType.Initial:
+	if state == State.Initial:
 		connected_lines.sort_custom(Callable(LineYSort, "InitialSorter"))
-	elif state == StateType.Final:
+	elif state == State.Final:
 		connected_lines.sort_custom(Callable(LineYSort, "FinalSorter"))
 	return connected_lines
 
@@ -149,7 +158,7 @@ func group_connected_quarks(sorted_connected_lines: Array) -> Array:
 			continue
 		if current_group.size() == 0:
 			current_group.append(particle_line)
-		elif abs(particle_line.get_side_point(state).y - current_y_point) == Diagram.grid_size:
+		elif abs(particle_line.get_side_position(state).y - current_y_point) == Diagram.grid_size:
 			current_group.append(particle_line)
 		else:
 			if current_group.size() > 1:
@@ -157,7 +166,7 @@ func group_connected_quarks(sorted_connected_lines: Array) -> Array:
 			if particle_line != sorted_connected_lines[-1]:
 				current_group = [particle_line]
 				
-		current_y_point = particle_line.get_side_point(state).y
+		current_y_point = particle_line.get_side_position(state).y
 
 	if current_group.size() > 1 and current_group not in grouped_connected_lines:
 		grouped_connected_lines.append(current_group)
@@ -201,4 +210,3 @@ func get_state_interactions() -> Array:
 		state_interactions.append(hadron.quarks)
 		
 	return state_interactions
-
