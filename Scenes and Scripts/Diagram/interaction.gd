@@ -368,12 +368,6 @@ func positioni() -> Vector2i:
 func is_hovered() -> bool:
 	return hovering
 
-func pick_up() -> void:
-	super.pick_up()
-	
-	for particle_line:ParticleLine in connected_lines:
-		particle_line.pick_up(particle_line.get_point_at_position(position))
-
 func get_new_information_id() -> int:
 	for i:int in range(1, INFORMATION_ID_MAXIMUM):
 		if !i in used_information_numbers:

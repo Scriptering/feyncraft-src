@@ -43,7 +43,6 @@ var particle_name : String : get = _get_particle_name
 var connected_interactions : Array[Interaction] = [null, null]
 
 var anti := 1 : set = _set_anti
-var is_placed := false
 var on_state_line := StateLine
 var quantum_numbers: Array : get = _get_quantum_numbers
 var dimensionality: float
@@ -162,8 +161,8 @@ func set_left_and_right_points() -> void:
 		left_point = Point.End
 		right_point = Point.Start
 
-func connect_interaction(interaction: Interaction) -> void:
-	connected_interactions[points.find(interaction.positioni())] = interaction
+func connect_interaction(interaction: Interaction, point:Point = points.find(interaction.positioni())) -> void:
+	connected_interactions[point] = interaction
 
 func get_on_state_line() -> StateLine.State:
 	if points[left_point].x == Initial.position.x and points[right_point].x == Final.position.x:
@@ -206,7 +205,6 @@ func is_position_on_line(test_position: Vector2i) -> bool:
 
 func is_vertical() -> bool:
 	return points[Point.Start].x == points[Point.End].x
-	
 
 func get_points_connected() -> PointsConnected:
 	if connected_interactions[left_point] and connected_interactions[right_point]:
@@ -228,7 +226,7 @@ func get_point_at_position(test_position: Vector2i) -> Point:
 	return Point.Invalid
 
 func get_connected_point(interaction: Interaction) -> Point:
-	return points.find(interaction.positioni()) as Point
+	return connected_interactions.find(interaction) as Point
 
 func get_unconnected_point(interaction: Interaction) -> Point:
 	return (get_connected_point(interaction)+1)%2 as Point
@@ -253,8 +251,8 @@ func update() -> void:
 	move_text()
 	set_text_visiblity()
 
-func move(to_position: Vector2i) -> void:
-	points[moving_point] = to_position
+func move(point:Point, to_position: Vector2i) -> void:
+	points[point] = to_position
 	queue_update()
 
 func move_line() -> void:
@@ -366,13 +364,6 @@ func set_text_texture() -> void:
 	if points[Point.End].x == points[Point.Start].x and base_particle == ParticleData.Particle.W:
 		Text.texture = ParticleData.particle_textures['W_0']
 
-func place() -> void:
-	is_placed = true
-
-func pick_up(point_index_to_pick_up: Point) -> void:
-	is_placed = false
-	moving_point = point_index_to_pick_up
-
 func is_duplicate(particle_line: ParticleLine) -> bool:
 	if particle_line == self:
 		return false
@@ -389,12 +380,17 @@ func is_overlapping(particle_line: ParticleLine) -> bool:
 	if particle_line == self:
 		return false
 	
-	if !(particle_line.points[ParticleLine.Point.Start] in points):
+	if !(
+		particle_line.line_vector.normalized() == line_vector.normalized()
+		|| particle_line.line_vector.normalized() == -line_vector.normalized()
+	):
 		return false
-		
-	if !is_position_on_line(particle_line.points[ParticleLine.Point.End]):
-		return false
-		
+	
+	return (
+		is_position_on_line(particle_line.points[ParticleLine.Point.Start])
+		|| is_position_on_line(particle_line.points[ParticleLine.Point.End])
+	)
+	
 	return true
 
 func is_hovered() -> bool:

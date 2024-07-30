@@ -20,16 +20,17 @@ func input(_event: InputEvent) -> State:
 	
 	if Input.is_action_just_released("click"):
 		place_objects()
-		return State.Hovering
+		
+		if Input.is_action_pressed("editing"):
+			return State.Hovering
+		else:
+			return State.Idle
 
 	return State.Null
 
 func place_objects() -> void:
 	if grabbed_interaction:
-		if ArrayFuncs.is_vec_zero_approx(grabbed_interaction.position - grabbed_interaction.start_grab_position):
-			Diagram.remove_last_diagram_from_history()
-		
-		Diagram.place_objects()
+		Diagram.drop_interaction(grabbed_interaction)
 		return
 	
 	get_tree().call_group("grabbable", "drop")

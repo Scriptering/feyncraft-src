@@ -13,7 +13,7 @@ func load_problem(problem: Problem) -> void:
 		load_state_symbols(state, problem.get_state_interaction(state))
 
 func clear_equation(state: StateLine.State) -> void:
-	for child:HBoxContainer in StateEquations[state].get_children():
+	for child:TextureRect in StateEquations[state].get_children():
 		child.queue_free()
 
 func load_state_symbols(state: StateLine.State, state_interactions: Array) -> void:
