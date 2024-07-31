@@ -3,6 +3,7 @@
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_b04gi"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/ProblemSelection/problem_set_item.gd" id="3_1cbyy"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="4_dol4y"]
+[ext_resource type="FontVariation" uid="uid://cb46dh1o5m7cc" path="res://Resources/Themes/line_edit.tres" id="4_lkw13"]
 [ext_resource type="Script" path="res://Scenes and Scripts/Classes/line_edit.gd" id="4_ylu82"]
 [ext_resource type="Texture2D" uid="uid://cb6lapmtgwimd" path="res://Textures/UI/MiniDiagram/arrow_right.png" id="5_7dhmq"]
 [ext_resource type="LabelSettings" uid="uid://mi5j08pnv0ay" path="res://Resources/Themes/uppercase_and_numbers.tres" id="5_iu731"]
@@ -14,10 +15,6 @@
 [ext_resource type="Texture2D" uid="uid://co7w81osg53kf" path="res://Textures/UI/Information/valid.png" id="14_xqm6y"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qxe7s"]
-
-[sub_resource type="FontVariation" id="FontVariation_3dqxw"]
-spacing_top = -3
-spacing_bottom = -2
 
 [node name="ProblemSetItem" type="PanelContainer" node_paths=PackedStringArray("title")]
 material = ExtResource("1_b04gi")
@@ -57,7 +54,7 @@ alignment = 1
 use_parent_material = true
 custom_minimum_size = Vector2(100, 2.08165e-12)
 layout_mode = 2
-theme_override_fonts/font = SubResource("FontVariation_3dqxw")
+theme_override_fonts/font = ExtResource("4_lkw13")
 placeholder_text = "[Enter Title]"
 alignment = 1
 max_length = 18
