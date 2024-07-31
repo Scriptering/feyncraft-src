@@ -35,7 +35,7 @@ var line_vector : Vector2 = Vector2.ZERO:
 	get: return points[Point.End] - points[Point.Start]
 var particle_name : String : get = _get_particle_name
 
-var texture_dict: Array = [
+const texture_dict: Array = [
 'Electroweak', 
 'loop',
 'Electroweak',

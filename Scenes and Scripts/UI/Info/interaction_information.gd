@@ -97,6 +97,8 @@ func add_label(container: GridContainer, text: String) -> void:
 	var label := Label.new()
 	label.text = text
 	label.use_parent_material = true
+	label.custom_minimum_size.y = 9
+	label.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
 	
 	if container.get_child_count()%container.columns != 0:
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

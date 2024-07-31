@@ -50,6 +50,7 @@ material = ExtResource("1_ivc2f")
 use_parent_material = true
 layout_mode = 2
 theme = ExtResource("1_ulo0d")
+current_tab = 0
 clip_tabs = false
 use_hidden_tabs_for_min_size = true
 
@@ -58,13 +59,14 @@ use_parent_material = true
 layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_bjjr6")
+metadata/_tab_index = 0
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer/TabContainer/Quantum Numbers"]
 use_parent_material = true
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = -2
-theme_override_constants/margin_top = -4
+theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = -3
 
 [node name="TextureRect" type="TextureRect" parent="PanelContainer/TabContainer/Quantum Numbers/MarginContainer"]
@@ -79,33 +81,37 @@ use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/h_separation = 7
-theme_override_constants/v_separation = 0
+theme_override_constants/v_separation = 1
 columns = 4
 
 [node name="name" type="Label" parent="PanelContainer/TabContainer/Quantum Numbers/Quantum Numbers"]
 use_parent_material = true
-custom_minimum_size = Vector2(50, 2.08165e-12)
+custom_minimum_size = Vector2(50, 10)
 layout_mode = 2
 text = "NAME"
+vertical_alignment = 2
 
 [node name="before" type="Label" parent="PanelContainer/TabContainer/Quantum Numbers/Quantum Numbers"]
 use_parent_material = true
-custom_minimum_size = Vector2(28, 2.08165e-12)
+custom_minimum_size = Vector2(28, 10)
 layout_mode = 2
 text = "BEFORE"
 horizontal_alignment = 1
+vertical_alignment = 2
 
 [node name="after" type="Label" parent="PanelContainer/TabContainer/Quantum Numbers/Quantum Numbers"]
 use_parent_material = true
-custom_minimum_size = Vector2(28, 2.08165e-12)
+custom_minimum_size = Vector2(28, 10)
 layout_mode = 2
 text = "AFTER"
 horizontal_alignment = 1
+vertical_alignment = 2
 
 [node name="space" type="Label" parent="PanelContainer/TabContainer/Quantum Numbers/Quantum Numbers"]
 use_parent_material = true
-custom_minimum_size = Vector2(3, 2.08165e-12)
+custom_minimum_size = Vector2(3, 10)
 layout_mode = 2
+vertical_alignment = 2
 
 [node name="Other" type="PanelContainer" parent="PanelContainer/TabContainer"]
 visible = false
@@ -113,6 +119,7 @@ use_parent_material = true
 layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_7oyg1")
+metadata/_tab_index = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer/TabContainer/Other"]
 use_parent_material = true

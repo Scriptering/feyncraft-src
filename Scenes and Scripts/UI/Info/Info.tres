@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://b4w0nb2kv1et0" path="res://Textures/UI/Information/InfoTabFocus.png" id="3_y0k27"]
 [ext_resource type="Texture2D" uid="uid://d0eecxfakl8nn" path="res://Textures/UI/Information/InfoTabNormal.png" id="4_6bqre"]
 [ext_resource type="Texture2D" uid="uid://bw54k0fgw50is" path="res://Textures/UI/Information/InfoTabHover.png" id="5_lfin4"]
-[ext_resource type="FontFile" uid="uid://c8gvjmnxplvqf" path="res://Textures/Fonts/munro-font/Munro.ttf" id="7_jo4ud"]
+[ext_resource type="FontFile" uid="uid://cx3ks8aulujjo" path="res://Textures/Fonts/04B_03__.TTF" id="7_mluca"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_om0v4"]
 texture = ExtResource("1_866kd")
@@ -117,8 +117,8 @@ texture_margin_top = 1.0
 texture_margin_bottom = 1.0
 
 [resource]
-default_font = ExtResource("7_jo4ud")
-default_font_size = 6
+default_font = ExtResource("7_mluca")
+default_font_size = 8
 Button/styles/hover = SubResource("StyleBoxTexture_om0v4")
 Button/styles/normal = SubResource("StyleBoxEmpty_ewhig")
 Button/styles/pressed = SubResource("StyleBoxTexture_qhm74")
