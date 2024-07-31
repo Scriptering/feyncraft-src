@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://bbkvwth6ke1is"]
+[gd_scene load_steps=34 format=3 uid="uid://bbkvwth6ke1is"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_x63u3"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/PullOutTab.gd" id="2_kmb27"]
@@ -20,7 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://80bi27me1iqr" path="res://Scenes and Scripts/UI/Buttons/pull_out_tab_button_down.tscn" id="10_xn6km"]
 [ext_resource type="FontFile" uid="uid://dtkr82iuj8ovy" path="res://Textures/Fonts/munro-font/Munro-2LYe.ttf" id="14_wsnu4"]
 [ext_resource type="Texture2D" uid="uid://bf4xxweukjvsb" path="res://Textures/Buttons/icons/interaction.png" id="15_5phct"]
-[ext_resource type="FontFile" uid="uid://c8gvjmnxplvqf" path="res://Textures/Fonts/munro-font/Munro.ttf" id="15_mihxt"]
+[ext_resource type="FontVariation" uid="uid://bgv46fr0yu083" path="res://Textures/Fonts/numbers.tres" id="15_c5d3y"]
 [ext_resource type="Texture2D" uid="uid://dvx430022t0ua" path="res://Textures/Buttons/icons/next.png" id="16_leqlk"]
 
 [sub_resource type="Theme" id="Theme_rwvfw"]
@@ -45,17 +45,14 @@ texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 expand_margin_top = 10.0
 
+[sub_resource type="Theme" id="Theme_803vf"]
+default_font = ExtResource("15_c5d3y")
+default_font_size = 16
+
 [sub_resource type="FontVariation" id="FontVariation_vdd88"]
 base_font = ExtResource("14_wsnu4")
 spacing_top = -3
 spacing_bottom = -5
-
-[sub_resource type="FontVariation" id="FontVariation_du8fy"]
-base_font = ExtResource("15_mihxt")
-
-[sub_resource type="Theme" id="Theme_25u8a"]
-default_font_size = 10
-Label/fonts/font = SubResource("FontVariation_du8fy")
 
 [sub_resource type="Theme" id="Theme_wmnb4"]
 default_font = SubResource("FontVariation_vdd88")
@@ -242,10 +239,10 @@ theme_override_constants/separation = 3
 
 [node name="Rewind" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
 layout_mode = 2
-icon = ExtResource("5_t5pc5")
 minimum_size = Vector2(25, 24)
-expand_icon = true
 disabled = true
+icon = ExtResource("5_t5pc5")
+expand_icon = true
 icon_use_parent_material = true
 
 [node name="Tooltip" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer/Rewind" instance=ExtResource("7_itf5n")]
@@ -253,8 +250,8 @@ tooltip = "Load previous problem"
 
 [node name="Solution" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
 layout_mode = 2
-icon = ExtResource("6_pp1px")
 minimum_size = Vector2(25, 24)
+icon = ExtResource("6_pp1px")
 expand_icon = true
 icon_use_parent_material = true
 
@@ -269,14 +266,14 @@ layout_mode = 2
 [node name="HBoxContainer" type="HBoxContainer" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer/DegreeContainer"]
 use_parent_material = true
 layout_mode = 2
-theme_override_constants/separation = 0
 alignment = 2
 
 [node name="Degree" type="Label" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer/DegreeContainer/HBoxContainer"]
 use_parent_material = true
 layout_mode = 2
-theme_override_fonts/font = SubResource("FontVariation_vdd88")
-theme_override_font_sizes/font_size = 14
+size_flags_vertical = 1
+theme_override_fonts/font = ExtResource("15_c5d3y")
+theme_override_font_sizes/font_size = 16
 text = "0/0"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -297,24 +294,23 @@ scale_factor = 1.2
 
 [node name="ViewSubmissions" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
 layout_mode = 2
-icon = ExtResource("5_15poa")
 minimum_size = Vector2(24, 24)
-expand_icon = true
 disabled = true
+icon = ExtResource("5_15poa")
+expand_icon = true
 
 [node name="Tooltip" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer/ViewSubmissions" instance=ExtResource("7_itf5n")]
 tooltip = "View submissions"
 
 [node name="Submit" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
 layout_mode = 2
-theme = SubResource("Theme_25u8a")
-icon = ExtResource("8_2kr0t")
-text = "0/0"
-font_size = 4
+theme = SubResource("Theme_803vf")
+icon_text_seperation = 0
 minimum_size = Vector2(47, 24)
+text = "0/0"
+icon = ExtResource("8_2kr0t")
 expand_icon = true
 icon_use_parent_material = true
-icon_text_seperation = 0
 
 [node name="Tooltip" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer/Submit" instance=ExtResource("7_itf5n")]
 tooltip = "Submit solution"
@@ -322,9 +318,9 @@ tooltip = "Submit solution"
 [node name="NextProblem" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer" instance=ExtResource("4_gj1up")]
 layout_mode = 2
 theme = SubResource("Theme_wmnb4")
-icon = ExtResource("16_leqlk")
 minimum_size = Vector2(26, 24)
 disabled = true
+icon = ExtResource("16_leqlk")
 icon_use_parent_material = true
 
 [node name="Tooltip" parent="MovingContainer/VBoxContainer/Tab/HBoxContainer/NextProblem" instance=ExtResource("7_itf5n")]

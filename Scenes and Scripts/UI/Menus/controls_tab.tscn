@@ -1,7 +1,6 @@
-[gd_scene load_steps=15 format=3 uid="uid://b65u1c7v5mbh6"]
+[gd_scene load_steps=12 format=3 uid="uid://b65u1c7v5mbh6"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_ihga5"]
-[ext_resource type="FontFile" uid="uid://cq27s0444iwkg" path="res://Textures/Fonts/ConnectionIi-2wj8.otf" id="2_a54w8"]
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="2_kvqmk"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/controls_tab.gd" id="4_1fcak"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="6_4bdyr"]
@@ -11,19 +10,6 @@
 [ext_resource type="PackedScene" uid="uid://80bi27me1iqr" path="res://Scenes and Scripts/UI/Buttons/pull_out_tab_button_down.tscn" id="11_nha8c"]
 [ext_resource type="Texture2D" uid="uid://7svrwb52wwlb" path="res://Textures/Buttons/icons/redo.png" id="12_3t38n"]
 [ext_resource type="Texture2D" uid="uid://ba6v4j0iomg0s" path="res://Textures/Buttons/icons/spanner.png" id="12_8scxb"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4ap8b"]
-texture = ExtResource("2_kvqmk")
-texture_margin_left = 6.0
-texture_margin_top = 6.0
-texture_margin_right = 6.0
-texture_margin_bottom = 6.0
-expand_margin_bottom = 10.0
-
-[sub_resource type="Theme" id="Theme_jad7o"]
-Label/font_sizes/font_size = 8
-Label/fonts/font = ExtResource("2_a54w8")
-PanelContainer/styles/panel = SubResource("StyleBoxTexture_4ap8b")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_kkki1"]
 content_margin_left = 6.0
@@ -47,7 +33,6 @@ offset_right = -640.0
 offset_bottom = -360.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = SubResource("Theme_jad7o")
 script = ExtResource("4_1fcak")
 ContentContainer = NodePath("MovingContainer/ContentContainer")
 TabButton = NodePath("MovingContainer/PullOutTabButtonDown")
@@ -82,7 +67,7 @@ columns = 3
 use_parent_material = true
 layout_mode = 2
 text = "CTRL-Z"
-vertical_alignment = 2
+horizontal_alignment = 1
 
 [node name="Label2" type="Label" parent="MovingContainer/ContentContainer/GridContainer"]
 use_parent_material = true
@@ -95,12 +80,13 @@ vertical_alignment = 2
 use_parent_material = true
 layout_mode = 2
 text = "CTRL-Y"
+horizontal_alignment = 1
 vertical_alignment = 2
 
 [node name="Undo" parent="MovingContainer/ContentContainer/GridContainer" instance=ExtResource("6_4bdyr")]
 layout_mode = 2
-icon = ExtResource("11_a0bdl")
 minimum_size = Vector2(25, 25)
+icon = ExtResource("11_a0bdl")
 expand_icon = true
 icon_use_parent_material = true
 
@@ -109,8 +95,8 @@ tooltip = "Undo"
 
 [node name="Reset" parent="MovingContainer/ContentContainer/GridContainer" instance=ExtResource("6_4bdyr")]
 layout_mode = 2
-icon = ExtResource("10_d874e")
 minimum_size = Vector2(25, 25)
+icon = ExtResource("10_d874e")
 expand_icon = true
 icon_use_parent_material = true
 
@@ -119,8 +105,8 @@ tooltip = "Reset"
 
 [node name="Redo" parent="MovingContainer/ContentContainer/GridContainer" instance=ExtResource("6_4bdyr")]
 layout_mode = 2
-icon = ExtResource("12_3t38n")
 minimum_size = Vector2(25, 25)
+icon = ExtResource("12_3t38n")
 expand_icon = true
 icon_use_parent_material = true
 
@@ -131,6 +117,7 @@ tooltip = "Redo"
 use_parent_material = true
 layout_mode = 2
 text = "W: MOVE"
+horizontal_alignment = 1
 vertical_alignment = 2
 
 [node name="Label5" type="Label" parent="MovingContainer/ContentContainer/GridContainer"]
@@ -144,6 +131,7 @@ vertical_alignment = 2
 use_parent_material = true
 layout_mode = 2
 text = "X: DELETE"
+horizontal_alignment = 1
 vertical_alignment = 2
 
 [node name="PullOutTabButtonDown" parent="MovingContainer" instance=ExtResource("11_nha8c")]

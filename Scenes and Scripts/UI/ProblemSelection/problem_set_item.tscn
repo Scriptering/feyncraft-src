@@ -1,12 +1,11 @@
-[gd_scene load_steps=19 format=3 uid="uid://b6go021ha3ocr"]
+[gd_scene load_steps=15 format=3 uid="uid://b6go021ha3ocr"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_b04gi"]
-[ext_resource type="StyleBox" uid="uid://dvu7f5h7snggp" path="res://Scenes and Scripts/UI/Menus/panelContainer.tres" id="1_g4bto"]
-[ext_resource type="FontFile" uid="uid://cq27s0444iwkg" path="res://Textures/Fonts/ConnectionIi-2wj8.otf" id="2_fqu2n"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/ProblemSelection/problem_set_item.gd" id="3_1cbyy"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="4_dol4y"]
 [ext_resource type="Script" path="res://Scenes and Scripts/Classes/line_edit.gd" id="4_ylu82"]
 [ext_resource type="Texture2D" uid="uid://cb6lapmtgwimd" path="res://Textures/UI/MiniDiagram/arrow_right.png" id="5_7dhmq"]
+[ext_resource type="LabelSettings" uid="uid://mi5j08pnv0ay" path="res://Resources/Themes/uppercase_and_numbers.tres" id="5_iu731"]
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="6_plt5e"]
 [ext_resource type="Texture2D" uid="uid://cms1u4elh5bo3" path="res://Textures/Buttons/icons/delete.png" id="7_dyt28"]
 [ext_resource type="Texture2D" uid="uid://d16opu3dyhri7" path="res://Textures/Buttons/eye/eye_open.png" id="7_f5yhf"]
@@ -14,30 +13,19 @@
 [ext_resource type="Texture2D" uid="uid://qxw17ji0dvra" path="res://Textures/Buttons/icons/share.png" id="13_4yitn"]
 [ext_resource type="Texture2D" uid="uid://co7w81osg53kf" path="res://Textures/UI/Information/valid.png" id="14_xqm6y"]
 
-[sub_resource type="FontVariation" id="FontVariation_5o2co"]
-base_font = ExtResource("2_fqu2n")
-spacing_bottom = -1
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vtmen"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0snhi"]
-
-[sub_resource type="Theme" id="Theme_kr54n"]
-LineEdit/font_sizes/font_size = 9
-LineEdit/fonts/font = SubResource("FontVariation_5o2co")
-LineEdit/styles/focus = SubResource("StyleBoxEmpty_vtmen")
-LineEdit/styles/normal = ExtResource("1_g4bto")
-LineEdit/styles/read_only = SubResource("StyleBoxEmpty_0snhi")
-
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qxe7s"]
 
-[node name="ProblemSetItem" type="PanelContainer"]
+[sub_resource type="FontVariation" id="FontVariation_3dqxw"]
+spacing_top = -3
+spacing_bottom = -2
+
+[node name="ProblemSetItem" type="PanelContainer" node_paths=PackedStringArray("title")]
 material = ExtResource("1_b04gi")
 offset_right = 12.0
 offset_bottom = 12.0
-theme = SubResource("Theme_kr54n")
 theme_override_styles/panel = SubResource("StyleBoxEmpty_qxe7s")
 script = ExtResource("3_1cbyy")
+title = NodePath("HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/Title")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 use_parent_material = true
@@ -47,8 +35,8 @@ layout_mode = 2
 material = ExtResource("1_b04gi")
 custom_minimum_size = Vector2(16, 2.08165e-12)
 layout_mode = 2
-theme_override_font_sizes/font_size = 15
 text = "99"
+label_settings = ExtResource("5_iu731")
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -60,11 +48,16 @@ layout_mode = 2
 use_parent_material = true
 layout_mode = 2
 
-[node name="Title" type="LineEdit" parent="HBoxContainer/PanelContainer/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/PanelContainer/HBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+alignment = 1
+
+[node name="Title" type="LineEdit" parent="HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer"]
 use_parent_material = true
 custom_minimum_size = Vector2(100, 2.08165e-12)
 layout_mode = 2
-theme_override_font_sizes/font_size = 8
+theme_override_fonts/font = SubResource("FontVariation_3dqxw")
 placeholder_text = "[Enter Title]"
 alignment = 1
 max_length = 18
@@ -74,11 +67,11 @@ script = ExtResource("4_ylu82")
 [node name="Play" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("4_dol4y")]
 layout_mode = 2
 mouse_filter = 1
-icon = ExtResource("5_7dhmq")
 minimum_size = Vector2(22, 22)
+action_mode = 1
+icon = ExtResource("5_7dhmq")
 expand_icon = true
 icon_use_parent_material = true
-action_mode = 1
 
 [node name="Tooltip" parent="HBoxContainer/PanelContainer/HBoxContainer/Play" instance=ExtResource("6_plt5e")]
 tooltip = "Resume"
@@ -86,10 +79,10 @@ tooltip = "Resume"
 [node name="View" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("4_dol4y")]
 layout_mode = 2
 mouse_filter = 1
-icon = ExtResource("7_f5yhf")
 minimum_size = Vector2(22, 22)
-expand_icon = true
 action_mode = 1
+icon = ExtResource("7_f5yhf")
+expand_icon = true
 
 [node name="Tooltip" parent="HBoxContainer/PanelContainer/HBoxContainer/View" instance=ExtResource("6_plt5e")]
 tooltip = "View Problems"
@@ -97,11 +90,11 @@ tooltip = "View Problems"
 [node name="Delete" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("4_dol4y")]
 layout_mode = 2
 mouse_filter = 1
-icon = ExtResource("7_dyt28")
 minimum_size = Vector2(22, 22)
+action_mode = 1
+icon = ExtResource("7_dyt28")
 expand_icon = true
 icon_use_parent_material = true
-action_mode = 1
 
 [node name="Tooltip" parent="HBoxContainer/PanelContainer/HBoxContainer/Delete" instance=ExtResource("6_plt5e")]
 tooltip = "Delete"
@@ -109,16 +102,17 @@ tooltip = "Delete"
 [node name="Upload" parent="HBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("10_6kia2")]
 layout_mode = 2
 mode = 1
-icon = ExtResource("13_4yitn")
 minimum_size = Vector2(22, 22)
+icon = ExtResource("13_4yitn")
 expand_icon = true
 flip_icon_v = false
 
 [node name="IndexLabel" type="Label" parent="HBoxContainer/PanelContainer/HBoxContainer"]
+use_parent_material = true
 custom_minimum_size = Vector2(32, 2.08165e-12)
 layout_mode = 2
-theme_override_font_sizes/font_size = 9
 text = "0/0"
+label_settings = ExtResource("5_iu731")
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -130,7 +124,7 @@ texture = ExtResource("14_xqm6y")
 expand_mode = 5
 stretch_mode = 5
 
-[connection signal="text_submitted" from="HBoxContainer/PanelContainer/HBoxContainer/Title" to="." method="_on_title_text_submitted"]
+[connection signal="text_submitted" from="HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/Title" to="." method="_on_title_text_submitted"]
 [connection signal="pressed" from="HBoxContainer/PanelContainer/HBoxContainer/Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="HBoxContainer/PanelContainer/HBoxContainer/View" to="." method="_on_view_pressed"]
 [connection signal="pressed" from="HBoxContainer/PanelContainer/HBoxContainer/Delete" to="." method="_on_delete_pressed"]

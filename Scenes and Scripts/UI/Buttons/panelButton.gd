@@ -12,21 +12,27 @@ signal button_mouse_exited
 signal button_down
 signal button_up
 
-@export var icon: Texture2D : set = _set_button_icon
-@export var text: String : set = _set_button_text
-@export var override_font_size: bool = false : set = _set_override_font_size
-@export var font_size: int : set = _set_font_size
+@export_group("Button")
+@export var icon_text_seperation: int = 3: set = _set_icon_text_seperation
 @export var minimum_size: Vector2 : set = _set_button_minimum_size
 @export var toggle_mode: bool : set = _set_toggle_mode
-@export var expand_icon: bool : set = _set_expand_icon
 @export var button_pressed: bool: set = _set_button_pressed, get = _get_button_pressed
 @export var disabled: bool = false: set = _set_button_disabled
-@export var icon_use_parent_material: bool = false: set = _set_icon_use_parent_material
 @export var mute: bool = false
 @export var action_mode: Button.ActionMode = Button.ACTION_MODE_BUTTON_PRESS :
 	set = _set_action_mode
 @export var button_group: ButtonGroup : set = _set_button_button_group
-@export var icon_text_seperation: int = 3: set = _set_icon_text_seperation
+@export var flat: bool = false:
+	set(new_value):
+		flat = new_value
+		get_node("Button").flat = flat
+@export_group("Label")
+@export var text: String : set = _set_button_text
+@export var label_settings: LabelSettings : set = _set_label_settings
+@export_group("Icon")
+@export var icon: Texture2D : set = _set_button_icon
+@export var expand_icon: bool : set = _set_expand_icon
+@export var icon_use_parent_material: bool = false: set = _set_icon_use_parent_material
 @export var flip_icon_v: bool = false:
 	set(new_value):
 		flip_icon_v = new_value
@@ -35,10 +41,7 @@ signal button_up
 	set(new_value):
 		flip_icon_h = new_value
 		$ContentContainer/HBoxContainer/ButtonIcon.flip_h = new_value
-@export var flat: bool = false:
-	set(new_value):
-		flat = new_value
-		get_node("Button").flat = flat
+		
 
 @onready var button := $Button
 @onready var label := $ContentContainer/HBoxContainer/ButtonText
@@ -74,23 +77,9 @@ func _ready() -> void:
 	
 	EventBus.button_created(self)
 
-func update_font_size() -> void:
-	if override_font_size:
-		$ContentContainer/HBoxContainer/ButtonText.add_theme_font_size_override(
-			"font_size", font_size
-		)
-	else:
-		$ContentContainer/HBoxContainer/ButtonText.remove_theme_font_size_override(
-			"font_size"
-		)
-
-func _set_override_font_size(new_value: bool) -> void:
-	override_font_size = new_value
-	update_font_size()
-
-func _set_font_size(new_value: int) -> void:
-	font_size = new_value
-	update_font_size()
+func _set_label_settings(new_value: LabelSettings) -> void:
+	label_settings = new_value
+	$ContentContainer/HBoxContainer/ButtonText.label_settings = new_value
 
 func _set_icon_use_parent_material(new_value: bool) -> void:
 	icon_use_parent_material = new_value

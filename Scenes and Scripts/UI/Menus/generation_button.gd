@@ -188,6 +188,3 @@ func _on_max_degree_value_changed(value: float) -> void:
 func _on_submit_feedback_push_in_finished() -> void:
 	for feedback_container in feedback_containers:
 		feedback_container.hide()
-
-
-

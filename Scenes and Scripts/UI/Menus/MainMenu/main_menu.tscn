@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://blu0n6lwfysjf"]
+[gd_scene load_steps=33 format=3 uid="uid://blu0n6lwfysjf"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_m8wv1"]
 [ext_resource type="Texture2D" uid="uid://c2myqhjupqo25" path="res://Textures/Background/tile.png" id="2_3tgej"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="11_t2od8"]
 [ext_resource type="PackedScene" uid="uid://besym8haj5qo4" path="res://Scenes and Scripts/UI/Crosshair.tscn" id="12_6wo74"]
 [ext_resource type="Texture2D" uid="uid://7ipru72d5e13" path="res://Textures/Buttons/icons/sandbox.png" id="13_21fnr"]
+[ext_resource type="LabelSettings" uid="uid://yitjpuh73rxw" path="res://Scenes and Scripts/UI/Menus/MainMenu/main_menu_labels.tres" id="14_sqpi5"]
 [ext_resource type="Texture2D" uid="uid://b20ltmcqk6xwh" path="res://Textures/Buttons/icons/question_mark.png" id="16_0rbva"]
 [ext_resource type="PackedScene" uid="uid://b4oiaq2nic3ig" path="res://Scenes and Scripts/UI/Buttons/MuteButton.tscn" id="16_1yq2b"]
 [ext_resource type="Texture2D" uid="uid://btu2jj1bbbbil" path="res://Textures/Buttons/icons/palette.png" id="17_cv4ds"]
@@ -239,10 +240,10 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -76.0
-offset_top = -152.0
-offset_right = 76.0
-offset_bottom = -27.0
+offset_left = -82.0
+offset_top = -161.0
+offset_right = 82.0
+offset_bottom = -21.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
@@ -251,39 +252,36 @@ alignment = 1
 [node name="Tutorial" parent="Center/VBoxContainer" instance=ExtResource("11_t2od8")]
 material = null
 layout_mode = 2
-icon = ExtResource("16_0rbva")
-text = "Tutorial"
-override_font_size = true
-font_size = 10
-minimum_size = Vector2(100, 2.08165e-12)
-icon_use_parent_material = true
 icon_text_seperation = 4
+minimum_size = Vector2(110, 0)
+text = "Tutorial"
+label_settings = ExtResource("14_sqpi5")
+icon = ExtResource("16_0rbva")
+icon_use_parent_material = true
 
 [node name="Sandbox" parent="Center/VBoxContainer" instance=ExtResource("11_t2od8")]
 material = null
 layout_mode = 2
-icon = ExtResource("13_21fnr")
-text = "Sandbox"
-override_font_size = true
-font_size = 10
-minimum_size = Vector2(110, 2.08165e-12)
-expand_icon = true
-action_mode = 1
 icon_text_seperation = 4
+minimum_size = Vector2(123, 0)
+action_mode = 1
+text = "Sandbox"
+label_settings = ExtResource("14_sqpi5")
+icon = ExtResource("13_21fnr")
+expand_icon = true
 
 [node name="ProblemSets" parent="Center/VBoxContainer" instance=ExtResource("11_t2od8")]
 material = null
 layout_mode = 2
 theme = ExtResource("22_a8ikr")
-icon = ExtResource("19_fbmws")
-text = "Problem Sets"
-override_font_size = true
-font_size = 10
+icon_text_seperation = 4
 minimum_size = Vector2(164, 2.08165e-12)
 toggle_mode = true
+text = "Problem Sets"
+label_settings = ExtResource("14_sqpi5")
+icon = ExtResource("19_fbmws")
 expand_icon = true
 icon_use_parent_material = true
-icon_text_seperation = 4
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Center/VBoxContainer"]
 use_parent_material = true
@@ -295,29 +293,23 @@ material = null
 layout_mode = 2
 size_flags_horizontal = 1
 size_flags_vertical = 1
-icon = ExtResource("21_lu08p")
-override_font_size = false
-font_size = 0
 toggle_mode = true
+icon = ExtResource("21_lu08p")
 
 [node name="Palettes" parent="Center/VBoxContainer/HBoxContainer" instance=ExtResource("11_t2od8")]
 material = null
 layout_mode = 2
-icon = ExtResource("17_cv4ds")
-override_font_size = false
-font_size = 0
 minimum_size = Vector2(30, 30)
 toggle_mode = true
+icon = ExtResource("17_cv4ds")
 expand_icon = true
 
 [node name="CreditButton" parent="Center/VBoxContainer/HBoxContainer" instance=ExtResource("11_t2od8")]
 material = null
 layout_mode = 2
-icon = ExtResource("23_sgn8e")
-override_font_size = false
-font_size = 0
 minimum_size = Vector2(30, 30)
 toggle_mode = true
+icon = ExtResource("23_sgn8e")
 expand_icon = true
 icon_use_parent_material = true
 

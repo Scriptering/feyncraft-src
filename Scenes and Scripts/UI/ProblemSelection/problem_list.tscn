@@ -57,10 +57,10 @@ layout_mode = 2
 
 [node name="AddProblem" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_tav84")]
 layout_mode = 2
-icon = ExtResource("5_6tky2")
 minimum_size = Vector2(154, 28)
-icon_use_parent_material = true
 action_mode = 1
+icon = ExtResource("5_6tky2")
+icon_use_parent_material = true
 
 [node name="TitleContainer" type="PanelContainer" parent="VBoxContainer"]
 use_parent_material = true
@@ -94,7 +94,6 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 mouse_filter = 1
-theme_override_font_sizes/font_size = 9
 text = "Problems"
 horizontal_alignment = 1
 vertical_alignment = 1

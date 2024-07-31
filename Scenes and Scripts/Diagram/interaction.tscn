@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://bhi4xq3qdbt4d"]
+[gd_scene load_steps=22 format=3 uid="uid://bhi4xq3qdbt4d"]
 
 [ext_resource type="Texture2D" uid="uid://dujsq82ocy6bp" path="res://Textures/Interactions/Interaction.png" id="1"]
 [ext_resource type="Material" uid="uid://clhuw6cdr2tdj" path="res://Resources/Shaders/interaction.tres" id="1_151mx"]
@@ -86,6 +86,8 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="LabelSettings" id="LabelSettings_q6um2"]
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_usurp"]
 size = Vector2(12, 12)
 
@@ -118,10 +120,12 @@ sprite_frames = SubResource("11")
 [node name="InfoNumberLabel" type="Label" parent="."]
 material = ExtResource("8_kmrm7")
 offset_left = 7.0
-offset_top = -6.0
-offset_right = 47.0
-offset_bottom = 10.0
+offset_top = -5.0
+offset_right = 22.0
+offset_bottom = 7.0
 theme_override_font_sizes/font_size = 11
+label_settings = SubResource("LabelSettings_q6um2")
+vertical_alignment = 1
 
 [node name="ButtonSoundComponent" parent="." instance=ExtResource("9_b7d5g")]
 manual = true

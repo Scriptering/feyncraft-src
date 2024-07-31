@@ -68,10 +68,10 @@ alignment = 1
 [node name="AddProblemSet" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer" instance=ExtResource("1_tgmdf")]
 layout_mode = 2
 size_flags_horizontal = 1
-icon = ExtResource("3_fyqnn")
 minimum_size = Vector2(70, 28)
-icon_use_parent_material = true
 action_mode = 1
+icon = ExtResource("3_fyqnn")
+icon_use_parent_material = true
 
 [node name="LoadButton" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer" instance=ExtResource("7_sjfsr")]
 layout_mode = 2
@@ -108,7 +108,6 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 mouse_filter = 1
-theme_override_font_sizes/font_size = 9
 text = "Problem Sets"
 horizontal_alignment = 1
 vertical_alignment = 1
