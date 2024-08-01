@@ -56,6 +56,10 @@ func _ready() -> void:
 	for state_line:StateLine in StateLines:
 		state_line.init(self)
 
+func _input(event: InputEvent) -> void:
+	if Input.is_action_just_pressed("ui_accept"):
+		print(DrawingMatrixExporter.get_string(generate_drawing_matrix_from_diagram()))
+
 func init(
 	particle_buttons: Control, controls: Node, vision_buttons: Control, vision: Node, state_manager: Node
 ) -> void:

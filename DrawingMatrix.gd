@@ -239,10 +239,10 @@ func rejoin_double_connections() -> void:
 		var from_id: int = get_connected_ids(id, false, ParticleData.Particle.none, true)[0]
 		var to_id: int = get_connected_ids(id)[0]
 		
-		if get_connection_particles(from_id, to_id) != get_connection_particles(id, to_id):
+		if get_connection_particles(from_id, id) != get_connection_particles(id, to_id):
 			continue
 			
-		var connection_particle: ParticleData.Particle = get_connection_particles(from_id, to_id).front()
+		var connection_particle: ParticleData.Particle = get_connection_particles(from_id, id).front()
 		
 		disconnect_interactions(from_id, id, connection_particle)
 		disconnect_interactions(id, to_id, connection_particle)
