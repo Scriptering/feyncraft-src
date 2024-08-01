@@ -3,6 +3,8 @@ extends ListItem
 signal view
 signal play
 
+@export var title:LineEdit
+
 var problem_set: ProblemSet
 var file_path: String
 var is_custom: bool
@@ -13,7 +15,7 @@ func _ready() -> void:
 
 func toggle_edit_visibility(can_edit: bool, can_delete: bool = can_edit) -> void:
 	$HBoxContainer/PanelContainer/HBoxContainer/Delete.visible = can_delete
-	$HBoxContainer/PanelContainer/HBoxContainer/Title.editable = can_edit
+	title.editable = can_edit
 	$HBoxContainer/PanelContainer/HBoxContainer/Upload.visible = can_edit
 
 func set_index(new_index: int) -> void:
@@ -26,7 +28,7 @@ func update_problem_index() -> void:
 
 func load_problem_set(_problem_set: ProblemSet) -> void:
 	problem_set = _problem_set
-	$HBoxContainer/PanelContainer/HBoxContainer/Title.text = problem_set.title
+	title.text = problem_set.title
 
 func update() -> void:
 	var no_problems : bool = problem_set.problems.size() == 0

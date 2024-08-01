@@ -41,6 +41,8 @@ var diagram_future: Array[DrawingMatrix] = []
 var current_diagram: DrawingMatrix = null
 var diagram_added_to_history: bool = false
 
+var update_queue : Array[Variant] = []
+
 func _ready() -> void:
 	Crosshair.moved_and_rested.connect(_crosshair_moved)
 	Crosshair.moved.connect(_crosshair_moved)
@@ -82,12 +84,12 @@ func _process(_delta: float) -> void:
 	flush_update_queue()
 
 func flush_update_queue():
-	for interaction:Interaction in get_interactions():
+	for interaction:Interaction in $DiagramArea/Interactions.get_children():
 		if interaction.update_queued:
 			interaction.update_queued = false
 			interaction.update()
 
-	for particle_line:ParticleLine in get_particle_lines():
+	for particle_line:ParticleLine in $DiagramArea/ParticleLines.get_children():
 		if particle_line.update_queued:
 			particle_line.update_queued = false
 			particle_line.update()
@@ -423,19 +425,14 @@ func is_line_placement_valid(particle_line: ParticleLine) -> bool:
 	return true
 
 func get_interactions() -> Array[Interaction]:
-	var interactions : Array[Interaction] = []
-	for interaction:Interaction in super.get_interactions():
-		if interaction is Interaction:
-			interactions.append(interaction)
-	
+	var interactions : Array[Interaction]
+	interactions.assign($DiagramArea/Interactions.get_children())
 	return interactions
 
 func get_particle_lines() -> Array[ParticleLine]:
-	var particle_lines : Array[ParticleLine] = []
-	for particle_line:ParticleLine in super.get_particle_lines():
-		if particle_line is ParticleLine:
-			particle_lines.append(particle_line)
-	return particle_lines
+	var interactions : Array[ParticleLine]
+	interactions.assign($DiagramArea/ParticleLines.get_children())
+	return interactions
 
 func get_selected_particle() -> ParticleData.Particle:
 	return ParticleButtons.selected_particle

@@ -1,9 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://j70abl1nme6y"]
+[gd_scene load_steps=14 format=3 uid="uid://j70abl1nme6y"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_7ln54"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/ProblemSelection/problem_selector.gd" id="2_7m7ny"]
 [ext_resource type="PackedScene" uid="uid://cqfassynt86vn" path="res://Scenes and Scripts/UI/Equation/mini_equation.tscn" id="2_v0r42"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="2_yg01j"]
+[ext_resource type="LabelSettings" uid="uid://mi5j08pnv0ay" path="res://Resources/Themes/uppercase_and_numbers.tres" id="3_08rbt"]
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="4_c7up8"]
 [ext_resource type="Texture2D" uid="uid://cb6lapmtgwimd" path="res://Textures/UI/MiniDiagram/arrow_right.png" id="6_prjng"]
 [ext_resource type="Texture2D" uid="uid://cms1u4elh5bo3" path="res://Textures/Buttons/icons/delete.png" id="8_moko8"]
@@ -30,8 +31,8 @@ theme_override_constants/separation = 0
 use_parent_material = true
 custom_minimum_size = Vector2(16, 2.08165e-12)
 layout_mode = 2
-theme_override_font_sizes/font_size = 15
 text = "1"
+label_settings = ExtResource("3_08rbt")
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -56,11 +57,11 @@ theme_override_constants/separation = 1
 material = null
 layout_mode = 2
 mouse_filter = 1
-icon = ExtResource("6_prjng")
 minimum_size = Vector2(22, 22)
+action_mode = 1
+icon = ExtResource("6_prjng")
 expand_icon = true
 icon_use_parent_material = true
-action_mode = 1
 
 [node name="Tooltip" parent="HBoxContainer/PanelContainer/HBoxContainer/HBoxContainer/Play" instance=ExtResource("4_c7up8")]
 tooltip = "Play"
@@ -69,11 +70,11 @@ tooltip = "Play"
 material = null
 layout_mode = 2
 mouse_filter = 1
-icon = ExtResource("8_moko8")
 minimum_size = Vector2(22, 22)
+action_mode = 1
+icon = ExtResource("8_moko8")
 expand_icon = true
 icon_use_parent_material = true
-action_mode = 1
 
 [node name="Tooltip" parent="HBoxContainer/PanelContainer/HBoxContainer/HBoxContainer/Delete" instance=ExtResource("4_c7up8")]
 tooltip = "Delete"
@@ -82,11 +83,11 @@ tooltip = "Delete"
 material = null
 layout_mode = 2
 mouse_filter = 1
-icon = ExtResource("10_8itxw")
 minimum_size = Vector2(22, 22)
+action_mode = 1
+icon = ExtResource("10_8itxw")
 expand_icon = true
 icon_use_parent_material = true
-action_mode = 1
 
 [node name="Tooltip" parent="HBoxContainer/PanelContainer/HBoxContainer/HBoxContainer/Modify" instance=ExtResource("4_c7up8")]
 tooltip = "Modify"
@@ -99,15 +100,15 @@ theme_override_constants/separation = -6
 [node name="Up" parent="HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer" instance=ExtResource("2_yg01j")]
 material = null
 layout_mode = 2
-icon = ExtResource("9_38yb2")
 minimum_size = Vector2(19, 15)
+icon = ExtResource("9_38yb2")
 icon_use_parent_material = true
 
 [node name="Down" parent="HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer" instance=ExtResource("2_yg01j")]
 material = null
 layout_mode = 2
-icon = ExtResource("10_r0lbv")
 minimum_size = Vector2(19, 15)
+icon = ExtResource("10_r0lbv")
 icon_use_parent_material = true
 
 [node name="Completed" type="TextureRect" parent="HBoxContainer"]

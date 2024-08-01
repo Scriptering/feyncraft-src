@@ -117,10 +117,10 @@ alignment = 1
 [node name="AddProblem" parent="PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/HBoxContainer" instance=ExtResource("5_7aaw2")]
 layout_mode = 2
 size_flags_horizontal = 1
-icon = ExtResource("7_bfw4j")
 minimum_size = Vector2(70, 28)
-icon_use_parent_material = true
 action_mode = 1
+icon = ExtResource("7_bfw4j")
+icon_use_parent_material = true
 
 [node name="LoadButton" parent="PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/HBoxContainer" instance=ExtResource("8_sg02h")]
 layout_mode = 2
@@ -158,7 +158,6 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 mouse_filter = 1
-theme_override_font_sizes/font_size = 9
 text = "Palettes"
 horizontal_alignment = 1
 vertical_alignment = 1

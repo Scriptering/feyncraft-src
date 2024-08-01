@@ -1,10 +1,8 @@
-[gd_scene load_steps=22 format=3 uid="uid://rtdlfrcuvhi8"]
+[gd_scene load_steps=14 format=3 uid="uid://rtdlfrcuvhi8"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_4tkmy"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/ProblemSelection/problem_creation_info.gd" id="2_13y6g"]
-[ext_resource type="Theme" uid="uid://cfmbhoq8cuoge" path="res://Resources/Themes/ProjectTheme.tres" id="2_shmax"]
 [ext_resource type="Texture2D" uid="uid://tql14gtq05lf" path="res://Textures/UI/Information/invalid.png" id="3_1n5rt"]
-[ext_resource type="FontFile" uid="uid://cq27s0444iwkg" path="res://Textures/Fonts/ConnectionIi-2wj8.otf" id="4_4hmwv"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="4_5sf8a"]
 [ext_resource type="Texture2D" uid="uid://c8iesbop3uqwa" path="res://Textures/Buttons/up_down.png" id="4_bv2vm"]
 [ext_resource type="Texture2D" uid="uid://bf4xxweukjvsb" path="res://Textures/Buttons/icons/interaction.png" id="4_yw2rn"]
@@ -14,18 +12,6 @@
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="7_y52ba"]
 [ext_resource type="Texture2D" uid="uid://dvx430022t0ua" path="res://Textures/Buttons/icons/next.png" id="8_2yrn2"]
 [ext_resource type="Script" path="res://Scenes and Scripts/Classes/spin_box.gd" id="8_harlm"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_v864w"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_28rdb"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_aqe77"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_02j3g"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bhw3a"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_twqoi"]
 
 [sub_resource type="Theme" id="Theme_otstg"]
 default_font = ExtResource("6_3hqhb")
@@ -37,7 +23,6 @@ use_parent_material = true
 custom_minimum_size = Vector2(2.08165e-12, 150)
 offset_right = 114.0
 offset_bottom = 200.0
-theme = ExtResource("2_shmax")
 script = ExtResource("2_13y6g")
 title = "2. Problem Creation"
 next_button = NodePath("VBoxContainer/Buttons/NextStep")
@@ -57,8 +42,6 @@ size_flags_vertical = 3
 use_parent_material = true
 custom_minimum_size = Vector2(1, 1)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("6_3hqhb")
-theme_override_font_sizes/font_size = 10
 text = "- Draw the problem.
 - Only the drawn initial and final states matter."
 autowrap_mode = 3
@@ -74,14 +57,6 @@ layout_mode = 2
 [node name="CheckButton" type="CheckButton" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
-theme_override_fonts/font = ExtResource("4_4hmwv")
-theme_override_font_sizes/font_size = 8
-theme_override_styles/normal = SubResource("StyleBoxEmpty_v864w")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_28rdb")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_aqe77")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_02j3g")
-theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_bhw3a")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_twqoi")
 text = "Custom Degree"
 
 [node name="ButtonSoundComponent" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/CheckButton" instance=ExtResource("5_hqg77")]
@@ -135,7 +110,6 @@ use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
-theme_override_font_sizes/font_size = 9
 text = "Quantum numbers don't match"
 autowrap_mode = 2
 
@@ -154,7 +128,6 @@ use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
-theme_override_font_sizes/font_size = 9
 text = "Energy not conserved"
 autowrap_mode = 2
 
@@ -173,7 +146,6 @@ use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
-theme_override_font_sizes/font_size = 9
 text = "No particles"
 autowrap_mode = 2
 
@@ -192,7 +164,6 @@ use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
-theme_override_font_sizes/font_size = 9
 text = "No Solutions Found"
 autowrap_mode = 2
 
@@ -204,8 +175,8 @@ alignment = 1
 [node name="PrevStep" parent="VBoxContainer/Buttons" instance=ExtResource("4_5sf8a")]
 material = null
 layout_mode = 2
-icon = ExtResource("6_1wu7s")
 minimum_size = Vector2(24, 21)
+icon = ExtResource("6_1wu7s")
 icon_use_parent_material = true
 
 [node name="Tooltip" parent="VBoxContainer/Buttons/PrevStep" instance=ExtResource("7_y52ba")]
@@ -214,8 +185,8 @@ tooltip = "Previous Step"
 [node name="NextStep" parent="VBoxContainer/Buttons" instance=ExtResource("4_5sf8a")]
 material = null
 layout_mode = 2
-icon = ExtResource("8_2yrn2")
 minimum_size = Vector2(24, 21)
+icon = ExtResource("8_2yrn2")
 icon_use_parent_material = true
 
 [node name="Tooltip" parent="VBoxContainer/Buttons/NextStep" instance=ExtResource("7_y52ba")]

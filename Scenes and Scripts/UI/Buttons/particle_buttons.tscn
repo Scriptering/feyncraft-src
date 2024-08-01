@@ -1,9 +1,9 @@
-[gd_scene load_steps=32 format=3 uid="uid://ds2iet11sv3ty"]
+[gd_scene load_steps=30 format=3 uid="uid://ds2iet11sv3ty"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Buttons/particle_buttons.gd" id="1_magdw"]
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_w6xjt"]
+[ext_resource type="FontVariation" uid="uid://bgv46fr0yu083" path="res://Textures/Fonts/numbers.tres" id="2_r2fks"]
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="4_1s6pp"]
-[ext_resource type="FontFile" uid="uid://dtkr82iuj8ovy" path="res://Textures/Fonts/munro-font/Munro-2LYe.ttf" id="4_g22of"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/PullOutTab.gd" id="5_hlykg"]
 [ext_resource type="PackedScene" uid="uid://diro6a1arcmc0" path="res://Scenes and Scripts/UI/Buttons/ParticleButtons/ParticleButton.tscn" id="7_omtgh"]
 [ext_resource type="PackedScene" uid="uid://ctj2f7ofdkrr1" path="res://Scenes and Scripts/UI/Buttons/pull_out_tab_button_up.tscn" id="8_uancy"]
@@ -28,17 +28,10 @@
 [ext_resource type="Texture2D" uid="uid://bmv8pnuf6tt5c" path="res://Textures/Buttons/icons/Particles/lepton_neutrino.png" id="28_wg0lb"]
 [ext_resource type="Texture2D" uid="uid://dowhqmddrlbp" path="res://Textures/Buttons/icons/Particles/dark_quark.png" id="29_vjhit"]
 
-[sub_resource type="FontVariation" id="FontVariation_bju0s"]
-base_font = ExtResource("4_g22of")
-variation_transform = Transform2D(1, 2.08165e-12, 2.08165e-12, 0.75, 2.08165e-12, 2.08165e-12)
-spacing_top = -3
-spacing_bottom = -4
-
 [sub_resource type="Theme" id="Theme_nl1g0"]
-Label/font_sizes/font_size = 14
-Label/fonts/font = SubResource("FontVariation_bju0s")
-
-[sub_resource type="Theme" id="Theme_be46u"]
+default_font = ExtResource("2_r2fks")
+Label/font_sizes/font_size = 16
+Label/fonts/font = ExtResource("2_r2fks")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4juqm"]
 texture = ExtResource("4_1s6pp")
@@ -73,7 +66,6 @@ custom_minimum_size = Vector2(79, 2.08165e-12)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
-theme = SubResource("Theme_be46u")
 script = ExtResource("5_hlykg")
 ContentContainer = NodePath("MovingContainer/Tab/Leptons")
 TabButton = NodePath("MovingContainer/PullOutTabButtonUp")
@@ -102,6 +94,7 @@ theme_override_constants/margin_left = 5
 theme_override_constants/margin_right = 5
 TabText = "LEPTONS"
 TabMinimumSize = Vector2(61, 2.08165e-12)
+icon_use_parent_material = true
 
 [node name="Tab" type="PanelContainer" parent="HBoxContainer/Leptons/MovingContainer"]
 use_parent_material = true

@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dutuwg10y2hwq"]
+[gd_scene load_steps=11 format=3 uid="uid://dutuwg10y2hwq"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_660a7"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/credits.gd" id="2_nu17t"]
@@ -6,15 +6,10 @@
 [ext_resource type="Texture2D" uid="uid://d38a3uriu26gx" path="res://Textures/Buttons/icons/donate.png" id="4_6crf1"]
 [ext_resource type="Texture2D" uid="uid://bs7yco7s5pg15" path="res://icon.png" id="4_84af4"]
 [ext_resource type="Texture2D" uid="uid://bwwdur67r0bgl" path="res://Textures/aseprite.png" id="5_e238y"]
-[ext_resource type="FontFile" uid="uid://cq27s0444iwkg" path="res://Textures/Fonts/ConnectionIi-2wj8.otf" id="9_t01cb"]
 [ext_resource type="StyleBox" uid="uid://bubm5sx3xn6q5" path="res://Resources/Themes/TitleLabel.tres" id="10_4hdph"]
 [ext_resource type="Texture2D" uid="uid://ci1qrp3pyqm6h" path="res://Textures/Buttons/icons/close.png" id="11_6hv25"]
 [ext_resource type="Texture2D" uid="uid://cgfs1pdopjbh" path="res://Textures/Buttons/icons/close_hover.png" id="12_schb0"]
 [ext_resource type="PackedScene" uid="uid://dorw3vr2amuy3" path="res://Scenes and Scripts/Components/button_sound_component.tscn" id="13_1042u"]
-
-[sub_resource type="FontVariation" id="FontVariation_80dg7"]
-base_font = ExtResource("9_t01cb")
-spacing_bottom = -2
 
 [node name="Credits" type="Control" node_paths=PackedStringArray("GrabAreas")]
 material = ExtResource("1_660a7")
@@ -32,7 +27,7 @@ offset_left = -67.0
 offset_top = -51.0
 offset_right = 71.0
 offset_bottom = 11.0
-theme_override_constants/separation = -146
+theme_override_constants/separation = -154
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
 use_parent_material = true
@@ -45,7 +40,6 @@ layout_mode = 2
 [node name="Label" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
-theme_override_fonts/font = SubResource("FontVariation_80dg7")
 text = "- Made by
 Adam Owen and Jo Gaunt
 - Funded by The Royal Society
@@ -77,22 +71,20 @@ stretch_mode = 5
 [node name="Label2" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/GridContainer"]
 use_parent_material = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 9
 text = "Godot"
 horizontal_alignment = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/GridContainer"]
 use_parent_material = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 9
 text = "Aseprite"
 horizontal_alignment = 1
 
 [node name="Donate" parent="VBoxContainer/PanelContainer/VBoxContainer" instance=ExtResource("2_rnov3")]
 layout_mode = 2
-icon = ExtResource("4_6crf1")
+minimum_size = Vector2(110, 23)
 text = "Donate on KoFi "
-minimum_size = Vector2(100, 23)
+icon = ExtResource("4_6crf1")
 expand_icon = true
 
 [node name="TitleContainer" type="PanelContainer" parent="VBoxContainer"]
@@ -122,12 +114,11 @@ on_pressed = true
 
 [node name="Title" type="Label" parent="VBoxContainer/TitleContainer/HBoxContainer"]
 use_parent_material = true
-custom_minimum_size = Vector2(50, 15)
+custom_minimum_size = Vector2(39, 12)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 mouse_filter = 1
-theme_override_font_sizes/font_size = 9
 text = "Credits"
 horizontal_alignment = 1
 vertical_alignment = 1
