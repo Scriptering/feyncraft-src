@@ -1,0 +1,6 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://mi5j08pnv0ay"]
+
+[ext_resource type="FontVariation" uid="uid://bgv46fr0yu083" path="res://Textures/Fonts/numbers.tres" id="1_tqh17"]
+
+[resource]
+font = ExtResource("1_tqh17")
