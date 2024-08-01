@@ -41,7 +41,8 @@ var diagram_future: Array[DrawingMatrix] = []
 var current_diagram: DrawingMatrix = null
 var diagram_added_to_history: bool = false
 
-var update_queue : Array[Variant] = []
+var update_queued: bool = true
+var drawing_matrix: DrawingMatrix
 
 func _ready() -> void:
 	Crosshair.moved_and_rested.connect(_crosshair_moved)
@@ -84,6 +85,9 @@ func _process(_delta: float) -> void:
 	flush_update_queue()
 
 func flush_update_queue():
+	if update_queued:
+		update_queued = false
+	
 	for interaction:Interaction in $DiagramArea/Interactions.get_children():
 		if interaction.update_queued:
 			interaction.update_queued = false
@@ -201,7 +205,7 @@ func sort_drawing_interactions(interaction1: Interaction, interaction2: Interact
 	var particle2: ParticleData.Particle = interaction2.connected_particles.front()
 	
 	if abs(particle1) != abs(particle2):
-		return abs(particle1) < abs(particle2)
+		return abs(particle1) < abs(particle2) 
 	
 	if particle1 != particle2:
 		return particle1 < particle2
@@ -425,14 +429,22 @@ func is_line_placement_valid(particle_line: ParticleLine) -> bool:
 	return true
 
 func get_interactions() -> Array[Interaction]:
-	var interactions : Array[Interaction]
-	interactions.assign($DiagramArea/Interactions.get_children())
+	var interactions : Array[Interaction] = []
+	
+	for child:Interaction in $DiagramArea/Interactions.get_children():
+		if child and !child.is_queued_for_deletion():
+			interactions.push_back(child)
+
 	return interactions
 
 func get_particle_lines() -> Array[ParticleLine]:
-	var interactions : Array[ParticleLine]
-	interactions.assign($DiagramArea/ParticleLines.get_children())
-	return interactions
+	var particle_lines : Array[ParticleLine] = []
+	
+	for child:ParticleLine in $DiagramArea/ParticleLines.get_children():
+		if child and !child.is_queued_for_deletion():
+			particle_lines.push_back(child)
+
+	return particle_lines
 
 func get_selected_particle() -> ParticleData.Particle:
 	return ParticleButtons.selected_particle
@@ -638,8 +650,11 @@ func drop_interaction(interaction: Interaction) -> void:
 	if ArrayFuncs.is_vec_zero_approx(interaction.position - interaction.start_grab_position):
 		remove_last_diagram_from_history()
 	
+	print("interaction dropped")
+	
 	for particle_line:ParticleLine in interaction.connected_lines:
 		if !is_line_placement_valid(particle_line):
+			print("line placement invalid")
 			delete_line(particle_line)
 			continue
 		

@@ -114,7 +114,6 @@ stretch_mode = 5
 [node name="Label" type="Label" parent="VBoxContainer/Tab/VBoxContainer/DiagramValid"]
 use_parent_material = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 8
 text = "Diagram is not valid"
 vertical_alignment = 2
 
@@ -130,7 +129,6 @@ stretch_mode = 5
 [node name="Label" type="Label" parent="VBoxContainer/Tab/VBoxContainer/DiagramConnected"]
 use_parent_material = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 8
 text = "Diagram is not connected"
 vertical_alignment = 2
 
@@ -146,7 +144,6 @@ stretch_mode = 5
 [node name="Label" type="Label" parent="VBoxContainer/Tab/VBoxContainer/EnergyConservation"]
 use_parent_material = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 8
 text = "Energy is not conserved"
 vertical_alignment = 2
 

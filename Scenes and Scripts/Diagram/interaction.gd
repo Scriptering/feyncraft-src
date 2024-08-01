@@ -143,10 +143,6 @@ func queue_update() -> void:
 	update_queued = true
 
 func update() -> void:
-	if should_request_deletion():
-		request_deletion.emit(self)
-		return
-
 	update_dot_visual()
 	update_ball_hovering()
 	if connected_lines.size() < 2 and information_visible:
