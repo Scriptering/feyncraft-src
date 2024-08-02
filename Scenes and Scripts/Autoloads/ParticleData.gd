@@ -706,3 +706,9 @@ var PARTICLE_INTERACTIONS : Dictionary = {
 		[Particle.bottom, Particle.bright_quark, Particle.W],
 	]
 }
+
+func anti(particle: ParticleData.Particle) -> ParticleData.Particle:
+	if particle in SHADED_PARTICLES:
+		return -particle
+	
+	return particle

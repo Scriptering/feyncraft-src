@@ -104,6 +104,67 @@ static func get_highest_y(positions: Array[Vector2i]) -> int:
 
 	return highest_y
 
+static func is_anti_connection(from_id:int, to_id:int, positions:Array[Vector2i], matrix:DrawingMatrix) -> bool:
+	var is_forward_connection: bool = matrix.are_interactions_connected(from_id, to_id)
+	var is_right_connection: bool = positions[to_id].x >= positions[from_id].x
+	
+	return is_forward_connection != is_right_connection
+	
+
+static func get_interaction_string(matrix: DrawingMatrix, id: int, positions:Array[Vector2i]) -> String:
+	var interaction_string: String = ""
+	
+	var is_extreme_point: bool = matrix.is_extreme_point(id)
+	
+	var connection_particle: ParticleData.Particle
+	if is_extreme_point:
+		connection_particle = matrix.get_connected_particles(id, true)[0]
+		var connected_id : int = matrix.get_connected_ids(id, true)[0]
+		var is_anti : bool = is_anti_connection(id, connected_id, positions, matrix)
+		
+		connection_particle = connection_particle if !is_anti else ParticleData.anti(connection_particle)
+	
+	interaction_string += "\\vertex (i%s) at (%s*\\xscale, %s*\\yscale)%s;\n" % [
+		id,
+		positions[id].x,
+		positions[id].y,
+		" {%s}"%particle_dict[connection_particle] if is_extreme_point else ""
+	]
+	
+	return interaction_string
+
+static func get_connection_string(
+	matrix:DrawingMatrix,
+	id:int, to_id:int,
+	particle:ParticleData.Particle,
+	positions:Array[Vector2i]
+) -> String:
+	
+	var connection_string: String = ""
+	
+	var is_right : bool = positions[to_id].x >= positions[id].x
+	
+	if !is_right:
+		particle = ParticleData.anti(particle)
+	
+	var left_id: int = id if is_right else to_id
+	var right_id: int = to_id if is_right else id
+	
+	var has_label: bool = !(
+		matrix.is_extreme_point(id)
+		|| matrix.is_extreme_point(to_id)
+	)
+	
+	connection_string += "(i%s) -- [%s%s] (i%s),\n" % [
+		left_id,
+		line_dict[particle],
+		", edge label = %s"%particle_dict[particle] if has_label else "",
+		right_id
+	]
+	
+	
+	return connection_string
+
 static func get_string(drawing_matrix: DrawingMatrix) -> String:
 	var exporting_matrix: DrawingMatrix = drawing_matrix.duplicate(true)
 	exporting_matrix.rejoin_double_connections()
@@ -123,35 +184,19 @@ static func get_string(drawing_matrix: DrawingMatrix) -> String:
 	]
 	
 	for i:int in exporting_matrix.matrix_size:
-		export_string += "\\vertex (i%s) at (%s*\\xscale, %s*\\yscale)%s;\n" % [
-			i,
-			exporting_matrix.normalised_interaction_positions[i].x,
-			exporting_matrix.normalised_interaction_positions[i].y,
-			" {%s}" if exporting_matrix.is_extreme_point(i) else ""
-		]
+		export_string += get_interaction_string(exporting_matrix, i, interaction_positions)
 
 	export_string += "\\diagram* {\n"
 
-	for i:int in exporting_matrix.matrix_size:
-		for c:Array in exporting_matrix.get_connections(i):
-			var particle : ParticleData.Particle = c[ConnectionMatrix.Connection.particle]
-			var to_id : int = c[ConnectionMatrix.Connection.to_id]
-			
-			var is_right : bool = interaction_positions[to_id].x > interaction_positions[i].x
-			
-			if particle in ParticleData.SHADED_PARTICLES:
-				if !is_right:
-					particle = -particle
-			
-			var left_id: int = i if is_right else to_id
-			var right_id: int = to_id if is_right else i
-			
-			export_string += "(i%s) -- [%s, edge label = %s] (i%s),\n" % [
-				left_id,
-				line_dict[particle],
-				particle_dict[particle],
-				right_id
-			]
+	for id:int in exporting_matrix.matrix_size:
+		for c:Array in exporting_matrix.get_connections(id):
+			export_string += get_connection_string(
+				exporting_matrix,
+				id,
+				c[ConnectionMatrix.Connection.to_id],
+				c[ConnectionMatrix.Connection.particle],
+				interaction_positions
+			)
 
 	export_string += "};\n\\end{feynman}\n\\end{tikzpicture}\n"
 
