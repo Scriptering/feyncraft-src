@@ -4,88 +4,6 @@ class_name DrawingMatrixExporter
 const xscale:float = .25
 const yscale:float = .25
 
-const particle_dict : Dictionary = {
-	ParticleData.Particle.photon : "\\(\\gamma\\)",
-	ParticleData.Particle.gluon : "\\(W^{-}\\)",
-	ParticleData.Particle.Z : "\\(Z\\)",
-	ParticleData.Particle.H : "\\(H\\)",
-	ParticleData.Particle.W : "\\(W\\)",
-	ParticleData.Particle.lepton : "\\(l^{-}\\)",
-	ParticleData.Particle.electron : "\\(e^{-}\\)",
-	ParticleData.Particle.muon : "\\(\\mu^{-}\\)",
-	ParticleData.Particle.tau : "\\(\\tau^{-}\\)",
-	ParticleData.Particle.lepton_neutrino : "\\(\\nu_{l}\\)",
-	ParticleData.Particle.electron_neutrino : "\\(\\nu_{e}\\)",
-	ParticleData.Particle.muon_neutrino : "\\(\\nu_{\\mu}\\)",
-	ParticleData.Particle.tau_neutrino : "\\(\\nu_{\\tau}\\)",
-	ParticleData.Particle.bright_quark : "\\(q^{u}\\)",
-	ParticleData.Particle.up : "\\(u\\)",
-	ParticleData.Particle.charm : "\\(c\\)",
-	ParticleData.Particle.top : "\\(t\\)",
-	ParticleData.Particle.dark_quark : "\\(q^{d}\\)",
-	ParticleData.Particle.down : "\\(d\\)",
-	ParticleData.Particle.strange : "\\(s\\)",
-	ParticleData.Particle.bottom : "\\(b\\)",
-	ParticleData.Particle.anti_bottom : "\\(\\overline b\\)",
-	ParticleData.Particle.anti_strange : "\\(\\overline s\\)",
-	ParticleData.Particle.anti_down : "\\(\\overline d\\)",
-	ParticleData.Particle.anti_dark_quark : "\\(\\overline q^{d}\\)",
-	ParticleData.Particle.anti_top : "\\(\\overline t\\)",
-	ParticleData.Particle.anti_charm : "\\(\\overline c\\)",
-	ParticleData.Particle.anti_up : "\\(\\overline u\\)",
-	ParticleData.Particle.anti_bright_quark : "\\(\\overline q^{u}\\)",
-	ParticleData.Particle.anti_tau_neutrino : "\\(\\overline \\nu_{\\tau}\\)",
-	ParticleData.Particle.anti_muon_neutrino : "\\(\\overline \\nu_{\\mu}\\)",
-	ParticleData.Particle.anti_electron_neutrino : "\\(\\overline \\nu_{e}\\)",
-	ParticleData.Particle.anti_lepton_neutrino : "\\(\\overline \\nu_{l}\\)",
-	ParticleData.Particle.anti_tau : "\\(\\tau^{+}\\)",
-	ParticleData.Particle.anti_muon : "\\(\\mu^{+}\\)",
-	ParticleData.Particle.anti_electron : "\\(e^{+}\\)",
-	ParticleData.Particle.anti_lepton : "\\(l^{+}\\)",
-	ParticleData.Particle.anti_W : "\\(W^{+}\\)",
-}
-
-const line_dict : Dictionary = {
-	ParticleData.Particle.photon : "photon",
-	ParticleData.Particle.gluon : "gluon",
-	ParticleData.Particle.Z : "boson",
-	ParticleData.Particle.H : "scalar",
-	ParticleData.Particle.W : "boson",
-	ParticleData.Particle.lepton : "fermion",
-	ParticleData.Particle.electron : "fermion",
-	ParticleData.Particle.muon : "fermion",
-	ParticleData.Particle.tau : "fermion",
-	ParticleData.Particle.lepton_neutrino : "fermion",
-	ParticleData.Particle.electron_neutrino : "fermion",
-	ParticleData.Particle.muon_neutrino : "fermion",
-	ParticleData.Particle.tau_neutrino : "fermion",
-	ParticleData.Particle.bright_quark : "fermion",
-	ParticleData.Particle.up : "fermion",
-	ParticleData.Particle.charm : "fermion",
-	ParticleData.Particle.top : "fermion",
-	ParticleData.Particle.dark_quark : "fermion",
-	ParticleData.Particle.down : "fermion",
-	ParticleData.Particle.strange : "fermion",
-	ParticleData.Particle.bottom : "fermion",
-	ParticleData.Particle.anti_bottom : "anti fermion",
-	ParticleData.Particle.anti_strange : "anti fermion",
-	ParticleData.Particle.anti_down : "anti fermion",
-	ParticleData.Particle.anti_dark_quark : "anti fermion",
-	ParticleData.Particle.anti_top : "anti fermion",
-	ParticleData.Particle.anti_charm : "anti fermion",
-	ParticleData.Particle.anti_up : "anti fermion",
-	ParticleData.Particle.anti_bright_quark : "anti fermion",
-	ParticleData.Particle.anti_tau_neutrino : "anti fermion",
-	ParticleData.Particle.anti_muon_neutrino : "anti fermion",
-	ParticleData.Particle.anti_electron_neutrino : "anti fermion",
-	ParticleData.Particle.anti_lepton_neutrino : "anti fermion",
-	ParticleData.Particle.anti_tau : "anti fermion",
-	ParticleData.Particle.anti_muon : "anti fermion",
-	ParticleData.Particle.anti_electron : "anti fermion",
-	ParticleData.Particle.anti_lepton : "anti fermion",
-	ParticleData.Particle.anti_W : "boson",
-}
-
 static func get_lowest_x(positions: Array[Vector2i]) -> int:
 	var lowest_x: int = positions[0].x
 	
@@ -109,7 +27,6 @@ static func is_anti_connection(from_id:int, to_id:int, positions:Array[Vector2i]
 	var is_right_connection: bool = positions[to_id].x >= positions[from_id].x
 	
 	return is_forward_connection != is_right_connection
-	
 
 static func get_interaction_string(matrix: DrawingMatrix, id: int, positions:Array[Vector2i]) -> String:
 	var interaction_string: String = ""
@@ -128,7 +45,7 @@ static func get_interaction_string(matrix: DrawingMatrix, id: int, positions:Arr
 		id,
 		positions[id].x,
 		positions[id].y,
-		" {%s}"%particle_dict[connection_particle] if is_extreme_point else ""
+		" {\\(%s\\)}"%ParticleData.export_particle_dict[connection_particle] if is_extreme_point else ""
 	]
 	
 	return interaction_string
@@ -157,13 +74,81 @@ static func get_connection_string(
 	
 	connection_string += "(i%s) -- [%s%s] (i%s),\n" % [
 		left_id,
-		line_dict[particle],
-		", edge label = %s"%particle_dict[particle] if has_label else "",
+		ParticleData.export_line_dict[particle],
+		", edge label = \\(%s\\)"%ParticleData.export_particle_dict[particle] if has_label else "",
 		right_id
 	]
 	
 	
 	return connection_string
+
+static func get_highest_hadron_id(hadron_ids:PackedInt32Array, positions:Array[Vector2i]) -> int:
+	var highest_id: int = hadron_ids[0]
+	
+	for id:int in hadron_ids:
+		if positions[id] > positions[highest_id]:
+			highest_id = id
+	
+	return highest_id
+
+static func get_lowest_hadron_id(hadron_ids:PackedInt32Array, positions:Array[Vector2i]) -> int:
+	var lowest_id: int = hadron_ids[0]
+	
+	for id:int in hadron_ids:
+		if positions[id] < positions[lowest_id]:
+			lowest_id = id
+	
+	return lowest_id
+
+static func get_hadron_particles(
+	matrix:DrawingMatrix,
+	hadron_ids:PackedInt32Array,
+	positions:Array[Vector2i]
+) -> Array[ParticleData.Particle]:
+	var particles: Array[ParticleData.Particle] = []
+	
+	for id:int in hadron_ids:
+		var to_id:int = matrix.get_connected_ids(id, true)[0]
+		var particle:ParticleData.Particle = matrix.get_connected_particles(id, true)[0]
+		var is_anti: bool = is_anti_connection(id, to_id, positions, matrix)
+		
+		particles.push_back(particle if !is_anti else ParticleData.anti(particle))
+	
+	return particles
+
+
+static func get_hadron_string(
+	matrix:DrawingMatrix,
+	hadron_ids:PackedInt32Array,
+	positions:Array[Vector2i]
+) -> String:
+	var hadron_string: String = ""
+	
+	var state: StateLine.State = matrix.get_state_from_id(hadron_ids[0])
+	
+	var on_left: bool = matrix.get_state_from_id(hadron_ids[0]) == StateLine.State.Initial
+	var label_position: String = "left" if on_left else "right"
+	
+	var lowest_id:int = get_lowest_hadron_id(hadron_ids, positions)
+	var highest_id:int = get_highest_hadron_id(hadron_ids, positions)
+	
+	var from_id:int = lowest_id if on_left else highest_id
+	var to_id:int = highest_id if on_left else lowest_id
+	
+	var from_position:String = "south west" if on_left else "north east"
+	var to_position:String = "north west" if on_left else "south east"
+	
+	hadron_string += "\\draw [decoration={brace}, decorate] (i%s.%s) -- (i%s.%s)\n"%[
+		from_id, from_position, to_id, to_position
+	]
+	
+	var particles:Array = get_hadron_particles(matrix, hadron_ids, positions)
+	
+	hadron_string += "\tnode [pos=0.5, %s] {\\(%s\\)};\n"%[
+		label_position, ParticleData.export_hadron_dict[ParticleData.find_hadron(particles)]
+	]
+	
+	return hadron_string
 
 static func get_string(drawing_matrix: DrawingMatrix) -> String:
 	var exporting_matrix: DrawingMatrix = drawing_matrix.duplicate(true)
@@ -197,7 +182,12 @@ static func get_string(drawing_matrix: DrawingMatrix) -> String:
 				c[ConnectionMatrix.Connection.particle],
 				interaction_positions
 			)
+	
+	export_string += "};\n"
+	
+	for hadron_ids:Array in exporting_matrix.split_hadron_ids:
+		export_string += get_hadron_string(exporting_matrix, hadron_ids, interaction_positions)
 
-	export_string += "};\n\\end{feynman}\n\\end{tikzpicture}\n"
+	export_string += "\\end{feynman}\n\\end{tikzpicture}\n"
 
 	return export_string

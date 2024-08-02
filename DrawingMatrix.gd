@@ -63,7 +63,7 @@ func seperate_double_connections() -> void:
 				get_state_from_id(j) != StateLine.State.None
 			)
 			
-			if both_hadrons:
+			if both_hadrons:	
 				continue
 			
 			while is_double_connection(i, j):

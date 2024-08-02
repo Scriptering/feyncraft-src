@@ -21,7 +21,7 @@ func get_hadron_interactions() -> Array[Interaction]:
 	
 	for hadron_line:ParticleLine in hadron_lines:
 		hadron_interactions.push_back(
-			hadron_line.get_interaction_at_point(hadron_line.get_point_at_position(hadron_line.get_side_position(state as ParticleLine.Side)))
+			hadron_line.connected_interactions[hadron_line.get_side_point(state as ParticleLine.Side)]
 		)
 	
 	return hadron_interactions

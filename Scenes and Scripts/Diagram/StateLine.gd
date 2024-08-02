@@ -24,12 +24,9 @@ var old_quark_groups: Array = [[]]
 var old_position_x: int
 var update_queued: bool = true
 
-var connected_lone_particles : Array[ParticleData.Particle] : get = _get_connected_lone_particles
+var connected_interactions: Array[Interaction] = []
 
-func _process(_delta: float) -> void:
-	if update_queued:
-		update_queued = false
-		update()
+var connected_lone_particles : Array[ParticleData.Particle] : get = _get_connected_lone_particles
 
 func init(diagram: MainDiagram) -> void:
 	Diagram = diagram
@@ -74,6 +71,12 @@ func update_hadrons(quark_groups: Array = get_quark_groups()) -> void:
 	sort_quark_groups(quark_groups)
 	create_hadrons(quark_groups)
 	create_hadron_visuals()
+
+func connect_interaction(interaction: Interaction) -> void:
+	connected_interactions.push_back(interaction)
+
+func disconnect_interaction(interaction: Interaction) -> void:
+	connected_interactions.erase(interaction)
 
 func clear_hadrons() -> void:
 	hadrons.clear()

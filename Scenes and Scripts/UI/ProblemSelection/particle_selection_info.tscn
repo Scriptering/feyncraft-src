@@ -7,13 +7,14 @@
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="6_5gy8v"]
 [ext_resource type="Texture2D" uid="uid://dvx430022t0ua" path="res://Textures/Buttons/icons/next.png" id="8_rm0tq"]
 
-[node name="ParticleSelectionInfo" type="PanelContainer" node_paths=PackedStringArray("next_button")]
+[node name="ParticleSelectionInfo" type="PanelContainer" node_paths=PackedStringArray("check_button", "next_button")]
 material = ExtResource("1_622tk")
 use_parent_material = true
 custom_minimum_size = Vector2(2.08165e-12, 150)
 offset_right = 124.0
 offset_bottom = 200.0
 script = ExtResource("2_ojpnu")
+check_button = NodePath("VBoxContainer/VBoxContainer/VBoxContainer/CheckButton")
 title = "1. Particle Selection"
 next_button = NodePath("VBoxContainer/VBoxContainer/Buttons/NextStep")
 

@@ -2,7 +2,7 @@ extends InfoPanel
 
 signal toggle_all(toggle: bool)
 
-@onready var check_button: CheckButton = $VBoxContainer/VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/CheckButton
+@export var check_button: CheckButton
 
 func _next() -> void:
 	Globals.creating_problem.hide_unavailable_particles = check_button.button_pressed
