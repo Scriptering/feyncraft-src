@@ -231,6 +231,18 @@ func remove_empty_rows() -> void:
 		if get_connected_count(id, true) == 0:
 			remove_interaction(id)
 
+func is_bend_interaction(id:int) -> bool:
+	if get_connected_count(id) != 1:
+		return false
+	
+	if get_connected_count(id, false, true) != 1:
+		return false
+	
+	if get_connected_particles(id).front() != get_connected_particles(id, false, true, true).front():
+		return false
+	
+	return true
+
 func rejoin_double_connections() -> void:
 	for id:int in get_state_ids(StateLine.State.None):
 		if !(get_connected_count(id) == 1 and get_connected_count(id, false, true) == 1):

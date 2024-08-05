@@ -75,6 +75,3 @@ func is_valid_end_position() -> bool:
 
 func cancel_placement() -> void:
 	Diagram.remove_last_diagram_from_history()
-	for particle_line:ParticleLine in Diagram.get_particle_lines():
-		if !particle_line.is_placed:
-			Diagram.delete_line(particle_line)
