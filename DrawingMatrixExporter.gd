@@ -3,6 +3,7 @@ class_name DrawingMatrixExporter
 
 const xscale:float = .25
 const yscale:float = .25
+const scale: Vector2 = Vector2(xscale, yscale)
 
 static func calc_centre(a: Vector2, b: Vector2, c:Vector2) -> Vector2:
 	b -= a
@@ -72,19 +73,91 @@ static func get_bend_angle(centre: Vector2, point: Vector2) -> float:
 	angle += sign((centre - point).x) * 90
 	angle *= sign((centre - point).y)
 	
-	return angle
+	return clamp(angle, -90, 90)
 
-static func get_bend_string(from_id: int, mid_id: int, to_id: int, positions: Array[Vector2i]) -> String:
-	var a: Vector2 = positions[from_id]
-	var b: Vector2 = positions[mid_id]
-	var c: Vector2 = positions[to_id]
+static func get_bend_connection_string(
+	from_id: int, mid_id: int, to_id: int,
+	particle: ParticleData.Particle,
+	positions: Array[Vector2i],
+	has_label: bool
+) -> String:
+	var out_vec: Vector2 = positions[mid_id] - positions[from_id]
+	var in_vec: Vector2 = positions[mid_id] - positions[to_id]
+	var out_angle : float = out_vec.angle()
+	var in_angle : float = in_vec.angle()
 	
-	var centre: Vector2 = calc_centre(a, b, c)
-	var radius: float = (b - centre).length()
-	
-	return ", out=%s, in=%s"%[round(get_bend_angle(centre, a)), round(get_bend_angle(centre, c))]
+	return (
+		"(i%s) -- [%s, out = %s, in = %s%s] (i%s),\n"%[
+			from_id,
+			ParticleData.export_line_dict[particle],
+			round(rad_to_deg(out_angle)),
+			round(rad_to_deg(in_angle)),
+			", edge label = %s"%[edge_label(particle)] if has_label else "",
+			to_id
+		]
+	)
 
-static func get_connection_string(
+static func edge_label(particle: ParticleData.Particle) -> String:
+	return "\\(%s\\)"%[ParticleData.export_particle_dict[particle]]
+
+static func get_3loop_string(path: Array[int], positions: Array[Vector2i], particle: ParticleData.Particle) -> String:
+	var out_vec: Vector2 = Vector2(positions[path[1]])*scale - Vector2(positions[path[0]])*scale
+	var in_vec: Vector2 = Vector2(positions[path[2]])*scale - Vector2(positions[path[0]])*scale
+	var out_angle : float = rad_to_deg(out_vec.angle())
+	var in_angle : float = rad_to_deg(in_vec.angle())
+	var min_distance : float = max(out_vec.length(), in_vec.length())
+	return "i%s -- [%s, out = %s, in = %s, loop, min distance = %scm, edge label = %s] i%s,\n"%[
+		path[0],
+		ParticleData.export_line_dict[particle],
+		round(out_angle),
+		round(in_angle),
+		round(min_distance) * 1.5,
+		edge_label(particle),
+		path[0]
+	]
+
+static func get_4loop_string(path: Array[int], positions: Array[Vector2i], particle: ParticleData.Particle) -> String:
+	return "i%s -- [%s, half left, edge label = %s] i%s,\n"%[
+		path[0],
+		ParticleData.export_line_dict[particle],
+		edge_label(particle),
+		path[2]
+	] + "i%s -- [%s, half left, edge label = %s] i%s,\n"%[
+		path[2],
+		ParticleData.export_line_dict[particle],
+		edge_label(particle),
+		path[0]
+	]
+
+static func get_bend_string(matrix:DrawingMatrix, from_id: int, first_bend_id: int, positions: Array[Vector2i]) -> String:
+	var bend_path: Array[int] = matrix.get_bend_path(from_id, first_bend_id)
+	var particle: ParticleData.Particle = matrix.get_connection_particles(from_id, first_bend_id).front()
+	
+	while bend_path.size() > (4 + int(bend_path.front() == bend_path.back())):
+		bend_path.remove_at(randi_range(1, bend_path.size()-2))
+	
+	if bend_path.front() == bend_path.back():
+		if bend_path.size() == 4:
+			return get_3loop_string(bend_path, positions, particle)
+		elif bend_path.size() == 5:
+			return get_4loop_string(bend_path, positions, particle)
+	
+	return get_bend_connection_string(
+		from_id,
+		bend_path[randi_range(1, bend_path.size()-2)],
+		bend_path[-1],
+		particle,
+		positions,
+		has_label(from_id, bend_path[-1], matrix)
+	)
+
+static func has_label(from_id: int, to_id: int, matrix:DrawingMatrix) -> bool:
+	return !(
+		matrix.is_extreme_point(from_id)
+		|| matrix.is_extreme_point(to_id)
+	)
+
+static func get_direct_connection_string(
 	matrix:DrawingMatrix,
 	from_id:int, to_id:int,
 	particle:ParticleData.Particle,
@@ -92,29 +165,19 @@ static func get_connection_string(
 ) -> String:
 	
 	var connection_string: String = ""
-	
-	var is_bend: bool = matrix.is_bend_interaction(to_id)
-	var bend_string: String
-	if is_bend:
-		bend_string = get_bend_string(from_id, to_id, matrix.get_connected_ids(to_id)[0], positions)
-	
 	var is_right : bool = positions[to_id].x >= positions[from_id].x
 	
 	var label_particle: ParticleData.Particle = particle
 	if !is_right:
 		label_particle = ParticleData.anti(label_particle)
 
-	var has_label: bool = !(
-		matrix.is_extreme_point(from_id)
-		|| matrix.is_extreme_point(to_id)
-	)
+	var has_label: bool = has_label(from_id, to_id, matrix)
 	
-	connection_string += "(i%s) -- [%s%s%s] (i%s),\n" % [
+	connection_string += "(i%s) -- [%s%s] (i%s),\n" % [
 		from_id,
 		ParticleData.export_line_dict[particle],
-		bend_string if is_bend else "",
 		", edge label = \\(%s\\)"%ParticleData.export_particle_dict[label_particle] if has_label else "",
-		matrix.get_connected_ids(to_id)[0] if is_bend else to_id
+		to_id
 	]
 	
 	
@@ -190,8 +253,7 @@ static func get_hadron_string(
 
 static func get_string(drawing_matrix: DrawingMatrix) -> String:
 	var exporting_matrix: DrawingMatrix = drawing_matrix.duplicate(true)
-	#exporting_matrix.rejoin_double_connections()
-	
+	exporting_matrix.fix_directionless_bend_paths()
 	var interaction_positions := exporting_matrix.normalised_interaction_positions
 	
 	var lowest_x : int = get_lowest_x(interaction_positions)
@@ -205,28 +267,44 @@ static func get_string(drawing_matrix: DrawingMatrix) -> String:
 	export_string += "\\def\\xscale{%s}\n\\def\\yscale{%s}\n" % [
 		xscale, yscale
 	]
-	
-	for id:int in exporting_matrix.matrix_size:
-		if drawing_matrix.is_bend_interaction(id):
-			continue
-		export_string += get_interaction_string(exporting_matrix, id, interaction_positions)
 
-	export_string += "\\diagram* {\n"
+	var diagram_string := "\\diagram* {\n"
 	
 	for id:int in exporting_matrix.matrix_size:
-		if drawing_matrix.is_bend_interaction(id):
+		if drawing_matrix.is_bend_id(id):
 			continue
 		
 		for c:Array in exporting_matrix.get_connections(id):
-			export_string += get_connection_string(
-				exporting_matrix,
-				id,
-				c[ConnectionMatrix.Connection.to_id],
-				c[ConnectionMatrix.Connection.particle],
-				interaction_positions
-			)
+			var to_id: int = c[ConnectionMatrix.Connection.to_id]
+			var particle: ParticleData.Particle = c[ConnectionMatrix.Connection.particle]
+			
+			if drawing_matrix.is_bend_id(to_id):
+				diagram_string += get_bend_string(
+					exporting_matrix,
+					id, to_id,
+					interaction_positions
+				)
+			
+			else:
+				diagram_string += get_direct_connection_string(
+					exporting_matrix,
+					id,
+					c[ConnectionMatrix.Connection.to_id],
+					c[ConnectionMatrix.Connection.particle],
+					interaction_positions
+				)
 	
-	export_string += "};\n"
+	diagram_string += "};\n"
+	
+	var interaction_string : String = ""
+	for id:int in exporting_matrix.matrix_size:
+		if diagram_string.find("i%s"%[id]) == -1:
+			continue
+		
+		interaction_string += get_interaction_string(exporting_matrix, id, interaction_positions)
+	
+	export_string += interaction_string
+	export_string += diagram_string
 	
 	for hadron_ids:Array in exporting_matrix.split_hadron_ids:
 		export_string += get_hadron_string(exporting_matrix, hadron_ids, interaction_positions)

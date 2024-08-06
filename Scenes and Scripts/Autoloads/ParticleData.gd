@@ -709,7 +709,7 @@ var PARTICLE_INTERACTIONS : Dictionary = {
 
 const export_particle_dict : Dictionary = {
 	Particle.photon : "\\gamma",
-	Particle.gluon : "W^{-}",
+	Particle.gluon : "g",
 	Particle.Z : "Z",
 	Particle.H : "H",
 	Particle.W : "W",
@@ -749,10 +749,10 @@ const export_particle_dict : Dictionary = {
 }
 
 const export_hadron_dict : Dictionary = {
-	Hadrons.Proton:"P",
-	Hadrons.AntiProton:"\\overline P",
-	Hadrons.Neutron:"N",
-	Hadrons.AntiNeutron:"\\overline N",
+	Hadrons.Proton:"p",
+	Hadrons.AntiProton:"\\overline p",
+	Hadrons.Neutron:"n",
+	Hadrons.AntiNeutron:"\\overline n",
 	Hadrons.DeltaPlusPlus:"\\Delta^{++}",
 	Hadrons.DeltaPlus:"\\Delta^{+}",
 	Hadrons.Delta0:"\\Delta^{0}",
