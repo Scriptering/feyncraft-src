@@ -249,7 +249,7 @@ func sort_drawing_interactions(interaction1: Interaction, interaction2: Interact
 	
 	if state1 != state2:
 		return state1 < state2
-	
+
 	var pos_y1: int = int(interaction1.position.y)
 	var pos_y2: int = int(interaction2.position.y)
 	
