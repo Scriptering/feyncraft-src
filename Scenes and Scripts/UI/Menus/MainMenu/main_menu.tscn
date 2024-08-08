@@ -15,7 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="11_t2od8"]
 [ext_resource type="PackedScene" uid="uid://besym8haj5qo4" path="res://Scenes and Scripts/UI/Crosshair.tscn" id="12_6wo74"]
 [ext_resource type="Texture2D" uid="uid://7ipru72d5e13" path="res://Textures/Buttons/icons/sandbox.png" id="13_21fnr"]
-[ext_resource type="LabelSettings" uid="uid://yitjpuh73rxw" path="res://Scenes and Scripts/UI/Menus/MainMenu/main_menu_labels.tres" id="14_sqpi5"]
+[ext_resource type="LabelSettings" uid="uid://cc3ui0g74tqvb" path="res://Scenes and Scripts/UI/Menus/MainMenu/main_menu_labels.tres" id="14_sqpi5"]
 [ext_resource type="Texture2D" uid="uid://b20ltmcqk6xwh" path="res://Textures/Buttons/icons/question_mark.png" id="16_0rbva"]
 [ext_resource type="PackedScene" uid="uid://b4oiaq2nic3ig" path="res://Scenes and Scripts/UI/Buttons/MuteButton.tscn" id="16_1yq2b"]
 [ext_resource type="Texture2D" uid="uid://btu2jj1bbbbil" path="res://Textures/Buttons/icons/palette.png" id="17_cv4ds"]

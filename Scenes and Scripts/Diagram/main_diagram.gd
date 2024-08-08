@@ -333,7 +333,7 @@ func update_colour(diagram: DrawingMatrix, current_vision: Globals.Vision) -> vo
 	update_colourless_interactions(colour_paths, colour_path_colours, colour_matrix, true)
 	
 	if current_vision == Globals.Vision.Colour:
-		draw_vision_lines(colour_paths, convert_path_colours(colour_path_colours, current_vision), colour_matrix)
+		draw_vision_lines(colour_paths, convert_path_colours(colour_path_colours, current_vision), diagram)
 	print(Time.get_ticks_usec() - time)
 
 func update_path_vision(diagram: DrawingMatrix, current_vision: Globals.Vision) -> void:
