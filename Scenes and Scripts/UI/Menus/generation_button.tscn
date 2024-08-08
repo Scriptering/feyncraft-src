@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://q7kyu3yv27sv" path="res://Textures/Buttons/icons/hammer.png" id="4_xnawx"]
 [ext_resource type="Texture2D" uid="uid://c8iesbop3uqwa" path="res://Textures/Buttons/up_down.png" id="5_0rv06"]
 [ext_resource type="Texture2D" uid="uid://dcwv3ofqvfivr" path="res://Textures/Buttons/icons/save_states.png" id="5_rmc36"]
-[ext_resource type="Theme" path="res://Resources/Themes/spin_box.tres" id="6_5iseb"]
+[ext_resource type="Theme" uid="uid://cu3v7nxs2h2hu" path="res://Resources/Themes/spin_box.tres" id="6_5iseb"]
 [ext_resource type="PackedScene" uid="uid://bug3v1xlp1gfr" path="res://Scenes and Scripts/UI/Buttons/pull_out_tab_button_right.tscn" id="6_7e8c8"]
 [ext_resource type="Script" path="res://Scenes and Scripts/Classes/spin_box.gd" id="6_8ds75"]
 [ext_resource type="PackedScene" uid="uid://dorw3vr2amuy3" path="res://Scenes and Scripts/Components/button_sound_component.tscn" id="6_aanob"]
