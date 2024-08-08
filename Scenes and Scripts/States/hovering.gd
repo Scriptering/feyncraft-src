@@ -3,17 +3,17 @@ extends BaseState
 signal split_interaction(interaction: Interaction)
 
 var start_placing := false
-var grabbed_interaction: Interaction = null
+var grabbed_object: Node
 var grab_start_position: Vector2 = Vector2.ZERO
 
 func enter() -> void:
 	super.enter()
-	grabbed_interaction = null
+	grabbed_object = null
 	connect_grabbable()
 
 func exit() -> void:
 	super.exit()
-	grabbed_interaction = null
+	grabbed_object = null
 	disconnect_grabbable()
 
 func input(_event: InputEvent) -> State:
@@ -22,7 +22,7 @@ func input(_event: InputEvent) -> State:
 	
 	if Input.is_action_just_released("click"):
 		change_cursor.emit(Globals.Cursor.hover)
-		grabbed_interaction = null
+		grabbed_object = null
 
 	return State.Null
 
@@ -33,9 +33,10 @@ func process(_delta: float) -> State:
 	return State.Null
 
 func crosshair_moved(_old_position: Vector2, _new_position: Vector2) -> void:
-	if grabbed_interaction and Input.is_action_pressed("click"):
-		interaction_grabbed_and_moved()
-		grabbed_interaction = null
+	if grabbed_object and Input.is_action_pressed("click"):
+		if grabbed_object is Interaction:
+			interaction_grabbed_and_moved()
+			grabbed_object = null
 
 func connect_grabbable() -> void:
 	for object in get_tree().get_nodes_in_group("grabbable"):
@@ -54,7 +55,7 @@ func _grabbable_object_clicked(object: Node) -> void:
 	
 	if object is Interaction:
 		grab_start_position = object.position
-		grabbed_interaction = object
+		grabbed_object = object
 	else:
 		start_placing = true
 		object.pick_up()
@@ -63,8 +64,8 @@ func interaction_grabbed_and_moved() -> void:
 	Diagram.add_diagram_to_history()
 	
 	if Input.is_action_pressed("split_interaction"):
-		Diagram.split_interaction(grabbed_interaction)
+		Diagram.split_interaction(grabbed_object)
 	
 	start_placing = true
-	grabbed_interaction.pick_up()
-	grabbed_interaction.start_grab_position = grab_start_position
+	grabbed_object.pick_up()
+	grabbed_object.start_grab_position = grab_start_position

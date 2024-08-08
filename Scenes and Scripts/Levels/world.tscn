@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://c7n4o6dbkwilh"]
+[gd_scene load_steps=37 format=3 uid="uid://c7n4o6dbkwilh"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/Levels/World.gd" id="1"]
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_6ope2"]
@@ -24,6 +24,7 @@
 [ext_resource type="PackedScene" uid="uid://deuhqxgq1bveq" path="res://Scenes and Scripts/UI/Menus/PuzzleUI.tscn" id="23_v0dtx"]
 [ext_resource type="PackedScene" uid="uid://wgw4km4uc7fh" path="res://Scenes and Scripts/UI/Menus/menu_tab.tscn" id="24_f5s2a"]
 [ext_resource type="PackedScene" uid="uid://ds2iet11sv3ty" path="res://Scenes and Scripts/UI/Buttons/particle_buttons.tscn" id="24_lunb1"]
+[ext_resource type="PackedScene" uid="uid://dh7y3g5jhluwj" path="res://Scenes and Scripts/UI/Menus/export_tab.tscn" id="27_jfab7"]
 [ext_resource type="PackedScene" uid="uid://dcpcxfh7umytq" path="res://Scenes and Scripts/UI/MiniDiagram/mini_diagram_viewer.tscn" id="27_laye5"]
 [ext_resource type="Script" path="res://Scenes and Scripts/Levels/Tutorial.gd" id="28_soh5r"]
 [ext_resource type="PackedScene" uid="uid://bjmi5sukccoma" path="res://Scenes and Scripts/tutorial/TutorialInfo.tscn" id="30_2684v"]
@@ -46,6 +47,8 @@ expand_margin_left = 1.0
 expand_margin_top = 1.0
 expand_margin_right = 1.0
 expand_margin_bottom = 1.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dacp6"]
 
 [node name="World" type="Node2D" groups=["level"]]
 material = ExtResource("1_6ope2")
@@ -109,13 +112,14 @@ offset_bottom = 256.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_2v8fu")
 
-[node name="DiagramArea" type="Control" parent="Diagram"]
+[node name="DiagramArea" type="Panel" parent="Diagram"]
 use_parent_material = true
-anchors_preset = 0
+layout_mode = 0
 offset_left = 64.0
 offset_right = 384.0
 offset_bottom = 256.0
 mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxEmpty_dacp6")
 
 [node name="InitialShadow" type="VBoxContainer" parent="Diagram/DiagramArea"]
 use_parent_material = true
@@ -304,15 +308,15 @@ grow_vertical = 0
 size_flags_horizontal = 4
 
 [node name="PuzzleUI" parent="PullOutTabs" instance=ExtResource("23_v0dtx")]
-offset_left = -140.0
+offset_left = -143.0
 offset_top = 159.0
-offset_right = -140.0
+offset_right = -143.0
 offset_bottom = 159.0
 
 [node name="GenerationButton" parent="PullOutTabs" instance=ExtResource("22_u64s1")]
-offset_left = -141.0
+offset_left = -144.0
 offset_top = 59.0
-offset_right = -141.0
+offset_right = -144.0
 offset_bottom = 59.0
 
 [node name="ProblemTab" parent="PullOutTabs" instance=ExtResource("20_uaeg6")]
@@ -334,6 +338,12 @@ offset_top = -39.0
 offset_right = 501.0
 offset_bottom = -39.0
 move_direction = 3
+
+[node name="ExportTab" parent="PullOutTabs" instance=ExtResource("27_jfab7")]
+offset_left = 613.0
+offset_top = 134.0
+offset_right = 613.0
+offset_bottom = 134.0
 
 [node name="ShaderControl" type="Node" parent="."]
 script = ExtResource("2")
@@ -473,8 +483,6 @@ text = "This is the end of the tutorial! Have fun! Check out the sandbox mode fo
 Press finish when ready."
 enable_spotlight = false
 
-[connection signal="mouse_entered" from="Diagram" to="Diagram" method="_on_mouse_entered"]
-[connection signal="mouse_exited" from="Diagram" to="Diagram" method="_on_mouse_exited"]
 [connection signal="text_changed" from="Diagram/TitleContainer/Title" to="Diagram/TitleContainer/Title" method="_on_text_changed"]
 [connection signal="text_submitted" from="Diagram/TitleContainer/Title" to="Diagram" method="_on_title_text_submitted"]
 [connection signal="submit_problem" from="FloatingMenus/CreationInformation" to="." method="_on_creation_information_submit_problem"]

@@ -1,17 +1,16 @@
 extends BaseState
 
-var grabbed_interaction: Interaction = null
+var grabbed_object: Node = null
 
 func enter() -> void:
 	super.enter()
 	
-	if is_interaction_grabbed():
-		grabbed_interaction = get_grabbed_object()
+	grabbed_object = get_grabbed_object()
 
 func exit() -> void:
 	super.exit()
 	
-	grabbed_interaction = null
+	grabbed_object = null
 
 func input(_event: InputEvent) -> State:
 	if Input.is_action_just_released("editing"):
@@ -29,11 +28,7 @@ func input(_event: InputEvent) -> State:
 	return State.Null
 
 func place_objects() -> void:
-	if grabbed_interaction:
-		Diagram.drop_interaction(grabbed_interaction)
-		return
-	
-	get_tree().call_group("grabbable", "drop")
+	grabbed_object.drop()
 
 func get_grabbed_object() -> Node:
 	for object:Variant in get_tree().get_nodes_in_group("grabbable"):
@@ -41,9 +36,3 @@ func get_grabbed_object() -> Node:
 			return object
 	
 	return null
-
-func is_interaction_grabbed() -> bool:
-	return get_tree().get_nodes_in_group("grabbable").any(
-		func(object:Variant) -> bool:
-			return object.grabbed and object is Interaction
-	)

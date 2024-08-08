@@ -60,6 +60,10 @@ import/blender/enabled=false
 
 export=false
 
+[global_group]
+
+decoration=""
+
 [gui]
 
 fonts/dynamic_fonts/use_oversampling=false

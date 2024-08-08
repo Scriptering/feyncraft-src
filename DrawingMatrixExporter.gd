@@ -46,8 +46,20 @@ static func is_anti_connection(from_id:int, to_id:int, positions:Array[Vector2i]
 	
 	return is_forward_connection != is_right_connection
 
-static func get_interaction_string(matrix: DrawingMatrix, id: int, positions:Array[Vector2i]) -> String:
+static func is_bend_interaction(matrix: DrawingMatrix, id:int, decorations: Array[Decoration.Decor]) -> bool:
+	return matrix.is_bend_id(id) and decorations[id] == Decoration.Decor.none
+
+static func get_interaction_string(
+	matrix: DrawingMatrix,
+	id: int,
+	positions:Array[Vector2i],
+	decorations: Array[Decoration.Decor]
+) -> String:
+
 	var interaction_string: String = ""
+	
+	var decoration: Decoration.Decor = decorations[id]
+	var has_decor: bool = decoration != Decoration.Decor.none
 	
 	var is_extreme_point: bool = matrix.is_extreme_point(id)
 	
@@ -59,11 +71,20 @@ static func get_interaction_string(matrix: DrawingMatrix, id: int, positions:Arr
 		
 		connection_particle = connection_particle if !is_anti else ParticleData.anti(connection_particle)
 	
-	interaction_string += "\\vertex (i%s) at (%s*\\xscale, %s*\\yscale)%s;\n" % [
+	var label_str: String
+	if has_decor:
+		label_str = " {}"
+	elif is_extreme_point:
+		label_str = " {%s}"%edge_label(connection_particle)
+	else:
+		label_str = ""
+	
+	interaction_string += "\\vertex (i%s)%s at (%s*\\xscale, %s*\\yscale)%s;\n" % [
 		id,
-		positions[id].x,
+		" [%s]"%[Decoration.get_export_name(decoration)] if has_decor else "",
+ 		positions[id].x,
 		positions[id].y,
-		" {\\(%s\\)}"%ParticleData.export_particle_dict[connection_particle] if is_extreme_point else ""
+		label_str
 	]
 	
 	return interaction_string
@@ -117,12 +138,12 @@ static func get_3loop_string(path: Array[int], positions: Array[Vector2i], parti
 	]
 
 static func get_4loop_string(path: Array[int], positions: Array[Vector2i], particle: ParticleData.Particle) -> String:
-	return "i%s -- [%s, half left, edge label = %s] i%s,\n"%[
+	return "(i%s) -- [%s, half left, edge label = %s] (i%s),\n"%[
 		path[0],
 		ParticleData.export_line_dict[particle],
 		edge_label(particle),
 		path[2]
-	] + "i%s -- [%s, half left, edge label = %s] i%s,\n"%[
+	] + "(i%s) -- [%s, half left, edge label = %s] (i%s),\n"%[
 		path[2],
 		ParticleData.export_line_dict[particle],
 		edge_label(particle),
@@ -251,17 +272,28 @@ static func get_hadron_string(
 	
 	return hadron_string
 
-static func get_string(drawing_matrix: DrawingMatrix) -> String:
-	var exporting_matrix: DrawingMatrix = drawing_matrix.duplicate(true)
-	exporting_matrix.fix_directionless_bend_paths()
-	var interaction_positions := exporting_matrix.normalised_interaction_positions
-	
+static func calc_positions(drawing_matrix: DrawingMatrix) -> Array[Vector2i]:
+	var interaction_positions := drawing_matrix.normalised_interaction_positions
 	var lowest_x : int = get_lowest_x(interaction_positions)
 	var highest_y : int = get_highest_y(interaction_positions)
 	
 	for i:int in interaction_positions.size():
 		interaction_positions[i] *= Vector2i(+1, -1)
 		interaction_positions[i] -= Vector2i(lowest_x, -highest_y)
+	
+	return interaction_positions
+	
+
+static func get_string(drawing_matrix: DrawingMatrix, interactions: Array[Interaction]) -> String:
+	var exporting_matrix: DrawingMatrix = drawing_matrix.duplicate(true)
+	exporting_matrix.fix_directionless_bend_paths()
+	
+	var interaction_positions := calc_positions(drawing_matrix)
+	var decorations : Array[Decoration.Decor]
+	decorations.assign(interactions.map(
+		func(interaction: Interaction) -> Decoration.Decor:
+			return interaction.decor
+	))
 	
 	var export_string : String = "\\begin{tikzpicture}\n\\begin{feynman}\n"
 	export_string += "\\def\\xscale{%s}\n\\def\\yscale{%s}\n" % [
@@ -271,14 +303,14 @@ static func get_string(drawing_matrix: DrawingMatrix) -> String:
 	var diagram_string := "\\diagram* {\n"
 	
 	for id:int in exporting_matrix.matrix_size:
-		if drawing_matrix.is_bend_id(id):
+		if is_bend_interaction(exporting_matrix, id, decorations):
 			continue
 		
 		for c:Array in exporting_matrix.get_connections(id):
 			var to_id: int = c[ConnectionMatrix.Connection.to_id]
 			var particle: ParticleData.Particle = c[ConnectionMatrix.Connection.particle]
 			
-			if drawing_matrix.is_bend_id(to_id):
+			if is_bend_interaction(exporting_matrix, to_id, decorations):
 				diagram_string += get_bend_string(
 					exporting_matrix,
 					id, to_id,
@@ -301,7 +333,9 @@ static func get_string(drawing_matrix: DrawingMatrix) -> String:
 		if diagram_string.find("i%s"%[id]) == -1:
 			continue
 		
-		interaction_string += get_interaction_string(exporting_matrix, id, interaction_positions)
+		interaction_string += get_interaction_string(
+			exporting_matrix, id, interaction_positions, decorations
+		)
 	
 	export_string += interaction_string
 	export_string += diagram_string

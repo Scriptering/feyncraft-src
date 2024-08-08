@@ -44,21 +44,61 @@ var diagram_added_to_history: bool = false
 var update_queued: bool = true
 var drawing_matrix: DrawingMatrix
 
+var mouse_inside_diagram: bool = false
+
 func _ready() -> void:
 	Crosshair.moved_and_rested.connect(_crosshair_moved)
 	Crosshair.moved.connect(_crosshair_moved)
-	mouse_entered.connect(Crosshair.DiagramMouseEntered)
-	mouse_exited.connect(Crosshair.DiagramMouseExited)
 	EventBus.signal_draw_raw_diagram.connect(draw_raw_diagram)
 	EventBus.signal_draw_diagram.connect(draw_diagram)
 	action_taken.connect(EventBus.action_taken)
 	
 	for state_line:StateLine in StateLines:
 		state_line.init(self)
+	
+	for decoration:Decoration in get_tree().get_nodes_in_group("decoration"):
+		decoration.dropped.connect(_decoration_dropped)
 
 func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("ui_accept"):
-		print(DrawingMatrixExporter.get_string(generate_drawing_matrix_from_diagram()))
+		print(DrawingMatrixExporter.get_string(
+			generate_drawing_matrix_from_diagram(),
+			get_interactions()
+		 ))
+	
+	if event is InputEventMouseMotion:
+		if DiagramArea.get_global_rect().has_point(get_global_mouse_position()):
+			if !mouse_inside_diagram:
+				EventBus.diagram_mouse_entered.emit()
+				mouse_inside_diagram = true
+		else:
+			if mouse_inside_diagram:
+				EventBus.diagram_mouse_exited.emit()
+				mouse_inside_diagram = false
+
+func _decoration_dropped(decoration: Decoration) -> void:
+	if !is_inside_tree():
+		return
+	
+	if !decoration.follow_crosshair:
+		return
+	
+	var interaction: Interaction = get_interaction_at_position(Crosshair.position)
+	
+	if interaction:
+		interaction.decor = decoration.decor
+		
+		if decoration.decor == Decoration.Decor.none:
+			check_rejoin_lines([interaction])
+		
+		return
+	
+	if decoration.decor == Decoration.Decor.none:
+		return
+
+	var new_interaction: Interaction = InteractionInstance.instantiate()
+	draw_interaction(Crosshair.position, new_interaction)
+	new_interaction.decor = decoration.decor
 
 func init(
 	particle_buttons: Control, controls: Node, vision_buttons: Control, vision: Node, state_manager: Node
@@ -584,6 +624,9 @@ func check_rejoin_lines(interactions: Array[Interaction] = get_interactions()) -
 		return
 	
 	for interaction:Interaction in interactions:
+		if interaction.decor != Decoration.Decor.none:
+			continue
+		
 		if interaction.connected_lines.size() != 2:
 			continue
 		if interaction.connected_lines.any(
@@ -693,7 +736,7 @@ func transfer_interaction_connections(from_interaction:Interaction, to_interacti
 			to_interaction
 		)
 
-func drop_interaction(interaction: Interaction) -> void:
+func _interaction_dropped(interaction: Interaction) -> void:
 	if ArrayFuncs.is_vec_zero_approx(interaction.position - interaction.start_grab_position):
 		remove_last_diagram_from_history()
 	
@@ -725,8 +768,13 @@ func drop_interaction(interaction: Interaction) -> void:
 	for particle_line:ParticleLine in connected_lines:
 		check_rejoin_lines(particle_line.connected_interactions)
 
+func place_interaction(interaction_position: Vector2, interaction: Node = InteractionInstance.instantiate()) -> void:
+	super.place_interaction(interaction_position, interaction)
+	
+	interaction.dropped.connect(_interaction_dropped)
+
 func draw_interaction(
-	interaction_position: Vector2, interaction: Node = InteractionInstance.instantiate(), is_action: bool = true
+	interaction_position: Vector2, interaction: Interaction = InteractionInstance.instantiate(), is_action: bool = true
 ) -> Interaction:
 	place_interaction(interaction_position, interaction)
 	check_split_lines(interaction)
@@ -1108,12 +1156,6 @@ func draw_vision_lines(
 ) -> void:
 	for i:int in range(paths.size()):
 		draw_vision_line(calculate_vision_line_points(paths[i], vision_matrix), path_colours[i])
-
-func _on_mouse_entered() -> void:
-	hovering = true
-
-func _on_mouse_exited() -> void:
-	hovering = false
 
 func set_title_editable(editable: bool) -> void:
 	Title.editable = editable
