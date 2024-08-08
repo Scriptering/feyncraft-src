@@ -1,6 +1,6 @@
-[gd_resource type="Theme" load_steps=2 format=3 uid="uid://cwu1ypxa78wfj"]
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://cu3v7nxs2h2hu"]
 
-[ext_resource type="FontVariation" uid="uid://bgv46fr0yu083" path="res://Textures/Fonts/numbers.tres" id="1_ysn0y"]
+[ext_resource type="FontVariation" uid="uid://jg507qhg14bj" path="res://Textures/Fonts/numbers.tres" id="1_ysn0y"]
 
 [resource]
 default_font = ExtResource("1_ysn0y")

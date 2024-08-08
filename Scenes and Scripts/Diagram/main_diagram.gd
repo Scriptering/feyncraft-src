@@ -570,7 +570,7 @@ func remove_lonely_interactions(interactions: Array[Interaction] = get_interacti
 			queue_stateline_update(get_state_by_position(interaction.positioni()))
 			interaction.delete()
 
-func split_line(line_to_split: ParticleLine, split_interaction: Interaction) -> void:
+func split_line(line_to_split: ParticleLine, split_interaction: Interaction) -> ParticleLine:
 	var new_start_point: Vector2 = line_to_split.points[ParticleLine.Point.Start]
 	
 	line_to_split.points[ParticleLine.Point.Start] = split_interaction.positioni()
@@ -598,6 +598,8 @@ func split_line(line_to_split: ParticleLine, split_interaction: Interaction) -> 
 	line_to_split.queue_update()
 	new_particle_line.queue_update()
 	queue_vision_update()
+	
+	return new_particle_line
 
 func is_interaction_on_line(interaction: Interaction, particle_line: ParticleLine) -> bool:
 	if particle_line in interaction.connected_lines:
@@ -605,12 +607,13 @@ func is_interaction_on_line(interaction: Interaction, particle_line: ParticleLin
 		
 	return particle_line.is_position_on_line(interaction.position)
 
-func get_interaction_on_particle_line(particle_line: ParticleLine) -> Interaction:
+func get_interactions_on_particle_line(particle_line: ParticleLine) -> Array[Interaction]:
+	var interactions_on_particle_line: Array[Interaction] = []
 	for interaction:Interaction in get_interactions():
 		if is_interaction_on_line(interaction, particle_line):
-			return interaction
+			interactions_on_particle_line.push_back(interaction)
 	
-	return null
+	return interactions_on_particle_line
 
 func get_particle_line_on_interaction(interaction: Interaction) -> ParticleLine:
 	for particle_line:ParticleLine in get_particle_lines():
@@ -788,11 +791,17 @@ func check_split_lines(object: Variant) -> void:
 		var splitting_line := get_particle_line_on_interaction(object)
 		if splitting_line:
 			split_line(splitting_line, object)
+		return
 	
-	if object is ParticleLine:
-		var splitting_interaction := get_interaction_on_particle_line(object)
-		if splitting_interaction:
-			split_line(object, splitting_interaction)
+	if !(object is ParticleLine):
+		return
+	
+	var splitting_interactions := get_interactions_on_particle_line(object)
+	if splitting_interactions.size() > 0:
+		split_line(object, splitting_interactions.front())
+	
+	for i:int in range(1, splitting_interactions.size()):
+		check_split_lines(splitting_interactions[i])
 
 func split_interaction(interaction: Interaction) -> void:
 	if interaction.connected_lines.size() == 1: 
