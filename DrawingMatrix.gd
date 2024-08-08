@@ -231,6 +231,61 @@ func remove_empty_rows() -> void:
 		if get_connected_count(id, true) == 0:
 			remove_interaction(id)
 
+func get_bend_path(start_id: int, first_bend_id:int) -> Array[int]:
+	var bend_path: Array[int] = [start_id]
+	var next_id: int = first_bend_id
+	bend_path.push_back(next_id)
+	
+	while (is_bend_id(next_id)):
+		var connected_ids := get_connected_ids(next_id, true)
+		next_id = connected_ids[(connected_ids.find(bend_path[-2]) + 1) % 2]
+		bend_path.push_back(next_id)
+	
+	return bend_path
+
+func fix_bend_path(path: Array[int], particle:ParticleData.Particle) -> void:
+	for i:int in path.size()-1:
+		var from_id:int = path[i]
+		var to_id:int = path[i+1]
+		disconnect_interactions(from_id, to_id, particle, true)
+		connect_interactions(from_id, to_id, particle)
+
+func fix_directionless_bend_paths() -> void:
+	for id:int in matrix_size:
+		if is_bend_id(id):
+			continue
+		
+		for to_id: int in get_connected_ids(id):
+			if !is_bend_id(to_id):
+				continue
+			var particle: ParticleData.Particle = get_connection_particles(id, to_id).front()
+			if particle in ParticleData.SHADED_PARTICLES:
+				continue
+			
+			var path : Array[int] = get_bend_path(id, to_id)
+			fix_bend_path(path, particle)
+
+func is_bend_id(id:int) -> bool:
+	if (
+		(get_connected_count(id) == 2 && get_connected_count(id, false, true) == 0)
+		|| (get_connected_count(id) == 0 && get_connected_count(id, false, true) == 2)
+	):
+		if get_connected_particles(id, true).front() != get_connected_particles(id, true).back():
+			return false
+		
+		return get_connected_particles(id, true).front() in ParticleData.UNSHADED_PARTICLES
+	
+	if get_connected_count(id) != 1:
+		return false
+	
+	if get_connected_count(id, false, true) != 1:
+		return false
+	
+	if get_connected_particles(id).front() != get_connected_particles(id, false, true, true).front():
+		return false
+	
+	return true
+
 func rejoin_double_connections() -> void:
 	for id:int in get_state_ids(StateLine.State.None):
 		if !(get_connected_count(id) == 1 and get_connected_count(id, false, true) == 1):
@@ -239,10 +294,10 @@ func rejoin_double_connections() -> void:
 		var from_id: int = get_connected_ids(id, false, ParticleData.Particle.none, true)[0]
 		var to_id: int = get_connected_ids(id)[0]
 		
-		if get_connection_particles(from_id, to_id) != get_connection_particles(id, to_id):
+		if get_connection_particles(from_id, id) != get_connection_particles(id, to_id):
 			continue
 			
-		var connection_particle: ParticleData.Particle = get_connection_particles(from_id, to_id).front()
+		var connection_particle: ParticleData.Particle = get_connection_particles(from_id, id).front()
 		
 		disconnect_interactions(from_id, id, connection_particle)
 		disconnect_interactions(id, to_id, connection_particle)

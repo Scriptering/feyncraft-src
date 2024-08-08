@@ -3,7 +3,7 @@ class_name GrabbableControl
 
 signal grab_area_clicked
 signal picked_up
-signal dropped
+signal dropped(object: GrabbableControl)
 
 @export var GrabAreas: Array[Node]
 @export var follow_cursor: bool = true
@@ -12,6 +12,7 @@ var grabbed: bool = false: set = _grabbed_changed
 var grab_area_hovered: bool = false: set = _grab_area_hovered_changed
 var grabbable: bool = true: set = _grabbable_changed
 var drag_vector_start: Vector2
+var start_position: Vector2
 
 func _ready() -> void:
 	add_to_group("grabbable")
@@ -31,6 +32,7 @@ func _process(_delta:float) -> void:
 func pick_up() -> void:
 	grabbed = true
 	drag_vector_start = position - get_global_mouse_position()
+	start_position = position
 	picked_up.emit(self)
 
 func drop() -> void:

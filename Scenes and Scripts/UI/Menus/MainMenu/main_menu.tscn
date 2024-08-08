@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://blu0n6lwfysjf"]
+[gd_scene load_steps=34 format=3 uid="uid://blu0n6lwfysjf"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_m8wv1"]
 [ext_resource type="Texture2D" uid="uid://c2myqhjupqo25" path="res://Textures/Background/tile.png" id="2_3tgej"]
@@ -15,7 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="11_t2od8"]
 [ext_resource type="PackedScene" uid="uid://besym8haj5qo4" path="res://Scenes and Scripts/UI/Crosshair.tscn" id="12_6wo74"]
 [ext_resource type="Texture2D" uid="uid://7ipru72d5e13" path="res://Textures/Buttons/icons/sandbox.png" id="13_21fnr"]
-[ext_resource type="LabelSettings" uid="uid://yitjpuh73rxw" path="res://Scenes and Scripts/UI/Menus/MainMenu/main_menu_labels.tres" id="14_sqpi5"]
+[ext_resource type="LabelSettings" uid="uid://cc3ui0g74tqvb" path="res://Scenes and Scripts/UI/Menus/MainMenu/main_menu_labels.tres" id="14_sqpi5"]
 [ext_resource type="Texture2D" uid="uid://b20ltmcqk6xwh" path="res://Textures/Buttons/icons/question_mark.png" id="16_0rbva"]
 [ext_resource type="PackedScene" uid="uid://b4oiaq2nic3ig" path="res://Scenes and Scripts/UI/Buttons/MuteButton.tscn" id="16_1yq2b"]
 [ext_resource type="Texture2D" uid="uid://btu2jj1bbbbil" path="res://Textures/Buttons/icons/palette.png" id="17_cv4ds"]
@@ -42,6 +42,8 @@ expand_margin_left = 1.0
 expand_margin_top = 1.0
 expand_margin_right = 1.0
 expand_margin_bottom = 1.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5kca2"]
 
 [node name="MainMenu" type="Node2D"]
 material = ExtResource("1_m8wv1")
@@ -92,13 +94,14 @@ mouse_filter = 2
 texture = ExtResource("2_3tgej")
 stretch_mode = 1
 
-[node name="DiagramArea" type="Control" parent="Diagram"]
+[node name="DiagramArea" type="Panel" parent="Diagram"]
 use_parent_material = true
-anchors_preset = 0
+layout_mode = 0
 offset_left = 64.0
 offset_right = 384.0
 offset_bottom = 130.0
 mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_5kca2")
 
 [node name="InitialShadow" type="VBoxContainer" parent="Diagram/DiagramArea"]
 visible = false

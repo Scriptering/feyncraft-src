@@ -142,7 +142,7 @@ func set_textures() -> void:
 func _get_particle_name() -> String:
 	return ParticleData.Particle.keys()[ParticleData.Particle.values().find(self.particle)]
 
-func get_side_point(side: Side) -> Point:
+func get_side_point(side: ParticleLine.Side) -> Point:
 	if side == Side.left:
 		return left_point
 	return right_point
@@ -253,6 +253,7 @@ func update() -> void:
 
 func move(point:Point, to_position: Vector2i) -> void:
 	points[point] = to_position
+	set_anti()
 	queue_update()
 
 func move_line() -> void:

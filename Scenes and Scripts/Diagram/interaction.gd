@@ -26,6 +26,7 @@ var StateManager: Node
 var InformationBox := preload("res://Scenes and Scripts/UI/Info/interaction_information.tscn")
 var information_id: int
 
+var decor: Decoration.Decor = Decoration.Decor.none: set = _set_decor
 var id : int
 var connected_lines: Array[ParticleLine] = []
 var old_connected_lines: Array[ParticleLine] = []
@@ -54,6 +55,8 @@ func _ready() -> void:
 
 	Ball.frame = NORMAL
 	
+	update_valid_visual()
+	
 	queue_update()
 
 func init(diagram: MainDiagram) -> void:
@@ -77,6 +80,10 @@ func _input(event: InputEvent) -> void:
 	super._input(event)
 	if Input.is_action_just_pressed("click") and hovering:
 		clicked_on.emit(self)
+
+func _set_decor(new_decor: Decoration.Decor) -> void:
+	decor = new_decor
+	update_valid_visual()
 
 func _set_hovering(new_value: bool) -> void:
 	hovering = new_value
@@ -104,9 +111,9 @@ func update_valid_visual() -> void:
 	var current_ball_frame: int = Ball.frame
 	
 	if valid and valid_colourless:
-		Ball.animation = 'valid'
+		Ball.animation = Decoration.get_decor_name(decor) + '_valid'
 	else:
-		Ball.animation = 'invalid'
+		Ball.animation = Decoration.get_decor_name(decor) + '_invalid'
 	
 	Ball.frame = current_ball_frame
 
@@ -143,10 +150,6 @@ func queue_update() -> void:
 	update_queued = true
 
 func update() -> void:
-	if should_request_deletion():
-		request_deletion.emit(self)
-		return
-
 	update_dot_visual()
 	update_ball_hovering()
 	if connected_lines.size() < 2 and information_visible:

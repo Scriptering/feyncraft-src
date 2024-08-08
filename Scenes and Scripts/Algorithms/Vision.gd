@@ -88,7 +88,8 @@ func generate_shade_paths(diagram: DrawingMatrix) -> Array:
 		if shade_matrix.is_empty():
 			continue
 		
-		var shade_paths: Array[PackedInt32Array] = generate_paths(shade_matrix, pick_next_shade_point)
+		var path_finder := PathFinder.new(shade_matrix)
+		var shade_paths := path_finder.generate_paths()
 		paths.append_array(shade_paths)
 		
 		for path in shade_paths:
@@ -104,8 +105,10 @@ func generate_colour_paths(drawing_matrix: DrawingMatrix, is_vision_matrix: bool
 	
 	if colour_matrix.is_empty():
 		return []
-		
-	var paths: Array[PackedInt32Array] = generate_paths(colour_matrix.duplicate(true), pick_next_colour_point)
+	
+	var path_finder = PathFinder.new(colour_matrix)
+	path_finder.set_get_next_point_function(pick_next_colour_point)
+	var paths: Array[PackedInt32Array] = path_finder.generate_paths()
 	
 	if paths.size() == 0:
 		return []
@@ -147,12 +150,14 @@ func find_colourless_hadron_interactions(
 	if hadrons.size() == 0:
 		return colourless_hadron_interactions
 	
-	var quark_paths: Array[PackedInt32Array] = generate_paths(
-		vision_matrix.get_reduced_matrix(
-			func(particle: ParticleData.Particle) -> bool: 
-				return particle in ParticleData.QUARKS),
-			pick_next_colour_point
+	var quark_matrix: DrawingMatrix = vision_matrix.get_reduced_matrix(
+		func(particle: ParticleData.Particle) -> bool: 
+			return particle in ParticleData.QUARKS
 	)
+	
+	var path_finder := PathFinder.new(quark_matrix)
+	path_finder.set_get_next_point_function(pick_next_colour_point)
+	var quark_paths: Array[PackedInt32Array] = path_finder.generate_paths()
 	
 	for hadron:PackedInt32Array in hadrons:
 		var colourless_hadron_interaction: int = find_colourless_hadron_interaction(
@@ -426,9 +431,6 @@ func generate_colour_matrix(drawing_matrix: DrawingMatrix) -> DrawingMatrix:
 	
 	return colour_matrix
 
-func pick_next_shade_point(_current_point: int, available_points: PackedInt32Array, _connections: DrawingMatrix) -> int:
-	return available_points[randi() % available_points.size()]
-
 func pick_next_colour_point(current_point: int, available_points: PackedInt32Array, connections: DrawingMatrix) -> int:
 	var gluon_points: PackedInt32Array = []
 	
@@ -451,120 +453,7 @@ func pick_next_colour_point(current_point: int, available_points: PackedInt32Arr
 			most_connections = connection_size
 	
 	return highest_connection_gluon_point
-	
 
-func generate_paths(colour_matrix: DrawingMatrix, next_point_picker_function: Callable) -> Array[PackedInt32Array]:
-	var paths: Array[PackedInt32Array] = []
-	
-	paths.append_array(generate_state_paths(colour_matrix, next_point_picker_function))
-	
-	for _attempt in MAX_LOOP_ATTEMPTS:
-		var loop_matrix: DrawingMatrix = colour_matrix.duplicate(true)
-		var loops: Array[PackedInt32Array] = generate_loops(loop_matrix, next_point_picker_function)
-		
-		if loops == INVALID_PATH:
-			continue
-		
-		paths.append_array(loops)
-		break
-	
-	return paths
-
-func generate_state_paths(connections: DrawingMatrix, next_point_picker_function: Callable) -> Array[PackedInt32Array]:
-	var start_points: PackedInt32Array = connections.get_entry_points()
-	start_points.append_array(connections.get_lonely_entry_points())
-	
-	var end_points: PackedInt32Array = connections.get_exit_points()
-	end_points.append_array(connections.get_lonely_exit_points())
-	
-	var paths: Array[PackedInt32Array] = []
-	
-	for start_point:int in start_points:
-		var new_path: PackedInt32Array = generate_path(connections, start_point, end_points, next_point_picker_function)
-		
-		if new_path.size() == 0:
-			continue
-			
-		paths.push_back(new_path)
-	
-	return paths
-
-func generate_loops(connections: DrawingMatrix, next_point_picker_function: Callable) -> Array[PackedInt32Array]:
-	
-	var paths: Array[PackedInt32Array] = []
-	
-	for _loop in range(MAX_LOOP_COUNT):
-		var start_point: int =  connections.find_first_id(
-			func(id: int) -> bool:
-				var connected_count: int = connections.get_connected_count(id, true)
-				return connected_count > 0 and connected_count < 3
-		)
-		
-		if start_point == connections.matrix_size:
-			start_point = connections.find_first_id(
-				func(id: int) -> bool:
-					return connections.get_connected_count(id, true) > 0
-			)
-		
-		if start_point == connections.matrix_size:
-			return paths
-		
-		var new_path : PackedInt32Array = generate_path(connections, start_point, [start_point], next_point_picker_function)
-		
-		if new_path.size() == 0:
-			return INVALID_PATH
-		
-		paths.push_back(new_path)
-	
-	return INVALID_PATH
-
-func get_next_point(current_point: int, path: PackedInt32Array, connections: DrawingMatrix, next_point_picker_function: Callable) -> int:
-	var available_points: PackedInt32Array = connections.get_connected_ids(current_point)
-	var temp_available_points: PackedInt32Array = available_points.duplicate()
-	
-	for available_point:int in temp_available_points:
-		if path.size() < 2:
-			continue
-		
-		var is_previous_point: bool = available_point == path[-2]
-		var is_u_turn_gluon: bool = (
-			current_point == path[1] and 
-			available_point == path[0] and 
-			connections.get_state_from_id(path[0]) == StateLine.State.None and
-			!connections.is_lonely_extreme_point(path[0])
-		)
-		
-		if is_previous_point or is_u_turn_gluon:
-			available_points.remove_at(available_points.find(available_point))
-			
-	return next_point_picker_function.call(current_point, available_points, connections)
-
-func generate_path(
-	connections: DrawingMatrix, start_point: int, end_points: PackedInt32Array, next_point_picker_function: Callable
-) -> PackedInt32Array:
-	
-	var path: PackedInt32Array = []
-	var current_point: int = start_point
-	
-	for step in MAX_PATH_STEPS:
-		path.push_back(current_point)
-		
-		if current_point in end_points and step != 0:
-			return path
-		
-		var next_point: int = get_next_point(current_point, path, connections, next_point_picker_function)
-		
-		if next_point == NOT_FOUND:
-			return []
-		
-		var connection: Array = [
-			current_point, next_point, connections.get_connection_particles(current_point, next_point, false, true).front()
-		]
-		
-		connections.remove_connection(connection)
-		current_point = next_point
-	
-	return []
 
 func init(diagram: DiagramBase, state_lines: Array) -> void:
 	Diagram = diagram

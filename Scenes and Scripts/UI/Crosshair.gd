@@ -13,6 +13,7 @@ const Z_INDEX_DRAWING := 0
 
 var can_draw: bool: get = _get_can_draw
 var old_position: Vector2 = Vector2.ZERO
+var old_global_position: Vector2 = Vector2.ZERO
 var clamp_left : float
 var clamp_right : float
 var clamp_up : float
@@ -28,6 +29,10 @@ var grid_size: int
 
 func _process(_event: float) -> void:
 	move_crosshair()
+
+func _ready() -> void:
+	EventBus.diagram_mouse_entered.connect(_diagram_mouse_entered)
+	EventBus.diagram_mouse_exited.connect(_diagram_mouse_exited)
 
 func init(diagram: DiagramBase, state_lines: Array, gridsize: int) -> void:
 	Diagram = diagram
@@ -62,7 +67,9 @@ func move_crosshair() -> void:
 		if position != old_position:
 			move_timer.start()
 			moved.emit(position, old_position)
+			EventBus.crosshair_moved.emit(global_position, old_global_position)
 		old_position = position
+		old_global_position = global_position
 		
 	visible = get_state_visible(StateManager.state)
 
@@ -108,7 +115,7 @@ func is_try_position_valid(try_position: Vector2) -> bool:
 	
 	if (
 		StateManager.state == BaseState.State.Placing or
-		(StateManager.state == BaseState.State.Hovering and StateManager.current_state.grabbed_interaction)
+		StateManager.state == BaseState.State.Hovering
 	):
 		return is_placing_position_valid(try_position)
 	
@@ -126,18 +133,21 @@ func is_drawing_position_valid(try_position: Vector2) -> bool:
 	return true
 
 func is_placing_position_valid(try_position: Vector2) -> bool:
+	var grabbed_object: Node = StateManager.current_state.grabbed_object
+	
+	if !(grabbed_object is Interaction):
+		return true
+	
 	if Diagram.get_on_stateline(try_position) == StateLine.State.None:
 		return true
 	
 	if is_crosshair_on_state_interaction(try_position):
 		return false
 	
-	var grabbed_interaction: Interaction = StateManager.current_state.grabbed_interaction
-	
-	if !grabbed_interaction:
+	if !grabbed_object:
 		return true
 	
-	var moving_line_count: int = grabbed_interaction.connected_lines.size()
+	var moving_line_count: int = grabbed_object.connected_lines.size()
 	if moving_line_count > 1:
 		if StateManager.state == BaseState.State.Placing:
 			return false
@@ -167,11 +177,11 @@ func is_on_interaction(test_position: Vector2 = position) -> bool:
 			return true
 	return false
 
-func DiagramMouseEntered() -> void:
+func _diagram_mouse_entered() -> void:
 	is_inside_diagram = true
 	visible = get_state_visible(StateManager.state)
 
-func DiagramMouseExited() -> void:
+func _diagram_mouse_exited() -> void:
 	is_inside_diagram = false
 	visible = get_state_visible(StateManager.state)
 

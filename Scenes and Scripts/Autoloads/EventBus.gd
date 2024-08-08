@@ -1,5 +1,8 @@
 extends Node
 
+signal crosshair_moved(new_position: Vector2i, old_position: Vector2i)
+signal diagram_mouse_entered()
+signal diagram_mouse_exited()
 signal signal_draw_diagram
 signal signal_draw_raw_diagram
 signal signal_add_floating_menu

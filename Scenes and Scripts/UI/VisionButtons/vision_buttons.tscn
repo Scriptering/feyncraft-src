@@ -25,9 +25,9 @@ texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 expand_margin_right = 10.0
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kubuy"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bjj87"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8ny3c"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_uqo3x"]
 content_margin_left = 5.0
 content_margin_top = 4.0
 content_margin_right = 5.0
@@ -38,7 +38,7 @@ texture_margin_top = 6.0
 texture_margin_right = 5.0
 texture_margin_bottom = 7.0
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ajrl4"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4ascm"]
 content_margin_left = 5.0
 content_margin_top = 4.0
 content_margin_right = 5.0
@@ -49,7 +49,7 @@ texture_margin_top = 6.0
 texture_margin_right = 5.0
 texture_margin_bottom = 7.0
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3hrye"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_sf6a1"]
 content_margin_left = 5.0
 content_margin_top = 6.0
 content_margin_right = 5.0
@@ -61,18 +61,18 @@ texture_margin_right = 5.0
 texture_margin_bottom = 5.0
 
 [sub_resource type="Theme" id="Theme_fuyn4"]
-Button/styles/focus = SubResource("StyleBoxEmpty_kubuy")
-Button/styles/hover = SubResource("StyleBoxTexture_8ny3c")
-Button/styles/normal = SubResource("StyleBoxTexture_ajrl4")
-Button/styles/pressed = SubResource("StyleBoxTexture_3hrye")
+Button/styles/focus = SubResource("StyleBoxEmpty_bjj87")
+Button/styles/hover = SubResource("StyleBoxTexture_uqo3x")
+Button/styles/normal = SubResource("StyleBoxTexture_4ascm")
+Button/styles/pressed = SubResource("StyleBoxTexture_sf6a1")
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_nb23c"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_r3dfu"]
 allow_unpress = true
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_ger0o"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_oy7xd"]
 allow_unpress = true
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_w38bs"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_wq76s"]
 allow_unpress = true
 
 [sub_resource type="Animation" id="Animation_2er6j"]
@@ -153,29 +153,29 @@ theme_override_constants/separation = -3
 [node name="Colour" parent="MovingContainer/Tab/ButtonContainer" instance=ExtResource("5_tinf7")]
 layout_mode = 2
 theme = SubResource("Theme_fuyn4")
-icon = ExtResource("6_v7snu")
 minimum_size = Vector2(26, 26)
 toggle_mode = true
+button_group = SubResource("ButtonGroup_r3dfu")
+icon = ExtResource("6_v7snu")
 expand_icon = true
-button_group = SubResource("ButtonGroup_nb23c")
 
 [node name="Shade" parent="MovingContainer/Tab/ButtonContainer" instance=ExtResource("5_tinf7")]
 layout_mode = 2
 theme = SubResource("Theme_fuyn4")
-icon = ExtResource("6_63enc")
 minimum_size = Vector2(26, 26)
 toggle_mode = true
+button_group = SubResource("ButtonGroup_oy7xd")
+icon = ExtResource("6_63enc")
 expand_icon = true
-button_group = SubResource("ButtonGroup_ger0o")
 
 [node name="Strength" parent="MovingContainer/Tab/ButtonContainer" instance=ExtResource("5_tinf7")]
 layout_mode = 2
 theme = SubResource("Theme_fuyn4")
-icon = ExtResource("7_nx8nj")
 minimum_size = Vector2(26, 26)
 toggle_mode = true
+button_group = SubResource("ButtonGroup_wq76s")
+icon = ExtResource("7_nx8nj")
 expand_icon = true
-button_group = SubResource("ButtonGroup_w38bs")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

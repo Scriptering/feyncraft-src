@@ -321,6 +321,13 @@ func find_all_ids(test_function: Callable) -> PackedInt32Array:
 			return test_function.call(id)
 	)
 
+func find_first_state_id(test_function: Callable, state: StateLine.State) -> int:
+	for id:int in get_state_ids(state):
+		if test_function.call(id):
+			return id
+	
+	return matrix_size
+
 func find_all_state_ids(test_function: Callable, state: StateLine.State) -> PackedInt32Array:
 	var valid_state_ids: PackedInt32Array = []
 	

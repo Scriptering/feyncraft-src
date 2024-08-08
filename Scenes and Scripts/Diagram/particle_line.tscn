@@ -56,7 +56,6 @@ texture = ExtResource("5_chfwe")
 offset = Vector2(-4, 0)
 
 [node name="text" type="Sprite2D" parent="."]
-visible = false
 z_index = 1
 material = SubResource("ShaderMaterial_224gy")
 scale = Vector2(1.5, 1.5)

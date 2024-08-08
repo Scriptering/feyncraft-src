@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cnc7r7d27yn5c"]
+[gd_scene load_steps=15 format=3 uid="uid://cnc7r7d27yn5c"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/universe.gd" id="1_f3b25"]
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_fbm6y"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://dbbrv15cfsttg" path="res://Textures/Buttons/cut_touch_button_normal.png" id="12_560ih"]
 [ext_resource type="Texture2D" uid="uid://n2w0tydjaa33" path="res://Textures/Buttons/cut_touch_button_pressed.png" id="13_gqnb4"]
 [ext_resource type="Script" path="res://Scenes and Scripts/fps.gd" id="14_jxbry"]
+[ext_resource type="Script" path="res://DrawingMatrixExporter.gd" id="14_nixvf"]
 
 [node name="Universe" type="Node2D"]
 material = ExtResource("1_fbm6y")
@@ -98,6 +99,9 @@ offset_right = 81.0
 offset_bottom = 40.0
 theme_override_font_sizes/font_size = 10
 script = ExtResource("14_jxbry")
+
+[node name="Node" type="Node" parent="."]
+script = ExtResource("14_nixvf")
 
 [connection signal="tree_exited" from="." to="." method="_on_tree_exited"]
 [connection signal="problem_submitted" from="World" to="." method="_on_world_problem_submitted"]

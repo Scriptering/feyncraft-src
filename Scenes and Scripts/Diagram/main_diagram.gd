@@ -41,19 +41,64 @@ var diagram_future: Array[DrawingMatrix] = []
 var current_diagram: DrawingMatrix = null
 var diagram_added_to_history: bool = false
 
-var update_queue : Array[Variant] = []
+var update_queued: bool = true
+var drawing_matrix: DrawingMatrix
+
+var mouse_inside_diagram: bool = false
 
 func _ready() -> void:
 	Crosshair.moved_and_rested.connect(_crosshair_moved)
 	Crosshair.moved.connect(_crosshair_moved)
-	mouse_entered.connect(Crosshair.DiagramMouseEntered)
-	mouse_exited.connect(Crosshair.DiagramMouseExited)
 	EventBus.signal_draw_raw_diagram.connect(draw_raw_diagram)
 	EventBus.signal_draw_diagram.connect(draw_diagram)
 	action_taken.connect(EventBus.action_taken)
 	
 	for state_line:StateLine in StateLines:
 		state_line.init(self)
+	
+	for decoration:Decoration in get_tree().get_nodes_in_group("decoration"):
+		decoration.dropped.connect(_decoration_dropped)
+
+func _input(event: InputEvent) -> void:
+	if Input.is_action_just_pressed("ui_accept"):
+		print(DrawingMatrixExporter.get_string(
+			generate_drawing_matrix_from_diagram(),
+			get_interactions()
+		 ))
+	
+	if event is InputEventMouseMotion:
+		if DiagramArea.get_global_rect().has_point(get_global_mouse_position()):
+			if !mouse_inside_diagram:
+				EventBus.diagram_mouse_entered.emit()
+				mouse_inside_diagram = true
+		else:
+			if mouse_inside_diagram:
+				EventBus.diagram_mouse_exited.emit()
+				mouse_inside_diagram = false
+
+func _decoration_dropped(decoration: Decoration) -> void:
+	if !is_inside_tree():
+		return
+	
+	if !decoration.follow_crosshair:
+		return
+	
+	var interaction: Interaction = get_interaction_at_position(Crosshair.position)
+	
+	if interaction:
+		interaction.decor = decoration.decor
+		
+		if decoration.decor == Decoration.Decor.none:
+			check_rejoin_lines([interaction])
+		
+		return
+	
+	if decoration.decor == Decoration.Decor.none:
+		return
+
+	var new_interaction: Interaction = InteractionInstance.instantiate()
+	draw_interaction(Crosshair.position, new_interaction)
+	new_interaction.decor = decoration.decor
 
 func init(
 	particle_buttons: Control, controls: Node, vision_buttons: Control, vision: Node, state_manager: Node
@@ -84,6 +129,9 @@ func _process(_delta: float) -> void:
 	flush_update_queue()
 
 func flush_update_queue():
+	if update_queued:
+		update_queued = false
+	
 	for interaction:Interaction in $DiagramArea/Interactions.get_children():
 		if interaction.update_queued:
 			interaction.update_queued = false
@@ -93,6 +141,11 @@ func flush_update_queue():
 		if particle_line.update_queued:
 			particle_line.update_queued = false
 			particle_line.update()
+	
+	for state_line:StateLine in StateLines:
+		if state_line.update_queued:
+			state_line.update_queued = false
+			state_line.update()
 
 	if vision_update_queued:
 		vision_update_queued = false
@@ -122,8 +175,14 @@ func _crosshair_moved(new_position: Vector2i, old_position: Vector2i) -> void:
 		StateLines[state_to_update].queue_update()
 
 func move_interaction(interaction: Interaction, to_position: Vector2i) -> void:
+	var old_position: Vector2i = interaction.positioni()
+	
 	interaction.move(to_position)
 	move_connected_particle_lines(interaction)
+	
+	queue_stateline_update(get_state_by_position(to_position))
+	queue_stateline_update(get_state_by_position(old_position))
+	
 	queue_vision_update()
 
 func position_stateline(pos: Vector2i) -> StateLine.State:
@@ -190,7 +249,7 @@ func sort_drawing_interactions(interaction1: Interaction, interaction2: Interact
 	
 	if state1 != state2:
 		return state1 < state2
-	
+
 	var pos_y1: int = int(interaction1.position.y)
 	var pos_y2: int = int(interaction2.position.y)
 	
@@ -201,7 +260,7 @@ func sort_drawing_interactions(interaction1: Interaction, interaction2: Interact
 	var particle2: ParticleData.Particle = interaction2.connected_particles.front()
 	
 	if abs(particle1) != abs(particle2):
-		return abs(particle1) < abs(particle2)
+		return abs(particle1) < abs(particle2) 
 	
 	if particle1 != particle2:
 		return particle1 < particle2
@@ -265,7 +324,6 @@ func update_colour(diagram: DrawingMatrix, current_vision: Globals.Vision) -> vo
 	var time := Time.get_ticks_usec()
 	var zip: Array = Vision.generate_vision_paths(Globals.Vision.Colour, colour_matrix, true)
 	
-	
 	if zip == []:
 		return
 	
@@ -275,7 +333,7 @@ func update_colour(diagram: DrawingMatrix, current_vision: Globals.Vision) -> vo
 	update_colourless_interactions(colour_paths, colour_path_colours, colour_matrix, true)
 	
 	if current_vision == Globals.Vision.Colour:
-		draw_vision_lines(colour_paths, convert_path_colours(colour_path_colours, current_vision), colour_matrix)
+		draw_vision_lines(colour_paths, convert_path_colours(colour_path_colours, current_vision), diagram)
 	print(Time.get_ticks_usec() - time)
 
 func update_path_vision(diagram: DrawingMatrix, current_vision: Globals.Vision) -> void:
@@ -425,14 +483,39 @@ func is_line_placement_valid(particle_line: ParticleLine) -> bool:
 	return true
 
 func get_interactions() -> Array[Interaction]:
-	var interactions : Array[Interaction]
-	interactions.assign($DiagramArea/Interactions.get_children())
+	var interactions : Array[Interaction] = []
+	
+	for child:Interaction in $DiagramArea/Interactions.get_children():
+		if child and !child.is_queued_for_deletion():
+			interactions.push_back(child)
+
 	return interactions
 
 func get_particle_lines() -> Array[ParticleLine]:
-	var interactions : Array[ParticleLine]
-	interactions.assign($DiagramArea/ParticleLines.get_children())
-	return interactions
+	var particle_lines : Array[ParticleLine] = []
+	
+	for child:ParticleLine in $DiagramArea/ParticleLines.get_children():
+		if child and !child.is_queued_for_deletion():
+			particle_lines.push_back(child)
+
+	return particle_lines
+
+func get_hadron_joints() -> Array[HadronJoint]:
+	var hadron_joints : Array[HadronJoint] = []
+	
+	for child:HadronJoint in $DiagramArea/HadronJoints.get_children():
+		if !child || child.is_queued_for_deletion():
+			continue
+		
+		if child.hadron_lines.any(
+			func(hadron_line:ParticleLine) -> bool:
+				return !hadron_line || hadron_line.is_queued_for_deletion()
+		):
+			continue
+		
+		hadron_joints.push_back(child)
+	
+	return hadron_joints
 
 func get_selected_particle() -> ParticleData.Particle:
 	return ParticleButtons.selected_particle
@@ -477,12 +560,15 @@ func delete_interaction(interaction: Interaction, add_to_history:bool = true) ->
 	var connected_lines : Array[ParticleLine] = interaction.connected_lines.duplicate()
 	for particle_line:ParticleLine in connected_lines:
 		delete_line(particle_line, false)
+	
+	queue_stateline_update(get_state_by_position(interaction.positioni()))
 	queue_vision_update()
 
 func remove_lonely_interactions(interactions: Array[Interaction] = get_interactions()):
 	for interaction:Interaction in interactions:
 		if interaction.connected_lines.size() == 0:
-			interaction.queue_free()
+			queue_stateline_update(get_state_by_position(interaction.positioni()))
+			interaction.delete()
 
 func split_line(line_to_split: ParticleLine, split_interaction: Interaction) -> void:
 	var new_start_point: Vector2 = line_to_split.points[ParticleLine.Point.Start]
@@ -538,6 +624,9 @@ func check_rejoin_lines(interactions: Array[Interaction] = get_interactions()) -
 		return
 	
 	for interaction:Interaction in interactions:
+		if interaction.decor != Decoration.Decor.none:
+			continue
+		
 		if interaction.connected_lines.size() != 2:
 			continue
 		if interaction.connected_lines.any(
@@ -603,6 +692,19 @@ func get_interaction_at_position(pos: Vector2i) -> Interaction:
 	
 	return null
 
+func queue_stateline_update(state: StateLine.State) -> void:
+	if state == StateLine.State.None:
+		return
+	
+	StateLines[state].queue_update()
+
+func get_state_by_position(pos:Vector2i) -> StateLine.State:
+	for state:StateLine.State in StateLine.STATES:
+		if pos.x == StateLines[state].position.x:
+			return state
+	
+	return StateLine.State.None
+
 func start_drawing(start_position: Vector2i) -> void:
 	add_diagram_to_history()
 	
@@ -634,12 +736,15 @@ func transfer_interaction_connections(from_interaction:Interaction, to_interacti
 			to_interaction
 		)
 
-func drop_interaction(interaction: Interaction) -> void:
+func _interaction_dropped(interaction: Interaction) -> void:
 	if ArrayFuncs.is_vec_zero_approx(interaction.position - interaction.start_grab_position):
 		remove_last_diagram_from_history()
 	
+	print("interaction dropped")
+	
 	for particle_line:ParticleLine in interaction.connected_lines:
 		if !is_line_placement_valid(particle_line):
+			print("line placement invalid")
 			delete_line(particle_line)
 			continue
 		
@@ -653,7 +758,7 @@ func drop_interaction(interaction: Interaction) -> void:
 		interaction.drop()
 		check_split_lines(interaction)
 	else:
-		interaction.queue_free()
+		interaction.delete()
 		var interaction_at_position := get_interaction_at_position(interaction.positioni())
 		transfer_interaction_connections(
 			interaction,
@@ -663,11 +768,18 @@ func drop_interaction(interaction: Interaction) -> void:
 	for particle_line:ParticleLine in connected_lines:
 		check_rejoin_lines(particle_line.connected_interactions)
 
+func place_interaction(interaction_position: Vector2, interaction: Node = InteractionInstance.instantiate()) -> void:
+	super.place_interaction(interaction_position, interaction)
+	
+	interaction.dropped.connect(_interaction_dropped)
+
 func draw_interaction(
-	interaction_position: Vector2, interaction: Node = InteractionInstance.instantiate(), is_action: bool = true
+	interaction_position: Vector2, interaction: Interaction = InteractionInstance.instantiate(), is_action: bool = true
 ) -> Interaction:
 	place_interaction(interaction_position, interaction)
 	check_split_lines(interaction)
+	
+	queue_stateline_update(get_state_by_position(interaction_position))
 	
 	return interaction
 
@@ -1044,12 +1156,6 @@ func draw_vision_lines(
 ) -> void:
 	for i:int in range(paths.size()):
 		draw_vision_line(calculate_vision_line_points(paths[i], vision_matrix), path_colours[i])
-
-func _on_mouse_entered() -> void:
-	hovering = true
-
-func _on_mouse_exited() -> void:
-	hovering = false
 
 func set_title_editable(editable: bool) -> void:
 	Title.editable = editable
