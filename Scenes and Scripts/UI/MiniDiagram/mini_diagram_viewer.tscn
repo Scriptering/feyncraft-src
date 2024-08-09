@@ -111,15 +111,15 @@ size_flags_horizontal = 3
 [node name="Left" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
 layout_mode = 2
 mouse_filter = 1
-icon = ExtResource("8_g4oap")
 minimum_size = Vector2(18, 2.08165e-12)
+icon = ExtResource("8_g4oap")
 icon_use_parent_material = true
 
 [node name="Load" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
 layout_mode = 2
 mouse_filter = 1
-icon = ExtResource("9_ulpnp")
 minimum_size = Vector2(25, 25)
+icon = ExtResource("9_ulpnp")
 expand_icon = true
 icon_use_parent_material = true
 
@@ -130,8 +130,8 @@ tooltip = "Load Diagram"
 visible = false
 layout_mode = 2
 mouse_filter = 1
-icon = ExtResource("11_tsyye")
 minimum_size = Vector2(24, 25)
+icon = ExtResource("11_tsyye")
 icon_use_parent_material = true
 
 [node name="Tooltip" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Resave" instance=ExtResource("10_6viqt")]
@@ -140,8 +140,8 @@ tooltip = "Resave diagram"
 [node name="Delete" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
 layout_mode = 2
 mouse_filter = 1
-icon = ExtResource("11_5ck4b")
 minimum_size = Vector2(24, 25)
+icon = ExtResource("11_5ck4b")
 expand_icon = true
 icon_use_parent_material = true
 
@@ -151,8 +151,8 @@ tooltip = "Delete Diagram"
 [node name="Right" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
 layout_mode = 2
 mouse_filter = 1
-icon = ExtResource("9_4bpdd")
 minimum_size = Vector2(18, 2.08165e-12)
+icon = ExtResource("9_4bpdd")
 icon_use_parent_material = true
 
 [node name="IndexContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
@@ -164,7 +164,6 @@ alignment = 1
 [node name="IndexLabel" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/IndexContainer"]
 use_parent_material = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
 text = "1/10"
 vertical_alignment = 1
 

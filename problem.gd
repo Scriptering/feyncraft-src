@@ -71,4 +71,3 @@ func is_matching_states(reduced_submission: ConnectionMatrix) -> bool:
 			return false
 	
 	return true
-

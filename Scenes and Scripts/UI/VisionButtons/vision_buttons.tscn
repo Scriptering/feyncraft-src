@@ -66,13 +66,13 @@ Button/styles/hover = SubResource("StyleBoxTexture_uqo3x")
 Button/styles/normal = SubResource("StyleBoxTexture_4ascm")
 Button/styles/pressed = SubResource("StyleBoxTexture_sf6a1")
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_11l2q"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_kpdp3"]
 allow_unpress = true
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_o5lwk"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_euo3v"]
 allow_unpress = true
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_x6w5a"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_ekbak"]
 allow_unpress = true
 
 [sub_resource type="Animation" id="Animation_2er6j"]
@@ -155,7 +155,7 @@ layout_mode = 2
 theme = SubResource("Theme_fuyn4")
 minimum_size = Vector2(26, 26)
 toggle_mode = true
-button_group = SubResource("ButtonGroup_11l2q")
+button_group = SubResource("ButtonGroup_kpdp3")
 icon = ExtResource("6_v7snu")
 expand_icon = true
 
@@ -164,7 +164,7 @@ layout_mode = 2
 theme = SubResource("Theme_fuyn4")
 minimum_size = Vector2(26, 26)
 toggle_mode = true
-button_group = SubResource("ButtonGroup_o5lwk")
+button_group = SubResource("ButtonGroup_euo3v")
 icon = ExtResource("6_63enc")
 expand_icon = true
 
@@ -173,7 +173,7 @@ layout_mode = 2
 theme = SubResource("Theme_fuyn4")
 minimum_size = Vector2(26, 26)
 toggle_mode = true
-button_group = SubResource("ButtonGroup_x6w5a")
+button_group = SubResource("ButtonGroup_ekbak")
 icon = ExtResource("7_nx8nj")
 expand_icon = true
 

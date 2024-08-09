@@ -8,12 +8,9 @@
 [node name="InteractionSprite" type="Sprite2D"]
 material = ExtResource("1_w3f7v")
 texture = ExtResource("3_npko6")
-centered = false
 script = ExtResource("2_v8q76")
 
 [node name="Dot" type="Sprite2D" parent="."]
-visible = false
 z_index = 1
 use_parent_material = true
 texture = ExtResource("4_l8g2o")
-centered = false
