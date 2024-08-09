@@ -61,14 +61,13 @@ func is_matching_states(reduced_submission: ConnectionMatrix) -> bool:
 	for state:StateLine.State in StateLine.STATES:
 		if (
 			sorted_submitted_states[state].any(
-				func(state_interaction: Array) -> bool:
-					return state_interaction not in sorted_states[state]
-		) or
+				func(state_particle: int) -> bool:
+					return state_particle not in sorted_states[state]
+		) ||
 			sorted_states[state].any(
-				func(state_interaction: Array) -> bool:
-					return state_interaction not in sorted_submitted_states[state]
+				func(state_particle: int) -> bool:
+					return state_particle not in sorted_submitted_states[state]
 		)):
 			return false
 	
 	return true
-

@@ -8,6 +8,9 @@ signal diagram_resaved
 signal load_diagram
 signal closed
 
+@onready var delete_button := $VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Delete
+@onready var resave_button := $VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Resave
+
 @export var allow_resaving: bool = false
 @export var title: String:
 	set(new_value):
@@ -32,7 +35,7 @@ var current_index: int = 0:
 func _ready() -> void:
 	super._ready()
 	
-	$VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Resave.visible = allow_resaving
+	resave_button.visible = allow_resaving
 	
 	BigDiagram.action_taken.connect(update_resave_button)
 	load_diagram.connect(EventBus.draw_diagram)
@@ -95,10 +98,10 @@ func update_resave_button(drawn_diagram: DrawingMatrix = BigDiagram.generate_dra
 	if !visible or !allow_resaving:
 		return
 	
-	$VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Resave.disabled = !drawn_diagram.is_duplicate(diagrams[current_index])
+	resave_button.disabled = diagrams.size() == 0 || !drawn_diagram.is_duplicate(diagrams[current_index])
 
 func update_delete_button() -> void:
-	$VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Delete.disabled = diagrams.size() == 0
+	delete_button.disabled = diagrams.size() == 0
 
 func remove_diagram(index: int = current_index) -> void:
 	diagrams.remove_at(index)

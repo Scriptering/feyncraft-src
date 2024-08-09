@@ -28,9 +28,9 @@ var Final: Control
 var anti := 1 : set = _set_anti
 var base_particle := ParticleData.Particle.none
 var particle := ParticleData.Particle.none : get = _get_particle
-var left_point: Vector2
-var right_point: Vector2
-var points : Array[Vector2] = [Vector2.ZERO, Vector2.ZERO] : set = _set_points
+var left_point: Vector2i
+var right_point: Vector2i
+var points : Array[Vector2i] = [Vector2i.ZERO, Vector2i.ZERO] : set = _set_points
 var line_vector : Vector2 = Vector2.ZERO:
 	get: return points[Point.End] - points[Point.Start]
 var particle_name : String : get = _get_particle_name
@@ -99,7 +99,7 @@ func set_anti() -> void:
 	else:
 		anti = Anti.noanti
 
-func _set_points(new_value: Array[Vector2]) -> void:
+func _set_points(new_value: Array[Vector2i]) -> void:
 	points = new_value
 
 func set_left_and_right_points() -> void:
@@ -132,10 +132,10 @@ func connect_to_interactions() -> void:
 			interaction.connected_lines.erase(self)
 	
 func move_line() -> void:
-	LineJointStart.points[Point.Start] = points[Point.Start]
-	LineJointEnd.points[Point.End] = points[Point.End]
+	LineJointStart.points[Point.Start] = Vector2(points[Point.Start])
+	LineJointEnd.points[Point.End] = Vector2(points[Point.End])
 	
-	LineJointStart.points[Point.End] = points[Point.Start] + line_joint_start_length * self.line_vector.normalized() 
+	LineJointStart.points[Point.End] = Vector2(points[Point.Start]) + line_joint_start_length * self.line_vector.normalized() 
 	
 	if base_particle == ParticleData.Particle.gluon:
 		var number_of_gluon_loops : int = floor((self.line_vector.length() - line_joint_start_length - line_joint_end_length) / gluon_loop_length)
@@ -145,7 +145,7 @@ func move_line() -> void:
 			gluon_loop_length * number_of_gluon_loops * self.line_vector.normalized()
 		)
 	else:
-		LineJointEnd.points[Point.Start] = points[Point.End] - line_joint_end_length * self.line_vector.normalized() 
+		LineJointEnd.points[Point.Start] = Vector2(points[Point.End]) - line_joint_end_length * self.line_vector.normalized() 
 	
 	LineMiddle.points[Point.Start] = LineJointStart.points[Point.End]
 	LineMiddle.points[Point.End] = LineJointEnd.points[Point.Start]
@@ -174,7 +174,7 @@ func get_arrow_visiblity() -> bool:
 	return true
 
 func move_arrow() -> void:
-	Arrow.position = points[Point.Start] + self.line_vector / 2
+	Arrow.position = Vector2(points[Point.Start]) + self.line_vector / 2
 	Arrow.rotation = self.line_vector.angle()
 
 func get_on_state_line() -> StateLine.State:
@@ -196,7 +196,7 @@ func is_point_connected(point: Vector2) -> bool:
 	return false
 
 func is_position_on_line(test_position: Vector2) -> bool:
-	var split_vector: Vector2 = test_position-points[Point.Start]
+	var split_vector: Vector2 = test_position-Vector2(points[Point.Start])
 	
 	if test_position in points:
 		return false
@@ -224,32 +224,32 @@ func get_points_connected() -> PointsConnected:
 func move_text() -> void:
 	match get_on_state_line():
 		StateLine.State.Both:
-			Text.position = left_point + text_gap * Vector2.LEFT
-			SpareText.position = right_point + text_gap * Vector2.RIGHT
+			Text.position = Vector2(left_point) + text_gap * Vector2.LEFT
+			SpareText.position = Vector2(right_point) + text_gap * Vector2.RIGHT
 			SpareText.show()
 			return
 		StateLine.State.Initial:
-			Text.position = left_point + text_gap * Vector2.LEFT
+			Text.position = Vector2(left_point) + text_gap * Vector2.LEFT
 			SpareText.hide()
 			return
 		StateLine.State.Final:
-			Text.position = right_point + text_gap * Vector2.RIGHT
+			Text.position = Vector2(right_point) + text_gap * Vector2.RIGHT
 			SpareText.hide()
 			return
 	SpareText.hide()
 	
 	if points[Point.Start] == points[Point.End]:
-		Text.position = left_point + text_gap * Vector2.LEFT
+		Text.position = Vector2(left_point) + text_gap * Vector2.LEFT
 		return
 	
 	match get_points_connected():
 		PointsConnected.Left:
-			Text.position = right_point + text_gap * Vector2.RIGHT
+			Text.position = Vector2(right_point) + text_gap * Vector2.RIGHT
 		PointsConnected.Right:
-			Text.position = left_point + text_gap * Vector2.LEFT
+			Text.position = Vector2(left_point) + text_gap * Vector2.LEFT
 	
 	Text.position = (
-		(right_point - left_point) / 2 + left_point +
+		Vector2(right_point - left_point) / 2 + Vector2(left_point) +
 		text_gap * self.line_vector.orthogonal().normalized()
 	)
 

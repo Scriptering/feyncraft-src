@@ -35,6 +35,9 @@ func input(_event: InputEvent) -> State:
 		return State.Deleting
 	elif Input.is_action_just_pressed("clear"):
 		cancel_placement()
+	elif Input.is_action_just_released("click"):
+		cancel_placement()
+		return State.Idle
 	elif drawing == true:
 		return State.Placing
 		
