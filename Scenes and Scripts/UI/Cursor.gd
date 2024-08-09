@@ -38,7 +38,7 @@ func _ready() -> void:
 	offset = Scale * normal_offset
 	Heart.offset = Scale * normal_heart_offset
 	
-	EventBus.signal_change_cursor.connect(change_cursor)
+	EventBus.change_cursor.connect(change_cursor)
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey:

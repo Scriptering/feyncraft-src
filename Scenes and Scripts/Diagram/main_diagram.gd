@@ -49,9 +49,9 @@ var mouse_inside_diagram: bool = false
 func _ready() -> void:
 	Crosshair.moved_and_rested.connect(_crosshair_moved)
 	Crosshair.moved.connect(_crosshair_moved)
-	EventBus.signal_draw_raw_diagram.connect(draw_raw_diagram)
-	EventBus.signal_draw_diagram.connect(draw_diagram)
-	action_taken.connect(EventBus.action_taken)
+	EventBus.draw_raw_diagram.connect(draw_raw_diagram)
+	EventBus.draw_diagram.connect(draw_diagram)
+	action_taken.connect(EventBus.action_taken.emit)
 	
 	DiagramArea.mouse_entered.connect(_on_diagram_area_mouse_entered)
 	DiagramArea.mouse_exited.connect(_on_diagram_area_mouse_exited)

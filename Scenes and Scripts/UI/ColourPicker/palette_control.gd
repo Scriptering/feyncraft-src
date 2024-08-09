@@ -8,7 +8,7 @@ signal closed
 @export var scroll_container: ScrollContainer
 
 func _ready() -> void:
-	EventBus.signal_save_files.connect(save_palettes)
+	EventBus.save_files.connect(save_palettes)
 	
 	$PaletteList.load_result.connect(_on_load_result)
 	$PaletteList.selected_palette_deleted.connect(load_tea_stain)

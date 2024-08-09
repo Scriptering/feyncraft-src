@@ -2,7 +2,6 @@
 
 extends PanelButton
 
-signal load_panel_created(panel: Node)
 signal submitted(submitted_text: String)
 
 enum Mode {Load, Upload}
@@ -24,7 +23,6 @@ var icon_dict: Dictionary = {
 func _ready() -> void:
 	super._ready()
 	self.mode = mode
-	load_panel_created.connect(EventBus.add_floating_menu)
 
 func _on_button_toggled(button_pressed_state: bool) -> void:
 	super._on_button_toggled(button_pressed_state)
@@ -43,7 +41,7 @@ func create_load_panel() -> void:
 		func(submitted_text: String) -> void:
 			submitted.emit(submitted_text)
 	)
-	load_panel_created.emit(load_panel)
+	EventBus.add_floating_menu.emit(load_panel)
 
 func close_load_panel() -> void:
 	self.button_pressed = false

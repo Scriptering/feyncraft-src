@@ -75,7 +75,7 @@ func _ready() -> void:
 			button_mouse_exited.emit(self)
 	)
 	
-	EventBus.button_created(self)
+	EventBus.button_created.emit($Button)
 
 func _set_label_settings(new_value: LabelSettings) -> void:
 	label_settings = new_value

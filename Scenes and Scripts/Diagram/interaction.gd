@@ -50,7 +50,6 @@ var update_queued := true
 func _ready() -> void:
 	super._ready()
 	
-	show_information_box.connect(EventBus.add_floating_menu)
 	request_deletion.connect(Diagram.delete_interaction)
 
 	Ball.frame = NORMAL
@@ -383,7 +382,7 @@ func open_information_box() -> void:
 	information_box.ConnectedInteraction = self
 	information_box.ID = information_id
 	information_box.position = Diagram.position + position + information_box_offset
-	show_information_box.emit(information_box)
+	EventBus.add_floating_menu.emit(information_box)
 	
 	InfoNumberLabel.text = str(information_id)
 	InfoNumberLabel.show()

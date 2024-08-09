@@ -1,8 +1,6 @@
 extends Node
 class_name BaseState
 
-signal change_cursor
-
 enum State {
 	Null,
 	Idle,
@@ -19,7 +17,7 @@ var Diagram : MainDiagram
 @export var cursor_state : Globals.Cursor
 
 func enter() -> void:
-	change_cursor.emit(cursor_state)
+	EventBus.change_cursor.emit(cursor_state)
 
 func exit() -> void:
 	pass

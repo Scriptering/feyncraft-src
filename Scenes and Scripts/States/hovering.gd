@@ -21,7 +21,7 @@ func input(_event: InputEvent) -> State:
 		return State.Idle
 	
 	if Input.is_action_just_released("click"):
-		change_cursor.emit(Globals.Cursor.hover)
+		EventBus.change_cursor.emit(Globals.Cursor.hover)
 		grabbed_object = null
 
 	return State.Null
@@ -51,7 +51,7 @@ func _grabbable_object_clicked(object: Node) -> void:
 	if !object.can_be_grabbed():
 		return
 	
-	change_cursor.emit(Globals.Cursor.hold)
+	EventBus.change_cursor.emit(Globals.Cursor.hold)
 	
 	if object is Interaction:
 		grab_start_position = object.position

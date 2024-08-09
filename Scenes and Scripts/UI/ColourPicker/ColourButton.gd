@@ -44,4 +44,4 @@ func create_picker_panel() -> void:
 	
 	await get_tree().process_frame
 	
-	EventBus.add_floating_menu(picker_panel)
+	EventBus.add_floating_menu.emit(picker_panel)

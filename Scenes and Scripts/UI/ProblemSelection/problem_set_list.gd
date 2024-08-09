@@ -17,7 +17,7 @@ var problem_sets: Array[ProblemSet]
 func _ready() -> void:
 	play_problem_set.connect(EventBus.enter_game)
 	
-	EventBus.signal_save_files.connect(save_problem_sets)
+	EventBus.save_files.connect(save_problem_sets)
 	
 	load_problem_sets()
 	

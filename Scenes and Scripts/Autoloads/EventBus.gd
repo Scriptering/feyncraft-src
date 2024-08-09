@@ -3,33 +3,22 @@ extends Node
 signal crosshair_moved(new_position: Vector2i, old_position: Vector2i)
 signal diagram_mouse_entered()
 signal diagram_mouse_exited()
-signal signal_draw_diagram
-signal signal_draw_raw_diagram
-signal signal_add_floating_menu
-signal signal_change_cursor
+signal button_created(button: PanelButton)
+signal draw_diagram
+signal draw_raw_diagram
+signal add_floating_menu
+signal change_cursor
+signal save_files
+signal diagram_submitted(diagram: DrawingMatrix, submissions: Array[DrawingMatrix])
 signal signal_enter_game
 signal signal_change_scene(scene: Globals.Scene, args: Array)
 signal signal_exit_game(mode: BaseMode.Mode, created_problem: Problem)
 signal signal_change_palette(palette: ImageTexture)
 signal signal_diagram_action_taken
-signal signal_button_created(button: PanelButton)
 signal signal_problem_modified(problem_item: PanelContainer)
 signal signal_problem_set_played(problem_set: ProblemSet, index: int)
 signal toggle_scene
-signal signal_save_files
-signal signal_diagram_submitted(diagram: DrawingMatrix, submissions: Array[DrawingMatrix])
-
-func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
-	signal_draw_diagram.emit(drawing_matrix)
-
-func draw_diagram_raw(connection_matrix: ConnectionMatrix) -> void:
-	signal_draw_raw_diagram.emit(connection_matrix)
-
-func add_floating_menu(menu: Node) -> void:
-	signal_add_floating_menu.emit(menu)
-
-func change_cursor(new_cursor: Globals.Cursor) -> void:
-	signal_change_cursor.emit(new_cursor)
+signal action_taken
 
 func enter_game(
 	mode: BaseMode.Mode, problem_set: ProblemSet = null, problem: Problem = null, creating_problem_set_file: String = ''
@@ -57,20 +46,8 @@ func change_scene(scene: Globals.Scene, args: Array = []) -> void:
 func change_palette(palette: ImageTexture) -> void:
 	signal_change_palette.emit(palette)
 
-func button_created(button: PanelButton) -> void:
-	signal_button_created.emit(button)
-
 func problem_modified(problem_item: PanelContainer) -> void:
 	signal_problem_modified.emit(problem_item)
 
 func problem_set_played(problem_set: ProblemSet, index: int) -> void:
 	signal_problem_set_played.emit(problem_set, index)
-
-func save_files() -> void:
-	signal_save_files.emit()
-
-func action_taken() -> void:
-	signal_diagram_action_taken.emit()
-
-func diagram_submitted(diagram: DrawingMatrix, submissions: Array[DrawingMatrix]) -> void:
-	signal_diagram_submitted.emit(diagram, submissions)
