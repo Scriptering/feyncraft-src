@@ -53,6 +53,9 @@ func _ready() -> void:
 	EventBus.signal_draw_diagram.connect(draw_diagram)
 	action_taken.connect(EventBus.action_taken)
 	
+	DiagramArea.mouse_entered.connect(_on_diagram_area_mouse_entered)
+	DiagramArea.mouse_exited.connect(_on_diagram_area_mouse_exited)
+	
 	for state_line:StateLine in StateLines:
 		state_line.init(self)
 	
@@ -61,20 +64,21 @@ func _ready() -> void:
 
 func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("ui_accept"):
-		print(DrawingMatrixExporter.get_string(
+		var exporter:= DrawingMatrixExporter.new(
 			generate_drawing_matrix_from_diagram(),
-			get_interactions()
-		 ))
+			get_decorations()
+		 )
 	
-	if event is InputEventMouseMotion:
-		if DiagramArea.get_global_rect().has_point(get_global_mouse_position()):
-			if !mouse_inside_diagram:
-				EventBus.diagram_mouse_entered.emit()
-				mouse_inside_diagram = true
-		else:
-			if mouse_inside_diagram:
-				EventBus.diagram_mouse_exited.emit()
-				mouse_inside_diagram = false
+	#if event is InputEventMouseMotion:
+		#if DiagramArea.get_global_rect().has_point(get_global_mouse_position()):
+			#if !mouse_inside_diagram:
+				#EventBus.diagram_mouse_entered.emit()
+				#mouse_inside_diagram = true
+		#else:
+			#if mouse_inside_diagram:
+				#EventBus.diagram_mouse_exited.emit()
+				#mouse_inside_diagram = false
+
 
 func _decoration_dropped(decoration: Decoration) -> void:
 	if !is_inside_tree():
@@ -99,6 +103,12 @@ func _decoration_dropped(decoration: Decoration) -> void:
 	var new_interaction: Interaction = InteractionInstance.instantiate()
 	draw_interaction(Crosshair.position, new_interaction)
 	new_interaction.decor = decoration.decor
+
+func get_decorations() -> Array[Decoration.Decor]:
+	var decorations:Array[Decoration.Decor] = []
+	for interaction:Interaction in get_interactions():
+		decorations.push_back(interaction.decor)
+	return decorations
 
 func init(
 	particle_buttons: Control, controls: Node, vision_buttons: Control, vision: Node, state_manager: Node
@@ -930,6 +940,9 @@ func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 			ParticleLine.Point.End,
 			get_interaction_at_position(drawing_particle.points[ParticleLine.Point.End])
 		)
+		
+		queue_stateline_update(StateLine.State.Initial)
+		queue_stateline_update(StateLine.State.Final)
 
 func undo() -> void:
 	if !is_inside_tree():
@@ -1185,3 +1198,9 @@ func get_degree() -> int:
 		degree += interaction.degree
 	
 	return degree
+
+func _on_diagram_area_mouse_entered() -> void:
+	EventBus.diagram_mouse_entered.emit()
+
+func _on_diagram_area_mouse_exited() -> void:
+	EventBus.diagram_mouse_exited.emit()

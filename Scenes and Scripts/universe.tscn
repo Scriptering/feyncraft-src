@@ -13,7 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://dbbrv15cfsttg" path="res://Textures/Buttons/cut_touch_button_normal.png" id="12_560ih"]
 [ext_resource type="Texture2D" uid="uid://n2w0tydjaa33" path="res://Textures/Buttons/cut_touch_button_pressed.png" id="13_gqnb4"]
 [ext_resource type="Script" path="res://Scenes and Scripts/fps.gd" id="14_jxbry"]
-[ext_resource type="Script" path="res://DrawingMatrixExporter.gd" id="14_nixvf"]
+[ext_resource type="Script" path="res://Scenes and Scripts/global_feedback.gd" id="14_x4syi"]
 
 [node name="Universe" type="Node2D"]
 material = ExtResource("1_fbm6y")
@@ -27,6 +27,7 @@ PaletteMenu = NodePath("../FloatingMenus/PaletteMenu")
 [node name="FloatingMenus" type="CanvasLayer" parent="."]
 
 [node name="PaletteMenu" parent="FloatingMenus" instance=ExtResource("5_yvg3b")]
+visible = false
 mouse_filter = 2
 
 [node name="PullOutTabs" type="Control" parent="."]
@@ -100,9 +101,40 @@ offset_bottom = 40.0
 theme_override_font_sizes/font_size = 10
 script = ExtResource("14_jxbry")
 
-[node name="Node" type="Node" parent="."]
-script = ExtResource("14_nixvf")
+[node name="GlobalFeedback" type="Node" parent="." node_paths=PackedStringArray("TooltipPanel", "TooltipLabel", "TooltipContainer")]
+script = ExtResource("14_x4syi")
+offset = Vector2(0, 0)
+show_delay = -1.0
+hide_delay = 1.0
+manual_placement = true
+TooltipPanel = NodePath("PanelContainer")
+TooltipLabel = NodePath("PanelContainer/HBoxContainer/Label")
+TooltipContainer = NodePath("PanelContainer/HBoxContainer")
+
+[node name="PanelContainer" type="PanelContainer" parent="GlobalFeedback"]
+visible = false
+z_index = 5
+material = ExtResource("1_fbm6y")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -6.5
+offset_top = -8.0
+offset_right = 6.5
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GlobalFeedback/PanelContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Label" type="Label" parent="GlobalFeedback/PanelContainer/HBoxContainer"]
+use_parent_material = true
+layout_mode = 2
 
 [connection signal="tree_exited" from="." to="." method="_on_tree_exited"]
-[connection signal="problem_submitted" from="World" to="." method="_on_world_problem_submitted"]
-[connection signal="save_problem_set" from="World" to="." method="_on_world_save_problem_set"]

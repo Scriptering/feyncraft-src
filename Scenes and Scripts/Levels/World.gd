@@ -302,3 +302,17 @@ func _on_menu_exit_pressed() -> void:
 
 func _on_tutorial_info_finish_pressed() -> void:
 	EventBus.signal_change_scene.emit(Globals.Scene.MainMenu)
+
+func _on_export_tab_export_pressed(join_paths: bool, draw_internal_labels: bool, draw_external_labels: bool) -> void:
+	var exporter:= DrawingMatrixExporter.new(
+		Diagram.generate_drawing_matrix_from_diagram(),
+		Diagram.get_decorations()
+	)
+	
+	exporter.join_paths = join_paths
+	exporter.draw_internal_labels = draw_internal_labels
+	exporter.draw_external_labels = draw_external_labels
+	
+	var export_string: String = exporter.generate_export()
+	
+	ClipBoard.copy(export_string)

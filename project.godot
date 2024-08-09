@@ -28,6 +28,7 @@ Globals="*res://Scenes and Scripts/Autoloads/Globals.gd"
 SOUNDBUS="*res://Scenes and Scripts/sound_bus.tscn"
 EventBus="*res://Scenes and Scripts/Autoloads/EventBus.gd"
 ParticleData="*res://Scenes and Scripts/Autoloads/ParticleData.gd"
+ClipBoard="*res://Scenes and Scripts/clip_board.tscn"
 
 [debug]
 

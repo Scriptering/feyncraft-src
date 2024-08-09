@@ -1,6 +1,5 @@
 extends PanelContainer
 
-signal sampling_started
 signal sampling_escaped
 signal sample_submitted(submitted_colour: Color)
 
