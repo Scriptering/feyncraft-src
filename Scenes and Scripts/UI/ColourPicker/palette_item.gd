@@ -93,7 +93,7 @@ func get_button_colours() -> Array[Color]:
 
 func set_buttons_disabled(disable: bool) -> void:
 	for colour_button:ColourButton in ColourButtonDict.values():
-		colour_button.disabled = disable
+		colour_button.set_disabled(disable)
 
 func load_data(_palette: Palette) -> void:
 	palette = _palette

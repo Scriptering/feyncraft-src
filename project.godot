@@ -64,9 +64,11 @@ export=false
 [global_group]
 
 decoration=""
+button=""
 
 [gui]
 
+common/snap_controls_to_pixels=false
 fonts/dynamic_fonts/use_oversampling=false
 theme/custom="res://Resources/Themes/ProjectTheme.tres"
 common/drop_mouse_on_gui_input_disabled=true
@@ -233,9 +235,7 @@ common/enable_pause_aware_picking=true
 
 textures/canvas_textures/default_texture_filter=0
 textures/default_filters/anisotropic_filtering_level=0
-2d/snap/snap_2d_transforms_to_pixel=true
-2d/snap/snap_2d_vertices_to_pixel=true
-2d/snapping/use_gpu_pixel_snap=true
+2d/snapping/use_gpu_pixel_snap=false
 batching/precision/uv_contract=true
 
 [shader_globals]

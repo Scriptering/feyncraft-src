@@ -65,17 +65,20 @@ func _ready() -> void:
 	
 	$Button.mouse_entered.connect(
 		func() -> void:
+			if disabled:
+				EventBus.show_disabled.emit()
+			EventBus.hide_disabled.emit()
 			mouse_entered.emit()
 			button_mouse_entered.emit(self)
 	)
 	
 	$Button.mouse_exited.connect(
-		func() -> void: 
+		func() -> void:
+			if disabled:
+				EventBus.hide_disabled.emit()
 			mouse_exited.emit()
 			button_mouse_exited.emit(self)
 	)
-	
-	EventBus.button_created.emit($Button)
 
 func _set_label_settings(new_value: LabelSettings) -> void:
 	label_settings = new_value

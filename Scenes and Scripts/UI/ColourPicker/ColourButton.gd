@@ -1,7 +1,7 @@
 @tool
+extends PanelContainer
 
 class_name ColourButton
-extends PanelButton
 
 signal colour_changed(button: ColourButton, colour: Color)
 
@@ -14,15 +14,7 @@ var picker_panel: GrabbableControl
 
 func _set_icon_colour(new_value: Color) -> void:
 	icon_colour = new_value
-	get_node("ContentContainer/HBoxContainer/ButtonIcon").modulate = icon_colour
-
-func _on_button_toggled(button_pressed_state: bool) -> void:
-	super._on_button_toggled(button_pressed_state)
-	
-	if button_pressed_state:
-		create_picker_panel()
-	else:
-		picker_panel.queue_free()
+	$MarginContainer/ColorRect.modulate = icon_colour
 
 func _on_color_picker_color_changed(color: Color) -> void:
 	self.icon_colour = color
@@ -39,9 +31,18 @@ func create_picker_panel() -> void:
 	picker_panel.colour_changed.connect(_on_color_picker_color_changed)
 	picker_panel.closed.connect(
 		func() -> void:
-			self.button_pressed = false
+			$Button.button_pressed = false
 	)
 	
 	await get_tree().process_frame
 	
 	EventBus.add_floating_menu.emit(picker_panel)
+
+func _on_button_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		create_picker_panel()
+	else:
+		picker_panel.queue_free()
+
+func set_disabled(disable: bool) -> void:
+	$Button.disabled = disable

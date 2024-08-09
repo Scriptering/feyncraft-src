@@ -10,8 +10,8 @@
 [ext_resource type="Texture2D" uid="uid://cea5mj3u65016" path="res://Textures/Buttons/square_pressed_active.png" id="5_xyfo5"]
 [ext_resource type="Texture2D" uid="uid://d16opu3dyhri7" path="res://Textures/Buttons/eye/eye_open.png" id="6_5d7ij"]
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="8_pa48w"]
-[ext_resource type="PackedScene" uid="uid://c062i5iscj5rd" path="res://Scenes and Scripts/UI/ColourPicker/colour_button.tscn" id="9_vjhyi"]
 [ext_resource type="Theme" uid="uid://cfmbhoq8cuoge" path="res://Resources/Themes/ProjectTheme.tres" id="11_l36jc"]
+[ext_resource type="PackedScene" uid="uid://dp48r81q855wa" path="res://Scenes and Scripts/UI/ColourPicker/colour_button.tscn" id="11_m2xhs"]
 [ext_resource type="Texture2D" uid="uid://cms1u4elh5bo3" path="res://Textures/Buttons/icons/delete.png" id="12_ipd10"]
 [ext_resource type="PackedScene" uid="uid://7kmcsryae7lw" path="res://Scenes and Scripts/UI/Buttons/load_button.tscn" id="13_gyqq1"]
 [ext_resource type="Theme" uid="uid://c7hk3afo5tria" path="res://Resources/Themes/toggle_button.tres" id="14_ylj5d"]
@@ -65,7 +65,7 @@ Button/styles/hover = SubResource("StyleBoxTexture_n0u2h")
 Button/styles/normal = SubResource("StyleBoxTexture_kxnlx")
 Button/styles/pressed = SubResource("StyleBoxTexture_pbk00")
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_88bte"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_e6c0f"]
 
 [node name="PaletteItem" type="PanelContainer" node_paths=PackedStringArray("UseButton", "MoreColoursButton", "MoreColoursContainer", "ClearButton", "DeleteButton", "UploadButton", "Title", "PrimaryColourButton", "GridColourButton", "SecondaryColourButton", "TextColourButton", "GridShadowColourButton", "ActiveColourButton", "DisabledColourButton", "Shadow1ColourButton", "Shadow2ColourButton")]
 material = ExtResource("1_ablgk")
@@ -84,12 +84,12 @@ Title = NodePath("VBoxContainer/HBoxContainer/HBoxContainer/Title")
 PrimaryColourButton = NodePath("VBoxContainer/HBoxContainer/HBoxContainer2/Colours/Primary")
 GridColourButton = NodePath("VBoxContainer/HBoxContainer/HBoxContainer2/Colours/Grid")
 SecondaryColourButton = NodePath("VBoxContainer/HBoxContainer/HBoxContainer2/Colours/Secondary")
-TextColourButton = NodePath("VBoxContainer/MoreContainer/GridContainer/Text")
-GridShadowColourButton = NodePath("VBoxContainer/MoreContainer/GridContainer/GridShadow")
-ActiveColourButton = NodePath("VBoxContainer/MoreContainer/GridContainer/Active")
-DisabledColourButton = NodePath("VBoxContainer/MoreContainer/GridContainer/Disabled")
-Shadow1ColourButton = NodePath("VBoxContainer/MoreContainer/GridContainer/Shadow1")
-Shadow2ColourButton = NodePath("VBoxContainer/MoreContainer/GridContainer/Shadow2")
+TextColourButton = NodePath("VBoxContainer/MoreContainer/GridContainer/VBoxContainer/Text")
+GridShadowColourButton = NodePath("VBoxContainer/MoreContainer/GridContainer/VBoxContainer2/GridShadow")
+ActiveColourButton = NodePath("VBoxContainer/MoreContainer/GridContainer/VBoxContainer3/Active")
+DisabledColourButton = NodePath("VBoxContainer/MoreContainer/GridContainer/VBoxContainer6/Disabled")
+Shadow1ColourButton = NodePath("VBoxContainer/MoreContainer/GridContainer/VBoxContainer4/Shadow1")
+Shadow2ColourButton = NodePath("VBoxContainer/MoreContainer/GridContainer/VBoxContainer5/Shadow2")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 use_parent_material = true
@@ -113,7 +113,7 @@ mouse_filter = 1
 theme = SubResource("Theme_35ehg")
 minimum_size = Vector2(20, 20)
 toggle_mode = true
-button_group = SubResource("ButtonGroup_88bte")
+button_group = SubResource("ButtonGroup_e6c0f")
 icon = ExtResource("6_5d7ij")
 expand_icon = true
 
@@ -140,27 +140,19 @@ size_flags_horizontal = 2
 [node name="Colours" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/HBoxContainer2"]
 use_parent_material = true
 layout_mode = 2
-theme_override_constants/separation = -1
+theme_override_constants/separation = 1
 
-[node name="Primary" parent="VBoxContainer/HBoxContainer/HBoxContainer2/Colours" instance=ExtResource("9_vjhyi")]
-material = null
+[node name="Primary" parent="VBoxContainer/HBoxContainer/HBoxContainer2/Colours" instance=ExtResource("11_m2xhs")]
+custom_minimum_size = Vector2(18, 18)
 layout_mode = 2
 
-[node name="Tooltip" parent="VBoxContainer/HBoxContainer/HBoxContainer2/Colours/Primary" instance=ExtResource("8_pa48w")]
-tooltip = "Background"
-
-[node name="Grid" parent="VBoxContainer/HBoxContainer/HBoxContainer2/Colours" instance=ExtResource("9_vjhyi")]
-material = null
+[node name="Secondary" parent="VBoxContainer/HBoxContainer/HBoxContainer2/Colours" instance=ExtResource("11_m2xhs")]
+custom_minimum_size = Vector2(18, 18)
 layout_mode = 2
 
-[node name="Tooltip" parent="VBoxContainer/HBoxContainer/HBoxContainer2/Colours/Grid" instance=ExtResource("8_pa48w")]
-tooltip = "Grid"
-
-[node name="Secondary" parent="VBoxContainer/HBoxContainer/HBoxContainer2/Colours" instance=ExtResource("9_vjhyi")]
+[node name="Grid" parent="VBoxContainer/HBoxContainer/HBoxContainer2/Colours" instance=ExtResource("11_m2xhs")]
+custom_minimum_size = Vector2(18, 18)
 layout_mode = 2
-
-[node name="Tooltip" parent="VBoxContainer/HBoxContainer/HBoxContainer2/Colours/Secondary" instance=ExtResource("8_pa48w")]
-tooltip = "Ink"
 
 [node name="Buttons" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/HBoxContainer2"]
 use_parent_material = true
@@ -181,7 +173,7 @@ icon_use_parent_material = true
 [node name="Tooltip" parent="VBoxContainer/HBoxContainer/HBoxContainer2/Buttons/Delete" instance=ExtResource("8_pa48w")]
 tooltip = "Delete"
 
-[node name="Upload" parent="VBoxContainer/HBoxContainer/HBoxContainer2/Buttons" instance=ExtResource("13_gyqq1")]
+[node name="Upload" parent="VBoxContainer/HBoxContainer/HBoxContainer2/Buttons" groups=["button"] instance=ExtResource("13_gyqq1")]
 layout_mode = 2
 theme = ExtResource("14_ylj5d")
 mode = 1
@@ -215,39 +207,99 @@ layout_mode = 2
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_constants/h_separation = 2
+theme_override_constants/h_separation = 6
 theme_override_constants/v_separation = 2
 columns = 3
 
-[node name="Text" parent="VBoxContainer/MoreContainer/GridContainer" instance=ExtResource("9_vjhyi")]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MoreContainer/GridContainer"]
+use_parent_material = true
 layout_mode = 2
-minimum_size = Vector2(45, 20)
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="VBoxContainer/MoreContainer/GridContainer/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
 text = "Text"
+horizontal_alignment = 1
 
-[node name="GridShadow" parent="VBoxContainer/MoreContainer/GridContainer" instance=ExtResource("9_vjhyi")]
+[node name="Text" parent="VBoxContainer/MoreContainer/GridContainer/VBoxContainer" instance=ExtResource("11_m2xhs")]
+custom_minimum_size = Vector2(26, 18)
 layout_mode = 2
-minimum_size = Vector2(82, 20)
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/MoreContainer/GridContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="VBoxContainer/MoreContainer/GridContainer/VBoxContainer2"]
+use_parent_material = true
+layout_mode = 2
 text = "Grid Shadow"
+horizontal_alignment = 1
 
-[node name="Active" parent="VBoxContainer/MoreContainer/GridContainer" instance=ExtResource("9_vjhyi")]
+[node name="GridShadow" parent="VBoxContainer/MoreContainer/GridContainer/VBoxContainer2" instance=ExtResource("11_m2xhs")]
+custom_minimum_size = Vector2(26, 18)
 layout_mode = 2
-minimum_size = Vector2(55, 20)
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="VBoxContainer/MoreContainer/GridContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="VBoxContainer/MoreContainer/GridContainer/VBoxContainer3"]
+use_parent_material = true
+layout_mode = 2
 text = "Active"
+horizontal_alignment = 1
 
-[node name="Shadow1" parent="VBoxContainer/MoreContainer/GridContainer" instance=ExtResource("9_vjhyi")]
+[node name="Active" parent="VBoxContainer/MoreContainer/GridContainer/VBoxContainer3" instance=ExtResource("11_m2xhs")]
+custom_minimum_size = Vector2(26, 18)
 layout_mode = 2
-minimum_size = Vector2(65, 20)
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="VBoxContainer/MoreContainer/GridContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="VBoxContainer/MoreContainer/GridContainer/VBoxContainer4"]
+use_parent_material = true
+layout_mode = 2
 text = "Shadow 1"
+horizontal_alignment = 1
 
-[node name="Shadow2" parent="VBoxContainer/MoreContainer/GridContainer" instance=ExtResource("9_vjhyi")]
+[node name="Shadow1" parent="VBoxContainer/MoreContainer/GridContainer/VBoxContainer4" instance=ExtResource("11_m2xhs")]
+custom_minimum_size = Vector2(26, 18)
 layout_mode = 2
-minimum_size = Vector2(66, 20)
-text = "Shadow2"
 
-[node name="Disabled" parent="VBoxContainer/MoreContainer/GridContainer" instance=ExtResource("9_vjhyi")]
+[node name="VBoxContainer5" type="VBoxContainer" parent="VBoxContainer/MoreContainer/GridContainer"]
+use_parent_material = true
 layout_mode = 2
-minimum_size = Vector2(62, 20)
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="VBoxContainer/MoreContainer/GridContainer/VBoxContainer5"]
+use_parent_material = true
+layout_mode = 2
+text = "Shadow 2"
+horizontal_alignment = 1
+
+[node name="Shadow2" parent="VBoxContainer/MoreContainer/GridContainer/VBoxContainer5" instance=ExtResource("11_m2xhs")]
+custom_minimum_size = Vector2(26, 18)
+layout_mode = 2
+
+[node name="VBoxContainer6" type="VBoxContainer" parent="VBoxContainer/MoreContainer/GridContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="VBoxContainer/MoreContainer/GridContainer/VBoxContainer6"]
+use_parent_material = true
+layout_mode = 2
 text = "Disabled"
+horizontal_alignment = 1
+
+[node name="Disabled" parent="VBoxContainer/MoreContainer/GridContainer/VBoxContainer6" instance=ExtResource("11_m2xhs")]
+custom_minimum_size = Vector2(26, 18)
+layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MoreContainer"]
 use_parent_material = true

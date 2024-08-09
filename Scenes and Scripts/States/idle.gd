@@ -6,19 +6,11 @@ var hovering_disabled_button: bool = false
 
 func _ready() -> void:
 	$minimum_press_timer.wait_time = minimum_press_time
-	EventBus.button_created.connect(_button_created)
-	connect_buttons()
-
-func connect_button(button: PanelButton) -> void:
-	if button.button_mouse_entered.is_connected(_on_button_mouse_entered):
-		return
-
-	button.button_mouse_entered.connect(_on_button_mouse_entered)
-	button.mouse_exited.connect(_on_button_mouse_exited)
 
 func connect_buttons() -> void:
 	for button in get_tree().get_nodes_in_group('button'):
-		connect_button(button)
+		if button is PanelButton:
+			continue
 
 func input(event: InputEvent) -> State:
 	if Input.is_action_just_pressed("draw_history"):
@@ -69,6 +61,3 @@ func _on_button_mouse_exited() -> void:
 func _on_minimum_press_timer_timeout() -> void:
 	if state_manager.state == State.Idle and !Input.is_action_pressed("click"):
 		EventBus.change_cursor.emit(Globals.Cursor.default)
-
-func _button_created(button: PanelButton) -> void:
-	connect_button(button)

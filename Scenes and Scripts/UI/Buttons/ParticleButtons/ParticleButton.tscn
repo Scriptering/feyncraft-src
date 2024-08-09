@@ -13,8 +13,8 @@ offset_bottom = -336.0
 theme = ExtResource("3_rxogd")
 script = ExtResource("5_pltn4")
 particle = 0
-icon = ExtResource("5_q3x61")
 toggle_mode = true
+icon = ExtResource("5_q3x61")
 expand_icon = true
 
 [node name="Button" parent="." index="0"]

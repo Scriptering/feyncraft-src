@@ -3,7 +3,8 @@ extends Node
 signal crosshair_moved(new_position: Vector2i, old_position: Vector2i)
 signal diagram_mouse_entered()
 signal diagram_mouse_exited()
-signal button_created(button: PanelButton)
+signal show_disabled
+signal hide_disabled
 signal draw_diagram
 signal draw_raw_diagram
 signal add_floating_menu
