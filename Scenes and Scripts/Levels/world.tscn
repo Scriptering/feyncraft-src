@@ -487,6 +487,7 @@ enable_spotlight = false
 [connection signal="text_submitted" from="Diagram/TitleContainer/Title" to="Diagram" method="_on_title_text_submitted"]
 [connection signal="submit_problem" from="FloatingMenus/CreationInformation" to="." method="_on_creation_information_submit_problem"]
 [connection signal="toggle_all" from="FloatingMenus/CreationInformation" to="." method="_on_creation_information_toggle_all"]
+[connection signal="export_pressed" from="PullOutTabs/ExportTab" to="." method="_on_export_tab_export_pressed"]
 [connection signal="finish_pressed" from="Tutorial/TutorialInfo" to="." method="_on_tutorial_info_finish_pressed"]
 [connection signal="next_pressed" from="Tutorial/TutorialInfo" to="Tutorial" method="_on_tutorial_info_next_pressed"]
 [connection signal="prev_pressed" from="Tutorial/TutorialInfo" to="Tutorial" method="_on_tutorial_info_prev_pressed"]

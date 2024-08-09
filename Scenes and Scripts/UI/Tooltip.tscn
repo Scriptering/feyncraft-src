@@ -16,14 +16,9 @@ texture_margin_bottom = 6.0
 [node name="Tooltip" type="Node" node_paths=PackedStringArray("TooltipPanel", "TooltipLabel", "TooltipContainer")]
 script = ExtResource("1_eetpi")
 offset = Vector2(2.08165e-12, 20)
-delay = 0.5
 TooltipPanel = NodePath("TooltipPanel")
 TooltipLabel = NodePath("TooltipPanel/HBoxContainer/Label")
 TooltipContainer = NodePath("TooltipPanel/HBoxContainer")
-
-[node name="TooltipTimer" type="Timer" parent="."]
-wait_time = 0.25
-one_shot = true
 
 [node name="TooltipPanel" type="PanelContainer" parent="."]
 visible = false
@@ -49,5 +44,3 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 1
 vertical_alignment = 2
-
-[connection signal="timeout" from="TooltipTimer" to="." method="_on_tooltip_timer_timeout"]

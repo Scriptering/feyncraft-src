@@ -19,7 +19,6 @@ var clamp_right : float
 var clamp_up : float
 var clamp_down : float
 var on_state_line : bool
-var is_inside_diagram : bool = false
 
 var Diagram: DiagramBase
 var Initial: StateLine
@@ -56,6 +55,10 @@ func init(diagram: DiagramBase, state_lines: Array, gridsize: int) -> void:
 			moved_and_rested.emit(position, old_position)
 	)
 
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion:
+		visible = get_state_visible(StateManager.state)
+
 func move_crosshair() -> void:
 	var try_position: Vector2 = get_try_position()
 	
@@ -70,8 +73,6 @@ func move_crosshair() -> void:
 			EventBus.crosshair_moved.emit(global_position, old_global_position)
 		old_position = position
 		old_global_position = global_position
-		
-	visible = get_state_visible(StateManager.state)
 
 func positioni() -> Vector2i:
 	return position
@@ -90,8 +91,25 @@ func get_try_position() -> Vector2:
 	
 	return try_position
 
+func is_inside_diagram() -> bool:
+	if !is_inside_tree():
+		return false
+	
+	var mouse_position : Vector2 = get_parent().get_local_mouse_position()
+	var try_position := Vector2(
+		snapped(mouse_position.x-clamp_left, grid_size)+clamp_left,
+		snapped(mouse_position.y-clamp_up, grid_size)+clamp_up
+	)
+	
+	return (
+		try_position.x < clamp_right + grid_size
+		&& try_position.x > clamp_left - grid_size
+		&& try_position.y < clamp_down + grid_size
+		&& try_position.y > clamp_up - grid_size
+	)
+
 func _get_can_draw() -> bool:
-	if !is_inside_diagram:
+	if !is_inside_diagram():
 		return false
 	
 	return is_start_drawing_position_valid()
@@ -178,11 +196,9 @@ func is_on_interaction(test_position: Vector2 = position) -> bool:
 	return false
 
 func _diagram_mouse_entered() -> void:
-	is_inside_diagram = true
 	visible = get_state_visible(StateManager.state)
 
 func _diagram_mouse_exited() -> void:
-	is_inside_diagram = false
 	visible = get_state_visible(StateManager.state)
 
 func _state_changed(new_state: BaseState.State, _old_state: BaseState.State) -> void: 
