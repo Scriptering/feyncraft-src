@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=64 format=3 uid="uid://cfmbhoq8cuoge"]
+[gd_resource type="Theme" load_steps=65 format=3 uid="uid://cfmbhoq8cuoge"]
 
 [ext_resource type="FontFile" uid="uid://cq27s0444iwkg" path="res://Textures/Fonts/ConnectionIi-2wj8.otf" id="1_s2gkm"]
 [ext_resource type="Texture2D" uid="uid://bcwpdy0lmenue" path="res://Textures/Buttons/square_disabled.png" id="2_8m3bx"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://s14bo7fcdam0" path="res://Textures/Buttons/square_normal.png" id="4_vxayc"]
 [ext_resource type="Texture2D" uid="uid://brb0ytbpqclrn" path="res://Textures/Buttons/square_pressed.png" id="5_1inkr"]
 [ext_resource type="StyleBox" uid="uid://cysejl4e52vsv" path="res://Textures/panel.tres" id="7_umh78"]
+[ext_resource type="Texture2D" uid="uid://vgda0rr6udn6" path="res://Textures/UI/h_seperator.png" id="8_iqovw"]
 [ext_resource type="Texture2D" uid="uid://cs50mifpalsrn" path="res://Textures/Buttons/CheckButton/checked.png" id="8_lb8ym"]
 [ext_resource type="Texture2D" uid="uid://cdfgpqy1srg8j" path="res://Textures/Buttons/CheckButton/unchecked.png" id="9_yjmwd"]
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="11_hhi3e"]
@@ -24,7 +25,6 @@
 [ext_resource type="Texture2D" uid="uid://cgghpligriwhd" path="res://Textures/UI/Equation/scroll_grabber_highlight_v.png" id="20_ullcv"]
 [ext_resource type="Texture2D" uid="uid://c8iesbop3uqwa" path="res://Textures/Buttons/up_down.png" id="21_6b0wi"]
 [ext_resource type="Texture2D" uid="uid://f76yp8golmnh" path="res://Textures/UI/Equation/scroll_grabber_pressed_v.png" id="21_kuoaw"]
-[ext_resource type="Texture2D" uid="uid://c0muhs2tnd6ew" path="res://Textures/UI/Equation/scrollbar_v.png" id="22_blifg"]
 [ext_resource type="Texture2D" uid="uid://cea5mj3u65016" path="res://Textures/Buttons/square_pressed_active.png" id="25_0wrbn"]
 [ext_resource type="FontFile" uid="uid://btyypxojvrdjc" path="res://Textures/Fonts/PIXELADE.TTF" id="26_acix5"]
 
@@ -77,6 +77,11 @@ texture_margin_bottom = 5.0
 [sub_resource type="StyleBoxEmpty" id="34"]
 
 [sub_resource type="StyleBoxEmpty" id="35"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_w7wsn"]
+texture = ExtResource("8_iqovw")
+texture_margin_top = 1.0
+texture_margin_bottom = 1.0
 
 [sub_resource type="StyleBoxEmpty" id="38"]
 content_margin_left = 0.0
@@ -536,9 +541,8 @@ texture_margin_right = 2.0
 texture_margin_bottom = 3.0
 region_rect = Rect2(0, 0, 9, 11)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_eka07"]
-texture = ExtResource("22_blifg")
-texture_margin_right = 9.0
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wpnlv"]
+content_margin_right = 9.0
 
 [sub_resource type="StyleBoxEmpty" id="27"]
 
@@ -564,6 +568,8 @@ CheckButton/styles/hover = ExtResource("7_umh78")
 CheckButton/styles/hover_pressed = ExtResource("7_umh78")
 CheckButton/styles/normal = ExtResource("7_umh78")
 CheckButton/styles/pressed = ExtResource("7_umh78")
+HSeparator/constants/separation = 2
+HSeparator/styles/separator = SubResource("StyleBoxTexture_w7wsn")
 HSlider/constants/grabber_offset = 0
 HSlider/icons/grabber = ExtResource("16_tru3k")
 HSlider/icons/grabber_disabled = ExtResource("16_tru3k")
@@ -616,5 +622,5 @@ TooltipPanel/styles/panel = SubResource("28")
 VScrollBar/styles/grabber = SubResource("1")
 VScrollBar/styles/grabber_highlight = SubResource("StyleBoxTexture_tcx20")
 VScrollBar/styles/grabber_pressed = SubResource("StyleBoxTexture_rf1m7")
-VScrollBar/styles/scroll = SubResource("StyleBoxTexture_eka07")
+VScrollBar/styles/scroll = SubResource("StyleBoxEmpty_wpnlv")
 VScrollBar/styles/scroll_focus = SubResource("27")

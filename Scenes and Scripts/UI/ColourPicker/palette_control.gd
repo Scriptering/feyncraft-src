@@ -4,6 +4,9 @@ var palette_file_path: String = "res://saves/Palettes/"
 var web_palette_file_path: String = "user://saves/Palettes/"
 signal closed
 
+@export var load_button: PanelButton
+@export var scroll_container: ScrollContainer
+
 func _ready() -> void:
 	EventBus.signal_save_files.connect(save_palettes)
 	
@@ -13,7 +16,7 @@ func _ready() -> void:
 	super._ready()
 	load_palettes()
 	load_tea_stain()
-	$PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer.scroll_vertical = 0
+	scroll_container.scroll_vertical = 0
 
 func _on_close_pressed() -> void:
 	closed.emit()
@@ -44,8 +47,7 @@ func _on_load_button_submitted(submitted_text: String) -> void:
 	$PaletteList.load_palette(file_path)
 
 func _on_load_result(valid: bool) -> void:
-	($PaletteList/VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/HBoxContainer/LoadButton
-	.load_result(valid))
+	load_button.load_result(valid)
 
 func get_seasonal_palette() -> String:
 	var datetime: Dictionary = Time.get_datetime_dict_from_system()

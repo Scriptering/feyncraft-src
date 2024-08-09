@@ -31,16 +31,19 @@ offset_bottom = 100.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_q3cex")
+current_tab = 0
 tabs_visible = false
 script = ExtResource("1_aqrhn")
 
 [node name="ProblemSetList" parent="ProblemSelection" instance=ExtResource("3_chpqf")]
 layout_mode = 2
 mouse_filter = 1
+metadata/_tab_index = 0
 
 [node name="ProblemList" parent="ProblemSelection" instance=ExtResource("1_gfl8q")]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 1
 
 [node name="TitleArea" type="Area2D" parent="."]
 position = Vector2(-1, -110)
