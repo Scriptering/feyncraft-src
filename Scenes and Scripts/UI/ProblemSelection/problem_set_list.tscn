@@ -15,11 +15,11 @@
 
 [node name="ProblemSetList" type="PanelContainer" node_paths=PackedStringArray("problem_container")]
 material = ExtResource("1_dmm2o")
-custom_minimum_size = Vector2(280, 225)
+custom_minimum_size = Vector2(280, 230)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -346.0
+offset_right = -360.0
 offset_bottom = -129.0
 grow_horizontal = 2
 grow_vertical = 2

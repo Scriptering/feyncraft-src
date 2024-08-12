@@ -3,15 +3,16 @@ extends PanelContainer
 signal back
 signal problem_deleted
 
-var ProblemSelector: PackedScene = preload("res://Scenes and Scripts/UI/ProblemSelection/problem_selector.tscn")
+@export_group("Children")
+@export var title: Label
+@export var add_button: PanelButton
 
-@onready var problem_container: VBoxContainer = $VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/ProblemContainer
+var ProblemSelector: PackedScene = preload("res://Scenes and Scripts/UI/ProblemSelection/problem_item.tscn")
+
+@onready var problem_container: PanelItemList = $VBoxContainer/PanelItemList
 
 var problem_set: ProblemSet
 var problem_set_file: String
-
-func _ready() -> void:
-	$VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer.get_v_scroll_bar().use_parent_material = true
 
 func delete_empty_problems() -> void:
 	for problem_item:PanelContainer in get_problem_items():
@@ -29,7 +30,7 @@ func reload() -> void:
 		problem_item.toggle_play_disabled(!problem_set.is_custom and problem_item.index > problem_set.highest_index_reached)
 
 func get_problem_items() -> Array:
-	return problem_container.get_children().filter(
+	return problem_container.get_items().filter(
 		func(child:PanelContainer) -> bool:
 			return !child.is_queued_for_deletion()
 	)
@@ -39,22 +40,18 @@ func load_problem_set(_problem_set: ProblemSet, p_problem_set_file_path: String)
 	problem_set_file = p_problem_set_file_path
 	
 	if problem_set.title == '':
-		$VBoxContainer/TitleContainer/HBoxContainer/Title.text = 'Problem Set'
+		title.text = 'Problem Set'
 	else:
-		$VBoxContainer/TitleContainer/HBoxContainer/Title.text = problem_set.title
+		title.text = problem_set.title
 	
-	clear_problems()
+	problem_container.clear_items()
 	
 	for problem in problem_set.problems:
 		add_problem(problem, problem_set.is_custom)
 	
-	$VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/AddProblem.visible = problem_set.is_custom
+	add_button.visible = problem_set.is_custom
 	
 	update_index_labels()
-
-func clear_problems() -> void:
-	for child:PanelContainer in get_problem_items():
-		child.queue_free()
 
 func add_problem(problem: Problem, is_custom: bool = false) -> void:
 	var problem_select: PanelContainer = ProblemSelector.instantiate()
@@ -65,7 +62,7 @@ func add_problem(problem: Problem, is_custom: bool = false) -> void:
 	problem_select.modify.connect(_problem_modified)
 	problem_select.save_problem_set.connect(_problem_saved)
 	
-	problem_container.add_child(problem_select)
+	problem_container.add_item(problem_select)
 	
 	problem_select.toggle_edit_visiblity(problem_set.is_custom)
 	

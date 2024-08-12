@@ -1,10 +1,12 @@
 extends PanelContainer
 
-@onready var Down : PanelButton = $HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/Down
-@onready var Up : PanelButton = $HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/Up
-@onready var Play: PanelContainer = $HBoxContainer/PanelContainer/HBoxContainer/HBoxContainer/Play
-@onready var Delete: PanelContainer = $HBoxContainer/PanelContainer/HBoxContainer/HBoxContainer/Delete
-@onready var Modify: PanelContainer = $HBoxContainer/PanelContainer/HBoxContainer/HBoxContainer/Modify
+@export_group("Children")
+@export var up_button: PanelButton
+@export var down_button: PanelButton
+@export var play_button: PanelButton
+@export var delete_button: PanelButton
+@export var modify_button: PanelButton
+@export var equation: PanelContainer
 
 signal move
 signal deleted
@@ -18,28 +20,29 @@ var index: int: set = _set_index
 func _set_index(new_value: int) -> void:
 	index = new_value
 	
-	$HBoxContainer/Index.text = str(index+1)
+	$VBoxContainer/HBoxContainer/HBoxContainer2/Index.text = str(index+1)
 	
-	Down.disabled = index == get_parent().get_child_count() - 1
-	Up.disabled = index == 0
+	down_button.disabled = index == get_parent().get_child_count() - 1
+	up_button.disabled = index == 0
 	
 func update() -> void:
 	return
 
 func toggle_play_disabled(toggle: bool) -> void:
-	Play.disabled = toggle
+	play_button.disabled = toggle
 
 func toggle_completed(toggle: bool) -> void:
-	$HBoxContainer/Completed.visible = toggle
+	$VBoxContainer/HBoxContainer/HBoxContainer2/Completed.visible = toggle
 
 func toggle_edit_visiblity(can_edit: bool) -> void:
-	Delete.visible = can_edit
-	Modify.visible = can_edit
-	$HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer.visible = can_edit
+	delete_button.visible = can_edit
+	modify_button.visible = can_edit
+	up_button.visible = can_edit
+	down_button.visible = can_edit
 
 func load_problem(_problem: Problem) -> void:
 	problem = _problem
-	$HBoxContainer/PanelContainer/HBoxContainer/Equation.load_problem(problem)
+	equation.load_problem(problem)
 	
 
 func _on_up_pressed() -> void:
