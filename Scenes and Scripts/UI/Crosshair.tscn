@@ -30,6 +30,7 @@ animations = [{
 radius = 1.0
 
 [node name="Crosshair" type="Node2D"]
+visible = false
 material = ExtResource("1_t2kot")
 script = ExtResource("2")
 grid_margin = 16

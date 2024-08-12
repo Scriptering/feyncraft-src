@@ -1,9 +1,8 @@
-[gd_scene load_steps=16 format=3 uid="uid://dscxljxdt3y5q"]
+[gd_scene load_steps=17 format=3 uid="uid://dscxljxdt3y5q"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_xotca"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/ColourPicker/PickerPanel.gd" id="2_5qwg5"]
-[ext_resource type="StyleBox" uid="uid://bubm5sx3xn6q5" path="res://Resources/Themes/TitleLabel.tres" id="3_6n4k7"]
-[ext_resource type="Texture2D" uid="uid://l0tmxxp6t7bs" path="res://Textures/UI/ColourPicker/picker_bar.png" id="3_yuseo"]
+[ext_resource type="FontFile" uid="uid://cgts3h57wry82" path="res://Textures/Fonts/numbers_font.ttf" id="3_y7h87"]
 [ext_resource type="Texture2D" uid="uid://xmlsqgppxb1i" path="res://Textures/UI/ColourPicker/picker.png" id="4_idovu"]
 [ext_resource type="Texture2D" uid="uid://ci1qrp3pyqm6h" path="res://Textures/Buttons/icons/close.png" id="5_6ue4d"]
 [ext_resource type="PackedScene" uid="uid://crjli3vncl5g7" path="res://Scenes and Scripts/UI/ColourPicker/colour_sampler.tscn" id="5_8vrca"]
@@ -11,17 +10,20 @@
 [ext_resource type="Texture2D" uid="uid://cgfs1pdopjbh" path="res://Textures/Buttons/icons/close_hover.png" id="6_ytwn5"]
 [ext_resource type="Script" path="res://Scenes and Scripts/Classes/line_edit.gd" id="7_85uwg"]
 [ext_resource type="FontVariation" uid="uid://c5fyui7qqu420" path="res://Resources/Themes/line_edit.tres" id="7_nd03m"]
+[ext_resource type="Texture2D" uid="uid://b8pvt1tu7w3jv" path="res://Textures/UI/info_box_border.png" id="9_f4p5q"]
 [ext_resource type="PackedScene" uid="uid://dorw3vr2amuy3" path="res://Scenes and Scripts/Components/button_sound_component.tscn" id="12_kgt14"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2o02u"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_uxmga"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u3xo3"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rk0ql"]
 resource_local_to_scene = true
 shader = ExtResource("6_kwlog")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7k5dl"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_atfhl"]
-
-[node name="ColourPickerPanel" type="Control" node_paths=PackedStringArray("GrabAreas")]
+[node name="ColourPickerPanel" type="Control" node_paths=PackedStringArray("colour_picker", "title_label", "GrabAreas")]
 material = ExtResource("1_xotca")
 layout_mode = 3
 anchors_preset = 15
@@ -32,38 +34,80 @@ offset_bottom = -360.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_5qwg5")
-GrabAreas = [NodePath("VBoxContainer/TitleContainer"), NodePath("VBoxContainer/PanelContainer")]
+colour_picker = NodePath("PanelContainer/VBoxContainer/PanelContainer/MarginContainer/ColorPicker")
+title_label = NodePath("PanelContainer/VBoxContainer/Header/VBoxSeperator/Label")
+GrabAreas = [NodePath("PanelContainer")]
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-use_parent_material = true
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-mouse_filter = 0
-theme_override_constants/separation = -181
-
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="."]
 use_parent_material = true
 layout_mode = 2
+offset_right = 139.0
+offset_bottom = 186.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
 use_parent_material = true
 layout_mode = 2
-theme_override_constants/separation = 1
+theme_override_constants/separation = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="Header" type="PanelContainer" parent="PanelContainer/VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
-theme_override_constants/margin_bottom = -8
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_uxmga")
 
-[node name="ColorPicker" type="ColorPicker" parent="VBoxContainer/PanelContainer/VBoxContainer/MarginContainer"]
+[node name="VBoxSeperator" type="VBoxContainer" parent="PanelContainer/VBoxContainer/Header"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = -1
+alignment = 1
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/Header/VBoxSeperator"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_override_fonts/font = ExtResource("3_y7h87")
+theme_override_font_sizes/font_size = 16
+text = "Title"
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/VBoxContainer/Header/VBoxSeperator"]
+show_behind_parent = true
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Close" type="TextureButton" parent="PanelContainer/VBoxContainer/Header"]
+use_parent_material = true
+custom_minimum_size = Vector2(10, 14)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture_normal = ExtResource("5_6ue4d")
+texture_hover = ExtResource("6_ytwn5")
+stretch_mode = 5
+
+[node name="ButtonSoundComponent" parent="PanelContainer/VBoxContainer/Header/Close" instance=ExtResource("12_kgt14")]
+
+[node name="PanelContainer" type="PanelContainer" parent="PanelContainer/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_u3xo3")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/PanelContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = -2
+theme_override_constants/margin_bottom = -10
+
+[node name="ColorPicker" type="ColorPicker" parent="PanelContainer/VBoxContainer/PanelContainer/MarginContainer"]
 layout_mode = 2
 mouse_filter = 0
 theme_override_constants/sv_width = 100
 theme_override_constants/sv_height = 100
 theme_override_constants/h_width = 15
 theme_override_icons/picker_cursor = ExtResource("4_idovu")
-theme_override_icons/bar_arrow = ExtResource("3_yuseo")
 edit_alpha = false
 color_mode = 1
 can_add_swatches = false
@@ -73,23 +117,48 @@ sliders_visible = false
 hex_visible = false
 presets_visible = false
 
-[node name="ColourSampler" parent="VBoxContainer/PanelContainer/VBoxContainer" instance=ExtResource("5_8vrca")]
-material = SubResource("ShaderMaterial_2o02u")
+[node name="MarginContainer2" type="MarginContainer" parent="PanelContainer/VBoxContainer/PanelContainer"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_right = 19
+theme_override_constants/margin_bottom = 0
+
+[node name="NinePatchRect" type="NinePatchRect" parent="PanelContainer/VBoxContainer/PanelContainer/MarginContainer2"]
+use_parent_material = true
+layout_mode = 2
+texture = ExtResource("9_f4p5q")
+patch_margin_left = 5
+patch_margin_top = 5
+patch_margin_right = 5
+patch_margin_bottom = 5
+
+[node name="MarginContainer3" type="MarginContainer" parent="PanelContainer/VBoxContainer/PanelContainer"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 109
+
+[node name="NinePatchRect2" type="NinePatchRect" parent="PanelContainer/VBoxContainer/PanelContainer/MarginContainer3"]
+use_parent_material = true
+layout_mode = 2
+texture = ExtResource("9_f4p5q")
+patch_margin_left = 5
+patch_margin_top = 5
+patch_margin_right = 5
+patch_margin_bottom = 5
+
+[node name="ColourSampler" parent="PanelContainer/VBoxContainer" instance=ExtResource("5_8vrca")]
+material = SubResource("ShaderMaterial_rk0ql")
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_7k5dl")
 
-[node name="HexContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="HexContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/HexContainer"]
-use_parent_material = true
-layout_mode = 2
-text = "Hex:"
-vertical_alignment = 1
-
-[node name="LineEdit" type="LineEdit" parent="VBoxContainer/PanelContainer/VBoxContainer/HexContainer"]
+[node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer/HexContainer"]
 use_parent_material = true
 custom_minimum_size = Vector2(82, 22)
 layout_mode = 2
@@ -99,40 +168,7 @@ alignment = 1
 select_all_on_focus = true
 script = ExtResource("7_85uwg")
 
-[node name="TitleContainer" type="PanelContainer" parent="VBoxContainer"]
-use_parent_material = true
-custom_minimum_size = Vector2(2.08165e-12, 19)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-theme_override_styles/panel = ExtResource("3_6n4k7")
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TitleContainer"]
-use_parent_material = true
-layout_mode = 2
-theme_override_constants/separation = 3
-
-[node name="Title" type="Label" parent="VBoxContainer/TitleContainer/HBoxContainer"]
-y_sort_enabled = true
-use_parent_material = true
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_styles/normal = SubResource("StyleBoxEmpty_atfhl")
-text = "Colour Name"
-
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TitleContainer/HBoxContainer"]
-layout_mode = 2
-alignment = 1
-
-[node name="Close" type="TextureButton" parent="VBoxContainer/TitleContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-texture_normal = ExtResource("5_6ue4d")
-texture_pressed = ExtResource("5_6ue4d")
-texture_hover = ExtResource("6_ytwn5")
-
-[node name="ButtonSoundComponent" parent="VBoxContainer/TitleContainer/HBoxContainer/VBoxContainer/Close" instance=ExtResource("12_kgt14")]
-
-[connection signal="color_changed" from="VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/ColorPicker" to="." method="_on_color_picker_color_changed"]
-[connection signal="sample_submitted" from="VBoxContainer/PanelContainer/VBoxContainer/ColourSampler" to="." method="_on_colour_sampler_sample_submitted"]
-[connection signal="text_submitted" from="VBoxContainer/PanelContainer/VBoxContainer/HexContainer/LineEdit" to="." method="_on_line_edit_text_submitted"]
-[connection signal="pressed" from="VBoxContainer/TitleContainer/HBoxContainer/VBoxContainer/Close" to="." method="_on_close_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Header/Close" to="." method="_on_close_pressed"]
+[connection signal="color_changed" from="PanelContainer/VBoxContainer/PanelContainer/MarginContainer/ColorPicker" to="." method="_on_color_picker_color_changed"]
+[connection signal="sample_submitted" from="PanelContainer/VBoxContainer/ColourSampler" to="." method="_on_colour_sampler_sample_submitted"]
+[connection signal="text_submitted" from="PanelContainer/VBoxContainer/HexContainer/LineEdit" to="." method="_on_line_edit_text_submitted"]

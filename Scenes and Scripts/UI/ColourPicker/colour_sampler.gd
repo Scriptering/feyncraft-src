@@ -5,6 +5,8 @@ signal sample_submitted(submitted_colour: Color)
 
 var sampling: bool = false
 
+@export var sampler_hint: ColorRect
+
 var screen_image: Image
 
 func _process(_delta: float) -> void:
@@ -12,7 +14,7 @@ func _process(_delta: float) -> void:
 		return
 	
 	var mouse_position: Vector2 = get_global_mouse_position()
-	$SamplerContainer/SamplerHint.color = screen_image.get_pixel(
+	sampler_hint.color = screen_image.get_pixel(
 		abs(mouse_position.x), abs(mouse_position.y)
 	)
 
@@ -21,7 +23,7 @@ func _process(_delta: float) -> void:
 		end_sampling()
 
 	if Input.is_action_just_pressed("submit") or Input.is_action_just_pressed("click"):
-		sample_submitted.emit($SamplerContainer/SamplerHint.color)
+		sample_submitted.emit(sampler_hint.color)
 		end_sampling()
 
 func _on_sampler_toggled(button_pressed: bool) -> void:

@@ -7,6 +7,7 @@ signal colour_changed(button: ColourButton, colour: Color)
 
 @export var picker_offset: Vector2 = Vector2.ZERO
 @export var icon_colour: Color: set = _set_icon_colour
+@export var colour_name: String
 
 var picker_panel: GrabbableControl
 
@@ -25,7 +26,7 @@ func _on_popup_panel_popup_hide() -> void:
 
 func create_picker_panel() -> void:
 	picker_panel = PickerPanel.instantiate()
-	picker_panel.title = name
+	picker_panel.set_title(colour_name)
 	picker_panel.starting_colour = icon_colour
 	picker_panel.position = get_global_position() + picker_offset
 	picker_panel.colour_changed.connect(_on_color_picker_color_changed)

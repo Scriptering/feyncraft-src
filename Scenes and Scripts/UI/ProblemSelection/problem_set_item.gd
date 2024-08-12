@@ -68,7 +68,7 @@ func _on_upload_toggled(button_pressed: bool) -> void:
 	uploading_problem_set.is_custom = false
 	
 	$HBoxContainer/PanelContainer/HBoxContainer/Upload.set_text(
-		Globals.get_resource_save_data(uploading_problem_set)
+		FileManager.get_resource_save_data(uploading_problem_set)
 	)
 
 func save() -> void:

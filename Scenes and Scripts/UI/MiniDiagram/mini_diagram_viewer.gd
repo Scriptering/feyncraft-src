@@ -7,16 +7,21 @@ signal diagram_deleted
 signal diagram_resaved
 signal closed
 
-@onready var delete_button := $VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Delete
-@onready var resave_button := $VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Resave
-
 @export var allow_resaving: bool = false
 @export var title: String:
 	set(new_value):
 		title = new_value
-		$VBoxContainer/TitleContainer/HBoxContainer/Title.text = new_value
+		title_label.text = new_value
 
 @export var BigDiagram: MainDiagram
+
+@export_group("Children")
+@export var delete_button : PanelButton
+@export var resave_button : PanelButton
+@export var title_label: Label
+@export var mini_diagram: MiniDiagram
+@export var index_label: Label
+
 var diagrams: Array[DrawingMatrix] = []
 var current_index: int = 0:
 	set(new_value):
@@ -24,12 +29,10 @@ var current_index: int = 0:
 		current_index = clamped_value
 		
 		if diagrams.size() != 0:
-			Diagram.draw_diagram(diagrams[current_index])
+			mini_diagram.draw_diagram(diagrams[current_index])
 
 		update_index_label()
 		update_resave_button()
-
-@onready var Diagram : MiniDiagram = $VBoxContainer/PanelContainer/VBoxContainer/CenterContainer/MiniDiagramContainer/MiniDiagram
 
 func _ready() -> void:
 	super._ready()
@@ -64,7 +67,7 @@ func store_diagram(matrix: Variant) -> void:
 	elif matrix is ConnectionMatrix:
 		var drawing_matrix := DrawingMatrix.new()
 		drawing_matrix.initialise_from_connection_matrix(matrix)
-		Diagram.create_diagram_interaction_positions(drawing_matrix)
+		mini_diagram.create_diagram_interaction_positions(drawing_matrix)
 		diagrams.push_back(drawing_matrix)
 	
 	self.current_index = current_index
@@ -84,12 +87,10 @@ func store_diagrams(matrices: Array) -> void:
 func update_index_label() -> void:
 	var label_index: int = current_index + 1 if diagrams.size() != 0 else 0
 	
-	$VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/IndexContainer/IndexLabel.text = (
-		str(label_index) + "/" + str(diagrams.size())
-	)
+	index_label.text = str(label_index) + "/" + str(diagrams.size())
 
 func update_diagram_visibility() -> void:
-	Diagram.visible = diagrams.size() > 0
+	mini_diagram.visible = diagrams.size() > 0
 
 func update_resave_button(drawn_diagram: DrawingMatrix = BigDiagram.generate_drawing_matrix_from_diagram()) -> void:
 	if !visible or !allow_resaving:
@@ -131,7 +132,7 @@ func _on_resave_pressed() -> void:
 func resave_diagram(new_diagram: DrawingMatrix) -> void:
 	diagrams.remove_at(current_index)
 	diagrams.insert(current_index, new_diagram)
-	Diagram.draw_diagram(new_diagram)
+	mini_diagram.draw_diagram(new_diagram)
 	
 	diagram_resaved.emit(current_index)
 	

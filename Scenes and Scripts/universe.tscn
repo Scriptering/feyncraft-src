@@ -101,7 +101,9 @@ offset_bottom = 40.0
 theme_override_font_sizes/font_size = 10
 script = ExtResource("14_jxbry")
 
-[node name="GlobalFeedback" type="Node" parent="." node_paths=PackedStringArray("TooltipPanel", "TooltipLabel", "TooltipContainer")]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="GlobalFeedback" type="Node" parent="CanvasLayer" node_paths=PackedStringArray("TooltipPanel", "TooltipLabel", "TooltipContainer")]
 script = ExtResource("14_x4syi")
 offset = Vector2(0, 0)
 show_delay = -1.0
@@ -111,9 +113,9 @@ TooltipPanel = NodePath("PanelContainer")
 TooltipLabel = NodePath("PanelContainer/HBoxContainer/Label")
 TooltipContainer = NodePath("PanelContainer/HBoxContainer")
 
-[node name="PanelContainer" type="PanelContainer" parent="GlobalFeedback"]
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/GlobalFeedback"]
 visible = false
-z_index = 5
+z_index = 10
 material = ExtResource("1_fbm6y")
 anchors_preset = 8
 anchor_left = 0.5
@@ -128,12 +130,12 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 
-[node name="HBoxContainer" type="HBoxContainer" parent="GlobalFeedback/PanelContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/GlobalFeedback/PanelContainer"]
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="Label" type="Label" parent="GlobalFeedback/PanelContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="CanvasLayer/GlobalFeedback/PanelContainer/HBoxContainer"]
 use_parent_material = true
 layout_mode = 2
 
