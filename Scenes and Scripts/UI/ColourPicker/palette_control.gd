@@ -81,18 +81,21 @@ func add_palette(palette_item: ListItem) -> void:
 	palette_item.deleted.connect(palette_item_deleted)
 
 func load_default_palettes() -> void:
-	load_default_palette("res://saves/Palettes/teastain.tres")
+	load_default_palette("res://saves/Palettes/Default/teastain.tres")
 	load_default_palette("res://saves/Palettes/Default/Mushroom.tres")
 	load_default_palette("res://saves/Palettes/Default/GameBoy.tres")
 
 func load_default_palette(default_path: String) -> void:
 	var palette_item: ListItem = palette_item_scene.instantiate()
+	
 	palette_item.load_data(load(default_path))
 	add_palette(palette_item)
 
 func load_palette(palette_path: String) -> void:
 	var new_palette_item: ListItem = palette_item_scene.instantiate()
 	new_palette_item.file_path = palette_path
+	
+	
 	
 	var palette: Palette = FileManager.load_txt(palette_path)
 	if palette:
@@ -121,7 +124,9 @@ func create_new_palette() -> void:
 	
 	add_palette(new_palette_item)
 	
-	FileManager.save(new_palette_item.palette, file_path)
+	ResourceSaver.save(new_palette_item.palette, file_path + ".tres")
+	
+	#FileManager.save(new_palette_item.palette, file_path)
 
 func _on_add_button_pressed() -> void:
 	create_new_palette()
