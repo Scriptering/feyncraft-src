@@ -45,19 +45,11 @@ func create_new_item() -> void:
 func _item_deleted(item: ListItem) -> void:
 	var deleted_path: String = item.file_path
 	
-	print(deleted_path)
-	
-	print(FileManager.delete_file(deleted_path))
-	
-	print(FileManager.get_files_in_folder("user://saves/Palettes/Custom/"))
-	
 	items_data.remove_at(get_items().find(item))
 	item.queue_free()
 	
 	if item.is_selected:
 		selected_palette_deleted.emit()
-	
-	print(FileManager.get_files_in_folder("user://saves/Palettes/Custom/"))
 
 func get_items() -> Array[ListItem]:
 	var items: Array[ListItem] = []

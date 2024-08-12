@@ -2,22 +2,27 @@ extends ListItem
 
 signal selected
 
+
 @export var palette: Palette = Palette.new()
 
-@onready var UseButton: PanelButton = $HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Use
-@onready var MoreColoursButton: PanelButton = $HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/More
-@onready var MoreColoursContainer: Container = $HBoxContainer/PanelContainer/VBoxContainer/MoreContainer
-@onready var ClearButton: PanelContainer = $HBoxContainer/PanelContainer/VBoxContainer/MoreContainer/HBoxContainer/Clear
+@export_group("Children")
+@export var UseButton: PanelButton
+@export var MoreColoursButton: PanelButton
+@export var MoreColoursContainer: Container
+@export var ClearButton: PanelContainer
+@export var DeleteButton: PanelButton
+@export var UploadButton: PanelButton
+@export var Title: LineEdit
 
-@onready var PrimaryColourButton: ColourButton = $HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Colours/Primary
-@onready var GridColourButton: ColourButton = $HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Colours/Grid
-@onready var SecondaryColourButton: ColourButton = $HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Colours/Secondary
-@onready var TextColourButton: ColourButton = $HBoxContainer/PanelContainer/VBoxContainer/MoreContainer/GridContainer/Text
-@onready var GridShadowColourButton: ColourButton = $HBoxContainer/PanelContainer/VBoxContainer/MoreContainer/GridContainer/GridShadow
-@onready var ActiveColourButton: ColourButton = $HBoxContainer/PanelContainer/VBoxContainer/MoreContainer/GridContainer/Active
-@onready var DisabledColourButton: ColourButton = $HBoxContainer/PanelContainer/VBoxContainer/MoreContainer/GridContainer/Disabled
-@onready var Shadow1ColourButton: ColourButton = $HBoxContainer/PanelContainer/VBoxContainer/MoreContainer/GridContainer/Shadow1
-@onready var Shadow2ColourButton: ColourButton = $HBoxContainer/PanelContainer/VBoxContainer/MoreContainer/GridContainer/Shadow2
+@export var PrimaryColourButton: ColourButton
+@export var GridColourButton: ColourButton
+@export var SecondaryColourButton: ColourButton
+@export var TextColourButton: ColourButton
+@export var GridShadowColourButton: ColourButton
+@export var ActiveColourButton: ColourButton
+@export var DisabledColourButton: ColourButton
+@export var Shadow1ColourButton: ColourButton
+@export var Shadow2ColourButton: ColourButton
 
 @onready var ColourButtonDict : Dictionary = {
 	Palette.ColourIndex.Primary: PrimaryColourButton,
@@ -51,7 +56,7 @@ func init() -> void:
 	set_buttons_disabled(!palette.is_custom)
 	update_button_colours(false)
 	set_custom_button_visibility()
-	$HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Title.text = palette.title
+	Title.text = palette.title
 
 func _on_more_toggled(button_pressed: bool) -> void:
 	toggle_more_colours(button_pressed)
@@ -88,17 +93,17 @@ func get_button_colours() -> Array[Color]:
 
 func set_buttons_disabled(disable: bool) -> void:
 	for colour_button:ColourButton in ColourButtonDict.values():
-		colour_button.disabled = disable
+		colour_button.set_disabled(disable)
 
 func load_data(_palette: Palette) -> void:
 	palette = _palette
 	
-	$HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Title.editable = palette.is_custom
-	$HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Title.text = palette.title
+	Title.editable = palette.is_custom
+	Title.text = palette.title
 
 func set_custom_button_visibility() -> void:
-	$HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Buttons/Delete.visible = palette.is_custom
-	$HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Buttons/Upload.visible = palette.is_custom
+	DeleteButton.visible = palette.is_custom
+	UploadButton.visible = palette.is_custom
 
 func update_custom_palette() -> void:
 	if palette.advanced_colours:
@@ -162,7 +167,7 @@ func _on_upload_toggled(button_pressed:bool) -> void:
 	
 	await get_tree().process_frame
 	
-	$HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Buttons/Upload.set_text(Globals.get_resource_save_data(palette))
+	UploadButton.set_text(Globals.get_resource_save_data(palette))
 
 func save() -> void:
 	FileManager.save(palette, file_path)

@@ -1,7 +1,5 @@
 extends Node2D
 
-signal save_files
-
 enum Scene {Level, MainMenu}
 
 @onready var MainMenu: Node2D = $MainMenu
@@ -36,11 +34,10 @@ func _ready() -> void:
 	
 	remove_child(Level)
 	
-	save_files.connect(EventBus.save_files)
 	EventBus.signal_change_scene.connect(change_scene)
 	EventBus.signal_problem_modified.connect(_on_problem_modified)
 	EventBus.signal_problem_set_played.connect(_on_problem_set_played)
-	EventBus.signal_add_floating_menu.connect(add_floating_menu)
+	EventBus.add_floating_menu.connect(add_floating_menu)
 	
 	Level.init(StateManager, ControlsTab, PaletteMenu)
 	MainMenu.init(StateManager, ControlsTab, PaletteMenu)
@@ -63,7 +60,7 @@ func change_scene(scene: Scene, args: Array = []) -> void:
 	StateManager.change_scene(scenes[scene].Diagram)
 	
 	enter_funcs[scene].call(args)
-	EventBus.change_cursor(Globals.Cursor.default)
+	EventBus.change_cursor.emit(Globals.Cursor.default)
 
 func switch_child_scene(new_scene: Scene) -> void:
 	remove_child(scenes[(new_scene + 1) % 2])
@@ -104,7 +101,7 @@ func _on_problem_set_played(problem_set: ProblemSet, index: int) -> void:
 	Level.load_problem_set(problem_set, index)
 
 func _on_world_save_problem_set() -> void:
-	save_files.emit()
+	EventBus.save_files.emit()
 
 func create_save_folders() -> void:
 	print("creating save folders")

@@ -28,7 +28,6 @@ func init(Diagram: DiagramBase) -> void:
 	var crosshair := Diagram.get_node("DiagramArea/Crosshair")
 	
 	for child:BaseState in get_children():
-		child.change_cursor.connect(Callable(EventBus.change_cursor))
 		child.state_manager = self
 		child.Diagram = Diagram
 		child.crosshair = crosshair

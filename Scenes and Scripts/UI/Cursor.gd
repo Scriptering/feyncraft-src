@@ -1,10 +1,13 @@
-extends Sprite2D
+extends Node2D
 
-@onready var Heart := get_node('Heart')
+@onready var Heart := $Cursor/Heart
+@onready var Disabled := $Disabled
+@onready var Cursor := $Cursor
 
 @export var Scale : float = 1.0
 @export var normal_offset: Vector2
 @export var normal_heart_offset: Vector2
+@export var disabled_offset: Vector2
 
 var angry := false
 var glowing := false: set = _set_glowing
@@ -31,14 +34,19 @@ var cursors: Dictionary = {
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 	
+	_hide_disabled()
+	
 	Heart.visible = false
 	
 	scale = Vector2(Scale, Scale)
 	
-	offset = Scale * normal_offset
+	Disabled.offset = Scale * disabled_offset
+	Cursor.offset = Scale * normal_offset
 	Heart.offset = Scale * normal_heart_offset
 	
-	EventBus.signal_change_cursor.connect(change_cursor)
+	EventBus.change_cursor.connect(change_cursor)
+	EventBus.show_disabled.connect(_show_disabled)
+	EventBus.hide_disabled.connect(_hide_disabled)
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey:
@@ -48,6 +56,14 @@ func _input(event: InputEvent) -> void:
 		if check_anger():
 			self.angry = !angry
 			change_cursor(Globals.Cursor.default)
+
+func _hide_disabled() -> void:
+	Disabled.hide()
+	Cursor.show()
+
+func _show_disabled() -> void:
+	Disabled.show()
+	Cursor.hide()
 
 func check_anger() -> bool:
 	if !(
@@ -104,6 +120,6 @@ func change_cursor(cursor: Globals.Cursor) -> void:
 		cursor = get_default_cursor()
 	
 	if cursor != current_cursor:
-		texture = cursors[cursor]
+		Cursor.texture = cursors[cursor]
 
 		current_cursor = cursor

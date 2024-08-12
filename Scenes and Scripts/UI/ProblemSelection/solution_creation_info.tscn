@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bvn4ssrvphh28"]
+[gd_scene load_steps=29 format=3 uid="uid://bvn4ssrvphh28"]
 
 [ext_resource type="Texture2D" uid="uid://tql14gtq05lf" path="res://Textures/UI/Information/invalid.png" id="1_mp3ie"]
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_vwd38"]
@@ -7,14 +7,45 @@
 [ext_resource type="Texture2D" uid="uid://c3nrennubqoow" path="res://Textures/Buttons/icons/back.png" id="4_187qd"]
 [ext_resource type="PackedScene" uid="uid://dorw3vr2amuy3" path="res://Scenes and Scripts/Components/button_sound_component.tscn" id="4_j2ks7"]
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="5_8fnwf"]
-[ext_resource type="FontFile" uid="uid://dtkr82iuj8ovy" path="res://Textures/Fonts/munro-font/Munro-2LYe.ttf" id="5_odh5n"]
+[ext_resource type="Theme" uid="uid://cu3v7nxs2h2hu" path="res://Resources/Themes/spin_box.tres" id="5_yylr5"]
 [ext_resource type="Texture2D" uid="uid://bcu6ptkd3fwfe" path="res://Textures/Buttons/icons/submit.png" id="6_eyill"]
-[ext_resource type="Texture2D" uid="uid://c8iesbop3uqwa" path="res://Textures/Buttons/up_down.png" id="6_lmoy8"]
 [ext_resource type="Script" path="res://Scenes and Scripts/Classes/spin_box.gd" id="7_aqn1d"]
 
-[sub_resource type="Theme" id="Theme_qjfhe"]
-default_font = ExtResource("5_odh5n")
-default_font_size = 10
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vj8pa"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_l348t"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mkt55"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mimsk"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_41p5t"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_luo7v"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_im77j"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_g8gnj"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f27kb"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kdwt3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tb8fc"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cv31x"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1nme1"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6k5qt"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qenc3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ajwmu"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0ybmp"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_t1k3s"]
 
 [node name="SolutionCreationInfo" type="PanelContainer" node_paths=PackedStringArray("prev_button", "exit_button")]
 material = ExtResource("1_vwd38")
@@ -55,14 +86,25 @@ layout_mode = 2
 [node name="CustomSolutions" type="CheckButton" parent="VBoxContainer/VBoxContainer/PanelContainer2/VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_vj8pa")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_l348t")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_mkt55")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_mimsk")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_41p5t")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_luo7v")
 text = "Custom solutions"
 
 [node name="ButtonSoundComponent" parent="VBoxContainer/VBoxContainer/PanelContainer2/VBoxContainer/CustomSolutions" instance=ExtResource("4_j2ks7")]
 
 [node name="AllowOtherSolutions" type="CheckButton" parent="VBoxContainer/VBoxContainer/PanelContainer2/VBoxContainer"]
-visible = false
 use_parent_material = true
 layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_im77j")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_g8gnj")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_f27kb")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_kdwt3")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_tb8fc")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_cv31x")
 text = "Allow other
 solutions"
 
@@ -83,7 +125,6 @@ use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
-theme_override_font_sizes/font_size = 9
 text = "No solutions created"
 autowrap_mode = 2
 
@@ -98,13 +139,18 @@ layout_mode = 2
 [node name="CustomSolutionCount" type="CheckButton" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1nme1")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_6k5qt")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_qenc3")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_ajwmu")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_0ybmp")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_t1k3s")
 text = "Custom required
 solution count"
 
 [node name="ButtonSoundComponent" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/CustomSolutionCount" instance=ExtResource("4_j2ks7")]
 
 [node name="SolutionCountContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
-visible = false
 use_parent_material = true
 layout_mode = 2
 
@@ -123,8 +169,7 @@ theme_override_constants/separation = 1
 [node name="SolutionCount" type="SpinBox" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/SolutionCountContainer/SolutionCountContainer"]
 use_parent_material = true
 layout_mode = 2
-theme = SubResource("Theme_qjfhe")
-theme_override_icons/updown = ExtResource("6_lmoy8")
+theme = ExtResource("5_yylr5")
 min_value = 1.0
 max_value = 4.0
 value = 1.0

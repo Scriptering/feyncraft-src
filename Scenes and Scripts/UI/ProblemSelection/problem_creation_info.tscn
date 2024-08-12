@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://rtdlfrcuvhi8"]
+[gd_scene load_steps=19 format=3 uid="uid://rtdlfrcuvhi8"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_4tkmy"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/ProblemSelection/problem_creation_info.gd" id="2_13y6g"]
@@ -8,13 +8,23 @@
 [ext_resource type="Texture2D" uid="uid://bf4xxweukjvsb" path="res://Textures/Buttons/icons/interaction.png" id="4_yw2rn"]
 [ext_resource type="PackedScene" uid="uid://dorw3vr2amuy3" path="res://Scenes and Scripts/Components/button_sound_component.tscn" id="5_hqg77"]
 [ext_resource type="Texture2D" uid="uid://c3nrennubqoow" path="res://Textures/Buttons/icons/back.png" id="6_1wu7s"]
-[ext_resource type="FontFile" uid="uid://dtkr82iuj8ovy" path="res://Textures/Fonts/munro-font/Munro-2LYe.ttf" id="6_3hqhb"]
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="7_y52ba"]
 [ext_resource type="Texture2D" uid="uid://dvx430022t0ua" path="res://Textures/Buttons/icons/next.png" id="8_2yrn2"]
 [ext_resource type="Script" path="res://Scenes and Scripts/Classes/spin_box.gd" id="8_harlm"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sersr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ul1hm"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cgk6g"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ubxvp"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ythwo"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ccxof"]
+
 [sub_resource type="Theme" id="Theme_otstg"]
-default_font = ExtResource("6_3hqhb")
 default_font_size = 10
 
 [node name="ProblemCreationInfo" type="PanelContainer" node_paths=PackedStringArray("next_button", "prev_button")]
@@ -57,6 +67,12 @@ layout_mode = 2
 [node name="CheckButton" type="CheckButton" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_sersr")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_ul1hm")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_cgk6g")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_ubxvp")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_ythwo")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ccxof")
 text = "Custom Degree"
 
 [node name="ButtonSoundComponent" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/CheckButton" instance=ExtResource("5_hqg77")]

@@ -5,7 +5,6 @@ extends GrabbableControl
 
 signal diagram_deleted
 signal diagram_resaved
-signal load_diagram
 signal closed
 
 @onready var delete_button := $VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Delete
@@ -38,13 +37,11 @@ func _ready() -> void:
 	resave_button.visible = allow_resaving
 	
 	BigDiagram.action_taken.connect(update_resave_button)
-	load_diagram.connect(EventBus.draw_diagram)
-
 func init(big_diagram: MainDiagram) -> void:
 	BigDiagram = big_diagram
 
 func _on_load_pressed() -> void:
-	load_diagram.emit(diagrams[current_index])
+	EventBus.draw_diagram.emit(diagrams[current_index])
 
 func _on_left_pressed() -> void:
 	self.current_index -= 1
