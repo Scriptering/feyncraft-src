@@ -94,10 +94,8 @@ func load_default_palette(default_path: String) -> void:
 func load_palette(palette_path: String) -> void:
 	var new_palette_item: ListItem = palette_item_scene.instantiate()
 	new_palette_item.file_path = palette_path
-	
-	
-	
-	var palette: Palette = FileManager.load_txt(palette_path)
+
+	var palette: Palette = load(palette_path)
 	if palette:
 		new_palette_item.load_data(palette)
 		add_palette(new_palette_item)
@@ -118,13 +116,13 @@ func palette_item_deleted(palette_item: ListItem) -> void:
 func create_new_palette() -> void:
 	var new_palette_item: ListItem = palette_item_scene.instantiate()
 	
-	var file_path: String = FileManager.get_unique_file_name(get_custom_file_path())
+	var file_path: String = FileManager.get_unique_file_name(get_custom_file_path(), ".tres")
 	new_palette_item.file_path = file_path
 	new_palette_item.randomise()
 	
 	add_palette(new_palette_item)
 	
-	ResourceSaver.save(new_palette_item.palette, file_path + ".tres")
+	ResourceSaver.save(new_palette_item.palette, file_path)
 	
 	#FileManager.save(new_palette_item.palette, file_path)
 

@@ -162,7 +162,7 @@ func _on_title_text_changed(new_text: String) -> void:
 	save()
 
 func save() -> void:
-	FileManager.save(palette, file_path)
+	ResourceSaver.save(palette, file_path)
 
 func _on_clear_pressed() -> void:
 	palette.advanced_colours = false
