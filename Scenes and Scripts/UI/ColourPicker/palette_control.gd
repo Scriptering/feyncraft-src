@@ -1,7 +1,5 @@
 extends GrabbableControl
 
-var palette_file_path: String = "res://saves/Palettes/"
-var web_palette_file_path: String = "user://saves/Palettes/"
 var palette_item_scene: PackedScene = preload("res://Scenes and Scripts/UI/ColourPicker/palette_list_item.tscn")
 signal closed
 
@@ -19,14 +17,17 @@ func _ready() -> void:
 func _on_close_pressed() -> void:
 	closed.emit()
 
+func palette_folder() -> String:
+	return FileManager.get_file_prefix() + "saves/Palettes/"
+
 func get_custom_file_path() -> String:
-	return (palette_file_path + 'Custom/') if Globals.is_on_editor else (web_palette_file_path + 'Custom/')
+	return palette_folder() + 'Custom/'
 
 func load_palettes() -> void:
 	var seasonal_palette: String = get_seasonal_palette()
 	if seasonal_palette != '':
-		load_palette("res://saves/Palettes/Seasonal/" + seasonal_palette + '.txt')
-	
+		load_palette(palette_folder() + "Seasonal/" + seasonal_palette + '.tres')
+
 	for file_path in FileManager.get_files_in_folder(get_custom_file_path()):
 		load_palette(file_path)
 
@@ -81,29 +82,16 @@ func add_palette(palette_item: ListItem) -> void:
 	palette_item.deleted.connect(palette_item_deleted)
 
 func load_default_palettes() -> void:
-	load_default_palette("res://saves/Palettes/Default/teastain.tres")
-	load_default_palette("res://saves/Palettes/Default/Mushroom.tres")
-	load_default_palette("res://saves/Palettes/Default/GameBoy.tres")
-
-func load_default_palette(default_path: String) -> void:
-	var palette_item: ListItem = palette_item_scene.instantiate()
-	
-	palette_item.load_data(load(default_path))
-	add_palette(palette_item)
+	load_palette("res://saves/Palettes/Default/teastain.tres")
+	load_palette("res://saves/Palettes/Default/Mushroom.tres")
+	load_palette("res://saves/Palettes/Default/GameBoy.tres")
 
 func load_palette(palette_path: String) -> void:
 	var new_palette_item: ListItem = palette_item_scene.instantiate()
 	new_palette_item.file_path = palette_path
 
-	var palette: Palette = load(palette_path)
-	if palette:
-		new_palette_item.load_data(palette)
-		add_palette(new_palette_item)
-	else:
-		new_palette_item.queue_free()
-		FileManager.delete_file(palette_path)
-	
-	load_button.load_result(palette != null)
+	new_palette_item.load_data(load(palette_path))
+	add_palette(new_palette_item)
 
 func palette_item_deleted(palette_item: ListItem) -> void:
 	FileManager.delete_file(palette_item.file_path)
@@ -113,18 +101,29 @@ func palette_item_deleted(palette_item: ListItem) -> void:
 	
 	item_list.queue_free_item(palette_item)
 
-func create_new_palette() -> void:
+func create_new_palette_item(palette: Palette = null, file_path: String = '') -> void:
 	var new_palette_item: ListItem = palette_item_scene.instantiate()
 	
-	var file_path: String = FileManager.get_unique_file_name(get_custom_file_path(), ".tres")
+	if file_path == '':
+		file_path = FileManager.get_unique_file_name(get_custom_file_path(), ".tres")
+	
 	new_palette_item.file_path = file_path
-	new_palette_item.randomise()
+	
+	if palette:
+		new_palette_item.palette = palette
+	else:
+		new_palette_item.randomise()
 	
 	add_palette(new_palette_item)
 	
 	ResourceSaver.save(new_palette_item.palette, file_path)
-	
-	#FileManager.save(new_palette_item.palette, file_path)
 
 func _on_add_button_pressed() -> void:
-	create_new_palette()
+	create_new_palette_item()
+
+func _on_load_button_pressed() -> void:
+	var palette: Palette = str_to_var(ClipBoard.paste())
+	if palette:
+		create_new_palette_item(palette)
+	else:
+		EventBus.show_feedback.emit("Load invalid.")
