@@ -141,9 +141,6 @@ func _on_colour_button_colour_changed(colour_button: ColourButton, new_colour: C
 	
 	update_button_colours()
  
-func _on_use_toggled(button_pressed: bool) -> void:
-	self.is_selected = button_pressed
-
 func _set_is_selected(new_value: bool) -> void:
 	var prev_value: bool = is_selected
 	is_selected = new_value
@@ -171,3 +168,6 @@ func _on_clear_pressed() -> void:
 
 func _on_upload_pressed() -> void:
 	ClipBoard.copy(FileManager.get_resource_save_data(palette))
+
+func _on_view_toggled(button_pressed: bool) -> void:
+	self.is_selected = button_pressed
