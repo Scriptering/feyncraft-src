@@ -13,6 +13,7 @@ signal selected
 @export var DeleteButton: PanelButton
 @export var UploadButton: PanelButton
 @export var Title: LineEdit
+@export var Shuffle: PanelButton
 
 @export var PrimaryColourButton: ColourButton
 @export var GridColourButton: ColourButton
@@ -94,6 +95,7 @@ func get_button_colours() -> Array[Color]:
 func set_buttons_disabled(disable: bool) -> void:
 	for colour_button:ColourButton in ColourButtonDict.values():
 		colour_button.set_disabled(disable)
+	
 
 func load_data(_palette: Palette) -> void:
 	palette = _palette
@@ -104,6 +106,8 @@ func load_data(_palette: Palette) -> void:
 func set_custom_button_visibility() -> void:
 	DeleteButton.visible = palette.is_custom
 	UploadButton.visible = palette.is_custom
+	Shuffle.visible = palette.is_custom
+	ClearButton.visible = palette.is_custom
 
 func update_custom_palette() -> void:
 	if palette.advanced_colours:

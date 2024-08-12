@@ -65,9 +65,9 @@ Button/styles/hover = SubResource("StyleBoxTexture_n0u2h")
 Button/styles/normal = SubResource("StyleBoxTexture_kxnlx")
 Button/styles/pressed = SubResource("StyleBoxTexture_pbk00")
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_dnbur"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_81aop"]
 
-[node name="PaletteItem" type="PanelContainer" node_paths=PackedStringArray("UseButton", "MoreColoursButton", "MoreColoursContainer", "ClearButton", "DeleteButton", "UploadButton", "Title", "PrimaryColourButton", "GridColourButton", "SecondaryColourButton", "TextColourButton", "GridShadowColourButton", "ActiveColourButton", "DisabledColourButton", "Shadow1ColourButton", "Shadow2ColourButton")]
+[node name="PaletteItem" type="PanelContainer" node_paths=PackedStringArray("UseButton", "MoreColoursButton", "MoreColoursContainer", "ClearButton", "DeleteButton", "UploadButton", "Title", "Shuffle", "PrimaryColourButton", "GridColourButton", "SecondaryColourButton", "TextColourButton", "GridShadowColourButton", "ActiveColourButton", "DisabledColourButton", "Shadow1ColourButton", "Shadow2ColourButton")]
 material = ExtResource("1_ablgk")
 use_parent_material = true
 offset_right = 12.0
@@ -81,6 +81,7 @@ ClearButton = NodePath("VBoxContainer/MoreContainer/HBoxContainer/Clear")
 DeleteButton = NodePath("VBoxContainer/HBoxContainer/HBoxContainer2/Buttons/Delete")
 UploadButton = NodePath("VBoxContainer/HBoxContainer/HBoxContainer2/Buttons/Upload")
 Title = NodePath("VBoxContainer/HBoxContainer/HBoxContainer/Title")
+Shuffle = NodePath("VBoxContainer/MoreContainer/HBoxContainer/Randomise")
 PrimaryColourButton = NodePath("VBoxContainer/HBoxContainer/HBoxContainer2/Colours/Primary")
 GridColourButton = NodePath("VBoxContainer/HBoxContainer/HBoxContainer2/Colours/Grid")
 SecondaryColourButton = NodePath("VBoxContainer/HBoxContainer/HBoxContainer2/Colours/Secondary")
@@ -113,7 +114,7 @@ mouse_filter = 1
 theme = SubResource("Theme_35ehg")
 minimum_size = Vector2(20, 20)
 toggle_mode = true
-button_group = SubResource("ButtonGroup_dnbur")
+button_group = SubResource("ButtonGroup_81aop")
 icon = ExtResource("6_5d7ij")
 expand_icon = true
 
