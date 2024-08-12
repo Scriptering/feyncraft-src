@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bk1gajbjms22h"]
+[gd_scene load_steps=17 format=3 uid="uid://bk1gajbjms22h"]
 
 [ext_resource type="Theme" uid="uid://cfmbhoq8cuoge" path="res://Resources/Themes/ProjectTheme.tres" id="1_qvc2w"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/LoadBox.gd" id="2_iws12"]
@@ -6,7 +6,6 @@
 [ext_resource type="Script" path="res://Scenes and Scripts/Classes/text_edit.gd" id="5_tjbbc"]
 [ext_resource type="StyleBox" uid="uid://dvu7f5h7snggp" path="res://Scenes and Scripts/UI/Menus/panelContainer.tres" id="6_cbvfb"]
 [ext_resource type="StyleBox" uid="uid://bubm5sx3xn6q5" path="res://Resources/Themes/TitleLabel.tres" id="6_kbw8s"]
-[ext_resource type="FontFile" uid="uid://cq27s0444iwkg" path="res://Textures/Fonts/ConnectionIi-2wj8.otf" id="7_kqs0u"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="8_eom8q"]
 [ext_resource type="Texture2D" uid="uid://cvuwkc5eaq805" path="res://Textures/Buttons/icons/copy.png" id="10_wm7fa"]
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="11_3lrwy"]
@@ -79,8 +78,6 @@ theme_override_constants/margin_right = -9
 [node name="TextEdit" type="TextEdit" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/PanelContainer/MarginContainer"]
 use_parent_material = true
 layout_mode = 2
-theme_override_fonts/font = ExtResource("7_kqs0u")
-theme_override_font_sizes/font_size = 7
 theme_override_styles/normal = SubResource("StyleBoxEmpty_1v5y6")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_btth5")
 theme_override_styles/read_only = SubResource("StyleBoxEmpty_f2w4s")
@@ -115,8 +112,8 @@ size_flags_horizontal = 2
 
 [node name="Close" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HBoxContainer" instance=ExtResource("8_eom8q")]
 layout_mode = 2
-icon = ExtResource("11_rg5fn")
 minimum_size = Vector2(24, 24)
+icon = ExtResource("11_rg5fn")
 expand_icon = true
 icon_use_parent_material = true
 
@@ -125,8 +122,8 @@ tooltip = "Close"
 
 [node name="Copy" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("8_eom8q")]
 layout_mode = 2
-icon = ExtResource("10_wm7fa")
 minimum_size = Vector2(24, 24)
+icon = ExtResource("10_wm7fa")
 expand_icon = true
 icon_use_parent_material = true
 
@@ -135,8 +132,8 @@ tooltip = "Copy"
 
 [node name="Paste" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("8_eom8q")]
 layout_mode = 2
-icon = ExtResource("11_ne5rf")
 minimum_size = Vector2(24, 24)
+icon = ExtResource("11_ne5rf")
 expand_icon = true
 icon_use_parent_material = true
 
@@ -151,8 +148,8 @@ alignment = 2
 
 [node name="Submit" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/SubmitContainer" instance=ExtResource("8_eom8q")]
 layout_mode = 2
-icon = ExtResource("12_buvla")
 minimum_size = Vector2(24, 24)
+icon = ExtResource("12_buvla")
 expand_icon = true
 icon_use_parent_material = true
 
@@ -179,7 +176,6 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 mouse_filter = 1
-theme_override_font_sizes/font_size = 9
 text = "Load"
 horizontal_alignment = 1
 vertical_alignment = 1

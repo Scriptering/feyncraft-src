@@ -73,7 +73,7 @@ action_mode = 1
 icon = ExtResource("3_fyqnn")
 icon_use_parent_material = true
 
-[node name="LoadButton" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer" groups=["button"] instance=ExtResource("7_sjfsr")]
+[node name="LoadButton" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer" instance=ExtResource("7_sjfsr")]
 layout_mode = 2
 minimum_size = Vector2(70, 28)
 

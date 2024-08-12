@@ -294,7 +294,7 @@ use_parent_material = true
 layout_mode = 2
 alignment = 1
 
-[node name="MuteButton" parent="Center/VBoxContainer/HBoxContainer" groups=["button"] instance=ExtResource("16_1yq2b")]
+[node name="MuteButton" parent="Center/VBoxContainer/HBoxContainer" instance=ExtResource("16_1yq2b")]
 material = null
 layout_mode = 2
 size_flags_horizontal = 1
@@ -302,7 +302,7 @@ size_flags_vertical = 1
 toggle_mode = true
 icon = ExtResource("21_lu08p")
 
-[node name="Palettes" parent="Center/VBoxContainer/HBoxContainer" groups=["button"] instance=ExtResource("11_t2od8")]
+[node name="Palettes" parent="Center/VBoxContainer/HBoxContainer" instance=ExtResource("11_t2od8")]
 material = null
 layout_mode = 2
 minimum_size = Vector2(30, 30)
@@ -310,7 +310,7 @@ toggle_mode = true
 icon = ExtResource("17_cv4ds")
 expand_icon = true
 
-[node name="CreditButton" parent="Center/VBoxContainer/HBoxContainer" groups=["button"] instance=ExtResource("11_t2od8")]
+[node name="CreditButton" parent="Center/VBoxContainer/HBoxContainer" instance=ExtResource("11_t2od8")]
 material = null
 layout_mode = 2
 minimum_size = Vector2(30, 30)

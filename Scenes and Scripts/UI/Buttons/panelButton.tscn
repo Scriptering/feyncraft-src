@@ -1,11 +1,12 @@
-[gd_scene load_steps=4 format=3 uid="uid://c4lyyfxwvqyfk"]
+[gd_scene load_steps=5 format=3 uid="uid://c4lyyfxwvqyfk"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_e0w4o"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Buttons/panelButton.gd" id="2_ns04d"]
+[ext_resource type="PackedScene" uid="uid://fkpapaw65twf" path="res://Scenes and Scripts/disabled_component.tscn" id="3_hru6u"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4oa4s"]
 
-[node name="Button" type="PanelContainer"]
+[node name="Button" type="PanelContainer" groups=["button"]]
 material = ExtResource("1_e0w4o")
 use_parent_material = true
 custom_minimum_size = Vector2(5, 5)
@@ -56,6 +57,8 @@ visible = false
 layout_mode = 2
 mouse_filter = 2
 stretch_mode = 3
+
+[node name="DisabledComponent" parent="." instance=ExtResource("3_hru6u")]
 
 [connection signal="button_down" from="Button" to="." method="_on_button_button_down"]
 [connection signal="button_up" from="Button" to="." method="_on_button_button_up"]

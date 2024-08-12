@@ -7,11 +7,14 @@
 
 [node name="Cursor" type="Node2D" groups=["cursor"]]
 script = ExtResource("1_esog3")
-Scale = 0.5
+Scale = 0.6
+normal_offset = Vector2(8, 16)
+normal_heart_offset = Vector2(8, 25)
+disabled_offset = Vector2(5, 7)
 
 [node name="Disabled" type="Sprite2D" parent="."]
-position = Vector2(5, 7)
 texture = ExtResource("4_c01jn")
+offset = Vector2(5, 7)
 
 [node name="Cursor" type="Sprite2D" parent="."]
 z_index = 10

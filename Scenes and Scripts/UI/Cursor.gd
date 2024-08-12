@@ -7,6 +7,7 @@ extends Node2D
 @export var Scale : float = 1.0
 @export var normal_offset: Vector2
 @export var normal_heart_offset: Vector2
+@export var disabled_offset: Vector2
 
 var angry := false
 var glowing := false: set = _set_glowing
@@ -39,7 +40,7 @@ func _ready() -> void:
 	
 	scale = Vector2(Scale, Scale)
 	
-	Disabled.offset = Scale * normal_offset
+	Disabled.offset = Scale * disabled_offset
 	Cursor.offset = Scale * normal_offset
 	Heart.offset = Scale * normal_heart_offset
 	

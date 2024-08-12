@@ -1,7 +1,7 @@
 [gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://jg507qhg14bj"]
 
-[ext_resource type="FontFile" uid="uid://dohkbu7ekkfx8" path="res://Textures/Fonts/pixeltype/Pixeltype.ttf" id="1_g2gma"]
+[ext_resource type="FontFile" uid="uid://cgts3h57wry82" path="res://Textures/Fonts/numbers_font.ttf" id="1_n764u"]
 
 [resource]
-base_font = ExtResource("1_g2gma")
+base_font = ExtResource("1_n764u")
 spacing_bottom = -3
