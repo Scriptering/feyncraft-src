@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/PuzzleUI.gd" id="1_0a0xk"]
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_bvq6l"]
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="3_afnrn"]
-[ext_resource type="Theme" uid="uid://cwu1ypxa78wfj" path="res://Resources/Themes/spin_box.tres" id="4_5cag6"]
+[ext_resource type="Theme" uid="uid://cu3v7nxs2h2hu" path="res://Resources/Themes/spin_box.tres" id="4_5cag6"]
 [ext_resource type="Script" path="res://Scenes and Scripts/Classes/spin_box.gd" id="5_pj5qq"]
 [ext_resource type="Texture2D" uid="uid://dvx430022t0ua" path="res://Textures/Buttons/icons/next.png" id="6_tjr7e"]
 [ext_resource type="Theme" uid="uid://cfmbhoq8cuoge" path="res://Resources/Themes/ProjectTheme.tres" id="8_cwndk"]

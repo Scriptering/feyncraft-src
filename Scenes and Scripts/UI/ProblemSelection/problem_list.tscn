@@ -45,6 +45,7 @@ theme_override_constants/separation = -2
 alignment = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/Header/VBoxSeperator"]
+use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
@@ -81,4 +82,5 @@ action_mode = 1
 icon = ExtResource("5_6tky2")
 icon_use_parent_material = true
 
+[connection signal="pressed" from="VBoxContainer/Header/Close" to="." method="_on_close_pressed"]
 [connection signal="pressed" from="VBoxContainer/AddProblem" to="." method="_on_add_problem_pressed"]

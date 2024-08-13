@@ -46,6 +46,7 @@ theme_override_constants/separation = -1
 alignment = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/Header/VBoxSeperator"]
+use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
@@ -98,3 +99,4 @@ flip_icon_v = true
 
 [connection signal="pressed" from="VBoxContainer/Header/Close" to="." method="_on_close_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/AddButton" to="." method="_on_add_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/LoadButton" to="." method="_on_load_button_pressed"]

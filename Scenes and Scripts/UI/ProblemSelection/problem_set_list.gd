@@ -122,13 +122,26 @@ func save_problem_sets() -> void:
 	for problem_set in problem_container.get_children():
 		FileManager.save(problem_set.problem_set, problem_set.file_path)
 	
-func create_new_problem_set(problem_set_path: String) -> void:
+func create_new_problem_set(problem_set: ProblemSet = null, problem_set_path: String = '') -> void:
 	var new_problem_set: ListItem = ProblemSetItem.instantiate()
-	new_problem_set.file_path = problem_set_path
-	add_problem_set(ProblemSet.new(), new_problem_set)
 	
-	FileManager.create_file(problem_set_path)
-	FileManager.save(new_problem_set.problem_set, problem_set_path)
+	if !problem_set:
+		problem_set = ProblemSet.new()
+	
+	if problem_set_path == '':
+		problem_set_path = FileManager.get_unique_file_name(get_custom_file_path(), '.tres')
+	
+	new_problem_set.file_path = problem_set_path
+	add_problem_set(problem_set, new_problem_set)
+	
+	ResourceSaver.save(new_problem_set.problem_set, problem_set_path)
 
 func _on_add_button_pressed() -> void:
-	create_new_problem_set(FileManager.get_unique_file_name(get_custom_file_path()))
+	create_new_problem_set()
+
+func _on_load_button_pressed() -> void:
+	var problem_set: ProblemSet = str_to_var(ClipBoard.paste())
+	if problem_set:
+		create_new_problem_set(problem_set)
+	else:
+		EventBus.show_feedback.emit("Load invalid.")

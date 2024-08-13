@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dtllx04gp77mu"]
+[gd_scene load_steps=6 format=3 uid="uid://dtllx04gp77mu"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/MainMenu/problem_selection.gd" id="1_aqrhn"]
 [ext_resource type="PackedScene" uid="uid://b8jrtk1lv0oo0" path="res://Scenes and Scripts/UI/ProblemSelection/problem_list.tscn" id="1_gfl8q"]
@@ -7,15 +7,12 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q3cex"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_k11wx"]
-size = Vector2(87, 25.5)
-
 [node name="Control" type="Control" node_paths=PackedStringArray("GrabAreas")]
 layout_mode = 3
 anchors_preset = 0
 mouse_filter = 2
 script = ExtResource("1_qn5hj")
-GrabAreas = [NodePath("ProblemSelection"), NodePath("TitleArea")]
+GrabAreas = [NodePath("ProblemSelection")]
 
 [node name="ProblemSelection" type="TabContainer" parent="."]
 layout_mode = 1
@@ -44,13 +41,6 @@ metadata/_tab_index = 0
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
-
-[node name="TitleArea" type="Area2D" parent="."]
-position = Vector2(-1, -110)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="TitleArea"]
-position = Vector2(0.5, -0.25)
-shape = SubResource("RectangleShape2D_k11wx")
 
 [connection signal="close" from="ProblemSelection/ProblemSetList" to="ProblemSelection" method="_on_problem_set_list_close"]
 [connection signal="enter_problem_set" from="ProblemSelection/ProblemSetList" to="ProblemSelection" method="_on_problem_set_list_enter_problem_set"]

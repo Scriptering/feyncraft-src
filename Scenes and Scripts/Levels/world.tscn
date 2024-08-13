@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://c7n4o6dbkwilh"]
+[gd_scene load_steps=40 format=3 uid="uid://c7n4o6dbkwilh"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/Levels/World.gd" id="1"]
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_6ope2"]
@@ -32,6 +32,9 @@
 [ext_resource type="PackedScene" uid="uid://c5scpc4iadf17" path="res://Scenes and Scripts/UI/ProblemSelection/creation_information.tscn" id="31_l3pqm"]
 [ext_resource type="Script" path="res://Scenes and Scripts/Levels/Hadrons.gd" id="31_rb52u"]
 [ext_resource type="Script" path="res://Scenes and Scripts/tutorial/TutorialStep.gd" id="31_t51na"]
+[ext_resource type="PackedScene" uid="uid://cv1hcrp0bkj2o" path="res://Scenes and Scripts/Diagram/decoration.tscn" id="33_8ahpc"]
+[ext_resource type="Texture2D" uid="uid://bhbno8fhsgyg8" path="res://Scenes and Scripts/UI/face.png" id="34_w3m6h"]
+[ext_resource type="Texture2D" uid="uid://b3j24x3p00ruh" path="res://Textures/Background/fake_tile.png" id="34_ytvfy"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vcfy5"]
 
@@ -61,6 +64,22 @@ offset_bottom = 360.0
 mouse_filter = 2
 texture = ExtResource("4_k4tjo")
 stretch_mode = 1
+
+[node name="Face" type="Sprite2D" parent="."]
+use_parent_material = true
+position = Vector2(40, 296)
+texture = ExtResource("34_w3m6h")
+
+[node name="Decoration" parent="." instance=ExtResource("33_8ahpc")]
+z_index = 0
+use_parent_material = true
+custom_minimum_size = Vector2(16, 16)
+offset_left = 32.0
+offset_top = 288.0
+offset_right = 48.0
+offset_bottom = 304.0
+texture = ExtResource("34_ytvfy")
+decor = 0
 
 [node name="Diagram" type="Panel" parent="." node_paths=PackedStringArray("Title")]
 use_parent_material = true
@@ -340,6 +359,7 @@ offset_bottom = -39.0
 move_direction = 3
 
 [node name="ExportTab" parent="PullOutTabs" instance=ExtResource("27_jfab7")]
+z_index = 1
 offset_left = 613.0
 offset_top = 134.0
 offset_right = 613.0

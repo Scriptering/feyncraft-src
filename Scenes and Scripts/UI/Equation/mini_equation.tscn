@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://bviwft3lcovj6" path="res://Textures/UI/Equation/scroll_grabber_highlight.png" id="3_mh1qt"]
 [ext_resource type="Texture2D" uid="uid://c0xyku0mewhpu" path="res://Textures/UI/Equation/scroll_grabber_pressed.png" id="4_ei1b2"]
 [ext_resource type="Texture2D" uid="uid://cqenoy2xbqeok" path="res://Textures/UI/Equation/scrollbar.png" id="5_qvcr4"]
-[ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="6_n4a2w"]
+[ext_resource type="Texture2D" uid="uid://dbeck067rce7m" path="res://Textures/UI/tooltip_panel.png" id="6_qlgcf"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Equation/ProblemEquation.gd" id="7_35pj2"]
 [ext_resource type="Texture2D" uid="uid://dxt3ti14uhl8s" path="res://Textures/UI/Equation/boundary.png" id="8_gg5ej"]
 [ext_resource type="Texture2D" uid="uid://denysnbqxm0co" path="res://Textures/UI/Equation/equation_arrow.png" id="9_2bfi6"]
@@ -39,7 +39,7 @@ texture_margin_top = 9.0
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_l3ym5"]
 content_margin_top = 4.0
 content_margin_bottom = 4.0
-texture = ExtResource("6_n4a2w")
+texture = ExtResource("6_qlgcf")
 texture_margin_left = 6.0
 texture_margin_top = 6.0
 texture_margin_right = 6.0
@@ -126,6 +126,7 @@ theme_override_constants/separation = 2
 alignment = 1
 
 [node name="LeftBoundary" type="Panel" parent="HBoxContainer/Centre"]
+visible = false
 use_parent_material = true
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_kbpcr")
@@ -139,6 +140,7 @@ expand_mode = 3
 stretch_mode = 5
 
 [node name="RightBoundary" type="Panel" parent="HBoxContainer/Centre"]
+visible = false
 use_parent_material = true
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_sbwvp")

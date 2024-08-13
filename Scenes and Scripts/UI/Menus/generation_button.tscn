@@ -326,6 +326,8 @@ tooltip = "View generated diagrams"
 [node name="Tab" parent="MovingContainer/MovingContainer" instance=ExtResource("6_7e8c8")]
 layout_mode = 2
 TabIcon = ExtResource("4_xnawx")
+TabMinimumSize = Vector2(28, 25)
+expand_icon = true
 icon_use_parent_material = true
 
 [connection signal="push_in_finished" from="MovingContainer/SubmitFeedback" to="." method="_on_submit_feedback_push_in_finished"]

@@ -123,9 +123,6 @@ func _on_add_problem_pressed() -> void:
 func _problem_played(problem: Problem) -> void:
 	EventBus.problem_set_played(problem_set, problem_set.problems.find(problem))
 
-func _on_back_pressed() -> void:
-	back.emit()
-
 func _problem_modified(problem_item: PanelContainer) -> void:
 	EventBus.problem_modified(problem_item)
 
@@ -134,3 +131,6 @@ func _problem_saved(_problem_item: PanelContainer) -> void:
 
 func save() -> void:
 	FileManager.save(problem_set, problem_set_file)
+
+func _on_close_pressed() -> void:
+	back.emit()

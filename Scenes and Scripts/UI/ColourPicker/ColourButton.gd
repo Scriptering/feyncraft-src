@@ -47,3 +47,9 @@ func _on_button_toggled(toggled_on: bool) -> void:
 
 func set_disabled(disable: bool) -> void:
 	$Button.disabled = disable
+
+func _on_button_mouse_entered() -> void:
+	$MarginContainer/ColorRect.modulate *= 1.1
+
+func _on_button_mouse_exited() -> void:
+	$MarginContainer/ColorRect.modulate /= 1.1

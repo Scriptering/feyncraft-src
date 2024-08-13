@@ -408,6 +408,10 @@ func get_hadron_string(hadron_ids:PackedInt32Array,) -> String:
 
 func calc_positions() -> Array[Vector2i]:
 	positions = matrix.normalised_interaction_positions
+	
+	if positions.is_empty():
+		return []
+	
 	var lowest_x : int = get_lowest_x(positions)
 	var highest_y : int = get_highest_y(positions)
 	
