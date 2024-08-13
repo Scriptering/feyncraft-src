@@ -2,11 +2,12 @@ extends Node2D
 
 enum Scene {Level, MainMenu}
 
+var current_scene: Scene
+
 @onready var MainMenu: Node2D = $MainMenu
 @onready var Level: Node2D = $World
 @onready var StateManager: Node = $state_manager
 @onready var ControlsTab: Control = $PullOutTabs/ControlsTab
-@onready var PaletteMenu: GrabbableControl = $FloatingMenus/PaletteMenu
 
 var modifying_problem_item : PanelContainer = null
 
@@ -32,6 +33,7 @@ func _ready() -> void:
 	MainMenu.sandbox_pressed.connect(_on_sandbox_pressed)
 	MainMenu.tutorial_pressed.connect(_on_tutorial_pressed)
 	
+	current_scene = Scene.MainMenu
 	remove_child(Level)
 	
 	EventBus.signal_change_scene.connect(change_scene)
@@ -39,23 +41,17 @@ func _ready() -> void:
 	EventBus.signal_problem_set_played.connect(_on_problem_set_played)
 	EventBus.add_floating_menu.connect(add_floating_menu)
 	
-	Level.init(StateManager, ControlsTab, PaletteMenu)
-	MainMenu.init(StateManager, ControlsTab, PaletteMenu)
+	Level.init(StateManager, ControlsTab)
+	MainMenu.init(StateManager, ControlsTab)
 	StateManager.init(MainMenu.Diagram)
 	
 	$ControlsLayer/Buttons.visible = Globals.is_on_mobile()
 	$ControlsLayer/Cursor.visible = !Globals.is_on_mobile()
 
 func add_floating_menu(menu: Control) -> void:
-	if menu.position == Vector2.ZERO:
-		menu.position = get_viewport_rect().size / 2
-	
-	$FloatingMenus.add_child(menu)
+	scenes[current_scene].add_floating_menu(menu)
 
 func change_scene(scene: Scene, args: Array = []) -> void:
-	for child in $FloatingMenus.get_children():
-		child.hide()
-	
 	switch_child_scene(scene)
 	StateManager.change_scene(scenes[scene].Diagram)
 	
@@ -63,6 +59,7 @@ func change_scene(scene: Scene, args: Array = []) -> void:
 	EventBus.change_cursor.emit(Globals.Cursor.default)
 
 func switch_child_scene(new_scene: Scene) -> void:
+	current_scene = new_scene
 	remove_child(scenes[(new_scene + 1) % 2])
 	add_child(scenes[new_scene])
 	move_child(scenes[new_scene], 0)

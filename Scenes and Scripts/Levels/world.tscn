@@ -275,36 +275,6 @@ patch_margin_bottom = 15
 
 [node name="ProblemGeneration" parent="Algorithms" instance=ExtResource("13_62803")]
 
-[node name="FloatingMenus" type="Node2D" parent="."]
-z_index = 2
-use_parent_material = true
-
-[node name="CreationInformation" parent="FloatingMenus" instance=ExtResource("31_l3pqm")]
-visible = false
-offset_left = 489.0
-offset_top = 87.0
-offset_right = 489.0
-offset_bottom = 87.0
-
-[node name="SubmittedDiagrams" parent="FloatingMenus" node_paths=PackedStringArray("BigDiagram") instance=ExtResource("27_laye5")]
-visible = false
-offset_left = 316.0
-offset_top = 160.0
-offset_right = 316.0
-offset_bottom = 160.0
-allow_resaving = true
-title = "Submitted Diagrams"
-BigDiagram = NodePath("../../Diagram")
-
-[node name="GeneratedDiagrams" parent="FloatingMenus" node_paths=PackedStringArray("BigDiagram") instance=ExtResource("27_laye5")]
-visible = false
-offset_left = 316.0
-offset_top = 160.0
-offset_right = 316.0
-offset_bottom = 160.0
-title = "Generated Diagrams"
-BigDiagram = NodePath("../../Diagram")
-
 [node name="PullOutTabs" type="Node2D" parent="."]
 z_index = 3
 use_parent_material = true
@@ -364,6 +334,34 @@ offset_left = 613.0
 offset_top = 134.0
 offset_right = 613.0
 offset_bottom = 134.0
+
+[node name="FloatingMenus" type="CanvasLayer" parent="."]
+
+[node name="CreationInformation" parent="FloatingMenus" instance=ExtResource("31_l3pqm")]
+visible = false
+offset_left = 489.0
+offset_top = 87.0
+offset_right = 489.0
+offset_bottom = 87.0
+
+[node name="SubmittedDiagrams" parent="FloatingMenus" node_paths=PackedStringArray("BigDiagram") instance=ExtResource("27_laye5")]
+visible = false
+offset_left = 316.0
+offset_top = 160.0
+offset_right = 316.0
+offset_bottom = 160.0
+allow_resaving = true
+title = "Submitted Diagrams"
+BigDiagram = NodePath("../../Diagram")
+
+[node name="GeneratedDiagrams" parent="FloatingMenus" node_paths=PackedStringArray("BigDiagram") instance=ExtResource("27_laye5")]
+visible = false
+offset_left = 316.0
+offset_top = 160.0
+offset_right = 316.0
+offset_bottom = 160.0
+title = "Generated Diagrams"
+BigDiagram = NodePath("../../Diagram")
 
 [node name="ShaderControl" type="Node" parent="."]
 script = ExtResource("2")
@@ -505,9 +503,9 @@ enable_spotlight = false
 
 [connection signal="text_changed" from="Diagram/TitleContainer/Title" to="Diagram/TitleContainer/Title" method="_on_text_changed"]
 [connection signal="text_submitted" from="Diagram/TitleContainer/Title" to="Diagram" method="_on_title_text_submitted"]
+[connection signal="export_pressed" from="PullOutTabs/ExportTab" to="." method="_on_export_tab_export_pressed"]
 [connection signal="submit_problem" from="FloatingMenus/CreationInformation" to="." method="_on_creation_information_submit_problem"]
 [connection signal="toggle_all" from="FloatingMenus/CreationInformation" to="." method="_on_creation_information_toggle_all"]
-[connection signal="export_pressed" from="PullOutTabs/ExportTab" to="." method="_on_export_tab_export_pressed"]
 [connection signal="finish_pressed" from="Tutorial/TutorialInfo" to="." method="_on_tutorial_info_finish_pressed"]
 [connection signal="next_pressed" from="Tutorial/TutorialInfo" to="Tutorial" method="_on_tutorial_info_next_pressed"]
 [connection signal="prev_pressed" from="Tutorial/TutorialInfo" to="Tutorial" method="_on_tutorial_info_prev_pressed"]

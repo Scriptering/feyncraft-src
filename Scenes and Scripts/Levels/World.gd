@@ -24,7 +24,6 @@ signal initialised
 
 var ControlsTab: Control
 var StateManager: Node
-var PaletteMenu: GrabbableControl
 
 var previous_mode: BaseMode.Mode = BaseMode.Mode.Null
 var current_mode: BaseMode.Mode = BaseMode.Mode.Null: set = _set_current_mode
@@ -57,10 +56,9 @@ func _set_current_mode(new_value: BaseMode.Mode) -> void:
 	current_mode = new_value
 	mode_enter_funcs[current_mode].call()
 
-func init(state_manager: Node, controls_tab: Control, palette_list: GrabbableControl) -> void:
+func init(state_manager: Node, controls_tab: Control) -> void:
 	StateManager = state_manager
 	ControlsTab = controls_tab
-	PaletteMenu = palette_list
 	VisionTab.vision_button_toggled.connect(_vision_button_toggled)
 	MenuTab.toggled_line_labels.connect(
 		func(toggle: bool) -> void:
@@ -72,7 +70,6 @@ func init(state_manager: Node, controls_tab: Control, palette_list: GrabbableCon
 	ProblemTab.prev_problem_pressed.connect(_on_prev_problem_pressed)
 	
 	Tutorial.init(self)
-	MenuTab.init(PaletteMenu)
 	CreationInformation.init(Diagram, self, ProblemTab)
 	Diagram.init(ParticleButtons, ControlsTab, VisionTab, $Algorithms/PathFinding, StateManager)
 	GenerationTab.init(Diagram, $Algorithms/SolutionGeneration, $FloatingMenus/GeneratedDiagrams)
@@ -316,3 +313,6 @@ func _on_export_tab_export_pressed(join_paths: bool, draw_internal_labels: bool,
 	var export_string: String = exporter.generate_export()
 	
 	ClipBoard.copy(export_string)
+
+func add_floating_menu(menu: Control) -> void:
+	$FloatingMenus.add_child(menu)

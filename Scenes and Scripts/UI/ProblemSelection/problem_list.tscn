@@ -14,14 +14,15 @@
 
 [node name="ProblemList" type="PanelContainer" node_paths=PackedStringArray("title", "add_button")]
 material = ExtResource("1_a6eex")
-custom_minimum_size = Vector2(280, 230)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -360.0
-offset_bottom = -130.0
+offset_right = -474.0
+offset_bottom = -131.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 mouse_filter = 1
 script = ExtResource("2_ycbub")
 title = NodePath("VBoxContainer/Header/VBoxSeperator/Label")
@@ -41,7 +42,7 @@ theme_override_styles/panel = SubResource("StyleBoxEmpty_2lvc7")
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_constants/separation = -2
+theme_override_constants/separation = -1
 alignment = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/Header/VBoxSeperator"]

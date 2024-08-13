@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://ds2iet11sv3ty"]
+[gd_scene load_steps=31 format=3 uid="uid://ds2iet11sv3ty"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Buttons/particle_buttons.gd" id="1_magdw"]
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_w6xjt"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="4_1s6pp"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/PullOutTab.gd" id="5_hlykg"]
 [ext_resource type="PackedScene" uid="uid://diro6a1arcmc0" path="res://Scenes and Scripts/UI/Buttons/ParticleButtons/ParticleButton.tscn" id="7_omtgh"]
+[ext_resource type="Theme" uid="uid://cuc6dkxinsqm2" path="res://Scenes and Scripts/UI/Buttons/particle_button.tres" id="8_tv6mj"]
 [ext_resource type="PackedScene" uid="uid://ctj2f7ofdkrr1" path="res://Scenes and Scripts/UI/Buttons/pull_out_tab_button_up.tscn" id="8_uancy"]
 [ext_resource type="Texture2D" uid="uid://bbcpi0csb1w4" path="res://Textures/Buttons/icons/Particles/electron.png" id="9_chxfj"]
 [ext_resource type="Texture2D" uid="uid://pkad4lple88f" path="res://Textures/Buttons/icons/Particles/muon.png" id="10_81gre"]
@@ -111,31 +112,37 @@ alignment = 1
 
 [node name="electron" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
 layout_mode = 2
+theme = ExtResource("8_tv6mj")
 particle = 6
 icon = ExtResource("9_chxfj")
 
 [node name="muon" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
 layout_mode = 2
+theme = ExtResource("8_tv6mj")
 particle = 7
 icon = ExtResource("10_81gre")
 
 [node name="tau" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
 layout_mode = 2
+theme = ExtResource("8_tv6mj")
 particle = 8
 icon = ExtResource("11_iujs7")
 
 [node name="electron_neutrino" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
 layout_mode = 2
+theme = ExtResource("8_tv6mj")
 particle = 10
 icon = ExtResource("12_j0i5o")
 
 [node name="muon_neutrino" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
 layout_mode = 2
+theme = ExtResource("8_tv6mj")
 particle = 11
 icon = ExtResource("13_4cq0t")
 
 [node name="tau_neutrino" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
 layout_mode = 2
+theme = ExtResource("8_tv6mj")
 particle = 12
 icon = ExtResource("14_xneog")
 
@@ -185,24 +192,29 @@ alignment = 1
 
 [node name="photon" parent="HBoxContainer/Bosons/MovingContainer/Tab/Bosons" instance=ExtResource("7_omtgh")]
 layout_mode = 2
+theme = ExtResource("8_tv6mj")
 
 [node name="gluon" parent="HBoxContainer/Bosons/MovingContainer/Tab/Bosons" instance=ExtResource("7_omtgh")]
 layout_mode = 2
+theme = ExtResource("8_tv6mj")
 particle = 1
 icon = ExtResource("16_jkhhj")
 
 [node name="W" parent="HBoxContainer/Bosons/MovingContainer/Tab/Bosons" instance=ExtResource("7_omtgh")]
 layout_mode = 2
+theme = ExtResource("8_tv6mj")
 particle = 4
 icon = ExtResource("17_75xcd")
 
 [node name="Z" parent="HBoxContainer/Bosons/MovingContainer/Tab/Bosons" instance=ExtResource("7_omtgh")]
 layout_mode = 2
+theme = ExtResource("8_tv6mj")
 particle = 2
 icon = ExtResource("18_vc2ix")
 
 [node name="H" parent="HBoxContainer/Bosons/MovingContainer/Tab/Bosons" instance=ExtResource("7_omtgh")]
 layout_mode = 2
+theme = ExtResource("8_tv6mj")
 particle = 3
 icon = ExtResource("19_j61dh")
 
@@ -252,31 +264,37 @@ alignment = 1
 
 [node name="up" parent="HBoxContainer/Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
 layout_mode = 2
+theme = ExtResource("8_tv6mj")
 particle = 14
 icon = ExtResource("20_p1utx")
 
 [node name="charm" parent="HBoxContainer/Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
 layout_mode = 2
+theme = ExtResource("8_tv6mj")
 particle = 15
 icon = ExtResource("21_2f4yg")
 
 [node name="top" parent="HBoxContainer/Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
 layout_mode = 2
+theme = ExtResource("8_tv6mj")
 particle = 16
 icon = ExtResource("22_5sekh")
 
 [node name="down" parent="HBoxContainer/Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
 layout_mode = 2
+theme = ExtResource("8_tv6mj")
 particle = 18
 icon = ExtResource("23_bqfxt")
 
 [node name="strange" parent="HBoxContainer/Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
 layout_mode = 2
+theme = ExtResource("8_tv6mj")
 particle = 19
 icon = ExtResource("24_5rpfr")
 
 [node name="bottom" parent="HBoxContainer/Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
 layout_mode = 2
+theme = ExtResource("8_tv6mj")
 particle = 20
 icon = ExtResource("25_r3qmv")
 
@@ -321,20 +339,24 @@ alignment = 1
 
 [node name="lepton" parent="HBoxContainer/General/MovingContainer/Tab/General" instance=ExtResource("7_omtgh")]
 layout_mode = 2
+theme = ExtResource("8_tv6mj")
 particle = 5
 icon = ExtResource("26_q00hp")
 
 [node name="bright_quark" parent="HBoxContainer/General/MovingContainer/Tab/General" instance=ExtResource("7_omtgh")]
 layout_mode = 2
+theme = ExtResource("8_tv6mj")
 particle = 13
 icon = ExtResource("27_cgwg8")
 
 [node name="lepton_neutrino" parent="HBoxContainer/General/MovingContainer/Tab/General" instance=ExtResource("7_omtgh")]
 layout_mode = 2
+theme = ExtResource("8_tv6mj")
 particle = 9
 icon = ExtResource("28_wg0lb")
 
 [node name="dark_quark" parent="HBoxContainer/General/MovingContainer/Tab/General" instance=ExtResource("7_omtgh")]
 layout_mode = 2
+theme = ExtResource("8_tv6mj")
 particle = 17
 icon = ExtResource("29_vjhit")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://wgw4km4uc7fh"]
+[gd_scene load_steps=27 format=3 uid="uid://wgw4km4uc7fh"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_wau64"]
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="2_0suyh"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="4_eh4di"]
 [ext_resource type="Texture2D" uid="uid://qaoot28mfcll" path="res://Textures/Buttons/icons/menu.png" id="5_0l85b"]
 [ext_resource type="Shader" path="res://Resources/Shaders/palette_swap.gdshader" id="5_sq2sq"]
+[ext_resource type="PackedScene" uid="uid://dh4niqtuyy5o3" path="res://Scenes and Scripts/UI/Buttons/popup_button.tscn" id="7_r536h"]
 [ext_resource type="Texture2D" uid="uid://bmns12qjnvbff" path="res://Textures/Buttons/icons/exit.png" id="7_verjv"]
 [ext_resource type="Theme" uid="uid://cfmbhoq8cuoge" path="res://Resources/Themes/ProjectTheme.tres" id="8_1y1ot"]
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="8_hwedl"]
@@ -15,6 +16,7 @@
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Buttons/MuteButton.gd" id="12_jlkch"]
 [ext_resource type="Texture2D" uid="uid://bxlc5rvpwjq8o" path="res://Textures/Buttons/icons/unmute.png" id="13_rwj10"]
 [ext_resource type="Theme" uid="uid://c7hk3afo5tria" path="res://Resources/Themes/toggle_button.tres" id="15_ijs5h"]
+[ext_resource type="PackedScene" uid="uid://b5pj0lanxu0o6" path="res://Scenes and Scripts/UI/ColourPicker/palette_menu.tscn" id="15_ulpqo"]
 [ext_resource type="Texture2D" uid="uid://ce37himikto8x" path="res://Textures/Buttons/icons/label.png" id="16_1c6xm"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4ap8b"]
@@ -53,10 +55,6 @@ texture_margin_bottom = 5.0
 
 [sub_resource type="Theme" id="Theme_g2x2b"]
 Button/styles/pressed = SubResource("StyleBoxTexture_bauei")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ke0iv"]
-resource_local_to_scene = true
-shader = ExtResource("5_sq2sq")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5ebon"]
 resource_local_to_scene = true
@@ -132,11 +130,10 @@ icon_use_parent_material = true
 [node name="Tooltip" parent="MovingContainer/ContentContainer/HBoxContainer/Mute" instance=ExtResource("8_hwedl")]
 tooltip = "Mute"
 
-[node name="Palettes" parent="MovingContainer/ContentContainer/HBoxContainer" instance=ExtResource("4_eh4di")]
-material = SubResource("ShaderMaterial_ke0iv")
+[node name="Palettes" parent="MovingContainer/ContentContainer/HBoxContainer" instance=ExtResource("7_r536h")]
 layout_mode = 2
+popup_scene = ExtResource("15_ulpqo")
 minimum_size = Vector2(26, 26)
-toggle_mode = true
 icon = ExtResource("11_w1230")
 expand_icon = true
 
@@ -158,5 +155,4 @@ icon_use_parent_material = true
 tooltip = "Show line labels"
 
 [connection signal="pressed" from="MovingContainer/ContentContainer/HBoxContainer/Exit" to="." method="_on_exit_pressed"]
-[connection signal="toggled" from="MovingContainer/ContentContainer/HBoxContainer/Palettes" to="." method="_on_palettes_toggled"]
 [connection signal="toggled" from="MovingContainer/ContentContainer/HBoxContainer/ShowLabels" to="." method="_on_show_labels_toggled"]

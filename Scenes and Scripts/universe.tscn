@@ -1,10 +1,9 @@
-[gd_scene load_steps=16 format=3 uid="uid://cnc7r7d27yn5c"]
+[gd_scene load_steps=14 format=3 uid="uid://cnc7r7d27yn5c"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/universe.gd" id="1_f3b25"]
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_fbm6y"]
 [ext_resource type="PackedScene" uid="uid://blu0n6lwfysjf" path="res://Scenes and Scripts/UI/Menus/MainMenu/main_menu.tscn" id="1_qkr4k"]
 [ext_resource type="PackedScene" uid="uid://c7n4o6dbkwilh" path="res://Scenes and Scripts/Levels/world.tscn" id="3_m7wj1"]
-[ext_resource type="PackedScene" uid="uid://b5pj0lanxu0o6" path="res://Scenes and Scripts/UI/ColourPicker/palette_menu.tscn" id="5_yvg3b"]
 [ext_resource type="PackedScene" uid="uid://b65u1c7v5mbh6" path="res://Scenes and Scripts/UI/Menus/controls_tab.tscn" id="6_a8qlc"]
 [ext_resource type="PackedScene" uid="uid://cv3ttwhplgav" path="res://Scenes and Scripts/States/state_manager.tscn" id="6_qca7e"]
 [ext_resource type="PackedScene" uid="uid://brd5auomhnn6l" path="res://Scenes and Scripts/UI/Cursor.tscn" id="7_s5a7m"]
@@ -14,22 +13,14 @@
 [ext_resource type="Texture2D" uid="uid://n2w0tydjaa33" path="res://Textures/Buttons/cut_touch_button_pressed.png" id="13_gqnb4"]
 [ext_resource type="Script" path="res://Scenes and Scripts/fps.gd" id="14_jxbry"]
 [ext_resource type="Script" path="res://Scenes and Scripts/global_feedback.gd" id="14_x4syi"]
-[ext_resource type="Texture2D" uid="uid://c2myqhjupqo25" path="res://Textures/Background/tile.png" id="15_1l277"]
 
 [node name="Universe" type="Node2D"]
 material = ExtResource("1_fbm6y")
 script = ExtResource("1_f3b25")
 
-[node name="MainMenu" parent="." node_paths=PackedStringArray("PaletteMenu") instance=ExtResource("1_qkr4k")]
-PaletteMenu = NodePath("../FloatingMenus/PaletteMenu")
+[node name="MainMenu" parent="." instance=ExtResource("1_qkr4k")]
 
 [node name="World" parent="." instance=ExtResource("3_m7wj1")]
-
-[node name="FloatingMenus" type="CanvasLayer" parent="."]
-
-[node name="PaletteMenu" parent="FloatingMenus" instance=ExtResource("5_yvg3b")]
-visible = false
-mouse_filter = 2
 
 [node name="PullOutTabs" type="Control" parent="."]
 layout_mode = 3
@@ -75,6 +66,7 @@ offset_top = -2.0
 offset_bottom = 360.0
 
 [node name="ControlsLayer" type="CanvasLayer" parent="."]
+layer = 5
 
 [node name="Cursor" parent="ControlsLayer" instance=ExtResource("7_s5a7m")]
 
@@ -139,10 +131,5 @@ size_flags_horizontal = 4
 [node name="Label" type="Label" parent="CanvasLayer/GlobalFeedback/PanelContainer/HBoxContainer"]
 use_parent_material = true
 layout_mode = 2
-
-[node name="Tile" type="Sprite2D" parent="."]
-use_parent_material = true
-position = Vector2(40, 280)
-texture = ExtResource("15_1l277")
 
 [connection signal="tree_exited" from="." to="." method="_on_tree_exited"]

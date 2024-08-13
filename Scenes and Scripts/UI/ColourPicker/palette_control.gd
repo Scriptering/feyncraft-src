@@ -1,10 +1,11 @@
 extends GrabbableControl
 
 var palette_item_scene: PackedScene = preload("res://Scenes and Scripts/UI/ColourPicker/palette_list_item.tscn")
-signal closed
 
 @export var load_button: PanelButton
 @export var item_list: PanelItemList
+
+signal close
 
 func _ready() -> void:
 	EventBus.save_files.connect(save_palettes)
@@ -15,7 +16,7 @@ func _ready() -> void:
 	load_tea_stain()
 
 func _on_close_pressed() -> void:
-	closed.emit()
+	close.emit()
 
 func palette_folder() -> String:
 	return FileManager.get_file_prefix() + "saves/Palettes/"

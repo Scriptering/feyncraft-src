@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://blu0n6lwfysjf"]
+[gd_scene load_steps=35 format=3 uid="uid://blu0n6lwfysjf"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_m8wv1"]
 [ext_resource type="Texture2D" uid="uid://c2myqhjupqo25" path="res://Textures/Background/tile.png" id="2_3tgej"]
@@ -20,8 +20,9 @@
 [ext_resource type="PackedScene" uid="uid://b4oiaq2nic3ig" path="res://Scenes and Scripts/UI/Buttons/MuteButton.tscn" id="16_1yq2b"]
 [ext_resource type="Texture2D" uid="uid://btu2jj1bbbbil" path="res://Textures/Buttons/icons/palette.png" id="17_cv4ds"]
 [ext_resource type="Texture2D" uid="uid://b3diapu0ec332" path="res://Textures/Buttons/icons/puzzle_piece.png" id="19_fbmws"]
+[ext_resource type="PackedScene" uid="uid://dh4niqtuyy5o3" path="res://Scenes and Scripts/UI/Buttons/popup_button.tscn" id="21_eg5af"]
 [ext_resource type="Texture2D" uid="uid://bxlc5rvpwjq8o" path="res://Textures/Buttons/icons/unmute.png" id="21_lu08p"]
-[ext_resource type="Theme" uid="uid://c7hk3afo5tria" path="res://Resources/Themes/toggle_button.tres" id="22_a8ikr"]
+[ext_resource type="PackedScene" uid="uid://b5pj0lanxu0o6" path="res://Scenes and Scripts/UI/ColourPicker/palette_menu.tscn" id="22_5omgn"]
 [ext_resource type="Texture2D" uid="uid://co52c2vc04qom" path="res://Textures/Buttons/icons/credit.png" id="23_sgn8e"]
 [ext_resource type="PackedScene" uid="uid://ds2iet11sv3ty" path="res://Scenes and Scripts/UI/Buttons/particle_buttons.tscn" id="26_grnbf"]
 [ext_resource type="PackedScene" uid="uid://cv6hlxtiukmtc" path="res://Scenes and Scripts/UI/VisionButtons/vision_buttons.tscn" id="27_y0o8i"]
@@ -276,13 +277,11 @@ label_settings = ExtResource("14_sqpi5")
 icon = ExtResource("13_21fnr")
 expand_icon = true
 
-[node name="ProblemSets" parent="Center/VBoxContainer" instance=ExtResource("11_t2od8")]
-material = null
+[node name="ProblemSets" parent="Center/VBoxContainer" instance=ExtResource("21_eg5af")]
 layout_mode = 2
-theme = ExtResource("22_a8ikr")
+popup_scene = ExtResource("8_oursg")
 icon_text_seperation = 4
-minimum_size = Vector2(164, 2.08165e-12)
-toggle_mode = true
+minimum_size = Vector2(164, 0)
 text = "Problem Sets"
 label_settings = ExtResource("14_sqpi5")
 icon = ExtResource("19_fbmws")
@@ -302,53 +301,20 @@ size_flags_vertical = 1
 toggle_mode = true
 icon = ExtResource("21_lu08p")
 
-[node name="Palettes" parent="Center/VBoxContainer/HBoxContainer" instance=ExtResource("11_t2od8")]
-material = null
+[node name="PaletteButton" parent="Center/VBoxContainer/HBoxContainer" instance=ExtResource("21_eg5af")]
 layout_mode = 2
-minimum_size = Vector2(30, 30)
-toggle_mode = true
+popup_scene = ExtResource("22_5omgn")
+minimum_size = Vector2(31, 30)
 icon = ExtResource("17_cv4ds")
 expand_icon = true
 
-[node name="CreditButton" parent="Center/VBoxContainer/HBoxContainer" instance=ExtResource("11_t2od8")]
-material = null
+[node name="CreditButton" parent="Center/VBoxContainer/HBoxContainer" instance=ExtResource("21_eg5af")]
 layout_mode = 2
+popup_scene = ExtResource("36_o748n")
 minimum_size = Vector2(30, 30)
-toggle_mode = true
 icon = ExtResource("23_sgn8e")
 expand_icon = true
 icon_use_parent_material = true
-
-[node name="FloatingMenus" type="Control" parent="."]
-z_index = 1
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-mouse_filter = 2
-
-[node name="ProblemSelection" parent="FloatingMenus" instance=ExtResource("8_oursg")]
-visible = false
-layout_mode = 1
-offset_left = 172.0
-offset_top = 32.0
-offset_right = 467.0
-offset_bottom = 332.0
-
-[node name="Credits" parent="FloatingMenus" instance=ExtResource("36_o748n")]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 300.0
-offset_top = 160.0
-offset_right = 300.0
-offset_bottom = 160.0
-grow_horizontal = 2
-grow_vertical = 2
 
 [node name="ParticleButtons" parent="." instance=ExtResource("26_grnbf")]
 visible = false
@@ -385,14 +351,12 @@ mouse_filter = 2
 [node name="ShaderControl" type="Node" parent="."]
 script = ExtResource("34_pwybq")
 
+[node name="FloatingMenus" type="CanvasLayer" parent="."]
+
 [connection signal="mouse_entered" from="Diagram" to="Diagram" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="Diagram" to="Diagram" method="_on_mouse_exited"]
 [connection signal="pressed" from="Center/VBoxContainer/Tutorial" to="." method="_on_tutorial_pressed"]
 [connection signal="pressed" from="Center/VBoxContainer/Sandbox" to="." method="_on_sandbox_pressed"]
-[connection signal="toggled" from="Center/VBoxContainer/ProblemSets" to="." method="_on_problem_sets_toggled"]
-[connection signal="toggled" from="Center/VBoxContainer/HBoxContainer/Palettes" to="." method="_on_palettes_toggled"]
-[connection signal="toggled" from="Center/VBoxContainer/HBoxContainer/CreditButton" to="." method="_on_credit_button_toggled"]
-[connection signal="closed" from="FloatingMenus/Credits" to="." method="_on_credits_closed"]
 
 [editable path="Diagram/DiagramArea/Initial"]
 [editable path="Diagram/DiagramArea/Final"]
