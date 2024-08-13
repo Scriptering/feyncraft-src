@@ -32,19 +32,20 @@ func load_problem_sets() -> void:
 	update_index_labels()
 	update_problem_sets()
 
+func problem_set_folder() -> String:
+	return FileManager.get_file_prefix() + "saves/ProblemSets/"
+
+func custom_folder() -> String:
+	return problem_set_folder() + "Custom/"
+
 func load_default_problem_sets() -> void:
-	var file_path: String = problem_set_file_path if Globals.is_on_editor else web_problem_set_file_path
-	
-	load_problem_set(file_path + 'Default/electromagnetic.txt')
-	load_problem_set(file_path + 'Default/strong.txt')
-	load_problem_set(file_path + 'Default/hadronic.txt')
+	load_problem_set(problem_set_folder() + 'Default/electromagnetic.tres')
+	load_problem_set(problem_set_folder() + 'Default/strong.tres')
+	load_problem_set(problem_set_folder() + 'Default/hadronic.tres')
 
 func load_custom_problem_sets() -> void:
-	for file_path in FileManager.get_files_in_folder(get_custom_file_path()):
+	for file_path in FileManager.get_files_in_folder(custom_folder()):
 		load_problem_set(file_path)
-
-func get_custom_file_path() -> String:
-	return (problem_set_file_path + 'Custom/') if Globals.is_on_editor else (web_problem_set_file_path + 'Custom/')
 
 func add_problem_set(problem_set: ProblemSet, problem_set_item: ListItem = ProblemSetItem.instantiate()) -> void:
 	problem_set_item.load_problem_set(problem_set)
@@ -102,21 +103,19 @@ func update() -> void:
 func _on_close_pressed() -> void:
 	close.emit()
 
-func _on_load_button_submitted(submitted_text: String) -> void:
-	var file_path: String = FileManager.get_unique_file_name(get_custom_file_path())
-	FileManager.create_text_file(submitted_text, file_path)
-	load_problem_set(file_path)
+func resave_txt_as_tres(problem_set_path: String) -> void:
+	var problem_set: ProblemSet = FileManager.load_txt(problem_set_path)
+	ResourceSaver.save(problem_set, problem_set_path + '.tres')
 
 func load_problem_set(problem_set_path: String) -> void:
 	var new_problem_set: ListItem = ProblemSetItem.instantiate()
 	new_problem_set.file_path = problem_set_path
 	
-	var problem_set: ProblemSet = FileManager.load_txt(problem_set_path)
+	var problem_set: ProblemSet = load(problem_set_path)
 	if problem_set:
 		add_problem_set(problem_set, new_problem_set)
 	else:
 		new_problem_set.queue_free()
-		FileManager.delete_file(problem_set_path)
 
 func save_problem_sets() -> void:
 	for problem_set in problem_container.get_children():
@@ -129,7 +128,7 @@ func create_new_problem_set(problem_set: ProblemSet = null, problem_set_path: St
 		problem_set = ProblemSet.new()
 	
 	if problem_set_path == '':
-		problem_set_path = FileManager.get_unique_file_name(get_custom_file_path(), '.tres')
+		problem_set_path = FileManager.get_unique_file_name(custom_folder(), '.tres')
 	
 	new_problem_set.file_path = problem_set_path
 	add_problem_set(problem_set, new_problem_set)

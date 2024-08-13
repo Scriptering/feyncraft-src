@@ -48,7 +48,7 @@ func update() -> void:
 	update_problem_index()
 
 func reload() -> void:
-	problem_set = FileManager.load_txt(file_path)
+	problem_set = load(file_path)
 	
 	await get_tree().process_frame
 	
@@ -63,23 +63,12 @@ func _on_view_pressed() -> void:
 func _on_play_pressed() -> void:
 	play.emit(problem_set)
 
-func _on_upload_toggled(button_pressed: bool) -> void:
-	if !button_pressed:
-		return
-	
-	await get_tree().process_frame
-	
-	var uploading_problem_set : ProblemSet = problem_set.duplicate(true)
-	uploading_problem_set.highest_index_reached = 0
-	uploading_problem_set.is_custom = false
-	
-	upload.set_text(
-		FileManager.get_resource_save_data(uploading_problem_set)
-	)
-
 func save() -> void:
-	FileManager.save(problem_set, file_path)
+	ResourceSaver.save(problem_set, file_path)
 
 func _on_title_text_submitted(new_text: String) -> void:
 	problem_set.title = new_text
 	save()
+
+func _on_upload_pressed() -> void:
+	ClipBoard.copy(FileManager.get_resource_save_data(problem_set))
