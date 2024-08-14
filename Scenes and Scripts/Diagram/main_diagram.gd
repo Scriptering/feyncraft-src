@@ -53,8 +53,12 @@ func _ready() -> void:
 	EventBus.draw_diagram.connect(draw_diagram)
 	action_taken.connect(EventBus.action_taken.emit)
 	
-	DiagramArea.mouse_entered.connect(_on_diagram_area_mouse_entered)
-	DiagramArea.mouse_exited.connect(_on_diagram_area_mouse_exited)
+	self.mouse_entered.connect(
+		func(): EventBus.diagram_mouse_entered.emit()
+	)
+	self.mouse_exited.connect(
+		func(): EventBus.diagram_mouse_exited.emit()
+	)
 	
 	for state_line:StateLine in StateLines:
 		state_line.init(self)
@@ -68,17 +72,6 @@ func _input(event: InputEvent) -> void:
 			generate_drawing_matrix_from_diagram(),
 			get_decorations()
 		 )
-	
-	#if event is InputEventMouseMotion:
-		#if DiagramArea.get_global_rect().has_point(get_global_mouse_position()):
-			#if !mouse_inside_diagram:
-				#EventBus.diagram_mouse_entered.emit()
-				#mouse_inside_diagram = true
-		#else:
-			#if mouse_inside_diagram:
-				#EventBus.diagram_mouse_exited.emit()
-				#mouse_inside_diagram = false
-
 
 func _decoration_dropped(decoration: Decoration) -> void:
 	if !is_inside_tree():
@@ -1198,9 +1191,3 @@ func get_degree() -> int:
 		degree += interaction.degree
 	
 	return degree
-
-func _on_diagram_area_mouse_entered() -> void:
-	EventBus.diagram_mouse_entered.emit()
-
-func _on_diagram_area_mouse_exited() -> void:
-	EventBus.diagram_mouse_exited.emit()

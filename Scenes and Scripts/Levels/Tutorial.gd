@@ -38,7 +38,7 @@ func init(world: Node2D) -> void:
 		step.init(world)
 		step.draw_diagram.connect(
 			func(diagram: DrawingMatrix) -> void:
-				EventBus.signal_draw_diagram.emit(diagram)
+				EventBus.draw_diagram.emit(diagram)
 		)
 	
 	reset()

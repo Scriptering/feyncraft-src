@@ -133,3 +133,5 @@ use_parent_material = true
 layout_mode = 2
 
 [connection signal="tree_exited" from="." to="." method="_on_tree_exited"]
+[connection signal="tutorial_pressed" from="MainMenu" to="." method="_on_main_menu_tutorial_pressed"]
+[connection signal="problem_submitted" from="World" to="." method="_on_world_problem_submitted"]

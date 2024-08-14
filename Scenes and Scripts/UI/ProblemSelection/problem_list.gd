@@ -23,7 +23,7 @@ func reload() -> void:
 	if !problem_set:
 		return
 	
-	load_problem_set(FileManager.load_txt(problem_set_file), problem_set_file)
+	load_problem_set(load(problem_set_file), problem_set_file)
 	
 	for problem_item:PanelContainer in get_problem_items():
 		problem_item.toggle_completed(!problem_set.is_custom and problem_item.index < problem_set.highest_index_reached)
@@ -90,7 +90,7 @@ func _problem_moved(problem_select: PanelContainer, index_change: int) -> void:
 	var current_index: int = get_problem_items().find(problem_select)
 	var new_index: int = current_index + index_change
 	
-	problem_container.move_child(problem_select, new_index)
+	problem_container.move_item(problem_select, new_index)
 	
 	var temp_problem: Problem = problem_set.problems[new_index]
 	problem_set.problems[new_index] = problem_set.problems[current_index]
@@ -130,7 +130,7 @@ func _problem_saved(_problem_item: PanelContainer) -> void:
 	save()
 
 func save() -> void:
-	FileManager.save(problem_set, problem_set_file)
+	ResourceSaver.save(problem_set, problem_set_file)
 
 func _on_close_pressed() -> void:
 	back.emit()

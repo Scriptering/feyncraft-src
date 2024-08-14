@@ -1,7 +1,7 @@
 extends Object
 class_name FileManager
 
-static func get_unique_file_name(folder_path: String, suffix: String = '.txt') -> String:
+static func get_unique_file_name(folder_path: String, suffix: String = '.tres') -> String:
 	#print("getting unique file name")
 	#print(folder_path)
 	

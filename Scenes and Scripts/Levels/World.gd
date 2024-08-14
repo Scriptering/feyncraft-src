@@ -226,7 +226,7 @@ func enter_tutorial() -> void:
 	Tutorial.show()
 	
 	Tutorial.reset()
-	load_problem_set(FileManager.load_txt("res://saves/ProblemSets/tutorial.txt"), 0)
+	load_problem_set(load("res://saves/ProblemSets/tutorial.tres"), 0)
 
 func exit_tutorial() -> void:
 	Tutorial.clear()

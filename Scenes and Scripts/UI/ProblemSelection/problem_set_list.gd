@@ -119,7 +119,7 @@ func load_problem_set(problem_set_path: String) -> void:
 
 func save_problem_sets() -> void:
 	for problem_set in problem_container.get_children():
-		FileManager.save(problem_set.problem_set, problem_set.file_path)
+		ResourceSaver.save(problem_set.problem_set, problem_set.file_path)
 	
 func create_new_problem_set(problem_set: ProblemSet = null, problem_set_path: String = '') -> void:
 	var new_problem_set: ListItem = ProblemSetItem.instantiate()

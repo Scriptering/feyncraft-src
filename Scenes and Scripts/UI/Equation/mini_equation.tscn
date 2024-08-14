@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cqfassynt86vn"]
+[gd_scene load_steps=16 format=3 uid="uid://cqfassynt86vn"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_hosl1"]
 [ext_resource type="Texture2D" uid="uid://c7tah165tpo1j" path="res://Textures/UI/Equation/scroll_grabber_normal.png" id="2_h4yw2"]
@@ -6,10 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://c0xyku0mewhpu" path="res://Textures/UI/Equation/scroll_grabber_pressed.png" id="4_ei1b2"]
 [ext_resource type="Texture2D" uid="uid://cqenoy2xbqeok" path="res://Textures/UI/Equation/scrollbar.png" id="5_qvcr4"]
 [ext_resource type="Texture2D" uid="uid://dbeck067rce7m" path="res://Textures/UI/tooltip_panel.png" id="6_qlgcf"]
-[ext_resource type="Script" path="res://Scenes and Scripts/UI/Equation/ProblemEquation.gd" id="7_35pj2"]
-[ext_resource type="Texture2D" uid="uid://dxt3ti14uhl8s" path="res://Textures/UI/Equation/boundary.png" id="8_gg5ej"]
+[ext_resource type="Script" path="res://Scenes and Scripts/UI/Equation/equation.gd" id="7_2ak1f"]
 [ext_resource type="Texture2D" uid="uid://denysnbqxm0co" path="res://Textures/UI/Equation/equation_arrow.png" id="9_2bfi6"]
-[ext_resource type="Texture2D" uid="uid://b7be8bbrdmc4v" path="res://Textures/UI/Equation/boundary_flipped.png" id="10_acmdd"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bhtjg"]
 texture = ExtResource("2_h4yw2")
@@ -37,8 +35,8 @@ texture = ExtResource("5_qvcr4")
 texture_margin_top = 9.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_l3ym5"]
-content_margin_top = 4.0
-content_margin_bottom = 4.0
+content_margin_top = 3.0
+content_margin_bottom = 3.0
 texture = ExtResource("6_qlgcf")
 texture_margin_left = 6.0
 texture_margin_top = 6.0
@@ -53,85 +51,64 @@ HScrollBar/styles/scroll = SubResource("StyleBoxTexture_im2l8")
 HScrollBar/styles/scroll_focus = null
 PanelContainer/styles/panel = SubResource("StyleBoxTexture_l3ym5")
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_kbpcr"]
-texture = ExtResource("8_gg5ej")
-texture_margin_left = 1.0
-texture_margin_top = 4.0
-texture_margin_right = 3.0
-texture_margin_bottom = 4.0
-expand_margin_left = 3.0
-expand_margin_top = 4.0
-expand_margin_right = 4.0
-expand_margin_bottom = 4.0
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kw2vk"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_sbwvp"]
-texture = ExtResource("10_acmdd")
-texture_margin_left = 2.0
-texture_margin_top = 4.0
-texture_margin_right = 2.0
-texture_margin_bottom = 4.0
-expand_margin_left = 3.0
-expand_margin_top = 4.0
-expand_margin_right = 4.0
-expand_margin_bottom = 4.0
-
-[node name="Equation" type="PanelContainer"]
+[node name="MiniEquation" type="PanelContainer" node_paths=PackedStringArray("LeftEquation", "RightEquation")]
 material = ExtResource("1_hosl1")
 custom_minimum_size = Vector2(120, 8)
-offset_right = 110.0
-offset_bottom = 21.0
-size_flags_vertical = 4
+offset_right = 120.0
+offset_bottom = 22.0
 theme = SubResource("Theme_fbh0y")
-script = ExtResource("7_35pj2")
+script = ExtResource("7_2ak1f")
+LeftEquation = NodePath("MarginContainer/ScrollContainer/MarginContainer/HBoxContainer/LeftParticles")
+RightEquation = NodePath("MarginContainer/ScrollContainer/MarginContainer/HBoxContainer/RightParticles")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
 use_parent_material = true
 layout_mode = 2
+theme_override_constants/margin_bottom = -6
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_kw2vk")
+vertical_scroll_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ScrollContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 8
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_bottom = -3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(0, 11)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 8
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="LeftMarginContainer" type="MarginContainer" parent="HBoxContainer"]
-use_parent_material = true
+[node name="LeftParticles" type="HBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_constants/margin_bottom = -8
-
-[node name="LeftScrollContainer" type="ScrollContainer" parent="HBoxContainer/LeftMarginContainer"]
-use_parent_material = true
-layout_mode = 2
-vertical_scroll_mode = 0
-
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/LeftMarginContainer/LeftScrollContainer"]
-custom_minimum_size = Vector2(2.08165e-12, 11)
-layout_mode = 2
-size_flags_horizontal = 10
-theme_override_constants/margin_bottom = -1
-
-[node name="LeftEquation" type="HBoxContainer" parent="HBoxContainer/LeftMarginContainer/LeftScrollContainer/MarginContainer"]
-use_parent_material = true
-custom_minimum_size = Vector2(2.08165e-12, 11)
-layout_mode = 2
-size_flags_horizontal = 10
-size_flags_vertical = 8
 theme_override_constants/separation = 0
-alignment = 2
 
-[node name="Centre" type="HBoxContainer" parent="HBoxContainer"]
+[node name="Centre" type="HBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/HBoxContainer"]
 use_parent_material = true
-custom_minimum_size = Vector2(27, 2.08165e-12)
+custom_minimum_size = Vector2(18, 0)
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_constants/separation = 2
 alignment = 1
 
-[node name="LeftBoundary" type="Panel" parent="HBoxContainer/Centre"]
-visible = false
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ScrollContainer/MarginContainer/HBoxContainer/Centre"]
 use_parent_material = true
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_kbpcr")
+theme_override_constants/margin_bottom = -2
 
-[node name="Arrow" type="TextureRect" parent="HBoxContainer/Centre"]
+[node name="Arrow" type="TextureRect" parent="MarginContainer/ScrollContainer/MarginContainer/HBoxContainer/Centre/MarginContainer"]
 use_parent_material = true
 custom_minimum_size = Vector2(2.08165e-12, 9)
 layout_mode = 2
@@ -139,40 +116,8 @@ texture = ExtResource("9_2bfi6")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="RightBoundary" type="Panel" parent="HBoxContainer/Centre"]
-visible = false
-use_parent_material = true
+[node name="RightParticles" type="HBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/HBoxContainer"]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_sbwvp")
-
-[node name="RightMarginContainer" type="MarginContainer" parent="HBoxContainer"]
-use_parent_material = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_constants/margin_left = 3
-theme_override_constants/margin_bottom = -8
-
-[node name="RightScrollContainer" type="ScrollContainer" parent="HBoxContainer/RightMarginContainer"]
-use_parent_material = true
-layout_mode = 2
-size_flags_horizontal = 3
-vertical_scroll_mode = 0
-
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/RightMarginContainer/RightScrollContainer"]
-custom_minimum_size = Vector2(2.08165e-12, 11)
-layout_mode = 2
-size_flags_horizontal = 2
-theme_override_constants/margin_bottom = -1
-
-[node name="RightEquation" type="HBoxContainer" parent="HBoxContainer/RightMarginContainer/RightScrollContainer/MarginContainer"]
-use_parent_material = true
-custom_minimum_size = Vector2(2.08165e-12, 11)
-layout_mode = 2
-size_flags_horizontal = 10
-size_flags_vertical = 8
 theme_override_constants/separation = 0
-alignment = 2
 
-[connection signal="child_entered_tree" from="HBoxContainer/LeftMarginContainer/LeftScrollContainer" to="." method="_on_scroll_container_child_entered_tree"]
-[connection signal="child_entered_tree" from="HBoxContainer/RightMarginContainer/RightScrollContainer" to="." method="_on_scroll_container_child_entered_tree"]
+[connection signal="child_entered_tree" from="MarginContainer/ScrollContainer" to="." method="_on_scroll_container_child_entered_tree"]

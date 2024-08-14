@@ -26,6 +26,8 @@ var Final: StateLine
 var StateManager: Node
 var grid_size: int
 
+var inside_diagram_control: bool = false
+
 func _process(_event: float) -> void:
 	move_crosshair()
 
@@ -196,10 +198,10 @@ func is_on_interaction(test_position: Vector2 = position) -> bool:
 	return false
 
 func _diagram_mouse_entered() -> void:
-	visible = get_state_visible(StateManager.state)
+	inside_diagram_control = true
 
 func _diagram_mouse_exited() -> void:
-	visible = get_state_visible(StateManager.state)
+	inside_diagram_control = false
 
 func _state_changed(new_state: BaseState.State, _old_state: BaseState.State) -> void: 
 	if !is_inside_tree():
@@ -208,6 +210,9 @@ func _state_changed(new_state: BaseState.State, _old_state: BaseState.State) -> 
 	visible = get_state_visible(new_state)
 
 func get_state_visible(new_state: BaseState.State) -> bool:
+	if !inside_diagram_control:
+		return false
+	
 	if new_state == BaseState.State.Idle:
 		return can_draw
 	

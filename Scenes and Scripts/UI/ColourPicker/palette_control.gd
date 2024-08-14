@@ -40,7 +40,7 @@ func save_palettes() -> void:
 		if !palette_item.palette.is_custom:
 			continue
 		
-		FileManager.save(palette_item.palette, palette_item.file_path)
+		ResourceSaver.save(palette_item.palette, palette_item.file_path)
 
 func _on_add_problem_pressed() -> void:
 	$PaletteList.create_new_palette(FileManager.get_unique_file_name(get_custom_file_path()))

@@ -45,6 +45,7 @@ visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
+[connection signal="tree_entered" from="." to="." method="_on_tree_entered"]
 [connection signal="close" from="ProblemSelection/ProblemSetList" to="." method="_on_problem_set_list_close"]
 [connection signal="enter_problem_set" from="ProblemSelection/ProblemSetList" to="." method="_on_problem_set_list_enter_problem_set"]
 [connection signal="back" from="ProblemSelection/ProblemList" to="." method="_on_problem_list_back"]

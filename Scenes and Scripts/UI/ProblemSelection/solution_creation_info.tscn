@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://bvn4ssrvphh28"]
+[gd_scene load_steps=30 format=3 uid="uid://bvn4ssrvphh28"]
 
 [ext_resource type="Texture2D" uid="uid://tql14gtq05lf" path="res://Textures/UI/Information/invalid.png" id="1_mp3ie"]
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_vwd38"]
@@ -10,6 +10,8 @@
 [ext_resource type="Theme" uid="uid://cu3v7nxs2h2hu" path="res://Resources/Themes/spin_box.tres" id="5_yylr5"]
 [ext_resource type="Texture2D" uid="uid://bcu6ptkd3fwfe" path="res://Textures/Buttons/icons/submit.png" id="6_eyill"]
 [ext_resource type="Script" path="res://Scenes and Scripts/Classes/spin_box.gd" id="7_aqn1d"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cixn1"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vj8pa"]
 
@@ -53,6 +55,7 @@ use_parent_material = true
 custom_minimum_size = Vector2(2.08165e-12, 150)
 offset_right = 121.0
 offset_bottom = 200.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_cixn1")
 script = ExtResource("2_6e24i")
 title = "3. Solution Creation"
 prev_button = NodePath("VBoxContainer/Buttons/PrevStep")

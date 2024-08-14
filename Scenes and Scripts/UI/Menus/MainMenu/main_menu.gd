@@ -33,3 +33,6 @@ func _on_exit_game(_mode: BaseMode.Mode, _problem: Problem) -> void:
 
 func add_floating_menu(menu: Control) -> void:
 	$FloatingMenus.add_child(menu)
+
+func _on_tutorial_pressed() -> void:
+	tutorial_pressed.emit()

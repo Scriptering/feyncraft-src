@@ -75,14 +75,11 @@ offset_left = 48.0
 offset_top = 32.0
 offset_right = 592.0
 offset_bottom = 192.0
-mouse_filter = 2
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxTexture_qgodk")
 script = ExtResource("5_3sh45")
 freeze_vision = true
 freeze_statelines = true
-vision_line_offset = null
-min_vision_line_offset_factor = null
-max_vision_line_offset_factor = null
 grid_size = 16
 InteractionInstance = ExtResource("6_x1gwm")
 particle_line_scene = ExtResource("7_ts01x")
@@ -353,8 +350,6 @@ script = ExtResource("34_pwybq")
 
 [node name="FloatingMenus" type="CanvasLayer" parent="."]
 
-[connection signal="mouse_entered" from="Diagram" to="Diagram" method="_on_mouse_entered"]
-[connection signal="mouse_exited" from="Diagram" to="Diagram" method="_on_mouse_exited"]
 [connection signal="pressed" from="Center/VBoxContainer/Tutorial" to="." method="_on_tutorial_pressed"]
 [connection signal="pressed" from="Center/VBoxContainer/Sandbox" to="." method="_on_sandbox_pressed"]
 

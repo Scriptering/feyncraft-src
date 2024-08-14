@@ -77,6 +77,8 @@ func _grab_area_hovered_changed(new_value: bool) -> void:
 
 func _input(event: InputEvent) -> void:
 	super._input(event)
+
+func _unhandled_input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("click") and hovering:
 		clicked_on.emit(self)
 

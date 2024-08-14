@@ -71,9 +71,6 @@ func enter_level(args: Array = [BaseMode.Mode.Sandbox]) -> void:
 func enter_main_menu(_args: Array = []) -> void:
 	Globals.in_main_menu = true
 	modifying_problem_item = null
-	
-	await get_tree().process_frame
-	MainMenu.reload_problem_selection()
 
 func _on_sandbox_pressed() -> void:
 	change_scene(Scene.Level, [BaseMode.Mode.Sandbox])
