@@ -3,7 +3,13 @@ extends ListItem
 signal view
 signal play
 
+@export_group("Children")
 @export var title:LineEdit
+@export var delete:PanelButton
+@export var upload:PanelButton
+@export var index_label: Label
+@export var completed:TextureRect
+@export var play_button:PanelButton
 
 var problem_set: ProblemSet
 var file_path: String
@@ -14,15 +20,12 @@ func _ready() -> void:
 	update()
 
 func toggle_edit_visibility(can_edit: bool, can_delete: bool = can_edit) -> void:
-	$HBoxContainer/PanelContainer/HBoxContainer/Delete.visible = can_delete
+	delete.visible = can_delete
 	title.editable = can_edit
-	$HBoxContainer/PanelContainer/HBoxContainer/Upload.visible = can_edit
-
-func set_index(new_index: int) -> void:
-	$HBoxContainer/Index.text = str(new_index+1)
-
+	upload.visible = can_edit
+	
 func update_problem_index() -> void:
-	$HBoxContainer/PanelContainer/HBoxContainer/IndexLabel.text = (
+	index_label.text = (
 		str(problem_set.highest_index_reached) + "/" + str(problem_set.problems.size())
 	)
 
@@ -33,16 +36,16 @@ func load_problem_set(_problem_set: ProblemSet) -> void:
 func update() -> void:
 	var no_problems : bool = problem_set.problems.size() == 0
 	
-	$HBoxContainer/PanelContainer/HBoxContainer/Play.disabled = no_problems
-	$HBoxContainer/PanelContainer/HBoxContainer/Upload.disabled = no_problems
-	$HBoxContainer/Completed.visible = (
+	play_button.disabled = no_problems
+	upload.disabled = no_problems
+	completed.visible = (
 		!no_problems and problem_set.highest_index_reached >= problem_set.problems.size()
 	)
 	
 	update_problem_index()
 
 func reload() -> void:
-	problem_set = FileManager.load_txt(file_path)
+	problem_set = load(file_path)
 	
 	await get_tree().process_frame
 	
@@ -57,23 +60,12 @@ func _on_view_pressed() -> void:
 func _on_play_pressed() -> void:
 	play.emit(problem_set)
 
-func _on_upload_toggled(button_pressed: bool) -> void:
-	if !button_pressed:
-		return
-	
-	await get_tree().process_frame
-	
-	var uploading_problem_set : ProblemSet = problem_set.duplicate(true)
-	uploading_problem_set.highest_index_reached = 0
-	uploading_problem_set.is_custom = false
-	
-	$HBoxContainer/PanelContainer/HBoxContainer/Upload.set_text(
-		Globals.get_resource_save_data(uploading_problem_set)
-	)
-
 func save() -> void:
-	FileManager.save(problem_set, file_path)
+	ResourceSaver.save(problem_set, file_path)
 
 func _on_title_text_submitted(new_text: String) -> void:
 	problem_set.title = new_text
 	save()
+
+func _on_upload_pressed() -> void:
+	ClipBoard.copy(FileManager.get_resource_save_data(problem_set))

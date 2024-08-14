@@ -174,6 +174,10 @@ func generate_diagrams(
 	generated_connection_matrices = cut_colourless_matrices(generated_connection_matrices)
 	generated_connection_matrices = convert_general_matrices(generated_connection_matrices)
 	
+	if generated_connection_matrices.size() == 0:
+		if print_results:
+			print('Generation failed')
+	
 	if find == Find.One:
 		return [generated_connection_matrices.pick_random()]
 	
@@ -643,6 +647,9 @@ func convert_general_matrices(general_connection_matrices: Array[ConnectionMatri
 
 func convert_general_matrix(matrix: ConnectionMatrix) -> ConnectionMatrix:
 	for id:int in matrix.get_state_ids(StateLine.State.None):
+		if matrix == null:
+			return null
+		
 		if id_needs_converting(id, matrix):
 			matrix = convert_general_id(id, matrix)
 

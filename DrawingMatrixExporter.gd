@@ -83,7 +83,7 @@ func get_connection_string(id: int, to_id: int, particle: ParticleData.Particle)
 func get_fermion_string() -> String:
 	var fermion_string: String = ""
 	
-	var particle_matrix = matrix.get_reduced_matrix(
+	var particle_matrix : DrawingMatrix = matrix.get_reduced_matrix(
 		func(particle : ParticleData.Particle) -> bool:
 			return particle in ParticleData.FERMIONS
 	)
@@ -408,6 +408,10 @@ func get_hadron_string(hadron_ids:PackedInt32Array,) -> String:
 
 func calc_positions() -> Array[Vector2i]:
 	positions = matrix.normalised_interaction_positions
+	
+	if positions.is_empty():
+		return []
+	
 	var lowest_x : int = get_lowest_x(positions)
 	var highest_y : int = get_highest_y(positions)
 	

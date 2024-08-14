@@ -123,7 +123,6 @@ stretch_mode = 2
 [node name="Label" type="Label" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/NoStatesToSave"]
 use_parent_material = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 8
 text = "No states to save
 "
 
@@ -135,7 +134,6 @@ layout_mode = 2
 [node name="Label" type="Label" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/StatesSaved"]
 use_parent_material = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 8
 text = "States saved"
 
 [node name="NoDiagramsFound" type="HBoxContainer" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer"]
@@ -151,7 +149,6 @@ stretch_mode = 2
 [node name="Label" type="Label" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/NoDiagramsFound"]
 use_parent_material = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 8
 text = "No diagrams found"
 
 [node name="GenerationSuccess" type="HBoxContainer" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer"]
@@ -162,7 +159,6 @@ layout_mode = 2
 [node name="Label" type="Label" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/GenerationSuccess"]
 use_parent_material = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 8
 text = "Generation finished
 "
 
@@ -326,6 +322,8 @@ tooltip = "View generated diagrams"
 [node name="Tab" parent="MovingContainer/MovingContainer" instance=ExtResource("6_7e8c8")]
 layout_mode = 2
 TabIcon = ExtResource("4_xnawx")
+TabMinimumSize = Vector2(28, 25)
+expand_icon = true
 icon_use_parent_material = true
 
 [connection signal="push_in_finished" from="MovingContainer/SubmitFeedback" to="." method="_on_submit_feedback_push_in_finished"]

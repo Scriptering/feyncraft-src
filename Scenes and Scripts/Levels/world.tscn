@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://c7n4o6dbkwilh"]
+[gd_scene load_steps=42 format=3 uid="uid://c7n4o6dbkwilh"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/Levels/World.gd" id="1"]
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_6ope2"]
@@ -8,7 +8,9 @@
 [ext_resource type="PackedScene" uid="uid://cv6hlxtiukmtc" path="res://Scenes and Scripts/UI/VisionButtons/vision_buttons.tscn" id="3_hqsoq"]
 [ext_resource type="PackedScene" uid="uid://pgnduadnvgfx" path="res://Scenes and Scripts/Diagram/StateLine.tscn" id="4"]
 [ext_resource type="Texture2D" uid="uid://c2myqhjupqo25" path="res://Textures/Background/tile.png" id="4_k4tjo"]
+[ext_resource type="Script" path="res://Scenes and Scripts/Levels/tile_easter_egg.gd" id="4_q7vfn"]
 [ext_resource type="PackedScene" uid="uid://bhi4xq3qdbt4d" path="res://Scenes and Scripts/Diagram/interaction.tscn" id="6_aqbiw"]
+[ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="6_hcc8u"]
 [ext_resource type="PackedScene" uid="uid://b22nw60juoc6k" path="res://Scenes and Scripts/Diagram/particle_line.tscn" id="7_sgp8p"]
 [ext_resource type="StyleBox" uid="uid://bubm5sx3xn6q5" path="res://Resources/Themes/TitleLabel.tres" id="7_yb0gu"]
 [ext_resource type="Texture2D" uid="uid://doyaei3vq3cbb" path="res://Textures/Background/state_line_shadow_top.png" id="8_fwvkc"]
@@ -32,6 +34,9 @@
 [ext_resource type="PackedScene" uid="uid://c5scpc4iadf17" path="res://Scenes and Scripts/UI/ProblemSelection/creation_information.tscn" id="31_l3pqm"]
 [ext_resource type="Script" path="res://Scenes and Scripts/Levels/Hadrons.gd" id="31_rb52u"]
 [ext_resource type="Script" path="res://Scenes and Scripts/tutorial/TutorialStep.gd" id="31_t51na"]
+[ext_resource type="PackedScene" uid="uid://cv1hcrp0bkj2o" path="res://Scenes and Scripts/Diagram/decoration.tscn" id="33_8ahpc"]
+[ext_resource type="Texture2D" uid="uid://bhbno8fhsgyg8" path="res://Scenes and Scripts/UI/face.png" id="34_w3m6h"]
+[ext_resource type="Texture2D" uid="uid://b3j24x3p00ruh" path="res://Textures/Background/fake_tile.png" id="34_ytvfy"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vcfy5"]
 
@@ -61,6 +66,37 @@ offset_bottom = 360.0
 mouse_filter = 2
 texture = ExtResource("4_k4tjo")
 stretch_mode = 1
+
+[node name="TileEasterEgg" type="Node2D" parent="."]
+use_parent_material = true
+script = ExtResource("4_q7vfn")
+
+[node name="Tooltip" parent="TileEasterEgg" instance=ExtResource("6_hcc8u")]
+show_delay = 0.0
+hide_delay = 1.0
+manual_placement = true
+
+[node name="TooltipPanel" parent="TileEasterEgg/Tooltip" index="0"]
+offset_left = 13.0
+offset_top = 264.0
+offset_right = 26.0
+offset_bottom = 283.0
+
+[node name="Face" type="Sprite2D" parent="TileEasterEgg"]
+use_parent_material = true
+position = Vector2(40, 296)
+texture = ExtResource("34_w3m6h")
+
+[node name="Decoration" parent="TileEasterEgg" instance=ExtResource("33_8ahpc")]
+z_index = 0
+use_parent_material = true
+custom_minimum_size = Vector2(18, 18)
+offset_left = 31.0
+offset_top = 287.0
+offset_right = 49.0
+offset_bottom = 305.0
+texture = ExtResource("34_ytvfy")
+decor = 0
 
 [node name="Diagram" type="Panel" parent="." node_paths=PackedStringArray("Title")]
 use_parent_material = true
@@ -256,36 +292,6 @@ patch_margin_bottom = 15
 
 [node name="ProblemGeneration" parent="Algorithms" instance=ExtResource("13_62803")]
 
-[node name="FloatingMenus" type="Node2D" parent="."]
-z_index = 2
-use_parent_material = true
-
-[node name="CreationInformation" parent="FloatingMenus" instance=ExtResource("31_l3pqm")]
-visible = false
-offset_left = 489.0
-offset_top = 87.0
-offset_right = 489.0
-offset_bottom = 87.0
-
-[node name="SubmittedDiagrams" parent="FloatingMenus" node_paths=PackedStringArray("BigDiagram") instance=ExtResource("27_laye5")]
-visible = false
-offset_left = 316.0
-offset_top = 160.0
-offset_right = 316.0
-offset_bottom = 160.0
-allow_resaving = true
-title = "Submitted Diagrams"
-BigDiagram = NodePath("../../Diagram")
-
-[node name="GeneratedDiagrams" parent="FloatingMenus" node_paths=PackedStringArray("BigDiagram") instance=ExtResource("27_laye5")]
-visible = false
-offset_left = 316.0
-offset_top = 160.0
-offset_right = 316.0
-offset_bottom = 160.0
-title = "Generated Diagrams"
-BigDiagram = NodePath("../../Diagram")
-
 [node name="PullOutTabs" type="Node2D" parent="."]
 z_index = 3
 use_parent_material = true
@@ -340,10 +346,39 @@ offset_bottom = -39.0
 move_direction = 3
 
 [node name="ExportTab" parent="PullOutTabs" instance=ExtResource("27_jfab7")]
+z_index = 1
 offset_left = 613.0
 offset_top = 134.0
 offset_right = 613.0
 offset_bottom = 134.0
+
+[node name="FloatingMenus" type="CanvasLayer" parent="."]
+
+[node name="CreationInformation" parent="FloatingMenus" instance=ExtResource("31_l3pqm")]
+visible = false
+offset_left = 489.0
+offset_top = 87.0
+offset_right = 489.0
+offset_bottom = 87.0
+
+[node name="SubmittedDiagrams" parent="FloatingMenus" node_paths=PackedStringArray("BigDiagram") instance=ExtResource("27_laye5")]
+visible = false
+offset_left = 316.0
+offset_top = 160.0
+offset_right = 316.0
+offset_bottom = 160.0
+allow_resaving = true
+title = "Submitted Diagrams"
+BigDiagram = NodePath("../../Diagram")
+
+[node name="GeneratedDiagrams" parent="FloatingMenus" node_paths=PackedStringArray("BigDiagram") instance=ExtResource("27_laye5")]
+visible = false
+offset_left = 316.0
+offset_top = 160.0
+offset_right = 316.0
+offset_bottom = 160.0
+title = "Generated Diagrams"
+BigDiagram = NodePath("../../Diagram")
 
 [node name="ShaderControl" type="Node" parent="."]
 script = ExtResource("2")
@@ -483,16 +518,19 @@ text = "This is the end of the tutorial! Have fun! Check out the sandbox mode fo
 Press finish when ready."
 enable_spotlight = false
 
+[connection signal="dropped" from="TileEasterEgg/Decoration" to="TileEasterEgg" method="_on_decoration_dropped"]
+[connection signal="picked_up" from="TileEasterEgg/Decoration" to="TileEasterEgg" method="_on_decoration_picked_up"]
 [connection signal="text_changed" from="Diagram/TitleContainer/Title" to="Diagram/TitleContainer/Title" method="_on_text_changed"]
 [connection signal="text_submitted" from="Diagram/TitleContainer/Title" to="Diagram" method="_on_title_text_submitted"]
+[connection signal="export_pressed" from="PullOutTabs/ExportTab" to="." method="_on_export_tab_export_pressed"]
 [connection signal="submit_problem" from="FloatingMenus/CreationInformation" to="." method="_on_creation_information_submit_problem"]
 [connection signal="toggle_all" from="FloatingMenus/CreationInformation" to="." method="_on_creation_information_toggle_all"]
-[connection signal="export_pressed" from="PullOutTabs/ExportTab" to="." method="_on_export_tab_export_pressed"]
 [connection signal="finish_pressed" from="Tutorial/TutorialInfo" to="." method="_on_tutorial_info_finish_pressed"]
 [connection signal="next_pressed" from="Tutorial/TutorialInfo" to="Tutorial" method="_on_tutorial_info_next_pressed"]
 [connection signal="prev_pressed" from="Tutorial/TutorialInfo" to="Tutorial" method="_on_tutorial_info_prev_pressed"]
 [connection signal="next_step" from="Tutorial/Steps/ProblemTab" to="Tutorial" method="_on_problem_tab_next_step"]
 
+[editable path="TileEasterEgg/Tooltip"]
 [editable path="Diagram/DiagramArea/Initial"]
 [editable path="Diagram/DiagramArea/Final"]
 [editable path="Algorithms/SolutionGeneration"]

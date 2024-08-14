@@ -10,6 +10,7 @@ signal draw_raw_diagram
 signal add_floating_menu
 signal change_cursor
 signal save_files
+signal show_feedback(feedback: String)
 signal diagram_submitted(diagram: DrawingMatrix, submissions: Array[DrawingMatrix])
 signal signal_enter_game
 signal signal_change_scene(scene: Globals.Scene, args: Array)

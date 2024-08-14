@@ -2,7 +2,7 @@ extends Control
 class_name GrabbableControl
 
 signal grab_area_clicked
-signal picked_up
+signal picked_up(object: GrabbableControl)
 signal dropped(object: GrabbableControl)
 
 @export var GrabAreas: Array[Node]

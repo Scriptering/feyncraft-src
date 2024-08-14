@@ -39,7 +39,7 @@ class LineYSort:
 		return false
 		
 	static func FinalSorter(line1: ParticleLine, line2: ParticleLine) -> bool:
-		if line1.points[line1.right_point].y < line2.points[line1.right_point].y:
+		if line1.points[line1.right_point].y < line2.points[line2.right_point].y:
 			return true
 		return false
 

@@ -129,7 +129,7 @@ func submit_diagram() -> void:
 	
 	NextProblem.disabled = !in_sandbox and submitted_diagrams.size() < current_problem.solution_count
 	
-	EventBus.signal_diagram_submitted.emit(submission, submitted_diagrams)
+	EventBus.diagram_submitted.emit(submission, submitted_diagrams)
 
 func generate_solution() -> ConnectionMatrix:
 	return(SolutionGeneration.generate_diagrams(
@@ -178,7 +178,7 @@ func _on_solution_pressed() -> void:
 	if current_problem.custom_solutions:
 		EventBus.draw_diagram.emit(current_problem.solutions.pick_random())
 	else:
-		EventBus.draw_diagram_raw.emit(generate_solution())
+		EventBus.draw_raw_diagram.emit(generate_solution())
 
 func _on_rewind_pressed() -> void:
 	prev_problem_pressed.emit()

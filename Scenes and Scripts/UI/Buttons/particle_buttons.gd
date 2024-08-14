@@ -1,5 +1,7 @@
 extends Control
 
+signal particle_selected(particle: ParticleData.Particle)
+
 var selected_particle: int = ParticleData.Particle.none
 var particle_buttons: Array[PanelButton] = []
 
@@ -28,6 +30,7 @@ func _ready() -> void:
 
 func on_particle_button_pressed(button:PanelButton) -> void:
 	selected_particle = button.particle
+	particle_selected.emit(selected_particle)
 
 func add_buttons_to_button_group() -> void:
 	particle_button_group = ButtonGroup.new()

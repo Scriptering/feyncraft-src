@@ -2,7 +2,6 @@ extends ListItem
 
 signal selected
 
-
 @export var palette: Palette = Palette.new()
 
 @export_group("Children")
@@ -13,6 +12,7 @@ signal selected
 @export var DeleteButton: PanelButton
 @export var UploadButton: PanelButton
 @export var Title: LineEdit
+@export var Shuffle: PanelButton
 
 @export var PrimaryColourButton: ColourButton
 @export var GridColourButton: ColourButton
@@ -40,10 +40,6 @@ var file_path: String
 var is_selected: bool = false: set = _set_is_selected
 var main_colours: Array[Palette.ColourIndex] = [Palette.ColourIndex.Primary, Palette.ColourIndex.Grid, Palette.ColourIndex.Secondary]
 
-func _ready() -> void:
-	if !palette.is_custom:
-		init()
-
 func init() -> void:
 	toggle_more_colours(false)
 	
@@ -57,6 +53,7 @@ func init() -> void:
 	update_button_colours(false)
 	set_custom_button_visibility()
 	Title.text = palette.title
+	Title.editable = palette.is_custom
 
 func _on_more_toggled(button_pressed: bool) -> void:
 	toggle_more_colours(button_pressed)
@@ -94,6 +91,7 @@ func get_button_colours() -> Array[Color]:
 func set_buttons_disabled(disable: bool) -> void:
 	for colour_button:ColourButton in ColourButtonDict.values():
 		colour_button.set_disabled(disable)
+	
 
 func load_data(_palette: Palette) -> void:
 	palette = _palette
@@ -104,6 +102,8 @@ func load_data(_palette: Palette) -> void:
 func set_custom_button_visibility() -> void:
 	DeleteButton.visible = palette.is_custom
 	UploadButton.visible = palette.is_custom
+	Shuffle.visible = palette.is_custom
+	ClearButton.visible = palette.is_custom
 
 func update_custom_palette() -> void:
 	if palette.advanced_colours:
@@ -141,9 +141,6 @@ func _on_colour_button_colour_changed(colour_button: ColourButton, new_colour: C
 	
 	update_button_colours()
  
-func _on_use_toggled(button_pressed: bool) -> void:
-	self.is_selected = button_pressed
-
 func _set_is_selected(new_value: bool) -> void:
 	var prev_value: bool = is_selected
 	is_selected = new_value
@@ -161,18 +158,16 @@ func _on_title_text_changed(new_text: String) -> void:
 	palette.title = new_text
 	save()
 
-func _on_upload_toggled(button_pressed:bool) -> void:
-	if !button_pressed:
-		return
-	
-	await get_tree().process_frame
-	
-	UploadButton.set_text(Globals.get_resource_save_data(palette))
-
 func save() -> void:
-	FileManager.save(palette, file_path)
+	ResourceSaver.save(palette, file_path)
 
 func _on_clear_pressed() -> void:
 	palette.advanced_colours = false
 	ClearButton.hide()
 	update_custom_palette()
+
+func _on_upload_pressed() -> void:
+	ClipBoard.copy(FileManager.get_resource_save_data(palette))
+
+func _on_view_toggled(button_pressed: bool) -> void:
+	self.is_selected = button_pressed

@@ -19,12 +19,11 @@ signal initialised
 @onready var VisionTab := $PullOutTabs/VisionButton
 @onready var CreationInformation := $FloatingMenus/CreationInformation
 @onready var HealthTab := $PullOutTabs/HealthTab
-@onready var Diagram: DiagramBase = $Diagram
+@onready var Diagram: MainDiagram = $Diagram
 @onready var Tutorial := $Tutorial
 
 var ControlsTab: Control
 var StateManager: Node
-var PaletteMenu: GrabbableControl
 
 var previous_mode: BaseMode.Mode = BaseMode.Mode.Null
 var current_mode: BaseMode.Mode = BaseMode.Mode.Null: set = _set_current_mode
@@ -57,10 +56,9 @@ func _set_current_mode(new_value: BaseMode.Mode) -> void:
 	current_mode = new_value
 	mode_enter_funcs[current_mode].call()
 
-func init(state_manager: Node, controls_tab: Control, palette_list: GrabbableControl) -> void:
+func init(state_manager: Node, controls_tab: Control) -> void:
 	StateManager = state_manager
 	ControlsTab = controls_tab
-	PaletteMenu = palette_list
 	VisionTab.vision_button_toggled.connect(_vision_button_toggled)
 	MenuTab.toggled_line_labels.connect(
 		func(toggle: bool) -> void:
@@ -72,9 +70,8 @@ func init(state_manager: Node, controls_tab: Control, palette_list: GrabbableCon
 	ProblemTab.prev_problem_pressed.connect(_on_prev_problem_pressed)
 	
 	Tutorial.init(self)
-	MenuTab.init(PaletteMenu)
 	CreationInformation.init(Diagram, self, ProblemTab)
-	Diagram.init(ParticleButtons, ControlsTab, VisionTab, $Algorithms/PathFinding, StateManager)
+	Diagram.init(ControlsTab, $Algorithms/PathFinding, StateManager)
 	GenerationTab.init(Diagram, $Algorithms/SolutionGeneration, $FloatingMenus/GeneratedDiagrams)
 	ProblemTab.init(
 		Diagram, Problem.new(), $FloatingMenus/SubmittedDiagrams, $Algorithms/ProblemGeneration, $Algorithms/SolutionGeneration
@@ -86,10 +83,17 @@ func init(state_manager: Node, controls_tab: Control, palette_list: GrabbableCon
 	
 	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
 	
+	ParticleButtons.particle_selected.connect(_on_particle_selected)
+	
 	initialised.emit()
 
-func _vision_button_toggled(current_vision: Globals.Vision) -> void:
+func _on_particle_selected(particle: ParticleData.Particle) -> void:
+	Diagram.drawing_particle = particle
+
+func _vision_button_toggled(current_vision: Globals.Vision, toggle: bool) -> void:
 	$ShaderControl.toggle_interaction_strength(current_vision == Globals.Vision.Strength)
+	Diagram.set_current_vision(current_vision)
+	Diagram.vision_button_toggled(current_vision, toggle)
 
 func load_test_problem() -> void:
 	var test_problem: Problem = Problem.new()
@@ -229,7 +233,7 @@ func enter_tutorial() -> void:
 	Tutorial.show()
 	
 	Tutorial.reset()
-	load_problem_set(FileManager.load_txt("res://saves/ProblemSets/tutorial.txt"), 0)
+	load_problem_set(load("res://saves/ProblemSets/tutorial.tres"), 0)
 
 func exit_tutorial() -> void:
 	Tutorial.clear()
@@ -273,13 +277,16 @@ func _on_prev_problem_pressed() -> void:
 		BaseMode.Mode.Tutorial:
 			load_problem(problem_set.previous_problem())
 			ProblemTab.set_prev_problem_disabled(problem_set.current_index == 0)
+			ProblemTab.set_next_problem_disabled(false)
 		BaseMode.Mode.ProblemSolving:
 			load_problem(problem_set.previous_problem())
 			ProblemTab.set_prev_problem_disabled(problem_set.current_index == 0)
+			ProblemTab.set_next_problem_disabled(false)
 		BaseMode.Mode.Sandbox:
 			load_problem(problem_history[-1])
 			problem_history.pop_back()
 			ProblemTab.set_prev_problem_disabled(problem_history.size() == 0)
+			ProblemTab.set_next_problem_disabled(false)
 	
 	Diagram.clear_diagram()
 
@@ -316,3 +323,6 @@ func _on_export_tab_export_pressed(join_paths: bool, draw_internal_labels: bool,
 	var export_string: String = exporter.generate_export()
 	
 	ClipBoard.copy(export_string)
+
+func add_floating_menu(menu: Control) -> void:
+	$FloatingMenus.add_child(menu)

@@ -4,10 +4,10 @@ signal colour_changed(colour: Color)
 signal closed
 signal sampler_toggled(button_pressed: bool)
 
-@onready var ColourPicker: ColorPicker = $VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/ColorPicker
+@export var colour_picker: ColorPicker
+@export var title_label: Label
 
 var starting_colour: Color = Color.BLACK
-var title: String = "": set = _set_title
 
 var sampling: bool = false
 var screen_image: Image
@@ -20,12 +20,8 @@ func _ready() -> void:
 var colour: Color:
 	set(new_value):
 		colour = new_value
-		ColourPicker.color = colour
+		colour_picker.color = colour
 		colour_changed.emit(colour)
-
-func _set_title(new_value: String) -> void:
-	title = new_value
-	$VBoxContainer/TitleContainer/HBoxContainer/Title.text = title
 
 func _on_color_picker_color_changed(color: Color) -> void:
 	colour_changed.emit(color)
@@ -47,3 +43,6 @@ func _on_line_edit_text_submitted(new_text: String) -> void:
 
 func _on_colour_sampler_sample_submitted(submitted_colour: Color) -> void:
 	self.colour = submitted_colour
+
+func set_title(title: String) -> void:
+	title_label.text = title 

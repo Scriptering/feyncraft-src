@@ -2,11 +2,12 @@ extends Node2D
 
 enum Scene {Level, MainMenu}
 
+var current_scene: Scene
+
 @onready var MainMenu: Node2D = $MainMenu
 @onready var Level: Node2D = $World
 @onready var StateManager: Node = $state_manager
 @onready var ControlsTab: Control = $PullOutTabs/ControlsTab
-@onready var PaletteMenu: GrabbableControl = $FloatingMenus/PaletteMenu
 
 var modifying_problem_item : PanelContainer = null
 
@@ -26,12 +27,13 @@ func _ready() -> void:
 	if !Globals.is_on_editor and !DirAccess.dir_exists_absolute("User://saves/"):
 		create_save_folders()
 		
-		if !FileAccess.file_exists("user://saves/ProblemSets/Default/electromagnetic.txt"):
+		if !FileAccess.file_exists("user://saves/ProblemSets/Default/electromagnetic.tres"):
 			create_default_problem_sets()
 
 	MainMenu.sandbox_pressed.connect(_on_sandbox_pressed)
 	MainMenu.tutorial_pressed.connect(_on_tutorial_pressed)
 	
+	current_scene = Scene.MainMenu
 	remove_child(Level)
 	
 	EventBus.signal_change_scene.connect(change_scene)
@@ -39,23 +41,17 @@ func _ready() -> void:
 	EventBus.signal_problem_set_played.connect(_on_problem_set_played)
 	EventBus.add_floating_menu.connect(add_floating_menu)
 	
-	Level.init(StateManager, ControlsTab, PaletteMenu)
-	MainMenu.init(StateManager, ControlsTab, PaletteMenu)
+	Level.init(StateManager, ControlsTab)
+	MainMenu.init(StateManager, ControlsTab)
 	StateManager.init(MainMenu.Diagram)
 	
 	$ControlsLayer/Buttons.visible = Globals.is_on_mobile()
 	$ControlsLayer/Cursor.visible = !Globals.is_on_mobile()
 
 func add_floating_menu(menu: Control) -> void:
-	if menu.position == Vector2.ZERO:
-		menu.position = get_viewport_rect().size / 2
-	
-	$FloatingMenus.add_child(menu)
+	scenes[current_scene].add_floating_menu(menu)
 
 func change_scene(scene: Scene, args: Array = []) -> void:
-	for child in $FloatingMenus.get_children():
-		child.hide()
-	
 	switch_child_scene(scene)
 	StateManager.change_scene(scenes[scene].Diagram)
 	
@@ -63,6 +59,7 @@ func change_scene(scene: Scene, args: Array = []) -> void:
 	EventBus.change_cursor.emit(Globals.Cursor.default)
 
 func switch_child_scene(new_scene: Scene) -> void:
+	current_scene = new_scene
 	remove_child(scenes[(new_scene + 1) % 2])
 	add_child(scenes[new_scene])
 	move_child(scenes[new_scene], 0)
@@ -75,8 +72,7 @@ func enter_main_menu(_args: Array = []) -> void:
 	Globals.in_main_menu = true
 	modifying_problem_item = null
 	
-	await get_tree().process_frame
-	MainMenu.reload_problem_selection()
+	EventBus.save_files.emit()
 
 func _on_sandbox_pressed() -> void:
 	change_scene(Scene.Level, [BaseMode.Mode.Sandbox])
@@ -115,10 +111,6 @@ func create_save_folders() -> void:
 
 func create_default_problem_sets() -> void:
 	for file_path:String in FileManager.get_files_in_folder("res://saves/ProblemSets/Default/"):
-		var default_file := FileAccess.open(file_path, FileAccess.READ)
-		FileManager.create_text_file(
-			default_file.get_as_text(), "user://saves/ProblemSets/Default/" + file_path.trim_prefix("res://saves/ProblemSets/Default/")
-		)
-		default_file.close()
+		DirAccess.copy_absolute(file_path, "user://saves/ProblemSets/Default/")
 	
 	await get_tree().process_frame
