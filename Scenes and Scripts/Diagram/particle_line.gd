@@ -369,6 +369,9 @@ func is_duplicate(particle_line: ParticleLine) -> bool:
 	if particle_line == self:
 		return false
 	
+	if particle_line.points[Point.Start] == particle_line.points[Point.End]:
+		return false
+	
 	if !(particle_line.points[Point.Start] in points):
 		return false
 	
@@ -379,6 +382,9 @@ func is_duplicate(particle_line: ParticleLine) -> bool:
 
 func is_overlapping(particle_line: ParticleLine) -> bool:
 	if particle_line == self:
+		return false
+	
+	if particle_line.points[Point.Start] == particle_line.points[Point.End]:
 		return false
 	
 	if !(
