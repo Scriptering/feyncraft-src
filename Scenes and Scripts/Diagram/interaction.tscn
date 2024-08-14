@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://bhi4xq3qdbt4d"]
+[gd_scene load_steps=35 format=3 uid="uid://bhi4xq3qdbt4d"]
 
 [ext_resource type="Texture2D" uid="uid://dujsq82ocy6bp" path="res://Textures/Interactions/Interaction.png" id="1"]
 [ext_resource type="Material" uid="uid://clhuw6cdr2tdj" path="res://Resources/Shaders/interaction.tres" id="1_151mx"]
@@ -16,7 +16,6 @@
 [ext_resource type="Texture2D" uid="uid://dymxtxnwexs03" path="res://Textures/Interactions/dot_decor.png" id="8_8166d"]
 [ext_resource type="Texture2D" uid="uid://cqviq7dkajove" path="res://Textures/Interactions/crossed_dot_highlight.png" id="8_b83mn"]
 [ext_resource type="Material" uid="uid://dc4rnoi735twf" path="res://Resources/Shaders/outline_palette_swap.tres" id="8_kmrm7"]
-[ext_resource type="PackedScene" uid="uid://bp22b2ydisdm0" path="res://Scenes and Scripts/Components/area_button.tscn" id="9_24vtf"]
 [ext_resource type="PackedScene" uid="uid://dorw3vr2amuy3" path="res://Scenes and Scripts/Components/button_sound_component.tscn" id="9_b7d5g"]
 [ext_resource type="Texture2D" uid="uid://dr5u8gty4wev3" path="res://Textures/Interactions/dot_decor_highlight.png" id="12_td0bq"]
 
@@ -187,9 +186,6 @@ animations = [{
 
 [sub_resource type="LabelSettings" id="LabelSettings_q6um2"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_usurp"]
-size = Vector2(12, 12)
-
 [node name="Interaction" type="Node2D" node_paths=PackedStringArray("GrabArea") groups=["grabbable", "interactions"]]
 material = ExtResource("1_151mx")
 script = ExtResource("2")
@@ -229,12 +225,12 @@ vertical_alignment = 1
 [node name="ButtonSoundComponent" parent="." instance=ExtResource("9_b7d5g")]
 manual = true
 
-[node name="MouseAreaButton" parent="." instance=ExtResource("9_24vtf")]
-collision_layer = 1
-action_mode = 1
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MouseAreaButton"]
-shape = SubResource("RectangleShape2D_usurp")
+[node name="MouseAreaButton" type="Button" parent="."]
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 6.0
+offset_bottom = 6.0
+flat = true
 
 [connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
 [connection signal="pressed" from="MouseAreaButton" to="." method="_on_mouse_area_button_pressed"]

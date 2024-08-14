@@ -5,12 +5,9 @@ signal play_problem_set(mode: BaseMode.Mode, problem_set: ProblemSet, problem: P
 signal close
 
 var problem_set_file_path: String = "res://saves/ProblemSets/"
-var web_problem_set_file_path: String = "user://saves/ProblemSets/"
 var ProblemSetItem: PackedScene = preload("res://Scenes and Scripts/UI/ProblemSelection/problem_set_item.tscn")
 
 @export var problem_container:PanelItemList
-
-var problem_sets: Array[ProblemSet]
 
 func _ready() -> void:
 	play_problem_set.connect(EventBus.enter_game)
@@ -76,8 +73,6 @@ func update_problem_sets() -> void:
 func _problem_set_deleted(problem_set_item: PanelContainer) -> void:
 	var index: int = problem_container.get_items().find(problem_set_item)
 	FileManager.delete_file(problem_set_item.file_path)
-
-	problem_sets.remove_at(index)
 	problem_set_item.queue_free()
 	
 	update_index_labels()
@@ -103,10 +98,6 @@ func update() -> void:
 func _on_close_pressed() -> void:
 	close.emit()
 
-func resave_txt_as_tres(problem_set_path: String) -> void:
-	var problem_set: ProblemSet = FileManager.load_txt(problem_set_path)
-	ResourceSaver.save(problem_set, problem_set_path + '.tres')
-
 func load_problem_set(problem_set_path: String) -> void:
 	var new_problem_set: ListItem = ProblemSetItem.instantiate()
 	new_problem_set.file_path = problem_set_path
@@ -118,7 +109,7 @@ func load_problem_set(problem_set_path: String) -> void:
 		new_problem_set.queue_free()
 
 func save_problem_sets() -> void:
-	for problem_set in problem_container.get_children():
+	for problem_set in problem_container.get_items():
 		ResourceSaver.save(problem_set.problem_set, problem_set.file_path)
 	
 func create_new_problem_set(problem_set: ProblemSet = null, problem_set_path: String = '') -> void:

@@ -95,6 +95,7 @@ theme_override_font_sizes/font_size = 10
 script = ExtResource("14_jxbry")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 4
 
 [node name="GlobalFeedback" type="Node" parent="CanvasLayer" node_paths=PackedStringArray("TooltipPanel", "TooltipLabel", "TooltipContainer")]
 script = ExtResource("14_x4syi")

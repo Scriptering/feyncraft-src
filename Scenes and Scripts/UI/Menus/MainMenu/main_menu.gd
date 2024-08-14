@@ -7,7 +7,6 @@ var Level := preload("res://Scenes and Scripts/Levels/world.tscn")
 var placing: bool = false
 
 @onready var Diagram: MainDiagram = $Diagram
-@onready var MenuTab: Control = $MenuTab
 
 var ControlsTab: Control
 var StateManager: Node
@@ -19,7 +18,7 @@ func init(state_manager: Node, controls_tab: Control) -> void:
 	StateManager = state_manager
 	ControlsTab = controls_tab
 
-	$Diagram.init($ParticleButtons, ControlsTab, $VisionButton, $Algorithms/PathFinding, StateManager)
+	$Diagram.init(ControlsTab, $Algorithms/PathFinding, StateManager)
 	$Algorithms/PathFinding.init($Diagram, $Diagram.StateLines)
 	$Algorithms/ProblemGeneration.init($Algorithms/SolutionGeneration)
 	

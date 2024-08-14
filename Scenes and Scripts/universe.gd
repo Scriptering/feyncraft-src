@@ -27,7 +27,7 @@ func _ready() -> void:
 	if !Globals.is_on_editor and !DirAccess.dir_exists_absolute("User://saves/"):
 		create_save_folders()
 		
-		if !FileAccess.file_exists("user://saves/ProblemSets/Default/electromagnetic.txt"):
+		if !FileAccess.file_exists("user://saves/ProblemSets/Default/electromagnetic.tres"):
 			create_default_problem_sets()
 
 	MainMenu.sandbox_pressed.connect(_on_sandbox_pressed)
@@ -71,6 +71,8 @@ func enter_level(args: Array = [BaseMode.Mode.Sandbox]) -> void:
 func enter_main_menu(_args: Array = []) -> void:
 	Globals.in_main_menu = true
 	modifying_problem_item = null
+	
+	EventBus.save_files.emit()
 
 func _on_sandbox_pressed() -> void:
 	change_scene(Scene.Level, [BaseMode.Mode.Sandbox])
@@ -109,10 +111,6 @@ func create_save_folders() -> void:
 
 func create_default_problem_sets() -> void:
 	for file_path:String in FileManager.get_files_in_folder("res://saves/ProblemSets/Default/"):
-		var default_file := FileAccess.open(file_path, FileAccess.READ)
-		FileManager.create_text_file(
-			default_file.get_as_text(), "user://saves/ProblemSets/Default/" + file_path.trim_prefix("res://saves/ProblemSets/Default/")
-		)
-		default_file.close()
+		DirAccess.copy_absolute(file_path, "user://saves/ProblemSets/Default/")
 	
 	await get_tree().process_frame

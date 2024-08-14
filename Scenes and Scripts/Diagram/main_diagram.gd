@@ -17,11 +17,12 @@ signal action_taken
 
 @onready var VisionLine := preload("res://Scenes and Scripts/Diagram/vision_line.tscn")
 
-var ParticleButtons: Control
 var Controls: Node
-var VisionButtons: Control
 var Vision: Node
 var StateManager: Node
+
+var drawing_particle: ParticleData.Particle = ParticleData.Particle.none
+var current_vision: Globals.Vision = Globals.Vision.None
 
 var line_diagram_actions: bool = true
 var show_line_labels: bool = true:
@@ -97,6 +98,12 @@ func _decoration_dropped(decoration: Decoration) -> void:
 	draw_interaction(Crosshair.position, new_interaction)
 	new_interaction.decor = decoration.decor
 
+func set_drawing_particle(particle: ParticleData.Particle) -> void:
+	drawing_particle = particle
+
+func set_current_vision(vision: Globals.Vision) -> void:
+	current_vision = vision
+
 func get_decorations() -> Array[Decoration.Decor]:
 	var decorations:Array[Decoration.Decor] = []
 	for interaction:Interaction in get_interactions():
@@ -104,11 +111,9 @@ func get_decorations() -> Array[Decoration.Decor]:
 	return decorations
 
 func init(
-	particle_buttons: Control, controls: Node, vision_buttons: Control, vision: Node, state_manager: Node
+	controls: Node, vision: Node, state_manager: Node
 ) -> void:
-	ParticleButtons = particle_buttons
 	Controls = controls
-	VisionButtons = vision_buttons
 	Vision = vision
 	StateManager = state_manager
 	
@@ -122,8 +127,6 @@ func init(
 	Controls.undo.connect(undo)
 	Controls.redo.connect(redo)
 	
-	vision_buttons.vision_button_toggled.connect(_on_vision_button_toggled)
-
 func _process(_delta: float) -> void:
 	for stateline:StateLine in StateLines:
 		if stateline.grabbed:
@@ -354,9 +357,7 @@ func update_path_vision(diagram: DrawingMatrix, current_vision: Globals.Vision) 
 
 	draw_vision_lines(paths, convert_path_colours(path_colours,current_vision), vision_matrix)
 
-func update_vision(
-	diagram: DrawingMatrix = generate_drawing_matrix_from_diagram(true), current_vision: Globals.Vision = VisionButtons.get_active_vision()
-) -> void:
+func update_vision(diagram: DrawingMatrix = generate_drawing_matrix_from_diagram(true)) -> void:
 	
 	if freeze_vision:
 		return
@@ -372,8 +373,11 @@ func update_vision(
 		update_path_vision(diagram,current_vision)
 		return
 
-func _on_vision_button_toggled(_vision: Globals.Vision) -> void:
-	queue_vision_update()
+func vision_button_toggled(_vision: Globals.Vision, toggle: bool) -> void:
+	if toggle:
+		queue_vision_update()
+	else:
+		clear_vision_lines()
 
 func move_stateline(stateline: StateLine) -> void:
 	var non_state_interactions : Array[Interaction] = []
@@ -519,9 +523,6 @@ func get_hadron_joints() -> Array[HadronJoint]:
 		hadron_joints.push_back(child)
 	
 	return hadron_joints
-
-func get_selected_particle() -> ParticleData.Particle:
-	return ParticleButtons.selected_particle
 
 func action() -> void:
 	update_vision()
@@ -868,7 +869,7 @@ func can_place_interaction(test_position: Vector2, test_interaction: Interaction
 
 func draw_particle_line(
 	start_position: Vector2i, end_position: Vector2i = Vector2i.ZERO,
-	base_particle: ParticleData.Particle = ParticleButtons.selected_particle
+	base_particle: ParticleData.Particle = drawing_particle
 ) -> ParticleLine:
 	var particle_line : ParticleLine = create_particle_line()
 	particle_line.init(self)

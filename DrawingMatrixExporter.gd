@@ -83,7 +83,7 @@ func get_connection_string(id: int, to_id: int, particle: ParticleData.Particle)
 func get_fermion_string() -> String:
 	var fermion_string: String = ""
 	
-	var particle_matrix = matrix.get_reduced_matrix(
+	var particle_matrix : DrawingMatrix = matrix.get_reduced_matrix(
 		func(particle : ParticleData.Particle) -> bool:
 			return particle in ParticleData.FERMIONS
 	)

@@ -43,7 +43,6 @@ func toggle_edit_visiblity(can_edit: bool) -> void:
 func load_problem(_problem: Problem) -> void:
 	problem = _problem
 	equation.load_problem(problem)
-	
 
 func _on_up_pressed() -> void:
 	move.emit(self, -1)

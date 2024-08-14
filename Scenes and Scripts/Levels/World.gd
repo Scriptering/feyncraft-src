@@ -19,7 +19,7 @@ signal initialised
 @onready var VisionTab := $PullOutTabs/VisionButton
 @onready var CreationInformation := $FloatingMenus/CreationInformation
 @onready var HealthTab := $PullOutTabs/HealthTab
-@onready var Diagram: DiagramBase = $Diagram
+@onready var Diagram: MainDiagram = $Diagram
 @onready var Tutorial := $Tutorial
 
 var ControlsTab: Control
@@ -71,7 +71,7 @@ func init(state_manager: Node, controls_tab: Control) -> void:
 	
 	Tutorial.init(self)
 	CreationInformation.init(Diagram, self, ProblemTab)
-	Diagram.init(ParticleButtons, ControlsTab, VisionTab, $Algorithms/PathFinding, StateManager)
+	Diagram.init(ControlsTab, $Algorithms/PathFinding, StateManager)
 	GenerationTab.init(Diagram, $Algorithms/SolutionGeneration, $FloatingMenus/GeneratedDiagrams)
 	ProblemTab.init(
 		Diagram, Problem.new(), $FloatingMenus/SubmittedDiagrams, $Algorithms/ProblemGeneration, $Algorithms/SolutionGeneration
@@ -83,10 +83,17 @@ func init(state_manager: Node, controls_tab: Control) -> void:
 	
 	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
 	
+	ParticleButtons.particle_selected.connect(_on_particle_selected)
+	
 	initialised.emit()
 
-func _vision_button_toggled(current_vision: Globals.Vision) -> void:
+func _on_particle_selected(particle: ParticleData.Particle) -> void:
+	Diagram.drawing_particle = particle
+
+func _vision_button_toggled(current_vision: Globals.Vision, toggle: bool) -> void:
 	$ShaderControl.toggle_interaction_strength(current_vision == Globals.Vision.Strength)
+	Diagram.set_current_vision(current_vision)
+	Diagram.vision_button_toggled(current_vision, toggle)
 
 func load_test_problem() -> void:
 	var test_problem: Problem = Problem.new()
@@ -270,13 +277,16 @@ func _on_prev_problem_pressed() -> void:
 		BaseMode.Mode.Tutorial:
 			load_problem(problem_set.previous_problem())
 			ProblemTab.set_prev_problem_disabled(problem_set.current_index == 0)
+			ProblemTab.set_next_problem_disabled(false)
 		BaseMode.Mode.ProblemSolving:
 			load_problem(problem_set.previous_problem())
 			ProblemTab.set_prev_problem_disabled(problem_set.current_index == 0)
+			ProblemTab.set_next_problem_disabled(false)
 		BaseMode.Mode.Sandbox:
 			load_problem(problem_history[-1])
 			problem_history.pop_back()
 			ProblemTab.set_prev_problem_disabled(problem_history.size() == 0)
+			ProblemTab.set_next_problem_disabled(false)
 	
 	Diagram.clear_diagram()
 

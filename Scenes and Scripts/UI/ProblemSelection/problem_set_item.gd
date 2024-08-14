@@ -23,9 +23,6 @@ func toggle_edit_visibility(can_edit: bool, can_delete: bool = can_edit) -> void
 	delete.visible = can_delete
 	title.editable = can_edit
 	upload.visible = can_edit
-
-func set_index(new_index: int) -> void:
-	pass
 	
 func update_problem_index() -> void:
 	index_label.text = (

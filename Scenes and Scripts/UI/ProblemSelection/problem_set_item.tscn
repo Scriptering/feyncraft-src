@@ -144,5 +144,6 @@ size_flags_horizontal = 4
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/HBoxContainer/HBoxContainer/Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/HBoxContainer/HBoxContainer/View" to="." method="_on_view_pressed"]
+[connection signal="text_submitted" from="VBoxContainer/HBoxContainer/HBoxContainer/Title" to="." method="_on_title_text_submitted"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/HBoxContainer2/Delete" to="." method="_on_delete_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/HBoxContainer2/Upload" to="." method="_on_upload_pressed"]

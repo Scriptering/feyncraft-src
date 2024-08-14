@@ -8,7 +8,7 @@ var eye_open := preload("res://Textures/Buttons/eye/eye_open.png")
 var eye_middle := preload("res://Textures/Buttons/eye/eye_middle.png")
 var eye_closed := preload("res://Textures/Buttons/eye/eye_closed.png")
 
-signal vision_button_toggled(active_vision: Globals.Vision)
+signal vision_button_toggled(active_vision: Globals.Vision, toggle: bool)
 
 var vision_button_group: ButtonGroup = ButtonGroup.new()
 
@@ -36,5 +36,5 @@ func get_active_vision() -> Globals.Vision:
 			return i as Globals.Vision
 	return Globals.Vision.None
 
-func _vision_button_toggled(_button: Button) -> void:
-	vision_button_toggled.emit(get_active_vision())
+func _vision_button_toggled(button: Button) -> void:
+	vision_button_toggled.emit(get_active_vision(), button.button_pressed)
