@@ -925,6 +925,8 @@ func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 		
 		queue_stateline_update(StateLine.State.Initial)
 		queue_stateline_update(StateLine.State.Final)
+	
+	line_diagram_actions = true
 
 func undo() -> void:
 	if !is_inside_tree():
