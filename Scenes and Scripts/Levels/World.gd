@@ -21,8 +21,8 @@ signal initialised
 @onready var HealthTab := $PullOutTabs/HealthTab
 @onready var Diagram: MainDiagram = $Diagram
 @onready var Tutorial := $Tutorial
+@onready var ControlsTab := $PullOutTabs/ControlsTab
 
-var ControlsTab: Control
 var StateManager: Node
 
 var previous_mode: BaseMode.Mode = BaseMode.Mode.Null
@@ -56,9 +56,8 @@ func _set_current_mode(new_value: BaseMode.Mode) -> void:
 	current_mode = new_value
 	mode_enter_funcs[current_mode].call()
 
-func init(state_manager: Node, controls_tab: Control) -> void:
+func init(state_manager: Node) -> void:
 	StateManager = state_manager
-	ControlsTab = controls_tab
 	VisionTab.vision_button_toggled.connect(_vision_button_toggled)
 	MenuTab.toggled_line_labels.connect(
 		func(toggle: bool) -> void:
@@ -71,7 +70,7 @@ func init(state_manager: Node, controls_tab: Control) -> void:
 	
 	Tutorial.init(self)
 	CreationInformation.init(Diagram, self, ProblemTab)
-	Diagram.init(ControlsTab, $Algorithms/PathFinding, StateManager)
+	Diagram.init($Algorithms/PathFinding, StateManager)
 	GenerationTab.init(Diagram, $Algorithms/SolutionGeneration, $FloatingMenus/GeneratedDiagrams)
 	ProblemTab.init(
 		Diagram, Problem.new(), $FloatingMenus/SubmittedDiagrams, $Algorithms/ProblemGeneration, $Algorithms/SolutionGeneration
@@ -85,7 +84,15 @@ func init(state_manager: Node, controls_tab: Control) -> void:
 	
 	ParticleButtons.particle_selected.connect(_on_particle_selected)
 	
+	ControlsTab.clear_diagram.connect(_controls_clear)
+	ControlsTab.undo.connect(func(): Diagram.undo())
+	ControlsTab.redo.connect(func(): Diagram.redo())
+	
 	initialised.emit()
+
+func _controls_clear() -> void:
+	Diagram.add_diagram_to_history()
+	Diagram.clear_diagram()
 
 func _on_particle_selected(particle: ParticleData.Particle) -> void:
 	Diagram.drawing_particle = particle

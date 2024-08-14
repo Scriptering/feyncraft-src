@@ -8,17 +8,15 @@ var placing: bool = false
 
 @onready var Diagram: MainDiagram = $Diagram
 
-var ControlsTab: Control
 var StateManager: Node
 
 func _ready() -> void:
 	EventBus.signal_exit_game.connect(_on_exit_game)
 
-func init(state_manager: Node, controls_tab: Control) -> void:
+func init(state_manager: Node) -> void:
 	StateManager = state_manager
-	ControlsTab = controls_tab
 
-	$Diagram.init(ControlsTab, $Algorithms/PathFinding, StateManager)
+	$Diagram.init($Algorithms/PathFinding, StateManager)
 	$Algorithms/PathFinding.init($Diagram, $Diagram.StateLines)
 	$Algorithms/ProblemGeneration.init($Algorithms/SolutionGeneration)
 	

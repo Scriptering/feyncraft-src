@@ -7,7 +7,6 @@ var current_scene: Scene
 @onready var MainMenu: Node2D = $MainMenu
 @onready var Level: Node2D = $World
 @onready var StateManager: Node = $state_manager
-@onready var ControlsTab: Control = $PullOutTabs/ControlsTab
 
 var modifying_problem_item : PanelContainer = null
 
@@ -41,12 +40,13 @@ func _ready() -> void:
 	EventBus.signal_problem_set_played.connect(_on_problem_set_played)
 	EventBus.add_floating_menu.connect(add_floating_menu)
 	
-	Level.init(StateManager, ControlsTab)
-	MainMenu.init(StateManager, ControlsTab)
 	StateManager.init(MainMenu.Diagram)
 	
 	$ControlsLayer/Buttons.visible = Globals.is_on_mobile()
 	$ControlsLayer/Cursor.visible = !Globals.is_on_mobile()
+	
+	MainMenu.init(StateManager)
+	Level.init(StateManager)
 
 func add_floating_menu(menu: Control) -> void:
 	scenes[current_scene].add_floating_menu(menu)
