@@ -10,12 +10,12 @@ signal draw_raw_diagram
 signal add_floating_menu
 signal change_cursor
 signal save_files
+signal change_palette(palette: ImageTexture)
 signal show_feedback(feedback: String)
 signal diagram_submitted(diagram: DrawingMatrix, submissions: Array[DrawingMatrix])
 signal signal_enter_game
 signal signal_change_scene(scene: Globals.Scene, args: Array)
 signal signal_exit_game(mode: BaseMode.Mode, created_problem: Problem)
-signal signal_change_palette(palette: ImageTexture)
 signal signal_diagram_action_taken
 signal signal_problem_modified(problem_item: PanelContainer)
 signal signal_problem_set_played(problem_set: ProblemSet, index: int)
@@ -44,9 +44,6 @@ func exit_game(mode: BaseMode.Mode, problem: Problem = null) -> void:
 
 func change_scene(scene: Globals.Scene, args: Array = []) -> void:
 	signal_change_scene.emit(scene, args)
-
-func change_palette(palette: ImageTexture) -> void:
-	signal_change_palette.emit(palette)
 
 func problem_modified(problem_item: PanelContainer) -> void:
 	signal_problem_modified.emit(problem_item)

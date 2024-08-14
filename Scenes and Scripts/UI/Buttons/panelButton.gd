@@ -31,6 +31,7 @@ signal button_up
 @export var label_settings: LabelSettings : set = _set_label_settings
 @export_group("Icon")
 @export var icon: Texture2D : set = _set_button_icon
+@export var hide_icon: bool = false : set = _set_hide_icon
 @export var expand_icon: bool : set = _set_expand_icon
 @export var icon_use_parent_material: bool = false: set = _set_icon_use_parent_material
 @export var flip_icon_v: bool = false:
@@ -83,6 +84,10 @@ func _ready() -> void:
 func _set_label_settings(new_value: LabelSettings) -> void:
 	label_settings = new_value
 	$ContentContainer/HBoxContainer/ButtonText.label_settings = new_value
+
+func _set_hide_icon(new_value: bool) -> void:
+	hide_icon = new_value
+	$ContentContainer/HBoxContainer/ButtonIcon.visible = !new_value
 
 func _set_icon_use_parent_material(new_value: bool) -> void:
 	icon_use_parent_material = new_value

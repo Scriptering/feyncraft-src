@@ -120,7 +120,7 @@ func load_saved_palette() -> void:
 	palette = FileManager.load_txt(file_path)
 
 func update_shader() -> void:
-	EventBus.signal_change_palette.emit(palette.generate_palette_texture())
+	EventBus.change_palette.emit(palette.generate_palette_texture())
 
 func randomise() -> void:
 	palette.colours = palette.get_random_colours()
@@ -150,6 +150,8 @@ func _set_is_selected(new_value: bool) -> void:
 	
 	if is_selected:
 		update_shader()
+	
+	StatsManager.stats.palette = palette
 
 func _on_delete_pressed() -> void:
 	deleted.emit(self)

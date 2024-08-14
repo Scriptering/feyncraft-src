@@ -98,3 +98,13 @@ static func get_files_in_folder(folder_path: String) -> Array[String]:
 	#print(files)
 
 	return files
+
+static func create_save_folders() -> void:
+	print("creating save folders")
+	
+	DirAccess.make_dir_absolute("user://saves/")
+	DirAccess.make_dir_absolute("user://saves/Palettes")
+	DirAccess.make_dir_absolute("user://saves/Palettes/Custom")
+	DirAccess.make_dir_absolute("user://saves/ProblemSets")
+	DirAccess.make_dir_absolute("user://saves/ProblemSets/Custom")
+	DirAccess.make_dir_absolute("user://saves/ProblemSets/Default")

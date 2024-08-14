@@ -24,11 +24,11 @@ func _ready() -> void:
 	Globals.load_problem_set.problems.push_back(Globals.creating_problem)
 	
 	if !Globals.is_on_editor and !DirAccess.dir_exists_absolute("User://saves/"):
-		create_save_folders()
+		FileManager.create_save_folders()
 		
 		if !FileAccess.file_exists("user://saves/ProblemSets/Default/electromagnetic.tres"):
 			create_default_problem_sets()
-
+	
 	MainMenu.sandbox_pressed.connect(_on_sandbox_pressed)
 	MainMenu.tutorial_pressed.connect(_on_tutorial_pressed)
 	
@@ -47,6 +47,8 @@ func _ready() -> void:
 	
 	MainMenu.init(StateManager)
 	Level.init(StateManager)
+	
+	EventBus.change_palette.emit(StatsManager.stats.palette.generate_palette_texture())
 
 func add_floating_menu(menu: Control) -> void:
 	scenes[current_scene].add_floating_menu(menu)
@@ -98,16 +100,6 @@ func _on_problem_set_played(problem_set: ProblemSet, index: int) -> void:
 
 func _on_world_save_problem_set() -> void:
 	EventBus.save_files.emit()
-
-func create_save_folders() -> void:
-	print("creating save folders")
-	
-	DirAccess.make_dir_absolute("user://saves/")
-	DirAccess.make_dir_absolute("user://saves/Palettes")
-	DirAccess.make_dir_absolute("user://saves/Palettes/Custom")
-	DirAccess.make_dir_absolute("user://saves/ProblemSets")
-	DirAccess.make_dir_absolute("user://saves/ProblemSets/Custom")
-	DirAccess.make_dir_absolute("user://saves/ProblemSets/Default")
 
 func create_default_problem_sets() -> void:
 	for file_path:String in FileManager.get_files_in_folder("res://saves/ProblemSets/Default/"):
