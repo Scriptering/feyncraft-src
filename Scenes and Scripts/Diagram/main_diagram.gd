@@ -17,7 +17,6 @@ signal action_taken
 
 @onready var VisionLine := preload("res://Scenes and Scripts/Diagram/vision_line.tscn")
 
-var Controls: Node
 var Vision: Node
 var StateManager: Node
 
@@ -110,22 +109,11 @@ func get_decorations() -> Array[Decoration.Decor]:
 		decorations.push_back(interaction.decor)
 	return decorations
 
-func init(
-	controls: Node, vision: Node, state_manager: Node
-) -> void:
-	Controls = controls
+func init(vision: Node, state_manager: Node) -> void:
 	Vision = vision
 	StateManager = state_manager
 	
 	Crosshair.init(self, StateLines, grid_size)
-	
-	Controls.clear_diagram.connect(
-		func() -> void: 
-			add_diagram_to_history()
-			clear_diagram()
-	)
-	Controls.undo.connect(undo)
-	Controls.redo.connect(redo)
 	
 func _process(_delta: float) -> void:
 	for stateline:StateLine in StateLines:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://c7n4o6dbkwilh"]
+[gd_scene load_steps=43 format=3 uid="uid://c7n4o6dbkwilh"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/Levels/World.gd" id="1"]
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_6ope2"]
@@ -37,6 +37,7 @@
 [ext_resource type="PackedScene" uid="uid://cv1hcrp0bkj2o" path="res://Scenes and Scripts/Diagram/decoration.tscn" id="33_8ahpc"]
 [ext_resource type="Texture2D" uid="uid://bhbno8fhsgyg8" path="res://Scenes and Scripts/UI/face.png" id="34_w3m6h"]
 [ext_resource type="Texture2D" uid="uid://b3j24x3p00ruh" path="res://Textures/Background/fake_tile.png" id="34_ytvfy"]
+[ext_resource type="PackedScene" uid="uid://b65u1c7v5mbh6" path="res://Scenes and Scripts/UI/Menus/controls_tab.tscn" id="38_h5txr"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vcfy5"]
 
@@ -295,6 +296,12 @@ patch_margin_bottom = 15
 [node name="PullOutTabs" type="Node2D" parent="."]
 z_index = 3
 use_parent_material = true
+
+[node name="ControlsTab" parent="PullOutTabs" instance=ExtResource("38_h5txr")]
+offset_left = 4.0
+offset_top = -54.0
+offset_right = 4.0
+offset_bottom = -54.0
 
 [node name="VisionButton" parent="PullOutTabs" instance=ExtResource("3_hqsoq")]
 offset_left = 612.0
