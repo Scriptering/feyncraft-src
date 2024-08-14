@@ -20,8 +20,6 @@ func load_last_palette() -> void:
 		if palette_item.palette == StatsManager.stats.palette:
 			palette_item.is_selected = true
 			return
-	
-	load_tea_stain()
 
 func _on_close_pressed() -> void:
 	close.emit()

@@ -151,7 +151,7 @@ func _set_is_selected(new_value: bool) -> void:
 	if is_selected:
 		update_shader()
 	
-	StatsManager.stats.palette = palette
+	StatsManager.stats.palette = load(file_path)
 
 func _on_delete_pressed() -> void:
 	deleted.emit(self)

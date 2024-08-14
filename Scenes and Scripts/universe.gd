@@ -48,8 +48,13 @@ func _ready() -> void:
 	MainMenu.init(StateManager)
 	Level.init(StateManager)
 	
-	EventBus.change_palette.emit(StatsManager.stats.palette.generate_palette_texture())
+	var last_palette: Palette = StatsManager.stats.palette
+	if !last_palette:
+		EventBus.change_palette.emit(load("res://saves/Palettes/Default/teastain.tres").generate_palette_texture())
+	else:
+		EventBus.change_palette.emit(last_palette.generate_palette_texture())
 
+	
 func add_floating_menu(menu: Control) -> void:
 	scenes[current_scene].add_floating_menu(menu)
 

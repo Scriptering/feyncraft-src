@@ -5,7 +5,7 @@ enum HadronFrequency {Always, Allowed, Never}
 const MAX_REQUIRED_SOLUTION_COUNT : int = 4
 
 const MAX_NEXT_INTERACTION_ATTEMPTS : int = 100
-const MAX_INTERACTION_GENERATION_ATTEMPTS : int = 1000
+const MAX_INTERACTION_GENERATION_ATTEMPTS : int = 300
 
 var SolutionGeneration: Node
 
@@ -28,16 +28,21 @@ func generate(
 		return null
 	
 	for _interaction_generation_attempt in MAX_INTERACTION_GENERATION_ATTEMPTS:
-		print("problem generation attempt")
+		print("problem generation started")
+		var time: float = Time.get_ticks_usec()
 		
 		for _attempt in MAX_INTERACTION_GENERATION_ATTEMPTS:
 			state_interactions = generate_state_interactions(min_particle_count, max_particle_count, useable_state_interactions, use_hadrons)
 
 			if state_interactions != [] and is_energy_conserved(state_interactions):
+				print(_attempt)
 				break
+				
 		
 		if state_interactions == []:
 			break
+		
+		print("States found: %susec"%[round(Time.get_ticks_usec() - time)] )
 		
 		if SolutionGeneration.generate_diagrams(
 			state_interactions[StateLine.State.Initial], state_interactions[StateLine.State.Final], 0, 6,
