@@ -114,7 +114,16 @@ func create_default_problem_sets() -> void:
 	await get_tree().process_frame
 
 func load_daily() -> void:
-	pass
+	if !daily_problem:
+		var date: Dictionary = Time.get_datetime_dict_from_system()
+		
+		var set_seed: int = int("%s%s%s"%[date.day, date.month, date.year])
+		
+		daily_problem = ProblemGeneration.generate(
+			3, 6, ProblemGeneration.HadronFrequency.Allowed, ProblemGeneration.get_all_particles(),
+			set_seed
+		)
+
 
 func _on_main_menu_daily_pressed() -> void:
 	load_daily()

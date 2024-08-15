@@ -9,8 +9,10 @@ const MAX_INTERACTION_GENERATION_ATTEMPTS : int = 300
 
 func generate(
 	min_particle_count: int = 3, max_particle_count: int = 6, use_hadrons: HadronFrequency = HadronFrequency.Allowed,
-	useable_particles: Array[ParticleData.Particle] = get_all_particles()
+	useable_particles: Array[ParticleData.Particle] = get_all_particles(), set_seed: int = Time.get_ticks_usec()
 ) -> Problem:
+	seed(set_seed)
+	
 	var problem := Problem.new()
 
 	var state_interactions : Array

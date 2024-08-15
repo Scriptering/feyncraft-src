@@ -313,11 +313,6 @@ offset_left = 157.0
 offset_top = -26.0
 offset_right = 157.0
 offset_bottom = -26.0
-diagram_viewer_offset = Vector2(15, 15)
-tab_out = false
-time_to_pull_out = 0.25
-time_to_push_in = 0.25
-stay_out_time = 0.0
 
 [node name="MenuTab" parent="PullOutTabs" instance=ExtResource("24_f5s2a")]
 offset_left = 515.0
