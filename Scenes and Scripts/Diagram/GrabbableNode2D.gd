@@ -21,6 +21,7 @@ func _ready() -> void:
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("click") and grab_area_hovered:
 		grab_area_clicked.emit(self)
+		EventBus.grabbable_object_clicked.emit(self)
 
 func pick_up() -> void:
 	if !grabbed:

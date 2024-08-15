@@ -61,6 +61,7 @@ func init(diagram: DiagramBase, state_lines: Array, gridsize: int) -> void:
 	clamp_down = Diagram.size.y - grid_size
 	
 	add_child(move_timer)
+	move_timer.one_shot = true
 	move_timer.wait_time = 0.01
 	move_timer.timeout.connect(
 		func() -> void:

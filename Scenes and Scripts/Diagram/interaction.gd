@@ -1,7 +1,7 @@
 class_name Interaction
 extends GrabbableNode2D
 
-signal clicked_on
+signal deleted
 signal request_deletion
 signal show_information_box
 
@@ -74,13 +74,6 @@ func _grab_area_hovered_changed(new_value: bool) -> void:
 		Ball.frame = HIGHLIGHT
 	else:
 		Ball.frame = NORMAL
-
-func _input(event: InputEvent) -> void:
-	super._input(event)
-
-func _unhandled_input(event: InputEvent) -> void:
-	if Input.is_action_just_pressed("click") and hovering:
-		clicked_on.emit(self)
 
 func _set_decor(new_decor: Decoration.Decor) -> void:
 	decor = new_decor
@@ -397,6 +390,8 @@ func close_information_box() -> void:
 	information_visible = false
 
 func _on_mouse_area_button_pressed() -> void:
+	EventBus.deletable_object_clicked.emit(self)
+	
 	if (
 		(StateManager.state == BaseState.State.Idle or
 		(StateManager.state == BaseState.State.Drawing and
@@ -411,6 +406,7 @@ func _on_mouse_area_button_pressed() -> void:
 			$ButtonSoundComponent.play_button_down()
 
 func delete() -> void:
+	deleted.emit(self)
 	queue_free()
 
 func deconstructor() -> void:

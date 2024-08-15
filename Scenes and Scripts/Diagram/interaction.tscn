@@ -230,6 +230,7 @@ offset_left = -6.0
 offset_top = -6.0
 offset_right = 6.0
 offset_bottom = 6.0
+action_mode = 0
 flat = true
 
 [connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
