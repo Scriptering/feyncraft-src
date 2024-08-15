@@ -124,6 +124,7 @@ func _process(_delta: float) -> void:
 
 func flush_update_queue():
 	if update_queued:
+		action_taken.emit()
 		update_queued = false
 	
 	for interaction:Interaction in $DiagramArea/Interactions.get_children():
@@ -168,6 +169,9 @@ func _crosshair_moved(new_position: Vector2i, old_position: Vector2i) -> void:
 		
 		StateLines[state_to_update].queue_update()
 
+func queue_update() -> void:
+	update_queued = true
+
 func move_interaction(interaction: Interaction, to_position: Vector2i) -> void:
 	var old_position: Vector2i = interaction.positioni()
 	
@@ -178,6 +182,7 @@ func move_interaction(interaction: Interaction, to_position: Vector2i) -> void:
 	queue_stateline_update(get_state_by_position(old_position))
 	
 	queue_vision_update()
+	queue_update()
 
 func position_stateline(pos: Vector2i) -> StateLine.State:
 	if StateLines[StateLine.State.Initial].position.x == pos.x:
@@ -542,7 +547,9 @@ func delete_line(particle_line: ParticleLine, add_to_history:bool = true) -> voi
 	remove_lonely_interactions(particle_line.connected_interactions)
 	
 	check_rejoin_lines(particle_line.connected_interactions)
+	
 	queue_vision_update()
+	queue_update()
 
 func delete_interaction(interaction: Interaction, add_to_history:bool = true) -> void:
 	if add_to_history:
@@ -555,6 +562,7 @@ func delete_interaction(interaction: Interaction, add_to_history:bool = true) ->
 	
 	queue_stateline_update(get_state_by_position(interaction.positioni()))
 	queue_vision_update()
+	queue_update()
 
 func remove_lonely_interactions(interactions: Array[Interaction] = get_interactions()):
 	for interaction:Interaction in interactions:
@@ -590,6 +598,7 @@ func split_line(line_to_split: ParticleLine, split_interaction: Interaction) -> 
 	line_to_split.queue_update()
 	new_particle_line.queue_update()
 	queue_vision_update()
+	queue_update()
 	
 	return new_particle_line
 
@@ -668,6 +677,7 @@ func rejoin_lines(line_to_extend: ParticleLine, line_to_delete: ParticleLine) ->
 	disconnect_line(line_to_delete)
 	line_to_extend.queue_update()
 	queue_vision_update()
+	queue_update()
 
 func connect_interaction(interaction:Interaction) -> void:
 	for particle_line:ParticleLine in get_particle_lines():
@@ -775,6 +785,7 @@ func draw_interaction(
 	check_split_lines(interaction)
 	
 	queue_stateline_update(get_state_by_position(interaction_position))
+	queue_update()
 	
 	return interaction
 
@@ -927,6 +938,8 @@ func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 		queue_stateline_update(StateLine.State.Final)
 	
 	line_diagram_actions = true
+	queue_vision_update()
+	queue_update()
 
 func undo() -> void:
 	if !is_inside_tree():
@@ -1021,6 +1034,15 @@ func is_energy_conserved() -> bool:
 			return state_line.get_connected_base_particles()
 	)
 	
+	state_base_particles[StateLine.State.Initial].sort()
+	state_base_particles[StateLine.State.Final].sort()
+	
+	if (
+		state_base_particles[StateLine.State.Initial]
+		== state_base_particles[StateLine.State.Final]
+	):
+		return true
+	
 	var state_masses: Array = state_base_particles.map(
 		func(base_particles: Array) -> float:
 			return base_particles.reduce(
@@ -1034,7 +1056,7 @@ func is_energy_conserved() -> bool:
 		if state_base_particles[state_type].size() > 1:
 			continue
 		
-		if state_masses[state_type] < state_masses[(state_type + 1) % 2] - MASS_PRECISION:
+		if abs(state_masses[state_type] - state_masses[(state_type + 1) % 2]) <= MASS_PRECISION:
 			return false
 	
 	return true

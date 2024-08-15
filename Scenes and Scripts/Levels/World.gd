@@ -75,7 +75,6 @@ func init(state_manager: Node) -> void:
 	ProblemTab.init(
 		Diagram, Problem.new(), $FloatingMenus/SubmittedDiagrams, $Algorithms/ProblemGeneration, $Algorithms/SolutionGeneration
 	)
-	HealthTab.init(Diagram)
 	$Algorithms/PathFinding.init(Diagram, Diagram.StateLines)
 	$Algorithms/ProblemGeneration.init($Algorithms/SolutionGeneration)
 	$Algorithms/SolutionGeneration.init($Algorithms/PathFinding)
@@ -89,6 +88,8 @@ func init(state_manager: Node) -> void:
 	ControlsTab.redo.connect(func(): Diagram.redo())
 	
 	initialised.emit()
+	
+	Diagram.action_taken.connect(_diagram_action_taken)
 
 func _controls_clear() -> void:
 	Diagram.add_diagram_to_history()
@@ -333,3 +334,10 @@ func _on_export_tab_export_pressed(join_paths: bool, draw_internal_labels: bool,
 
 func add_floating_menu(menu: Control) -> void:
 	$FloatingMenus.add_child(menu)
+
+func _diagram_action_taken() -> void:
+	HealthTab.update(
+		Diagram.is_valid(),
+		Diagram.is_fully_connected(true),
+		Diagram.is_energy_conserved()
+	)

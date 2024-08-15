@@ -10,27 +10,18 @@ var invalid_circle: Texture2D = preload("res://Textures/Buttons/icons/error_circ
 var invalid_texture: Texture2D = preload("res://Textures/UI/Information/invalid.png")
 var valid_texture: Texture2D = preload("res://Textures/UI/Information/valid.png")
 
-var Diagram: MainDiagram
+func update(
+	diagram_valid: bool, diagram_connected: bool, energy_conserved: bool
+) -> void:
 
-func init(diagram: MainDiagram) -> void:
-	Diagram = diagram
-	Diagram.action_taken.connect(check)
-	
-	check()
-
-func check() -> void:
-	var diagram_valid: bool = Diagram.is_valid()
-	var diagram_connected: bool = Diagram.is_fully_connected(true)
-	var enery_conserved: bool = Diagram.is_energy_conserved()
-	
-	if diagram_valid and diagram_connected and enery_conserved:
+	if diagram_valid and diagram_connected and energy_conserved:
 		TabButton.TabIcon = tick_circle
 	else:
 		TabButton.TabIcon = invalid_circle
 	
 	toggle_diagram_valid(diagram_valid)
 	toggle_diagram_connected(diagram_connected)
-	toggle_energy_conservation(enery_conserved)
+	toggle_energy_conservation(energy_conserved)
 
 func toggle_tick(container: HBoxContainer, valid: bool) -> void:
 	var icon: TextureRect = container.get_node("TextureRect")
