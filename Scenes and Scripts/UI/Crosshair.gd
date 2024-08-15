@@ -27,9 +27,19 @@ var StateManager: Node
 var grid_size: int
 
 var inside_diagram_control: bool = false
+var inside_crosshair_area: bool = false
 
 func _process(_event: float) -> void:
 	move_crosshair()
+	
+	var temp: bool = is_inside_crosshair_area()
+	if temp != inside_crosshair_area:
+		if temp:
+			EventBus.crosshair_area_mouse_entered.emit()
+		else:
+			EventBus.crosshair_area_mouse_exited.emit()
+	
+		inside_crosshair_area = temp
 
 func _ready() -> void:
 	EventBus.diagram_mouse_entered.connect(_diagram_mouse_entered)
@@ -51,6 +61,7 @@ func init(diagram: DiagramBase, state_lines: Array, gridsize: int) -> void:
 	clamp_down = Diagram.size.y - grid_size
 	
 	add_child(move_timer)
+	move_timer.one_shot = true
 	move_timer.wait_time = 0.01
 	move_timer.timeout.connect(
 		func() -> void:
@@ -60,6 +71,20 @@ func init(diagram: DiagramBase, state_lines: Array, gridsize: int) -> void:
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		visible = get_state_visible(StateManager.state)
+
+func is_inside_crosshair_area() -> bool:
+	var mouse_position : Vector2 = get_parent().get_local_mouse_position()
+	var try_position := Vector2(
+		snapped(mouse_position.x-clamp_left, grid_size)+clamp_left,
+		snapped(mouse_position.y-clamp_up, grid_size)+clamp_up
+	)
+	
+	return (
+		try_position.x < clamp_right + grid_size
+		&& try_position.x > clamp_left - grid_size
+		&& try_position.y < clamp_down + grid_size
+		&& try_position.y > clamp_up - grid_size
+	)
 
 func move_crosshair() -> void:
 	var try_position: Vector2 = get_try_position()
@@ -93,25 +118,9 @@ func get_try_position() -> Vector2:
 	
 	return try_position
 
-func is_inside_diagram() -> bool:
-	if !is_inside_tree():
-		return false
-	
-	var mouse_position : Vector2 = get_parent().get_local_mouse_position()
-	var try_position := Vector2(
-		snapped(mouse_position.x-clamp_left, grid_size)+clamp_left,
-		snapped(mouse_position.y-clamp_up, grid_size)+clamp_up
-	)
-	
-	return (
-		try_position.x < clamp_right + grid_size
-		&& try_position.x > clamp_left - grid_size
-		&& try_position.y < clamp_down + grid_size
-		&& try_position.y > clamp_up - grid_size
-	)
 
 func _get_can_draw() -> bool:
-	if !is_inside_diagram():
+	if !inside_crosshair_area:
 		return false
 	
 	return is_start_drawing_position_valid()

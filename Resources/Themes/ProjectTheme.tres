@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="11_hhi3e"]
 [ext_resource type="StyleBox" uid="uid://dvu7f5h7snggp" path="res://Scenes and Scripts/UI/Menus/panelContainer.tres" id="15_olnr4"]
 [ext_resource type="Texture2D" uid="uid://d3yddpra1btvh" path="res://Textures/UI/Information/sliderH/grabber.png" id="16_tru3k"]
+[ext_resource type="Texture2D" uid="uid://bwoj6h7oyr2oh" path="res://Textures/UI/up_down.png" id="17_s6slh"]
 [ext_resource type="Texture2D" uid="uid://dne44tp1it1xy" path="res://Textures/UI/Information/sliderH/grabber_highlighted.png" id="17_slpu5"]
 [ext_resource type="Texture2D" uid="uid://c2m85qf18ix63" path="res://Textures/UI/radio_checked.png" id="18_r21sa"]
 [ext_resource type="Texture2D" uid="uid://30oe2l4k7py3" path="res://Textures/UI/Information/sliderH/tick.png" id="18_rn8st"]
@@ -21,7 +22,6 @@
 [ext_resource type="Texture2D" uid="uid://b4w0nb2kv1et0" path="res://Textures/UI/Information/InfoTabFocus.png" id="19_t430v"]
 [ext_resource type="Texture2D" uid="uid://d0eecxfakl8nn" path="res://Textures/UI/Information/InfoTabNormal.png" id="20_bj4mi"]
 [ext_resource type="Texture2D" uid="uid://cgghpligriwhd" path="res://Textures/UI/Equation/scroll_grabber_highlight_v.png" id="20_ullcv"]
-[ext_resource type="Texture2D" uid="uid://c8iesbop3uqwa" path="res://Textures/Buttons/up_down.png" id="21_6b0wi"]
 [ext_resource type="Texture2D" uid="uid://f76yp8golmnh" path="res://Textures/UI/Equation/scroll_grabber_pressed_v.png" id="21_kuoaw"]
 [ext_resource type="Texture2D" uid="uid://cea5mj3u65016" path="res://Textures/Buttons/square_pressed_active.png" id="25_0wrbn"]
 [ext_resource type="FontFile" uid="uid://btyypxojvrdjc" path="res://Textures/Fonts/normal_font.ttf" id="26_acix5"]
@@ -751,7 +751,7 @@ PopupMenu/icons/radio_unchecked = ExtResource("19_etkwf")
 PopupMenu/styles/panel = ExtResource("15_olnr4")
 PopupPanel/styles/panel = SubResource("29")
 ScrollContainer/styles/panel = SubResource("StyleBoxEmpty_4dpbh")
-SpinBox/icons/updown = ExtResource("21_6b0wi")
+SpinBox/icons/updown = ExtResource("17_s6slh")
 TabContainer/colors/drop_mark_color = Color(0.219608, 0.223529, 0.188235, 1)
 TabContainer/colors/font_color_bg = Color(0.219608, 0.223529, 0.188235, 1)
 TabContainer/colors/font_color_fg = Color(0.219608, 0.223529, 0.188235, 1)

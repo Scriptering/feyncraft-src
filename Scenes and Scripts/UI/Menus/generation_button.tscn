@@ -1,11 +1,10 @@
-[gd_scene load_steps=23 format=3 uid="uid://bgvo11j4kfjdc"]
+[gd_scene load_steps=22 format=3 uid="uid://bgvo11j4kfjdc"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_h3eo1"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Menus/generation_button.gd" id="2_plgpl"]
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="3_82pmn"]
 [ext_resource type="PackedScene" uid="uid://cqfassynt86vn" path="res://Scenes and Scripts/UI/Equation/mini_equation.tscn" id="4_ovcff"]
 [ext_resource type="Texture2D" uid="uid://q7kyu3yv27sv" path="res://Textures/Buttons/icons/hammer.png" id="4_xnawx"]
-[ext_resource type="Texture2D" uid="uid://c8iesbop3uqwa" path="res://Textures/Buttons/up_down.png" id="5_0rv06"]
 [ext_resource type="Texture2D" uid="uid://dcwv3ofqvfivr" path="res://Textures/Buttons/icons/save_states.png" id="5_rmc36"]
 [ext_resource type="Theme" uid="uid://cu3v7nxs2h2hu" path="res://Resources/Themes/spin_box.tres" id="6_5iseb"]
 [ext_resource type="PackedScene" uid="uid://bug3v1xlp1gfr" path="res://Scenes and Scripts/UI/Buttons/pull_out_tab_button_right.tscn" id="6_7e8c8"]
@@ -223,7 +222,6 @@ stretch_mode = 5
 use_parent_material = true
 layout_mode = 2
 theme = ExtResource("6_5iseb")
-theme_override_icons/updown = ExtResource("5_0rv06")
 min_value = 1.0
 max_value = 6.0
 value = 4.0

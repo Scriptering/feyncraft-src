@@ -1,7 +1,7 @@
 extends Control
 class_name GrabbableControl
 
-signal grab_area_clicked
+signal grab_area_clicked(object: GrabbableControl)
 signal picked_up(object: GrabbableControl)
 signal dropped(object: GrabbableControl)
 
@@ -24,6 +24,7 @@ func _ready() -> void:
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("click") and grab_area_hovered:
 		grab_area_clicked.emit(self)
+		EventBus.grabbable_object_clicked.emit(self)
 
 func _process(_delta:float) -> void:
 	if grabbed and follow_cursor:

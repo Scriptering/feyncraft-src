@@ -73,6 +73,9 @@ func update_hadrons(quark_groups: Array = get_quark_groups()) -> void:
 	create_hadron_visuals()
 
 func connect_interaction(interaction: Interaction) -> void:
+	if interaction in connected_interactions:
+		return
+	
 	connected_interactions.push_back(interaction)
 
 func disconnect_interaction(interaction: Interaction) -> void:
@@ -134,14 +137,8 @@ func sort_quark_groups(quark_groups: Array) -> Array:
 
 func get_connected_lines() -> Array[ParticleLine]:
 	var connected_lines: Array[ParticleLine] = []
-	for particle_line:ParticleLine in Diagram.get_particle_lines():
-		if particle_line.is_queued_for_deletion():
-			continue
-		
-		var line_state_line : State = particle_line.get_on_state_line()
-		var on_state_line : bool = line_state_line == state or line_state_line == State.Both
-		if on_state_line:
-			connected_lines.append(particle_line)
+	for interaction:Interaction in connected_interactions:
+		connected_lines.push_back(interaction.connected_lines.front())
 	return connected_lines
 
 func sort_connected_lines(connected_lines: Array) -> Array:

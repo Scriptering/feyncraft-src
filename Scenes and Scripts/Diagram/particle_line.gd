@@ -1,8 +1,7 @@
 extends Node2D
 class_name ParticleLine
 
-signal request_deletion
-signal clicked_on()
+signal deleted
 
 @onready var Text := get_node("text")
 @onready var SpareText := get_node("spareText")
@@ -84,8 +83,6 @@ var line_texture: Texture2D
 var show_labels: bool = true
 
 func _ready() -> void:
-	request_deletion.connect(Diagram.delete_line)
-	
 	has_colour = base_particle in ParticleData.COLOUR_PARTICLES
 	has_shade = base_particle in ParticleData.SHADED_PARTICLES
 	quantum_numbers = ParticleData.QUANTUM_NUMBERS[base_particle]
@@ -104,6 +101,10 @@ func init(diagram: MainDiagram) -> void:
 	Initial = diagram.StateLines[StateLine.State.Initial]
 	Final = diagram.StateLines[StateLine.State.Final]
 	Crosshair = diagram.Crosshair
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("click") and is_hovered():
+		EventBus.deletable_object_clicked.emit(self)
 
 func _set_points(new_points: Array[Vector2i]) -> void:
 	points = new_points
@@ -416,12 +417,11 @@ func is_hovered() -> bool:
 	return true
 
 func delete() -> void:
-	deconstructor()
+	deleted.emit(self)
 	queue_free()
 
 func deconstructor() -> void:
 	being_deleted = true
-	Diagram.update_statelines()
 	points[Point.Start] = Vector2.LEFT
 	points[Point.End] = Vector2.LEFT
 

@@ -1,8 +1,12 @@
 extends Node
 
 signal crosshair_moved(new_position: Vector2i, old_position: Vector2i)
+signal crosshair_area_mouse_entered()
+signal crosshair_area_mouse_exited()
 signal diagram_mouse_entered()
 signal diagram_mouse_exited()
+signal grabbable_object_clicked(obj: Node)
+signal deletable_object_clicked(obh: Node)
 signal show_disabled
 signal hide_disabled
 signal draw_diagram

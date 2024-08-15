@@ -100,6 +100,7 @@ text = "Custom solutions"
 [node name="ButtonSoundComponent" parent="VBoxContainer/VBoxContainer/PanelContainer2/VBoxContainer/CustomSolutions" instance=ExtResource("4_j2ks7")]
 
 [node name="AllowOtherSolutions" type="CheckButton" parent="VBoxContainer/VBoxContainer/PanelContainer2/VBoxContainer"]
+visible = false
 use_parent_material = true
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_im77j")
@@ -154,6 +155,7 @@ solution count"
 [node name="ButtonSoundComponent" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/CustomSolutionCount" instance=ExtResource("4_j2ks7")]
 
 [node name="SolutionCountContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+visible = false
 use_parent_material = true
 layout_mode = 2
 

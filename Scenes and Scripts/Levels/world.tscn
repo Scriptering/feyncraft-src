@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://c7n4o6dbkwilh"]
+[gd_scene load_steps=41 format=3 uid="uid://c7n4o6dbkwilh"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/Levels/World.gd" id="1"]
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_6ope2"]
@@ -8,9 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://cv6hlxtiukmtc" path="res://Scenes and Scripts/UI/VisionButtons/vision_buttons.tscn" id="3_hqsoq"]
 [ext_resource type="PackedScene" uid="uid://pgnduadnvgfx" path="res://Scenes and Scripts/Diagram/StateLine.tscn" id="4"]
 [ext_resource type="Texture2D" uid="uid://c2myqhjupqo25" path="res://Textures/Background/tile.png" id="4_k4tjo"]
-[ext_resource type="Script" path="res://Scenes and Scripts/Levels/tile_easter_egg.gd" id="4_q7vfn"]
 [ext_resource type="PackedScene" uid="uid://bhi4xq3qdbt4d" path="res://Scenes and Scripts/Diagram/interaction.tscn" id="6_aqbiw"]
-[ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes and Scripts/UI/Tooltip.tscn" id="6_hcc8u"]
 [ext_resource type="PackedScene" uid="uid://b22nw60juoc6k" path="res://Scenes and Scripts/Diagram/particle_line.tscn" id="7_sgp8p"]
 [ext_resource type="StyleBox" uid="uid://bubm5sx3xn6q5" path="res://Resources/Themes/TitleLabel.tres" id="7_yb0gu"]
 [ext_resource type="Texture2D" uid="uid://doyaei3vq3cbb" path="res://Textures/Background/state_line_shadow_top.png" id="8_fwvkc"]
@@ -70,18 +68,6 @@ stretch_mode = 1
 
 [node name="TileEasterEgg" type="Node2D" parent="."]
 use_parent_material = true
-script = ExtResource("4_q7vfn")
-
-[node name="Tooltip" parent="TileEasterEgg" instance=ExtResource("6_hcc8u")]
-show_delay = 0.0
-hide_delay = 1.0
-manual_placement = true
-
-[node name="TooltipPanel" parent="TileEasterEgg/Tooltip" index="0"]
-offset_left = 13.0
-offset_top = 264.0
-offset_right = 26.0
-offset_bottom = 283.0
 
 [node name="Face" type="Sprite2D" parent="TileEasterEgg"]
 use_parent_material = true
@@ -537,7 +523,6 @@ enable_spotlight = false
 [connection signal="prev_pressed" from="Tutorial/TutorialInfo" to="Tutorial" method="_on_tutorial_info_prev_pressed"]
 [connection signal="next_step" from="Tutorial/Steps/ProblemTab" to="Tutorial" method="_on_problem_tab_next_step"]
 
-[editable path="TileEasterEgg/Tooltip"]
 [editable path="Diagram/DiagramArea/Initial"]
 [editable path="Diagram/DiagramArea/Final"]
 [editable path="Algorithms/SolutionGeneration"]
