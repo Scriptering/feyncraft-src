@@ -10,6 +10,8 @@ var current_scene: Scene
 
 var modifying_problem_item : PanelContainer = null
 
+var daily_problem: Problem = null
+
 var enter_funcs: Dictionary = {
 	Scene.Level: enter_level,
 	Scene.MainMenu: enter_main_menu
@@ -54,7 +56,6 @@ func _ready() -> void:
 	else:
 		EventBus.change_palette.emit(last_palette.generate_palette_texture())
 
-	
 func add_floating_menu(menu: Control) -> void:
 	scenes[current_scene].add_floating_menu(menu)
 
@@ -111,3 +112,9 @@ func create_default_problem_sets() -> void:
 		DirAccess.copy_absolute(file_path, "user://saves/ProblemSets/Default/")
 	
 	await get_tree().process_frame
+
+func load_daily() -> void:
+	pass
+
+func _on_main_menu_daily_pressed() -> void:
+	load_daily()

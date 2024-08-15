@@ -7,11 +7,6 @@ const MAX_REQUIRED_SOLUTION_COUNT : int = 4
 const MAX_NEXT_INTERACTION_ATTEMPTS : int = 100
 const MAX_INTERACTION_GENERATION_ATTEMPTS : int = 300
 
-var SolutionGeneration: Node
-
-func init(solution_generation: Node) -> void:
-	SolutionGeneration = solution_generation
-
 func generate(
 	min_particle_count: int = 3, max_particle_count: int = 6, use_hadrons: HadronFrequency = HadronFrequency.Allowed,
 	useable_particles: Array[ParticleData.Particle] = get_all_particles()

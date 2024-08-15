@@ -2,7 +2,6 @@ extends PullOutTab
 
 var Initial: StateLine
 var Final: StateLine
-var Generation: Node
 var GeneratedDiagramViewer: MiniDiagramViewer
 
 @export var InitialState : Array
@@ -47,10 +46,9 @@ func _ready() -> void:
 	
 	self.can_generate = can_generate
 
-func init(diagram: DiagramBase, generation: Node, generated_diagram_viewer: MiniDiagramViewer) -> void:
+func init(diagram: DiagramBase, generated_diagram_viewer: MiniDiagramViewer) -> void:
 	Initial = diagram.StateLines[StateLine.State.Initial]
 	Final = diagram.StateLines[StateLine.State.Final]
-	Generation = generation
 	GeneratedDiagramViewer = generated_diagram_viewer
 	
 	GeneratedDiagramViewer.closed.connect(toggle_diagram_viewer)
@@ -96,8 +94,9 @@ func set_electroweak_check(new_value: bool) -> void:
 
 func generate(checks: Array[bool]) -> void:
 	var generated_diagrams: Array[ConnectionMatrix] = (
-		Generation.generate_diagrams(
-			InitialState, FinalState, min_degree, max_degree, Generation.get_usable_interactions(checks)
+		SolutionGeneration.generate_diagrams(
+			InitialState, FinalState, min_degree, max_degree,
+			SolutionGeneration.get_usable_interactions(checks)
 		)
 	)
 	

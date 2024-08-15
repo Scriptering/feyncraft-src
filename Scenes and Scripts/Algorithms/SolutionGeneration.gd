@@ -6,11 +6,6 @@ enum Shade {Bright, Dark, None}
 const SHADED_PARTICLES := [ParticleData.BRIGHT_PARTICLES, ParticleData.DARK_PARTICLES, ParticleData.SHADED_PARTICLES]
 const INTERACTION_SIZE = 3.0
 
-var INTERACTIONS := ParticleData.INTERACTIONS
-var TOTAL_INTERACTIONS : Array
-
-var Vision: Node
-
 enum Find {All, One, LowestOrder}
 
 enum INDEX {unconnected, connected, ID = 0, TYPE, START = 0, END, INTERACTION = 0, CONNECTION_COUNT, CONNECTION_PARTICLES = 1}
@@ -49,9 +44,6 @@ var start_time : float
 var print_times := false
 
 var generated_matrix: InteractionMatrix
-
-func init(vision: Node) -> void:
-	Vision = vision
 
 func get_useable_interactions_from_particles(allowed_particles: Array) -> Array:
 	var useable_interactions: Array = []

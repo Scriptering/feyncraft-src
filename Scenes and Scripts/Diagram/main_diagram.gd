@@ -18,7 +18,6 @@ signal action_taken
 @onready var hadron_joint_scene := preload("res://Scenes and Scripts/Diagram/Hadrons/HadronJoint.tscn")
 @onready var VisionLine := preload("res://Scenes and Scripts/Diagram/vision_line.tscn")
 
-var Vision: Node
 var StateManager: Node
 
 var drawing_particle: ParticleData.Particle = ParticleData.Particle.none
@@ -112,8 +111,7 @@ func get_decorations() -> Array[Decoration.Decor]:
 		decorations.push_back(interaction.decor)
 	return decorations
 
-func init(vision: Node, state_manager: Node) -> void:
-	Vision = vision
+func init(state_manager: Node) -> void:
 	StateManager = state_manager
 	
 	Crosshair.init(self, StateLines, grid_size)

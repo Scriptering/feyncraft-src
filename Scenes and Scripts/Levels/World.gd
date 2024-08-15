@@ -7,10 +7,6 @@ signal initialised
 @export var test_initial_state: Array = []
 @export var test_final_state: Array = []
 
-@onready var Pathfinding := $Algorithms/PathFinding
-@onready var SolutionGeneration := $Algorithms/SolutionGeneration
-@onready var ProblemGeneration := $Algorithms/ProblemGeneration
-
 @onready var ParticleButtons := $PullOutTabs/ParticleButtons
 @onready var GenerationTab := $PullOutTabs/GenerationButton
 @onready var PuzzleOptions: Control = $PullOutTabs/PuzzleUI
@@ -70,15 +66,10 @@ func init(state_manager: Node) -> void:
 	
 	Tutorial.init(self)
 	CreationInformation.init(Diagram, self, ProblemTab)
-	Diagram.init($Algorithms/PathFinding, StateManager)
-	GenerationTab.init(Diagram, $Algorithms/SolutionGeneration, $FloatingMenus/GeneratedDiagrams)
-	ProblemTab.init(
-		Diagram, Problem.new(), $FloatingMenus/SubmittedDiagrams, $Algorithms/ProblemGeneration, $Algorithms/SolutionGeneration
-	)
-	$Algorithms/PathFinding.init(Diagram, Diagram.StateLines)
-	$Algorithms/ProblemGeneration.init($Algorithms/SolutionGeneration)
-	$Algorithms/SolutionGeneration.init($Algorithms/PathFinding)
-	
+	Diagram.init(StateManager)
+	GenerationTab.init(Diagram, $FloatingMenus/GeneratedDiagrams)
+	ProblemTab.init(Diagram, Problem.new(), $FloatingMenus/SubmittedDiagrams)
+
 	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
 	
 	ParticleButtons.particle_selected.connect(_on_particle_selected)
