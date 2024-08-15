@@ -3,6 +3,8 @@ extends Node
 signal crosshair_moved(new_position: Vector2i, old_position: Vector2i)
 signal diagram_mouse_entered()
 signal diagram_mouse_exited()
+signal crosshair_area_mouse_entered()
+signal crosshair_area_mouse_exited()
 signal show_disabled
 signal hide_disabled
 signal draw_diagram

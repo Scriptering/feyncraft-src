@@ -134,7 +134,7 @@ expand_icon = true
 icon_use_parent_material = true
 
 [node name="Tooltip" parent="VBoxContainer/HBoxContainer/HBoxContainer2/Upload" instance=ExtResource("6_plt5e")]
-tooltip = "Delete"
+tooltip = "Share"
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
 use_parent_material = true

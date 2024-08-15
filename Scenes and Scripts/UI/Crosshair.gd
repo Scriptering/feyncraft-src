@@ -27,9 +27,21 @@ var StateManager: Node
 var grid_size: int
 
 var inside_diagram_control: bool = false
+var inside_crosshair_area: bool = false
+var old_inside_crosshair_area: bool = false
 
 func _process(_event: float) -> void:
 	move_crosshair()
+	inside_crosshair_area = is_inside_crosshair_area()
+	
+	if inside_crosshair_area != old_inside_crosshair_area:
+		if inside_crosshair_area:
+			EventBus.crosshair_area_mouse_entered.emit()
+		else:
+			EventBus.crosshair_area_mouse_exited.emit()
+		old_inside_crosshair_area = inside_crosshair_area
+	
+	visible = get_state_visible(StateManager.state)
 
 func _ready() -> void:
 	EventBus.diagram_mouse_entered.connect(_diagram_mouse_entered)
@@ -56,10 +68,6 @@ func init(diagram: DiagramBase, state_lines: Array, gridsize: int) -> void:
 		func() -> void:
 			moved_and_rested.emit(position, old_position)
 	)
-
-func _input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion:
-		visible = get_state_visible(StateManager.state)
 
 func move_crosshair() -> void:
 	var try_position: Vector2 = get_try_position()
@@ -93,7 +101,7 @@ func get_try_position() -> Vector2:
 	
 	return try_position
 
-func is_inside_diagram() -> bool:
+func is_inside_crosshair_area() -> bool:
 	if !is_inside_tree():
 		return false
 	
@@ -111,7 +119,7 @@ func is_inside_diagram() -> bool:
 	)
 
 func _get_can_draw() -> bool:
-	if !is_inside_diagram():
+	if !inside_crosshair_area:
 		return false
 	
 	return is_start_drawing_position_valid()
