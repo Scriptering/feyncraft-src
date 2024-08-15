@@ -177,6 +177,7 @@ func generate_diagrams(
 	if generated_connection_matrices.size() == 0:
 		if print_results:
 			print('Generation failed')
+		return [null]
 	
 	if find == Find.One:
 		return [generated_connection_matrices.pick_random()]

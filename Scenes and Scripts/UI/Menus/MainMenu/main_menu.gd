@@ -33,3 +33,6 @@ func add_floating_menu(menu: Control) -> void:
 
 func _on_tutorial_pressed() -> void:
 	tutorial_pressed.emit()
+
+func _on_daily_pressed() -> void:
+	pass # Replace with function body.

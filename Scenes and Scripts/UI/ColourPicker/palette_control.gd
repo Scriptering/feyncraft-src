@@ -13,7 +13,13 @@ func _ready() -> void:
 	super._ready()
 	load_default_palettes()
 	load_palettes()
-	load_tea_stain()
+	load_last_palette()
+
+func load_last_palette() -> void:
+	for palette_item:ListItem in item_list.get_items():
+		if palette_item.palette == StatsManager.stats.palette:
+			palette_item.is_selected = true
+			return
 
 func _on_close_pressed() -> void:
 	close.emit()
