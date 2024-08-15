@@ -1308,18 +1308,27 @@ func generate_unique_interaction_matrices(
 	
 	var generated_matrices : Array[InteractionMatrix] = []
 	
+	print("time start now")
+	print_time()
 	for interaction_matrix:InteractionMatrix in state_connected_matrices:
-		var interaction_sets:Array = generate_interaction_sets(
+		var interaction_sets: Array = generate_interaction_sets(
 			interaction_matrix.get_unconnected_base_particles(),
 			degree - interaction_matrix.state_count[StateLine.State.None],
 			usable_interactons
 		)
-		
-		if interaction_sets == [FAILED]:
+
+		if interaction_sets == []:
 			continue
-		
-		add_interaction_sets(interaction_matrix, generated_matrices, interaction_sets)
-	
+
+		add_interaction_sets(
+			interaction_matrix,
+			generated_matrices,
+			interaction_sets,
+			usable_interactons
+		)
+
+	print("time end now")
+	print_time()
 	var unique_matrices : Array[InteractionMatrix] = []
 
 	for interaction_matrix:InteractionMatrix in generated_matrices:
@@ -1337,29 +1346,139 @@ func sum(accum: int, number: int) -> int:
 	return accum + number
 
 func add_interaction_sets(
-	base_interaction_matrix: InteractionMatrix, unique_matrices: Array[InteractionMatrix], interaction_sets: Array
+	base_interaction_matrix: InteractionMatrix,
+	unique_matrices: Array[InteractionMatrix],
+	interaction_sets: Array,
+	usable_interactions: Array
 ) -> void:
 	
 	if interaction_sets == []:
 		unique_matrices.push_back(base_interaction_matrix)
 		return
 	
-	var unique_interaction_sets : Array = []
-	
 	for interaction_set:Array in interaction_sets:
-		if unique_interaction_sets.any(
-			func(unique_interaction_set: Array) -> bool:
-				return get_shared_elements_count(interaction_set, unique_interaction_set) == interaction_set.size()
-		):
+		var interaction_matrix: InteractionMatrix = base_interaction_matrix.duplicate(true)
+		for i:int in interaction_set:
+			interaction_matrix.add_unconnected_interaction(usable_interactions[i])
+		unique_matrices.push_back(interaction_matrix)
+
+func generate_unique_interaction_sets(
+	initial_unconnected_particles: Array,
+	initial_degree: int,
+	usable_interactions: Array
+) -> Array:
+	var unique_interaction_sets: Array = []
+	var interaction_sets: Array = []
+	var unconnected_particle_sets: Array = []
+	var degrees: Array = []
+	
+	for degree:int in range(initial_degree, 0, -1):
+		var next_interaction_sets: Array = []
+		var next_unconnected_particles: Array = []
+		var next_degrees: Array = []
+		
+		if degree == initial_degree:
+			extend_interaction_set(
+				degree,
+				next_interaction_sets,
+				next_unconnected_particles,
+				next_degrees,
+				[],
+				initial_unconnected_particles,
+				usable_interactions
+			)
+		else:
+			for i:int in interaction_sets.size():
+				extend_interaction_set(
+					degrees[i],
+					next_interaction_sets,
+					next_unconnected_particles,
+					next_degrees,
+					interaction_sets[i],
+					unconnected_particle_sets[i],
+					usable_interactions
+				)
+		
+		remove_copies(
+			next_interaction_sets,
+			next_unconnected_particles,
+			next_degrees
+		)
+		
+		interaction_sets = next_interaction_sets.duplicate(true)
+		unconnected_particle_sets = next_unconnected_particles.duplicate(true)
+		degrees = next_degrees.duplicate()
+	
+	return interaction_sets
+
+func remove_copies(
+	interaction_sets: Array,
+	unconnected_particle_sets: Array,
+	degrees: Array
+) -> void:
+	var to_remove_indexes: Array[int] = []
+	
+	for i:int in interaction_sets.size():
+		if i in to_remove_indexes:
 			continue
 		
-		unique_interaction_sets.push_back(interaction_set)
+		for j:int in range(i, interaction_sets.size()):
+			if j in to_remove_indexes:
+				continue
+			
+			if degrees[i] != degrees[j]:
+				continue
+			
+			if get_shared_elements_count(unconnected_particle_sets[i], unconnected_particle_sets[j]):
+				continue
+			
+			if get_shared_elements_count(interaction_sets[i], interaction_sets[j]):
+				continue
+			
+			to_remove_indexes.push_back(j)
 	
-	for interaction_set:Array in unique_interaction_sets:
-		var interaction_matrix: InteractionMatrix = base_interaction_matrix.duplicate(true)
-		for interaction:Array in interaction_set:
-			interaction_matrix.add_unconnected_interaction(interaction)
-		unique_matrices.push_back(interaction_matrix)
+	for i:int in range(interaction_sets.size(), 0, -1):
+		if i in to_remove_indexes:
+			interaction_sets.remove_at(i)
+			unconnected_particle_sets.remove_at(i)
+			degrees.remove_at(i)
+
+func extend_interaction_set(
+	degree: int,
+	next_interaction_sets: Array,
+	next_unconnected_particles: Array,
+	next_degrees: Array,
+	interaction_set: Array,
+	unconnected_particles: Array,
+	usable_interactions: Array
+) -> void:
+	
+	if degree == 0:
+		return
+
+	var extended_sets: Array = []
+
+	var next_ineractions: Array = []
+
+	var possible_interaction_connections := get_possible_interaction_connections(
+		unconnected_particles, degree, usable_interactions
+	)
+
+	for connection:Array in possible_interaction_connections:
+		var new_unconnected_particles : Array = add_next_interaction_connection(unconnected_particles, connection, connection)
+		var new_degree : int = degree-interaction_size(connection[INDEX.INTERACTION])
+
+		if new_degree == 0 and new_unconnected_particles.size() > 0:
+			continue
+
+		next_ineractions.push_back(connection[INDEX.INTERACTION])
+		next_degrees.push_back(new_degree)
+		next_unconnected_particles.push_back(new_unconnected_particles)
+
+	for interaction: Array in next_ineractions:
+		var new_interaction_set: Array = interaction_set.duplicate()
+		new_interaction_set.push_back(interaction)
+		next_interaction_sets.push_back(new_interaction_set)
 
 func generate_interaction_sets(unconnected_particles: Array, degree: int, usable_interactions: Array) -> Array:
 	var interaction_sets : Array = []
@@ -1367,36 +1486,59 @@ func generate_interaction_sets(unconnected_particles: Array, degree: int, usable
 	if degree == 0:
 		return []
 	
-	var possible_interaction_connections := get_possible_interaction_connections(unconnected_particles, degree, usable_interactions)
-	
-	for connection:Array in possible_interaction_connections:
-		var new_unconnected_particles : Array = add_next_interaction_connection(unconnected_particles, connection)
-		var new_degree : int = degree-interaction_size(connection[INDEX.INTERACTION])
-		
-		if new_degree == 0 and new_unconnected_particles.size() == 0:
-			interaction_sets.push_back([connection[INDEX.INTERACTION]])
-			continue
-		
-		if new_degree == 0 and new_unconnected_particles.size() > 0:
-			return [FAILED]
-		
-		var next_interaction_sets := generate_interaction_sets(new_unconnected_particles, new_degree, usable_interactions)
-		
-		if next_interaction_sets == [FAILED] or next_interaction_sets == []:
-			continue
-		
-		for interaction_set:Array in next_interaction_sets:
-			var combined_set : Array = []
-			combined_set.push_back(connection[INDEX.INTERACTION])
-			combined_set += interaction_set
+	for id:int in usable_interactions.size():
+		for connection:Array in get_possible_interaction_connections(
+			unconnected_particles, degree, usable_interactions[id]
+		):
+			var new_unconnected_particles : Array = add_next_interaction_connection(
+				unconnected_particles, usable_interactions[id], connection
+			)
 			
-			interaction_sets.push_back(combined_set)
-	
+			var new_degree : int = degree-interaction_size(usable_interactions[id])
+			
+			if new_degree == 0 and new_unconnected_particles.size() == 0:
+				interaction_sets.push_back([id])
+				continue
+			
+			if new_degree == 0 and new_unconnected_particles.size() > 0:
+				return [FAILED]
+			
+			var next_interaction_sets := generate_interaction_sets(new_unconnected_particles, new_degree, usable_interactions)
+			
+			if next_interaction_sets == [FAILED] or next_interaction_sets == []:
+				continue
+			
+			if next_interaction_sets.size() == 1:
+				interaction_sets.push_back(next_interaction_sets.front() + [id])
+				continue
+			
+			var unique_interaction_sets: Array = []
+			var ignore_index: Array[int] = []
+			for i: int in next_interaction_sets.size():
+				if i in ignore_index:
+					continue
+				for j: int in range(i, next_interaction_sets.size()):
+					if i == j:
+						continue
+					
+					if j in ignore_index:
+						continue
+
+					if get_shared_elements_count(
+						next_interaction_sets[i],
+						next_interaction_sets[j]
+					) == next_interaction_sets[i].size():
+						ignore_index.push_back(j)
+						continue
+
+				interaction_sets.push_back(next_interaction_sets[i] + [id])
+		
 	return interaction_sets
 
-func add_next_interaction_connection(unconnected_particles: Array, interaction_connection: Array,
-	interaction :Array = interaction_connection[INDEX.INTERACTION],
-	connection_particles : Array = interaction_connection[INDEX.CONNECTION_PARTICLES]
+func add_next_interaction_connection(
+	unconnected_particles: Array,
+	interaction:Array,
+	connection_particles: Array
 ) -> Array:
 	unconnected_particles = get_non_shared_elements(unconnected_particles, connection_particles)
 	unconnected_particles += get_non_shared_elements(interaction, connection_particles)
@@ -1529,23 +1671,22 @@ func choose_random(array: Array, choose_count: int = 1) -> Array:
 	return chosen_random
 
 func get_possible_interaction_connections(
-	unconnected_particles: Array, interaction_count: int, usable_interactions: Array
+	unconnected_particles: Array, interaction_count: int, interaction:Array
 ) -> Array:
 	var possible_interaction_connections := []
 
-	for interaction:Array in usable_interactions:
-		var shared_particles := get_shared_elements(interaction, unconnected_particles)
+	var shared_particles := get_shared_elements(interaction, unconnected_particles)
 
-		if shared_particles.size() == 0:
-			continue
+	if shared_particles.size() == 0:
+		return []
 
-		for connection_number:int in range(1, shared_particles.size()+1):
-			if is_connection_number_possible(
-				unconnected_particles.size() + interaction.size() - 2*connection_number,
-				interaction_count - interaction_size(interaction)
-			):
-				for connection_particles:Array in get_permutations(shared_particles, connection_number):
-					possible_interaction_connections.append([interaction, connection_particles])
+	for connection_number:int in range(1, shared_particles.size()+1):
+		if is_connection_number_possible(
+			unconnected_particles.size() + interaction.size() - 2*connection_number,
+			interaction_count - interaction_size(interaction)
+		):
+			for connection_particles:Array in get_permutations(shared_particles, connection_number):
+				possible_interaction_connections.push_back(connection_particles)
 
 	return possible_interaction_connections
 
