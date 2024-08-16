@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://diro6a1arcmc0"]
 
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes and Scripts/UI/Buttons/panelButton.tscn" id="1_ubmeo"]
-[ext_resource type="Theme" uid="uid://c7hk3afo5tria" path="res://Resources/Themes/toggle_button.tres" id="3_rxogd"]
+[ext_resource type="Theme" uid="uid://cuc6dkxinsqm2" path="res://Scenes and Scripts/UI/Buttons/particle_button.tres" id="2_cvba5"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Buttons/ParticleButtons/ParticleButton.gd" id="5_pltn4"]
 [ext_resource type="Texture2D" uid="uid://c0fv0drhuu6cf" path="res://Textures/Buttons/icons/Particles/photon.png" id="5_q3x61"]
 
@@ -10,7 +10,7 @@ offset_left = -6.0
 offset_top = -6.0
 offset_right = -616.0
 offset_bottom = -336.0
-theme = ExtResource("3_rxogd")
+theme = ExtResource("2_cvba5")
 script = ExtResource("5_pltn4")
 particle = 0
 toggle_mode = true

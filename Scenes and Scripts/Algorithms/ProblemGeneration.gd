@@ -36,16 +36,18 @@ func generate(
 			if state_interactions != [] and is_energy_conserved(state_interactions):
 				print(_attempt)
 				break
-				
-		
+
 		if state_interactions == []:
 			break
 		
 		print("States found: %susec"%[round(Time.get_ticks_usec() - time)] )
 		
 		if SolutionGeneration.generate_diagrams(
-			state_interactions[StateLine.State.Initial], state_interactions[StateLine.State.Final], 0, 5,
-			SolutionGeneration.generate_useable_interactions_from_particles(useable_particles), SolutionGeneration.Find.One
+			state_interactions[StateLine.State.Initial],
+			state_interactions[StateLine.State.Final],
+			0, 5,
+			SolutionGeneration.generate_useable_interactions_from_particles(useable_particles),
+			SolutionGeneration.Find.One
 		) != [null]:
 			break
 	

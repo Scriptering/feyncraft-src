@@ -21,6 +21,8 @@ signal closed
 @export var title_label: Label
 @export var mini_diagram: MiniDiagram
 @export var index_label: Label
+@export var left: PanelButton
+@export var right: PanelButton
 
 var diagrams: Array[Variant] = []
 var current_index: int = 0:
@@ -31,7 +33,7 @@ var current_index: int = 0:
 		if diagrams.size() != 0:
 			mini_diagram.draw_diagram(get_drawing_matrix(current_index))
 
-		update_index_label()
+		update_index()
 		update_resave_button()
 
 func _ready() -> void:
@@ -53,6 +55,9 @@ func _on_left_pressed() -> void:
 func get_drawing_matrix(index: int) -> DrawingMatrix:
 	var matrix: Variant = diagrams[index]
 	
+	if matrix is DrawingMatrix:
+		return matrix
+	
 	if matrix is ConnectionMatrix:
 		var drawing_matrix := DrawingMatrix.new()
 		drawing_matrix.initialise_from_connection_matrix(matrix)
@@ -72,17 +77,26 @@ func toggle_visible() -> void:
 	visible = !visible
 	self.current_index = 0
 
+func update_index() -> void:
+	update_index_label()
+	left.disabled = current_index == 0
+	right.disabled = current_index == diagrams.size() - 1
+
 func store_diagram(matrix: Variant) -> void:
 	diagrams.push_back(matrix)
+	self.current_index = current_index
+	update_index()
+	update_diagram_visibility()
+	update_delete_button()
 
 func store_diagrams(matrices: Array) -> void:
 	clear()
 	
 	for matrix:Variant in matrices:
-		store_diagram(matrix)
+		diagrams.push_back(matrix)
 	
 	self.current_index = 0
-	update_index_label()
+	update_index()
 	update_diagram_visibility()
 	update_delete_button()
 
@@ -134,7 +148,8 @@ func _on_resave_pressed() -> void:
 func resave_diagram(new_diagram: DrawingMatrix) -> void:
 	diagrams.remove_at(current_index)
 	diagrams.insert(current_index, new_diagram)
-	mini_diagram.draw_diagram(new_diagram)
+	
+	mini_diagram.draw_diagram(get_drawing_matrix(current_index))
 	
 	diagram_resaved.emit(current_index)
 	
