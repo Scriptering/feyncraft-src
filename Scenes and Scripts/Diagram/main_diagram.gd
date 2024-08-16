@@ -1098,7 +1098,7 @@ func is_energy_conserved() -> bool:
 		if state_base_particles[state_type].size() > 1:
 			continue
 		
-		if abs(state_masses[state_type] - state_masses[(state_type + 1) % 2]) <= MASS_PRECISION:
+		if state_masses[state_type] - state_masses[(state_type + 1) % 2] <= MASS_PRECISION:
 			return false
 	
 	return true

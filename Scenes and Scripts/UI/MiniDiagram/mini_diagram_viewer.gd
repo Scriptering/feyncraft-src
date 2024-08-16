@@ -22,14 +22,14 @@ signal closed
 @export var mini_diagram: MiniDiagram
 @export var index_label: Label
 
-var diagrams: Array[DrawingMatrix] = []
+var diagrams: Array[Variant] = []
 var current_index: int = 0:
 	set(new_value):
 		var clamped_value : int = clamp(new_value, 0, max(0, diagrams.size() - 1))
 		current_index = clamped_value
 		
 		if diagrams.size() != 0:
-			mini_diagram.draw_diagram(diagrams[current_index])
+			mini_diagram.draw_diagram(get_drawing_matrix(current_index))
 
 		update_index_label()
 		update_resave_button()
@@ -44,11 +44,22 @@ func init(big_diagram: MainDiagram) -> void:
 	BigDiagram = big_diagram
 
 func _on_load_pressed() -> void:
-	EventBus.draw_diagram.emit(diagrams[current_index])
+	EventBus.draw_diagram.emit(get_drawing_matrix(current_index))
 
 func _on_left_pressed() -> void:
 	self.current_index -= 1
 	update_index_label()
+
+func get_drawing_matrix(index: int) -> DrawingMatrix:
+	var matrix: Variant = diagrams[index]
+	
+	if matrix is ConnectionMatrix:
+		var drawing_matrix := DrawingMatrix.new()
+		drawing_matrix.initialise_from_connection_matrix(matrix)
+		mini_diagram.create_diagram_interaction_positions(drawing_matrix)
+		matrix = drawing_matrix
+	
+	return matrix
 
 func _on_right_pressed() -> void:
 	self.current_index += 1
@@ -62,18 +73,7 @@ func toggle_visible() -> void:
 	self.current_index = 0
 
 func store_diagram(matrix: Variant) -> void:
-	if matrix is DrawingMatrix:
-		diagrams.push_back(matrix)
-	elif matrix is ConnectionMatrix:
-		var drawing_matrix := DrawingMatrix.new()
-		drawing_matrix.initialise_from_connection_matrix(matrix)
-		mini_diagram.create_diagram_interaction_positions(drawing_matrix)
-		diagrams.push_back(drawing_matrix)
-	
-	self.current_index = current_index
-	
-	update_diagram_visibility()
-	update_delete_button()
+	diagrams.push_back(matrix)
 
 func store_diagrams(matrices: Array) -> void:
 	clear()
@@ -83,6 +83,8 @@ func store_diagrams(matrices: Array) -> void:
 	
 	self.current_index = 0
 	update_index_label()
+	update_diagram_visibility()
+	update_delete_button()
 
 func update_index_label() -> void:
 	var label_index: int = current_index + 1 if diagrams.size() != 0 else 0
@@ -126,7 +128,7 @@ func _on_close_pressed() -> void:
 func _on_resave_pressed() -> void:
 	var new_diagram: DrawingMatrix = BigDiagram.generate_drawing_matrix_from_diagram()
 	
-	if new_diagram.is_duplicate(diagrams[current_index]):
+	if new_diagram.is_duplicate(get_drawing_matrix(current_index)):
 		resave_diagram(new_diagram)
 
 func resave_diagram(new_diagram: DrawingMatrix) -> void:

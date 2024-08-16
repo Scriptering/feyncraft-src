@@ -4,6 +4,8 @@ enum HadronFrequency {Always, Allowed, Never}
 
 const MAX_REQUIRED_SOLUTION_COUNT : int = 4
 
+const MASS_PRECISION: float = 1e-4
+
 const MAX_NEXT_INTERACTION_ATTEMPTS : int = 100
 const MAX_INTERACTION_GENERATION_ATTEMPTS : int = 300
 
@@ -42,7 +44,7 @@ func generate(
 		print("States found: %susec"%[round(Time.get_ticks_usec() - time)] )
 		
 		if SolutionGeneration.generate_diagrams(
-			state_interactions[StateLine.State.Initial], state_interactions[StateLine.State.Final], 0, 6,
+			state_interactions[StateLine.State.Initial], state_interactions[StateLine.State.Final], 0, 5,
 			SolutionGeneration.generate_useable_interactions_from_particles(useable_particles), SolutionGeneration.Find.One
 		) != [null]:
 			break
@@ -97,7 +99,7 @@ func is_energy_conserved(state_interactions: Array) -> bool:
 		if state_base_particles[state].size() != 1:
 			continue
 		
-		if state_masses[state] < state_masses[(state + 1) % 2] - 0.005:
+		if state_masses[state] - state_masses[(state + 1) % 2] <= MASS_PRECISION:
 			return false
 	
 	return true
