@@ -21,8 +21,6 @@ var Diagram: MainDiagram
 var current_problem: Problem = null:
 	set(new_value): current_problem = new_value
 var SubmittedDiagramViewer: MiniDiagramViewer
-var ProblemGeneration: Node
-var SolutionGeneration: Node
 
 var submitted_diagrams: Array[DrawingMatrix] = []
 
@@ -40,8 +38,7 @@ var in_solution_creation: bool = false:
 var in_sandbox: bool = false
 
 func init(
-	diagram: DiagramBase, _current_problem: Problem, submitted_diagrams_viewer: MiniDiagramViewer, problem_generation: Node,
-	_solution_generation: Node
+	diagram: DiagramBase, _current_problem: Problem, submitted_diagrams_viewer: MiniDiagramViewer
 ) -> void:
 
 	Diagram = diagram
@@ -51,8 +48,6 @@ func init(
 	SubmittedDiagramViewer.diagram_deleted.connect(submitted_diagram_deleted)
 	SubmittedDiagramViewer.diagram_resaved.connect(submitted_diagram_resaved)
 	SubmittedDiagramViewer.closed.connect(toggle_diagram_viewer)
-	ProblemGeneration = problem_generation
-	SolutionGeneration = _solution_generation
 
 func _on_diagram_action() -> void:
 	update_degree_label()

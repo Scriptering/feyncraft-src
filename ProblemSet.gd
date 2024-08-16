@@ -11,7 +11,7 @@ var current_problem: Problem:
 	get:
 		if problems.size() == 0:
 			return null
-			
+
 		return problems[current_index]
 	set(_new_value):
 		return
@@ -21,7 +21,7 @@ var current_problem: Problem:
 func _set_current_index(new_value: int) -> void:
 	current_index = clamp(new_value, 0, problems.size()-1)
 	highest_index_reached = max(highest_index_reached, new_value)
-	
+
 	if new_value == problems.size():
 		end_reached.emit()
 

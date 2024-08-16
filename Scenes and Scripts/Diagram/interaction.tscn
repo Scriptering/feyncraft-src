@@ -230,8 +230,8 @@ offset_left = -6.0
 offset_top = -6.0
 offset_right = 6.0
 offset_bottom = 6.0
-action_mode = 0
 flat = true
 
 [connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
+[connection signal="button_down" from="MouseAreaButton" to="." method="_on_mouse_area_button_button_down"]
 [connection signal="pressed" from="MouseAreaButton" to="." method="_on_mouse_area_button_pressed"]

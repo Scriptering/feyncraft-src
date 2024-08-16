@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://c7n4o6dbkwilh"]
+[gd_scene load_steps=38 format=3 uid="uid://c7n4o6dbkwilh"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/Levels/World.gd" id="1"]
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_6ope2"]
@@ -14,10 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://doyaei3vq3cbb" path="res://Textures/Background/state_line_shadow_top.png" id="8_fwvkc"]
 [ext_resource type="Script" path="res://Scenes and Scripts/Levels/Title.gd" id="8_moevd"]
 [ext_resource type="Texture2D" uid="uid://basekc2ce6rmp" path="res://Textures/Background/state_line_shadow_tile.png" id="9_075jn"]
-[ext_resource type="PackedScene" uid="uid://byrhmsj4f7kxm" path="res://Scenes and Scripts/Algorithms/Vision.tscn" id="13"]
-[ext_resource type="PackedScene" uid="uid://bs6vtukhlou2r" path="res://Scenes and Scripts/Algorithms/problem_generation.tscn" id="13_62803"]
 [ext_resource type="Script" path="res://Scenes and Scripts/Diagram/main_diagram.gd" id="17_23v64"]
-[ext_resource type="PackedScene" uid="uid://nuajmillcsir" path="res://Scenes and Scripts/Algorithms/SolutionGeneration.tscn" id="18"]
 [ext_resource type="PackedScene" uid="uid://bbkvwth6ke1is" path="res://Scenes and Scripts/UI/Menus/problem_tab.tscn" id="20_uaeg6"]
 [ext_resource type="PackedScene" uid="uid://bgvo11j4kfjdc" path="res://Scenes and Scripts/UI/Menus/generation_button.tscn" id="22_u64s1"]
 [ext_resource type="Texture2D" uid="uid://bvc8sakoqg037" path="res://Textures/Background/background_border.png" id="23_ebvm0"]
@@ -271,14 +268,6 @@ patch_margin_top = 15
 patch_margin_right = 15
 patch_margin_bottom = 15
 
-[node name="Algorithms" type="Node" parent="."]
-
-[node name="SolutionGeneration" parent="Algorithms" instance=ExtResource("18")]
-
-[node name="PathFinding" parent="Algorithms" instance=ExtResource("13")]
-
-[node name="ProblemGeneration" parent="Algorithms" instance=ExtResource("13_62803")]
-
 [node name="PullOutTabs" type="Node2D" parent="."]
 z_index = 3
 use_parent_material = true
@@ -525,4 +514,3 @@ enable_spotlight = false
 
 [editable path="Diagram/DiagramArea/Initial"]
 [editable path="Diagram/DiagramArea/Final"]
-[editable path="Algorithms/SolutionGeneration"]

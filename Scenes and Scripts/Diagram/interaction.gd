@@ -26,6 +26,7 @@ var StateManager: Node
 var InformationBox := preload("res://Scenes and Scripts/UI/Info/interaction_information.tscn")
 var information_id: int
 
+var start_press_pos: Vector2 = Vector2.ZERO
 var decor: Decoration.Decor = Decoration.Decor.none: set = _set_decor
 var id : int
 var connected_lines: Array[ParticleLine] = []
@@ -390,6 +391,9 @@ func close_information_box() -> void:
 	information_visible = false
 
 func _on_mouse_area_button_pressed() -> void:
+	if start_press_pos != position:
+		return
+	
 	EventBus.deletable_object_clicked.emit(self)
 	
 	if (
@@ -499,3 +503,6 @@ func get_vision_vectors(vision: Globals.Vision) -> PackedVector2Array:
 		)
 	
 	return vision_vectors
+
+func _on_mouse_area_button_button_down() -> void:
+	start_press_pos = position

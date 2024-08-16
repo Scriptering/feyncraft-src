@@ -10,6 +10,8 @@ var current_scene: Scene
 
 var modifying_problem_item : PanelContainer = null
 
+var daily_problem_set := ProblemSet.new()
+
 var enter_funcs: Dictionary = {
 	Scene.Level: enter_level,
 	Scene.MainMenu: enter_main_menu
@@ -19,6 +21,8 @@ var enter_funcs: Dictionary = {
 	Scene.Level: Level,
 	Scene.MainMenu: MainMenu
 }
+
+const seconds_in_day: int = 24 * 60 * 60
 
 func _ready() -> void:
 	Globals.load_problem_set.problems.push_back(Globals.creating_problem)
@@ -31,6 +35,10 @@ func _ready() -> void:
 	
 	MainMenu.sandbox_pressed.connect(_on_sandbox_pressed)
 	MainMenu.tutorial_pressed.connect(_on_tutorial_pressed)
+	
+	if should_reset_daily_streak():
+		StatsManager.stats.daily_streak = 0
+	daily_problem_set.end_reached.connect(_on_daily_completed)
 	
 	current_scene = Scene.MainMenu
 	remove_child(Level)
@@ -54,7 +62,6 @@ func _ready() -> void:
 	else:
 		EventBus.change_palette.emit(last_palette.generate_palette_texture())
 
-	
 func add_floating_menu(menu: Control) -> void:
 	scenes[current_scene].add_floating_menu(menu)
 
@@ -111,3 +118,57 @@ func create_default_problem_sets() -> void:
 		DirAccess.copy_absolute(file_path, "user://saves/ProblemSets/Default/")
 	
 	await get_tree().process_frame
+
+func load_daily() -> void:
+	if daily_problem_set.problems.size() == 0:
+		var date: Dictionary = Time.get_datetime_dict_from_system()
+
+		var set_seed: int = int("%s%s%s"%[date.day, date.month, date.year])
+
+		var daily_problem = ProblemGeneration.setup_new_problem(ProblemGeneration.generate(
+			3, 6, ProblemGeneration.HadronFrequency.Allowed, ProblemGeneration.get_all_particles(),
+			set_seed
+		))
+		daily_problem.title = "Daily"
+
+		daily_problem_set.problems.push_back(daily_problem)
+		daily_problem_set.current_index = 0
+
+	change_scene(Scene.Level, [BaseMode.Mode.ProblemSolving])
+	Level.load_problem_set(daily_problem_set, 0)
+
+func _on_main_menu_daily_pressed() -> void:
+	load_daily()
+
+func _on_daily_completed() -> void:
+	var last_date := StatsManager.stats.last_daily_completed_date
+	var date := Time.get_datetime_dict_from_system()
+	
+	if !last_date or !is_same_day(last_date, date):
+		StatsManager.stats.last_daily_completed_date = Time.get_datetime_dict_from_system()
+		StatsManager.stats.daily_streak += 1
+		MainMenu.set_daily_counter()
+
+func is_same_day(dateA: Dictionary, dateB: Dictionary) -> bool:
+	return (
+		dateA.day == dateB.day
+		&& dateA.month == dateB.month
+		&& dateA.year == dateB.year
+	)
+
+func get_day_difference(dateA: Dictionary, dateB: Dictionary) -> int:
+	return floor(abs(
+		Time.get_unix_time_from_datetime_dict(dateA)
+		- Time.get_unix_time_from_datetime_dict(dateB)
+	) / seconds_in_day)
+
+func should_reset_daily_streak() -> bool:
+	if !StatsManager.stats.last_daily_completed_date:
+		return false
+	
+	var day_difference: int = get_day_difference(
+		StatsManager.stats.last_daily_completed_date,
+		Time.get_datetime_dict_from_system()
+	)
+	
+	return day_difference > 1

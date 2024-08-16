@@ -77,7 +77,6 @@ material = ExtResource("1_x63u3")
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("3_kka6b")
-diagram_viewer_offset = null
 DegreeLabel = NodePath("MovingContainer/VBoxContainer/Tab/HBoxContainer/DegreeContainer/HBoxContainer/Degree")
 SubmitButton = NodePath("MovingContainer/VBoxContainer/Tab/HBoxContainer/Submit")
 NextProblem = NodePath("MovingContainer/VBoxContainer/Tab/HBoxContainer/NextProblem")
@@ -87,10 +86,6 @@ TabButton = NodePath("MovingContainer/VBoxContainer/PullOutTabButtonDown")
 MovingContainer = NodePath("MovingContainer")
 moving_container_margins = Vector2(2.08165e-12, -3)
 move_direction = 3
-tab_out = null
-time_to_pull_out = null
-time_to_push_in = null
-stay_out_time = null
 
 [node name="MovingContainer" type="Control" parent="."]
 use_parent_material = true

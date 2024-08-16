@@ -30,6 +30,8 @@ EventBus="*res://Scenes and Scripts/Autoloads/EventBus.gd"
 ParticleData="*res://Scenes and Scripts/Autoloads/ParticleData.gd"
 ClipBoard="*res://Scenes and Scripts/clip_board.tscn"
 StatsManager="*res://Scenes and Scripts/Autoloads/StatsManager.tscn"
+ProblemGeneration="*res://Scenes and Scripts/Algorithms/problem_generation.tscn"
+SolutionGeneration="*res://Scenes and Scripts/Algorithms/SolutionGeneration.tscn"
 
 [debug]
 
