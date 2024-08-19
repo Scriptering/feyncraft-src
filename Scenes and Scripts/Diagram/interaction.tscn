@@ -226,10 +226,10 @@ vertical_alignment = 1
 manual = true
 
 [node name="MouseAreaButton" type="Button" parent="."]
-offset_left = -6.0
-offset_top = -6.0
-offset_right = 6.0
-offset_bottom = 6.0
+offset_left = -7.0
+offset_top = -7.0
+offset_right = 7.0
+offset_bottom = 7.0
 flat = true
 
 [connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]

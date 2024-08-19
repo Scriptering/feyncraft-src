@@ -1,4 +1,5 @@
 extends Node2D
+class_name Crosshair
 
 @export var grid_margin: int
 
@@ -11,7 +12,6 @@ var move_timer: Timer = Timer.new()
 const Z_INDEX_IDLE := 0
 const Z_INDEX_DRAWING := 0
 
-var can_draw: bool: get = _get_can_draw
 var old_position: Vector2 = Vector2.ZERO
 var old_global_position: Vector2 = Vector2.ZERO
 var clamp_left : float
@@ -26,6 +26,8 @@ var Final: StateLine
 var StateManager: Node
 var grid_size: int
 
+var last_input_inside_area: bool = false
+
 var inside_diagram_control: bool = false
 var inside_crosshair_area: bool = false
 
@@ -34,14 +36,17 @@ func _input(event: InputEvent) -> void:
 		handle_mobile_event(event)
 
 	elif event is InputEventMouseMotion:
-		move_crosshair(get_parent().get_local_mouse_position())
+		var mouse_position: Vector2 = get_parent().get_local_mouse_position()
+		last_input_inside_area = is_inside_crosshair_area(mouse_position)
+		move(mouse_position)
 		visible = get_state_visible(StateManager.state)
 
 func handle_mobile_event(event: InputEvent) -> void:
-	if event is InputEventScreenDrag:
+	if event is InputEventScreenDrag or (event is InputEventScreenTouch and event.pressed):
 		var drag_position: Vector2 = event.position - get_parent().global_position
-		move_crosshair(drag_position)
-		visible = is_inside_crosshair_area(drag_position)
+		move(drag_position)
+		last_input_inside_area = is_inside_crosshair_area(drag_position)
+		visible = last_input_inside_area and get_state_visible(StateManager.state)
 	elif event is InputEventScreenTouch and event.is_released():
 		visible = false
 
@@ -95,7 +100,7 @@ func is_inside_crosshair_area(pos: Vector2) -> bool:
 		&& try_position.y > clamp_up - grid_size
 	)
 
-func move_crosshair(try_position: Vector2) -> void:
+func move(try_position: Vector2) -> void:
 	try_position = snap_and_clamp(try_position)
 	
 	if try_position == old_position:
@@ -126,13 +131,10 @@ func snap_and_clamp(pos: Vector2) -> Vector2:
 	
 	return pos
 
-func _get_can_draw() -> bool:
-	if !inside_crosshair_area:
+func is_start_drawing_position_valid() -> bool:
+	if !is_inside_crosshair_area(position):
 		return false
 	
-	return is_start_drawing_position_valid()
-
-func is_start_drawing_position_valid() -> bool:
 	if is_crosshair_on_state_interaction(position):
 		return false
 	
@@ -230,9 +232,12 @@ func get_state_visible(new_state: BaseState.State) -> bool:
 		return false
 	
 	if new_state == BaseState.State.Idle:
-		return can_draw
+		return is_start_drawing_position_valid()
 	
 	if new_state == BaseState.State.Drawing:
 		return true
+	
+	if new_state == BaseState.State.Deleting:
+		return false
 	
 	return false

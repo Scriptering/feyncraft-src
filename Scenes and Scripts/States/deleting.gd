@@ -2,10 +2,12 @@ extends BaseState
 
 func enter() -> void:
 	super()
+	print("deleting")
 	EventBus.deletable_object_clicked.connect(_deletable_object_clicked)
 
 func exit() -> void:
 	super()
+	print("leaving deleting")
 	EventBus.deletable_object_clicked.disconnect(_deletable_object_clicked)
 
 func _deletable_object_clicked(obj: Node) -> void:

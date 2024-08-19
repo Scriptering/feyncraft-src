@@ -21,7 +21,10 @@ func _ready() -> void:
 		GrabArea.mouse_entered.connect(_on_GrabArea_mouse_entered)
 		GrabArea.mouse_exited.connect(_on_GrabArea_mouse_exited)
 
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
+	if !is_visible_in_tree():
+		return
+	
 	if is_event_clicked_on(event):
 		get_viewport().set_input_as_handled()
 		grab_area_clicked.emit(self)
@@ -43,6 +46,8 @@ func is_event_clicked_on(event: InputEvent) -> bool:
 				return node.get_global_rect().has_point(event.position)
 		):
 			return true
+		
+		return false
 		
 	elif Input.is_action_just_pressed("click") and grab_area_hovered:
 		return true
@@ -70,7 +75,7 @@ func drop() -> void:
 	dropped.emit(self)
 
 func can_be_grabbed() -> bool:
-	return grabbable and grab_area_hovered
+	return grabbable
 
 func _on_GrabArea_mouse_entered() -> void:
 	grab_area_hovered = true

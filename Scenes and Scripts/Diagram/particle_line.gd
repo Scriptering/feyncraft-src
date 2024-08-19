@@ -95,6 +95,8 @@ func _ready() -> void:
 	
 	set_anti()
 	set_left_and_right_points()
+	
+	click_area_width = 12 if Globals.is_on_mobile() else 7
 
 func init(diagram: MainDiagram) -> void:
 	Diagram = diagram
@@ -102,8 +104,11 @@ func init(diagram: MainDiagram) -> void:
 	Final = diagram.StateLines[StateLine.State.Final]
 	Crosshair = diagram.Crosshair
 
-func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("click") and is_hovered():
+func _input(event: InputEvent) -> void:
+	if Globals.is_on_mobile():
+		if event is InputEventScreenTouch and event.pressed and is_hovered(event.position - global_position):
+			EventBus.deletable_object_clicked.emit(self)
+	elif event.is_action_pressed("click") and is_hovered(get_local_mouse_position()):
 		EventBus.deletable_object_clicked.emit(self)
 
 func _set_points(new_points: Array[Vector2i]) -> void:
@@ -401,12 +406,13 @@ func is_overlapping(particle_line: ParticleLine) -> bool:
 	
 	return true
 
-func is_hovered() -> bool:
+func is_hovered(pos: Vector2) -> bool:
 	var v := line_vector.normalized();
-	var m := get_local_mouse_position() - Vector2(points[Point.Start]);
+	var m := pos - Vector2(points[Point.Start]);
 
 	var lambda := m.x*v.x + m.y*v.y
 	var rho :=   -m.x*v.y + m.y*v.x
+
 
 	if lambda < 0 or lambda > line_vector.length():
 		return false
