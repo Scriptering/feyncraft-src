@@ -30,4 +30,5 @@ func _ready() -> void:
 	is_on_editor = OS.has_feature("editor")
 
 func is_on_mobile() -> bool:
+	return true
 	return OS.has_feature("web_android") or OS.has_feature("web_ios") or OS.has_feature("android") or OS.has_feature("ios")

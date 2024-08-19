@@ -21,13 +21,42 @@ func _ready() -> void:
 		GrabArea.mouse_entered.connect(_on_GrabArea_mouse_entered)
 		GrabArea.mouse_exited.connect(_on_GrabArea_mouse_exited)
 
-func _input(_event: InputEvent) -> void:
-	if Input.is_action_just_pressed("click") and grab_area_hovered:
+func _unhandled_input(event: InputEvent) -> void:
+	if is_event_clicked_on(event):
+		get_viewport().set_input_as_handled()
 		grab_area_clicked.emit(self)
 		EventBus.grabbable_object_clicked.emit(self)
+	
+	if grabbed:
+		handle_drag(event)
 
-func _process(_delta:float) -> void:
-	if grabbed and follow_cursor:
+func is_event_clicked_on(event: InputEvent) -> bool:
+	if Globals.is_on_mobile():
+		if !event is InputEventScreenTouch:
+			return false
+		
+		if !event.is_pressed():
+			return false
+		
+		if GrabAreas.any(
+			func(node: Control): 
+				return node.get_global_rect().has_point(event.position)
+		):
+			return true
+		
+	elif Input.is_action_just_pressed("click") and grab_area_hovered:
+		return true
+	
+	return false
+
+func handle_drag(event: InputEvent) -> void:
+	if !follow_cursor:
+		return
+	
+	if Globals.is_on_mobile() and event is InputEventScreenDrag:
+		position = event.position + drag_vector_start
+	
+	elif !Globals.is_on_mobile() and event is InputEventMouseMotion:
 		position = get_global_mouse_position() + drag_vector_start
 
 func pick_up() -> void:

@@ -14,10 +14,6 @@ config/name="FeynCraft"
 run/main_scene="res://Scenes and Scripts/universe.tscn"
 config/features=PackedStringArray("4.3")
 run/low_processor_mode=true
-boot_splash/bg_color=Color(0.254902, 0.25098, 0.258824, 1)
-boot_splash/image="res://Textures/splash_icon.png"
-boot_splash/fullsize=false
-boot_splash/use_filter=false
 config/icon="res://icon.png"
 config/macos_native_icon="res://Textures/game_icon.icns"
 config/windows_native_icon="res://Textures/game_icon.ico"
@@ -224,6 +220,10 @@ split_interaction={
 "deadzone": 0.5,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194325,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
 ]
+}
+finger_press={
+"deadzone": 0.5,
+"events": []
 }
 
 [input_devices]

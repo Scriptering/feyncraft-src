@@ -50,8 +50,7 @@ func _ready() -> void:
 	
 	StateManager.init(MainMenu.Diagram)
 	
-	$ControlsLayer/Buttons.visible = Globals.is_on_mobile()
-	$ControlsLayer/Cursor.visible = !Globals.is_on_mobile()
+	#$ControlsLayer/Cursor.visible = !Globals.is_on_mobile()
 	
 	MainMenu.init(StateManager)
 	Level.init(StateManager)
@@ -115,7 +114,9 @@ func _on_world_save_problem_set() -> void:
 
 func create_default_problem_sets() -> void:
 	for file_path:String in FileManager.get_files_in_folder("res://saves/ProblemSets/Default/"):
-		DirAccess.copy_absolute(file_path, "user://saves/ProblemSets/Default/")
+		file_path = file_path.trim_suffix(".remap")
+		var user_path: String = "user" + file_path.trim_prefix("res")
+		ResourceSaver.save(load(file_path), user_path)
 	
 	await get_tree().process_frame
 

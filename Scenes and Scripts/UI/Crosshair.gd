@@ -29,10 +29,24 @@ var grid_size: int
 var inside_diagram_control: bool = false
 var inside_crosshair_area: bool = false
 
+func _input(event: InputEvent) -> void:
+	if Globals.is_on_mobile():
+		handle_mobile_event(event)
+
+	elif event is InputEventMouseMotion:
+		move_crosshair(get_parent().get_local_mouse_position())
+		visible = get_state_visible(StateManager.state)
+
+func handle_mobile_event(event: InputEvent) -> void:
+	if event is InputEventScreenDrag:
+		var drag_position: Vector2 = event.position - get_parent().global_position
+		move_crosshair(drag_position)
+		visible = is_inside_crosshair_area(drag_position)
+	elif event is InputEventScreenTouch and event.is_released():
+		visible = false
+
 func _process(_event: float) -> void:
-	move_crosshair()
-	
-	var temp: bool = is_inside_crosshair_area()
+	var temp: bool = is_inside_crosshair_area(get_parent().get_local_mouse_position())
 	if temp != inside_crosshair_area:
 		if temp:
 			EventBus.crosshair_area_mouse_entered.emit()
@@ -68,15 +82,10 @@ func init(diagram: DiagramBase, state_lines: Array, gridsize: int) -> void:
 			moved_and_rested.emit(position, old_position)
 	)
 
-func _input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion:
-		visible = get_state_visible(StateManager.state)
-
-func is_inside_crosshair_area() -> bool:
-	var mouse_position : Vector2 = get_parent().get_local_mouse_position()
+func is_inside_crosshair_area(pos: Vector2) -> bool:
 	var try_position := Vector2(
-		snapped(mouse_position.x-clamp_left, grid_size)+clamp_left,
-		snapped(mouse_position.y-clamp_up, grid_size)+clamp_up
+		snapped(pos.x-clamp_left, grid_size)+clamp_left,
+		snapped(pos.y-clamp_up, grid_size)+clamp_up
 	)
 	
 	return (
@@ -86,8 +95,8 @@ func is_inside_crosshair_area() -> bool:
 		&& try_position.y > clamp_up - grid_size
 	)
 
-func move_crosshair() -> void:
-	var try_position: Vector2 = get_try_position()
+func move_crosshair(try_position: Vector2) -> void:
+	try_position = snap_and_clamp(try_position)
 	
 	if try_position == old_position:
 		return
@@ -104,20 +113,18 @@ func move_crosshair() -> void:
 func positioni() -> Vector2i:
 	return position
 
-func get_try_position() -> Vector2:
-	var mouse_position : Vector2 = get_parent().get_local_mouse_position()
-	var try_position := Vector2(
-		snapped(mouse_position.x-clamp_left, grid_size)+clamp_left,
-		snapped(mouse_position.y-clamp_up, grid_size)+clamp_up
+func snap_and_clamp(pos: Vector2) -> Vector2:
+	pos = Vector2(
+		snapped(pos.x-clamp_left, grid_size)+clamp_left,
+		snapped(pos.y-clamp_up, grid_size)+clamp_up
 	)
 
-	try_position = Vector2(
-		clamp(try_position.x, clamp_left, clamp_right),
-		clamp(try_position.y, clamp_up, clamp_down)
+	pos = Vector2(
+		clamp(pos.x, clamp_left, clamp_right),
+		clamp(pos.y, clamp_up, clamp_down)
 	)
 	
-	return try_position
-
+	return pos
 
 func _get_can_draw() -> bool:
 	if !inside_crosshair_area:

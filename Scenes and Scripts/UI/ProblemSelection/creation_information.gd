@@ -21,8 +21,6 @@ var Level: Node2D
 
 
 func _process(delta: float) -> void:
-	super._process(delta)
-	
 	if Level.current_mode != BaseMode.Mode.ProblemCreation:
 		return
 	
