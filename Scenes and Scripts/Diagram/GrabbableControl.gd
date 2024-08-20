@@ -13,6 +13,7 @@ var grab_area_hovered: bool = false: set = _grab_area_hovered_changed
 var grabbable: bool = true: set = _grabbable_changed
 var drag_vector_start: Vector2
 var start_position: Vector2
+var drag_finger_index: int = 1
 
 func _ready() -> void:
 	add_to_group("grabbable")
@@ -35,21 +36,21 @@ func _input(event: InputEvent) -> void:
 
 func is_event_clicked_on(event: InputEvent) -> bool:
 	if Globals.is_on_mobile():
-		if !event is InputEventScreenTouch:
-			return false
-		
-		if !event.is_pressed():
+		if !event is InputEventScreenDrag:
 			return false
 		
 		if GrabAreas.any(
 			func(node: Control): 
 				return node.get_global_rect().has_point(event.position)
 		):
+			drag_finger_index = event.index
+			drag_vector_start = position - event.position
 			return true
 		
 		return false
 		
 	elif Input.is_action_just_pressed("click") and grab_area_hovered:
+		drag_vector_start = position - get_global_mouse_position()
 		return true
 	
 	return false
@@ -58,15 +59,20 @@ func handle_drag(event: InputEvent) -> void:
 	if !follow_cursor:
 		return
 	
-	if Globals.is_on_mobile() and event is InputEventScreenDrag:
-		position = event.position + drag_vector_start
-	
-	elif !Globals.is_on_mobile() and event is InputEventMouseMotion:
+	if Globals.is_on_mobile():
+		if event is InputEventScreenDrag and event.index == drag_finger_index:
+			print(event.index)
+			print(event.position)
+			print(position)
+			print(drag_vector_start)
+			print(start_position)
+			print('\n')
+			position = event.position + drag_vector_start
+	elif event is InputEventMouseMotion:
 		position = get_global_mouse_position() + drag_vector_start
 
 func pick_up() -> void:
 	grabbed = true
-	drag_vector_start = position - get_global_mouse_position()
 	start_position = position
 	picked_up.emit(self)
 

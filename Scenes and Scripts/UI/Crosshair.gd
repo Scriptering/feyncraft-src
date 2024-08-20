@@ -50,7 +50,7 @@ func handle_mobile_event(event: InputEvent) -> void:
 	elif event is InputEventScreenTouch and event.is_released():
 		visible = false
 
-func _process(_event: float) -> void:
+func _process(_delta: float) -> void:
 	var temp: bool = is_inside_crosshair_area(get_parent().get_local_mouse_position())
 	if temp != inside_crosshair_area:
 		if temp:
@@ -101,6 +101,15 @@ func is_inside_crosshair_area(pos: Vector2) -> bool:
 	)
 
 func move(try_position: Vector2) -> void:
+	var temp: bool = is_inside_crosshair_area(try_position)
+	if temp != inside_crosshair_area:
+		if temp:
+			EventBus.crosshair_area_mouse_entered.emit()
+		else:
+			EventBus.crosshair_area_mouse_exited.emit()
+	
+		inside_crosshair_area = temp
+	
 	try_position = snap_and_clamp(try_position)
 	
 	if try_position == old_position:
