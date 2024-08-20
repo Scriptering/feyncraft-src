@@ -32,9 +32,14 @@ func process(_delta: float) -> State:
 		return State.Placing
 	return State.Null
 
-func _grabbable_object_clicked(object: Node) -> void:
+func _grabbable_object_clicked(object: Node) -> void:	
 	if !object.can_be_grabbed():
 		return
+	
+	if grabbed_object:
+		return
+	
+	grabbed_object = object
 	
 	EventBus.change_cursor.emit(Globals.Cursor.hold)
 	

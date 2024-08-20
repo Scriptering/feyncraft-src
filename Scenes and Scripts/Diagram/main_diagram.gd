@@ -79,6 +79,8 @@ func _decoration_dropped(decoration: Decoration) -> void:
 	if !is_inside_tree():
 		return
 	
+	print(decoration.follow_crosshair)
+	
 	if !decoration.follow_crosshair:
 		return
 	
@@ -98,6 +100,8 @@ func _decoration_dropped(decoration: Decoration) -> void:
 	var new_interaction: Interaction = InteractionInstance.instantiate()
 	draw_interaction(Crosshair.position, new_interaction)
 	new_interaction.decor = decoration.decor
+	
+	print("dropped")
 
 func set_drawing_particle(particle: ParticleData.Particle) -> void:
 	drawing_particle = particle
@@ -850,6 +854,8 @@ func check_split_lines(object: Variant) -> void:
 func split_interaction(interaction: Interaction) -> void:
 	if interaction.connected_lines.size() == 1: 
 		return
+	
+	print("interaction split")
 	
 	var picked_particle_line: ParticleLine = choose_split_particle_line(interaction)
 	

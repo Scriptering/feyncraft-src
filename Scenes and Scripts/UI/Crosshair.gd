@@ -26,10 +26,19 @@ var Final: StateLine
 var StateManager: Node
 var grid_size: int
 
+var drag_finger_index: int = -1
+
 var last_input_inside_area: bool = false
 
 var inside_diagram_control: bool = false
 var inside_crosshair_area: bool = false
+var fingers_inside_crosshair_area: Dictionary = {
+	0: false,
+	1: false,
+	2: false,
+	3: false,
+	4: false
+}
 
 func _input(event: InputEvent) -> void:
 	if Globals.is_on_mobile():
@@ -43,22 +52,34 @@ func _input(event: InputEvent) -> void:
 
 func handle_mobile_event(event: InputEvent) -> void:
 	if event is InputEventScreenDrag or (event is InputEventScreenTouch and event.pressed):
-		var drag_position: Vector2 = event.position - get_parent().global_position
-		move(drag_position)
-		last_input_inside_area = is_inside_crosshair_area(drag_position)
-		visible = last_input_inside_area and get_state_visible(StateManager.state)
+		handle_drag(event)
 	elif event is InputEventScreenTouch and event.is_released():
+		if drag_finger_index == event.index:
+			drag_finger_index = -1
 		visible = false
 
-func _process(_delta: float) -> void:
-	var temp: bool = is_inside_crosshair_area(get_parent().get_local_mouse_position())
-	if temp != inside_crosshair_area:
-		if temp:
-			EventBus.crosshair_area_mouse_entered.emit()
+func handle_drag(event: InputEvent) -> void:
+	var drag_position: Vector2 = event.position - get_parent().global_position
+	var in_crosshair_area: bool = is_inside_crosshair_area(drag_position)
+	if in_crosshair_area != fingers_inside_crosshair_area[event.index]:
+		if in_crosshair_area:
+			EventBus.crosshair_area_finger_entered.emit(event.index)
 		else:
-			EventBus.crosshair_area_mouse_exited.emit()
+			EventBus.crosshair_area_finger_exited.emit(event.index)
+		fingers_inside_crosshair_area[event.index] = in_crosshair_area
+	last_input_inside_area = in_crosshair_area
 	
-		inside_crosshair_area = temp
+	if !in_crosshair_area:
+		return
+	
+	if drag_finger_index == -1:
+		drag_finger_index = event.index
+	
+	if event.index != drag_finger_index:
+		return
+	
+	visible = get_state_visible(StateManager.state)
+	move(drag_position)
 
 func _ready() -> void:
 	EventBus.diagram_mouse_entered.connect(_diagram_mouse_entered)

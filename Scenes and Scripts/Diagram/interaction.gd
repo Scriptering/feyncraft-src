@@ -77,11 +77,14 @@ func _grab_area_hovered_changed(new_value: bool) -> void:
 		Ball.frame = NORMAL
 
 func _input(event: InputEvent) -> void:
-	super(event)
-	if Globals.is_on_mobile():
-		if event is InputEventScreenTouch and event.pressed and $MouseAreaButton.get_global_rect().has_point(event.position):
-			print("interaction deleted")
-			EventBus.deletable_object_clicked.emit(self)
+	if grabbed:
+		return
+	elif is_event_clicked_on(event):
+		get_viewport().set_input_as_handled()
+		grab_area_clicked.emit(self)
+		print("interaction grabbed")
+		EventBus.grabbable_object_clicked.emit(self)
+		EventBus.deletable_object_clicked.emit(self)
 
 func _set_decor(new_decor: Decoration.Decor) -> void:
 	decor = new_decor

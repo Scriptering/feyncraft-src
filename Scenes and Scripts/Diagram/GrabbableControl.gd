@@ -26,17 +26,19 @@ func _input(event: InputEvent) -> void:
 	if !is_visible_in_tree():
 		return
 	
-	if is_event_clicked_on(event):
+	if grabbed:
+		handle_drag(event)
+	elif is_event_clicked_on(event):
 		get_viewport().set_input_as_handled()
 		grab_area_clicked.emit(self)
 		EventBus.grabbable_object_clicked.emit(self)
-	
-	if grabbed:
-		handle_drag(event)
 
 func is_event_clicked_on(event: InputEvent) -> bool:
 	if Globals.is_on_mobile():
-		if !event is InputEventScreenDrag:
+		if !(
+			event is InputEventScreenDrag
+			or (event is InputEventScreenTouch and event.pressed)
+		):
 			return false
 		
 		if GrabAreas.any(
@@ -61,12 +63,6 @@ func handle_drag(event: InputEvent) -> void:
 	
 	if Globals.is_on_mobile():
 		if event is InputEventScreenDrag and event.index == drag_finger_index:
-			print(event.index)
-			print(event.position)
-			print(position)
-			print(drag_vector_start)
-			print(start_position)
-			print('\n')
 			position = event.position + drag_vector_start
 	elif event is InputEventMouseMotion:
 		position = get_global_mouse_position() + drag_vector_start
