@@ -23,6 +23,8 @@ script = ExtResource("1_f3b25")
 [node name="MainMenu" parent="." instance=ExtResource("1_qkr4k")]
 
 [node name="World" parent="." instance=ExtResource("3_m7wj1")]
+test_initial_state = null
+test_final_state = null
 
 [node name="state_manager" parent="." instance=ExtResource("6_qca7e")]
 
@@ -87,6 +89,7 @@ action = "deleting"
 visibility_mode = 1
 
 [node name="FPS" type="Label" parent="."]
+visible = false
 offset_left = 41.0
 offset_top = 31.0
 offset_right = 81.0

@@ -54,6 +54,8 @@ expand_margin_bottom = 1.0
 [node name="World" type="Node2D" groups=["level"]]
 material = ExtResource("1_6ope2")
 script = ExtResource("1")
+test_initial_state = null
+test_final_state = null
 
 [node name="Background" type="TextureRect" parent="."]
 use_parent_material = true
@@ -444,7 +446,7 @@ Press next when ready.
 
 "
 FocusObjects = [NodePath("../../../Diagram"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/General/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Bosons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer")]
-DiagramFilePath = "res://saves/Diagrams/interactions.txt"
+DiagramFilePath = "res://saves/Diagrams/interactions.tres"
 
 [node name="InteractionInformation" type="Node" parent="Tutorial/Steps" node_paths=PackedStringArray("FocusObjects")]
 script = ExtResource("31_t51na")
@@ -452,7 +454,7 @@ text = "Invalid interactions are marked in red, to find out why, you can press o
 
 Press next when ready."
 FocusObjects = [NodePath("../../../Diagram"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/General/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Bosons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer")]
-DiagramFilePath = "res://saves/Diagrams/invalid_interactions.txt"
+DiagramFilePath = "res://saves/Diagrams/invalid_interactions.tres"
 
 [node name="ProblemTab" type="Node" parent="Tutorial/Steps" node_paths=PackedStringArray("FocusObjects")]
 script = ExtResource("31_t51na")
@@ -491,7 +493,7 @@ FocusObjects = [NodePath("../../../PullOutTabs/ProblemTab/MovingContainer/VBoxCo
 script = ExtResource("31_rb52u")
 text = "This problem requires you to draw hadrons. As shown, hadrons can be created by drawing quarks next to each other on state lines."
 enable_spotlight = false
-DiagramFilePath = "res://saves/Diagrams/hadrons.txt"
+DiagramFilePath = "res://saves/Diagrams/hadrons.tres"
 
 [node name="End" type="Node" parent="Tutorial/Steps"]
 script = ExtResource("31_t51na")

@@ -28,7 +28,7 @@ enum Shade {Bright, Dark}
 var Diagram: MainDiagram
 var Initial: StateLine
 var Final: StateLine
-var Crosshair: Node
+var crosshair: Crosshair
 
 var points : Array[Vector2i] = [Vector2i.LEFT, Vector2i.LEFT] : set = _set_points
 var prev_points : Array[Vector2i] = [Vector2i(0, 0), Vector2i(0, 0)]
@@ -102,7 +102,7 @@ func init(diagram: MainDiagram) -> void:
 	Diagram = diagram
 	Initial = diagram.StateLines[StateLine.State.Initial]
 	Final = diagram.StateLines[StateLine.State.Final]
-	Crosshair = diagram.Crosshair
+	crosshair = diagram.crosshair
 
 func _input(event: InputEvent) -> void:
 	if Globals.is_on_mobile():
@@ -170,7 +170,10 @@ func set_left_and_right_points() -> void:
 		left_point = Point.End
 		right_point = Point.Start
 
-func connect_interaction(interaction: Interaction, point:Point = points.find(interaction.positioni())) -> void:
+func connect_interaction(
+	interaction: Interaction,
+	point:Point = get_point_at_position(interaction.positioni())
+) -> void:
 	connected_interactions[point] = interaction
 
 func get_on_state_line() -> StateLine.State:
@@ -403,8 +406,6 @@ func is_overlapping(particle_line: ParticleLine) -> bool:
 		is_position_on_line(particle_line.points[ParticleLine.Point.Start])
 		|| is_position_on_line(particle_line.points[ParticleLine.Point.End])
 	)
-	
-	return true
 
 func is_hovered(pos: Vector2) -> bool:
 	var v := line_vector.normalized();

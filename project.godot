@@ -33,6 +33,7 @@ SolutionGeneration="*res://Scenes and Scripts/Algorithms/SolutionGeneration.tscn
 
 gdscript/warnings/untyped_declaration=1
 gdscript/warnings/integer_division=0
+gdscript/warnings/deprecated_keyword=2
 
 [display]
 
@@ -225,10 +226,6 @@ finger_press={
 "deadzone": 0.5,
 "events": []
 }
-
-[input_devices]
-
-pointing/emulate_touch_from_mouse=true
 
 [physics]
 

@@ -3,7 +3,6 @@ extends GrabbableNode2D
 
 signal deleted
 signal request_deletion
-signal show_information_box
 
 @onready var Ball: AnimatedSprite2D = $Ball
 @onready var Dot: AnimatedSprite2D = $Dot

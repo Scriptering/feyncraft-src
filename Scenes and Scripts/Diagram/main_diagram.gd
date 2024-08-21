@@ -10,7 +10,7 @@ signal action_taken
 @export var min_vision_line_offset_factor: float = 5
 @export var max_vision_line_offset_factor: float = 15
 
-@onready var Crosshair := $DiagramArea/Crosshair
+@onready var crosshair := $DiagramArea/Crosshair
 @onready var DiagramArea := $DiagramArea
 @onready var VisionLines := $DiagramArea/VisionLines
 @export var Title: LineEdit
@@ -42,23 +42,18 @@ var current_diagram: DrawingMatrix = null
 var diagram_added_to_history: bool = false
 
 var update_queued: bool = true
-var drawing_matrix: DrawingMatrix
 
 var mouse_inside_diagram: bool = false
 
 func _ready() -> void:
-	Crosshair.moved_and_rested.connect(_crosshair_moved)
-	Crosshair.moved.connect(_crosshair_moved)
+	crosshair.moved_and_rested.connect(_crosshair_moved)
+	crosshair.moved.connect(_crosshair_moved)
 	EventBus.draw_raw_diagram.connect(draw_raw_diagram)
 	EventBus.draw_diagram.connect(draw_diagram)
 	action_taken.connect(EventBus.action_taken.emit)
 	
-	self.mouse_entered.connect(
-		func(): EventBus.diagram_mouse_entered.emit()
-	)
-	self.mouse_exited.connect(
-		func(): EventBus.diagram_mouse_exited.emit()
-	)
+	self.mouse_entered.connect(EventBus.diagram_mouse_entered.emit)
+	self.mouse_exited.connect(EventBus.diagram_mouse_exited.emit)
 	
 	for state_line:StateLine in StateLines:
 		state_line.init(self)
@@ -68,23 +63,16 @@ func _ready() -> void:
 	for decoration:Decoration in get_tree().get_nodes_in_group("decoration"):
 		decoration.dropped.connect(_decoration_dropped)
 
-func _input(event: InputEvent) -> void:
-	if Input.is_action_just_pressed("ui_accept"):
-		var exporter:= DrawingMatrixExporter.new(
-			generate_drawing_matrix_from_diagram(),
-			get_decorations()
-		 )
-
 func _decoration_dropped(decoration: Decoration) -> void:
 	if !is_inside_tree():
 		return
 	
-	print(decoration.follow_crosshair)
-	
 	if !decoration.follow_crosshair:
 		return
 	
-	var interaction: Interaction = get_interaction_at_position(Crosshair.position)
+	add_diagram_to_history()
+	
+	var interaction: Interaction = get_interaction_at_position(crosshair.position)
 	
 	if interaction:
 		interaction.decor = decoration.decor
@@ -98,7 +86,7 @@ func _decoration_dropped(decoration: Decoration) -> void:
 		return
 
 	var new_interaction: Interaction = InteractionInstance.instantiate()
-	draw_interaction(Crosshair.position, new_interaction)
+	draw_interaction(crosshair.position, new_interaction)
 	new_interaction.decor = decoration.decor
 	
 	print("dropped")
@@ -118,12 +106,12 @@ func get_decorations() -> Array[Decoration.Decor]:
 func init(state_manager: Node) -> void:
 	StateManager = state_manager
 	
-	Crosshair.init(self, StateLines, grid_size)
+	crosshair.init(self, StateLines, grid_size)
 	
 func _process(_delta: float) -> void:
 	flush_update_queue()
 
-func flush_update_queue():
+func flush_update_queue() -> void:
 	for interaction:Interaction in $DiagramArea/Interactions.get_children():
 		if interaction.update_queued:
 			interaction.update_queued = false
@@ -287,8 +275,8 @@ func generate_drawing_matrix_from_diagram(get_only_valid: bool = false) -> Drawi
 	interactions.sort_custom(sort_drawing_interactions)
 
 	for interaction:Interaction in interactions:
-		generated_matrix.add_interaction_with_position(
-			interaction.position, grid_size, position_stateline(interaction.positioni())
+		generated_matrix.add_full_interaction(
+			interaction.position, interaction.decor, grid_size, position_stateline(interaction.positioni())
 		)
 
 	for particle_line:ParticleLine in get_particle_lines():
@@ -322,7 +310,7 @@ func generate_drawing_matrix_from_diagram(get_only_valid: bool = false) -> Drawi
 	
 	return generated_matrix
 
-func update_colour(diagram: DrawingMatrix, current_vision: Globals.Vision) -> void:
+func update_colour(diagram: DrawingMatrix) -> void:
 	var colour_matrix: DrawingMatrix = Vision.generate_vision_matrix(Globals.Vision.Colour, diagram)
 	
 	var time := Time.get_ticks_usec()
@@ -340,7 +328,7 @@ func update_colour(diagram: DrawingMatrix, current_vision: Globals.Vision) -> vo
 		draw_vision_lines(colour_paths, convert_path_colours(colour_path_colours, current_vision), diagram)
 	print(Time.get_ticks_usec() - time)
 
-func update_path_vision(diagram: DrawingMatrix, current_vision: Globals.Vision) -> void:
+func update_path_vision(diagram: DrawingMatrix) -> void:
 	var vision_matrix: DrawingMatrix = Vision.generate_vision_matrix(current_vision, diagram)
 	var zip : Array = Vision.generate_vision_paths(current_vision, vision_matrix, true)
 	
@@ -365,10 +353,10 @@ func update_vision(diagram: DrawingMatrix = generate_drawing_matrix_from_diagram
 	if get_interactions().size() == 0:
 		return
 	
-	update_colour(diagram, current_vision)
+	update_colour(diagram)
 	
 	if current_vision in [Globals.Vision.Shade]:
-		update_path_vision(diagram,current_vision)
+		update_path_vision(diagram)
 		return
 
 func vision_button_toggled(_vision: Globals.Vision, toggle: bool) -> void:
@@ -396,7 +384,7 @@ func move_stateline(stateline: StateLine) -> void:
 		interaction.position.x = stateline.position.x
 		
 		for particle_line in interaction.connected_lines:
-			particle_line.points[particle_line.get_point_at_position(interaction_position)].x = stateline.position.x
+			particle_line.points[particle_line.get_point_at_position(interaction_position)].x = int(stateline.position.x)
 			particle_line.queue_update()
 		
 		interaction.queue_update()
@@ -442,7 +430,7 @@ func connect_particle_line(
 	particle_line: ParticleLine,
 	point:ParticleLine.Point,
 	interaction:Interaction=null
-):
+) -> void:
 	var prev_interaction:Interaction = particle_line.connected_interactions[point]
 	
 	if interaction and prev_interaction:
@@ -572,19 +560,19 @@ func delete_interaction(interaction: Interaction) -> void:
 	queue_vision_update()
 	queue_update()
 
-func remove_lonely_interactions(interactions: Array[Interaction] = get_interactions()):
+func remove_lonely_interactions(interactions: Array[Interaction] = get_interactions()) -> void:
 	for interaction:Interaction in interactions:
 		if interaction.connected_lines.size() == 0:
 			disconnect_interaction_from_stateline(interaction, get_state_by_position(interaction.positioni()))
 			interaction.queue_free()
 
-func split_line(line_to_split: ParticleLine, split_interaction: Interaction) -> ParticleLine:
+func split_line(line_to_split: ParticleLine, splitting_interaction: Interaction) -> ParticleLine:
 	var new_start_point: Vector2 = line_to_split.points[ParticleLine.Point.Start]
 	
-	line_to_split.points[ParticleLine.Point.Start] = split_interaction.positioni()
+	line_to_split.points[ParticleLine.Point.Start] = splitting_interaction.positioni()
 	
 	var new_particle_line := draw_particle_line(
-		new_start_point, split_interaction.positioni(), line_to_split.base_particle
+		new_start_point, splitting_interaction.positioni(), line_to_split.base_particle
 	)
 	
 	connect_particle_line(
@@ -595,12 +583,12 @@ func split_line(line_to_split: ParticleLine, split_interaction: Interaction) -> 
 	connect_particle_line(
 		new_particle_line,
 		ParticleLine.Point.End,
-		split_interaction
+		splitting_interaction
 	)
 	connect_particle_line(
 		line_to_split,
 		ParticleLine.Point.Start,
-		split_interaction
+		splitting_interaction
 	)
 	
 	line_to_split.queue_update()
@@ -733,7 +721,7 @@ func start_drawing(start_position: Vector2i) -> void:
 	
 	var grabbed_interaction: Interaction = InteractionInstance.instantiate()
 	grabbed_interaction.pick_up()
-	place_interaction(Crosshair.position, grabbed_interaction)
+	place_interaction(crosshair.position, grabbed_interaction)
 	
 	var particle_line := draw_particle_line(start_position)
 	
@@ -756,7 +744,7 @@ func transfer_interaction_connections(from_interaction:Interaction, to_interacti
 			to_interaction
 		)
 
-func _stateline_picked_up(stateline: StateLine) -> void:
+func _stateline_picked_up(_stateline: StateLine) -> void:
 	add_diagram_to_history()
 
 func _stateline_dropped(stateline: StateLine) -> void:
@@ -825,7 +813,7 @@ func place_interaction(interaction_position: Vector2, interaction: Node = Intera
 	connect_interaction_to_stateline(interaction, get_state_by_position(interaction_position))
 
 func draw_interaction(
-	interaction_position: Vector2, interaction: Interaction = InteractionInstance.instantiate(), is_action: bool = true
+	interaction_position: Vector2, interaction: Interaction = InteractionInstance.instantiate()
 ) -> Interaction:
 	place_interaction(interaction_position, interaction)
 	check_split_lines(interaction)
@@ -923,7 +911,7 @@ func draw_particle_line(
 	particle_line.points[particle_line.Point.Start] = start_position
 	
 	if end_position == Vector2i.ZERO:
-		particle_line.points[particle_line.Point.End] = Crosshair.positioni()
+		particle_line.points[particle_line.Point.End] = crosshair.positioni()
 	else:
 		particle_line.points[particle_line.Point.End] = end_position
 	
@@ -967,21 +955,24 @@ func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 	for state:int in StateLines.size():
 		StateLines[state].position.x = drawing_matrix.state_line_positions[state] * grid_size
 
-	for interaction_position:Vector2 in drawing_matrix.get_interaction_positions():
-		place_interaction(interaction_position * grid_size)
+	for i:int in drawing_matrix.matrix_size:
+		var interaction: Interaction = InteractionInstance.instantiate()
+		place_interaction(drawing_matrix.get_interaction_positions()[i] * grid_size, interaction)
+		if !drawing_matrix.decorations.is_empty():
+			interaction.decor = drawing_matrix.decorations[i]
 		
-	for drawing_particle:ParticleLine in super.draw_diagram_particles(drawing_matrix):
-		ParticleLines.add_child(drawing_particle)
-		drawing_particle.deleted.connect(_particle_line_deleted)
+	for particle_line:ParticleLine in super.draw_diagram_particles(drawing_matrix):
+		ParticleLines.add_child(particle_line)
+		particle_line.deleted.connect(_particle_line_deleted)
 		connect_particle_line(
-			drawing_particle,
+			particle_line,
 			ParticleLine.Point.Start,
-			get_interaction_at_position(drawing_particle.points[ParticleLine.Point.Start])
+			get_interaction_at_position(particle_line.points[ParticleLine.Point.Start])
 		)
 		connect_particle_line(
-			drawing_particle,
+			particle_line,
 			ParticleLine.Point.End,
-			get_interaction_at_position(drawing_particle.points[ParticleLine.Point.End])
+			get_interaction_at_position(particle_line.points[ParticleLine.Point.End])
 		)
 	
 	line_diagram_actions = true

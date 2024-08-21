@@ -834,6 +834,6 @@ const export_line_dict : Dictionary = {
 
 func anti(particle: ParticleData.Particle) -> ParticleData.Particle:
 	if particle in SHADED_PARTICLES:
-		return -particle
+		return -particle as ParticleData.Particle
 	
 	return particle

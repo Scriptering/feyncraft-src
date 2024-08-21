@@ -100,7 +100,7 @@ static func generate_colour_paths(drawing_matrix: DrawingMatrix, is_vision_matri
 	if colour_matrix.is_empty():
 		return []
 	
-	var path_finder = PathFinder.new(colour_matrix)
+	var path_finder := PathFinder.new(colour_matrix)
 	path_finder.set_get_next_point_function(pick_next_colour_point)
 	var paths: Array[PackedInt32Array] = path_finder.generate_paths()
 	
@@ -166,7 +166,7 @@ static func find_colourless_hadron_interactions(
 	return colourless_hadron_interactions
 
 static func get_quark_path_gluon_points(
-	quark_path: PackedInt32Array, vision_matrix: DrawingMatrix, colourless_group_interactions: PackedInt32Array = []
+	quark_path: PackedInt32Array, vision_matrix: DrawingMatrix, _colourless_group_interactions: PackedInt32Array = []
 ) -> PackedInt32Array:
 	var gluon_points: PackedInt32Array = []
 	

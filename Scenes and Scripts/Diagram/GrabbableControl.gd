@@ -42,7 +42,7 @@ func is_event_clicked_on(event: InputEvent) -> bool:
 			return false
 		
 		if GrabAreas.any(
-			func(node: Control): 
+			func(node: Control) -> bool: 
 				return node.get_global_rect().has_point(event.position)
 		):
 			drag_finger_index = event.index

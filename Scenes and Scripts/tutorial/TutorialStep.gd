@@ -17,8 +17,8 @@ func init(world: Node2D) -> void:
 		FocusObjects.push_back(world.ControlsTab.MovingContainer)
 	
 	if DiagramFilePath != '':
-		drawing_matrix = FileManager.load_txt(DiagramFilePath)
-		
+		drawing_matrix = load(DiagramFilePath)
+
 func enter() -> void:
 	if drawing_matrix:
 		draw_diagram.emit(drawing_matrix)

@@ -1367,7 +1367,6 @@ func generate_unique_interaction_sets(
 	initial_degree: int,
 	usable_interactions: Array
 ) -> Array:
-	var unique_interaction_sets: Array = []
 	var interaction_sets: Array = []
 	var unconnected_particle_sets: Array = []
 	var degrees: Array = []
@@ -1456,8 +1455,6 @@ func extend_interaction_set(
 	if degree == 0:
 		return
 
-	var extended_sets: Array = []
-
 	var next_ineractions: Array = []
 
 	var possible_interaction_connections := get_possible_interaction_connections(
@@ -1512,7 +1509,6 @@ func generate_interaction_sets(unconnected_particles: Array, degree: int, usable
 				interaction_sets.push_back(next_interaction_sets.front() + [id])
 				continue
 			
-			var unique_interaction_sets: Array = []
 			var ignore_index: Array[int] = []
 			for i: int in next_interaction_sets.size():
 				if i in ignore_index:

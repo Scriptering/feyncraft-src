@@ -2,7 +2,7 @@ extends TextureRect
 
 const MINIMUM_LABEL_SIZE := Vector2(10, 10)
 
-var hadron: ParticleData.Hadrons
+var hadron: ParticleData.Hadrons = ParticleData.Hadrons.Proton
 var Symbol := preload("res://Scenes and Scripts/UI/Equation/EquationSymbol.tscn")
 
 func init(_hadron: ParticleData.Hadrons) -> void:

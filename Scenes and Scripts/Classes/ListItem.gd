@@ -1,7 +1,7 @@
 class_name ListItem
 extends PanelContainer
 
-signal deleted(item: ListItem)
+signal deleted
 
 var index: int: set = _set_index
 

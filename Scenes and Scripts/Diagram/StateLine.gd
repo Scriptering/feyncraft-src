@@ -7,7 +7,7 @@ extends GrabbableControl
 @export var state : State
 
 var Diagram: MainDiagram
-var Crosshair: Node
+var crosshair: Node
 
 enum {NOT_FOUND}
 
@@ -30,7 +30,7 @@ var connected_lone_particles : Array[ParticleData.Particle] : get = _get_connect
 
 func init(diagram: MainDiagram) -> void:
 	Diagram = diagram
-	Crosshair = diagram.Crosshair
+	crosshair = diagram.crosshair
 
 class LineYSort:
 	static func InitialSorter(line1: ParticleLine, line2: ParticleLine) -> bool:

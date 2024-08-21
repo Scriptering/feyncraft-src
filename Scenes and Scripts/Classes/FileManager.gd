@@ -76,8 +76,8 @@ static func delete_file(path: String) -> Error:
 	var error: Error = DirAccess.remove_absolute(path)
 	
 	if !Globals.is_on_editor:
-		var refresh_path: String = "user://saves/ProblemSets/Default/electromagnetic.txt"
-		save(load_txt(refresh_path), refresh_path)
+		var refresh_path: String = "user://saves/ProblemSets/Default/electromagnetic.tres"
+		ResourceSaver.save(load(refresh_path), refresh_path)
 	
 	return error
 	

@@ -21,13 +21,13 @@ func input(event: InputEvent) -> State:
 		Diagram.undo()
 	elif Globals.is_on_mobile():
 		return handle_mobile_event(event)
-	elif !Globals.is_on_mobile() and Input.is_action_just_pressed("click"):
-		if event.pressed:
+	elif !Globals.is_on_mobile():
+		if Input.is_action_just_pressed("click"):
 			$minimum_press_timer.start()
 			EventBus.change_cursor.emit(Globals.Cursor.press)
 			if can_draw():
 				return State.Drawing
-		elif !event.pressed and $minimum_press_timer.is_stopped():
+		elif !Input.is_action_pressed("click") and $minimum_press_timer.is_stopped():
 			EventBus.change_cursor.emit(Globals.Cursor.default)
 	
 	return State.Null

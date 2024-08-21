@@ -17,7 +17,7 @@ func _ready() -> void:
 	load_problem_sets()
 
 func reload() -> void:
-	for problem_set_item in problem_container.get_items():
+	for problem_set_item:PanelContainer in problem_container.get_items():
 		problem_set_item.reload()
 
 func load_problem_sets() -> void:
@@ -56,7 +56,6 @@ func add_problem_set(problem_set: ProblemSet, problem_set_item: ListItem = Probl
 	problem_set_item.update()
 
 func update_index_labels() -> void:
-	var index: int = 0
 	for i:int in range(problem_container.get_item_count()):
 		var problem_set: PanelContainer = problem_container.get_item(i)
 		
@@ -64,14 +63,12 @@ func update_index_labels() -> void:
 			continue
 		
 		problem_set.update_problem_index()
-		index += 1
 
 func update_problem_sets() -> void:
-	for problem_set in problem_container.get_items():
-		problem_set.update()
+	for problem_set_item:PanelContainer in problem_container.get_items():
+		problem_set_item.update()
 
 func _problem_set_deleted(problem_set_item: PanelContainer) -> void:
-	var index: int = problem_container.get_items().find(problem_set_item)
 	FileManager.delete_file(problem_set_item.file_path)
 	problem_set_item.queue_free()
 	
@@ -109,7 +106,7 @@ func load_problem_set(problem_set_path: String) -> void:
 		new_problem_set.queue_free()
 
 func save_problem_sets() -> void:
-	for problem_set in problem_container.get_items():
+	for problem_set:ListItem in problem_container.get_items():
 		ResourceSaver.save(problem_set.problem_set, problem_set.file_path)
 	
 func create_new_problem_set(problem_set: ProblemSet = null, problem_set_path: String = '') -> void:

@@ -75,8 +75,8 @@ func init(state_manager: Node) -> void:
 	ParticleButtons.particle_selected.connect(_on_particle_selected)
 	
 	ControlsTab.clear_diagram.connect(_controls_clear)
-	ControlsTab.undo.connect(func(): Diagram.undo())
-	ControlsTab.redo.connect(func(): Diagram.redo())
+	ControlsTab.undo.connect(Diagram.undo)
+	ControlsTab.redo.connect(Diagram.redo)
 	
 	initialised.emit()
 	
@@ -311,8 +311,7 @@ func _on_tutorial_info_finish_pressed() -> void:
 
 func _on_export_tab_export_pressed(join_paths: bool, draw_internal_labels: bool, draw_external_labels: bool) -> void:
 	var exporter:= DrawingMatrixExporter.new(
-		Diagram.generate_drawing_matrix_from_diagram(),
-		Diagram.get_decorations()
+		Diagram.generate_drawing_matrix_from_diagram()
 	)
 	
 	exporter.join_paths = join_paths
