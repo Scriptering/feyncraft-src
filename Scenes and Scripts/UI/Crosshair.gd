@@ -1,4 +1,5 @@
 extends Node2D
+class_name Crosshair
 
 @export var grid_margin: int
 
@@ -11,7 +12,6 @@ var move_timer: Timer = Timer.new()
 const Z_INDEX_IDLE := 0
 const Z_INDEX_DRAWING := 0
 
-var can_draw: bool: get = _get_can_draw
 var old_position: Vector2 = Vector2.ZERO
 var old_global_position: Vector2 = Vector2.ZERO
 var clamp_left : float
@@ -26,24 +26,73 @@ var Final: StateLine
 var StateManager: Node
 var grid_size: int
 
+var drag_finger_index: int = -1
+
+var last_input_inside_area: bool = false
+
 var inside_diagram_control: bool = false
 var inside_crosshair_area: bool = false
+var fingers_inside_crosshair_area: Array[bool] = [
+	false,
+	false,
+	false,
+	false,
+	false
+]
 
-func _process(_event: float) -> void:
-	move_crosshair()
+func _input(event: InputEvent) -> void:
+	if Globals.is_on_mobile():
+		handle_mobile_event(event)
+
+	elif event is InputEventMouseMotion:
+		var mouse_position: Vector2 = get_parent().get_local_mouse_position()
+		
+		var in_crosshair_area:bool = is_inside_crosshair_area(mouse_position)
+		
+		if in_crosshair_area != inside_diagram_control:
+			if in_crosshair_area:
+				EventBus.crosshair_area_mouse_entered.emit()
+			else:
+				EventBus.crosshair_area_mouse_exited.emit()
+			inside_diagram_control = in_crosshair_area
+		
+		last_input_inside_area = in_crosshair_area
+		move(mouse_position)
+		visible = in_crosshair_area and get_state_visible(StateManager.state)
+
+func handle_mobile_event(event: InputEvent) -> void:
+	if event is InputEventScreenDrag or (event is InputEventScreenTouch and event.pressed):
+		handle_drag(event)
+	elif event is InputEventScreenTouch and event.is_released():
+		if drag_finger_index == event.index:
+			drag_finger_index = -1
+		visible = false
+
+func handle_drag(event: InputEvent) -> void:
+	var drag_position: Vector2 = event.position - get_parent().global_position
+	var in_crosshair_area: bool = is_inside_crosshair_area(drag_position)
+	var index: int = clamp(event.index, 0, 5)
+	var last_finger_in_area: bool = fingers_inside_crosshair_area[index]
 	
-	var temp: bool = is_inside_crosshair_area()
-	if temp != inside_crosshair_area:
-		if temp:
-			EventBus.crosshair_area_mouse_entered.emit()
+	if in_crosshair_area != last_finger_in_area:
+		if in_crosshair_area:
+			EventBus.crosshair_area_finger_entered.emit(index)
 		else:
-			EventBus.crosshair_area_mouse_exited.emit()
+			EventBus.crosshair_area_finger_exited.emit(index)
+		fingers_inside_crosshair_area[index] = in_crosshair_area
+	last_input_inside_area = in_crosshair_area
 	
-		inside_crosshair_area = temp
-
-func _ready() -> void:
-	EventBus.diagram_mouse_entered.connect(_diagram_mouse_entered)
-	EventBus.diagram_mouse_exited.connect(_diagram_mouse_exited)
+	if !in_crosshair_area:
+		return
+	
+	if drag_finger_index == -1:
+		drag_finger_index = index
+	
+	if index != drag_finger_index:
+		return
+	
+	move(drag_position)
+	visible = in_crosshair_area and get_state_visible(StateManager.state)
 
 func init(diagram: DiagramBase, state_lines: Array, gridsize: int) -> void:
 	Diagram = diagram
@@ -68,15 +117,10 @@ func init(diagram: DiagramBase, state_lines: Array, gridsize: int) -> void:
 			moved_and_rested.emit(position, old_position)
 	)
 
-func _input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion:
-		visible = get_state_visible(StateManager.state)
-
-func is_inside_crosshair_area() -> bool:
-	var mouse_position : Vector2 = get_parent().get_local_mouse_position()
+func is_inside_crosshair_area(pos: Vector2) -> bool:
 	var try_position := Vector2(
-		snapped(mouse_position.x-clamp_left, grid_size)+clamp_left,
-		snapped(mouse_position.y-clamp_up, grid_size)+clamp_up
+		snapped(pos.x-clamp_left, grid_size)+clamp_left,
+		snapped(pos.y-clamp_up, grid_size)+clamp_up
 	)
 	
 	return (
@@ -86,8 +130,17 @@ func is_inside_crosshair_area() -> bool:
 		&& try_position.y > clamp_up - grid_size
 	)
 
-func move_crosshair() -> void:
-	var try_position: Vector2 = get_try_position()
+func move(try_position: Vector2) -> void:
+	var temp: bool = is_inside_crosshair_area(try_position)
+	if temp != inside_crosshair_area:
+		if temp:
+			EventBus.crosshair_area_mouse_entered.emit()
+		else:
+			EventBus.crosshair_area_mouse_exited.emit()
+	
+		inside_crosshair_area = temp
+	
+	try_position = snap_and_clamp(try_position)
 	
 	if try_position == old_position:
 		return
@@ -104,28 +157,23 @@ func move_crosshair() -> void:
 func positioni() -> Vector2i:
 	return position
 
-func get_try_position() -> Vector2:
-	var mouse_position : Vector2 = get_parent().get_local_mouse_position()
-	var try_position := Vector2(
-		snapped(mouse_position.x-clamp_left, grid_size)+clamp_left,
-		snapped(mouse_position.y-clamp_up, grid_size)+clamp_up
+func snap_and_clamp(pos: Vector2) -> Vector2:
+	pos = Vector2(
+		snapped(pos.x-clamp_left, grid_size)+clamp_left,
+		snapped(pos.y-clamp_up, grid_size)+clamp_up
 	)
 
-	try_position = Vector2(
-		clamp(try_position.x, clamp_left, clamp_right),
-		clamp(try_position.y, clamp_up, clamp_down)
+	pos = Vector2(
+		clamp(pos.x, clamp_left, clamp_right),
+		clamp(pos.y, clamp_up, clamp_down)
 	)
 	
-	return try_position
-
-
-func _get_can_draw() -> bool:
-	if !inside_crosshair_area:
-		return false
-	
-	return is_start_drawing_position_valid()
+	return pos
 
 func is_start_drawing_position_valid() -> bool:
+	if !is_inside_crosshair_area(position):
+		return false
+	
 	if is_crosshair_on_state_interaction(position):
 		return false
 	
@@ -206,12 +254,6 @@ func is_on_interaction(test_position: Vector2 = position) -> bool:
 			return true
 	return false
 
-func _diagram_mouse_entered() -> void:
-	inside_diagram_control = true
-
-func _diagram_mouse_exited() -> void:
-	inside_diagram_control = false
-
 func _state_changed(new_state: BaseState.State, _old_state: BaseState.State) -> void: 
 	if !is_inside_tree():
 		return
@@ -219,13 +261,13 @@ func _state_changed(new_state: BaseState.State, _old_state: BaseState.State) -> 
 	visible = get_state_visible(new_state)
 
 func get_state_visible(new_state: BaseState.State) -> bool:
-	if !inside_diagram_control:
-		return false
-	
 	if new_state == BaseState.State.Idle:
-		return can_draw
+		return is_start_drawing_position_valid()
 	
 	if new_state == BaseState.State.Drawing:
 		return true
+	
+	if new_state == BaseState.State.Deleting:
+		return false
 	
 	return false

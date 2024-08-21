@@ -25,6 +25,9 @@ var enter_funcs: Dictionary = {
 const seconds_in_day: int = 24 * 60 * 60
 
 func _ready() -> void:
+	$ControlsLayer/Buttons.visible = false
+	$ControlsLayer/Cursor.visible = true
+
 	Globals.load_problem_set.problems.push_back(Globals.creating_problem)
 	
 	if !Globals.is_on_editor and !DirAccess.dir_exists_absolute("User://saves/"):
@@ -50,8 +53,7 @@ func _ready() -> void:
 	
 	StateManager.init(MainMenu.Diagram)
 	
-	$ControlsLayer/Buttons.visible = Globals.is_on_mobile()
-	$ControlsLayer/Cursor.visible = !Globals.is_on_mobile()
+	EventBus.using_touchscreen_changed.connect(_on_using_touchscreen_changed)
 	
 	MainMenu.init(StateManager)
 	Level.init(StateManager)
@@ -115,7 +117,9 @@ func _on_world_save_problem_set() -> void:
 
 func create_default_problem_sets() -> void:
 	for file_path:String in FileManager.get_files_in_folder("res://saves/ProblemSets/Default/"):
-		DirAccess.copy_absolute(file_path, "user://saves/ProblemSets/Default/")
+		file_path = file_path.trim_suffix(".remap")
+		var user_path: String = "user" + file_path.trim_prefix("res")
+		ResourceSaver.save(load(file_path), user_path)
 	
 	await get_tree().process_frame
 
@@ -125,7 +129,7 @@ func load_daily() -> void:
 
 		var set_seed: int = int("%s%s%s"%[date.day, date.month, date.year])
 
-		var daily_problem = ProblemGeneration.setup_new_problem(ProblemGeneration.generate(
+		var daily_problem := ProblemGeneration.setup_new_problem(ProblemGeneration.generate(
 			3, 6, ProblemGeneration.HadronFrequency.Allowed, ProblemGeneration.get_all_particles(),
 			set_seed
 		))
@@ -172,3 +176,7 @@ func should_reset_daily_streak() -> bool:
 	)
 	
 	return day_difference > 1
+
+func _on_using_touchscreen_changed(using_touchscreen: bool) -> void:
+	$ControlsLayer/Buttons.visible = using_touchscreen
+	$ControlsLayer/Cursor.visible = !using_touchscreen

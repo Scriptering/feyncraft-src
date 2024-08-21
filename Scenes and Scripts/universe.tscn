@@ -1,12 +1,15 @@
-[gd_scene load_steps=13 format=3 uid="uid://cnc7r7d27yn5c"]
+[gd_scene load_steps=16 format=3 uid="uid://cnc7r7d27yn5c"]
 
 [ext_resource type="Script" path="res://Scenes and Scripts/universe.gd" id="1_f3b25"]
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_fbm6y"]
 [ext_resource type="PackedScene" uid="uid://blu0n6lwfysjf" path="res://Scenes and Scripts/UI/Menus/MainMenu/main_menu.tscn" id="1_qkr4k"]
 [ext_resource type="PackedScene" uid="uid://c7n4o6dbkwilh" path="res://Scenes and Scripts/Levels/world.tscn" id="3_m7wj1"]
 [ext_resource type="PackedScene" uid="uid://cv3ttwhplgav" path="res://Scenes and Scripts/States/state_manager.tscn" id="6_qca7e"]
-[ext_resource type="PackedScene" uid="uid://brd5auomhnn6l" path="res://Scenes and Scripts/UI/Cursor.tscn" id="7_s5a7m"]
+[ext_resource type="PackedScene" uid="uid://brd5auomhnn6l" path="res://Scenes and Scripts/UI/cursor.tscn" id="7_s5a7m"]
+[ext_resource type="Texture2D" uid="uid://b5t01la3a122h" path="res://Textures/UI/split_normal.png" id="9_v030i"]
+[ext_resource type="Texture2D" uid="uid://g23i650xp21d" path="res://Textures/Buttons/split_hover.png" id="10_43d4r"]
 [ext_resource type="Texture2D" uid="uid://btjrj2wemfwjq" path="res://Textures/Buttons/move_touch_button_normal.png" id="10_ihkyb"]
+[ext_resource type="Script" path="res://Scenes and Scripts/split.gd" id="11_axers"]
 [ext_resource type="Texture2D" uid="uid://db6rdb3r8el1a" path="res://Textures/Buttons/move_touch_button_pressed.png" id="11_ojt0j"]
 [ext_resource type="Texture2D" uid="uid://dbbrv15cfsttg" path="res://Textures/Buttons/cut_touch_button_normal.png" id="12_560ih"]
 [ext_resource type="Texture2D" uid="uid://n2w0tydjaa33" path="res://Textures/Buttons/cut_touch_button_pressed.png" id="13_gqnb4"]
@@ -20,6 +23,8 @@ script = ExtResource("1_f3b25")
 [node name="MainMenu" parent="." instance=ExtResource("1_qkr4k")]
 
 [node name="World" parent="." instance=ExtResource("3_m7wj1")]
+test_initial_state = null
+test_final_state = null
 
 [node name="state_manager" parent="." instance=ExtResource("6_qca7e")]
 
@@ -60,10 +65,20 @@ layer = 5
 
 [node name="Move" type="TouchScreenButton" parent="ControlsLayer/Buttons"]
 material = ExtResource("1_fbm6y")
-position = Vector2(15, 309)
+position = Vector2(18, 309)
 texture_normal = ExtResource("10_ihkyb")
 texture_pressed = ExtResource("11_ojt0j")
 action = "editing"
+visibility_mode = 1
+
+[node name="Split" type="TouchScreenButton" parent="ControlsLayer/Buttons"]
+material = ExtResource("1_fbm6y")
+position = Vector2(104, 309)
+texture_normal = ExtResource("9_v030i")
+texture_pressed = ExtResource("10_43d4r")
+action = "editing"
+visibility_mode = 1
+script = ExtResource("11_axers")
 
 [node name="Delete" type="TouchScreenButton" parent="ControlsLayer/Buttons"]
 material = ExtResource("1_fbm6y")
@@ -71,8 +86,10 @@ position = Vector2(61, 309)
 texture_normal = ExtResource("12_560ih")
 texture_pressed = ExtResource("13_gqnb4")
 action = "deleting"
+visibility_mode = 1
 
 [node name="FPS" type="Label" parent="."]
+visible = false
 offset_left = 41.0
 offset_top = 31.0
 offset_right = 81.0
@@ -123,3 +140,5 @@ layout_mode = 2
 [connection signal="daily_pressed" from="MainMenu" to="." method="_on_main_menu_daily_pressed"]
 [connection signal="tutorial_pressed" from="MainMenu" to="." method="_on_main_menu_tutorial_pressed"]
 [connection signal="problem_submitted" from="World" to="." method="_on_world_problem_submitted"]
+[connection signal="pressed" from="ControlsLayer/Buttons/Split" to="ControlsLayer/Buttons/Split" method="_on_pressed"]
+[connection signal="released" from="ControlsLayer/Buttons/Split" to="ControlsLayer/Buttons/Split" method="_on_released"]

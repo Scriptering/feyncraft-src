@@ -14,9 +14,9 @@ const xscale:float = .25
 const yscale:float = .25
 const scale: Vector2 = Vector2(xscale, yscale)
 
-func _init(_matrix: DrawingMatrix, _decorations: Array[Decoration.Decor]) -> void:
+func _init(_matrix: DrawingMatrix) -> void:
 	matrix = _matrix
-	decorations = _decorations
+	decorations = _matrix.decorations
 	
 	matrix.fix_directionless_bend_paths()
 	positions = calc_positions()
@@ -83,12 +83,12 @@ func get_connection_string(id: int, to_id: int, particle: ParticleData.Particle)
 func get_fermion_string() -> String:
 	var fermion_string: String = ""
 	
-	var particle_matrix : DrawingMatrix = matrix.get_reduced_matrix(
+	var fermion_matrix : DrawingMatrix = matrix.get_reduced_matrix(
 		func(particle : ParticleData.Particle) -> bool:
 			return particle in ParticleData.FERMIONS
 	)
 	
-	var path_finder := PathFinder.new(particle_matrix)
+	var path_finder := PathFinder.new(fermion_matrix)
 	fermion_paths = path_finder.generate_paths()
 	
 	for fermion_path: PackedInt32Array in fermion_paths:
@@ -101,8 +101,7 @@ func get_fermion_string() -> String:
 
 func get_fermion_path_string(path: PackedInt32Array) -> String:
 	var fermion_path_string: String = ""
-	var prev_particle: ParticleData.Particle = ParticleData.Particle.gluon
-	
+
 	for i in path.size() - 1:
 		var from_id: int = path[i]
 		var to_id: int = path[i+1] 
@@ -136,7 +135,7 @@ func calc_out_angle(a: Vector2, centre: Vector2) -> float:
 	
 	return acos(b.x/b.length())
 
-func get_lowest_x(positions: Array[Vector2i]) -> int:
+func get_lowest_x() -> int:
 	var lowest_x: int = positions[0].x
 	
 	for position: Vector2i in positions:
@@ -145,7 +144,7 @@ func get_lowest_x(positions: Array[Vector2i]) -> int:
 
 	return lowest_x
 
-func get_highest_y(positions: Array[Vector2i]) -> int:
+func get_highest_y() -> int:
 	var highest_y: int = positions[0].y
 	
 	for position: Vector2i in positions:
@@ -376,11 +375,8 @@ func get_hadron_particles(hadron_ids:PackedInt32Array,) -> Array[ParticleData.Pa
 	
 	return particles
 
-
 func get_hadron_string(hadron_ids:PackedInt32Array,) -> String:
 	var hadron_string: String = ""
-	
-	var state: StateLine.State = matrix.get_state_from_id(hadron_ids[0])
 	
 	var on_left: bool = matrix.get_state_from_id(hadron_ids[0]) == StateLine.State.Initial
 	var label_position: String = "left" if on_left else "right"
@@ -412,8 +408,8 @@ func calc_positions() -> Array[Vector2i]:
 	if positions.is_empty():
 		return []
 	
-	var lowest_x : int = get_lowest_x(positions)
-	var highest_y : int = get_highest_y(positions)
+	var lowest_x : int = get_lowest_x()
+	var highest_y : int = get_highest_y()
 	
 	for i:int in positions.size():
 		positions[i] *= Vector2i(+1, -1)

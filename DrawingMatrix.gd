@@ -4,6 +4,7 @@ extends ConnectionMatrix
 @export var split_hadron_ids : Array = []
 @export var normalised_interaction_positions : Array[Vector2i] = []
 @export var state_line_positions : Array[int] = [0, 20]
+@export var decorations : Array[Decoration.Decor] = []
 
 func initialise_from_connection_matrix(from_connection_matrix: ConnectionMatrix) -> void:
 	connection_matrix = from_connection_matrix.connection_matrix.duplicate(true)
@@ -22,6 +23,22 @@ func get_interaction_positions(grid_size: int = 1) -> Array[Vector2i]:
 		interaction_positions[i] *= grid_size
 	
 	return interaction_positions
+
+func add_full_interaction(
+	interaction_position: Vector2i,
+	decoration: Decoration.Decor,
+	grid_size: int,
+	interaction_state: StateLine.State = StateLine.State.None,
+	id : int = calculate_new_interaction_id(interaction_state)
+) -> void:
+	decorations.insert(id, decoration)
+	
+	add_interaction_with_position(
+		interaction_position,
+		grid_size,
+		interaction_state,
+		id
+	)
 
 func add_interaction_position(position: Vector2i, grid_size: int, id: int = normalised_interaction_positions.size()) -> void:
 	normalised_interaction_positions.insert(id, position/grid_size)

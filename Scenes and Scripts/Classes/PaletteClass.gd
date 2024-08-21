@@ -48,7 +48,7 @@ func get_colour(colour_index: ColourIndex) -> Color:
 	return colours[colour_index]
 
 func generate_palette_texture() -> ImageTexture:
-	var img := Image.create(palette_size, palette_size, false, Image.Format.FORMAT_RGBA8)
+	var img := Image.create_empty(palette_size, palette_size, false, Image.Format.FORMAT_RGBA8)
 	img.fill(Color.BLACK)
 	
 	for i:int in range(ColourIndex.size()):

@@ -1,7 +1,5 @@
 extends ListItem
 
-signal selected
-
 @export var palette: Palette = Palette.new()
 
 @export_group("Children")
@@ -117,7 +115,7 @@ func update_custom_palette() -> void:
 	update_button_colours()
 
 func load_saved_palette() -> void:
-	palette = FileManager.load_txt(file_path)
+	palette = load(file_path)
 
 func update_shader() -> void:
 	EventBus.change_palette.emit(palette.generate_palette_texture())

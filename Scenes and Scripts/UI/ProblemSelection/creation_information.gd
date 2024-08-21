@@ -20,9 +20,7 @@ var Level: Node2D
 @export var title:Label
 
 
-func _process(delta: float) -> void:
-	super._process(delta)
-	
+func _process(_delta: float) -> void:
 	if Level.current_mode != BaseMode.Mode.ProblemCreation:
 		return
 	

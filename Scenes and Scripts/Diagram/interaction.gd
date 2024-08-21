@@ -3,7 +3,6 @@ extends GrabbableNode2D
 
 signal deleted
 signal request_deletion
-signal show_information_box
 
 @onready var Ball: AnimatedSprite2D = $Ball
 @onready var Dot: AnimatedSprite2D = $Dot
@@ -394,8 +393,6 @@ func _on_mouse_area_button_pressed() -> void:
 	if start_press_pos != position:
 		return
 	
-	EventBus.deletable_object_clicked.emit(self)
-	
 	if (
 		(StateManager.state == BaseState.State.Idle or
 		(StateManager.state == BaseState.State.Drawing and
@@ -506,3 +503,9 @@ func get_vision_vectors(vision: Globals.Vision) -> PackedVector2Array:
 
 func _on_mouse_area_button_button_down() -> void:
 	start_press_pos = position
+	EventBus.grabbable_object_clicked.emit(self)
+	EventBus.deletable_object_clicked.emit(self)
+
+func _on_touch_screen_button_pressed() -> void:
+	EventBus.grabbable_object_clicked.emit(self)
+	EventBus.deletable_object_clicked.emit(self)

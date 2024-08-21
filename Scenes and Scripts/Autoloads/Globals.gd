@@ -25,9 +25,32 @@ const vision_colours : Array = [
 @onready var particle_textures := {}
 
 var is_on_editor: bool
+var is_using_finger: bool = false:
+	set(new_using_finger):
+		if is_using_finger == new_using_finger:
+			return
+		is_using_finger = new_using_finger
+		EventBus.using_touchscreen_changed.emit(is_using_finger)
+
+var has_used_mouse_this_frame: bool = false
+var has_used_touch_this_frame: bool = false
 
 func _ready() -> void:
 	is_on_editor = OS.has_feature("editor")
 
+func _process(delta: float) -> void:
+	if !(has_used_touch_this_frame or has_used_mouse_this_frame):
+		return
+	
+	self.is_using_finger = has_used_touch_this_frame
+	has_used_mouse_this_frame = false
+	has_used_touch_this_frame = false
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventScreenDrag or event is InputEventScreenTouch:
+		has_used_touch_this_frame = true
+	elif event is InputEventMouse:
+		has_used_mouse_this_frame = true
+
 func is_on_mobile() -> bool:
-	return OS.has_feature("web_android") or OS.has_feature("web_ios") or OS.has_feature("android") or OS.has_feature("ios")
+	return is_using_finger

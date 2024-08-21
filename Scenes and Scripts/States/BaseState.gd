@@ -10,7 +10,7 @@ enum State {
 	Drawing
 }
 
-var crosshair : Node2D
+var crosshair : Crosshair
 var state_manager : Node
 var Diagram : MainDiagram
 

@@ -28,7 +28,7 @@ enum Shade {Bright, Dark}
 var Diagram: MainDiagram
 var Initial: StateLine
 var Final: StateLine
-var Crosshair: Node
+var crosshair: Crosshair
 
 var points : Array[Vector2i] = [Vector2i.LEFT, Vector2i.LEFT] : set = _set_points
 var prev_points : Array[Vector2i] = [Vector2i(0, 0), Vector2i(0, 0)]
@@ -95,15 +95,20 @@ func _ready() -> void:
 	
 	set_anti()
 	set_left_and_right_points()
+	
+	click_area_width = 12 if Globals.is_on_mobile() else 7
 
 func init(diagram: MainDiagram) -> void:
 	Diagram = diagram
 	Initial = diagram.StateLines[StateLine.State.Initial]
 	Final = diagram.StateLines[StateLine.State.Final]
-	Crosshair = diagram.Crosshair
+	crosshair = diagram.crosshair
 
-func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("click") and is_hovered():
+func _input(event: InputEvent) -> void:
+	if Globals.is_on_mobile():
+		if event is InputEventScreenTouch and event.pressed and is_hovered(event.position - global_position):
+			EventBus.deletable_object_clicked.emit(self)
+	elif event.is_action_pressed("click") and is_hovered(get_local_mouse_position()):
 		EventBus.deletable_object_clicked.emit(self)
 
 func _set_points(new_points: Array[Vector2i]) -> void:
@@ -165,7 +170,10 @@ func set_left_and_right_points() -> void:
 		left_point = Point.End
 		right_point = Point.Start
 
-func connect_interaction(interaction: Interaction, point:Point = points.find(interaction.positioni())) -> void:
+func connect_interaction(
+	interaction: Interaction,
+	point:Point = get_point_at_position(interaction.positioni())
+) -> void:
 	connected_interactions[point] = interaction
 
 func get_on_state_line() -> StateLine.State:
@@ -398,15 +406,14 @@ func is_overlapping(particle_line: ParticleLine) -> bool:
 		is_position_on_line(particle_line.points[ParticleLine.Point.Start])
 		|| is_position_on_line(particle_line.points[ParticleLine.Point.End])
 	)
-	
-	return true
 
-func is_hovered() -> bool:
+func is_hovered(pos: Vector2) -> bool:
 	var v := line_vector.normalized();
-	var m := get_local_mouse_position() - Vector2(points[Point.Start]);
+	var m := pos - Vector2(points[Point.Start]);
 
 	var lambda := m.x*v.x + m.y*v.y
 	var rho :=   -m.x*v.y + m.y*v.x
+
 
 	if lambda < 0 or lambda > line_vector.length():
 		return false

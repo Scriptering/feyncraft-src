@@ -1,9 +1,6 @@
 class_name ConnectionMatrix
 extends Resource
 
-signal interaction_added(point_id: int)
-signal interaction_removed(point_id: int)
-
 enum {INVALID}
 enum Connection {from_id, to_id, particle}
 enum EntryFactor {Entry = +1, Exit = -1, Both = 0}
@@ -126,8 +123,6 @@ func add_interaction(
 	id : int = calculate_new_interaction_id(interaction_state)
 ) -> void:
 
-	emit_signal("interaction_added", id)
-	
 	connection_matrix.insert(id, create_empty_array(matrix_size))
 	matrix_size += 1
 	
@@ -149,8 +144,6 @@ func calculate_new_interaction_id(interaction_state: StateLine.State = StateLine
 	return INVALID
 
 func remove_interaction(id: int) -> void:
-	emit_signal("interaction_removed", id)
-	
 	for row in matrix_size:
 		connection_matrix[row].remove_at(id)
 	

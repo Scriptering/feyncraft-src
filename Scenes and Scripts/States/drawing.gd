@@ -19,14 +19,16 @@ func _set_delay_time(new_value: float) -> void:
 func enter() -> void:
 	super.enter()
 	drawing = false
+	
 	start_crosshair_position = crosshair.position
+	
 	crosshair.drawing_started()
 	delay_timer.start()
 
 func exit() -> void:
 	crosshair.drawing_ended()
 
-func input(_event: InputEvent) -> State:
+func input(event: InputEvent) -> State:
 	if Input.is_action_just_pressed("editing"):
 		cancel_placement()
 		return State.Hovering
@@ -35,7 +37,10 @@ func input(_event: InputEvent) -> State:
 		return State.Deleting
 	elif Input.is_action_just_pressed("clear"):
 		cancel_placement()
-	elif Input.is_action_just_released("click"):
+	elif (
+		(event is InputEventScreenTouch and event.is_released())
+		or Input.is_action_just_released("click")
+	):
 		cancel_placement()
 		return State.Idle
 	elif drawing == true:

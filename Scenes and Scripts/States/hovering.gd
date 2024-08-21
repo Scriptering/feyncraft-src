@@ -13,11 +13,14 @@ func exit() -> void:
 	grabbed_object = null
 	EventBus.grabbable_object_clicked.disconnect(_grabbable_object_clicked)
 
-func input(_event: InputEvent) -> State:
+func input(event: InputEvent) -> State:
 	if Input.is_action_just_released("editing"):
 		return State.Idle
 	
-	if Input.is_action_just_released("click"):
+	if (
+		(Globals.is_on_mobile() and event is InputEventMouseButton and event.is_released())
+		or Input.is_action_just_released("click")
+	):
 		EventBus.change_cursor.emit(Globals.Cursor.hover)
 		grabbed_object = null
 
@@ -29,9 +32,14 @@ func process(_delta: float) -> State:
 		return State.Placing
 	return State.Null
 
-func _grabbable_object_clicked(object: Node) -> void:
+func _grabbable_object_clicked(object: Node) -> void:	
 	if !object.can_be_grabbed():
 		return
+	
+	if grabbed_object:
+		return
+	
+	grabbed_object = object
 	
 	EventBus.change_cursor.emit(Globals.Cursor.hold)
 	

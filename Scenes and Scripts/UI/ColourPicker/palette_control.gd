@@ -51,11 +51,6 @@ func save_palettes() -> void:
 func _on_add_problem_pressed() -> void:
 	$PaletteList.create_new_palette(FileManager.get_unique_file_name(get_custom_file_path()))
 
-func _on_load_button_submitted(submitted_text: String) -> void:
-	var file_path: String = FileManager.get_unique_file_name(get_custom_file_path())
-	FileManager.create_text_file(submitted_text, file_path)
-	load_palette(file_path)
-
 func get_seasonal_palette() -> String:
 	var datetime: Dictionary = Time.get_datetime_dict_from_system()
 	
