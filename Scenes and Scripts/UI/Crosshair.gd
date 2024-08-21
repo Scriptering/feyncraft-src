@@ -32,13 +32,13 @@ var last_input_inside_area: bool = false
 
 var inside_diagram_control: bool = false
 var inside_crosshair_area: bool = false
-var fingers_inside_crosshair_area: Dictionary = {
-	0: false,
-	1: false,
-	2: false,
-	3: false,
-	4: false
-}
+var fingers_inside_crosshair_area: Array[bool] = [
+	false,
+	false,
+	false,
+	false,
+	false
+]
 
 func _input(event: InputEvent) -> void:
 	if Globals.is_on_mobile():
@@ -46,9 +46,19 @@ func _input(event: InputEvent) -> void:
 
 	elif event is InputEventMouseMotion:
 		var mouse_position: Vector2 = get_parent().get_local_mouse_position()
-		last_input_inside_area = is_inside_crosshair_area(mouse_position)
+		
+		var in_crosshair_area:bool = is_inside_crosshair_area(mouse_position)
+		
+		if in_crosshair_area != inside_diagram_control:
+			if in_crosshair_area:
+				EventBus.crosshair_area_mouse_entered.emit()
+			else:
+				EventBus.crosshair_area_mouse_exited.emit()
+			inside_diagram_control = in_crosshair_area
+		
+		last_input_inside_area = in_crosshair_area
 		move(mouse_position)
-		visible = get_state_visible(StateManager.state)
+		visible = in_crosshair_area and get_state_visible(StateManager.state)
 
 func handle_mobile_event(event: InputEvent) -> void:
 	if event is InputEventScreenDrag or (event is InputEventScreenTouch and event.pressed):
@@ -61,29 +71,28 @@ func handle_mobile_event(event: InputEvent) -> void:
 func handle_drag(event: InputEvent) -> void:
 	var drag_position: Vector2 = event.position - get_parent().global_position
 	var in_crosshair_area: bool = is_inside_crosshair_area(drag_position)
-	if in_crosshair_area != fingers_inside_crosshair_area[event.index]:
+	var index: int = clamp(event.index, 0, 5)
+	var last_finger_in_area: bool = fingers_inside_crosshair_area[index]
+	
+	if in_crosshair_area != last_finger_in_area:
 		if in_crosshair_area:
-			EventBus.crosshair_area_finger_entered.emit(event.index)
+			EventBus.crosshair_area_finger_entered.emit(index)
 		else:
-			EventBus.crosshair_area_finger_exited.emit(event.index)
-		fingers_inside_crosshair_area[event.index] = in_crosshair_area
+			EventBus.crosshair_area_finger_exited.emit(index)
+		fingers_inside_crosshair_area[index] = in_crosshair_area
 	last_input_inside_area = in_crosshair_area
 	
 	if !in_crosshair_area:
 		return
 	
 	if drag_finger_index == -1:
-		drag_finger_index = event.index
+		drag_finger_index = index
 	
-	if event.index != drag_finger_index:
+	if index != drag_finger_index:
 		return
 	
-	visible = get_state_visible(StateManager.state)
 	move(drag_position)
-
-func _ready() -> void:
-	EventBus.diagram_mouse_entered.connect(_diagram_mouse_entered)
-	EventBus.diagram_mouse_exited.connect(_diagram_mouse_exited)
+	visible = in_crosshair_area and get_state_visible(StateManager.state)
 
 func init(diagram: DiagramBase, state_lines: Array, gridsize: int) -> void:
 	Diagram = diagram
@@ -245,12 +254,6 @@ func is_on_interaction(test_position: Vector2 = position) -> bool:
 			return true
 	return false
 
-func _diagram_mouse_entered() -> void:
-	inside_diagram_control = true
-
-func _diagram_mouse_exited() -> void:
-	inside_diagram_control = false
-
 func _state_changed(new_state: BaseState.State, _old_state: BaseState.State) -> void: 
 	if !is_inside_tree():
 		return
@@ -258,9 +261,6 @@ func _state_changed(new_state: BaseState.State, _old_state: BaseState.State) -> 
 	visible = get_state_visible(new_state)
 
 func get_state_visible(new_state: BaseState.State) -> bool:
-	if !inside_diagram_control:
-		return false
-	
 	if new_state == BaseState.State.Idle:
 		return is_start_drawing_position_valid()
 	

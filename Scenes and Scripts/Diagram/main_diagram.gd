@@ -840,7 +840,7 @@ func check_split_lines(object: Variant) -> void:
 		check_split_lines(splitting_interactions[i])
 
 func split_interaction(interaction: Interaction) -> void:
-	if interaction.connected_lines.size() == 1: 
+	if interaction.connected_lines.size() <= 1: 
 		return
 	
 	print("interaction split")

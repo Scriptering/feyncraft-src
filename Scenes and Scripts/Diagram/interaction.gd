@@ -75,16 +75,6 @@ func _grab_area_hovered_changed(new_value: bool) -> void:
 	else:
 		Ball.frame = NORMAL
 
-func _input(event: InputEvent) -> void:
-	if grabbed:
-		return
-	elif is_event_clicked_on(event):
-		get_viewport().set_input_as_handled()
-		grab_area_clicked.emit(self)
-		print("interaction grabbed")
-		EventBus.grabbable_object_clicked.emit(self)
-		EventBus.deletable_object_clicked.emit(self)
-
 func _set_decor(new_decor: Decoration.Decor) -> void:
 	decor = new_decor
 	update_valid_visual()
@@ -403,8 +393,6 @@ func _on_mouse_area_button_pressed() -> void:
 	if start_press_pos != position:
 		return
 	
-	EventBus.deletable_object_clicked.emit(self)
-	
 	if (
 		(StateManager.state == BaseState.State.Idle or
 		(StateManager.state == BaseState.State.Drawing and
@@ -515,3 +503,9 @@ func get_vision_vectors(vision: Globals.Vision) -> PackedVector2Array:
 
 func _on_mouse_area_button_button_down() -> void:
 	start_press_pos = position
+	EventBus.grabbable_object_clicked.emit(self)
+	EventBus.deletable_object_clicked.emit(self)
+
+func _on_touch_screen_button_pressed() -> void:
+	EventBus.grabbable_object_clicked.emit(self)
+	EventBus.deletable_object_clicked.emit(self)
