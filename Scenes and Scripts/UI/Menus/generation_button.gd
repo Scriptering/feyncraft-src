@@ -148,7 +148,7 @@ func _on_save_pressed() -> void:
 
 func toggle_diagram_viewer() -> void:
 	GeneratedDiagramViewer.toggle_visible()
-	GeneratedDiagramViewer.position = get_viewport_rect().size / 2
+	GeneratedDiagramViewer.position = Vector2.ZERO
 
 func _on_view_pressed() -> void:
 	toggle_diagram_viewer()

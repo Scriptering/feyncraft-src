@@ -5,11 +5,17 @@ signal crosshair_area_mouse_entered()
 signal crosshair_area_mouse_exited()
 signal crosshair_area_finger_entered(index: int)
 signal crosshair_area_finger_exited(index: int)
+
 signal using_touchscreen_changed(using_touchscreen: bool)
+
 signal diagram_mouse_entered()
 signal diagram_mouse_exited()
+signal diagram_finger_pressed(index: int)
+signal diagram_mouse_pressed()
+
 signal grabbable_object_clicked(obj: Node)
 signal deletable_object_clicked(obh: Node)
+
 signal show_disabled
 signal hide_disabled
 signal draw_diagram

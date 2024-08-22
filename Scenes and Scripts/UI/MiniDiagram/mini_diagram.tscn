@@ -65,6 +65,7 @@ anchors_preset = 0
 offset_left = 35.0
 offset_right = 75.0
 offset_bottom = 40.0
+mouse_filter = 2
 
 [node name="Initial" type="Control" parent="DiagramArea"]
 use_parent_material = true

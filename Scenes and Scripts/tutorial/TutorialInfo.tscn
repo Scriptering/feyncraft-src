@@ -55,8 +55,8 @@ alignment = 1
 [node name="PrevStep" parent="TutorialPanel/VBoxContainer/Buttons" instance=ExtResource("4_3eia6")]
 visible = false
 layout_mode = 2
-icon = ExtResource("6_1qgbo")
 minimum_size = Vector2(24, 21)
+icon = ExtResource("6_1qgbo")
 icon_use_parent_material = true
 
 [node name="Tooltip" parent="TutorialPanel/VBoxContainer/Buttons/PrevStep" instance=ExtResource("7_pgcfn")]
@@ -64,8 +64,8 @@ tooltip = "Prev Step"
 
 [node name="NextStep" parent="TutorialPanel/VBoxContainer/Buttons" instance=ExtResource("4_3eia6")]
 layout_mode = 2
-icon = ExtResource("6_ele4h")
 minimum_size = Vector2(24, 21)
+icon = ExtResource("6_ele4h")
 icon_use_parent_material = true
 
 [node name="Tooltip" parent="TutorialPanel/VBoxContainer/Buttons/NextStep" instance=ExtResource("7_pgcfn")]
@@ -74,8 +74,8 @@ tooltip = "Next Step"
 [node name="Finish" parent="TutorialPanel/VBoxContainer/Buttons" instance=ExtResource("4_3eia6")]
 visible = false
 layout_mode = 2
-icon = ExtResource("10_qnfej")
 minimum_size = Vector2(24, 21)
+icon = ExtResource("10_qnfej")
 icon_use_parent_material = true
 
 [node name="Tooltip" parent="TutorialPanel/VBoxContainer/Buttons/Finish" node_paths=PackedStringArray("TooltipPanel", "TooltipLabel", "TooltipContainer") instance=ExtResource("7_pgcfn")]

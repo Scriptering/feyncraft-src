@@ -147,6 +147,7 @@ func is_submission_duplicate(submission: DrawingMatrix) -> bool:
 
 func toggle_diagram_viewer() -> void:
 	SubmittedDiagramViewer.visible = !SubmittedDiagramViewer.visible
+	SubmittedDiagramViewer.position = Vector2.ZERO
 
 func _on_view_submissions_pressed() -> void:
 	toggle_diagram_viewer()

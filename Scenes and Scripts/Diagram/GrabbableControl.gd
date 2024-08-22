@@ -19,15 +19,18 @@ func _ready() -> void:
 	add_to_group("grabbable")
 	
 	for GrabArea in GrabAreas:
+		GrabArea.gui_input.connect(_grab_area_gui_input)
 		GrabArea.mouse_entered.connect(_on_GrabArea_mouse_entered)
 		GrabArea.mouse_exited.connect(_on_GrabArea_mouse_exited)
 
-func _input(event: InputEvent) -> void:
+func _grab_area_gui_input(event: InputEvent) -> void:
 	if !is_visible_in_tree():
 		return
 	
 	if grabbed:
 		handle_drag(event)
+		return
+	
 	elif is_event_clicked_on(event):
 		get_viewport().set_input_as_handled()
 		grab_area_clicked.emit(self)
@@ -35,27 +38,43 @@ func _input(event: InputEvent) -> void:
 
 func is_event_clicked_on(event: InputEvent) -> bool:
 	if Globals.is_on_mobile():
-		if !(
-			event is InputEventScreenDrag
-			or (event is InputEventScreenTouch and event.pressed)
-		):
-			return false
-		
-		if GrabAreas.any(
-			func(node: Control) -> bool: 
-				return node.get_global_rect().has_point(event.position)
-		):
-			drag_finger_index = event.index
+		if event is InputEventScreenTouch and event.pressed:
+			drag_finger_index=event.index
 			drag_vector_start = position - event.position
 			return true
-		
-		return false
-		
-	elif Input.is_action_just_pressed("click") and grab_area_hovered:
+	elif (
+		event is InputEventMouseButton
+		and event.button_index == MOUSE_BUTTON_LEFT
+		and event.is_pressed()
+	):
 		drag_vector_start = position - get_global_mouse_position()
 		return true
 	
 	return false
+
+#func is_event_clicked_on(event: InputEvent) -> bool:
+	#if Globals.is_on_mobile():
+		#if !(
+			#event is InputEventScreenDrag
+			#or (event is InputEventScreenTouch and event.pressed)
+		#):
+			#return false
+		#
+		#if GrabAreas.any(
+			#func(node: Control) -> bool: 
+				#return node.get_global_rect().has_point(event.position)
+		#):
+			#drag_finger_index = event.index
+			#drag_vector_start = position - event.position
+			#return true
+		#
+		#return false
+		#
+	#elif Input.is_action_just_pressed("click") and grab_area_hovered:
+		#drag_vector_start = position - get_global_mouse_position()
+		#return true
+	#
+	#return false
 
 func handle_drag(event: InputEvent) -> void:
 	if !follow_cursor:

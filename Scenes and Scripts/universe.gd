@@ -25,6 +25,9 @@ var enter_funcs: Dictionary = {
 const seconds_in_day: int = 24 * 60 * 60
 
 func _ready() -> void:
+	get_viewport().physics_object_picking_sort = true
+	get_viewport().physics_object_picking_first_only = true
+	
 	$ControlsLayer/Buttons.visible = false
 	$ControlsLayer/Cursor.visible = true
 
@@ -179,5 +182,4 @@ func should_reset_daily_streak() -> bool:
 
 func _on_using_touchscreen_changed(using_touchscreen: bool) -> void:
 	EventBus.show_feedback.emit("Touch screen changed")
-	$ControlsLayer/Buttons.visible = using_touchscreen
 	$ControlsLayer/Cursor.visible = !using_touchscreen
