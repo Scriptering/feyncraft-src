@@ -17,17 +17,17 @@ func input(event: InputEvent) -> State:
 		place_objects()
 		return State.Idle
 	
-	if Globals.is_on_mobile():
-		if (
-			event is InputEventScreenTouch
-			and event.is_released()
-			and event.index == grabbed_object.drag_finger_index
-		):
-			place_objects()
-			if Input.is_action_pressed("editing"):
-				return State.Hovering
-			else:
-				return State.Idle
+	if (
+		Globals.is_on_mobile()
+		and event is InputEventScreenTouch
+		and event.is_released()
+		and event.index == grabbed_object.drag_finger_index
+	):
+		place_objects()
+		if Input.is_action_pressed("editing"):
+			return State.Hovering
+		else:
+			return State.Idle
 
 	elif Input.is_action_just_released("click"):
 		place_objects()

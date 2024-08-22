@@ -178,5 +178,6 @@ func should_reset_daily_streak() -> bool:
 	return day_difference > 1
 
 func _on_using_touchscreen_changed(using_touchscreen: bool) -> void:
+	EventBus.show_feedback.emit("Touch screen changed")
 	$ControlsLayer/Buttons.visible = using_touchscreen
 	$ControlsLayer/Cursor.visible = !using_touchscreen
