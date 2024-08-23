@@ -1103,14 +1103,35 @@ func is_fully_connected(bidirectional: bool) -> bool:
 		).size() == 0
 	)
 
-func is_energy_conserved() -> bool:
-	var state_base_particles: Array = StateLines.map(
-		func(state_line: StateLine) -> Array:
-			return state_line.get_connected_base_particles()
-	)
+func sort_particles(particle_A: Variant, particle_B: Variant) -> bool:
+	if particle_A is ParticleData.Particle:
+		if particle_B is ParticleData.Particle:
+			return particle_A < particle_B
+		else:
+			return true
 	
-	state_base_particles[StateLine.State.Initial].sort()
-	state_base_particles[StateLine.State.Final].sort()
+	if particle_B is ParticleData.Particle:
+		return false
+	else:
+		return particle_A < particle_B
+
+func is_energy_conserved() -> bool:
+	var connection_matrix: ConnectionMatrix = current_diagram.reduce_to_connection_matrix()
+	
+	var state_base_particles: Array = [[],[]]
+	
+	for state:StateLine.State in StateLine.STATES:
+		for id: int in connection_matrix.get_state_ids(state):
+			var connected_particles : Array[ParticleData.Particle] = connection_matrix.get_connected_particles(id, true)
+			
+			if connected_particles.size() == 1:
+				state_base_particles[state].push_back(connected_particles)
+				continue
+
+			state_base_particles[state].push_back(ParticleData.find_hadron(connected_particles))
+	
+	state_base_particles[StateLine.State.Initial].sort_custom(sort_particles)
+	state_base_particles[StateLine.State.Final].sort_custom(sort_particles)
 	
 	if (
 		state_base_particles[StateLine.State.Initial]
@@ -1121,7 +1142,7 @@ func is_energy_conserved() -> bool:
 	var state_masses: Array = state_base_particles.map(
 		func(base_particles: Array) -> float:
 			return base_particles.reduce(
-				func(accum: float, particle: ParticleData.Particle) -> float:
+				func(accum: float, particle: Variant) -> float:
 					return accum + ParticleData.PARTICLE_MASSES[particle],
 				0.0
 		)
