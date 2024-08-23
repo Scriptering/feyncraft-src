@@ -193,7 +193,7 @@ func enter_solution_creation() -> void:
 	CreationInformation.show()
 	
 	var creating_problem: Problem = Globals.creating_problem
-	var drawn_diagram: DrawingMatrix = Diagram.generate_drawing_matrix_from_diagram()
+	var drawn_diagram: DrawingMatrix = Diagram.get_current_diagram()
 	for state:StateLine.State in StateLine.STATES:
 		Globals.creating_problem.state_interactions[state] = drawn_diagram.reduce_to_connection_matrix().get_state_interactions(state)
 	
@@ -311,7 +311,7 @@ func _on_tutorial_info_finish_pressed() -> void:
 
 func _on_export_tab_export_pressed(join_paths: bool, draw_internal_labels: bool, draw_external_labels: bool) -> void:
 	var exporter:= DrawingMatrixExporter.new(
-		Diagram.generate_drawing_matrix_from_diagram()
+		Diagram.get_current_diagram()
 	)
 	
 	exporter.join_paths = join_paths
