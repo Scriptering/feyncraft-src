@@ -25,24 +25,26 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -106.0
-offset_top = -100.0
-offset_right = 106.0
-offset_bottom = 100.0
+offset_left = -155.0
+offset_top = -115.5
+offset_right = 155.0
+offset_bottom = 115.5
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_q3cex")
 current_tab = 0
 tabs_visible = false
 
 [node name="ProblemSetList" parent="ProblemSelection" instance=ExtResource("3_chpqf")]
 layout_mode = 2
-mouse_filter = 1
+mouse_filter = 2
 metadata/_tab_index = 0
 
 [node name="ProblemList" parent="ProblemSelection" instance=ExtResource("1_gfl8q")]
 visible = false
 layout_mode = 2
+mouse_filter = 2
 metadata/_tab_index = 1
 
 [connection signal="tree_entered" from="." to="." method="_on_tree_entered"]

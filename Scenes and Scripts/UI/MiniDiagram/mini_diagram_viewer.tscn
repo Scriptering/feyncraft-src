@@ -26,10 +26,9 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -640.0
-offset_bottom = -360.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("4_o6nlg")
 delete_button = NodePath("PanelContainer/VBoxContainer/HBoxContainer/Delete")
 resave_button = NodePath("PanelContainer/VBoxContainer/HBoxContainer/Resave")
@@ -42,16 +41,25 @@ GrabAreas = [NodePath("PanelContainer")]
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 use_parent_material = true
-layout_mode = 2
-offset_right = 242.0
-offset_bottom = 184.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -121.0
+offset_top = -92.0
+offset_right = 121.0
+offset_bottom = 92.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-mouse_filter = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
 use_parent_material = true
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 1
 
 [node name="Header" type="PanelContainer" parent="PanelContainer/VBoxContainer"]
@@ -64,6 +72,7 @@ theme_override_styles/panel = SubResource("StyleBoxEmpty_8mruu")
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 4
+mouse_filter = 2
 theme_override_constants/separation = -2
 alignment = 1
 
@@ -78,6 +87,7 @@ theme_override_font_sizes/font_size = 16
 show_behind_parent = true
 use_parent_material = true
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 0
 
 [node name="Close" type="TextureButton" parent="PanelContainer/VBoxContainer/Header"]
@@ -95,6 +105,7 @@ stretch_mode = 5
 [node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
+mouse_filter = 2
 
 [node name="Label" type="Label" parent="PanelContainer/VBoxContainer/CenterContainer"]
 use_parent_material = true
@@ -117,11 +128,13 @@ layout_mode = 2
 [node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
+mouse_filter = 2
 alignment = 1
 
 [node name="Control" type="Control" parent="PanelContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
 
 [node name="Left" parent="PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
 layout_mode = 2

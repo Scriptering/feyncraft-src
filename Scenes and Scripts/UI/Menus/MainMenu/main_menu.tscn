@@ -21,7 +21,7 @@
 [ext_resource type="Texture2D" uid="uid://btu2jj1bbbbil" path="res://Textures/Buttons/icons/palette.png" id="17_cv4ds"]
 [ext_resource type="Texture2D" uid="uid://cmknf0gynrux7" path="res://Textures/Buttons/icons/fire.png" id="17_ws57h"]
 [ext_resource type="Texture2D" uid="uid://b3diapu0ec332" path="res://Textures/Buttons/icons/puzzle_piece.png" id="19_fbmws"]
-[ext_resource type="PackedScene" uid="uid://dh4niqtuyy5o3" path="res://Scenes and Scripts/UI/Buttons/popup_button.tscn" id="21_eg5af"]
+[ext_resource type="PackedScene" uid="uid://dh4niqtuyy5o3" path="res://popup_button.tscn" id="21_eg5af"]
 [ext_resource type="Texture2D" uid="uid://bxlc5rvpwjq8o" path="res://Textures/Buttons/icons/unmute.png" id="21_lu08p"]
 [ext_resource type="PackedScene" uid="uid://b5pj0lanxu0o6" path="res://Scenes and Scripts/UI/ColourPicker/palette_menu.tscn" id="22_5omgn"]
 [ext_resource type="Texture2D" uid="uid://co52c2vc04qom" path="res://Textures/Buttons/icons/credit.png" id="23_sgn8e"]

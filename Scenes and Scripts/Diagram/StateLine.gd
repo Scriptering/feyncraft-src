@@ -138,7 +138,8 @@ func sort_quark_groups(quark_groups: Array) -> Array:
 func get_connected_lines() -> Array[ParticleLine]:
 	var connected_lines: Array[ParticleLine] = []
 	for interaction:Interaction in connected_interactions:
-		connected_lines.push_back(interaction.connected_lines.front())
+		if interaction.connected_lines.size() > 0:
+			connected_lines.push_back(interaction.connected_lines.front())
 	return connected_lines
 
 func sort_connected_lines(connected_lines: Array) -> Array:

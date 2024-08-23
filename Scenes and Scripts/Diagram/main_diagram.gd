@@ -111,6 +111,17 @@ func init(state_manager: Node) -> void:
 func _process(_delta: float) -> void:
 	flush_update_queue()
 
+func _gui_input(event: InputEvent) -> void:
+	if Globals.is_on_mobile():
+		if event is InputEventScreenTouch and event.is_pressed():
+			EventBus.diagram_finger_pressed.emit(event.index)
+	elif(
+		event is InputEventMouseButton
+		and event.button_index == MOUSE_BUTTON_LEFT
+		and event.is_pressed()
+	):
+		EventBus.diagram_mouse_pressed.emit()
+
 func flush_update_queue() -> void:
 	for interaction:Interaction in $DiagramArea/Interactions.get_children():
 		if interaction.update_queued:
