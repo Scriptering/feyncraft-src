@@ -121,9 +121,24 @@ func create_diagram_interaction_positions(drawing_matrix: DrawingMatrix) -> void
 	for state:StateLine.State in StateLine.STATES:
 		create_state_diagram_interaction_positions(drawing_matrix, state)
 	
-	create_middle_diagram_interaction_positions(drawing_matrix)
+	for pos: Vector2 in generate_spring_layout_positions(drawing_matrix):
+		var snapped_pos: Vector2i = Vector2(
+			snapped(clamp(pos.x, grid_size, grid_width - grid_size), grid_size),
+			snapped(clamp(pos.y, grid_size, grid_height - grid_size), grid_size)
+		)
+		
+		while snapped_pos in drawing_matrix.get_interaction_positions(grid_size):
+			if pos.x < (grid_width - grid_size):
+				pos.x += grid_size
+				continue
+			elif pos.y < (grid_height - grid_size):
+				pos.y += grid_size
+				continue
+		
+		drawing_matrix.add_interaction_position(snapped_pos, grid_size)
+	#create_middle_diagram_interaction_positions(drawing_matrix)
 
-func create_middle_diagram_interaction_positions(drawing_matrix: DrawingMatrix) -> void:
+func create_middle_diagram_interaction_positions(drawing_matrix: DrawingMatrix) -> Array[Vector2]:
 	var degree_pos : Array[float] = []
 	var degree_step : float = 2 * PI / (drawing_matrix.get_state_count(StateLine.State.None))
 	var degree_start : float = randf() * 2 * PI
@@ -134,31 +149,157 @@ func create_middle_diagram_interaction_positions(drawing_matrix: DrawingMatrix) 
 	var radius : float = snapped(min(grid_width, grid_height) / 2 - grid_size, grid_size)
 	var circle_y_start : int = snapped(grid_height / 2.0, grid_size)
 	var circle_x : int = grid_centre
+	
+	var positions: Array[Vector2] = []
+	for j: int in range(drawing_matrix.get_state_count(StateLine.State.None)):
+		positions.push_back(Vector2(
+			circle_x + radius * cos(degree_pos[j]),
+			circle_y_start + radius * sin(degree_pos[j])
+		))
+	return positions
 
-	for j:int in range(drawing_matrix.get_state_count(StateLine.State.None)):
-		drawing_matrix.add_interaction_position(Vector2(
-			snapped(circle_x + radius * cos(degree_pos[j]), grid_size),
-			snapped(circle_y_start + radius * sin(degree_pos[j]), grid_size)
-		), grid_size)
+	#for j:int in range(drawing_matrix.get_state_count(StateLine.State.None)):
+		#drawing_matrix.add_interaction_position(Vector2(
+			#snapped(circle_x + radius * cos(degree_pos[j]), grid_size),
+			#snapped(circle_y_start + radius * sin(degree_pos[j]), grid_size)
+		#), grid_size)
+
+func generate_start_positions(drawing_matrix: DrawingMatrix) -> Array[Vector2]:
+	var positions: Array[Vector2]
+	positions.assign(drawing_matrix.get_interaction_positions(grid_size))
+	positions.append_array(create_middle_diagram_interaction_positions(drawing_matrix))
+	
+	#for id:int in drawing_matrix.get_state_ids(StateLine.State.None):
+		#positions.push_back(
+			#Vector2(
+				#randf_range(grid_size, grid_width - grid_size),
+				#randf_range(grid_size, grid_height - grid_size)
+			#)
+		#)
+	
+	return positions
+
+func generate_spring_layout_positions(
+	drawing_matrix: DrawingMatrix,
+	loop_count: int = 100,
+	c1: float = 2,
+	c2: float = 500,
+	c3: float = 300,
+	c4: float = .1,
+	c5: float = 10
+) -> Array[Vector2]:
+
+	var positions: Array[Vector2] = generate_start_positions(drawing_matrix)
+	var mid_ids: PackedInt32Array = drawing_matrix.get_state_ids(StateLine.State.None)
+	
+	var forces: Array[Vector2] = []
+	forces.resize(drawing_matrix.matrix_size)
+	
+	for loop:int in loop_count:
+		for id:int in mid_ids:
+			forces[id] = Vector2.ZERO
+			for jd:int in drawing_matrix.matrix_size:
+				if id == jd:
+					continue
+				
+				forces[id] += Vector2((
+					 c5 / positions[id].x
+				) if positions[id].x < grid_width/2 else (
+					c5 / (-(grid_width - positions[id].x))
+				), 0)
+
+				forces[id] += (
+					calc_force(
+						id, jd,
+						positions[id], positions[jd],
+						drawing_matrix,
+						c1, c2, c3
+						)
+				)
+		
+		for id:int in mid_ids:
+			positions[id] += c4*forces[id]
+	
+	var mid_positions: Array[Vector2] = []
+	for i:int in positions.size():
+		if i in drawing_matrix.get_state_ids(StateLine.State.None):
+			mid_positions.push_back(positions[i])
+	
+	return mid_positions
+
+func calc_force(
+	A: int, B:int,
+	pos_A: Vector2, pos_B: Vector2,
+	matrix: DrawingMatrix,
+	c1: float, c2: float, c3: float
+) -> Vector2:
+
+	var A_to_B: Vector2 = pos_B - pos_A
+	var d: float = A_to_B.length() / grid_size
+	var norm: Vector2 = A_to_B.normalized()
+	
+	var force: float = 0
+	if matrix.are_interactions_connected(A, B, true):
+		force += c1 * d
+	else:
+		force += -(c2 / (d*d*d))
+		
+	force += -(c3 / (d*d))
+	
+	return norm * force
 
 func create_state_diagram_interaction_positions(drawing_matrix: DrawingMatrix, state: StateLine.State) -> void:
-	var current_y : int = 0
-	
+	var particle_count: int = 0
 	for state_id:int in drawing_matrix.get_state_ids(state):
-		if drawing_matrix.get_state_from_id(state_id) == StateLine.State.None:
+		var hadron_id: int = ArrayFuncs.find_var(
+			drawing_matrix.split_hadron_ids,
+			func(hadron: PackedInt32Array) -> bool:
+				return state_id in hadron
+		)
+		
+		if hadron_id == drawing_matrix.split_hadron_ids.size():
+			particle_count += 1
 			continue
 		
-		for hadron:Array in drawing_matrix.split_hadron_ids:
-			if state_id not in hadron:
-				continue
+		var hadron_pos: int = drawing_matrix.split_hadron_ids[hadron_id].find(state_id)
 		
-			if hadron.find(state_id) != 0:
+		if hadron_pos == 0:
+			particle_count += 1
+			continue
+	
+	var gap: int = floor(grid_height / (particle_count + 1))
+	var current_y: int = 0
+	
+	for state_id:int in drawing_matrix.get_state_ids(state):
+		var hadron_id: int = ArrayFuncs.find_var(
+			drawing_matrix.split_hadron_ids,
+			func(hadron: PackedInt32Array) -> bool:
+				return state_id in hadron
+		)
+		
+		if hadron_id == drawing_matrix.split_hadron_ids.size():
+			current_y += gap
+			drawing_matrix.add_interaction_position(
+				Vector2(StateLines[state].position.x, current_y), grid_size
+			)
+			continue
+		
+		var hadron_pos: int = drawing_matrix.split_hadron_ids[hadron_id].find(state_id)
+		
+		if hadron_pos == 0:
+			current_y += gap
+			if gap != grid_size:
 				current_y -= grid_size
-				
-		current_y += 2*grid_size
+			drawing_matrix.add_interaction_position(
+				Vector2(StateLines[state].position.x, current_y), grid_size
+			)
+			continue
+		
+		current_y += grid_size
 		drawing_matrix.add_interaction_position(
 			Vector2(StateLines[state].position.x, current_y), grid_size
 		)
+
 
 func place_interaction(interaction_position: Vector2, interaction: Node = InteractionInstance.instantiate()) -> void:
 	interaction.position = interaction_position
