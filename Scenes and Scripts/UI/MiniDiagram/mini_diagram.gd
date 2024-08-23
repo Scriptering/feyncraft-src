@@ -41,7 +41,7 @@ func find_hadron(quarks: Array) -> ParticleData.Hadron:
 		if quarks in ParticleData.HADRON_QUARK_CONTENT[hadron]:
 			return hadron
 	
-	return ParticleData.Hadron.Proton
+	return ParticleData.Hadron.proton
 
 func create_hadron_joint(drawing_matrix: DrawingMatrix, hadron_ids: PackedInt32Array) -> void:
 	var interaction_ys: PackedInt32Array = []
