@@ -222,8 +222,6 @@ use_parent_material = true
 layout_mode = 2
 offset_top = -12.0
 offset_bottom = 28.0
-hadron_label_gap = null
-state = null
 
 [node name="Line" parent="Diagram/DiagramArea/Initial" index="0"]
 offset_bottom = 280.0
@@ -235,7 +233,6 @@ offset_left = 320.0
 offset_top = -12.0
 offset_right = 320.0
 offset_bottom = -12.0
-hadron_label_gap = null
 state = 1
 
 [node name="Line" parent="Diagram/DiagramArea/Final" index="0"]

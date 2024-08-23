@@ -82,12 +82,26 @@ func is_energy_conserved(state_interactions: Array) -> bool:
 	):
 		return true
 	
-	var state_base_particles: Array = state_interactions.map(
-		func(state_interaction: Array) -> Array:
-			return ArrayFuncs.flatten(state_interaction).map(
-			func(particle: ParticleData.Particle) -> ParticleData.Particle: 
-				return abs(particle) as ParticleData.Particle
-	))
+	var state_base_particles: Array = [[],[]]
+	
+	for state:StateLine.State in StateLine.STATES:
+		for interaction:Array in state_interactions[state]:
+			if interaction.size() == 1:
+				state_base_particles[state].push_back(ParticleData.base(interaction.front()))
+			
+			else:
+				state_base_particles[state].push_back(ParticleData.base_hadron(
+					ParticleData.find_hadron(interaction)
+				))
+	
+	state_base_particles[StateLine.State.Initial].sort_custom(ParticleData.sort_particles)
+	state_base_particles[StateLine.State.Final].sort_custom(ParticleData.sort_particles)
+	
+	if (
+		state_base_particles[StateLine.State.Initial]
+		== state_base_particles[StateLine.State.Final]
+	):
+		return true
 	
 	var state_masses: Array = state_base_particles.map(
 		func(base_particles: Array) -> float: 

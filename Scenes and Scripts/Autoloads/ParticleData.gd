@@ -8,7 +8,7 @@ func _ready() -> void:
 	sort_hadrons()
 	set_interaction_strength_limits()
 
-	for folder_path : String in ['res://Textures/ParticlesAndLines/', 'res://Textures/ParticlesAndLines/Hadron/']:
+	for folder_path : String in ['res://Textures/ParticlesAndLines/', 'res://Textures/ParticlesAndLines/Hadrons/']:
 		var dir := DirAccess.open(folder_path)
 		dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 
@@ -33,7 +33,7 @@ enum Particle {
 	lepton, electron, muon, tau,
 	lepton_neutrino, electron_neutrino, muon_neutrino, tau_neutrino,
 	bright_quark, up, charm, top, dark_quark, down, strange, bottom,
-	anti_bottom = -20, anti_strange, anti_down, anti_dark_quark, anti_top, anti_charm, anti_up, anti_bright_quark,
+	anti_bottom = -bottom, anti_strange, anti_down, anti_dark_quark, anti_top, anti_charm, anti_up, anti_bright_quark,
 	anti_tau_neutrino, anti_muon_neutrino, anti_electron_neutrino, anti_lepton_neutrino,
 	anti_tau, anti_muon, anti_electron, anti_lepton,
 	anti_W,
@@ -356,9 +356,31 @@ var PARTICLE_MASSES: Dictionary = {
 	Particle.down: 4.7,
 	Particle.strange: 96,
 	Particle.bottom: 4.18e3,
-	Hadron.proton: 938.272, Hadron.anti_proton: 938.272,
-	Hadron.neutron: 939.565, Hadron.anti_neutron: 939.565,
-	Hadron.delta_plus_plus: 1.232e3,  
+	Hadron.proton: 938.272,
+	Hadron.neutron: 939.565,
+	Hadron.delta_plus_plus: 1.232e3,
+	Hadron.delta_plus: 1.232e3,
+	Hadron.delta_0: 1.232e3,
+	Hadron.delta_minus: 1.232e3,
+	Hadron.epsilon_0: 1.31486e3,
+	Hadron.epsilon_minus: 1.32171e3,
+	Hadron.lambda_0: 1.115683e3,
+	Hadron.sigma_plus: 1.18937e3,
+	Hadron.sigma_minus: 1.197449e3,
+	Hadron.omega_minus: 1.67245e3,
+	Hadron.D_plus: 1.86962e3,
+	Hadron.D_0: 1.86484e3,
+	Hadron.D_minus: 1.86962e3,
+	Hadron.B_plus: 5.27934e3,
+	Hadron.B_0: 5.27965e3,
+	Hadron.B_minus: 5.27934e3,
+	Hadron.JPsi: 3.096916e6,
+	Hadron.pion_minus: 139.57039,
+	Hadron.pion_plus: 139.57039,
+	Hadron.pion_0: 134.9768,
+	Hadron.kaon_plus: 493.677,
+	Hadron.kaon_minus: 493.677,
+	Hadron.kaon_0: 497.611
 }
 
 const MIN_INTERACTION_STRENGTH: float = 1e-3
@@ -880,8 +902,26 @@ const export_line_dict : Dictionary = {
 	Particle.anti_W : "boson",
 }
 
+func sort_particles(particle_A: Variant, particle_B: Variant) -> bool:
+	if particle_A is ParticleData.Particle:
+		if particle_B is ParticleData.Particle:
+			return particle_A < particle_B
+		else:
+			return true
+	
+	if particle_B is ParticleData.Particle:
+		return false
+	else:
+		return particle_A < particle_B
+
 func anti(particle: ParticleData.Particle) -> ParticleData.Particle:
 	if particle in SHADED_PARTICLES:
 		return -particle as ParticleData.Particle
 	
 	return particle
+
+func base(particle: ParticleData.Particle) -> ParticleData.Particle:
+	return abs(particle) as ParticleData.Particle
+
+func base_hadron(hadron: ParticleData.Hadron) -> ParticleData.Hadron:
+	return abs(hadron) as ParticleData.Hadron

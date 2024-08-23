@@ -1103,35 +1103,20 @@ func is_fully_connected(bidirectional: bool) -> bool:
 		).size() == 0
 	)
 
-func sort_particles(particle_A: Variant, particle_B: Variant) -> bool:
-	if particle_A is ParticleData.Particle:
-		if particle_B is ParticleData.Particle:
-			return particle_A < particle_B
-		else:
-			return true
-	
-	if particle_B is ParticleData.Particle:
-		return false
-	else:
-		return particle_A < particle_B
-
 func is_energy_conserved() -> bool:
-	var connection_matrix: ConnectionMatrix = current_diagram.reduce_to_connection_matrix()
-	
 	var state_base_particles: Array = [[],[]]
 	
 	for state:StateLine.State in StateLine.STATES:
-		for id: int in connection_matrix.get_state_ids(state):
-			var connected_particles : Array[ParticleData.Particle] = connection_matrix.get_connected_particles(id, true)
-			
-			if connected_particles.size() == 1:
-				state_base_particles[state].push_back(connected_particles)
-				continue
-
-			state_base_particles[state].push_back(ParticleData.find_hadron(connected_particles))
+		state_base_particles[state] = StateLines[state]._get_connected_lone_particles().map(
+			func(particle: ParticleData.Particle) -> ParticleData.Particle:
+				return ParticleData.base(particle)
+		)
+		
+		for hadron:QuarkGroup in StateLines[state].hadrons:
+			state_base_particles[state].push_back(ParticleData.base_hadron(hadron.hadron))
 	
-	state_base_particles[StateLine.State.Initial].sort_custom(sort_particles)
-	state_base_particles[StateLine.State.Final].sort_custom(sort_particles)
+	state_base_particles[StateLine.State.Initial].sort_custom(ParticleData.sort_particles)
+	state_base_particles[StateLine.State.Final].sort_custom(ParticleData.sort_particles)
 	
 	if (
 		state_base_particles[StateLine.State.Initial]
@@ -1147,14 +1132,14 @@ func is_energy_conserved() -> bool:
 				0.0
 		)
 	)
-	
+
 	for state_type:StateLine.State in StateLine.STATES:
 		if state_base_particles[state_type].size() > 1:
 			continue
 		
 		if state_masses[state_type] - state_masses[(state_type + 1) % 2] <= MASS_PRECISION:
 			return false
-	
+
 	return true
 
 func get_interaction_from_matrix_id(id: int, matrix: DrawingMatrix) -> Interaction:

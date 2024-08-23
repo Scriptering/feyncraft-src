@@ -1,7 +1,7 @@
 class_name StateLine
 extends GrabbableControl
 
-@onready var hadron_joint_scene := preload("res://Scenes and Scripts/Diagram/Hadron/HadronJoint.tscn")
+@onready var hadron_joint_scene := preload("res://Scenes and Scripts/Diagram/Hadrons/HadronJoint.tscn")
 
 @export var hadron_label_gap : int
 @export var state : State
