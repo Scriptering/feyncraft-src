@@ -189,10 +189,14 @@ func generate_state_interactions(
 	var interaction_count: int = randi_range(min_particle_count, max_particle_count)
 	var interaction_count_left: int = interaction_count
 	var state_interactions : Array = [[], []]
-	var current_state : StateLine.State = StateLine.State.Initial
 	var W_count : int = 0
 	
 	for particle_count in max_particle_count:
+		var current_state : int = randi() % 2
+		
+		if particle_count < 2:
+			current_state = (particle_count % 2) as StateLine.State
+		
 		var state_factor : int = StateLine.state_factor[current_state]
 		
 		var next_state_interaction: Array
@@ -212,8 +216,6 @@ func generate_state_interactions(
 			next_state_interaction = get_next_state_interaction(
 				quantum_number_difference, useable_state_interactions, interaction_count_left, W_count, state_factor
 			)
-		
-		current_state = (current_state + 1) % 2 as StateLine.State
 		
 		if next_state_interaction == []:
 			return []
