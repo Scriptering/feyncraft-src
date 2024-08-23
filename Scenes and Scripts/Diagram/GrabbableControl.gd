@@ -5,7 +5,7 @@ signal grab_area_clicked(object: GrabbableControl)
 signal picked_up(object: GrabbableControl)
 signal dropped(object: GrabbableControl)
 
-@export var GrabAreas: Array[Node]
+@export var grab_area: Control
 @export var follow_cursor: bool = true
 
 var grabbed: bool = false: set = _grabbed_changed
@@ -18,20 +18,21 @@ var drag_finger_index: int = 1
 func _ready() -> void:
 	add_to_group("grabbable")
 	
-	for GrabArea in GrabAreas:
-		GrabArea.gui_input.connect(_grab_area_gui_input)
-		GrabArea.mouse_entered.connect(_on_GrabArea_mouse_entered)
-		GrabArea.mouse_exited.connect(_on_GrabArea_mouse_exited)
+	grab_area.gui_input.connect(_grab_area_gui_input)
+	grab_area.mouse_entered.connect(_on_GrabArea_mouse_entered)
+	grab_area.mouse_exited.connect(_on_GrabArea_mouse_exited)
+
+func _input(event: InputEvent) -> void:
+	if !grabbed:
+		return
+	
+	handle_drag(event)
 
 func _grab_area_gui_input(event: InputEvent) -> void:
-	if !is_visible_in_tree():
-		return
-	
 	if grabbed:
-		handle_drag(event)
 		return
 	
-	elif is_event_clicked_on(event):
+	if is_event_clicked_on(event):
 		get_viewport().set_input_as_handled()
 		grab_area_clicked.emit(self)
 		EventBus.grabbable_object_clicked.emit(self)
@@ -40,7 +41,7 @@ func is_event_clicked_on(event: InputEvent) -> bool:
 	if Globals.is_on_mobile():
 		if event is InputEventScreenTouch and event.pressed:
 			drag_finger_index=event.index
-			drag_vector_start = position - event.position
+			drag_vector_start = -(grab_area.position + event.position)
 			return true
 	elif (
 		event is InputEventMouseButton
@@ -51,30 +52,6 @@ func is_event_clicked_on(event: InputEvent) -> bool:
 		return true
 	
 	return false
-
-#func is_event_clicked_on(event: InputEvent) -> bool:
-	#if Globals.is_on_mobile():
-		#if !(
-			#event is InputEventScreenDrag
-			#or (event is InputEventScreenTouch and event.pressed)
-		#):
-			#return false
-		#
-		#if GrabAreas.any(
-			#func(node: Control) -> bool: 
-				#return node.get_global_rect().has_point(event.position)
-		#):
-			#drag_finger_index = event.index
-			#drag_vector_start = position - event.position
-			#return true
-		#
-		#return false
-		#
-	#elif Input.is_action_just_pressed("click") and grab_area_hovered:
-		#drag_vector_start = position - get_global_mouse_position()
-		#return true
-	#
-	#return false
 
 func handle_drag(event: InputEvent) -> void:
 	if !follow_cursor:

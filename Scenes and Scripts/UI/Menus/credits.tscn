@@ -13,7 +13,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6by83"]
 
-[node name="Credits" type="Control" node_paths=PackedStringArray("GrabAreas")]
+[node name="Credits" type="Control" node_paths=PackedStringArray("grab_area")]
 material = ExtResource("1_660a7")
 layout_mode = 3
 anchors_preset = 15
@@ -23,7 +23,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("2_nu17t")
-GrabAreas = [NodePath("PanelContainer")]
+grab_area = NodePath("PanelContainer")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 use_parent_material = true

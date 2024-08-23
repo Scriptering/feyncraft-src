@@ -20,18 +20,32 @@ texture_margin_top = 6.0
 texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 
-[node name="TutorialInfo" type="Control" node_paths=PackedStringArray("Text", "GrabAreas")]
+[node name="TutorialInfo" type="Control" node_paths=PackedStringArray("Text", "grab_area")]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_6afw4")
 Text = NodePath("TutorialPanel/VBoxContainer/TutorialText")
-GrabAreas = [NodePath("TutorialPanel")]
+grab_area = NodePath("TutorialPanel")
 
 [node name="TutorialPanel" type="PanelContainer" parent="."]
 material = ExtResource("2_dbjjh")
-layout_mode = 0
-offset_right = 144.0
-offset_bottom = 108.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -72.0
+offset_top = -61.0
+offset_right = 72.0
+offset_bottom = 61.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_khgyl")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="TutorialPanel"]

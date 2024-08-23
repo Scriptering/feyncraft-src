@@ -1,5 +1,7 @@
 extends Node
 
+signal press(press_position: Vector2)
+
 signal crosshair_moved(new_position: Vector2i, old_position: Vector2i)
 signal crosshair_area_mouse_entered()
 signal crosshair_area_mouse_exited()

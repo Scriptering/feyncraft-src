@@ -28,6 +28,10 @@ var connected_interactions: Array[Interaction] = []
 
 var connected_lone_particles : Array[ParticleData.Particle] : get = _get_connected_lone_particles
 
+func _ready() -> void:
+	super()
+	$Line/GrabBottom.gui_input.connect(_grab_area_gui_input)
+
 func init(diagram: MainDiagram) -> void:
 	Diagram = diagram
 	crosshair = diagram.crosshair

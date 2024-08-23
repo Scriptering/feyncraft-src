@@ -32,6 +32,7 @@ use_parent_material = true
 custom_minimum_size = Vector2(2.08165e-12, 150)
 offset_right = 114.0
 offset_bottom = 200.0
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_8vuq3")
 script = ExtResource("2_13y6g")
 title = "2. Problem Creation"
@@ -41,12 +42,14 @@ prev_button = NodePath("VBoxContainer/Buttons/PrevStep")
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 use_parent_material = true
 layout_mode = 2
+mouse_filter = 2
 alignment = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
 size_flags_vertical = 3
+mouse_filter = 2
 
 [node name="Body" type="Label" parent="VBoxContainer/VBoxContainer"]
 use_parent_material = true
@@ -59,10 +62,12 @@ autowrap_mode = 3
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
+mouse_filter = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/VBoxContainer/PanelContainer"]
 use_parent_material = true
 layout_mode = 2
+mouse_filter = 2
 
 [node name="CheckButton" type="CheckButton" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
 use_parent_material = true
@@ -81,6 +86,7 @@ text = "Custom Degree"
 visible = false
 use_parent_material = true
 layout_mode = 2
+mouse_filter = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/DegreeContainer"]
 use_parent_material = true
@@ -91,6 +97,7 @@ vertical_alignment = 1
 [node name="DegreeContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/DegreeContainer"]
 use_parent_material = true
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 1
 
 [node name="Degree" type="SpinBox" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/DegreeContainer/DegreeContainer"]
@@ -114,6 +121,7 @@ stretch_mode = 5
 visible = false
 use_parent_material = true
 layout_mode = 2
+mouse_filter = 2
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/InvalidQuantumNumbers"]
 layout_mode = 2
@@ -132,6 +140,7 @@ autowrap_mode = 2
 visible = false
 use_parent_material = true
 layout_mode = 2
+mouse_filter = 2
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/EnergyNotConserved"]
 layout_mode = 2
@@ -150,6 +159,7 @@ autowrap_mode = 2
 visible = false
 use_parent_material = true
 layout_mode = 2
+mouse_filter = 2
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/NoParticles"]
 layout_mode = 2
@@ -168,6 +178,7 @@ autowrap_mode = 2
 visible = false
 use_parent_material = true
 layout_mode = 2
+mouse_filter = 2
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/NoSolutions"]
 layout_mode = 2
@@ -185,6 +196,7 @@ autowrap_mode = 2
 [node name="Buttons" type="HBoxContainer" parent="VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
+mouse_filter = 2
 alignment = 1
 
 [node name="PrevStep" parent="VBoxContainer/Buttons" instance=ExtResource("4_5sf8a")]

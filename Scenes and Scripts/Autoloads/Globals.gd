@@ -47,10 +47,23 @@ func _process(delta: float) -> void:
 	has_used_touch_this_frame = false
 
 func _input(event: InputEvent) -> void:
-	if event is InputEventScreenDrag or event is InputEventScreenTouch:
+	if event is InputEventScreenTouch:
+		has_used_touch_this_frame = true
+		if event.pressed:
+			EventBus.press.emit(event.position)
+	
+	elif event is InputEventScreenDrag:
 		has_used_touch_this_frame = true
 	elif event is InputEventMouse:
 		has_used_mouse_this_frame = true
+		
+		if (
+			!is_on_mobile()
+			and event is InputEventMouseButton
+			and event.button_index == MOUSE_BUTTON_LEFT
+			and event.pressed
+		):
+			EventBus.press.emit(event.position)
 
 func is_on_mobile() -> bool:
 	return is_using_finger

@@ -3,6 +3,8 @@ extends GrabbableNode2D
 
 signal deleted
 signal request_deletion
+signal mouse_pressed()
+signal finger_pressed()
 
 @onready var Ball: AnimatedSprite2D = $Ball
 @onready var Dot: AnimatedSprite2D = $Dot
@@ -25,7 +27,7 @@ var StateManager: Node
 var InformationBox := preload("res://Scenes and Scripts/UI/Info/interaction_information.tscn")
 var information_id: int
 
-var start_press_pos: Vector2 = Vector2.ZERO
+var has_moved: bool = false
 var decor: Decoration.Decor = Decoration.Decor.none: set = _set_decor
 var id : int
 var connected_lines: Array[ParticleLine] = []
@@ -216,6 +218,7 @@ func should_request_deletion() -> bool:
 	return false
 
 func move(to_position: Vector2i) -> void:
+	has_moved = true
 	position = to_position
 
 func has_particle_connected(particle: ParticleData.Particle) -> bool:
@@ -390,7 +393,7 @@ func close_information_box() -> void:
 	information_visible = false
 
 func _on_mouse_area_button_pressed() -> void:
-	if start_press_pos != position:
+	if has_moved:
 		return
 	
 	if (
@@ -502,10 +505,13 @@ func get_vision_vectors(vision: Globals.Vision) -> PackedVector2Array:
 	return vision_vectors
 
 func _on_mouse_area_button_button_down() -> void:
-	start_press_pos = position
+	has_moved = false
+	
+	mouse_pressed.emit()
 	EventBus.grabbable_object_clicked.emit(self)
 	EventBus.deletable_object_clicked.emit(self)
 
 func _on_touch_screen_button_pressed() -> void:
+	finger_pressed.emit()
 	EventBus.grabbable_object_clicked.emit(self)
 	EventBus.deletable_object_clicked.emit(self)

@@ -2,10 +2,19 @@ extends BaseState
 
 @export var minimum_press_time: float
 
+func enter() -> void:
+	super()
+	EventBus.diagram_finger_pressed.connect(_on_diagram_finger_pressed)
+	EventBus.diagram_mouse_pressed.connect(_on_diagram_mouse_pressed)
+
+func exit() -> void:
+	EventBus.diagram_finger_pressed.disconnect(_on_diagram_finger_pressed)
+	EventBus.diagram_mouse_pressed.disconnect(_on_diagram_mouse_pressed)
+
 func _ready() -> void:
 	$minimum_press_timer.wait_time = minimum_press_time
 
-func input(event: InputEvent) -> State:
+func process(_delta: float) -> State:
 	if Input.is_action_just_pressed("draw_history"):
 		Diagram.draw_history()
 	elif Input.is_action_just_pressed("deleting"):
@@ -19,27 +28,21 @@ func input(event: InputEvent) -> State:
 		Diagram.redo()
 	elif Input.is_action_just_pressed("undo"):
 		Diagram.undo()
-	elif Globals.is_on_mobile():
-		return handle_mobile_event(event)
-	elif !Globals.is_on_mobile():
-		if Input.is_action_just_pressed("click"):
-			$minimum_press_timer.start()
-			EventBus.change_cursor.emit(Globals.Cursor.press)
-			if can_draw():
-				return State.Drawing
-		elif !Input.is_action_pressed("click") and $minimum_press_timer.is_stopped():
-			EventBus.change_cursor.emit(Globals.Cursor.default)
+	elif Input.is_action_just_pressed("click"):
+		$minimum_press_timer.start()
+		EventBus.change_cursor.emit(Globals.Cursor.press)
+	elif !Input.is_action_pressed("click") and $minimum_press_timer.is_stopped():
+		EventBus.change_cursor.emit(Globals.Cursor.default)
 	
 	return State.Null
 
-func handle_mobile_event(event: InputEvent) -> BaseState.State:
-	crosshair.handle_mobile_event(event)
-	
-	if event is InputEventScreenTouch and event.pressed and can_draw():
-		print("Drawing")
-		return State.Drawing
-	
-	return State.Null
+func _on_diagram_finger_pressed(_index: int) -> void:
+	if can_draw():
+		change_state.emit(self, State.Drawing)
+
+func _on_diagram_mouse_pressed() -> void:
+	if can_draw():
+		change_state.emit(self, State.Drawing)
 
 func can_draw() -> bool:
 	if !crosshair.last_input_inside_area:

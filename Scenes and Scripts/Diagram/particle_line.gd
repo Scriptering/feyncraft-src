@@ -104,13 +104,6 @@ func init(diagram: MainDiagram) -> void:
 	Final = diagram.StateLines[StateLine.State.Final]
 	crosshair = diagram.crosshair
 
-func _input(event: InputEvent) -> void:
-	if Globals.is_on_mobile():
-		if event is InputEventScreenTouch and event.pressed and is_hovered(event.position - global_position):
-			EventBus.deletable_object_clicked.emit(self)
-	elif event.is_action_pressed("click") and is_hovered(get_local_mouse_position()):
-		EventBus.deletable_object_clicked.emit(self)
-
 func _set_points(new_points: Array[Vector2i]) -> void:
 	points = new_points
 	set_anti()

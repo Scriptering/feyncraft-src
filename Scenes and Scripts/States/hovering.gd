@@ -18,7 +18,7 @@ func input(event: InputEvent) -> State:
 		return State.Idle
 	
 	if (
-		(Globals.is_on_mobile() and event is InputEventMouseButton and event.is_released())
+		(event is InputEventScreenTouch and event.is_released())
 		or Input.is_action_just_released("click")
 	):
 		EventBus.change_cursor.emit(Globals.Cursor.hover)
@@ -32,7 +32,7 @@ func process(_delta: float) -> State:
 		return State.Placing
 	return State.Null
 
-func _grabbable_object_clicked(object: Node) -> void:	
+func _grabbable_object_clicked(object: Node) -> void:
 	if !object.can_be_grabbed():
 		return
 	
