@@ -25,5 +25,3 @@ func _on_focus_entered() -> void:
 
 func _on_focus_exited() -> void:
 	placeholder_text = previous_placeholder_text
-
-

@@ -189,7 +189,7 @@ offset_bottom = 28.0
 [node name="Line" parent="Diagram/DiagramArea/Initial" index="0"]
 offset_bottom = 280.0
 
-[node name="Final" parent="Diagram/DiagramArea" node_paths=PackedStringArray("GrabAreas") instance=ExtResource("11_ed86s")]
+[node name="Final" parent="Diagram/DiagramArea" instance=ExtResource("11_ed86s")]
 visible = false
 use_parent_material = true
 layout_mode = 2
@@ -198,18 +198,17 @@ offset_top = -12.0
 offset_right = 464.0
 offset_bottom = -12.0
 state = 1
-GrabAreas = [NodePath("Line/GrabTop"), NodePath("../Initial/Line/GrabBottom")]
 
 [node name="Line" parent="Diagram/DiagramArea/Final" index="0"]
 offset_bottom = 280.0
-
-[node name="ParticleLines" type="Node2D" parent="Diagram/DiagramArea"]
-use_parent_material = true
 
 [node name="Crosshair" parent="Diagram/DiagramArea" instance=ExtResource("12_6wo74")]
 use_parent_material = true
 position = Vector2(-160, -48)
 grid_margin = 0
+
+[node name="ParticleLines" type="Node2D" parent="Diagram/DiagramArea"]
+use_parent_material = true
 
 [node name="VisionLines" type="Control" parent="Diagram/DiagramArea"]
 use_parent_material = true

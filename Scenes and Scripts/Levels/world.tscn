@@ -54,8 +54,6 @@ expand_margin_bottom = 1.0
 [node name="World" type="Node2D" groups=["level"]]
 material = ExtResource("1_6ope2")
 script = ExtResource("1")
-test_initial_state = null
-test_final_state = null
 
 [node name="Background" type="TextureRect" parent="."]
 use_parent_material = true
@@ -240,13 +238,13 @@ state = 1
 [node name="Line" parent="Diagram/DiagramArea/Final" index="0"]
 offset_bottom = 280.0
 
-[node name="ParticleLines" type="Node2D" parent="Diagram/DiagramArea"]
-use_parent_material = true
-
 [node name="Crosshair" parent="Diagram/DiagramArea" instance=ExtResource("3")]
 use_parent_material = true
 position = Vector2(-160, -48)
 grid_margin = 0
+
+[node name="ParticleLines" type="Node2D" parent="Diagram/DiagramArea"]
+use_parent_material = true
 
 [node name="VisionLines" type="Control" parent="Diagram/DiagramArea"]
 use_parent_material = true
@@ -337,6 +335,7 @@ offset_right = 613.0
 offset_bottom = 134.0
 
 [node name="FloatingMenus" type="CanvasLayer" parent="."]
+follow_viewport_enabled = true
 
 [node name="CreationInformation" parent="FloatingMenus" instance=ExtResource("31_l3pqm")]
 visible = false
@@ -369,10 +368,10 @@ script = ExtResource("2")
 
 [node name="vision_manager" type="Node" parent="."]
 
-[node name="Tutorial" type="Node2D" parent="." node_paths=PackedStringArray("ProblemTab")]
-visible = false
-z_index = 6
+[node name="Tutorial" type="CanvasLayer" parent="." node_paths=PackedStringArray("TutorialInfo", "ProblemTab")]
+follow_viewport_enabled = true
 script = ExtResource("28_soh5r")
+TutorialInfo = NodePath("TutorialInfo")
 ProblemTab = NodePath("../PullOutTabs/ProblemTab")
 
 [node name="CanvasGroup" type="CanvasGroup" parent="Tutorial"]
@@ -397,10 +396,6 @@ offset_bottom = 40.0
 mouse_filter = 2
 
 [node name="TutorialInfo" parent="Tutorial" instance=ExtResource("30_2684v")]
-offset_left = 292.0
-offset_top = 76.0
-offset_right = 292.0
-offset_bottom = 76.0
 
 [node name="Steps" type="Node" parent="Tutorial"]
 

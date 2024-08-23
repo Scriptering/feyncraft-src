@@ -55,6 +55,7 @@ use_parent_material = true
 custom_minimum_size = Vector2(2.08165e-12, 150)
 offset_right = 121.0
 offset_bottom = 200.0
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_cixn1")
 script = ExtResource("2_6e24i")
 title = "3. Solution Creation"
@@ -64,12 +65,14 @@ exit_button = NodePath("VBoxContainer/Buttons/Submit")
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 use_parent_material = true
 layout_mode = 2
+mouse_filter = 2
 alignment = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
 size_flags_vertical = 3
+mouse_filter = 2
 
 [node name="Body" type="Label" parent="VBoxContainer/VBoxContainer"]
 use_parent_material = true
@@ -85,6 +88,7 @@ layout_mode = 2
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/VBoxContainer/PanelContainer2"]
 use_parent_material = true
 layout_mode = 2
+mouse_filter = 2
 
 [node name="CustomSolutions" type="CheckButton" parent="VBoxContainer/VBoxContainer/PanelContainer2/VBoxContainer"]
 use_parent_material = true
@@ -118,6 +122,7 @@ solutions"
 visible = false
 use_parent_material = true
 layout_mode = 2
+mouse_filter = 2
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/NoSolutions"]
 layout_mode = 2
@@ -135,10 +140,12 @@ autowrap_mode = 2
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
+mouse_filter = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/VBoxContainer/PanelContainer"]
 use_parent_material = true
 layout_mode = 2
+mouse_filter = 2
 
 [node name="CustomSolutionCount" type="CheckButton" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
 use_parent_material = true
@@ -158,6 +165,7 @@ solution count"
 visible = false
 use_parent_material = true
 layout_mode = 2
+mouse_filter = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/SolutionCountContainer"]
 use_parent_material = true
@@ -169,6 +177,7 @@ vertical_alignment = 1
 [node name="SolutionCountContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/SolutionCountContainer"]
 use_parent_material = true
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 1
 
 [node name="SolutionCount" type="SpinBox" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/SolutionCountContainer/SolutionCountContainer"]
@@ -185,6 +194,7 @@ script = ExtResource("7_aqn1d")
 [node name="Buttons" type="HBoxContainer" parent="VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
+mouse_filter = 2
 alignment = 1
 
 [node name="PrevStep" parent="VBoxContainer/Buttons" instance=ExtResource("2_66fjv")]

@@ -28,12 +28,19 @@ func init(Diagram: DiagramBase) -> void:
 	var crosshair := Diagram.get_node("DiagramArea/Crosshair")
 	
 	for child:BaseState in get_children():
+		child.change_state.connect(_on_state_change_state)
 		child.state_manager = self
 		child.Diagram = Diagram
 		child.crosshair = crosshair
 		
 	crosshair.moved_and_rested.connect(crosshair_moved)
 	change_state(BaseState.State.Idle)
+
+func _on_state_change_state(state: BaseState, new_state: BaseState.State) -> void:
+	if state != current_state:
+		return
+	
+	change_state(new_state)
 
 func change_scene(Diagram: DiagramBase) -> void:
 	var crosshair := Diagram.get_node("DiagramArea/Crosshair")

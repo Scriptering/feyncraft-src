@@ -1,6 +1,8 @@
 extends Node
 class_name BaseState
 
+signal change_state(state: BaseState, new_state: State)
+
 enum State {
 	Null,
 	Idle,

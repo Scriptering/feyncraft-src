@@ -28,7 +28,6 @@ func _ready() -> void:
 	get_viewport().physics_object_picking_sort = true
 	get_viewport().physics_object_picking_first_only = true
 	
-	$ControlsLayer/Buttons.visible = false
 	$ControlsLayer/Cursor.visible = true
 
 	Globals.load_problem_set.problems.push_back(Globals.creating_problem)
@@ -181,5 +180,4 @@ func should_reset_daily_streak() -> bool:
 	return day_difference > 1
 
 func _on_using_touchscreen_changed(using_touchscreen: bool) -> void:
-	EventBus.show_feedback.emit("Touch screen changed")
 	$ControlsLayer/Cursor.visible = !using_touchscreen

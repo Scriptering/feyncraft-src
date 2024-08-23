@@ -2,7 +2,6 @@ extends GrabbableControl
 
 var palette_item_scene: PackedScene = preload("res://Scenes and Scripts/UI/ColourPicker/palette_list_item.tscn")
 
-@export var load_button: PanelButton
 @export var item_list: PanelItemList
 
 signal close

@@ -1,9 +1,9 @@
-extends Node2D
+extends CanvasLayer
 
 @onready var Spotlight: PackedScene = preload("res://Scenes and Scripts/tutorial/spotlight.tscn")
 @onready var Spotlights: Control = $CanvasGroup/Spotlights
-@onready var TutorialInfo: GrabbableControl = $TutorialInfo
 
+@export var TutorialInfo: GrabbableControl
 @export var ProblemTab: PullOutTab
 
 var current_step: BaseTutorialStep

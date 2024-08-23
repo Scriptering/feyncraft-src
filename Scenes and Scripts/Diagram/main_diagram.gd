@@ -42,7 +42,6 @@ var current_diagram: DrawingMatrix = null
 var diagram_added_to_history: bool = false
 
 var update_queued: bool = true
-
 var mouse_inside_diagram: bool = false
 
 func _ready() -> void:
@@ -115,12 +114,23 @@ func _gui_input(event: InputEvent) -> void:
 	if Globals.is_on_mobile():
 		if event is InputEventScreenTouch and event.is_pressed():
 			EventBus.diagram_finger_pressed.emit(event.index)
+			check_particle_line_deleted(event.position)
 	elif(
 		event is InputEventMouseButton
 		and event.button_index == MOUSE_BUTTON_LEFT
 		and event.is_pressed()
 	):
 		EventBus.diagram_mouse_pressed.emit()
+		check_particle_line_deleted(event.position)
+
+func check_particle_line_deleted(pos: Vector2) -> void:
+	if StateManager.state != BaseState.State.Deleting:
+		return
+	
+	for particle_line: ParticleLine in get_particle_lines():
+		if particle_line.is_hovered(pos + global_position - particle_line.global_position):
+			EventBus.deletable_object_clicked.emit(particle_line)
+			return
 
 func flush_update_queue() -> void:
 	for interaction:Interaction in $DiagramArea/Interactions.get_children():
@@ -143,6 +153,7 @@ func flush_update_queue() -> void:
 		update_vision()
 
 	if update_queued:
+		current_diagram = generate_drawing_matrix_from_diagram()
 		action_taken.emit()
 		update_queued = false
 	
@@ -817,11 +828,20 @@ func connect_interaction_to_stateline(interaction: Interaction, state: StateLine
 func place_interaction(interaction_position: Vector2, interaction: Node = InteractionInstance.instantiate()) -> void:
 	super.place_interaction(interaction_position, interaction)
 	
+	interaction.mouse_pressed.connect(_interaction_mouse_pressed)
+	interaction.finger_pressed.connect(_interaction_finger_pressed)
 	interaction.deleted.connect(_interaction_deleted)
 	interaction.picked_up.connect(_interaction_grabbed)
 	interaction.dropped.connect(_interaction_dropped)
 	
 	connect_interaction_to_stateline(interaction, get_state_by_position(interaction_position))
+
+func _interaction_finger_pressed() -> void:
+	await crosshair._input
+	EventBus.diagram_finger_pressed.emit(0)
+
+func _interaction_mouse_pressed() -> void:
+	EventBus.diagram_mouse_pressed.emit()
 
 func draw_interaction(
 	interaction_position: Vector2, interaction: Interaction = InteractionInstance.instantiate()
@@ -1067,6 +1087,9 @@ func is_valid() -> bool:
 		func(interaction: Interaction) -> bool: 
 			return interaction.valid
 	)
+
+func get_current_diagram() -> DrawingMatrix:
+	return current_diagram
 
 func is_fully_connected(bidirectional: bool) -> bool:
 	var diagram: DrawingMatrix = generate_drawing_matrix_from_diagram()

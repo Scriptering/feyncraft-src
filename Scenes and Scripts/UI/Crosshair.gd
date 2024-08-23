@@ -44,21 +44,24 @@ func _input(event: InputEvent) -> void:
 	if Globals.is_on_mobile():
 		handle_mobile_event(event)
 
-	elif event is InputEventMouseMotion:
-		var mouse_position: Vector2 = get_parent().get_local_mouse_position()
-		
-		var in_crosshair_area:bool = is_inside_crosshair_area(mouse_position)
-		
-		if in_crosshair_area != inside_diagram_control:
-			if in_crosshair_area:
-				EventBus.crosshair_area_mouse_entered.emit()
-			else:
-				EventBus.crosshair_area_mouse_exited.emit()
-			inside_diagram_control = in_crosshair_area
-		
-		last_input_inside_area = in_crosshair_area
-		move(mouse_position)
-		visible = in_crosshair_area and get_state_visible(StateManager.state)
+	elif event is InputEventMouseMotion or event is InputEventMouseButton:
+		handle_mouse_event(event)
+
+func handle_mouse_event(event: InputEvent) -> void:
+	var mouse_position: Vector2 = get_parent().get_local_mouse_position()
+	
+	var in_crosshair_area:bool = is_inside_crosshair_area(mouse_position)
+	
+	if in_crosshair_area != inside_diagram_control:
+		if in_crosshair_area:
+			EventBus.crosshair_area_mouse_entered.emit()
+		else:
+			EventBus.crosshair_area_mouse_exited.emit()
+		inside_diagram_control = in_crosshair_area
+	
+	last_input_inside_area = in_crosshair_area
+	move(mouse_position)
+	visible = in_crosshair_area and get_state_visible(StateManager.state)
 
 func handle_mobile_event(event: InputEvent) -> void:
 	if event is InputEventScreenDrag or (event is InputEventScreenTouch and event.pressed):
@@ -258,7 +261,7 @@ func _state_changed(new_state: BaseState.State, _old_state: BaseState.State) -> 
 	if !is_inside_tree():
 		return
 	
-	visible = get_state_visible(new_state)
+	visible = last_input_inside_area and get_state_visible(new_state)
 
 func get_state_visible(new_state: BaseState.State) -> bool:
 	if new_state == BaseState.State.Idle:

@@ -6,7 +6,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q3cex"]
 
-[node name="Control" type="Control" node_paths=PackedStringArray("GrabAreas")]
+[node name="Control" type="Control" node_paths=PackedStringArray("grab_area")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,7 +15,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_qn5hj")
-GrabAreas = [NodePath("ProblemSelection")]
+grab_area = NodePath("ProblemSelection")
 
 [node name="ProblemSelection" type="TabContainer" parent="."]
 custom_minimum_size = Vector2(310, 215)
@@ -38,7 +38,6 @@ tabs_visible = false
 
 [node name="ProblemSetList" parent="ProblemSelection" instance=ExtResource("3_chpqf")]
 layout_mode = 2
-mouse_filter = 2
 metadata/_tab_index = 0
 
 [node name="ProblemList" parent="ProblemSelection" instance=ExtResource("1_gfl8q")]

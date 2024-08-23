@@ -16,14 +16,14 @@
 
 [sub_resource type="LabelSettings" id="LabelSettings_40jpi"]
 
-[node name="InteractionInformation" type="Control" node_paths=PackedStringArray("GrabAreas") groups=["grabbable"]]
+[node name="InteractionInformation" type="Control" node_paths=PackedStringArray("grab_area") groups=["grabbable"]]
 z_index = 6
 z_as_relative = false
 material = ExtResource("1_ivc2f")
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("2_64w2u")
-GrabAreas = [NodePath("PanelContainer/TabContainer")]
+grab_area = NodePath("PanelContainer")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 use_parent_material = true
@@ -38,6 +38,7 @@ theme_override_styles/panel = SubResource("StyleBoxEmpty_erdcx")
 material = ExtResource("1_ivc2f")
 use_parent_material = true
 layout_mode = 2
+mouse_filter = 2
 current_tab = 0
 clip_tabs = false
 
@@ -152,6 +153,7 @@ custom_minimum_size = Vector2(15, 15)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
+mouse_filter = 2
 
 [node name="Number" type="Label" parent="PanelContainer/NumberContainer"]
 material = ExtResource("4_vwqnr")
