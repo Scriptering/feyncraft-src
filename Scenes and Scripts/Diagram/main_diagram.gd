@@ -38,7 +38,7 @@ const MASS_PRECISION: float = 1e-4
 const MAX_DIAGRAM_HISTORY_SIZE : int = 10
 var diagram_history: Array[DrawingMatrix] = []
 var diagram_future: Array[DrawingMatrix] = []
-var current_diagram: DrawingMatrix = null
+var current_diagram: DrawingMatrix = DrawingMatrix.new()
 var diagram_added_to_history: bool = false
 
 var update_queued: bool = true
@@ -79,6 +79,7 @@ func _decoration_dropped(decoration: Decoration) -> void:
 		if decoration.decor == Decoration.Decor.none:
 			check_rejoin_lines([interaction])
 		
+		queue_update()
 		return
 	
 	if decoration.decor == Decoration.Decor.none:
@@ -176,14 +177,6 @@ func _crosshair_moved(new_position: Vector2i, old_position: Vector2i) -> void:
 		if interaction.grabbed:
 			move_interaction(interaction, new_position)
 
-	for pos:Vector2i in [new_position, old_position]:
-		var state_to_update := position_stateline(position)
-		
-		if state_to_update == StateLine.State.None:
-			continue
-		
-		StateLines[state_to_update].queue_update()
-
 func queue_update() -> void:
 	update_queued = true
 
@@ -193,9 +186,15 @@ func move_interaction(interaction: Interaction, to_position: Vector2i) -> void:
 	interaction.move(to_position)
 	move_connected_particle_lines(interaction)
 	
-	disconnect_interaction_from_stateline(interaction, get_state_by_position(old_position))
-	connect_interaction_to_stateline(interaction, get_state_by_position(to_position))
+	var old_state: StateLine.State = get_state_by_position(old_position)
+	var new_state: StateLine.State = get_state_by_position(to_position)
 	
+	if old_state != new_state:
+		disconnect_interaction_from_stateline(interaction, get_state_by_position(old_position))
+		connect_interaction_to_stateline(interaction, get_state_by_position(to_position))
+	
+	queue_stateline_update(old_state)
+	queue_stateline_update(new_state)
 	queue_vision_update()
 	queue_update()
 
@@ -332,8 +331,8 @@ func generate_drawing_matrix_from_diagram(get_only_valid: bool = false) -> Drawi
 	
 	return generated_matrix
 
-func update_colour(diagram: DrawingMatrix) -> void:
-	var colour_matrix: DrawingMatrix = Vision.generate_vision_matrix(Globals.Vision.Colour, diagram)
+func update_colour(valid_diagram: DrawingMatrix) -> void:
+	var colour_matrix: DrawingMatrix = Vision.generate_vision_matrix(Globals.Vision.Colour, valid_diagram)
 	
 	var time := Time.get_ticks_usec()
 	var zip: Array = Vision.generate_vision_paths(Globals.Vision.Colour, colour_matrix, true)
@@ -347,11 +346,15 @@ func update_colour(diagram: DrawingMatrix) -> void:
 	update_colourless_interactions(colour_paths, colour_path_colours, colour_matrix, true)
 	
 	if current_vision == Globals.Vision.Colour:
-		draw_vision_lines(colour_paths, convert_path_colours(colour_path_colours, current_vision), diagram)
+		draw_vision_lines(
+			colour_paths,
+			convert_path_colours(colour_path_colours, current_vision),
+			colour_matrix
+		)
 	print(Time.get_ticks_usec() - time)
 
-func update_path_vision(diagram: DrawingMatrix) -> void:
-	var vision_matrix: DrawingMatrix = Vision.generate_vision_matrix(current_vision, diagram)
+func update_path_vision(valid_diagram: DrawingMatrix) -> void:
+	var vision_matrix: DrawingMatrix = Vision.generate_vision_matrix(current_vision, valid_diagram)
 	var zip : Array = Vision.generate_vision_paths(current_vision, vision_matrix, true)
 	
 	if zip == []:
@@ -365,8 +368,7 @@ func update_path_vision(diagram: DrawingMatrix) -> void:
 
 	draw_vision_lines(paths, convert_path_colours(path_colours,current_vision), vision_matrix)
 
-func update_vision(diagram: DrawingMatrix = generate_drawing_matrix_from_diagram(true)) -> void:
-	
+func update_vision() -> void:
 	if freeze_vision:
 		return
 	
@@ -375,10 +377,12 @@ func update_vision(diagram: DrawingMatrix = generate_drawing_matrix_from_diagram
 	if get_interactions().size() == 0:
 		return
 	
-	update_colour(diagram)
+	var valid_diagram: DrawingMatrix = generate_drawing_matrix_from_diagram(true)
+	
+	update_colour(valid_diagram)
 	
 	if current_vision in [Globals.Vision.Shade]:
-		update_path_vision(diagram)
+		update_path_vision(valid_diagram)
 		return
 
 func vision_button_toggled(_vision: Globals.Vision, toggle: bool) -> void:
@@ -1026,7 +1030,7 @@ func redo() -> void:
 	
 	await get_tree().process_frame
 
-func add_diagram_to_history(clear_future: bool = true, diagram: DrawingMatrix = generate_drawing_matrix_from_diagram()) -> void:
+func add_diagram_to_history(clear_future: bool = true, diagram: DrawingMatrix = get_current_diagram()) -> void:
 	if !is_inside_tree():
 		return
 	
@@ -1038,7 +1042,7 @@ func add_diagram_to_history(clear_future: bool = true, diagram: DrawingMatrix = 
 	if diagram_history.size() > MAX_DIAGRAM_HISTORY_SIZE:
 		diagram_history.pop_front()
 
-func add_diagram_to_future(diagram: DrawingMatrix = generate_drawing_matrix_from_diagram()) -> void:
+func add_diagram_to_future(diagram: DrawingMatrix = get_current_diagram()) -> void:
 	diagram_future.push_back(diagram)
 	
 func remove_last_diagram_from_history() -> void:
@@ -1092,11 +1096,9 @@ func get_current_diagram() -> DrawingMatrix:
 	return current_diagram
 
 func is_fully_connected(bidirectional: bool) -> bool:
-	var diagram: DrawingMatrix = generate_drawing_matrix_from_diagram()
-	
 	return (
-		diagram.is_fully_connected(bidirectional) and
-		diagram.get_lonely_extreme_points(
+		current_diagram.is_fully_connected(bidirectional) and
+		current_diagram.get_lonely_extreme_points(
 			ConnectionMatrix.EntryFactor.Both
 		).size() == 0
 	)

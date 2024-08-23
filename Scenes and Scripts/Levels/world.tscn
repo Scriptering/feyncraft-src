@@ -369,6 +369,7 @@ script = ExtResource("2")
 [node name="vision_manager" type="Node" parent="."]
 
 [node name="Tutorial" type="CanvasLayer" parent="." node_paths=PackedStringArray("TutorialInfo", "ProblemTab")]
+visible = false
 follow_viewport_enabled = true
 script = ExtResource("28_soh5r")
 TutorialInfo = NodePath("TutorialInfo")
