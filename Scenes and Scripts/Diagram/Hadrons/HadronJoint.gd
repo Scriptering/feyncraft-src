@@ -5,7 +5,7 @@ class_name HadronJoint
 
 @export var label_seperation : float = 25
 var state : StateLine.State
-var hadron : Hadron
+var hadron : QuarkGroup
 var hadron_lines : Array
 
 func _ready() -> void:

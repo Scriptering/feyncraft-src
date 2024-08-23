@@ -2,13 +2,13 @@ extends TextureRect
 
 const MINIMUM_LABEL_SIZE := Vector2(10, 10)
 
-var hadron: ParticleData.Hadrons = ParticleData.Hadrons.Proton
+var hadron: ParticleData.Hadron = ParticleData.Hadron.Proton
 var Symbol := preload("res://Scenes and Scripts/UI/Equation/EquationSymbol.tscn")
 
-func init(_hadron: ParticleData.Hadrons) -> void:
+func init(_hadron: ParticleData.Hadron) -> void:
 	hadron = _hadron
 	
-	if hadron == ParticleData.Hadrons.Invalid:
+	if hadron == ParticleData.Hadron.Invalid:
 		return
 	
 	for i:int in range(ParticleData.HADRON_QUARK_CONTENT[hadron].size()):
@@ -40,7 +40,7 @@ func get_particle_name(interaction: Array) -> String:
 	if interaction.size() == 1:
 		return ParticleData.Particle.keys()[ParticleData.Particle.values().find(interaction.front())]
 	
-	for hadron_type:ParticleData.Hadrons in ParticleData.HADRON_QUARK_CONTENT.keys():
+	for hadron_type:ParticleData.Hadron in ParticleData.HADRON_QUARK_CONTENT.keys():
 		if interaction in ParticleData.HADRON_QUARK_CONTENT[hadron_type]:
 			return ParticleData.HADRON_NAMES[hadron_type]
 	

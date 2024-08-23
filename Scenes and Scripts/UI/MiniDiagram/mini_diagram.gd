@@ -36,12 +36,12 @@ func show_interaction_dots(drawing_matrix: DrawingMatrix) -> void:
 		if drawing_matrix.get_connected_count(id, true) >= Interaction.INTERACTION_SIZE_MINIMUM:
 			Interactions.get_child(id).show_dot()
 
-func find_hadron(quarks: Array) -> ParticleData.Hadrons:
-	for hadron:ParticleData.Hadrons in ParticleData.HADRON_QUARK_CONTENT:
+func find_hadron(quarks: Array) -> ParticleData.Hadron:
+	for hadron:ParticleData.Hadron in ParticleData.HADRON_QUARK_CONTENT:
 		if quarks in ParticleData.HADRON_QUARK_CONTENT[hadron]:
 			return hadron
 	
-	return ParticleData.Hadrons.Proton
+	return ParticleData.Hadron.Proton
 
 func create_hadron_joint(drawing_matrix: DrawingMatrix, hadron_ids: PackedInt32Array) -> void:
 	var interaction_ys: PackedInt32Array = []

@@ -719,7 +719,7 @@ func get_interaction_at_position(pos: Vector2i) -> Interaction:
 	
 	return null
 
-func create_hadron_joint(hadron: Hadron, state: StateLine.State) -> void:
+func create_hadron_joint(hadron: QuarkGroup, state: StateLine.State) -> void:
 	var joint := hadron_joint_scene.instantiate()
 	joint.hadron = hadron
 	joint.state = state

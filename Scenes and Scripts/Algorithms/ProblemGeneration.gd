@@ -152,7 +152,7 @@ func calc_W_count(state_factor: int, state_interaction: Array) -> int:
 func get_useable_hadrons(useable_particles: Array[ParticleData.Particle]) -> Array:
 	var useable_hadrons : Array = []
 	
-	for hadron:ParticleData.Hadrons in ParticleData.Hadrons.values():
+	for hadron:ParticleData.Hadron in ParticleData.Hadron.values():
 		for hadron_content:Array in ParticleData.HADRON_QUARK_CONTENT[hadron]:
 			if hadron_content.all(
 				func(quark: ParticleData.Particle) -> bool:

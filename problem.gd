@@ -43,7 +43,7 @@ func get_state_interaction(state: StateLine.State) -> Array:
 
 func get_sorted_states(states: Array) -> Array:
 	return states.map(func(interactions:Array) -> Array:
-		return interactions.map(func(state_interaction: Array) -> ParticleData.Hadrons:
+		return interactions.map(func(state_interaction: Array) -> ParticleData.Hadron:
 			if state_interaction.size() == 1:
 				return state_interaction.front()
 			

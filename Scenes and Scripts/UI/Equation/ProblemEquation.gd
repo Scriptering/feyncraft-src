@@ -49,12 +49,12 @@ func get_particle_name(interaction: Array) -> String:
 	
 	return ParticleData.HADRON_NAMES[get_hadron(interaction)]
 
-func get_hadron(interaction: Array) -> ParticleData.Hadrons:
-	for hadron:ParticleData.Hadrons in ParticleData.HADRON_QUARK_CONTENT:
+func get_hadron(interaction: Array) -> ParticleData.Hadron:
+	for hadron:ParticleData.Hadron in ParticleData.HADRON_QUARK_CONTENT:
 		if interaction in ParticleData.HADRON_QUARK_CONTENT[hadron]:
 			return hadron
 	
-	return ParticleData.Hadrons.Invalid
+	return ParticleData.Hadron.Invalid
 
 func _on_scroll_container_child_entered_tree(node: Node) -> void:
 	node.use_parent_material = true
