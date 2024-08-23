@@ -28,6 +28,11 @@ func enter() -> void:
 func exit() -> void:
 	crosshair.drawing_ended()
 
+func process(_delta: float) -> State:
+	if drawing == true:
+		return State.Placing
+	return State.Null
+
 func input(event: InputEvent) -> State:
 	if Input.is_action_just_pressed("editing"):
 		cancel_placement()
@@ -43,8 +48,6 @@ func input(event: InputEvent) -> State:
 	):
 		cancel_placement()
 		return State.Idle
-	elif drawing == true:
-		return State.Placing
 		
 	return State.Null
 
@@ -64,22 +67,6 @@ func crosshair_moved(current_position : Vector2, old_position : Vector2) -> void
 func _on_delay_timeout() -> void:
 	if state_manager.state == State.Drawing:
 		start_drawing()
-
-func end_drawing() -> void:
-	if !is_valid_end_position():
-		cancel_placement()
-		return
-	
-	for particle_line:ParticleLine in Diagram.get_particle_lines():
-		if !particle_line.is_placed:
-			Diagram.try_place_particle_line(particle_line)
-
-	Diagram.draw_interaction(crosshair.position)
-
-func is_valid_end_position() -> bool:
-	if crosshair.position == start_crosshair_position:
-		return false
-	return true
 
 func cancel_placement() -> void:
 	Diagram.remove_last_diagram_from_history()

@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://blu0n6lwfysjf" path="res://Scenes and Scripts/UI/Menus/MainMenu/main_menu.tscn" id="1_qkr4k"]
 [ext_resource type="PackedScene" uid="uid://c7n4o6dbkwilh" path="res://Scenes and Scripts/Levels/world.tscn" id="3_m7wj1"]
 [ext_resource type="PackedScene" uid="uid://cv3ttwhplgav" path="res://Scenes and Scripts/States/state_manager.tscn" id="6_qca7e"]
-[ext_resource type="PackedScene" uid="uid://brd5auomhnn6l" path="res://Scenes and Scripts/UI/cursor.tscn" id="7_s5a7m"]
+[ext_resource type="PackedScene" uid="uid://brd5auomhnn6l" path="res://Scenes and Scripts/UI/Cursor.tscn" id="7_s5a7m"]
 [ext_resource type="Script" path="res://Scenes and Scripts/UI/Buttons/touch_screen_button.gd" id="9_p3l37"]
 [ext_resource type="Texture2D" uid="uid://b5t01la3a122h" path="res://Textures/UI/split_normal.png" id="9_v030i"]
 [ext_resource type="Texture2D" uid="uid://g23i650xp21d" path="res://Textures/Buttons/split_hover.png" id="10_43d4r"]

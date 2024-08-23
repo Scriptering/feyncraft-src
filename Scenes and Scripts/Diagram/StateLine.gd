@@ -18,7 +18,7 @@ const state_factor : Dictionary = {
 }
 const STATES : Array[State] = [State.Initial, State.Final]
 
-var hadrons : Array[Hadron] = []
+var hadrons : Array[QuarkGroup] = []
 var joints : Array[HadronJoint] = []
 var old_quark_groups: Array = [[]]
 var old_position_x: int
@@ -92,10 +92,10 @@ func clear_hadrons() -> void:
 	joints.clear()
 
 func create_hadron_visuals() -> void:
-	for hadron:Hadron in hadrons:
+	for hadron:QuarkGroup in hadrons:
 		create_hadron_joint(hadron)
 
-func create_hadron_joint(hadron: Hadron) -> void:
+func create_hadron_joint(hadron: QuarkGroup) -> void:
 	var joint := hadron_joint_scene.instantiate()
 	joint.hadron = hadron
 	joint.state = state
@@ -106,10 +106,10 @@ func create_hadron_joint(hadron: Hadron) -> void:
 func create_hadrons(quark_groups: Array) -> void:
 	for i:int in range(quark_groups.size()):
 		var quark_group:Array = quark_groups[i]
-		var group_hadron : ParticleData.Hadrons = get_quark_group_hadron(quark_group)
-		if group_hadron == ParticleData.Hadrons.Invalid:
+		var group_hadron : ParticleData.Hadron = get_quark_group_hadron(quark_group)
+		if group_hadron == ParticleData.Hadron.Invalid:
 			continue
-		var hadron := Hadron.new()
+		var hadron := QuarkGroup.new()
 		hadron.init(quark_group, group_hadron)
 		hadrons.append(hadron)
 
@@ -124,15 +124,15 @@ func get_quantum_numbers() -> PackedFloat32Array:
 	
 	return quantum_sum
 
-func get_quark_group_hadron(quark_group: Array) -> ParticleData.Hadrons:
+func get_quark_group_hadron(quark_group: Array) -> ParticleData.Hadron:
 	var quarks : Array[ParticleData.Particle] = []
 	for particle_line:ParticleLine in quark_group:
 		quarks.append(particle_line.particle)
 	
-	for hadron:ParticleData.Hadrons in ParticleData.Hadrons.values():
+	for hadron:ParticleData.Hadron in ParticleData.Hadron.values():
 		if quarks in ParticleData.HADRON_QUARK_CONTENT[hadron]:
 			return hadron
-	return ParticleData.Hadrons.Invalid
+	return ParticleData.Hadron.Invalid
 
 func sort_quark_groups(quark_groups: Array) -> Array:
 	for quark_group: Array in quark_groups:
@@ -188,7 +188,7 @@ func _get_connected_lone_particles() -> Array[ParticleData.Particle]:
 			continue
 		
 		if hadrons.any(
-			func(hadron: Hadron) -> bool:
+			func(hadron: QuarkGroup) -> bool:
 				return connected_line in hadron.quark_lines
 		):
 			continue
@@ -211,7 +211,7 @@ func get_state_interactions() -> Array:
 	for particle:ParticleData.Particle in connected_lone_particles:
 		state_interactions.append([particle])
 	
-	for hadron:Hadron in hadrons:
+	for hadron:QuarkGroup in hadrons:
 		state_interactions.append(hadron.quarks)
 		
 	return state_interactions

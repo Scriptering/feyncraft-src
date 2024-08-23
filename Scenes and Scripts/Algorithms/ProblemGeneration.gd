@@ -82,12 +82,26 @@ func is_energy_conserved(state_interactions: Array) -> bool:
 	):
 		return true
 	
-	var state_base_particles: Array = state_interactions.map(
-		func(state_interaction: Array) -> Array:
-			return ArrayFuncs.flatten(state_interaction).map(
-			func(particle: ParticleData.Particle) -> ParticleData.Particle: 
-				return abs(particle) as ParticleData.Particle
-	))
+	var state_base_particles: Array = [[],[]]
+	
+	for state:StateLine.State in StateLine.STATES:
+		for interaction:Array in state_interactions[state]:
+			if interaction.size() == 1:
+				state_base_particles[state].push_back(ParticleData.base(interaction.front()))
+			
+			else:
+				state_base_particles[state].push_back(ParticleData.base_hadron(
+					ParticleData.find_hadron(interaction)
+				))
+	
+	state_base_particles[StateLine.State.Initial].sort_custom(ParticleData.sort_particles)
+	state_base_particles[StateLine.State.Final].sort_custom(ParticleData.sort_particles)
+	
+	if (
+		state_base_particles[StateLine.State.Initial]
+		== state_base_particles[StateLine.State.Final]
+	):
+		return true
 	
 	var state_masses: Array = state_base_particles.map(
 		func(base_particles: Array) -> float: 
@@ -152,7 +166,7 @@ func calc_W_count(state_factor: int, state_interaction: Array) -> int:
 func get_useable_hadrons(useable_particles: Array[ParticleData.Particle]) -> Array:
 	var useable_hadrons : Array = []
 	
-	for hadron:ParticleData.Hadrons in ParticleData.Hadrons.values():
+	for hadron:ParticleData.Hadron in ParticleData.Hadron.values():
 		for hadron_content:Array in ParticleData.HADRON_QUARK_CONTENT[hadron]:
 			if hadron_content.all(
 				func(quark: ParticleData.Particle) -> bool:
@@ -175,10 +189,14 @@ func generate_state_interactions(
 	var interaction_count: int = randi_range(min_particle_count, max_particle_count)
 	var interaction_count_left: int = interaction_count
 	var state_interactions : Array = [[], []]
-	var current_state : StateLine.State = StateLine.State.Initial
 	var W_count : int = 0
 	
 	for particle_count in max_particle_count:
+		var current_state : int = randi() % 2
+		
+		if particle_count < 2:
+			current_state = (particle_count % 2) as StateLine.State
+		
 		var state_factor : int = StateLine.state_factor[current_state]
 		
 		var next_state_interaction: Array
@@ -198,8 +216,6 @@ func generate_state_interactions(
 			next_state_interaction = get_next_state_interaction(
 				quantum_number_difference, useable_state_interactions, interaction_count_left, W_count, state_factor
 			)
-		
-		current_state = (current_state + 1) % 2 as StateLine.State
 		
 		if next_state_interaction == []:
 			return []

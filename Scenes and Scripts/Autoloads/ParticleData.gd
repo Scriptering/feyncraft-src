@@ -33,7 +33,7 @@ enum Particle {
 	lepton, electron, muon, tau,
 	lepton_neutrino, electron_neutrino, muon_neutrino, tau_neutrino,
 	bright_quark, up, charm, top, dark_quark, down, strange, bottom,
-	anti_bottom = -20, anti_strange, anti_down, anti_dark_quark, anti_top, anti_charm, anti_up, anti_bright_quark,
+	anti_bottom = -bottom, anti_strange, anti_down, anti_dark_quark, anti_top, anti_charm, anti_up, anti_bright_quark,
 	anti_tau_neutrino, anti_muon_neutrino, anti_electron_neutrino, anti_lepton_neutrino,
 	anti_tau, anti_muon, anti_electron, anti_lepton,
 	anti_W,
@@ -45,10 +45,48 @@ const BASE_PARTICLES: Array[Particle] = [
 	Particle.bright_quark, Particle.up, Particle.charm, Particle.top, Particle.dark_quark, Particle.down, Particle.strange, Particle.bottom
 ]
 
-enum Hadrons {Proton = 101, AntiProton, Neutron, AntiNeutron, DeltaPlusPlus, DeltaPlus, Delta0, DeltaMinus,
-AntiDeltaPlusPlus, AntiDeltaPlus, AntiDelta0, AntiDeltaMinus, Epsilon0, EpsilonMinus, AntiEpsilon0, AntiEpsilonMinus,
-Lambda0, AntiLambda0, SigmaPlus, SigmaMinus, AntiSigmaPlus, AntiSigmaMinus, OmegaMinus, AntiOmegaMinus,
-DPlus, D0, AntiD0, DMinus, BPlus, B0, AntiB0, BMinus, JPsi, PionMinus, PionPlus, Pion0, KaonPlus, KaonMinus, Kaon0, Invalid}
+enum Hadron {
+	proton = 101,
+	neutron,
+	delta_plus_plus,
+	delta_plus,
+	delta_0,
+	delta_minus,
+	epsilon_0,
+	epsilon_minus,
+	lambda_0,
+	sigma_plus,
+	sigma_minus,
+	omega_minus,
+	D_plus,
+	D_0,
+	D_minus,
+	B_plus,
+	B_0,
+	B_minus,
+	JPsi,
+	pion_minus,
+	pion_plus,
+	pion_0,
+	kaon_plus,
+	kaon_minus,
+	kaon_0,
+	anti_proton = -proton,
+	anti_neutron = -neutron,
+	anti_delta_plusPlus = -delta_plus_plus,
+	anti_delta_plus = -delta_plus,
+	anti_delta_0 = -delta_0,
+	anti_delta_minus = -delta_minus,
+	anti_epsilon_0 = -epsilon_0,
+	anti_epsilon_minus = -epsilon_minus,
+	anti_lambda_0 = -lambda_0,
+	anti_sigma_plus = -sigma_plus, 
+	anti_sigma_minus = -sigma_minus,
+	anti_omega_minus = -omega_minus,
+	anti_D_0 = -D_0,
+	anti_B_0 = -B_0,
+	Invalid = 100
+}
 
 enum QuantumNumber {charge, lepton, electron, muon, tau, quark, up, down, charm, strange, top, bottom, bright, dark}
 
@@ -289,6 +327,13 @@ const CKM_MATRIX := [
 	[0.008, 0.0388, 1.013]
 ]
 
+#
+#proton = 101, anti_proton, neutron, anti_neutron, delta_plus_plus, delta_plus, delta_0, delta_minus,
+#anti_delta_plusPlus, anti_delta_plus, anti_delta_0, anti_delta_minus, epsilon_0, epsilon_minus, anti_epsilon_0, anti_epsilon_minus,
+#lambda_0, anti_lambda_0, sigma_plus, sigma_minus, anti_sigma_plus, anti_sigma_minus, omega_minus, anti_omega_minus,
+#D_plus, D_0, anti_D_0, D_minus, B_plus, B_0, anti_B_0, B_minus, JPsi, pion_minus, pion_plus, pion_0, kaon_plus, kaon_minus, kaon_0, Invalid
+
+# MeV
 var PARTICLE_MASSES: Dictionary = {
 	Particle.W: 80.36e3,
 	Particle.Z: 91.19e3,
@@ -310,7 +355,32 @@ var PARTICLE_MASSES: Dictionary = {
 	Particle.top: 173.1e3,
 	Particle.down: 4.7,
 	Particle.strange: 96,
-	Particle.bottom: 4.18e3
+	Particle.bottom: 4.18e3,
+	Hadron.proton: 938.272,
+	Hadron.neutron: 939.565,
+	Hadron.delta_plus_plus: 1.232e3,
+	Hadron.delta_plus: 1.232e3,
+	Hadron.delta_0: 1.232e3,
+	Hadron.delta_minus: 1.232e3,
+	Hadron.epsilon_0: 1.31486e3,
+	Hadron.epsilon_minus: 1.32171e3,
+	Hadron.lambda_0: 1.115683e3,
+	Hadron.sigma_plus: 1.18937e3,
+	Hadron.sigma_minus: 1.197449e3,
+	Hadron.omega_minus: 1.67245e3,
+	Hadron.D_plus: 1.86962e3,
+	Hadron.D_0: 1.86484e3,
+	Hadron.D_minus: 1.86962e3,
+	Hadron.B_plus: 5.27934e3,
+	Hadron.B_0: 5.27965e3,
+	Hadron.B_minus: 5.27934e3,
+	Hadron.JPsi: 3.096916e6,
+	Hadron.pion_minus: 139.57039,
+	Hadron.pion_plus: 139.57039,
+	Hadron.pion_0: 134.9768,
+	Hadron.kaon_plus: 493.677,
+	Hadron.kaon_minus: 493.677,
+	Hadron.kaon_0: 497.611
 }
 
 const MIN_INTERACTION_STRENGTH: float = 1e-3
@@ -394,102 +464,102 @@ var INTERACTION_STRENGTHS: Array = [
 	]
 ]
 
-const BARYONS : Array[Hadrons] = [
-	Hadrons.Proton, Hadrons.AntiProton, Hadrons.Neutron, Hadrons.AntiNeutron, Hadrons.DeltaPlusPlus, Hadrons.DeltaPlus, Hadrons.Delta0,
-	Hadrons.DeltaMinus, Hadrons.AntiDeltaPlusPlus, Hadrons.AntiDeltaPlus, Hadrons.AntiDelta0, Hadrons.AntiDeltaMinus, Hadrons.Epsilon0,
-	Hadrons.EpsilonMinus, Hadrons.AntiEpsilon0, Hadrons.AntiEpsilonMinus, Hadrons.Lambda0, Hadrons.AntiLambda0, Hadrons.SigmaPlus,
-	Hadrons.SigmaMinus, Hadrons.AntiSigmaPlus, Hadrons.AntiSigmaMinus, Hadrons.OmegaMinus, Hadrons.AntiOmegaMinus
+const BARYONS : Array[Hadron] = [
+	Hadron.proton, Hadron.anti_proton, Hadron.neutron, Hadron.anti_neutron, Hadron.delta_plus_plus, Hadron.delta_plus, Hadron.delta_0,
+	Hadron.delta_minus, Hadron.anti_delta_plusPlus, Hadron.anti_delta_plus, Hadron.anti_delta_0, Hadron.anti_delta_minus, Hadron.epsilon_0,
+	Hadron.epsilon_minus, Hadron.anti_epsilon_0, Hadron.anti_epsilon_minus, Hadron.lambda_0, Hadron.anti_lambda_0, Hadron.sigma_plus,
+	Hadron.sigma_minus, Hadron.anti_sigma_plus, Hadron.anti_sigma_minus, Hadron.omega_minus, Hadron.anti_omega_minus
 ]
 
-const MESONS : Array[Hadrons] = [
-	Hadrons.DPlus, Hadrons.D0, Hadrons.AntiD0, Hadrons.DMinus, Hadrons.BPlus, Hadrons.B0, Hadrons.AntiB0, Hadrons.BMinus, Hadrons.JPsi,
-	Hadrons.PionMinus, Hadrons.PionPlus, Hadrons.Pion0, Hadrons.KaonPlus, Hadrons.KaonMinus, Hadrons.Kaon0
+const MESONS : Array[Hadron] = [
+	Hadron.D_plus, Hadron.D_0, Hadron.anti_D_0, Hadron.D_minus, Hadron.B_plus, Hadron.B_0, Hadron.anti_B_0, Hadron.B_minus, Hadron.JPsi,
+	Hadron.pion_minus, Hadron.pion_plus, Hadron.pion_0, Hadron.kaon_plus, Hadron.kaon_minus, Hadron.kaon_0
 ]
  
 var HADRON_QUARK_CONTENT : Dictionary = {
-	Hadrons.Proton:[[Particle.down, Particle.up, Particle.up]],
-	Hadrons.AntiProton:[[Particle.anti_down, Particle.anti_up, Particle.anti_up]],
-	Hadrons.Neutron:[[Particle.down, Particle.down, Particle.up]],
-	Hadrons.AntiNeutron:[[Particle.anti_down, Particle.anti_down, Particle.anti_up]],
-	Hadrons.DeltaPlusPlus:[[Particle.up, Particle.up, Particle.up]],
-	Hadrons.DeltaPlus:[[Particle.down, Particle.up, Particle.up]],
-	Hadrons.Delta0:[[Particle.down,Particle.down,Particle.up]],
-	Hadrons.DeltaMinus:[[Particle.down,Particle.down,Particle.down]],
-	Hadrons.AntiDeltaPlusPlus:[[Particle.anti_up, Particle.anti_up, Particle.anti_up]],
-	Hadrons.AntiDeltaPlus:[[Particle.anti_down, Particle.anti_up, Particle.anti_up]],
-	Hadrons.AntiDelta0:[[Particle.anti_down,Particle.anti_down,Particle.anti_up]],
-	Hadrons.AntiDeltaMinus:[[Particle.anti_down,Particle.anti_down,Particle.anti_down]],
-	Hadrons.Epsilon0:[[Particle.strange, Particle.strange, Particle.up]],
-	Hadrons.EpsilonMinus:[[Particle.down, Particle.strange, Particle.strange]],
-	Hadrons.AntiEpsilon0:[[Particle.anti_strange, Particle.anti_strange, Particle.anti_up]],
-	Hadrons.AntiEpsilonMinus:[[Particle.anti_down, Particle.anti_strange, Particle.anti_strange]],
-	Hadrons.Lambda0:[[Particle.down, Particle.strange, Particle.up]],
-	Hadrons.AntiLambda0:[[Particle.anti_down, Particle.anti_strange, Particle.anti_up]],
-	Hadrons.SigmaPlus:[[Particle.strange, Particle.up, Particle.up]],
-	Hadrons.SigmaMinus:[[Particle.down, Particle.down, Particle.strange]],
-	Hadrons.AntiSigmaPlus:[[Particle.anti_strange, Particle.anti_up, Particle.anti_up]],
-	Hadrons.AntiSigmaMinus:[[Particle.anti_down, Particle.anti_down, Particle.anti_strange]],
-	Hadrons.OmegaMinus:[[Particle.strange,Particle.strange,Particle.strange]],
-	Hadrons.AntiOmegaMinus:[[Particle.anti_strange,Particle.anti_strange,Particle.anti_strange]],
-	Hadrons.DPlus:[[Particle.charm, Particle.anti_down]],
-	Hadrons.D0:[[Particle.anti_charm, Particle.up]],
-	Hadrons.AntiD0:[[Particle.charm, Particle.anti_up]],
-	Hadrons.DMinus:[[Particle.anti_charm, Particle.down]],
-	Hadrons.BPlus:[[Particle.anti_bottom, Particle.up]],
-	Hadrons.B0:[[Particle.anti_bottom, Particle.down]],
-	Hadrons.AntiB0:[[Particle.bottom, Particle.anti_down]],
-	Hadrons.BMinus:[[Particle.bottom, Particle.anti_up]],
-	Hadrons.JPsi:[[Particle.charm, Particle.anti_charm]],
-	Hadrons.PionMinus:[[Particle.down, Particle.anti_up]],
-	Hadrons.PionPlus:[[Particle.anti_down, Particle.up]],
-	Hadrons.Pion0:[[Particle.down,Particle.anti_down], [Particle.up, Particle.anti_up]],
-	Hadrons.KaonPlus:[[Particle.anti_strange, Particle.up]],
-	Hadrons.KaonMinus:[[Particle.strange, Particle.anti_up]],
-	Hadrons.Kaon0:[[Particle.down, Particle.anti_strange], [Particle.anti_down, Particle.strange]],
-	Hadrons.Invalid:[]
+	Hadron.proton:[[Particle.down, Particle.up, Particle.up]],
+	Hadron.anti_proton:[[Particle.anti_down, Particle.anti_up, Particle.anti_up]],
+	Hadron.neutron:[[Particle.down, Particle.down, Particle.up]],
+	Hadron.anti_neutron:[[Particle.anti_down, Particle.anti_down, Particle.anti_up]],
+	Hadron.delta_plus_plus:[[Particle.up, Particle.up, Particle.up]],
+	Hadron.delta_plus:[[Particle.down, Particle.up, Particle.up]],
+	Hadron.delta_0:[[Particle.down,Particle.down,Particle.up]],
+	Hadron.delta_minus:[[Particle.down,Particle.down,Particle.down]],
+	Hadron.anti_delta_plusPlus:[[Particle.anti_up, Particle.anti_up, Particle.anti_up]],
+	Hadron.anti_delta_plus:[[Particle.anti_down, Particle.anti_up, Particle.anti_up]],
+	Hadron.anti_delta_0:[[Particle.anti_down,Particle.anti_down,Particle.anti_up]],
+	Hadron.anti_delta_minus:[[Particle.anti_down,Particle.anti_down,Particle.anti_down]],
+	Hadron.epsilon_0:[[Particle.strange, Particle.strange, Particle.up]],
+	Hadron.epsilon_minus:[[Particle.down, Particle.strange, Particle.strange]],
+	Hadron.anti_epsilon_0:[[Particle.anti_strange, Particle.anti_strange, Particle.anti_up]],
+	Hadron.anti_epsilon_minus:[[Particle.anti_down, Particle.anti_strange, Particle.anti_strange]],
+	Hadron.lambda_0:[[Particle.down, Particle.strange, Particle.up]],
+	Hadron.anti_lambda_0:[[Particle.anti_down, Particle.anti_strange, Particle.anti_up]],
+	Hadron.sigma_plus:[[Particle.strange, Particle.up, Particle.up]],
+	Hadron.sigma_minus:[[Particle.down, Particle.down, Particle.strange]],
+	Hadron.anti_sigma_plus:[[Particle.anti_strange, Particle.anti_up, Particle.anti_up]],
+	Hadron.anti_sigma_minus:[[Particle.anti_down, Particle.anti_down, Particle.anti_strange]],
+	Hadron.omega_minus:[[Particle.strange,Particle.strange,Particle.strange]],
+	Hadron.anti_omega_minus:[[Particle.anti_strange,Particle.anti_strange,Particle.anti_strange]],
+	Hadron.D_plus:[[Particle.charm, Particle.anti_down]],
+	Hadron.D_0:[[Particle.anti_charm, Particle.up]],
+	Hadron.anti_D_0:[[Particle.charm, Particle.anti_up]],
+	Hadron.D_minus:[[Particle.anti_charm, Particle.down]],
+	Hadron.B_plus:[[Particle.anti_bottom, Particle.up]],
+	Hadron.B_0:[[Particle.anti_bottom, Particle.down]],
+	Hadron.anti_B_0:[[Particle.bottom, Particle.anti_down]],
+	Hadron.B_minus:[[Particle.bottom, Particle.anti_up]],
+	Hadron.JPsi:[[Particle.charm, Particle.anti_charm]],
+	Hadron.pion_minus:[[Particle.down, Particle.anti_up]],
+	Hadron.pion_plus:[[Particle.anti_down, Particle.up]],
+	Hadron.pion_0:[[Particle.down,Particle.anti_down], [Particle.up, Particle.anti_up]],
+	Hadron.kaon_plus:[[Particle.anti_strange, Particle.up]],
+	Hadron.kaon_minus:[[Particle.strange, Particle.anti_up]],
+	Hadron.kaon_0:[[Particle.down, Particle.anti_strange], [Particle.anti_down, Particle.strange]],
+	Hadron.Invalid:[]
 }
 
 const HADRON_NAMES : Dictionary = {
-	Hadrons.Proton:"proton",
-	Hadrons.AntiProton:"proton_anti",
-	Hadrons.Neutron:"neutron",
-	Hadrons.AntiNeutron:"neutron_anti",
-	Hadrons.DeltaPlusPlus:"delta_plus_plus",
-	Hadrons.DeltaPlus:"delta_plus",
-	Hadrons.Delta0:"delta_0",
-	Hadrons.DeltaMinus:"delta_minus",
-	Hadrons.AntiDeltaPlusPlus:"delta_plus_plus_anti",
-	Hadrons.AntiDeltaPlus:"delta_plus_anti",
-	Hadrons.AntiDelta0:"delta_0_anti",
-	Hadrons.AntiDeltaMinus:"delta_minus_anti",
-	Hadrons.Epsilon0:"epsilon_0",
-	Hadrons.EpsilonMinus:"epsilon_minus",
-	Hadrons.AntiEpsilon0:"epsilon_0_anti",
-	Hadrons.AntiEpsilonMinus:"epsilon_minus_anti",
-	Hadrons.Lambda0:"lambda_0",
-	Hadrons.AntiLambda0:"lambda_0_anti",
-	Hadrons.SigmaPlus:"sigma_plus",
-	Hadrons.SigmaMinus:"sigma_minus",
-	Hadrons.AntiSigmaPlus:"sigma_plus_anti",
-	Hadrons.AntiSigmaMinus:"sigma_minus_anti",
-	Hadrons.OmegaMinus:"omega_minus",
-	Hadrons.AntiOmegaMinus:"omega_minus_anti",
-	Hadrons.DPlus:"D_plus",
-	Hadrons.D0:"D_0",
-	Hadrons.AntiD0:"D_0_anti",
-	Hadrons.DMinus:"D_minus",
-	Hadrons.BPlus:"B_plus",
-	Hadrons.B0:"B_0",
-	Hadrons.AntiB0:"B_0_anti",
-	Hadrons.BMinus:"B_minus",
-	Hadrons.JPsi:"J_psi",
-	Hadrons.PionMinus:"pion_minus",
-	Hadrons.PionPlus:"pion_plus",
-	Hadrons.Pion0:"pion_0",
-	Hadrons.KaonPlus:"kaon_plus",
-	Hadrons.KaonMinus:"kaon_minus",
-	Hadrons.Kaon0:"kaon_0",
-	Hadrons.Invalid:"Invalid"
+	Hadron.proton:"proton",
+	Hadron.anti_proton:"proton_anti",
+	Hadron.neutron:"neutron",
+	Hadron.anti_neutron:"neutron_anti",
+	Hadron.delta_plus_plus:"delta_plus_plus",
+	Hadron.delta_plus:"delta_plus",
+	Hadron.delta_0:"delta_0",
+	Hadron.delta_minus:"delta_minus",
+	Hadron.anti_delta_plusPlus:"delta_plus_plus_anti",
+	Hadron.anti_delta_plus:"delta_plus_anti",
+	Hadron.anti_delta_0:"delta_0_anti",
+	Hadron.anti_delta_minus:"delta_minus_anti",
+	Hadron.epsilon_0:"epsilon_0",
+	Hadron.epsilon_minus:"epsilon_minus",
+	Hadron.anti_epsilon_0:"epsilon_0_anti",
+	Hadron.anti_epsilon_minus:"epsilon_minus_anti",
+	Hadron.lambda_0:"lambda_0",
+	Hadron.anti_lambda_0:"lambda_0_anti",
+	Hadron.sigma_plus:"sigma_plus",
+	Hadron.sigma_minus:"sigma_minus",
+	Hadron.anti_sigma_plus:"sigma_plus_anti",
+	Hadron.anti_sigma_minus:"sigma_minus_anti",
+	Hadron.omega_minus:"omega_minus",
+	Hadron.anti_omega_minus:"omega_minus_anti",
+	Hadron.D_plus:"D_plus",
+	Hadron.D_0:"D_0",
+	Hadron.anti_D_0:"D_0_anti",
+	Hadron.D_minus:"D_minus",
+	Hadron.B_plus:"B_plus",
+	Hadron.B_0:"B_0",
+	Hadron.anti_B_0:"B_0_anti",
+	Hadron.B_minus:"B_minus",
+	Hadron.JPsi:"J_psi",
+	Hadron.pion_minus:"pion_minus",
+	Hadron.pion_plus:"pion_plus",
+	Hadron.pion_0:"pion_0",
+	Hadron.kaon_plus:"kaon_plus",
+	Hadron.kaon_minus:"kaon_minus",
+	Hadron.kaon_0:"kaon_0",
+	Hadron.Invalid:"Invalid"
 }
 
 func get_particle_name(particle: int) -> String:
@@ -501,18 +571,18 @@ func get_particle_texture(particle: int) -> Texture2D:
 func get_particle_icon(particle: int) -> Texture2D:
 	return load("res://Textures/Buttons/icons/Particles/" + get_particle_name(particle) + ".png")
 
-func get_hadron_texture(hadron: Hadrons) -> Texture2D:
+func get_hadron_texture(hadron: Hadron) -> Texture2D:
 	return particle_textures[HADRON_NAMES[hadron]]
 
-func find_hadron(interaction: Array) -> Hadrons:
+func find_hadron(interaction: Array) -> Hadron:
 	var sorted_interaction: Array = interaction.duplicate()
 	sorted_interaction.sort()
 	
-	for key:Hadrons in HADRON_QUARK_CONTENT.keys():
+	for key:Hadron in HADRON_QUARK_CONTENT.keys():
 		if sorted_interaction in HADRON_QUARK_CONTENT[key]:
 			return key
 	
-	return Hadrons.Invalid
+	return Hadron.Invalid
 
 func sort_interactions() -> void:
 	for interaction_type:Array in INTERACTIONS:
@@ -528,7 +598,7 @@ func sort_interactions() -> void:
 			interaction.sort()
 
 func sort_hadrons() -> void:
-	for key:Hadrons in HADRON_QUARK_CONTENT.keys():
+	for key:Hadron in HADRON_QUARK_CONTENT.keys():
 		for hadron:Array in HADRON_QUARK_CONTENT[key]:
 			hadron.sort()
 
@@ -749,46 +819,46 @@ const export_particle_dict : Dictionary = {
 }
 
 const export_hadron_dict : Dictionary = {
-	Hadrons.Proton:"p",
-	Hadrons.AntiProton:"\\overline p",
-	Hadrons.Neutron:"n",
-	Hadrons.AntiNeutron:"\\overline n",
-	Hadrons.DeltaPlusPlus:"\\Delta^{++}",
-	Hadrons.DeltaPlus:"\\Delta^{+}",
-	Hadrons.Delta0:"\\Delta^{0}",
-	Hadrons.DeltaMinus:"\\Delta^{-}",
-	Hadrons.AntiDeltaPlusPlus:"\\overline \\Delta^{++}",
-	Hadrons.AntiDeltaPlus:"\\overline \\Delta^{+}",
-	Hadrons.AntiDelta0:"\\overline \\Delta^{0}",
-	Hadrons.AntiDeltaMinus:"\\overline \\Delta^{-}",
-	Hadrons.Epsilon0:"\\Epsilon^{0}",
-	Hadrons.EpsilonMinus:"\\Epsilon^{-}",
-	Hadrons.AntiEpsilon0:"\\overline \\Epsilon^{0}",
-	Hadrons.AntiEpsilonMinus:"\\overline \\Epsilon^{-}",
-	Hadrons.Lambda0:"\\Lambda^{0}",
-	Hadrons.AntiLambda0:"\\overline \\Lambda^{0}",
-	Hadrons.SigmaPlus:"\\Sigma^{+}",
-	Hadrons.SigmaMinus:"\\Sigma^{-}",
-	Hadrons.AntiSigmaPlus:"\\overline \\Sigma^{+}",
-	Hadrons.AntiSigmaMinus:"\\overline \\Sigma^{-}",
-	Hadrons.OmegaMinus:"\\Omega{-}",
-	Hadrons.AntiOmegaMinus:"\\overline \\Omega^{-}",
-	Hadrons.DPlus:"D^{+}",
-	Hadrons.D0:"D^{0}",
-	Hadrons.AntiD0:"\\overline D^{0}",
-	Hadrons.DMinus:"\\overline D^{-}",
-	Hadrons.BPlus:"B^{+}",
-	Hadrons.B0:"B^{0}",
-	Hadrons.AntiB0:"\\overline B^{0}",
-	Hadrons.BMinus:"\\overline B^{-}",
-	Hadrons.JPsi:"J//psi",
-	Hadrons.PionMinus:"\\pi^{-}",
-	Hadrons.PionPlus:"\\pi^{+}",
-	Hadrons.Pion0:"\\pi^{0}",
-	Hadrons.KaonPlus:"K^{+}",
-	Hadrons.KaonMinus:"K^{-}",
-	Hadrons.Kaon0:"K^{0}",
-	Hadrons.Invalid:"Invalid"
+	Hadron.proton:"p",
+	Hadron.anti_proton:"\\overline p",
+	Hadron.neutron:"n",
+	Hadron.anti_neutron:"\\overline n",
+	Hadron.delta_plus_plus:"\\Delta^{++}",
+	Hadron.delta_plus:"\\Delta^{+}",
+	Hadron.delta_0:"\\Delta^{0}",
+	Hadron.delta_minus:"\\Delta^{-}",
+	Hadron.anti_delta_plusPlus:"\\overline \\Delta^{++}",
+	Hadron.anti_delta_plus:"\\overline \\Delta^{+}",
+	Hadron.anti_delta_0:"\\overline \\Delta^{0}",
+	Hadron.anti_delta_minus:"\\overline \\Delta^{-}",
+	Hadron.epsilon_0:"\\Epsilon^{0}",
+	Hadron.epsilon_minus:"\\Epsilon^{-}",
+	Hadron.anti_epsilon_0:"\\overline \\Epsilon^{0}",
+	Hadron.anti_epsilon_minus:"\\overline \\Epsilon^{-}",
+	Hadron.lambda_0:"\\Lambda^{0}",
+	Hadron.anti_lambda_0:"\\overline \\Lambda^{0}",
+	Hadron.sigma_plus:"\\Sigma^{+}",
+	Hadron.sigma_minus:"\\Sigma^{-}",
+	Hadron.anti_sigma_plus:"\\overline \\Sigma^{+}",
+	Hadron.anti_sigma_minus:"\\overline \\Sigma^{-}",
+	Hadron.omega_minus:"\\Omega{-}",
+	Hadron.anti_omega_minus:"\\overline \\Omega^{-}",
+	Hadron.D_plus:"D^{+}",
+	Hadron.D_0:"D^{0}",
+	Hadron.anti_D_0:"\\overline D^{0}",
+	Hadron.D_minus:"\\overline D^{-}",
+	Hadron.B_plus:"B^{+}",
+	Hadron.B_0:"B^{0}",
+	Hadron.anti_B_0:"\\overline B^{0}",
+	Hadron.B_minus:"\\overline B^{-}",
+	Hadron.JPsi:"J//psi",
+	Hadron.pion_minus:"\\pi^{-}",
+	Hadron.pion_plus:"\\pi^{+}",
+	Hadron.pion_0:"\\pi^{0}",
+	Hadron.kaon_plus:"K^{+}",
+	Hadron.kaon_minus:"K^{-}",
+	Hadron.kaon_0:"K^{0}",
+	Hadron.Invalid:"Invalid"
 }
 
 const export_line_dict : Dictionary = {
@@ -832,8 +902,26 @@ const export_line_dict : Dictionary = {
 	Particle.anti_W : "boson",
 }
 
+func sort_particles(particle_A: Variant, particle_B: Variant) -> bool:
+	if particle_A is ParticleData.Particle:
+		if particle_B is ParticleData.Particle:
+			return particle_A < particle_B
+		else:
+			return true
+	
+	if particle_B is ParticleData.Particle:
+		return false
+	else:
+		return particle_A < particle_B
+
 func anti(particle: ParticleData.Particle) -> ParticleData.Particle:
 	if particle in SHADED_PARTICLES:
 		return -particle as ParticleData.Particle
 	
 	return particle
+
+func base(particle: ParticleData.Particle) -> ParticleData.Particle:
+	return abs(particle) as ParticleData.Particle
+
+func base_hadron(hadron: ParticleData.Hadron) -> ParticleData.Hadron:
+	return abs(hadron) as ParticleData.Hadron

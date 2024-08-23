@@ -719,7 +719,7 @@ func get_interaction_at_position(pos: Vector2i) -> Interaction:
 	
 	return null
 
-func create_hadron_joint(hadron: Hadron, state: StateLine.State) -> void:
+func create_hadron_joint(hadron: QuarkGroup, state: StateLine.State) -> void:
 	var joint := hadron_joint_scene.instantiate()
 	joint.hadron = hadron
 	joint.state = state
@@ -1104,13 +1104,19 @@ func is_fully_connected(bidirectional: bool) -> bool:
 	)
 
 func is_energy_conserved() -> bool:
-	var state_base_particles: Array = StateLines.map(
-		func(state_line: StateLine) -> Array:
-			return state_line.get_connected_base_particles()
-	)
+	var state_base_particles: Array = [[],[]]
 	
-	state_base_particles[StateLine.State.Initial].sort()
-	state_base_particles[StateLine.State.Final].sort()
+	for state:StateLine.State in StateLine.STATES:
+		state_base_particles[state] = StateLines[state]._get_connected_lone_particles().map(
+			func(particle: ParticleData.Particle) -> ParticleData.Particle:
+				return ParticleData.base(particle)
+		)
+		
+		for hadron:QuarkGroup in StateLines[state].hadrons:
+			state_base_particles[state].push_back(ParticleData.base_hadron(hadron.hadron))
+	
+	state_base_particles[StateLine.State.Initial].sort_custom(ParticleData.sort_particles)
+	state_base_particles[StateLine.State.Final].sort_custom(ParticleData.sort_particles)
 	
 	if (
 		state_base_particles[StateLine.State.Initial]
@@ -1121,19 +1127,19 @@ func is_energy_conserved() -> bool:
 	var state_masses: Array = state_base_particles.map(
 		func(base_particles: Array) -> float:
 			return base_particles.reduce(
-				func(accum: float, particle: ParticleData.Particle) -> float:
+				func(accum: float, particle: Variant) -> float:
 					return accum + ParticleData.PARTICLE_MASSES[particle],
 				0.0
 		)
 	)
-	
+
 	for state_type:StateLine.State in StateLine.STATES:
 		if state_base_particles[state_type].size() > 1:
 			continue
 		
 		if state_masses[state_type] - state_masses[(state_type + 1) % 2] <= MASS_PRECISION:
 			return false
-	
+
 	return true
 
 func get_interaction_from_matrix_id(id: int, matrix: DrawingMatrix) -> Interaction:

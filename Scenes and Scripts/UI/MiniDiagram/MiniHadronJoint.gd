@@ -5,7 +5,7 @@ class_name MiniHadronJoint
 
 @export var label_seperation : float = 20
 var state : StateLine.State
-var hadron: ParticleData.Hadrons = ParticleData.Hadrons.Proton
+var hadron: ParticleData.Hadron = ParticleData.Hadron.proton
 var interaction_ys: PackedInt32Array
 
 var Diagram: MiniDiagram
