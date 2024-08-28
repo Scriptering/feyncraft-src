@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="FeynCraft"
-run/main_scene="res://Scenes and Scripts/universe.tscn"
+run/main_scene="res://Scenes_and_scripts/universe.tscn"
 config/features=PackedStringArray("4.3")
 run/low_processor_mode=true
 config/icon="res://icon.png"
@@ -20,14 +20,14 @@ config/windows_native_icon="res://Textures/game_icon.ico"
 
 [autoload]
 
-Globals="*res://Scenes and Scripts/Autoloads/Globals.gd"
-SOUNDBUS="*res://Scenes and Scripts/sound_bus.tscn"
-EventBus="*res://Scenes and Scripts/Autoloads/EventBus.gd"
-ParticleData="*res://Scenes and Scripts/Autoloads/ParticleData.gd"
-ClipBoard="*res://Scenes and Scripts/clip_board.tscn"
-StatsManager="*res://Scenes and Scripts/Autoloads/StatsManager.tscn"
-ProblemGeneration="*res://Scenes and Scripts/Algorithms/problem_generation.tscn"
-SolutionGeneration="*res://Scenes and Scripts/Algorithms/SolutionGeneration.tscn"
+Globals="*res://Scenes_and_scripts/Autoloads/Globals.gd"
+SOUNDBUS="*res://Scenes_and_scripts/sound_bus.tscn"
+EventBus="*res://Scenes_and_scripts/Autoloads/EventBus.gd"
+ParticleData="*res://Scenes_and_scripts/Autoloads/ParticleData.gd"
+ClipBoard="*res://Scenes_and_scripts/clip_board.tscn"
+StatsManager="*res://Scenes_and_scripts/Autoloads/StatsManager.tscn"
+ProblemGeneration="*res://Scenes_and_scripts/Algorithms/problem_generation.tscn"
+SolutionGeneration="*res://Scenes_and_scripts/Algorithms/SolutionGeneration.tscn"
 
 [debug]
 

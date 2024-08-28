@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://bgsq45ojvnmr8"]
 
-[ext_resource type="Script" path="res://Scenes and Scripts/States/idle.gd" id="1_x5js1"]
-[ext_resource type="Script" path="res://Scenes and Scripts/States/drawing.gd" id="3_c00fs"]
+[ext_resource type="Script" path="res://Scenes_and_scripts/States/idle.gd" id="1_x5js1"]
+[ext_resource type="Script" path="res://Scenes_and_scripts/States/drawing.gd" id="3_c00fs"]
 
 [sub_resource type="GDScript" id="GDScript_3lf1w"]
 script/source = "extends Node

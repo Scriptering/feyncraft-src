@@ -9,7 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://cs50mifpalsrn" path="res://Textures/Buttons/CheckButton/checked.png" id="8_lb8ym"]
 [ext_resource type="Texture2D" uid="uid://cdfgpqy1srg8j" path="res://Textures/Buttons/CheckButton/unchecked.png" id="9_yjmwd"]
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="11_hhi3e"]
-[ext_resource type="StyleBox" uid="uid://dvu7f5h7snggp" path="res://Scenes and Scripts/UI/Menus/panelContainer.tres" id="15_olnr4"]
+[ext_resource type="StyleBox" uid="uid://dvu7f5h7snggp" path="res://Scenes_and_scripts/UI/Menus/panelContainer.tres" id="15_olnr4"]
 [ext_resource type="Texture2D" uid="uid://d3yddpra1btvh" path="res://Textures/UI/Information/sliderH/grabber.png" id="16_tru3k"]
 [ext_resource type="Texture2D" uid="uid://bwoj6h7oyr2oh" path="res://Textures/UI/up_down.png" id="17_s6slh"]
 [ext_resource type="Texture2D" uid="uid://dne44tp1it1xy" path="res://Textures/UI/Information/sliderH/grabber_highlighted.png" id="17_slpu5"]

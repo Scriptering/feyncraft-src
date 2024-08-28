@@ -128,11 +128,11 @@ func create_diagram_interaction_positions(drawing_matrix: DrawingMatrix) -> void
 		)
 		
 		while snapped_pos in drawing_matrix.get_interaction_positions(grid_size):
-			if pos.x < (grid_width - grid_size):
-				pos.x += grid_size
+			if snapped_pos.x < (grid_width - grid_size):
+				snapped_pos.x += grid_size
 				continue
-			elif pos.y < (grid_height - grid_size):
-				pos.y += grid_size
+			elif snapped_pos.y < (grid_height - grid_size):
+				snapped_pos.y += grid_size
 				continue
 		
 		drawing_matrix.add_interaction_position(snapped_pos, grid_size)
@@ -181,10 +181,10 @@ func generate_start_positions(drawing_matrix: DrawingMatrix) -> Array[Vector2]:
 
 func generate_spring_layout_positions(
 	drawing_matrix: DrawingMatrix,
-	loop_count: int = 100,
-	c1: float = 2,
-	c2: float = 500,
-	c3: float = 300,
+	loop_count: int = 200,
+	c1: float = 4,
+	c2: float = 200,
+	c3: float = 750,
 	c4: float = .1,
 	c5: float = 10
 ) -> Array[Vector2]:
@@ -219,6 +219,16 @@ func generate_spring_layout_positions(
 		
 		for id:int in mid_ids:
 			positions[id] += c4*forces[id]
+			
+			if positions[id].x > grid_width - grid_size:
+				positions[id].x -= 5*(positions[id].x - (grid_width - grid_size))
+			elif positions[id].x < grid_size:
+				positions[id].x += 5*(grid_size - positions[id].x)
+			
+			if positions[id].y > grid_height - grid_size:
+				positions[id].y -= 5*(positions[id].y - (grid_height - grid_size))
+			elif positions[id].y < grid_size:
+				positions[id].y += 5*(grid_size - positions[id].y)
 	
 	var mid_positions: Array[Vector2] = []
 	for i:int in positions.size():
@@ -242,9 +252,9 @@ func calc_force(
 	if matrix.are_interactions_connected(A, B, true):
 		force += c1 * d
 	else:
-		force += -(c2 / (d*d*d))
+		force += -(c2 / (d*d))
 		
-	force += -(c3 / (d*d))
+	force += -(c3 / (d*d*d))
 	
 	return norm * force
 
@@ -288,7 +298,7 @@ func create_state_diagram_interaction_positions(drawing_matrix: DrawingMatrix, s
 		
 		if hadron_pos == 0:
 			current_y += gap
-			if gap != grid_size:
+			if gap > 2*grid_size:
 				current_y -= grid_size
 			drawing_matrix.add_interaction_position(
 				Vector2(StateLines[state].position.x, current_y), grid_size

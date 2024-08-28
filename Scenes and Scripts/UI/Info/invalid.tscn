@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://cl3o4kwttowbv"]
-
-[ext_resource type="Texture2D" uid="uid://tql14gtq05lf" path="res://Textures/UI/Information/invalid.png" id="1_e3gts"]
-
-[node name="invalid" type="TextureRect"]
-size_flags_vertical = 0
-texture = ExtResource("1_e3gts")
-stretch_mode = 2

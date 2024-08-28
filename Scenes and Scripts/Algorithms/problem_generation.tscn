@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://bs6vtukhlou2r"]
-
-[ext_resource type="Script" path="res://Scenes and Scripts/Algorithms/ProblemGeneration.gd" id="1_ly1io"]
-
-[node name="ProblemGeneration" type="Node"]
-script = ExtResource("1_ly1io")

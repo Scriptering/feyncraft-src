@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://bhqbh8l20ks3h"]
-
-[ext_resource type="Script" path="res://Scenes and Scripts/Algorithms/Vision.gd" id="1"]
-
-[node name="Vision" type="Node"]
-script = ExtResource("1")

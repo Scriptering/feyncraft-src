@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://tkooi22n56bl"]
-
-[ext_resource type="Texture2D" uid="uid://co7w81osg53kf" path="res://Textures/UI/Information/valid.png" id="1_v0ush"]
-
-[node name="valid" type="TextureRect"]
-size_flags_vertical = 0
-texture = ExtResource("1_v0ush")
-stretch_mode = 2
