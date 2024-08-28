@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://brd5auomhnn6l"]
+
+[ext_resource type="Texture2D" uid="uid://cijtfk2524cte" path="res://Textures/Cursors/cursor_point.png" id="1"]
+[ext_resource type="Script" path="res://Scenes_and_scripts/UI/cursor.gd" id="1_esog3"]
+[ext_resource type="Texture2D" uid="uid://cane64owm0oof" path="res://Textures/Cursors/heart.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://djqwjgfep38nt" path="res://Textures/Cursors/cursor_disabled.png" id="4_c01jn"]
+
+[node name="Cursor" type="Node2D" groups=["cursor"]]
+script = ExtResource("1_esog3")
+Scale = 0.6
+normal_offset = Vector2(8, 16)
+normal_heart_offset = Vector2(8, 25)
+disabled_offset = Vector2(5, 7)
+
+[node name="Disabled" type="Sprite2D" parent="."]
+texture = ExtResource("4_c01jn")
+offset = Vector2(5, 7)
+
+[node name="Cursor" type="Sprite2D" parent="."]
+z_index = 10
+texture = ExtResource("1")
+offset = Vector2(8, 16)
+
+[node name="Heart" type="Sprite2D" parent="Cursor"]
+visible = false
+texture = ExtResource("3")
+offset = Vector2(9, 26)

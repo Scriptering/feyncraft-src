@@ -1,0 +1,168 @@
+[gd_scene load_steps=13 format=3 uid="uid://dh7y3g5jhluwj"]
+
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_calm3"]
+[ext_resource type="Script" path="res://Scenes_and_scripts/UI/Menus/export_tab.gd" id="2_00o4x"]
+[ext_resource type="PackedScene" uid="uid://c842ueypoq88x" path="res://Scenes_and_scripts/UI/Buttons/pull_out_tab_button_left.tscn" id="3_n7eiy"]
+[ext_resource type="Texture2D" uid="uid://qxw17ji0dvra" path="res://Textures/Buttons/icons/share.png" id="4_q7ddc"]
+[ext_resource type="Theme" uid="uid://cfmbhoq8cuoge" path="res://Resources/Themes/ProjectTheme.tres" id="5_fm0dq"]
+[ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="6_37pnp"]
+[ext_resource type="Texture2D" uid="uid://cdknipqtlfaia" path="res://Textures/Interactions/blob.png" id="7_exnkd"]
+[ext_resource type="PackedScene" uid="uid://cv1hcrp0bkj2o" path="res://Scenes_and_scripts/Diagram/decoration.tscn" id="7_ri02b"]
+[ext_resource type="Texture2D" uid="uid://do3unrc23xp01" path="res://Textures/Interactions/crossed_dot.png" id="8_i6an4"]
+[ext_resource type="Texture2D" uid="uid://dkrsyn76doidj" path="res://Textures/UI/cancel.png" id="10_68cq7"]
+[ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes_and_scripts/UI/Buttons/panelButton.tscn" id="11_lyp7y"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_c3dkk"]
+texture = ExtResource("6_37pnp")
+texture_margin_left = 6.0
+texture_margin_top = 6.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+expand_margin_right = 10.0
+
+[node name="ExportTab" type="Control" node_paths=PackedStringArray("ContentContainer", "TabButton", "MovingContainer")]
+material = ExtResource("1_calm3")
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -640.0
+offset_bottom = -360.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_00o4x")
+ContentContainer = NodePath("MovingContainer/ContentContainer")
+TabButton = NodePath("MovingContainer/TabButton")
+MovingContainer = NodePath("MovingContainer")
+
+[node name="MovingContainer" type="HBoxContainer" parent="."]
+use_parent_material = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="TabButton" parent="MovingContainer" instance=ExtResource("3_n7eiy")]
+layout_mode = 2
+TabIcon = ExtResource("4_q7ddc")
+TabMinimumSize = Vector2(25, 23)
+icon_use_parent_material = true
+
+[node name="ContentContainer" type="PanelContainer" parent="MovingContainer"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+theme = ExtResource("5_fm0dq")
+theme_override_styles/panel = SubResource("StyleBoxTexture_c3dkk")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MovingContainer/ContentContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+theme_override_constants/separation = 1
+
+[node name="JoinPaths" type="CheckButton" parent="MovingContainer/ContentContainer/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+text = "Join paths"
+
+[node name="InternalLabels" type="CheckButton" parent="MovingContainer/ContentContainer/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+button_pressed = true
+text = "Line labels"
+
+[node name="ExternalLabels" type="CheckButton" parent="MovingContainer/ContentContainer/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+button_pressed = true
+text = "Ext. labels"
+
+[node name="GridContainer" type="GridContainer" parent="MovingContainer/ContentContainer/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_override_constants/h_separation = 1
+theme_override_constants/v_separation = 1
+columns = 2
+
+[node name="BlobContainer" type="PanelContainer" parent="MovingContainer/ContentContainer/VBoxContainer/GridContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="MovingContainer/ContentContainer/VBoxContainer/GridContainer/BlobContainer"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Decoration" parent="MovingContainer/ContentContainer/VBoxContainer/GridContainer/BlobContainer/CenterContainer" instance=ExtResource("7_ri02b")]
+use_parent_material = true
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+texture = ExtResource("7_exnkd")
+
+[node name="CrossedDotContainer" type="PanelContainer" parent="MovingContainer/ContentContainer/VBoxContainer/GridContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="MovingContainer/ContentContainer/VBoxContainer/GridContainer/CrossedDotContainer"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Decoration" parent="MovingContainer/ContentContainer/VBoxContainer/GridContainer/CrossedDotContainer/CenterContainer" instance=ExtResource("7_ri02b")]
+use_parent_material = true
+custom_minimum_size = Vector2(14, 14)
+layout_mode = 2
+texture = ExtResource("8_i6an4")
+decor = 2
+
+[node name="PanelContainer4" type="PanelContainer" parent="MovingContainer/ContentContainer/VBoxContainer/GridContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="MovingContainer/ContentContainer/VBoxContainer/GridContainer/PanelContainer4"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Decoration" parent="MovingContainer/ContentContainer/VBoxContainer/GridContainer/PanelContainer4/CenterContainer" instance=ExtResource("7_ri02b")]
+use_parent_material = true
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+decor = 3
+
+[node name="PanelContainer2" type="PanelContainer" parent="MovingContainer/ContentContainer/VBoxContainer/GridContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="MovingContainer/ContentContainer/VBoxContainer/GridContainer/PanelContainer2"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Decoration" parent="MovingContainer/ContentContainer/VBoxContainer/GridContainer/PanelContainer2/CenterContainer" instance=ExtResource("7_ri02b")]
+use_parent_material = true
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+texture = ExtResource("10_68cq7")
+decor = 0
+
+[node name="Export" parent="MovingContainer/ContentContainer/VBoxContainer" instance=ExtResource("11_lyp7y")]
+layout_mode = 2
+minimum_size = Vector2(50, 20)
+icon = ExtResource("4_q7ddc")
+icon_use_parent_material = true
+
+[connection signal="pressed" from="MovingContainer/ContentContainer/VBoxContainer/Export" to="." method="_on_export_pressed"]

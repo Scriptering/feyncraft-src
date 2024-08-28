@@ -1,0 +1,106 @@
+[gd_scene load_steps=12 format=3 uid="uid://c3m8fesktmd85"]
+
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_dmm2o"]
+[ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes_and_scripts/UI/Buttons/panelButton.tscn" id="1_tgmdf"]
+[ext_resource type="Script" path="res://Scenes_and_scripts/UI/ProblemSelection/problem_set_list.gd" id="2_oi7x7"]
+[ext_resource type="Texture2D" uid="uid://1qi6lr05g0vt" path="res://Textures/Buttons/icons/add.png" id="3_fyqnn"]
+[ext_resource type="FontFile" uid="uid://cgts3h57wry82" path="res://Textures/Fonts/numbers_font.ttf" id="3_yuthw"]
+[ext_resource type="PackedScene" uid="uid://cmafkxyj8ko4d" path="res://Scenes_and_scripts/UI/PanelItemList.tscn" id="7_2up2w"]
+[ext_resource type="PackedScene" uid="uid://dorw3vr2amuy3" path="res://Scenes_and_scripts/Components/button_sound_component.tscn" id="10_4ouwk"]
+[ext_resource type="Texture2D" uid="uid://ci1qrp3pyqm6h" path="res://Textures/Buttons/icons/close.png" id="10_b7g42"]
+[ext_resource type="Texture2D" uid="uid://bfoxtqmre12qw" path="res://Textures/Buttons/icons/load.png" id="10_snvvg"]
+[ext_resource type="Texture2D" uid="uid://cgfs1pdopjbh" path="res://Textures/Buttons/icons/close_hover.png" id="11_5q7ul"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fxurh"]
+
+[node name="ProblemSetList" type="PanelContainer" node_paths=PackedStringArray("problem_container")]
+material = ExtResource("1_dmm2o")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -484.0
+offset_bottom = -129.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+mouse_filter = 2
+script = ExtResource("2_oi7x7")
+problem_container = NodePath("VBoxContainer/PanelList")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Header" type="PanelContainer" parent="VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_fxurh")
+
+[node name="VBoxSeperator" type="VBoxContainer" parent="VBoxContainer/Header"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_override_constants/separation = -1
+alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/Header/VBoxSeperator"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_override_fonts/font = ExtResource("3_yuthw")
+theme_override_font_sizes/font_size = 16
+text = "Problem Sets"
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/Header/VBoxSeperator"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Close" type="TextureButton" parent="VBoxContainer/Header"]
+use_parent_material = true
+custom_minimum_size = Vector2(10, 14)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture_normal = ExtResource("10_b7g42")
+texture_hover = ExtResource("11_5q7ul")
+stretch_mode = 5
+
+[node name="ButtonSoundComponent" parent="VBoxContainer/Header/Close" instance=ExtResource("10_4ouwk")]
+
+[node name="PanelList" parent="VBoxContainer" instance=ExtResource("7_2up2w")]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+mouse_filter = 2
+alignment = 1
+
+[node name="AddButton" parent="VBoxContainer/HBoxContainer" instance=ExtResource("1_tgmdf")]
+layout_mode = 2
+size_flags_horizontal = 1
+minimum_size = Vector2(70, 28)
+action_mode = 1
+icon = ExtResource("3_fyqnn")
+icon_use_parent_material = true
+
+[node name="LoadButton" parent="VBoxContainer/HBoxContainer" instance=ExtResource("1_tgmdf")]
+layout_mode = 2
+size_flags_horizontal = 1
+minimum_size = Vector2(70, 28)
+action_mode = 1
+icon = ExtResource("10_snvvg")
+icon_use_parent_material = true
+flip_icon_v = true
+
+[connection signal="pressed" from="VBoxContainer/Header/Close" to="." method="_on_close_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/AddButton" to="." method="_on_add_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/LoadButton" to="." method="_on_load_button_pressed"]

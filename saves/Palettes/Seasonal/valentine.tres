@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Palette" load_steps=2 format=3 uid="uid://c3lbhnewqmih3"]
+
+[ext_resource type="Script" path="res://Scenes_and_scripts/Classes/PaletteClass.gd" id="1_gvt1o"]
+
+[resource]
+script = ExtResource("1_gvt1o")
+title = "Adoring"
+is_custom = false
+colours = Array[Color]([Color(1, 0.145098, 0.494118, 1), Color(1, 0.269216, 0.616312, 1), Color(1, 0.393333, 0.738506, 1), Color(0.811111, 0.0756601, 0.25017, 1), Color(0.811111, 0.199778, 0.372364, 1), Color(0.622222, 0.00622222, 0.00622222, 1), Color(1, 0.395098, 0.642053, 1), Color(1, 0.401569, 0.645882, 1), Color(1, -0.254902, 0.257421, 1), Color(0.756863, 0.243137, 0.243137, 1), Color(0.243137, 0.756863, 0.243137, 1), Color(0.25098, 0.341176, 0.745098, 1), Color(0, 0, 0, 1), Color(0.537778, 0, 0.20794, 1)])
+advanced_colours = true

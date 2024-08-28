@@ -1,0 +1,121 @@
+[gd_scene load_steps=12 format=3 uid="uid://b5pj0lanxu0o6"]
+
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_3q1kk"]
+[ext_resource type="Script" path="res://Scenes_and_scripts/UI/ColourPicker/palette_control.gd" id="2_arvfv"]
+[ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes_and_scripts/UI/Buttons/panelButton.tscn" id="5_7aaw2"]
+[ext_resource type="FontFile" uid="uid://cgts3h57wry82" path="res://Textures/Fonts/numbers_font.ttf" id="5_ifvpa"]
+[ext_resource type="Texture2D" uid="uid://1qi6lr05g0vt" path="res://Textures/Buttons/icons/add.png" id="7_bfw4j"]
+[ext_resource type="PackedScene" uid="uid://cmafkxyj8ko4d" path="res://Scenes_and_scripts/UI/PanelItemList.tscn" id="9_u5inp"]
+[ext_resource type="Texture2D" uid="uid://bfoxtqmre12qw" path="res://Textures/Buttons/icons/load.png" id="10_47aoj"]
+[ext_resource type="Texture2D" uid="uid://ci1qrp3pyqm6h" path="res://Textures/Buttons/icons/close.png" id="10_l6c52"]
+[ext_resource type="Texture2D" uid="uid://cgfs1pdopjbh" path="res://Textures/Buttons/icons/close_hover.png" id="11_qnsjp"]
+[ext_resource type="PackedScene" uid="uid://dorw3vr2amuy3" path="res://Scenes_and_scripts/Components/button_sound_component.tscn" id="16_iciwe"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wm51p"]
+
+[node name="PaletteMenu" type="Control" node_paths=PackedStringArray("item_list", "grab_area")]
+top_level = true
+material = ExtResource("1_3q1kk")
+layout_mode = 3
+anchors_preset = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("2_arvfv")
+item_list = NodePath("PaletteList/VBoxContainer/PanelList")
+grab_area = NodePath("PaletteList")
+
+[node name="PaletteList" type="PanelContainer" parent="."]
+use_parent_material = true
+custom_minimum_size = Vector2(225, 2.08165e-12)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 180.0
+offset_top = 67.5
+offset_right = 460.0
+offset_bottom = 292.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PaletteList"]
+use_parent_material = true
+layout_mode = 2
+size_flags_vertical = 0
+mouse_filter = 2
+theme_override_constants/separation = 1
+
+[node name="Header" type="PanelContainer" parent="PaletteList/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_wm51p")
+
+[node name="VBoxSeperator" type="VBoxContainer" parent="PaletteList/VBoxContainer/Header"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_override_constants/separation = -2
+alignment = 1
+
+[node name="Label" type="Label" parent="PaletteList/VBoxContainer/Header/VBoxSeperator"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_override_fonts/font = ExtResource("5_ifvpa")
+theme_override_font_sizes/font_size = 16
+text = "Palletes"
+
+[node name="HSeparator" type="HSeparator" parent="PaletteList/VBoxContainer/Header/VBoxSeperator"]
+show_behind_parent = true
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Close" type="TextureButton" parent="PaletteList/VBoxContainer/Header"]
+use_parent_material = true
+custom_minimum_size = Vector2(10, 14)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture_normal = ExtResource("10_l6c52")
+texture_hover = ExtResource("11_qnsjp")
+stretch_mode = 5
+
+[node name="ButtonSoundComponent" parent="PaletteList/VBoxContainer/Header/Close" instance=ExtResource("16_iciwe")]
+
+[node name="PanelList" parent="PaletteList/VBoxContainer" instance=ExtResource("9_u5inp")]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PaletteList/VBoxContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+alignment = 1
+
+[node name="AddButton" parent="PaletteList/VBoxContainer/HBoxContainer" instance=ExtResource("5_7aaw2")]
+layout_mode = 2
+size_flags_horizontal = 1
+minimum_size = Vector2(70, 28)
+action_mode = 1
+icon = ExtResource("7_bfw4j")
+icon_use_parent_material = true
+
+[node name="LoadButton" parent="PaletteList/VBoxContainer/HBoxContainer" instance=ExtResource("5_7aaw2")]
+layout_mode = 2
+size_flags_horizontal = 1
+minimum_size = Vector2(70, 28)
+action_mode = 1
+icon = ExtResource("10_47aoj")
+icon_use_parent_material = true
+flip_icon_v = true
+
+[connection signal="pressed" from="PaletteList/VBoxContainer/Header/Close" to="." method="_on_close_pressed"]
+[connection signal="pressed" from="PaletteList/VBoxContainer/HBoxContainer/AddButton" to="." method="_on_add_button_pressed"]
+[connection signal="pressed" from="PaletteList/VBoxContainer/HBoxContainer/LoadButton" to="." method="_on_load_button_pressed"]

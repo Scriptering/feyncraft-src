@@ -1,0 +1,36 @@
+[gd_scene load_steps=2 format=3 uid="uid://cmafkxyj8ko4d"]
+
+[ext_resource type="Script" path="res://Scenes_and_scripts/UI/panel_item_list.gd" id="1_7k84x"]
+
+[node name="PanelItemList" type="PanelContainer"]
+use_parent_material = true
+offset_right = 300.0
+offset_bottom = 164.999
+mouse_filter = 2
+script = ExtResource("1_7k84x")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/margin_top = -4
+theme_override_constants/margin_right = -12
+theme_override_constants/margin_bottom = -3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(2.08165e-12, 159.999)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ScrollContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 9
+theme_override_constants/margin_bottom = 1
+
+[node name="ItemContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = 2

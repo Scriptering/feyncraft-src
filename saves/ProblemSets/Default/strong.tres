@@ -1,0 +1,89 @@
+[gd_resource type="Resource" script_class="ProblemSet" load_steps=9 format=3 uid="uid://d0mkimqljdem0"]
+
+[ext_resource type="Script" path="res://problem.gd" id="1_3mk7s"]
+[ext_resource type="Script" path="res://DrawingMatrix.gd" id="2_yyece"]
+[ext_resource type="Script" path="res://ProblemSet.gd" id="3_wdmaa"]
+
+[sub_resource type="Resource" id="Resource_gswy8"]
+script = ExtResource("1_3mk7s")
+custom_solutions = false
+allow_other_solutions = false
+custom_solution_count = false
+custom_degree = false
+limited_particles = false
+hide_unavailable_particles = false
+title = ""
+solutions = Array[ExtResource("2_yyece")]([])
+allowed_particles = Array[int]([6, 7, 8, 10, 11, 12, 0, 1, 4, 2, 3, 14, 15, 16, 18, 19, 20, 5, 13, 9, 17])
+state_interactions = [[[1], [13]], [[1], [13]]]
+degree = 2
+solution_count = 3
+
+[sub_resource type="Resource" id="Resource_4sqjq"]
+script = ExtResource("1_3mk7s")
+custom_solutions = false
+allow_other_solutions = false
+custom_solution_count = false
+custom_degree = false
+limited_particles = false
+hide_unavailable_particles = false
+title = ""
+solutions = Array[ExtResource("2_yyece")]([])
+allowed_particles = Array[int]([6, 7, 8, 10, 11, 12, 0, 1, 4, 2, 3, 14, 15, 16, 18, 19, 20, 5, 13, 9, 17])
+state_interactions = [[[1], [1]], [[1], [1]]]
+degree = 2
+solution_count = 4
+
+[sub_resource type="Resource" id="Resource_vp1bx"]
+script = ExtResource("1_3mk7s")
+custom_solutions = false
+allow_other_solutions = false
+custom_solution_count = false
+custom_degree = false
+limited_particles = false
+hide_unavailable_particles = false
+title = ""
+solutions = Array[ExtResource("2_yyece")]([])
+allowed_particles = Array[int]([6, 7, 8, 10, 11, 12, 0, 1, 4, 2, 3, 14, 15, 16, 18, 19, 20, 5, 13, 9, 17])
+state_interactions = [[[-13], [13]], [[0], [1]]]
+degree = 2
+solution_count = 2
+
+[sub_resource type="Resource" id="Resource_65as7"]
+script = ExtResource("1_3mk7s")
+custom_solutions = false
+allow_other_solutions = false
+custom_solution_count = false
+custom_degree = false
+limited_particles = false
+hide_unavailable_particles = false
+title = ""
+solutions = Array[ExtResource("2_yyece")]([])
+allowed_particles = Array[int]([6, 7, 8, 10, 11, 12, 0, 1, 4, 2, 3, 14, 15, 16, 18, 19, 20, 5, 13, 9, 17])
+state_interactions = [[[-13], [13]], [[1], [1]]]
+degree = 2
+solution_count = 3
+
+[sub_resource type="Resource" id="Resource_4y341"]
+script = ExtResource("1_3mk7s")
+custom_solutions = false
+allow_other_solutions = false
+custom_solution_count = false
+custom_degree = false
+limited_particles = false
+hide_unavailable_particles = false
+title = ""
+solutions = Array[ExtResource("2_yyece")]([])
+allowed_particles = Array[int]([6, 7, 8, 0, 1, 14, 15, 16, 18, 19, 20, 5, 13, 17])
+state_interactions = [[[-7], [7]], [[1], [1], [-13], [13]]]
+degree = 4
+solution_count = 4
+
+[resource]
+script = ExtResource("3_wdmaa")
+title = "Strong"
+problems = Array[ExtResource("1_3mk7s")]([SubResource("Resource_gswy8"), SubResource("Resource_4sqjq"), SubResource("Resource_vp1bx"), SubResource("Resource_65as7"), SubResource("Resource_4y341")])
+highest_index_reached = 0
+current_index = 0
+is_custom = false
+is_default = true

@@ -1,0 +1,143 @@
+[gd_scene load_steps=17 format=3 uid="uid://cnc7r7d27yn5c"]
+
+[ext_resource type="Script" path="res://Scenes_and_scripts/universe.gd" id="1_f3b25"]
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_fbm6y"]
+[ext_resource type="PackedScene" uid="uid://blu0n6lwfysjf" path="res://Scenes_and_scripts/UI/Menus/MainMenu/main_menu.tscn" id="1_qkr4k"]
+[ext_resource type="PackedScene" uid="uid://c7n4o6dbkwilh" path="res://Scenes_and_scripts/Levels/world.tscn" id="3_m7wj1"]
+[ext_resource type="PackedScene" uid="uid://cv3ttwhplgav" path="res://Scenes_and_scripts/States/state_manager.tscn" id="6_qca7e"]
+[ext_resource type="PackedScene" uid="uid://brd5auomhnn6l" path="res://Scenes_and_scripts/UI/cursor.tscn" id="7_s5a7m"]
+[ext_resource type="Script" path="res://Scenes_and_scripts/UI/Buttons/touch_screen_button.gd" id="9_p3l37"]
+[ext_resource type="Texture2D" uid="uid://b5t01la3a122h" path="res://Textures/UI/split_normal.png" id="9_v030i"]
+[ext_resource type="Texture2D" uid="uid://g23i650xp21d" path="res://Textures/Buttons/split_hover.png" id="10_43d4r"]
+[ext_resource type="Texture2D" uid="uid://btjrj2wemfwjq" path="res://Textures/Buttons/move_touch_button_normal.png" id="10_ihkyb"]
+[ext_resource type="Script" path="res://Scenes_and_scripts/split.gd" id="11_axers"]
+[ext_resource type="Texture2D" uid="uid://db6rdb3r8el1a" path="res://Textures/Buttons/move_touch_button_pressed.png" id="11_ojt0j"]
+[ext_resource type="Texture2D" uid="uid://dbbrv15cfsttg" path="res://Textures/Buttons/cut_touch_button_normal.png" id="12_560ih"]
+[ext_resource type="Texture2D" uid="uid://n2w0tydjaa33" path="res://Textures/Buttons/cut_touch_button_pressed.png" id="13_gqnb4"]
+[ext_resource type="Script" path="res://Scenes_and_scripts/fps.gd" id="14_jxbry"]
+[ext_resource type="Script" path="res://Scenes_and_scripts/global_feedback.gd" id="14_x4syi"]
+
+[node name="Universe" type="Node2D"]
+material = ExtResource("1_fbm6y")
+script = ExtResource("1_f3b25")
+
+[node name="state_manager" parent="." instance=ExtResource("6_qca7e")]
+
+[node name="MainMenu" parent="." instance=ExtResource("1_qkr4k")]
+
+[node name="World" parent="." instance=ExtResource("3_m7wj1")]
+
+[node name="Borders" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="BorderRectR" type="ColorRect" parent="Borders"]
+layout_mode = 0
+offset_left = 640.0
+offset_top = -2.0
+offset_right = 738.0
+offset_bottom = 360.0
+
+[node name="BorderRectD" type="ColorRect" parent="Borders"]
+layout_mode = 0
+offset_top = 360.0
+offset_right = 640.0
+offset_bottom = 444.0
+
+[node name="BorderRectU" type="ColorRect" parent="Borders"]
+layout_mode = 0
+offset_top = -84.0
+offset_right = 640.0
+
+[node name="BorderRectL" type="ColorRect" parent="Borders"]
+layout_mode = 0
+offset_left = -98.0
+offset_top = -2.0
+offset_bottom = 360.0
+
+[node name="ControlsLayer" type="CanvasLayer" parent="."]
+layer = 5
+
+[node name="Cursor" parent="ControlsLayer" instance=ExtResource("7_s5a7m")]
+
+[node name="Buttons" type="Node2D" parent="ControlsLayer"]
+
+[node name="Move" type="TouchScreenButton" parent="ControlsLayer/Buttons"]
+visible = false
+material = ExtResource("1_fbm6y")
+position = Vector2(18, 309)
+texture_normal = ExtResource("10_ihkyb")
+texture_pressed = ExtResource("11_ojt0j")
+action = "editing"
+script = ExtResource("9_p3l37")
+
+[node name="Split" type="TouchScreenButton" parent="ControlsLayer/Buttons"]
+visible = false
+material = ExtResource("1_fbm6y")
+position = Vector2(104, 309)
+texture_normal = ExtResource("9_v030i")
+texture_pressed = ExtResource("10_43d4r")
+action = "editing"
+script = ExtResource("11_axers")
+
+[node name="Delete" type="TouchScreenButton" parent="ControlsLayer/Buttons"]
+visible = false
+material = ExtResource("1_fbm6y")
+position = Vector2(61, 309)
+texture_normal = ExtResource("12_560ih")
+texture_pressed = ExtResource("13_gqnb4")
+action = "deleting"
+script = ExtResource("9_p3l37")
+
+[node name="FPS" type="Label" parent="."]
+visible = false
+offset_left = 41.0
+offset_top = 31.0
+offset_right = 81.0
+offset_bottom = 40.0
+theme_override_font_sizes/font_size = 10
+script = ExtResource("14_jxbry")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 4
+
+[node name="GlobalFeedback" type="Node" parent="CanvasLayer" node_paths=PackedStringArray("TooltipPanel", "TooltipLabel", "TooltipContainer")]
+script = ExtResource("14_x4syi")
+offset = Vector2(0, 0)
+show_delay = -1.0
+hide_delay = 1.0
+manual_placement = true
+TooltipPanel = NodePath("PanelContainer")
+TooltipLabel = NodePath("PanelContainer/HBoxContainer/Label")
+TooltipContainer = NodePath("PanelContainer/HBoxContainer")
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/GlobalFeedback"]
+visible = false
+z_index = 10
+material = ExtResource("1_fbm6y")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -6.5
+offset_top = -8.0
+offset_right = 6.5
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/GlobalFeedback/PanelContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Label" type="Label" parent="CanvasLayer/GlobalFeedback/PanelContainer/HBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+
+[connection signal="tree_exited" from="." to="." method="_on_tree_exited"]
+[connection signal="problem_submitted" from="World" to="." method="_on_world_problem_submitted"]
+[connection signal="pressed" from="ControlsLayer/Buttons/Split" to="ControlsLayer/Buttons/Split" method="_on_pressed"]
+[connection signal="released" from="ControlsLayer/Buttons/Split" to="ControlsLayer/Buttons/Split" method="_on_released"]

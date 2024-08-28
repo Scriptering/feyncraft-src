@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://dh4niqtuyy5o3"]
+
+[ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes_and_scripts/UI/Buttons/panelButton.tscn" id="1_gxmnt"]
+[ext_resource type="Script" path="res://popup_button.gd" id="2_4n0vk"]
+[ext_resource type="Theme" uid="uid://c7hk3afo5tria" path="res://Resources/Themes/toggle_button.tres" id="2_odcuo"]
+
+[node name="PopupButton" instance=ExtResource("1_gxmnt")]
+theme = ExtResource("2_odcuo")
+script = ExtResource("2_4n0vk")
+popup_scene = null
+toggle_mode = true
+
+[node name="Button" parent="." index="0"]
+toggle_mode = true
+
+[node name="HBoxContainer" parent="ContentContainer" index="0"]
+theme_override_constants/separation = 3

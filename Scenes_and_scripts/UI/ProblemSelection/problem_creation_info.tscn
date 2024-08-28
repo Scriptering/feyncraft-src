@@ -1,0 +1,223 @@
+[gd_scene load_steps=19 format=3 uid="uid://rtdlfrcuvhi8"]
+
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_4tkmy"]
+[ext_resource type="Script" path="res://Scenes_and_scripts/UI/ProblemSelection/problem_creation_info.gd" id="2_13y6g"]
+[ext_resource type="Texture2D" uid="uid://tql14gtq05lf" path="res://Textures/UI/Information/invalid.png" id="3_1n5rt"]
+[ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes_and_scripts/UI/Buttons/panelButton.tscn" id="4_5sf8a"]
+[ext_resource type="Theme" uid="uid://cu3v7nxs2h2hu" path="res://Resources/Themes/spin_box.tres" id="4_ak38j"]
+[ext_resource type="Texture2D" uid="uid://bf4xxweukjvsb" path="res://Textures/Buttons/icons/interaction.png" id="4_yw2rn"]
+[ext_resource type="PackedScene" uid="uid://dorw3vr2amuy3" path="res://Scenes_and_scripts/Components/button_sound_component.tscn" id="5_hqg77"]
+[ext_resource type="Texture2D" uid="uid://c3nrennubqoow" path="res://Textures/Buttons/icons/back.png" id="6_1wu7s"]
+[ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes_and_scripts/UI/Tooltip.tscn" id="7_y52ba"]
+[ext_resource type="Texture2D" uid="uid://dvx430022t0ua" path="res://Textures/Buttons/icons/next.png" id="8_2yrn2"]
+[ext_resource type="Script" path="res://Scenes_and_scripts/Classes/spin_box.gd" id="8_harlm"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8vuq3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sersr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ul1hm"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cgk6g"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ubxvp"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ythwo"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ccxof"]
+
+[node name="ProblemCreationInfo" type="PanelContainer" node_paths=PackedStringArray("next_button", "prev_button")]
+material = ExtResource("1_4tkmy")
+use_parent_material = true
+custom_minimum_size = Vector2(2.08165e-12, 150)
+offset_right = 114.0
+offset_bottom = 200.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_8vuq3")
+script = ExtResource("2_13y6g")
+title = "2. Problem Creation"
+next_button = NodePath("VBoxContainer/Buttons/NextStep")
+prev_button = NodePath("VBoxContainer/Buttons/PrevStep")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+alignment = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="Body" type="Label" parent="VBoxContainer/VBoxContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+text = "- Draw the problem.
+- Only the drawn initial and final states matter."
+autowrap_mode = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/VBoxContainer/PanelContainer"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_sersr")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_ul1hm")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_cgk6g")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_ubxvp")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_ythwo")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ccxof")
+text = "Custom Degree"
+
+[node name="ButtonSoundComponent" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/CheckButton" instance=ExtResource("5_hqg77")]
+
+[node name="DegreeContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+visible = false
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/DegreeContainer"]
+use_parent_material = true
+layout_mode = 2
+text = "Degree:"
+vertical_alignment = 1
+
+[node name="DegreeContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/DegreeContainer"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 1
+
+[node name="Degree" type="SpinBox" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/DegreeContainer/DegreeContainer"]
+use_parent_material = true
+layout_mode = 2
+theme = ExtResource("4_ak38j")
+min_value = 1.0
+max_value = 6.0
+value = 1.0
+alignment = 1
+update_on_text_changed = true
+script = ExtResource("8_harlm")
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/DegreeContainer/DegreeContainer"]
+use_parent_material = true
+layout_mode = 2
+texture = ExtResource("4_yw2rn")
+stretch_mode = 5
+
+[node name="InvalidQuantumNumbers" type="HBoxContainer" parent="VBoxContainer/VBoxContainer"]
+visible = false
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/InvalidQuantumNumbers"]
+layout_mode = 2
+texture = ExtResource("3_1n5rt")
+stretch_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/InvalidQuantumNumbers"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Quantum numbers don't match"
+autowrap_mode = 2
+
+[node name="EnergyNotConserved" type="HBoxContainer" parent="VBoxContainer/VBoxContainer"]
+visible = false
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/EnergyNotConserved"]
+layout_mode = 2
+texture = ExtResource("3_1n5rt")
+stretch_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/EnergyNotConserved"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Energy not conserved"
+autowrap_mode = 2
+
+[node name="NoParticles" type="HBoxContainer" parent="VBoxContainer/VBoxContainer"]
+visible = false
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/NoParticles"]
+layout_mode = 2
+texture = ExtResource("3_1n5rt")
+stretch_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/NoParticles"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "No particles"
+autowrap_mode = 2
+
+[node name="NoSolutions" type="HBoxContainer" parent="VBoxContainer/VBoxContainer"]
+visible = false
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/NoSolutions"]
+layout_mode = 2
+texture = ExtResource("3_1n5rt")
+stretch_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/NoSolutions"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "No Solutions Found"
+autowrap_mode = 2
+
+[node name="Buttons" type="HBoxContainer" parent="VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+alignment = 1
+
+[node name="PrevStep" parent="VBoxContainer/Buttons" instance=ExtResource("4_5sf8a")]
+material = null
+layout_mode = 2
+minimum_size = Vector2(24, 21)
+icon = ExtResource("6_1wu7s")
+icon_use_parent_material = true
+
+[node name="Tooltip" parent="VBoxContainer/Buttons/PrevStep" instance=ExtResource("7_y52ba")]
+tooltip = "Previous Step"
+
+[node name="NextStep" parent="VBoxContainer/Buttons" instance=ExtResource("4_5sf8a")]
+material = null
+layout_mode = 2
+minimum_size = Vector2(24, 21)
+icon = ExtResource("8_2yrn2")
+icon_use_parent_material = true
+
+[node name="Tooltip" parent="VBoxContainer/Buttons/NextStep" instance=ExtResource("7_y52ba")]
+tooltip = "Next Step"
+
+[connection signal="toggled" from="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/CheckButton" to="." method="_on_check_button_toggled"]
+[connection signal="value_changed" from="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/DegreeContainer/DegreeContainer/Degree" to="." method="_on_degree_value_changed"]

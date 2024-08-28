@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://fkpapaw65twf"]
+
+[ext_resource type="Script" path="res://Scenes_and_scripts/disabled_component.gd" id="1_veaju"]
+
+[node name="DisabledComponent" type="Node"]
+script = ExtResource("1_veaju")

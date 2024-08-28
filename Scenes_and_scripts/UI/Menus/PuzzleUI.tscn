@@ -1,0 +1,224 @@
+[gd_scene load_steps=12 format=3 uid="uid://deuhqxgq1bveq"]
+
+[ext_resource type="Script" path="res://Scenes_and_scripts/UI/Menus/PuzzleUI.gd" id="1_0a0xk"]
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_bvq6l"]
+[ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="3_afnrn"]
+[ext_resource type="Theme" uid="uid://cu3v7nxs2h2hu" path="res://Resources/Themes/spin_box.tres" id="4_5cag6"]
+[ext_resource type="Script" path="res://Scenes_and_scripts/Classes/spin_box.gd" id="5_pj5qq"]
+[ext_resource type="Texture2D" uid="uid://dvx430022t0ua" path="res://Textures/Buttons/icons/next.png" id="6_tjr7e"]
+[ext_resource type="Theme" uid="uid://cfmbhoq8cuoge" path="res://Resources/Themes/ProjectTheme.tres" id="8_cwndk"]
+[ext_resource type="PackedScene" uid="uid://dorw3vr2amuy3" path="res://Scenes_and_scripts/Components/button_sound_component.tscn" id="8_f0h1v"]
+[ext_resource type="PackedScene" uid="uid://bug3v1xlp1gfr" path="res://Scenes_and_scripts/UI/Buttons/pull_out_tab_button_right.tscn" id="9_2kx5m"]
+[ext_resource type="Texture2D" uid="uid://cvm801v32lknm" path="res://Textures/Buttons/icons/puzzle_options.png" id="11_01uho"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_d0ke6"]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+texture = ExtResource("3_afnrn")
+texture_margin_left = 6.0
+texture_margin_top = 6.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+expand_margin_left = 20.0
+
+[node name="PuzzleUI" type="Control" node_paths=PackedStringArray("EMCheck", "StrongCheck", "WeakCheck", "ElectroweakCheck", "HadronFrequencySlider", "MinParticleCount", "MaxParticleCount", "ContentContainer", "TabButton", "MovingContainer") groups=["buttons", "no_place"]]
+self_modulate = Color(1, 1, 1, 0)
+material = ExtResource("1_bvq6l")
+use_parent_material = true
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_0a0xk")
+EMCheck = NodePath("HBoxContainer/ContentContainer/OptionsContainer/GridContainer/electromagnetic")
+StrongCheck = NodePath("HBoxContainer/ContentContainer/OptionsContainer/GridContainer/strong")
+WeakCheck = NodePath("HBoxContainer/ContentContainer/OptionsContainer/GridContainer/weak")
+ElectroweakCheck = NodePath("HBoxContainer/ContentContainer/OptionsContainer/GridContainer/electro_weak")
+HadronFrequencySlider = NodePath("HBoxContainer/ContentContainer/OptionsContainer/PanelContainer/HadronSlider/VBoxContainer/HadronFrequency")
+MinParticleCount = NodePath("HBoxContainer/ContentContainer/OptionsContainer/StateParticleCountContainer/VBoxContainer/DegreeContainer/MinParticleCount")
+MaxParticleCount = NodePath("HBoxContainer/ContentContainer/OptionsContainer/StateParticleCountContainer/VBoxContainer/DegreeContainer/MaxParticleCount")
+ContentContainer = NodePath("HBoxContainer/ContentContainer")
+TabButton = NodePath("HBoxContainer/Tab")
+MovingContainer = NodePath("HBoxContainer")
+move_direction = 2
+time_to_pull_out = 0.35
+time_to_push_in = 0.35
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+use_parent_material = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = 0
+
+[node name="ContentContainer" type="PanelContainer" parent="HBoxContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_d0ke6")
+
+[node name="OptionsContainer" type="VBoxContainer" parent="HBoxContainer/ContentContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="StateParticleCountContainer" type="PanelContainer" parent="HBoxContainer/ContentContainer/OptionsContainer"]
+use_parent_material = true
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ContentContainer/OptionsContainer/StateParticleCountContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="HBoxContainer/ContentContainer/OptionsContainer/StateParticleCountContainer/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+text = "No. STATE PARTICLES"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="DegreeContainer" type="HBoxContainer" parent="HBoxContainer/ContentContainer/OptionsContainer/StateParticleCountContainer/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = 1
+alignment = 1
+
+[node name="MinParticleCount" type="SpinBox" parent="HBoxContainer/ContentContainer/OptionsContainer/StateParticleCountContainer/VBoxContainer/DegreeContainer"]
+use_parent_material = true
+layout_mode = 2
+theme = ExtResource("4_5cag6")
+min_value = 2.0
+max_value = 6.0
+value = 2.0
+alignment = 2
+update_on_text_changed = true
+select_all_on_focus = true
+script = ExtResource("5_pj5qq")
+
+[node name="TextureRect2" type="TextureRect" parent="HBoxContainer/ContentContainer/OptionsContainer/StateParticleCountContainer/VBoxContainer/DegreeContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(15, 2.08165e-12)
+layout_mode = 2
+texture = ExtResource("6_tjr7e")
+expand_mode = 5
+stretch_mode = 5
+
+[node name="MaxParticleCount" type="SpinBox" parent="HBoxContainer/ContentContainer/OptionsContainer/StateParticleCountContainer/VBoxContainer/DegreeContainer"]
+use_parent_material = true
+layout_mode = 2
+theme = ExtResource("4_5cag6")
+min_value = 2.0
+max_value = 6.0
+value = 6.0
+alignment = 2
+update_on_text_changed = true
+select_all_on_focus = true
+script = ExtResource("5_pj5qq")
+
+[node name="GridContainer" type="GridContainer" parent="HBoxContainer/ContentContainer/OptionsContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/h_separation = 1
+theme_override_constants/v_separation = 1
+columns = 2
+
+[node name="electromagnetic" type="CheckButton" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer"]
+use_parent_material = true
+layout_mode = 2
+button_pressed = true
+text = "EM"
+
+[node name="ButtonSoundComponent" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer/electromagnetic" instance=ExtResource("8_f0h1v")]
+
+[node name="strong" type="CheckButton" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer"]
+use_parent_material = true
+layout_mode = 2
+button_pressed = true
+text = "STRONG"
+
+[node name="ButtonSoundComponent" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer/strong" instance=ExtResource("8_f0h1v")]
+
+[node name="weak" type="CheckButton" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer"]
+use_parent_material = true
+layout_mode = 2
+button_pressed = true
+text = "WEAK"
+
+[node name="ButtonSoundComponent" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer/weak" instance=ExtResource("8_f0h1v")]
+
+[node name="electro_weak" type="CheckButton" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer"]
+use_parent_material = true
+layout_mode = 2
+button_pressed = true
+text = "E. WEAK"
+
+[node name="ButtonSoundComponent" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer/electro_weak" instance=ExtResource("8_f0h1v")]
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/ContentContainer/OptionsContainer"]
+use_parent_material = true
+layout_mode = 2
+
+[node name="HadronSlider" type="VBoxContainer" parent="HBoxContainer/ContentContainer/OptionsContainer/PanelContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Label" type="Label" parent="HBoxContainer/ContentContainer/OptionsContainer/PanelContainer/HadronSlider"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 1
+text = "HADRON FREQUENCY"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ContentContainer/OptionsContainer/PanelContainer/HadronSlider"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="HadronFrequency" type="HSlider" parent="HBoxContainer/ContentContainer/OptionsContainer/PanelContainer/HadronSlider/VBoxContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(102, 2.08165e-12)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("8_cwndk")
+theme_override_constants/grabber_offset = -6
+max_value = 2.0
+value = 1.0
+tick_count = 3
+ticks_on_borders = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/ContentContainer/OptionsContainer/PanelContainer/HadronSlider/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Always" type="Label" parent="HBoxContainer/ContentContainer/OptionsContainer/PanelContainer/HadronSlider/VBoxContainer/HBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Always "
+horizontal_alignment = 1
+
+[node name="Allowed" type="Label" parent="HBoxContainer/ContentContainer/OptionsContainer/PanelContainer/HadronSlider/VBoxContainer/HBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = " Allowed"
+horizontal_alignment = 1
+
+[node name="Never" type="Label" parent="HBoxContainer/ContentContainer/OptionsContainer/PanelContainer/HadronSlider/VBoxContainer/HBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "  Never"
+horizontal_alignment = 1
+
+[node name="Tab" parent="HBoxContainer" instance=ExtResource("9_2kx5m")]
+layout_mode = 2
+TabIcon = ExtResource("11_01uho")
+icon_use_parent_material = true
+
+[connection signal="value_changed" from="HBoxContainer/ContentContainer/OptionsContainer/StateParticleCountContainer/VBoxContainer/DegreeContainer/MinParticleCount" to="." method="_on_min_particle_count_value_changed"]
+[connection signal="value_changed" from="HBoxContainer/ContentContainer/OptionsContainer/StateParticleCountContainer/VBoxContainer/DegreeContainer/MaxParticleCount" to="." method="_on_max_particle_count_value_changed"]

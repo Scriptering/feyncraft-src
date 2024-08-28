@@ -1,0 +1,60 @@
+[gd_scene load_steps=7 format=3 uid="uid://crjli3vncl5g7"]
+
+[ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes_and_scripts/UI/Buttons/panelButton.tscn" id="1_h2pt1"]
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_npdxi"]
+[ext_resource type="Script" path="res://Scenes_and_scripts/UI/ColourPicker/colour_sampler.gd" id="2_71mmq"]
+[ext_resource type="Texture2D" uid="uid://ber05i7n5tlcd" path="res://Textures/Buttons/icons/sampler.png" id="4_ie3bn"]
+[ext_resource type="Texture2D" uid="uid://b8pvt1tu7w3jv" path="res://Textures/UI/info_box_border.png" id="5_p3y5l"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_e3u74"]
+
+[node name="ColourSampler" type="PanelContainer" node_paths=PackedStringArray("sampler_hint")]
+material = ExtResource("1_npdxi")
+use_parent_material = true
+offset_right = 12.0
+offset_bottom = 12.0
+script = ExtResource("2_71mmq")
+sampler_hint = NodePath("SamplerContainer/PanelContainer/MarginContainer/SamplerHint")
+
+[node name="SamplerContainer" type="HBoxContainer" parent="."]
+use_parent_material = true
+layout_mode = 2
+alignment = 1
+
+[node name="Sampler" parent="SamplerContainer" instance=ExtResource("1_h2pt1")]
+layout_mode = 2
+minimum_size = Vector2(21, 20)
+toggle_mode = true
+icon = ExtResource("4_ie3bn")
+
+[node name="PanelContainer" type="PanelContainer" parent="SamplerContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_e3u74")
+
+[node name="MarginContainer" type="MarginContainer" parent="SamplerContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 0
+
+[node name="SamplerHint" type="ColorRect" parent="SamplerContainer/PanelContainer/MarginContainer"]
+custom_minimum_size = Vector2(82, 18)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="NinePatchRect" type="NinePatchRect" parent="SamplerContainer/PanelContainer"]
+use_parent_material = true
+layout_mode = 2
+texture = ExtResource("5_p3y5l")
+region_rect = Rect2(0, 0, 11, 11)
+patch_margin_left = 5
+patch_margin_top = 5
+patch_margin_right = 5
+patch_margin_bottom = 5
+
+[node name="SampleScreen" type="Popup" parent="."]
+transparent_bg = true
+size = Vector2i(640, 360)
+
+[connection signal="toggled" from="SamplerContainer/Sampler" to="." method="_on_sampler_toggled"]

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://byavwp1ynk2py"]
+
+[ext_resource type="Script" path="res://Scenes_and_scripts/Autoloads/EventBus.gd" id="1_thity"]
+
+[node name="EventBus" type="Node"]
+script = ExtResource("1_thity")

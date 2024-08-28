@@ -1,0 +1,337 @@
+[gd_scene load_steps=30 format=3 uid="uid://blu0n6lwfysjf"]
+
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_m8wv1"]
+[ext_resource type="Texture2D" uid="uid://c2myqhjupqo25" path="res://Textures/Background/tile.png" id="2_3tgej"]
+[ext_resource type="Script" path="res://Scenes_and_scripts/UI/Menus/MainMenu/main_menu.gd" id="2_bknyf"]
+[ext_resource type="Texture2D" uid="uid://bvc8sakoqg037" path="res://Textures/Background/background_border.png" id="3_6hhsb"]
+[ext_resource type="Script" path="res://Scenes_and_scripts/Diagram/main_diagram.gd" id="5_3sh45"]
+[ext_resource type="PackedScene" uid="uid://bhi4xq3qdbt4d" path="res://Scenes_and_scripts/Diagram/interaction.tscn" id="6_x1gwm"]
+[ext_resource type="PackedScene" uid="uid://b22nw60juoc6k" path="res://Scenes_and_scripts/Diagram/particle_line.tscn" id="7_ts01x"]
+[ext_resource type="Texture2D" uid="uid://dvmhtrrnuhqrj" path="res://Textures/UI/grid_outline.png" id="8_nsyxd"]
+[ext_resource type="PackedScene" uid="uid://dtllx04gp77mu" path="res://Scenes_and_scripts/UI/Menus/MainMenu/problem_selection.tscn" id="8_oursg"]
+[ext_resource type="Texture2D" uid="uid://doyaei3vq3cbb" path="res://Textures/Background/state_line_shadow_top.png" id="9_182u3"]
+[ext_resource type="Texture2D" uid="uid://basekc2ce6rmp" path="res://Textures/Background/state_line_shadow_tile.png" id="10_v50i2"]
+[ext_resource type="PackedScene" uid="uid://pgnduadnvgfx" path="res://Scenes_and_scripts/Diagram/StateLine.tscn" id="11_ed86s"]
+[ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes_and_scripts/UI/Buttons/panelButton.tscn" id="11_t2od8"]
+[ext_resource type="PackedScene" uid="uid://besym8haj5qo4" path="res://Scenes_and_scripts/UI/Crosshair.tscn" id="12_6wo74"]
+[ext_resource type="Texture2D" uid="uid://7ipru72d5e13" path="res://Textures/Buttons/icons/sandbox.png" id="13_21fnr"]
+[ext_resource type="LabelSettings" uid="uid://cc3ui0g74tqvb" path="res://Scenes_and_scripts/UI/Menus/MainMenu/main_menu_labels.tres" id="14_sqpi5"]
+[ext_resource type="Texture2D" uid="uid://b20ltmcqk6xwh" path="res://Textures/Buttons/icons/question_mark.png" id="16_0rbva"]
+[ext_resource type="PackedScene" uid="uid://b4oiaq2nic3ig" path="res://Scenes_and_scripts/UI/Buttons/MuteButton.tscn" id="16_1yq2b"]
+[ext_resource type="Texture2D" uid="uid://btu2jj1bbbbil" path="res://Textures/Buttons/icons/palette.png" id="17_cv4ds"]
+[ext_resource type="Texture2D" uid="uid://cmknf0gynrux7" path="res://Textures/Buttons/icons/fire.png" id="17_ws57h"]
+[ext_resource type="Texture2D" uid="uid://b3diapu0ec332" path="res://Textures/Buttons/icons/puzzle_piece.png" id="19_fbmws"]
+[ext_resource type="PackedScene" uid="uid://dh4niqtuyy5o3" path="res://popup_button.tscn" id="21_eg5af"]
+[ext_resource type="Texture2D" uid="uid://bxlc5rvpwjq8o" path="res://Textures/Buttons/icons/unmute.png" id="21_lu08p"]
+[ext_resource type="PackedScene" uid="uid://b5pj0lanxu0o6" path="res://Scenes_and_scripts/UI/ColourPicker/palette_menu.tscn" id="22_5omgn"]
+[ext_resource type="Texture2D" uid="uid://co52c2vc04qom" path="res://Textures/Buttons/icons/credit.png" id="23_sgn8e"]
+[ext_resource type="Script" path="res://Scenes_and_scripts/UI/ShaderControl.gd" id="34_pwybq"]
+[ext_resource type="PackedScene" uid="uid://dutuwg10y2hwq" path="res://Scenes_and_scripts/UI/Menus/credits.tscn" id="36_o748n"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qgodk"]
+texture = ExtResource("8_nsyxd")
+texture_margin_left = 14.0
+texture_margin_top = 14.0
+texture_margin_right = 14.0
+texture_margin_bottom = 14.0
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5kca2"]
+
+[node name="MainMenu" type="Node2D"]
+material = ExtResource("1_m8wv1")
+script = ExtResource("2_bknyf")
+
+[node name="Background" type="TextureRect" parent="."]
+use_parent_material = true
+offset_right = 640.0
+offset_bottom = 360.0
+mouse_filter = 2
+texture = ExtResource("2_3tgej")
+stretch_mode = 1
+
+[node name="GridOutline" type="NinePatchRect" parent="."]
+z_index = 10
+use_parent_material = true
+offset_right = 640.0
+offset_bottom = 360.0
+texture = ExtResource("3_6hhsb")
+patch_margin_left = 15
+patch_margin_top = 15
+patch_margin_right = 15
+patch_margin_bottom = 15
+
+[node name="Diagram" type="Panel" parent="."]
+use_parent_material = true
+offset_left = 48.0
+offset_top = 32.0
+offset_right = 592.0
+offset_bottom = 192.0
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_qgodk")
+script = ExtResource("5_3sh45")
+freeze_vision = true
+freeze_statelines = true
+grid_size = 16
+InteractionInstance = ExtResource("6_x1gwm")
+particle_line_scene = ExtResource("7_ts01x")
+
+[node name="GridTiles" type="TextureRect" parent="Diagram"]
+z_index = -1
+use_parent_material = true
+layout_mode = 0
+offset_left = 16.0
+offset_right = 528.0
+offset_bottom = 160.0
+mouse_filter = 2
+texture = ExtResource("2_3tgej")
+stretch_mode = 1
+
+[node name="DiagramArea" type="Panel" parent="Diagram"]
+use_parent_material = true
+layout_mode = 0
+offset_left = 64.0
+offset_right = 384.0
+offset_bottom = 130.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_5kca2")
+
+[node name="InitialShadow" type="VBoxContainer" parent="Diagram/DiagramArea"]
+visible = false
+use_parent_material = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -212.0
+offset_top = 1.0
+offset_right = -204.0
+offset_bottom = 255.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Top" type="TextureRect" parent="Diagram/DiagramArea/InitialShadow"]
+use_parent_material = true
+layout_mode = 2
+texture = ExtResource("9_182u3")
+stretch_mode = 2
+
+[node name="Middle" type="TextureRect" parent="Diagram/DiagramArea/InitialShadow"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("10_v50i2")
+stretch_mode = 1
+
+[node name="Bottom" type="TextureRect" parent="Diagram/DiagramArea/InitialShadow"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("9_182u3")
+stretch_mode = 2
+flip_h = true
+flip_v = true
+
+[node name="FinalShadow" type="VBoxContainer" parent="Diagram/DiagramArea"]
+visible = false
+use_parent_material = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 156.0
+offset_top = 1.0
+offset_right = 164.0
+offset_bottom = 255.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Top" type="TextureRect" parent="Diagram/DiagramArea/FinalShadow"]
+use_parent_material = true
+layout_mode = 2
+texture = ExtResource("9_182u3")
+stretch_mode = 2
+
+[node name="Middle" type="TextureRect" parent="Diagram/DiagramArea/FinalShadow"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("10_v50i2")
+stretch_mode = 1
+
+[node name="Bottom" type="TextureRect" parent="Diagram/DiagramArea/FinalShadow"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("9_182u3")
+stretch_mode = 2
+flip_h = true
+flip_v = true
+
+[node name="Initial" parent="Diagram/DiagramArea" instance=ExtResource("11_ed86s")]
+visible = false
+use_parent_material = true
+layout_mode = 2
+offset_left = -48.0
+offset_top = -12.0
+offset_right = -48.0
+offset_bottom = 28.0
+
+[node name="Line" parent="Diagram/DiagramArea/Initial" index="0"]
+offset_bottom = 280.0
+
+[node name="Final" parent="Diagram/DiagramArea" instance=ExtResource("11_ed86s")]
+visible = false
+use_parent_material = true
+layout_mode = 2
+offset_left = 464.0
+offset_top = -12.0
+offset_right = 464.0
+offset_bottom = -12.0
+state = 1
+
+[node name="Line" parent="Diagram/DiagramArea/Final" index="0"]
+offset_bottom = 280.0
+
+[node name="Crosshair" parent="Diagram/DiagramArea" instance=ExtResource("12_6wo74")]
+use_parent_material = true
+position = Vector2(-160, -48)
+grid_margin = 0
+
+[node name="ParticleLines" type="Node2D" parent="Diagram/DiagramArea"]
+use_parent_material = true
+
+[node name="VisionLines" type="Control" parent="Diagram/DiagramArea"]
+use_parent_material = true
+anchors_preset = 0
+
+[node name="Interactions" type="Node2D" parent="Diagram/DiagramArea"]
+use_parent_material = true
+
+[node name="HadronJoints" type="Control" parent="Diagram/DiagramArea"]
+use_parent_material = true
+anchors_preset = 0
+
+[node name="Center" type="Control" parent="."]
+use_parent_material = true
+custom_minimum_size = Vector2(640, 360)
+layout_mode = 3
+anchors_preset = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Center"]
+use_parent_material = true
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -82.0
+offset_top = -161.0
+offset_right = 82.0
+offset_bottom = -21.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+alignment = 1
+
+[node name="GridContainer" type="GridContainer" parent="Center/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+columns = 2
+
+[node name="Tutorial" parent="Center/VBoxContainer/GridContainer" instance=ExtResource("11_t2od8")]
+material = null
+layout_mode = 2
+icon_text_seperation = 4
+minimum_size = Vector2(134, 0)
+text = "Tutorial"
+label_settings = ExtResource("14_sqpi5")
+icon = ExtResource("16_0rbva")
+expand_icon = true
+icon_use_parent_material = true
+
+[node name="Sandbox" parent="Center/VBoxContainer/GridContainer" instance=ExtResource("11_t2od8")]
+material = null
+layout_mode = 2
+icon_text_seperation = 4
+minimum_size = Vector2(134, 0)
+action_mode = 1
+text = "Sandbox"
+label_settings = ExtResource("14_sqpi5")
+icon = ExtResource("13_21fnr")
+expand_icon = true
+
+[node name="Daily" parent="Center/VBoxContainer/GridContainer" instance=ExtResource("11_t2od8")]
+material = null
+layout_mode = 2
+icon_text_seperation = 4
+minimum_size = Vector2(134, 0)
+action_mode = 1
+text = "Daily"
+label_settings = ExtResource("14_sqpi5")
+icon = ExtResource("17_ws57h")
+expand_icon = true
+
+[node name="Problems" parent="Center/VBoxContainer/GridContainer" instance=ExtResource("21_eg5af")]
+layout_mode = 2
+popup_scene = ExtResource("8_oursg")
+icon_text_seperation = 4
+minimum_size = Vector2(134, 0)
+text = "Problems"
+label_settings = ExtResource("14_sqpi5")
+icon = ExtResource("19_fbmws")
+expand_icon = true
+icon_use_parent_material = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Center/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+alignment = 1
+
+[node name="MuteButton" parent="Center/VBoxContainer/HBoxContainer" instance=ExtResource("16_1yq2b")]
+material = null
+layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = true
+icon = ExtResource("21_lu08p")
+
+[node name="PaletteButton" parent="Center/VBoxContainer/HBoxContainer" instance=ExtResource("21_eg5af")]
+layout_mode = 2
+popup_scene = ExtResource("22_5omgn")
+minimum_size = Vector2(31, 30)
+icon = ExtResource("17_cv4ds")
+expand_icon = true
+
+[node name="CreditButton" parent="Center/VBoxContainer/HBoxContainer" instance=ExtResource("21_eg5af")]
+layout_mode = 2
+popup_scene = ExtResource("36_o748n")
+minimum_size = Vector2(30, 30)
+icon = ExtResource("23_sgn8e")
+expand_icon = true
+icon_use_parent_material = true
+
+[node name="ShaderControl" type="Node" parent="."]
+script = ExtResource("34_pwybq")
+
+[node name="FloatingMenus" type="CanvasLayer" parent="."]
+
+[connection signal="pressed" from="Center/VBoxContainer/GridContainer/Tutorial" to="." method="_on_tutorial_pressed"]
+[connection signal="pressed" from="Center/VBoxContainer/GridContainer/Sandbox" to="." method="_on_sandbox_pressed"]
+[connection signal="pressed" from="Center/VBoxContainer/GridContainer/Daily" to="." method="_on_daily_pressed"]
+
+[editable path="Diagram/DiagramArea/Initial"]
+[editable path="Diagram/DiagramArea/Final"]

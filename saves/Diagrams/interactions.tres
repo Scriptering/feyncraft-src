@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="DrawingMatrix" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://DrawingMatrix.gd" id="1_agfod"]
+
+[resource]
+script = ExtResource("1_agfod")
+split_hadron_ids = Array[PackedInt32Array]([])
+normalised_interaction_positions = Array[Vector2i]([Vector2i(0, 8), Vector2i(0, 14), Vector2i(0, 6), Vector2i(20, 8), Vector2i(20, 14), Vector2i(20, 6), Vector2i(10, 2), Vector2i(5, 6), Vector2i(15, 6), Vector2i(10, 11)])
+state_line_positions = Array[int]([0, 20])
+connection_matrix = [[[], [], [], [], [], [], [], [], [], [1]], [[], [], [], [], [], [], [], [], [], [1]], [[], [], [], [], [], [], [], [6], [], []], [[], [], [], [], [], [], [], [], [], []], [[], [], [], [], [], [], [], [], [], []], [[], [], [], [], [], [], [], [], [], []], [[], [], [], [], [], [], [], [], [0], []], [[], [], [], [], [], [], [0], [], [6], []], [[], [], [], [], [], [6], [], [], [], []], [[], [], [], [1], [1], [], [], [], [], []]]
+state_count = Array[int]([3, 3, 4])
+matrix_size = 10
+last_added_id = 9

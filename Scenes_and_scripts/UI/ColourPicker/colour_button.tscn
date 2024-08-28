@@ -1,0 +1,54 @@
+[gd_scene load_steps=7 format=3 uid="uid://dp48r81q855wa"]
+
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_sjxr5"]
+[ext_resource type="PackedScene" uid="uid://dorw3vr2amuy3" path="res://Scenes_and_scripts/Components/button_sound_component.tscn" id="3_77abk"]
+[ext_resource type="Script" path="res://Scenes_and_scripts/UI/ColourPicker/ColourButton.gd" id="3_coarc"]
+[ext_resource type="Texture2D" uid="uid://b8pvt1tu7w3jv" path="res://Textures/UI/info_box_border.png" id="4_ed78m"]
+[ext_resource type="PackedScene" uid="uid://fkpapaw65twf" path="res://Scenes_and_scripts/disabled_component.tscn" id="4_hmft0"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kexjm"]
+
+[node name="ColourButton" type="PanelContainer"]
+material = ExtResource("1_sjxr5")
+offset_right = 27.0
+offset_bottom = 25.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_kexjm")
+script = ExtResource("3_coarc")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 1
+
+[node name="ColorRect" type="ColorRect" parent="MarginContainer"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Button" type="Button" parent="." groups=["button"]]
+layout_mode = 2
+toggle_mode = true
+flat = true
+expand_icon = true
+
+[node name="ButtonSoundComponent" parent="Button" instance=ExtResource("3_77abk")]
+
+[node name="DisabledComponent" parent="Button" instance=ExtResource("4_hmft0")]
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+use_parent_material = true
+layout_mode = 2
+texture = ExtResource("4_ed78m")
+patch_margin_left = 5
+patch_margin_top = 5
+patch_margin_right = 5
+patch_margin_bottom = 5
+
+[connection signal="mouse_entered" from="Button" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Button" to="." method="_on_button_mouse_exited"]
+[connection signal="toggled" from="Button" to="." method="_on_button_toggled"]

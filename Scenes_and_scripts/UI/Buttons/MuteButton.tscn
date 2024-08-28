@@ -1,0 +1,43 @@
+[gd_scene load_steps=7 format=3 uid="uid://b4oiaq2nic3ig"]
+
+[ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes_and_scripts/UI/Buttons/panelButton.tscn" id="1_18ch8"]
+[ext_resource type="Texture2D" uid="uid://ueqdiuyv54f0" path="res://Textures/Buttons/icons/mute.png" id="3_cqmaf"]
+[ext_resource type="Texture2D" uid="uid://cea5mj3u65016" path="res://Textures/Buttons/square_pressed_active.png" id="3_fntun"]
+[ext_resource type="Script" path="res://Scenes_and_scripts/UI/Buttons/MuteButton.gd" id="3_yhqie"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bauei"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+texture = ExtResource("3_fntun")
+texture_margin_left = 5.0
+texture_margin_top = 6.0
+texture_margin_right = 5.0
+texture_margin_bottom = 5.0
+
+[sub_resource type="Theme" id="Theme_cdixx"]
+Button/styles/pressed = SubResource("StyleBoxTexture_bauei")
+
+[node name="MuteButton" instance=ExtResource("1_18ch8")]
+theme = SubResource("Theme_cdixx")
+script = ExtResource("3_yhqie")
+button_pressed = true
+
+[node name="Button" parent="." index="0"]
+toggle_mode = true
+button_pressed = true
+
+[node name="ContentContainer" parent="." index="1"]
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" parent="ContentContainer" index="0"]
+theme_override_constants/separation = 3
+
+[node name="ButtonIcon" parent="ContentContainer/HBoxContainer" index="1"]
+visible = true
+use_parent_material = true
+texture = ExtResource("3_cqmaf")
+expand_mode = 3
+stretch_mode = 5

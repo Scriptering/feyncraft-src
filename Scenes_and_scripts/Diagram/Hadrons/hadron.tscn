@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://bt7ftrwrqkbqc"]
+
+[ext_resource type="Script" path="res://Scenes_and_scripts/Diagram/Hadrons/hadron.gd" id="2_di4xc"]
+
+[node name="hadron" type="Node2D" groups=["hadron"]]
+scale = Vector2(2, 2)
+script = ExtResource("2_di4xc")

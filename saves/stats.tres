@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="PlayerStats" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://PlayerStats.gd" id="1_4toko"]
+[ext_resource type="Resource" path="res://saves/Palettes/Default/teastain.tres" id="1_siyqf"]
+
+[resource]
+script = ExtResource("1_4toko")
+daily_streak = 0
+palette = ExtResource("1_siyqf")
+last_daily_completed_date = {}

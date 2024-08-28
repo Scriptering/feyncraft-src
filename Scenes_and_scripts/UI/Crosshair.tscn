@@ -1,0 +1,47 @@
+[gd_scene load_steps=8 format=3 uid="uid://besym8haj5qo4"]
+
+[ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_t2kot"]
+[ext_resource type="Script" path="res://Scenes_and_scripts/UI/Crosshair.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://d35qxiccrmjj3" path="res://Textures/UI/crosshair/crosshair.png" id="2_s7cg1"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_txv08"]
+atlas = ExtResource("2_s7cg1")
+region = Rect2(0, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ip048"]
+atlas = ExtResource("2_s7cg1")
+region = Rect2(10, 0, 10, 10)
+
+[sub_resource type="SpriteFrames" id="3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_txv08")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ip048")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="1"]
+radius = 1.0
+
+[node name="Crosshair" type="Node2D"]
+visible = false
+material = ExtResource("1_t2kot")
+script = ExtResource("2")
+grid_margin = 16
+
+[node name="IdleCrosshair" type="AnimatedSprite2D" parent="."]
+use_parent_material = true
+sprite_frames = SubResource("3")
+
+[node name="CrosshairArea" type="Area2D" parent="."]
+collision_layer = 2
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CrosshairArea"]
+shape = SubResource("1")

@@ -1,0 +1,41 @@
+[gd_scene load_steps=5 format=3 uid="uid://diro6a1arcmc0"]
+
+[ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes_and_scripts/UI/Buttons/panelButton.tscn" id="1_ubmeo"]
+[ext_resource type="Theme" uid="uid://cuc6dkxinsqm2" path="res://Scenes_and_scripts/UI/Buttons/particle_button.tres" id="2_cvba5"]
+[ext_resource type="Script" path="res://Scenes_and_scripts/UI/Buttons/ParticleButtons/ParticleButton.gd" id="5_pltn4"]
+[ext_resource type="Texture2D" uid="uid://c0fv0drhuu6cf" path="res://Textures/Buttons/icons/Particles/photon.png" id="5_q3x61"]
+
+[node name="ParticleButton" instance=ExtResource("1_ubmeo")]
+offset_left = -6.0
+offset_top = -6.0
+offset_right = -616.0
+offset_bottom = -336.0
+theme = ExtResource("2_cvba5")
+script = ExtResource("5_pltn4")
+particle = 0
+toggle_mode = true
+icon = ExtResource("5_q3x61")
+expand_icon = true
+
+[node name="Button" parent="." index="0"]
+custom_minimum_size = Vector2(23, 26)
+toggle_mode = true
+
+[node name="ContentContainer" parent="." index="1"]
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" parent="ContentContainer" index="0"]
+theme_override_constants/separation = 3
+
+[node name="ButtonText" parent="ContentContainer/HBoxContainer" index="0"]
+theme_override_font_sizes/font_size = 0
+
+[node name="ButtonIcon" parent="ContentContainer/HBoxContainer" index="1"]
+visible = true
+use_parent_material = true
+texture = ExtResource("5_q3x61")
+expand_mode = 3
+stretch_mode = 5

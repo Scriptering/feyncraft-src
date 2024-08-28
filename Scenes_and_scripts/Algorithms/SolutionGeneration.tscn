@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://nuajmillcsir"]
+
+[ext_resource type="Script" path="res://Scenes_and_scripts/Algorithms/SolutionGeneration.gd" id="1_kcb21"]
+
+[node name="Generation" type="Node"]
+script = ExtResource("1_kcb21")
