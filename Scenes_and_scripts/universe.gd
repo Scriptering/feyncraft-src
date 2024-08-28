@@ -17,6 +17,11 @@ var enter_funcs: Dictionary = {
 	Scene.MainMenu: enter_main_menu
 }
 
+var exit_funcs: Dictionary = {
+	Scene.Level: exit_level,
+	Scene.MainMenu: null
+}
+
 @onready var scenes: Dictionary = {
 	Scene.Level: Level,
 	Scene.MainMenu: MainMenu
@@ -38,8 +43,6 @@ func _ready() -> void:
 		if !FileAccess.file_exists("user://saves/ProblemSets/Default/electromagnetic.tres"):
 			create_default_problem_sets()
 	
-	MainMenu.sandbox_pressed.connect(_on_sandbox_pressed)
-	MainMenu.tutorial_pressed.connect(_on_tutorial_pressed)
 	
 	if should_reset_daily_streak():
 		StatsManager.stats.daily_streak = 0
@@ -73,7 +76,12 @@ func change_scene(scene: Scene, args: Array = []) -> void:
 	switch_child_scene(scene)
 	StateManager.change_scene(scenes[scene].Diagram)
 	
-	enter_funcs[scene].call(args)
+	if exit_funcs[scene]:
+		exit_funcs[scene].call(args)
+	
+	if enter_funcs[scene]:
+		enter_funcs[scene].call(args)
+
 	EventBus.change_cursor.emit(Globals.Cursor.default)
 
 func switch_child_scene(new_scene: Scene) -> void:
@@ -82,9 +90,12 @@ func switch_child_scene(new_scene: Scene) -> void:
 	add_child(scenes[new_scene])
 	move_child(scenes[new_scene], 0)
 
-func enter_level(args: Array = [BaseMode.Mode.Sandbox]) -> void:
+func enter_level(args: Array = [Mode.Sandbox]) -> void:
 	Globals.in_main_menu = false
 	Level.current_mode = args[0]
+
+func exit_level(args: Array = []) -> void:
+	Level.exit()
 
 func enter_main_menu(_args: Array = []) -> void:
 	Globals.in_main_menu = true
@@ -92,26 +103,28 @@ func enter_main_menu(_args: Array = []) -> void:
 	
 	EventBus.save_files.emit()
 
-func _on_sandbox_pressed() -> void:
-	change_scene(Scene.Level, [BaseMode.Mode.Sandbox])
+func _on_main_menu_sandbox_pressed() -> void:
+	change_scene(Scene.Level, [Mode.Sandbox])
 
-func _on_tutorial_pressed() -> void:
-	change_scene(Scene.Level, [BaseMode.Mode.Tutorial])
+func _on_main_menu_tutorial_pressed() -> void:
+	change_scene(Scene.Level, [Mode.Tutorial])
 
 func _on_world_problem_submitted() -> void:
 	modifying_problem_item.save()
-	
+
 	change_scene(Scene.MainMenu)
 
 func _on_problem_modified(problem_item: PanelContainer) -> void:
 	modifying_problem_item = problem_item
-	
-	Globals.creating_problem = modifying_problem_item.problem
+	var modifying_problem: Problem = modifying_problem_item.problem
 
-	change_scene(Scene.Level, [BaseMode.Mode.ParticleSelection])
+	Level.creating_problem = modifying_problem.duplicate(true)
+	Level.start_problem_modification()
+
+	change_scene(Scene.Level, [Mode.ParticleSelection])
 
 func _on_problem_set_played(problem_set: ProblemSet, index: int) -> void:
-	change_scene(Scene.Level, [BaseMode.Mode.ProblemSolving])
+	change_scene(Scene.Level, [Mode.ProblemSolving])
 	Level.load_problem_set(problem_set, index)
 
 func _on_world_save_problem_set() -> void:
@@ -122,7 +135,7 @@ func create_default_problem_sets() -> void:
 		file_path = file_path.trim_suffix(".remap")
 		var user_path: String = "user" + file_path.trim_prefix("res")
 		ResourceSaver.save(load(file_path), user_path)
-	
+
 	await get_tree().process_frame
 
 func load_daily() -> void:
@@ -140,7 +153,7 @@ func load_daily() -> void:
 		daily_problem_set.problems.push_back(daily_problem)
 		daily_problem_set.current_index = 0
 
-	change_scene(Scene.Level, [BaseMode.Mode.ProblemSolving])
+	change_scene(Scene.Level, [Mode.ProblemSolving])
 	Level.load_problem_set(daily_problem_set, 0)
 
 func _on_main_menu_daily_pressed() -> void:
@@ -149,7 +162,7 @@ func _on_main_menu_daily_pressed() -> void:
 func _on_daily_completed() -> void:
 	var last_date := StatsManager.stats.last_daily_completed_date
 	var date := Time.get_datetime_dict_from_system()
-	
+
 	if !last_date or !is_same_day(last_date, date):
 		StatsManager.stats.last_daily_completed_date = Time.get_datetime_dict_from_system()
 		StatsManager.stats.daily_streak += 1

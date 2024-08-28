@@ -30,15 +30,13 @@ signal show_feedback(feedback: String)
 signal diagram_submitted(diagram: DrawingMatrix, submissions: Array[DrawingMatrix])
 signal signal_enter_game
 signal signal_change_scene(scene: Globals.Scene, args: Array)
-signal signal_exit_game(mode: BaseMode.Mode, created_problem: Problem)
-signal signal_diagram_action_taken
+signal signal_exit_game(mode: int, created_problem: Problem)
 signal signal_problem_modified(problem_item: PanelContainer)
 signal signal_problem_set_played(problem_set: ProblemSet, index: int)
 signal toggle_scene
-signal action_taken
 
 func enter_game(
-	mode: BaseMode.Mode, problem_set: ProblemSet = null, problem: Problem = null, creating_problem_set_file: String = ''
+	mode: int, problem_set: ProblemSet = null, problem: Problem = null, creating_problem_set_file: String = ''
 ) -> void:
 	Globals.load_mode = mode
 	Globals.load_problem_set = problem_set
@@ -49,7 +47,7 @@ func enter_game(
 	toggle_scene.emit()
 	signal_enter_game.emit()
 
-func exit_game(mode: BaseMode.Mode, problem: Problem = null) -> void:
+func exit_game(mode: int, problem: Problem = null) -> void:
 	Globals.in_main_menu = true
 	
 	await get_tree().process_frame

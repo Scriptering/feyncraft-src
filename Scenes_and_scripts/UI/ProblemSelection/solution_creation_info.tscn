@@ -1,14 +1,10 @@
-[gd_scene load_steps=30 format=3 uid="uid://bvn4ssrvphh28"]
+[gd_scene load_steps=26 format=3 uid="uid://bvn4ssrvphh28"]
 
 [ext_resource type="Texture2D" uid="uid://tql14gtq05lf" path="res://Textures/UI/Information/invalid.png" id="1_mp3ie"]
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_vwd38"]
 [ext_resource type="Script" path="res://Scenes_and_scripts/UI/ProblemSelection/solution_creation_info.gd" id="2_6e24i"]
-[ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes_and_scripts/UI/Buttons/panelButton.tscn" id="2_66fjv"]
-[ext_resource type="Texture2D" uid="uid://c3nrennubqoow" path="res://Textures/Buttons/icons/back.png" id="4_187qd"]
 [ext_resource type="PackedScene" uid="uid://dorw3vr2amuy3" path="res://Scenes_and_scripts/Components/button_sound_component.tscn" id="4_j2ks7"]
-[ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes_and_scripts/UI/Tooltip.tscn" id="5_8fnwf"]
 [ext_resource type="Theme" uid="uid://cu3v7nxs2h2hu" path="res://Resources/Themes/spin_box.tres" id="5_yylr5"]
-[ext_resource type="Texture2D" uid="uid://bcu6ptkd3fwfe" path="res://Textures/Buttons/icons/submit.png" id="6_eyill"]
 [ext_resource type="Script" path="res://Scenes_and_scripts/Classes/spin_box.gd" id="7_aqn1d"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cixn1"]
@@ -49,7 +45,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_t1k3s"]
 
-[node name="SolutionCreationInfo" type="PanelContainer" node_paths=PackedStringArray("prev_button", "exit_button")]
+[node name="SolutionCreationInfo" type="PanelContainer"]
 material = ExtResource("1_vwd38")
 use_parent_material = true
 custom_minimum_size = Vector2(2.08165e-12, 150)
@@ -59,38 +55,30 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_cixn1")
 script = ExtResource("2_6e24i")
 title = "3. Solution Creation"
-prev_button = NodePath("VBoxContainer/Buttons/PrevStep")
-exit_button = NodePath("VBoxContainer/Buttons/Submit")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-use_parent_material = true
-layout_mode = 2
-mouse_filter = 2
-alignment = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
 
-[node name="Body" type="Label" parent="VBoxContainer/VBoxContainer"]
+[node name="Body" type="Label" parent="VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
 text = "- Draw solutions to the problem.
 - Submit solutions using puzzle tab."
 autowrap_mode = 3
 
-[node name="PanelContainer2" type="PanelContainer" parent="VBoxContainer/VBoxContainer"]
+[node name="PanelContainer2" type="PanelContainer" parent="VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/VBoxContainer/PanelContainer2"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer2"]
 use_parent_material = true
 layout_mode = 2
 mouse_filter = 2
 
-[node name="CustomSolutions" type="CheckButton" parent="VBoxContainer/VBoxContainer/PanelContainer2/VBoxContainer"]
+[node name="CustomSolutions" type="CheckButton" parent="VBoxContainer/PanelContainer2/VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_vj8pa")
@@ -101,9 +89,10 @@ theme_override_styles/pressed = SubResource("StyleBoxEmpty_41p5t")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_luo7v")
 text = "Custom solutions"
 
-[node name="ButtonSoundComponent" parent="VBoxContainer/VBoxContainer/PanelContainer2/VBoxContainer/CustomSolutions" instance=ExtResource("4_j2ks7")]
+[node name="ButtonSoundComponent" parent="VBoxContainer/PanelContainer2/VBoxContainer/CustomSolutions" instance=ExtResource("4_j2ks7")]
 
-[node name="AllowOtherSolutions" type="CheckButton" parent="VBoxContainer/VBoxContainer/PanelContainer2/VBoxContainer"]
+[node name="AllowOtherSolutions" type="CheckButton" parent="VBoxContainer/PanelContainer2/VBoxContainer"]
+unique_name_in_owner = true
 visible = false
 use_parent_material = true
 layout_mode = 2
@@ -116,20 +105,21 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_cv31x")
 text = "Allow other
 solutions"
 
-[node name="ButtonSoundComponent" parent="VBoxContainer/VBoxContainer/PanelContainer2/VBoxContainer/AllowOtherSolutions" instance=ExtResource("4_j2ks7")]
+[node name="ButtonSoundComponent" parent="VBoxContainer/PanelContainer2/VBoxContainer/AllowOtherSolutions" instance=ExtResource("4_j2ks7")]
 
-[node name="NoSolutions" type="HBoxContainer" parent="VBoxContainer/VBoxContainer"]
+[node name="NoSolutions" type="HBoxContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
 visible = false
 use_parent_material = true
 layout_mode = 2
 mouse_filter = 2
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/NoSolutions"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/NoSolutions"]
 layout_mode = 2
 texture = ExtResource("1_mp3ie")
 stretch_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/NoSolutions"]
+[node name="Label" type="Label" parent="VBoxContainer/NoSolutions"]
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -137,17 +127,18 @@ size_flags_vertical = 1
 text = "No solutions created"
 autowrap_mode = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
 mouse_filter = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/VBoxContainer/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer"]
 use_parent_material = true
 layout_mode = 2
 mouse_filter = 2
 
-[node name="CustomSolutionCount" type="CheckButton" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="CustomSolutionCount" type="CheckButton" parent="VBoxContainer/PanelContainer/VBoxContainer"]
+unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1nme1")
@@ -159,28 +150,30 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_t1k3s")
 text = "Custom required
 solution count"
 
-[node name="ButtonSoundComponent" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/CustomSolutionCount" instance=ExtResource("4_j2ks7")]
+[node name="ButtonSoundComponent" parent="VBoxContainer/PanelContainer/VBoxContainer/CustomSolutionCount" instance=ExtResource("4_j2ks7")]
 
-[node name="SolutionCountContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="SolutionCountContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
+unique_name_in_owner = true
 visible = false
 use_parent_material = true
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/SolutionCountContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/SolutionCountContainer"]
 use_parent_material = true
 layout_mode = 2
 text = "Required
 solution count:"
 vertical_alignment = 1
 
-[node name="SolutionCountContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/SolutionCountContainer"]
+[node name="SolutionCountContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/SolutionCountContainer"]
 use_parent_material = true
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 1
 
-[node name="SolutionCount" type="SpinBox" parent="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/SolutionCountContainer/SolutionCountContainer"]
+[node name="SolutionCount" type="SpinBox" parent="VBoxContainer/PanelContainer/VBoxContainer/SolutionCountContainer/SolutionCountContainer"]
+unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
 theme = ExtResource("5_yylr5")
@@ -191,30 +184,7 @@ alignment = 1
 update_on_text_changed = true
 script = ExtResource("7_aqn1d")
 
-[node name="Buttons" type="HBoxContainer" parent="VBoxContainer"]
-use_parent_material = true
-layout_mode = 2
-mouse_filter = 2
-alignment = 1
-
-[node name="PrevStep" parent="VBoxContainer/Buttons" instance=ExtResource("2_66fjv")]
-layout_mode = 2
-minimum_size = Vector2(24, 21)
-icon = ExtResource("4_187qd")
-icon_use_parent_material = true
-
-[node name="Tooltip" parent="VBoxContainer/Buttons/PrevStep" instance=ExtResource("5_8fnwf")]
-tooltip = "Previous Step"
-
-[node name="Submit" parent="VBoxContainer/Buttons" instance=ExtResource("2_66fjv")]
-layout_mode = 2
-minimum_size = Vector2(22, 22)
-icon = ExtResource("6_eyill")
-icon_use_parent_material = true
-
-[node name="Tooltip" parent="VBoxContainer/Buttons/Submit" instance=ExtResource("5_8fnwf")]
-tooltip = "Submit Problem"
-
-[connection signal="toggled" from="VBoxContainer/VBoxContainer/PanelContainer2/VBoxContainer/CustomSolutions" to="." method="_on_custom_solutions_toggled"]
-[connection signal="toggled" from="VBoxContainer/VBoxContainer/PanelContainer2/VBoxContainer/AllowOtherSolutions" to="." method="_on_custom_solutions_toggled"]
-[connection signal="toggled" from="VBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/CustomSolutionCount" to="." method="_on_check_button_toggled"]
+[connection signal="toggled" from="VBoxContainer/PanelContainer2/VBoxContainer/CustomSolutions" to="." method="_on_custom_solutions_toggled"]
+[connection signal="toggled" from="VBoxContainer/PanelContainer2/VBoxContainer/AllowOtherSolutions" to="." method="_on_allow_other_solutions_toggled"]
+[connection signal="toggled" from="VBoxContainer/PanelContainer/VBoxContainer/CustomSolutionCount" to="." method="_on_custom_solution_count_toggled"]
+[connection signal="value_changed" from="VBoxContainer/PanelContainer/VBoxContainer/SolutionCountContainer/SolutionCountContainer/SolutionCount" to="." method="_on_solution_count_value_changed"]

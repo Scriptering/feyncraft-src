@@ -40,8 +40,9 @@ func generate_export() -> String:
 	export_string += interaction_string
 	export_string += diagram_string
 	
-	for hadron_ids:Array in matrix.split_hadron_ids:
-		export_string += get_hadron_string(hadron_ids)
+	if draw_external_labels:
+		for hadron_ids:Array in matrix.split_hadron_ids:
+			export_string += get_hadron_string(hadron_ids)
 
 	export_string += "\\end{feynman}\n\\end{tikzpicture}\n"
 

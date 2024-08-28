@@ -1,7 +1,7 @@
 class_name MainDiagram
 extends DiagramBase
 
-signal action_taken
+signal action
 
 @export var freeze_vision: bool = false
 @export var freeze_statelines: bool = false
@@ -49,7 +49,6 @@ func _ready() -> void:
 	crosshair.moved.connect(_crosshair_moved)
 	EventBus.draw_raw_diagram.connect(draw_raw_diagram)
 	EventBus.draw_diagram.connect(draw_diagram)
-	action_taken.connect(EventBus.action_taken.emit)
 	
 	self.mouse_entered.connect(EventBus.diagram_mouse_entered.emit)
 	self.mouse_exited.connect(EventBus.diagram_mouse_exited.emit)
@@ -155,9 +154,9 @@ func flush_update_queue() -> void:
 
 	if update_queued:
 		current_diagram = generate_drawing_matrix_from_diagram()
-		action_taken.emit()
+		action.emit()
 		update_queued = false
-	
+
 func move_connected_particle_lines(interaction:Interaction) -> void:
 	for particle_line:ParticleLine in interaction.connected_lines:
 		particle_line.move(particle_line.get_connected_point(interaction), interaction.positioni())
@@ -214,12 +213,12 @@ func _set_show_line_labels(new_value: bool) -> void:
 		particle_line.show_labels = show_line_labels 
 		particle_line.set_text_visiblity()
 
-func load_problem(problem: Problem, mode: BaseMode.Mode) -> void:
+func load_problem(problem: Problem, mode: int) -> void:
 	clear_diagram()
 	
 	set_title(problem.title)
 	
-	var is_creating_problem: bool = mode in [BaseMode.Mode.ParticleSelection, BaseMode.Mode.ProblemCreation, BaseMode.Mode.SolutionCreation]
+	var is_creating_problem: bool = mode in [Mode.ParticleSelection, Mode.ProblemCreation, Mode.SolutionCreation]
 	
 	set_title_visible(is_creating_problem or problem.title != '')
 	set_title_editable(is_creating_problem)
@@ -535,10 +534,6 @@ func get_hadron_joints() -> Array[HadronJoint]:
 		hadron_joints.push_back(child)
 	
 	return hadron_joints
-
-func action() -> void:
-	update_vision()
-	action_taken.emit()
 
 func queue_vision_update() -> void:
 	vision_update_queued = true
@@ -1101,6 +1096,12 @@ func is_fully_connected(bidirectional: bool) -> bool:
 		current_diagram.get_lonely_extreme_points(
 			ConnectionMatrix.EntryFactor.Both
 		).size() == 0
+	)
+
+func has_state_particles() -> bool:
+	return StateLines.any(
+		func(state_line: StateLine) -> bool:
+			return !state_line.connected_interactions.is_empty()
 	)
 
 func is_energy_conserved() -> bool:

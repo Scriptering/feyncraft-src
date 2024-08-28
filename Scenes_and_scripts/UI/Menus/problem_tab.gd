@@ -42,15 +42,11 @@ func init(
 ) -> void:
 
 	Diagram = diagram
-	Diagram.action_taken.connect(_on_diagram_action)
 	current_problem = _current_problem
 	SubmittedDiagramViewer = submitted_diagrams_viewer
 	SubmittedDiagramViewer.diagram_deleted.connect(submitted_diagram_deleted)
 	SubmittedDiagramViewer.diagram_resaved.connect(submitted_diagram_resaved)
 	SubmittedDiagramViewer.closed.connect(toggle_diagram_viewer)
-
-func _on_diagram_action() -> void:
-	update_degree_label()
 
 func update_degree_label() -> void:
 	var problem_degree: int = 0 if !current_problem else current_problem.degree

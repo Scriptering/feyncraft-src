@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://c7n4o6dbkwilh"]
+[gd_scene load_steps=37 format=3 uid="uid://c7n4o6dbkwilh"]
 
 [ext_resource type="Script" path="res://Scenes_and_scripts/Levels/World.gd" id="1"]
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_6ope2"]
@@ -26,7 +26,6 @@
 [ext_resource type="Script" path="res://Scenes_and_scripts/Levels/Tutorial.gd" id="28_soh5r"]
 [ext_resource type="PackedScene" uid="uid://bjmi5sukccoma" path="res://Scenes_and_scripts/tutorial/TutorialInfo.tscn" id="30_2684v"]
 [ext_resource type="PackedScene" uid="uid://dxeg8j8rmil8t" path="res://Scenes_and_scripts/UI/Menus/health_tab.tscn" id="31_f28gh"]
-[ext_resource type="PackedScene" uid="uid://c5scpc4iadf17" path="res://Scenes_and_scripts/UI/ProblemSelection/creation_information.tscn" id="31_l3pqm"]
 [ext_resource type="Script" path="res://Scenes_and_scripts/Levels/Hadrons.gd" id="31_rb52u"]
 [ext_resource type="Script" path="res://Scenes_and_scripts/tutorial/TutorialStep.gd" id="31_t51na"]
 [ext_resource type="PackedScene" uid="uid://cv1hcrp0bkj2o" path="res://Scenes_and_scripts/Diagram/decoration.tscn" id="33_8ahpc"]
@@ -337,13 +336,6 @@ offset_bottom = 134.0
 [node name="FloatingMenus" type="CanvasLayer" parent="."]
 follow_viewport_enabled = true
 
-[node name="CreationInformation" parent="FloatingMenus" instance=ExtResource("31_l3pqm")]
-visible = false
-offset_left = 489.0
-offset_top = 87.0
-offset_right = 489.0
-offset_bottom = 87.0
-
 [node name="SubmittedDiagrams" parent="FloatingMenus" node_paths=PackedStringArray("BigDiagram") instance=ExtResource("27_laye5")]
 visible = false
 offset_left = 316.0
@@ -502,9 +494,12 @@ enable_spotlight = false
 [connection signal="picked_up" from="TileEasterEgg/Decoration" to="TileEasterEgg" method="_on_decoration_picked_up"]
 [connection signal="text_changed" from="Diagram/TitleContainer/Title" to="Diagram/TitleContainer/Title" method="_on_text_changed"]
 [connection signal="text_submitted" from="Diagram/TitleContainer/Title" to="Diagram" method="_on_title_text_submitted"]
+[connection signal="vision_button_toggled" from="PullOutTabs/VisionButton" to="." method="_on_vision_button_toggled"]
+[connection signal="next_problem_pressed" from="PullOutTabs/ProblemTab" to="." method="_on_next_problem_pressed"]
+[connection signal="prev_problem_pressed" from="PullOutTabs/ProblemTab" to="." method="_on_prev_problem_pressed"]
+[connection signal="exit_pressed" from="PullOutTabs/MenuTab" to="." method="_on_menu_tab_exit_pressed"]
+[connection signal="toggled_line_labels" from="PullOutTabs/MenuTab" to="." method="_on_menu_tab_toggled_line_labels"]
 [connection signal="export_pressed" from="PullOutTabs/ExportTab" to="." method="_on_export_tab_export_pressed"]
-[connection signal="submit_problem" from="FloatingMenus/CreationInformation" to="." method="_on_creation_information_submit_problem"]
-[connection signal="toggle_all" from="FloatingMenus/CreationInformation" to="." method="_on_creation_information_toggle_all"]
 [connection signal="finish_pressed" from="Tutorial/TutorialInfo" to="." method="_on_tutorial_info_finish_pressed"]
 [connection signal="next_pressed" from="Tutorial/TutorialInfo" to="Tutorial" method="_on_tutorial_info_next_pressed"]
 [connection signal="prev_pressed" from="Tutorial/TutorialInfo" to="Tutorial" method="_on_tutorial_info_prev_pressed"]

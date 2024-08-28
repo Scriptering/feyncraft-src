@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://c5scpc4iadf17"]
+[gd_scene load_steps=14 format=3 uid="uid://c5scpc4iadf17"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_j0xio"]
 [ext_resource type="Script" path="res://Scenes_and_scripts/UI/ProblemSelection/creation_information.gd" id="2_sqpln"]
@@ -6,12 +6,17 @@
 [ext_resource type="FontFile" uid="uid://cgts3h57wry82" path="res://Textures/Fonts/numbers_font.ttf" id="3_qwwoi"]
 [ext_resource type="PackedScene" uid="uid://rtdlfrcuvhi8" path="res://Scenes_and_scripts/UI/ProblemSelection/problem_creation_info.tscn" id="5_224cs"]
 [ext_resource type="PackedScene" uid="uid://bvn4ssrvphh28" path="res://Scenes_and_scripts/UI/ProblemSelection/solution_creation_info.tscn" id="6_jjee5"]
+[ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes_and_scripts/UI/Buttons/panelButton.tscn" id="7_6pjgy"]
+[ext_resource type="Texture2D" uid="uid://c3nrennubqoow" path="res://Textures/Buttons/icons/back.png" id="8_ge0ea"]
+[ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes_and_scripts/UI/Tooltip.tscn" id="9_x33sa"]
+[ext_resource type="Texture2D" uid="uid://bcu6ptkd3fwfe" path="res://Textures/Buttons/icons/submit.png" id="10_ls4ur"]
+[ext_resource type="Texture2D" uid="uid://dvx430022t0ua" path="res://Textures/Buttons/icons/next.png" id="11_jrrib"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6w8o2"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0pnha"]
 
-[node name="CreationInformation" type="Control" node_paths=PackedStringArray("tab_container", "particle_selection", "problem_creation", "solution_creation", "title", "grab_area")]
+[node name="CreationInformation" type="Control" node_paths=PackedStringArray("tab_container", "particle_selection", "problem_creation", "solution_creation", "title", "submit", "next_button", "prev_button", "grab_area")]
 material = ExtResource("1_j0xio")
 use_parent_material = true
 layout_mode = 3
@@ -19,11 +24,15 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("2_sqpln")
+follow_cursor = null
 tab_container = NodePath("PanelContainer/VBoxContainer/TabContainer")
 particle_selection = NodePath("PanelContainer/VBoxContainer/TabContainer/ParticleSelectionInfo")
 problem_creation = NodePath("PanelContainer/VBoxContainer/TabContainer/ProblemCreationInfo")
 solution_creation = NodePath("PanelContainer/VBoxContainer/TabContainer/SolutionCreationInfo")
 title = NodePath("PanelContainer/VBoxContainer/Header/VBoxSeperator/Title")
+submit = NodePath("PanelContainer/VBoxContainer/Buttons/Submit")
+next_button = NodePath("PanelContainer/VBoxContainer/Buttons/NextStep")
+prev_button = NodePath("PanelContainer/VBoxContainer/Buttons/PrevStep")
 grab_area = NodePath("PanelContainer")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
@@ -96,9 +105,36 @@ material = null
 layout_mode = 2
 metadata/_tab_index = 2
 
-[connection signal="next" from="PanelContainer/VBoxContainer/TabContainer/ParticleSelectionInfo" to="." method="_on_particle_selection_info_next"]
-[connection signal="toggle_all" from="PanelContainer/VBoxContainer/TabContainer/ParticleSelectionInfo" to="." method="_on_particle_selection_info_toggle_all"]
-[connection signal="next" from="PanelContainer/VBoxContainer/TabContainer/ProblemCreationInfo" to="." method="_on_problem_creation_info_next"]
-[connection signal="previous" from="PanelContainer/VBoxContainer/TabContainer/ProblemCreationInfo" to="." method="_on_problem_creation_info_previous"]
-[connection signal="exit" from="PanelContainer/VBoxContainer/TabContainer/SolutionCreationInfo" to="." method="_on_solution_creation_info_exit"]
-[connection signal="previous" from="PanelContainer/VBoxContainer/TabContainer/SolutionCreationInfo" to="." method="_on_solution_creation_info_previous"]
+[node name="Buttons" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 2
+alignment = 1
+
+[node name="PrevStep" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("7_6pjgy")]
+layout_mode = 2
+minimum_size = Vector2(24, 21)
+icon = ExtResource("8_ge0ea")
+icon_use_parent_material = true
+
+[node name="Tooltip" parent="PanelContainer/VBoxContainer/Buttons/PrevStep" instance=ExtResource("9_x33sa")]
+tooltip = "Previous Step"
+
+[node name="Submit" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("7_6pjgy")]
+layout_mode = 2
+minimum_size = Vector2(22, 22)
+icon = ExtResource("10_ls4ur")
+icon_use_parent_material = true
+
+[node name="Tooltip" parent="PanelContainer/VBoxContainer/Buttons/Submit" instance=ExtResource("9_x33sa")]
+tooltip = "Submit Problem"
+
+[node name="NextStep" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("7_6pjgy")]
+material = null
+layout_mode = 2
+minimum_size = Vector2(24, 21)
+icon = ExtResource("11_jrrib")
+icon_use_parent_material = true
+
+[node name="Tooltip" parent="PanelContainer/VBoxContainer/Buttons/NextStep" instance=ExtResource("9_x33sa")]
+tooltip = "Next Step"
