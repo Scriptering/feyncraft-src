@@ -1,6 +1,7 @@
 extends PullOutTab
 
-signal submit_pressed
+signal diagram_submitted
+signal diagram_deleted
 signal next_problem_pressed
 signal prev_problem_pressed
 
@@ -14,7 +15,8 @@ signal prev_problem_pressed
 @onready var SubmissionFeedback : PullOutTab = $MovingContainer/SubmitFeedback
 @onready var DiagramDuplicate : Control = $MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/DuplicateDiagram
 @onready var DiagramSubmitted : Control = $MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/DiagramSubmitted
-@onready var DiagramNotSolution : Control = $MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/DiagramNotSolution
+@onready var DiagramIncorrect : Control = $MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/DiagramIncorrect
+@onready var DiagramNotCustomSolution : Control = $MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/DiagramNotCustomSolution
 @onready var IncorrectOrder: HBoxContainer = $MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/IncorrectOrder
 
 var Diagram: MainDiagram
@@ -58,13 +60,14 @@ func update_degree_label() -> void:
 
 func _on_submit_pressed() -> void:
 	submit_diagram()
-	submit_pressed.emit()
 
 func submitted_diagram_deleted(index: int) -> void:
 	submitted_diagrams.remove_at(index)
 	
 	update_view_submission_button()
 	update_submitted_solution_count()
+	
+	diagram_deleted.emit()
 
 func submitted_diagram_resaved(index: int) -> void:
 	submitted_diagrams[index] = SubmittedDiagramViewer.diagrams[index]
@@ -82,13 +85,16 @@ func check_submission(submission: DrawingMatrix) -> bool:
 		return false
 	
 	if !(
-		current_problem.is_submission_solution(submission) and
 		Diagram.is_valid() and 
 		Diagram.is_fully_connected(true) and
 		Diagram.is_energy_conserved()
 		
 	):
-		DiagramNotSolution.show()
+		DiagramIncorrect.show()
+		return false
+	
+	if !current_problem.is_being_modified and !current_problem.is_submission_solution(submission):
+		DiagramNotCustomSolution.show()
 		return false
 	
 	DiagramSubmitted.show()
@@ -120,7 +126,7 @@ func submit_diagram() -> void:
 	
 	NextProblem.disabled = !in_sandbox and submitted_diagrams.size() < current_problem.solution_count
 	
-	EventBus.diagram_submitted.emit(submission, submitted_diagrams)
+	diagram_submitted.emit()
 
 func generate_solution() -> ConnectionMatrix:
 	return(SolutionGeneration.generate_diagrams(
@@ -151,8 +157,13 @@ func _on_view_submissions_pressed() -> void:
 func load_problem(problem: Problem) -> void:
 	current_problem = problem
 	
-	submitted_diagrams.clear()
-	SubmittedDiagramViewer.clear()
+	if problem.custom_solutions and problem.is_being_modified:
+		submitted_diagrams = problem.solutions
+		SubmittedDiagramViewer.store_diagrams(problem.solutions)
+	else:
+		submitted_diagrams.clear()
+		SubmittedDiagramViewer.clear()
+
 	Equation.load_problem(problem)
 	
 	update_degree_label()
@@ -167,7 +178,7 @@ func set_next_problem_disabled(disable: bool) -> void:
 	NextProblem.disabled = disable
 	
 func _on_solution_pressed() -> void:
-	if current_problem.custom_solutions:
+	if current_problem.custom_solutions and !current_problem.is_being_modified:
 		EventBus.draw_diagram.emit(current_problem.solutions.pick_random())
 	else:
 		EventBus.draw_raw_diagram.emit(generate_solution())

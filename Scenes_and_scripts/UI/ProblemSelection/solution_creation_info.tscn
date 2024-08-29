@@ -79,6 +79,7 @@ layout_mode = 2
 mouse_filter = 2
 
 [node name="CustomSolutions" type="CheckButton" parent="VBoxContainer/PanelContainer2/VBoxContainer"]
+unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_vj8pa")
@@ -124,7 +125,7 @@ use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
-text = "No solutions created"
+text = "No custom solutions created"
 autowrap_mode = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]

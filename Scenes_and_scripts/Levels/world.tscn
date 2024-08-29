@@ -492,9 +492,12 @@ enable_spotlight = false
 
 [connection signal="dropped" from="TileEasterEgg/Decoration" to="TileEasterEgg" method="_on_decoration_dropped"]
 [connection signal="picked_up" from="TileEasterEgg/Decoration" to="TileEasterEgg" method="_on_decoration_picked_up"]
+[connection signal="title_submitted" from="Diagram" to="." method="_on_diagram_title_submitted"]
 [connection signal="text_changed" from="Diagram/TitleContainer/Title" to="Diagram/TitleContainer/Title" method="_on_text_changed"]
 [connection signal="text_submitted" from="Diagram/TitleContainer/Title" to="Diagram" method="_on_title_text_submitted"]
 [connection signal="vision_button_toggled" from="PullOutTabs/VisionButton" to="." method="_on_vision_button_toggled"]
+[connection signal="diagram_deleted" from="PullOutTabs/ProblemTab" to="." method="_on_problem_tab_diagram_deleted"]
+[connection signal="diagram_submitted" from="PullOutTabs/ProblemTab" to="." method="_on_problem_tab_diagram_submitted"]
 [connection signal="next_problem_pressed" from="PullOutTabs/ProblemTab" to="." method="_on_next_problem_pressed"]
 [connection signal="prev_problem_pressed" from="PullOutTabs/ProblemTab" to="." method="_on_prev_problem_pressed"]
 [connection signal="exit_pressed" from="PullOutTabs/MenuTab" to="." method="_on_menu_tab_exit_pressed"]

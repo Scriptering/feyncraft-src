@@ -163,20 +163,35 @@ layout_mode = 2
 texture = ExtResource("15_5phct")
 stretch_mode = 2
 
-[node name="DiagramNotSolution" type="HBoxContainer" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer"]
+[node name="DiagramIncorrect" type="HBoxContainer" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer"]
 visible = false
 use_parent_material = true
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/DiagramNotSolution"]
+[node name="TextureRect" type="TextureRect" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/DiagramIncorrect"]
 layout_mode = 2
 texture = ExtResource("6_8a0lv")
 stretch_mode = 2
 
-[node name="Label" type="Label" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/DiagramNotSolution"]
+[node name="Label" type="Label" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/DiagramIncorrect"]
 use_parent_material = true
 layout_mode = 2
 text = "Diagram is incorrect"
+
+[node name="DiagramNotCustomSolution" type="HBoxContainer" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer"]
+visible = false
+use_parent_material = true
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/DiagramNotCustomSolution"]
+layout_mode = 2
+texture = ExtResource("6_8a0lv")
+stretch_mode = 2
+
+[node name="Label" type="Label" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/DiagramNotCustomSolution"]
+use_parent_material = true
+layout_mode = 2
+text = "Diagram is not a custom solution"
 
 [node name="DiagramSubmitted" type="HBoxContainer" parent="MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer"]
 use_parent_material = true

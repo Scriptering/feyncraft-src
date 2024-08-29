@@ -442,6 +442,26 @@ func get_state_interactions(state: StateLine.State) -> Array:
 	
 	return state_interactions
 
+func get_used_particles() -> Array[ParticleData.Particle]:
+	var used_particles: Array[ParticleData.Particle] = []
+	for id:int in matrix_size:
+		for jd:int in matrix_size:
+			for p:ParticleData.Particle in connection_matrix[id][jd]:
+				if p not in used_particles:
+					used_particles.push_back(p)
+	
+	return used_particles
+
+func get_used_base_particles() -> Array[ParticleData.Particle]:
+	var used_particles: Array[ParticleData.Particle] = []
+	for id:int in matrix_size:
+		for jd:int in matrix_size:
+			for p:ParticleData.Particle in connection_matrix[id][jd]:
+				if ParticleData.base(p) not in used_particles:
+					used_particles.push_back(ParticleData.base(p))
+	
+	return used_particles
+
 func get_unique(array: Array) -> Array:
 	var unique_elements: Array = []
 	

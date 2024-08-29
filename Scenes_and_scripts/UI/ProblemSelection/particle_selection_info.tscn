@@ -7,7 +7,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mhg50"]
 
-[node name="ParticleSelectionInfo" type="PanelContainer" node_paths=PackedStringArray("check_button")]
+[node name="ParticleSelectionInfo" type="PanelContainer"]
 material = ExtResource("1_622tk")
 use_parent_material = true
 custom_minimum_size = Vector2(2.08165e-12, 150)
@@ -17,7 +17,6 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_mhg50")
 script = ExtResource("2_ojpnu")
 title = "1. Particle Selection"
-check_button = NodePath("VBoxContainer/CheckButton")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 use_parent_material = true
@@ -49,13 +48,15 @@ layout_mode = 2
 minimum_size = Vector2(56, 24)
 text = "Toggle Off"
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer"]
+[node name="HideUnavailableParticles" type="CheckButton" parent="VBoxContainer"]
+unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
 text = "Hide unavailable
 particles"
 
-[node name="ButtonSoundComponent" parent="VBoxContainer/CheckButton" instance=ExtResource("4_une3u")]
+[node name="ButtonSoundComponent" parent="VBoxContainer/HideUnavailableParticles" instance=ExtResource("4_une3u")]
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/ToggleOn" to="." method="_on_toggle_on_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/ToggleOff" to="." method="_on_toggle_off_pressed"]
+[connection signal="toggled" from="VBoxContainer/HideUnavailableParticles" to="." method="_on_hide_unavailable_particles_toggled"]

@@ -3,6 +3,8 @@ extends Resource
 
 const LOWEST_ORDER: int = 0
 
+var is_being_modified: bool = false
+
 @export var custom_solutions: bool = false
 @export var allow_other_solutions: bool = false
 @export var custom_solution_count: bool = false

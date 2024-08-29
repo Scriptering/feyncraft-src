@@ -65,15 +65,15 @@ func init(state_manager: Node) -> void:
 	ProblemTab.init(Diagram, Problem.new(), $FloatingMenus/SubmittedDiagrams)
 
 	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
-	
+
 	ParticleButtons.particle_selected.connect(_on_particle_selected)
-	
+
 	ControlsTab.clear_diagram.connect(_controls_clear)
 	ControlsTab.undo.connect(Diagram.undo)
 	ControlsTab.redo.connect(Diagram.redo)
-	
+
 	initialised.emit()
-	
+
 	Diagram.action.connect(_diagram_action_taken)
 
 func _controls_clear() -> void:
@@ -85,7 +85,7 @@ func _on_particle_selected(particle: ParticleData.Particle) -> void:
 
 func load_problem(problem: Problem) -> void:
 	current_problem = problem
-	
+
 	Diagram.load_problem(problem, current_mode)
 	ProblemTab.load_problem(problem)
 	ParticleButtons.load_problem(problem)
@@ -97,53 +97,31 @@ func load_problem_set(p_problem_set: ProblemSet, index: int) -> void:
 	problem_set = p_problem_set
 	problem_set.end_reached.connect(_on_problem_set_end_reached)
 	problem_set.current_index = index
-	
+
 	problem_history.clear()
 	ProblemTab.set_prev_problem_disabled(index == 0)
 	load_problem(problem_set.current_problem)
 	ProblemTab.set_next_problem_disabled(index >= problem_set.highest_index_reached)
 
 func enter_particle_selection() -> void:
-	ParticleButtons.show()
-	GenerationTab.hide()
-	ProblemTab.hide()
-	VisionTab.hide()
-	
 	Diagram.load_problem(creating_problem, current_mode)
 	ParticleButtons.enter_particle_selection(creating_problem)
 
 func exit_particle_selection() -> void:
-	creating_problem.allowed_particles = ParticleButtons.get_toggled_particles(true)
 	ParticleButtons.exit_particle_selection()
 
 func enter_sandbox() -> void:
-	ParticleButtons.show()
-	GenerationTab.show()
-	ProblemTab.show()
-	VisionTab.show()
-	PuzzleOptions.show()
-	
 	ProblemTab._enter_sandbox()
 	load_problem(Problem.new())
-	
+
 	Diagram.clear_diagram()
 	Diagram.set_title_editable(false)
 	Diagram.set_title_visible(false)
 
 func enter_problem_solving() -> void:
-	ParticleButtons.show()
-	GenerationTab.hide()
-	ProblemTab.show()
-	VisionTab.show()
-	
 	Diagram.set_title_editable(false)
 
 func enter_problem_creation() -> void:
-	ParticleButtons.show()
-	GenerationTab.hide()
-	ProblemTab.hide()
-	VisionTab.show()
-	
 	ParticleButtons.load_problem(creating_problem)
 	
 	if creating_problem.state_interactions != [[],[]]:
@@ -154,36 +132,15 @@ func enter_problem_creation() -> void:
 				creating_problem.degree, creating_problem.degree,
 				SolutionGeneration.get_useable_interactions_from_particles(creating_problem.allowed_particles),
 				SolutionGeneration.Find.One
-		).front()
+			).front()
 		)
 
 func enter_solution_creation() -> void:
-	ParticleButtons.show()
-	GenerationTab.show()
-	ProblemTab.show()
-	VisionTab.show()
-
-	var drawn_diagram: DrawingMatrix = Diagram.get_current_diagram().reduce_to_connection_matrix()
-	var drawn_states: Array = [[], []]
-	for state:StateLine.State in StateLine.STATES:
-		drawn_states[state] = drawn_diagram.get_state_interactions(state)
-	
-	if !ProblemGeneration.setup_new_problem(creating_problem):
-		creation_info.no_solutions_found()
-		creation_info.prev_mode()
-		return
-
-	if drawn_states != creating_problem.state_interactions:
-		creating_problem.state_interactions = drawn_states
-
-	creating_problem.custom_solutions = false
-
 	ProblemTab.load_problem(creating_problem)
 	ProblemTab.in_solution_creation = true
 
 func exit_sandbox() -> void:
 	ProblemTab._exit_sandbox()
-	PuzzleOptions.hide()
 
 func exit_problem_creation() -> void:
 	pass
@@ -193,13 +150,6 @@ func exit_solution_creation() -> void:
 	ProblemTab.in_solution_creation = false
 
 func enter_tutorial() -> void:
-	ParticleButtons.show()
-	GenerationTab.hide()
-	ProblemTab.show()
-	VisionTab.hide()
-	PuzzleOptions.hide()
-	Tutorial.show()
-
 	Tutorial.reset()
 	load_problem_set(load("res://saves/ProblemSets/tutorial.tres"), 0)
 
@@ -216,7 +166,7 @@ func _on_problem_set_end_reached() -> void:
 
 func _on_next_problem_pressed() -> void:
 	problem_history.push_back(current_problem)
-	
+
 	match current_mode:
 		Mode.Tutorial:
 			load_problem(problem_set.next_problem())
@@ -227,12 +177,12 @@ func _on_next_problem_pressed() -> void:
 			save_problem_set.emit()
 		Mode.Sandbox:
 			var new_problem: Problem = generate_new_problem()
-			
+
 			if !new_problem:
 				return
-			
+
 			load_problem(new_problem)
-	
+
 	Diagram.clear_diagram()
 	ProblemTab.set_prev_problem_disabled(problem_history.size() == 0)
 
@@ -260,13 +210,10 @@ func generate_new_problem() -> Problem:
 		ProblemGeneration.get_useable_particles_from_interaction_checks(PuzzleOptions.get_checks())
 	))
 
-func _on_creation_information_toggle_all(toggle: bool) -> void:
-	ParticleButtons.toggle_buttons(toggle)
-
 func exit_current_mode() -> void:
 	if current_mode == Mode.Null:
 		return
-	
+
 	if mode_exit_funcs[current_mode]:
 		mode_exit_funcs[current_mode].call()
 
@@ -277,17 +224,17 @@ func _on_export_tab_export_pressed(join_paths: bool, draw_internal_labels: bool,
 	var exporter:= DrawingMatrixExporter.new(
 		Diagram.get_current_diagram()
 	)
-	
+
 	exporter.join_paths = join_paths
 	exporter.draw_internal_labels = draw_internal_labels
 	exporter.draw_external_labels = draw_external_labels
-	
+
 	var export_string: String = exporter.generate_export()
-	
+
 	ClipBoard.copy(export_string)
 
 func exit() -> void:
-	if creation_info:
+	if is_instance_valid(creation_info):
 		creation_info.queue_free()
 
 func add_floating_menu(menu: Control) -> void:
@@ -299,7 +246,7 @@ func _diagram_action_taken() -> void:
 		Diagram.is_fully_connected(true),
 		Diagram.is_energy_conserved()
 	)
-	
+
 	ProblemTab.update_degree_label()
 
 	if current_mode == Mode.ProblemCreation:
@@ -311,18 +258,96 @@ func _diagram_action_taken() -> void:
 
 func start_problem_modification() -> void:
 	creation_info = load("res://Scenes_and_scripts/UI/ProblemSelection/creation_information.tscn").instantiate()
-	add_floating_menu(creation_info)
-	creation_info.init()
 	creation_info.problem = creating_problem
+	add_floating_menu(creation_info)
+
+	creation_info.next_pressed.connect(_on_creation_info_next)
+	creation_info.prev_pressed.connect(_on_creation_info_prev)
+	creation_info.submit_pressed.connect(_on_creation_info_submit)
+	creation_info.toggle_all.connect(_on_creation_info_toggle_all)
+	
 	Diagram.set_title_editable(true)
 
-func _on_creation_information_submit_problem() -> void:
-	exit_current_mode()
+func particle_selection_to_problem_creation() -> void:
+	creating_problem.hide_unavailable_particles = creation_info.get_hide_unavailable_particles()
+	creating_problem.allowed_particles = ParticleButtons.get_toggled_particles(true)
 	
-	problem_submitted.emit(
-		creation_info.allowed_particles,
-		creation_info.custom_degree
+	current_mode = Mode.ProblemCreation
+	creation_info.change_mode(current_mode)
+
+func set_problem_creation() -> void:
+	creating_problem.custom_degree = creation_info.get_custom_degree()
+	
+	if creating_problem.custom_degree:
+		var degree: int = creation_info.get_degree()
+		if creating_problem.degree != degree:
+			creating_problem.degree = degree
+			creating_problem.solutions.clear()
+	else:
+		creating_problem.degree = Problem.LOWEST_ORDER
+	
+	var drawn_diagram: ConnectionMatrix = Diagram.get_current_diagram().reduce_to_connection_matrix()
+	var drawn_states: Array = [[], []]
+	for state:StateLine.State in StateLine.STATES:
+		drawn_states[state] = drawn_diagram.get_state_interactions(state)
+
+	if drawn_states != creating_problem.state_interactions:
+		creating_problem.state_interactions = drawn_states
+
+func problem_creation_to_solution_creation() -> void:
+	if !ProblemGeneration.setup_new_problem(creating_problem):
+		creation_info.no_solutions_found()
+		return
+	
+	creating_problem.solutions = creating_problem.solutions.filter(
+		func(solution: DrawingMatrix) -> bool:
+			return solution.allowed_particles.all(
+				func(particle: ParticleData.Particle) -> bool:
+					return particle in creating_problem.allowed_particles
+			)
 	)
+	
+	creation_info.toggle_no_custom_solutions(creating_problem.solutions.is_empty())
+
+	current_mode = Mode.SolutionCreation
+	creation_info.change_mode(current_mode)
+
+func _on_creation_info_next() -> void:
+	match current_mode:
+		Mode.ParticleSelection:
+			particle_selection_to_problem_creation()
+		Mode.ProblemCreation:
+			set_problem_creation()
+			problem_creation_to_solution_creation()
+
+func _on_creation_info_prev() -> void:
+	match current_mode:
+		Mode.ProblemCreation:
+			current_mode = Mode.ParticleSelection
+		Mode.SolutionCreation:
+			current_mode = Mode.ProblemCreation
+	
+	creation_info.change_mode(current_mode)
+
+func _on_creation_info_submit() -> void:
+	exit_current_mode()
+
+	creating_problem.custom_solutions = creation_info.get_custom_solutions()
+	creating_problem.allow_other_solutions = creation_info.get_allow_other_solutions()
+	creating_problem.custom_solution_count = creation_info.get_custom_solution_count()
+
+	if creating_problem.custom_solutions:
+		creating_problem.solutions = ProblemTab.submitted_diagrams
+
+	if creating_problem.custom_solution_count:
+		creating_problem.solution_count = creation_info.get_solution_count()
+
+	creating_problem.is_being_modified = false
+
+	problem_submitted.emit()
+
+func _on_creation_info_toggle_all(toggle: bool) -> void:
+	ParticleButtons.toggle_buttons(toggle)
 
 func _on_menu_tab_exit_pressed() -> void:
 	exit_current_mode()
@@ -345,3 +370,14 @@ func set_tab_visibility() -> void:
 	MenuTab.visible = Mode.tab_visibility[current_mode]["menu"]
 	GenerationTab.visible = Mode.tab_visibility[current_mode]["generation"]
 	ExportTab.visible = Mode.tab_visibility[current_mode]["export"]
+
+func _on_diagram_title_submitted(title: String) -> void:
+	creating_problem.title = title
+
+func _on_problem_tab_diagram_submitted() -> void:
+	if current_mode == Mode.SolutionCreation:
+		creation_info.toggle_no_custom_solutions(false)
+
+func _on_problem_tab_diagram_deleted() -> void:
+	if current_mode == Mode.SolutionCreation:
+		creation_info.toggle_no_custom_solutions(ProblemTab.submitted_diagrams.is_empty())

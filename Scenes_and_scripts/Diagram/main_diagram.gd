@@ -2,6 +2,7 @@ class_name MainDiagram
 extends DiagramBase
 
 signal action
+signal title_submitted(title: String)
 
 @export var freeze_vision: bool = false
 @export var freeze_statelines: bool = false
@@ -806,6 +807,7 @@ func _interaction_dropped(interaction: Interaction) -> void:
 			interaction,
 			interaction_at_position
 		)
+		queue_update()
 	
 	for particle_line:ParticleLine in connected_lines:
 		check_rejoin_lines(particle_line.connected_interactions)
@@ -1277,7 +1279,8 @@ func set_title(text: String) -> void:
 	Title.text = text
 
 func _on_title_text_submitted(new_text: String) -> void:
-	Globals.creating_problem.title = new_text
+	title_submitted.emit(new_text)
+	Title.text = new_text
 
 func get_degree() -> int:
 	var degree: int = 0

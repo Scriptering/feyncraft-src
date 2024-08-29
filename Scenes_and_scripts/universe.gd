@@ -110,6 +110,7 @@ func _on_main_menu_tutorial_pressed() -> void:
 	change_scene(Scene.Level, [Mode.Tutorial])
 
 func _on_world_problem_submitted() -> void:
+	modifying_problem_item.problem = Level.creating_problem
 	modifying_problem_item.save()
 
 	change_scene(Scene.MainMenu)
@@ -117,11 +118,13 @@ func _on_world_problem_submitted() -> void:
 func _on_problem_modified(problem_item: PanelContainer) -> void:
 	modifying_problem_item = problem_item
 	var modifying_problem: Problem = modifying_problem_item.problem
-
+	
 	Level.creating_problem = modifying_problem.duplicate(true)
-	Level.start_problem_modification()
+	Level.creating_problem.is_being_modified = true
 
 	change_scene(Scene.Level, [Mode.ParticleSelection])
+	
+	Level.start_problem_modification()
 
 func _on_problem_set_played(problem_set: ProblemSet, index: int) -> void:
 	change_scene(Scene.Level, [Mode.ProblemSolving])

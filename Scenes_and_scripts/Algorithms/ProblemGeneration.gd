@@ -61,18 +61,37 @@ func generate(
 func get_useable_particles_from_interaction_checks(checks: Array[bool]) -> Array[ParticleData.Particle]:
 	var useable_particles: Array[ParticleData.Particle] = []
 	
-	useable_particles += ParticleData.FERMIONS
+	var add_charged_leptons: bool = false
+	var add_quarks: bool = false
+	var add_neutrinos: bool = false
 	
-	if checks[0]:
+	if checks[ParticleData.Force.electromagnetic]:
 		useable_particles.append(ParticleData.Particle.photon)
-	if checks[1]:
+		add_charged_leptons = true
+		add_quarks = true
+	if checks[ParticleData.Force.strong]:
 		useable_particles.append(ParticleData.Particle.gluon)
-	if checks[2]:
+		add_quarks = true
+	if checks[ParticleData.Force.weak]:
 		useable_particles.append(ParticleData.Particle.W)
-	if checks[3]:
+		add_charged_leptons = true
+		add_quarks = true
+		add_neutrinos = true
+		
+	if checks[ParticleData.Force.electroweak]:
 		useable_particles.append(ParticleData.Particle.Z)
 		useable_particles.append(ParticleData.Particle.H)
+		add_charged_leptons = true
+		add_quarks = true
+		add_neutrinos = true
 	
+	if add_charged_leptons:
+		useable_particles += ParticleData.CHARGED_LEPTONS
+	if add_quarks:
+		useable_particles += ParticleData.QUARKS
+	if add_neutrinos:
+		useable_particles += ParticleData.NEUTRINOS
+
 	return useable_particles
 
 func is_energy_conserved(state_interactions: Array) -> bool:
