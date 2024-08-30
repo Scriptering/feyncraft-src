@@ -9,7 +9,7 @@ enum {
 }
 
 enum Colour {Red, Green, Blue, None = -1}
-enum Shade {Bright, Dark, Both}
+enum Shade {Bright, Dark, Both, None}
 
 const colours : Array[Colour] = [Colour.Red, Colour.Green, Colour.Blue]
 const shades: Array[Shade] = [Shade.Bright, Shade.Dark]
