@@ -84,6 +84,6 @@ script = ExtResource("3_v1vbx")
 title = "Electromagnetic"
 problems = Array[ExtResource("1_no25e")]([SubResource("Resource_s20yk"), SubResource("Resource_77gyi"), SubResource("Resource_6ljgd"), SubResource("Resource_d4b7k"), SubResource("Resource_akb7c")])
 highest_index_reached = 5
-current_index = 4
+current_index = 2
 is_custom = false
 is_default = true

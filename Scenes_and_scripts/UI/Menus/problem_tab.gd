@@ -129,9 +129,11 @@ func submit_diagram() -> void:
 	diagram_submitted.emit()
 
 func generate_solution() -> ConnectionMatrix:
+	var useable_interactions: Array = SolutionGeneration.get_useable_interactions_from_particles(current_problem.allowed_particles)
+	
 	return(SolutionGeneration.generate_diagrams(
 		current_problem.state_interactions[StateLine.State.Initial], current_problem.state_interactions[StateLine.State.Final],
-		current_problem.degree, current_problem.degree, SolutionGeneration.generate_useable_interactions_from_particles(current_problem.allowed_particles),
+		current_problem.degree, current_problem.degree, useable_interactions,
 		SolutionGeneration.Find.LowestOrder
 	).pick_random())
 
