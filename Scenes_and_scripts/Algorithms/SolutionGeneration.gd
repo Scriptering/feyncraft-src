@@ -125,18 +125,20 @@ func generate_diagrams(
 			):
 				continue
 			
-			completed_state_connection_matrices.push_back(connection_matrix)
+			if is_matrix_colourless(matrix):
+				continue
 				
+			completed_state_connection_matrices.push_back(connection_matrix)
 			if find == Find.One:
 				break
 		
 		generated_connection_matrices += completed_state_connection_matrices
 		
-		for i:int in state_connected_matrices.size():
-			state_connected_matrices[i] = convert_interaction_matrix_to_normal(state_connected_matrices[i])
+		for i:int in unconnected_interaction_matrices.size():
+			unconnected_interaction_matrices[i] = convert_interaction_matrix_to_normal(unconnected_interaction_matrices[i])
 		
 		var unique_interaction_matrices : Array[InteractionMatrix] = generate_unique_interaction_matrices(
-			state_connected_matrices, degree, general_usable_interactions
+			unconnected_interaction_matrices, degree, general_usable_interactions
 		)
 		
 		print_time(0)
@@ -162,7 +164,6 @@ func generate_diagrams(
 	
 	print("Generation Completed: " + get_print_time())
 	
-	generated_connection_matrices = cut_colourless_matrices(generated_connection_matrices)
 	generated_connection_matrices = convert_general_matrices(generated_connection_matrices)
 	
 	if generated_connection_matrices.size() == 0:
@@ -756,6 +757,9 @@ func generate_unique_connection_matrices(
 			func(matrix: ConnectionMatrix) -> bool: 
 				return matrix.is_duplicate(connection_matrix)
 		):
+			continue
+		
+		if is_matrix_colourless(connection_matrix):
 			continue
 		
 		unique_connected_matrices.push_back(connection_matrix)

@@ -32,9 +32,8 @@ func generate(
 		
 		for _attempt in MAX_INTERACTION_GENERATION_ATTEMPTS:
 			state_interactions = generate_state_interactions(min_particle_count, max_particle_count, useable_state_interactions, use_hadrons)
-
-			if state_interactions != [] and is_energy_conserved(state_interactions):
-				print(_attempt)
+			
+			if are_state_interactions_valid(state_interactions):
 				break
 
 		if state_interactions == []:
@@ -45,7 +44,7 @@ func generate(
 		if SolutionGeneration.generate_diagrams(
 			state_interactions[StateLine.State.Initial],
 			state_interactions[StateLine.State.Final],
-			0, 5,
+			0, 8,
 			SolutionGeneration.get_useable_interactions_from_particles(useable_particles),
 			SolutionGeneration.Find.One
 		) != [null]:
@@ -57,6 +56,18 @@ func generate(
 	print("problem found")
 	
 	return problem
+
+func are_state_interactions_valid(state_interactions: Array) -> bool:
+	if state_interactions.is_empty():
+		return false
+	
+	if !is_energy_conserved(state_interactions):
+		return false
+		
+	if is_lone_hadron_decay(state_interactions):
+		return false
+	
+	return true
 
 func get_useable_particles_from_interaction_checks(checks: Array[bool]) -> Array[ParticleData.Particle]:
 	var useable_particles: Array[ParticleData.Particle] = []
@@ -138,6 +149,40 @@ func is_energy_conserved(state_interactions: Array) -> bool:
 			return false
 	
 	return true
+
+func is_lone_hadron_decay(state_interactions: Array) -> bool:
+	if state_interactions[StateLine.State.Initial].size() != 1:
+		print("not lone")
+		return false
+	
+	if state_interactions[StateLine.State.Initial].front().size() == 1:
+		print("not hadron")
+		return false
+	
+	
+	if state_interactions[StateLine.State.Final].any(
+		func(interaction: Array) -> bool:
+			if interaction.size() > 1:
+				return true
+			
+			var particle:ParticleData.Particle = interaction.front()
+			return ParticleData.base(particle) not in ParticleData.QUARKS
+	):
+		print("not quarks")
+		return false
+	
+	var hadron: Array = state_interactions[StateLine.State.Initial].front()
+	hadron.sort()
+	
+	var quarks: Array = []
+	for interaction: Array in state_interactions[StateLine.State.Final]:
+		quarks += interaction
+	quarks.sort()
+	
+	print(hadron)
+	print(quarks)
+	return hadron == quarks
+
 
 func get_all_particles() -> Array[ParticleData.Particle]:
 	var all_particles: Array[ParticleData.Particle] = []
@@ -310,6 +355,9 @@ func is_quantum_number_difference_possible(
 
 func setup_new_problem(problem: Problem) -> Problem:
 	if !problem:
+		return null
+	
+	if problem.state_interactions.is_empty():
 		return null
 	
 	if problem.state_interactions == [[],[]]:

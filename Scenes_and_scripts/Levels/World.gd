@@ -75,6 +75,20 @@ func init(state_manager: Node) -> void:
 	initialised.emit()
 
 	Diagram.action.connect(_diagram_action_taken)
+	
+	var diagrams: Array[ConnectionMatrix] = SolutionGeneration.generate_diagrams(
+		[[-19, 18], [-15, 14], [14, 14, 19], [-18, -14, -14]],
+		[[14], [-15]],
+		1,
+		5,
+		SolutionGeneration.get_useable_interactions_from_particles(
+			ProblemGeneration.get_useable_particles_from_interaction_checks([false, true, false, false]),
+		)
+	)
+
+func _ready() -> void:
+	Diagram.show_line_labels = !StatsManager.stats.hide_labels
+	MenuTab.toggle_show_line_labels(!StatsManager.stats.hide_labels)
 
 func _controls_clear() -> void:
 	Diagram.add_diagram_to_history()
@@ -161,6 +175,7 @@ func exit_solution_creation() -> void:
 
 func enter_tutorial() -> void:
 	Tutorial.reset()
+	Tutorial.show()
 	load_problem_set(load("res://saves/ProblemSets/tutorial.tres"), 0)
 
 func exit_tutorial() -> void:
@@ -367,6 +382,7 @@ func _on_menu_tab_exit_pressed() -> void:
 	EventBus.signal_change_scene.emit(Globals.Scene.MainMenu)
 
 func _on_menu_tab_toggled_line_labels(button_pressed: bool) -> void:
+	StatsManager.stats.hide_labels = !button_pressed
 	Diagram.show_line_labels = button_pressed
 
 func _on_vision_button_toggled(current_vision: Globals.Vision, toggle: bool) -> void:

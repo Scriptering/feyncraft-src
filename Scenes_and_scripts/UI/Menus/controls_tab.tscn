@@ -113,27 +113,6 @@ icon_use_parent_material = true
 [node name="Tooltip" parent="MovingContainer/ContentContainer/GridContainer/Redo" instance=ExtResource("8_fff00")]
 tooltip = "Redo"
 
-[node name="Label4" type="Label" parent="MovingContainer/ContentContainer/GridContainer"]
-use_parent_material = true
-layout_mode = 2
-text = "W: MOVE"
-horizontal_alignment = 1
-vertical_alignment = 2
-
-[node name="Label5" type="Label" parent="MovingContainer/ContentContainer/GridContainer"]
-use_parent_material = true
-layout_mode = 2
-text = "SHIFT: SPLIT"
-horizontal_alignment = 1
-vertical_alignment = 2
-
-[node name="Label6" type="Label" parent="MovingContainer/ContentContainer/GridContainer"]
-use_parent_material = true
-layout_mode = 2
-text = "X: DELETE"
-horizontal_alignment = 1
-vertical_alignment = 2
-
 [node name="PullOutTabButtonDown" parent="MovingContainer" instance=ExtResource("11_nha8c")]
 layout_mode = 2
 size_flags_horizontal = 4
