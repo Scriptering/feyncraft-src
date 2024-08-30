@@ -46,7 +46,7 @@ func generate(
 			state_interactions[StateLine.State.Initial],
 			state_interactions[StateLine.State.Final],
 			0, 5,
-			SolutionGeneration.generate_useable_interactions_from_particles(useable_particles),
+			SolutionGeneration.get_useable_interactions_from_particles(useable_particles),
 			SolutionGeneration.Find.One
 		) != [null]:
 			break

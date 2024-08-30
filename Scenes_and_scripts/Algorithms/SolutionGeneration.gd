@@ -704,25 +704,17 @@ func convert_interactions_to_general(interactions: Array) -> Array:
 	var converted_interactions : Array = interactions.map(convert_interaction_to_general)
 	
 	var general_interactions : Array = []
-	for interaction:Array in converted_interactions:
-		if interaction not in general_interactions:
-			general_interactions.push_back(interaction)
+	for i:int in interactions.size():
+		var converted_interaction: Array = converted_interactions[i]
+		var base_interaction: Array = interactions[i]
+		
+		if converted_interaction not in interactions:
+			general_interactions.push_back(base_interaction)
+
+		elif converted_interaction not in general_interactions:
+			general_interactions.push_back(converted_interaction)
 
 	return general_interactions
-
-func generate_useable_interactions_from_particles(useable_particles: Array) -> Array:
-	var useable_interactions: Array = []
-	
-	for interaction_type:Array in ParticleData.INTERACTIONS:
-		for interaction:Array in interaction_type:
-			if interaction.all(
-				func(particle: ParticleData.Particle) -> bool:
-					return particle in useable_particles
-			):
-				useable_interactions.push_back(interaction)
-	
-	return useable_interactions
-
 
 func get_print_time() -> String:
 	return "time: " + str(Time.get_ticks_usec() - start_time) + " usec"
