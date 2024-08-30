@@ -78,6 +78,7 @@ size_flags_vertical = 3
 
 [node name="AddProblem" parent="VBoxContainer" instance=ExtResource("3_tav84")]
 layout_mode = 2
+size_flags_vertical = 8
 minimum_size = Vector2(154, 28)
 action_mode = 1
 icon = ExtResource("5_6tky2")

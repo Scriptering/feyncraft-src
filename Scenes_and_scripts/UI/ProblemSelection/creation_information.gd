@@ -30,6 +30,7 @@ var submitted_diagrams: Array[DrawingMatrix] = []
 func _ready() -> void:
 	super()
 	reset()
+	update_buttons()
 
 func set_title() -> void:
 	title.text = tab_container.get_current_tab_control().title
@@ -42,18 +43,25 @@ func change_mode(mode_index: int) -> void:
 	tab_container.current_tab = mode_index
 	tab_container.get_current_tab_control().enter(problem)
 
-	prev_button.visible = mode_index != Mode.ParticleSelection
-	next_button.visible = mode_index != Mode.SolutionCreation
-	submit.visible = mode_index == Mode.SolutionCreation
-	
+	update_buttons()
 	set_title()
 
-func _on_problem_creation_info_next() -> void:
-	problem_creation.hide_no_solutions_found()
-	next_pressed.emit()
+func update_buttons() -> void:
+	var index:int = $PanelContainer/VBoxContainer/TabContainer.current_tab
+	
+	prev_button.visible = index != Mode.ParticleSelection
+	next_button.visible = index != Mode.SolutionCreation
+	
+	if index != Mode.ProblemCreation:
+		next_button.disabled = false
+	
+	submit.visible = index == Mode.SolutionCreation
 
 func no_solutions_found() -> void:
 	problem_creation.show_no_solutions_found()
+
+func no_particles() -> void:
+	problem_creation.toggle_no_particles(true)
 
 func _on_particle_selection_info_toggle_all(toggle: bool) -> void:
 	toggle_all.emit(toggle)

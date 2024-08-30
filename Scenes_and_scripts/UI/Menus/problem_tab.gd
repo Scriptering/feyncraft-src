@@ -168,6 +168,7 @@ func load_problem(problem: Problem) -> void:
 	
 	update_degree_label()
 	update_submitted_solution_count()
+	update_view_submission_button()
 	
 	NextProblem.disabled = !in_sandbox
 

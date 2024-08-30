@@ -28,4 +28,4 @@ func _on_custom_degree_toggled(toggled_on: bool) -> void:
 
 func enter(problem: Problem) -> void:
 	%CustomDegree.button_pressed = problem.custom_degree
-	%Degree.value = degree
+	%Degree.value = problem.degree

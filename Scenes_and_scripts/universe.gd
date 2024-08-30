@@ -111,7 +111,7 @@ func _on_main_menu_tutorial_pressed() -> void:
 
 func _on_world_problem_submitted() -> void:
 	modifying_problem_item.problem = Level.creating_problem
-	modifying_problem_item.save()
+	modifying_problem_item.finish_modification()
 
 	change_scene(Scene.MainMenu)
 

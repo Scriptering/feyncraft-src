@@ -95,7 +95,10 @@ func load_problem(problem: Problem) -> void:
 
 func load_problem_set(p_problem_set: ProblemSet, index: int) -> void:
 	problem_set = p_problem_set
-	problem_set.end_reached.connect(_on_problem_set_end_reached)
+	
+	if !problem_set.end_reached.is_connected(_on_problem_set_end_reached):
+		problem_set.end_reached.connect(_on_problem_set_end_reached)
+		
 	problem_set.current_index = index
 
 	problem_history.clear()
@@ -125,15 +128,22 @@ func enter_problem_creation() -> void:
 	ParticleButtons.load_problem(creating_problem)
 	
 	if creating_problem.state_interactions != [[],[]]:
-		EventBus.draw_raw_diagram.emit(
-			SolutionGeneration.generate_diagrams(
+		var diagram: ConnectionMatrix
+		for i: int in range(10):
+			diagram = SolutionGeneration.generate_diagrams(
 				creating_problem.state_interactions[StateLine.State.Initial],
 				creating_problem.state_interactions[StateLine.State.Final],
 				creating_problem.degree, creating_problem.degree,
 				SolutionGeneration.get_useable_interactions_from_particles(creating_problem.allowed_particles),
 				SolutionGeneration.Find.One
 			).front()
-		)
+			
+			if diagram:
+				break
+		
+		EventBus.draw_raw_diagram.emit(diagram)
+	
+	update_problem_creation()
 
 func enter_solution_creation() -> void:
 	ProblemTab.load_problem(creating_problem)
@@ -249,6 +259,9 @@ func _diagram_action_taken() -> void:
 
 	ProblemTab.update_degree_label()
 
+	update_problem_creation()
+
+func update_problem_creation() -> void:
 	if current_mode == Mode.ProblemCreation:
 		creation_info.update_problem_creation(
 			Diagram.are_quantum_numbers_matching(),
@@ -301,7 +314,7 @@ func problem_creation_to_solution_creation() -> void:
 	
 	creating_problem.solutions = creating_problem.solutions.filter(
 		func(solution: DrawingMatrix) -> bool:
-			return solution.allowed_particles.all(
+			return solution.get_used_base_particles().all(
 				func(particle: ParticleData.Particle) -> bool:
 					return particle in creating_problem.allowed_particles
 			)
@@ -337,10 +350,10 @@ func _on_creation_info_submit() -> void:
 	creating_problem.custom_solution_count = creation_info.get_custom_solution_count()
 
 	if creating_problem.custom_solutions:
-		creating_problem.solutions = ProblemTab.submitted_diagrams
+		creating_problem.solutions = ProblemTab.submitted_diagrams.duplicate(true)
 
 	if creating_problem.custom_solution_count:
-		creating_problem.solution_count = creation_info.get_solution_count()
+		creating_problem.solution_count = creation_info.get_custom_solution_count()
 
 	creating_problem.is_being_modified = false
 

@@ -60,7 +60,7 @@ func add_problem(problem: Problem, is_custom: bool = false) -> void:
 	problem_select.deleted.connect(_problem_deleted)
 	problem_select.play.connect(_problem_played)
 	problem_select.modify.connect(_problem_modified)
-	problem_select.save_problem_set.connect(_problem_saved)
+	problem_select.modification_finished.connect(_problem_modification_finished)
 	
 	problem_container.add_item(problem_select)
 	
@@ -126,7 +126,8 @@ func _problem_played(problem: Problem) -> void:
 func _problem_modified(problem_item: PanelContainer) -> void:
 	EventBus.problem_modified(problem_item)
 
-func _problem_saved(_problem_item: PanelContainer) -> void:
+func _problem_modification_finished(problem_item: PanelContainer) -> void:
+	problem_set.problems[get_problem_items().find(problem_item)] = problem_item.problem
 	save()
 
 func save() -> void:

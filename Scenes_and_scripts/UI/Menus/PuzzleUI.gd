@@ -18,7 +18,11 @@ func _ready() -> void:
 	super()
 	
 	MinParticleCount.min_value = MINIMUM_PARTICLE_COUNT
+	MinParticleCount.max_value = MAXIMUM_PARTICLE_COUNT
+	
 	MaxParticleCount.value = STARTING_MAX_PARTICLE_COUNT
+	
+	MaxParticleCount.min_value = MINIMUM_PARTICLE_COUNT
 	MaxParticleCount.max_value = MAXIMUM_PARTICLE_COUNT
 
 var min_particle_count: int:
@@ -37,10 +41,10 @@ func reset() -> void:
 	HadronFrequencySlider.value = HadronFrequency.Allowed
 
 func _on_min_particle_count_value_changed(value: float) -> void:
-	MaxParticleCount.min_value = value
+	MaxParticleCount.value = max(value, MaxParticleCount.value)
 	
 func _on_max_particle_count_value_changed(value: float) -> void:
-	MinParticleCount.max_value = value
+	MinParticleCount.value = min(value, MinParticleCount.value)
 
 func get_checks() -> Array[bool]:
 	return [

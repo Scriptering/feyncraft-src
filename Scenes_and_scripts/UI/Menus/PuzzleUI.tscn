@@ -93,7 +93,6 @@ min_value = 2.0
 max_value = 6.0
 value = 2.0
 alignment = 2
-update_on_text_changed = true
 select_all_on_focus = true
 script = ExtResource("5_pj5qq")
 
@@ -113,7 +112,6 @@ min_value = 2.0
 max_value = 6.0
 value = 6.0
 alignment = 2
-update_on_text_changed = true
 select_all_on_focus = true
 script = ExtResource("5_pj5qq")
 

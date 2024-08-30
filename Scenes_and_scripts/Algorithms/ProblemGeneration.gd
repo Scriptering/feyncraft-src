@@ -312,6 +312,9 @@ func setup_new_problem(problem: Problem) -> Problem:
 	if !problem:
 		return null
 	
+	if problem.state_interactions == [[],[]]:
+		return null
+	
 	var min_degree: int = problem.degree if problem.custom_degree else 1
 	var max_degree: int = problem.degree if problem.custom_degree else 6
 	
