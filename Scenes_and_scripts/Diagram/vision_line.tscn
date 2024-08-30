@@ -35,9 +35,9 @@ vec4 add_outline(vec4 color, vec2 pixel_size, sampler2D Texture, vec2 uv)
 	outline += texture(Texture, uv + vec2(-size.x, -size.y)).a;
 	outline += texture(Texture, uv + vec2(size.x, -size.y)).a;
 	outline = min(outline, 1.0);
-	
+
 	vec4 palette_outline_color = vec4(texture(colour_scheme, vec2(outline_color.r, outline_color.g)).rgb, outline_color.a);
-	
+
 	return mix(color, palette_outline_color, outline - color.a);
 }
 
@@ -45,7 +45,7 @@ vec4 add_outline(vec4 color, vec2 pixel_size, sampler2D Texture, vec2 uv)
 void fragment()
 {
 	vec4 color = texture(SCREEN_TEXTURE, SCREEN_UV);
-	
+
 	color = vec4(line_color.rgb, texture(TEXTURE, UV).a);
 	color = add_outline(color, TEXTURE_PIXEL_SIZE, TEXTURE, UV);
 

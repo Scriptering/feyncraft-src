@@ -93,10 +93,12 @@ func set_electroweak_check(new_value: bool) -> void:
 		weak_check.button_pressed = true
 
 func generate(checks: Array[bool]) -> void:
+	var useable_particles: Array[ParticleData.Particle] = ProblemGeneration.get_useable_particles_from_interaction_checks(checks)
+	
 	var generated_diagrams: Array[ConnectionMatrix] = (
 		SolutionGeneration.generate_diagrams(
 			InitialState, FinalState, min_degree, max_degree,
-			SolutionGeneration.get_usable_interactions(checks)
+			SolutionGeneration.get_useable_interactions_from_particles(useable_particles)
 		)
 	)
 	
