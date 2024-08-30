@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProblemSet" load_steps=9 format=3 uid="uid://cw7g8qxv1hrsr"]
+[gd_resource type="Resource" script_class="ProblemSet" load_steps=9 format=3 uid="uid://6dhws6bodc11"]
 
 [ext_resource type="Script" path="res://problem.gd" id="1_no25e"]
 [ext_resource type="Script" path="res://DrawingMatrix.gd" id="2_aw5mb"]
@@ -71,7 +71,7 @@ allow_other_solutions = false
 custom_solution_count = false
 custom_degree = false
 limited_particles = false
-hide_unavailable_particles = false
+hide_unavailable_particles = true
 title = "The Box"
 solutions = Array[ExtResource("2_aw5mb")]([])
 allowed_particles = Array[int]([6, 0])
@@ -83,7 +83,7 @@ solution_count = 4
 script = ExtResource("3_v1vbx")
 title = "Electromagnetic"
 problems = Array[ExtResource("1_no25e")]([SubResource("Resource_s20yk"), SubResource("Resource_77gyi"), SubResource("Resource_6ljgd"), SubResource("Resource_d4b7k"), SubResource("Resource_akb7c")])
-highest_index_reached = 0
-current_index = 0
+highest_index_reached = 5
+current_index = 4
 is_custom = false
 is_default = true

@@ -1,40 +1,30 @@
-[gd_scene load_steps=8 format=3 uid="uid://buskwt83mql4x"]
+[gd_scene load_steps=6 format=3 uid="uid://buskwt83mql4x"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_622tk"]
 [ext_resource type="Script" path="res://Scenes_and_scripts/UI/ProblemSelection/particle_selection_info.gd" id="2_ojpnu"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes_and_scripts/UI/Buttons/panelButton.tscn" id="3_qv0n1"]
 [ext_resource type="PackedScene" uid="uid://dorw3vr2amuy3" path="res://Scenes_and_scripts/Components/button_sound_component.tscn" id="4_une3u"]
-[ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes_and_scripts/UI/Tooltip.tscn" id="6_5gy8v"]
-[ext_resource type="Texture2D" uid="uid://dvx430022t0ua" path="res://Textures/Buttons/icons/next.png" id="8_rm0tq"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mhg50"]
 
-[node name="ParticleSelectionInfo" type="PanelContainer" node_paths=PackedStringArray("check_button", "next_button")]
+[node name="ParticleSelectionInfo" type="PanelContainer"]
 material = ExtResource("1_622tk")
 use_parent_material = true
-custom_minimum_size = Vector2(2.08165e-12, 150)
-offset_right = 124.0
-offset_bottom = 200.0
+custom_minimum_size = Vector2(120, 0)
+offset_right = 120.0
+offset_bottom = 107.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_mhg50")
 script = ExtResource("2_ojpnu")
-check_button = NodePath("VBoxContainer/VBoxContainer/CheckButton")
 title = "1. Particle Selection"
-next_button = NodePath("VBoxContainer/Buttons/NextStep")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-use_parent_material = true
-layout_mode = 2
-mouse_filter = 2
-alignment = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
 
-[node name="Body" type="Label" parent="VBoxContainer/VBoxContainer"]
+[node name="Body" type="Label" parent="VBoxContainer"]
 material = ExtResource("1_622tk")
 layout_mode = 2
 text = "- Unselect/Select available particles.
@@ -42,44 +32,32 @@ text = "- Unselect/Select available particles.
 "
 autowrap_mode = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 0
+alignment = 1
 
-[node name="ToggleOn" parent="VBoxContainer/VBoxContainer/HBoxContainer" instance=ExtResource("3_qv0n1")]
+[node name="ToggleOn" parent="VBoxContainer/HBoxContainer" instance=ExtResource("3_qv0n1")]
 layout_mode = 2
 minimum_size = Vector2(56, 24)
 text = "Toggle On"
 
-[node name="ToggleOff" parent="VBoxContainer/VBoxContainer/HBoxContainer" instance=ExtResource("3_qv0n1")]
+[node name="ToggleOff" parent="VBoxContainer/HBoxContainer" instance=ExtResource("3_qv0n1")]
 layout_mode = 2
 minimum_size = Vector2(56, 24)
 text = "Toggle Off"
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer/VBoxContainer"]
+[node name="HideUnavailableParticles" type="CheckButton" parent="VBoxContainer"]
+unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
 text = "Hide unavailable
 particles"
 
-[node name="ButtonSoundComponent" parent="VBoxContainer/VBoxContainer/CheckButton" instance=ExtResource("4_une3u")]
+[node name="ButtonSoundComponent" parent="VBoxContainer/HideUnavailableParticles" instance=ExtResource("4_une3u")]
 
-[node name="Buttons" type="HBoxContainer" parent="VBoxContainer"]
-use_parent_material = true
-layout_mode = 2
-mouse_filter = 2
-alignment = 1
-
-[node name="NextStep" parent="VBoxContainer/Buttons" instance=ExtResource("3_qv0n1")]
-layout_mode = 2
-minimum_size = Vector2(24, 21)
-icon = ExtResource("8_rm0tq")
-icon_use_parent_material = true
-
-[node name="Tooltip" parent="VBoxContainer/Buttons/NextStep" instance=ExtResource("6_5gy8v")]
-tooltip = "Next Step"
-
-[connection signal="pressed" from="VBoxContainer/VBoxContainer/HBoxContainer/ToggleOn" to="." method="_on_toggle_on_pressed"]
-[connection signal="pressed" from="VBoxContainer/VBoxContainer/HBoxContainer/ToggleOff" to="." method="_on_toggle_off_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/ToggleOn" to="." method="_on_toggle_on_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/ToggleOff" to="." method="_on_toggle_off_pressed"]
+[connection signal="toggled" from="VBoxContainer/HideUnavailableParticles" to="." method="_on_hide_unavailable_particles_toggled"]

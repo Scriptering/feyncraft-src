@@ -22,7 +22,7 @@ func init(state_manager: Node) -> void:
 func _on_sandbox_pressed() -> void:
 	sandbox_pressed.emit()
 
-func _on_exit_game(_mode: BaseMode.Mode, _problem: Problem) -> void:
+func _on_exit_game(_mode: int, _problem: Problem) -> void:
 	return
 
 func add_floating_menu(menu: Control) -> void:

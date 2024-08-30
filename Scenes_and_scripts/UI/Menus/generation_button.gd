@@ -179,10 +179,10 @@ func _on_electro_weak_toggled(button_pressed: bool) -> void:
 	weak_check.button_pressed = true
 
 func _on_min_degree_value_changed(value: float) -> void:
-	MaxDegree.min_value = value
+	MaxDegree.value = max(value, MaxDegree.value)
 
 func _on_max_degree_value_changed(value: float) -> void:
-	MinDegree.max_value = value
+	MinDegree.value = min(value, MinDegree.value)
 
 func _on_submit_feedback_push_in_finished() -> void:
 	for feedback_container in feedback_containers:

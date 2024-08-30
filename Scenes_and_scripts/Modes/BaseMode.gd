@@ -1,9 +1,7 @@
 extends Node
-class_name BaseMode
+class_name Mode
 
-@export var mode: Mode
-
-enum Mode {
+enum {
 	ParticleSelection,
 	ProblemCreation,
 	SolutionCreation,
@@ -13,28 +11,83 @@ enum Mode {
 	Null
 }
 
-var ProblemTab: Control
-var VisionTab: Control
-var GenerationTab: Control
-var MenuTab: Control
-var ParticleButtons: Control
-var CreationInformation: Control
+const particle_selection_visibility : Dictionary = {
+	"controls": true,
+	"vision": false,
+	"problem_options": false,
+	"generation": false,
+	"particles": true,
+	"problem": false,
+	"menu": true,
+	"health": false,
+	"export": false
+}
 
-func enter() -> void:
-	toggle_menu_visibility()
-	CreationInformation.change_mode(mode)
+const problem_creation_visibility : Dictionary = {
+	"controls": true,
+	"vision": true,
+	"problem_options": false,
+	"generation": false,
+	"particles": true,
+	"problem": false,
+	"menu": true,
+	"health": false,
+	"export": false
+}
 
-func exit() -> void:
-	pass
+const solution_creation_visibility : Dictionary = {
+	"controls": true,
+	"vision": true,
+	"problem_options": false,
+	"generation": false,
+	"particles": true,
+	"problem": true,
+	"menu": true,
+	"health": true,
+	"export": false
+}
 
-func input(_event: InputEvent) -> Mode:
-	return Mode.Null
+const sandbox_visibility : Dictionary = {
+	"controls": true,
+	"vision": true,
+	"problem_options": true,
+	"generation": true,
+	"particles": true,
+	"problem": true,
+	"menu": true,
+	"health": true,
+	"export": true
+}
 
-func process(_delta: float) -> Mode:
-	return Mode.Null
+const problem_solving_visibility : Dictionary = {
+	"controls": true,
+	"vision": true,
+	"problem_options": false,
+	"generation": false,
+	"particles": true,
+	"problem": true,
+	"menu": true,
+	"health": true,
+	"export": false
+}
 
-func physics_process(_delta: float) -> Mode:
-	return Mode.Null
+const tutorial_visibility : Dictionary = {
+	"controls": true,
+	"vision": false,
+	"problem_options": false,
+	"generation": false,
+	"particles": true,
+	"problem": true,
+	"menu": true,
+	"health": true,
+	"export": false
+}
 
-func toggle_menu_visibility() -> void:
-	pass
+const tab_visibility: Dictionary = {
+	ParticleSelection: particle_selection_visibility,
+	ProblemCreation: problem_creation_visibility,
+	SolutionCreation: solution_creation_visibility,
+	Sandbox: sandbox_visibility,
+	ProblemSolving: problem_solving_visibility,
+	Tutorial: tutorial_visibility
+}

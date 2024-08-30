@@ -1,6 +1,5 @@
 extends Node
 
-enum INTERACTION_TYPE {electroweak, strong, higgs, weak}
 enum Shade {Bright, Dark, None}
 
 const SHADED_PARTICLES := [ParticleData.BRIGHT_PARTICLES, ParticleData.DARK_PARTICLES, ParticleData.SHADED_PARTICLES]

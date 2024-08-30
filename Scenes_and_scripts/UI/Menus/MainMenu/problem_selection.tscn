@@ -18,7 +18,7 @@ script = ExtResource("1_qn5hj")
 grab_area = NodePath("ProblemSelection")
 
 [node name="ProblemSelection" type="TabContainer" parent="."]
-custom_minimum_size = Vector2(310, 215)
+custom_minimum_size = Vector2(339, 250)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

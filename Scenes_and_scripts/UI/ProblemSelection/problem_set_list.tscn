@@ -19,7 +19,7 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = -484.0
-offset_bottom = -129.0
+offset_bottom = -110.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 6
@@ -76,11 +76,13 @@ stretch_mode = 5
 
 [node name="PanelList" parent="VBoxContainer" instance=ExtResource("7_2up2w")]
 layout_mode = 2
+size_flags_vertical = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 use_parent_material = true
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
+size_flags_vertical = 8
 mouse_filter = 2
 alignment = 1
 

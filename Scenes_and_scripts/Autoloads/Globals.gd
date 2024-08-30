@@ -6,7 +6,7 @@ enum Scene {Level, MainMenu}
 enum Vision {Colour, Shade, Strength, None}
 
 var in_main_menu: bool = true
-var load_mode: BaseMode.Mode = BaseMode.Mode.Sandbox
+var load_mode: int = Mode.Sandbox
 var creating_problem: Problem = Problem.new()
 var creating_problem_set_file: String = ''
 var load_problem_set: ProblemSet = ProblemSet.new()

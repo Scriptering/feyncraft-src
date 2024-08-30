@@ -110,7 +110,6 @@ mouse_filter = 2
 [node name="Label" type="Label" parent="PanelContainer/VBoxContainer/CenterContainer"]
 use_parent_material = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
 text = "No diagrams to show :("
 
 [node name="MiniDiagramContainer" type="PanelContainer" parent="PanelContainer/VBoxContainer/CenterContainer"]

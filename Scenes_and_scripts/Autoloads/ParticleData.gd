@@ -90,7 +90,7 @@ enum Hadron {
 
 enum QuantumNumber {charge, lepton, electron, muon, tau, quark, up, down, charm, strange, top, bottom, bright, dark}
 
-enum INTERACTION_TYPE {electromagnetic, strong, weak, electroweak}
+enum Force {electromagnetic, strong, weak, electroweak}
 
 const QUANTUM_NUMBERS : Array[Array] = [
 [0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
@@ -125,6 +125,14 @@ const BOSON_DIMENSIONALITY : float = 1.0
 
 const LEPTONS : Array[ParticleData.Particle] = [
 	Particle.lepton, Particle.electron, Particle.muon, Particle.tau,
+	Particle.lepton_neutrino, Particle.electron_neutrino, Particle.muon_neutrino, Particle.tau_neutrino
+]
+
+const CHARGED_LEPTONS : Array[ParticleData.Particle] = [
+	Particle.lepton, Particle.electron, Particle.muon, Particle.tau
+]
+
+const NEUTRINOS : Array[ParticleData.Particle] = [
 	Particle.lepton_neutrino, Particle.electron_neutrino, Particle.muon_neutrino, Particle.tau_neutrino
 ]
 

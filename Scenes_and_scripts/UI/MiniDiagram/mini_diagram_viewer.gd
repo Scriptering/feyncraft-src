@@ -40,7 +40,7 @@ func _ready() -> void:
 	
 	resave_button.visible = allow_resaving
 	
-	BigDiagram.action_taken.connect(update_resave_button)
+	BigDiagram.action.connect(update_resave_button)
 
 func init(big_diagram: MainDiagram) -> void:
 	BigDiagram = big_diagram
@@ -108,7 +108,7 @@ func update_index_label() -> void:
 func update_diagram_visibility() -> void:
 	mini_diagram.visible = diagrams.size() > 0
 
-func update_resave_button(drawn_diagram: DrawingMatrix = BigDiagram.generate_drawing_matrix_from_diagram()) -> void:
+func update_resave_button(drawn_diagram: DrawingMatrix = BigDiagram.get_current_diagram()) -> void:
 	if !visible or !allow_resaving:
 		return
 	

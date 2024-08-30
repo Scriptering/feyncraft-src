@@ -1,7 +1,7 @@
 extends PanelContainer
 
 signal enter_problem_set(problem_set: ProblemSet, problem_set_file_path: String)
-signal play_problem_set(mode: BaseMode.Mode, problem_set: ProblemSet, problem: Problem)
+signal play_problem_set(mode: int, problem_set: ProblemSet, problem: Problem)
 signal close
 
 var problem_set_file_path: String = "res://saves/ProblemSets/"
