@@ -13,3 +13,11 @@ class_name PlayerStats
 	set(new_value) :
 		last_daily_completed_date = new_value
 		emit_changed()
+@export var muted: bool = false:
+	set(new_value) :
+		muted = new_value
+		emit_changed()
+@export var hide_labels: bool = false:
+	set(new_value) :
+		hide_labels = new_value
+		emit_changed()

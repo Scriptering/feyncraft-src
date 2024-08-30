@@ -19,7 +19,7 @@ enum Cursor {default, point, hold, snip, snipped, middle, hover, press, disabled
 
 const vision_colours : Array = [
 	[Color('c13e3e'), Color('3ec13e'), Color('4057be')],
-	[Color('ffffff'), Color('000000'), Color('727272')]
+	[Color('fff7ed'), Color('000000'), Color('727272')]
 ]
 
 @onready var particle_textures := {}
