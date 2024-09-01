@@ -1,9 +1,9 @@
 [gd_scene load_steps=7 format=3 uid="uid://b4oiaq2nic3ig"]
 
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes_and_scripts/UI/Buttons/panelButton.tscn" id="1_18ch8"]
-[ext_resource type="Texture2D" uid="uid://ueqdiuyv54f0" path="res://Textures/Buttons/icons/mute.png" id="3_cqmaf"]
 [ext_resource type="Texture2D" uid="uid://cea5mj3u65016" path="res://Textures/Buttons/square_pressed_active.png" id="3_fntun"]
 [ext_resource type="Script" path="res://Scenes_and_scripts/UI/Buttons/MuteButton.gd" id="3_yhqie"]
+[ext_resource type="Texture2D" uid="uid://bxlc5rvpwjq8o" path="res://Textures/Buttons/icons/unmute.png" id="4_w07h0"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bauei"]
 content_margin_left = 5.0
@@ -23,6 +23,7 @@ Button/styles/pressed = SubResource("StyleBoxTexture_bauei")
 theme = SubResource("Theme_cdixx")
 script = ExtResource("3_yhqie")
 button_pressed = true
+icon = ExtResource("4_w07h0")
 
 [node name="Button" parent="." index="0"]
 toggle_mode = true
@@ -38,6 +39,6 @@ theme_override_constants/separation = 3
 [node name="ButtonIcon" parent="ContentContainer/HBoxContainer" index="1"]
 visible = true
 use_parent_material = true
-texture = ExtResource("3_cqmaf")
+texture = ExtResource("4_w07h0")
 expand_mode = 3
 stretch_mode = 5

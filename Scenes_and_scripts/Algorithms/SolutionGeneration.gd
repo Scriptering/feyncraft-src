@@ -112,19 +112,19 @@ func generate_diagrams(
 			if matrix.get_unconnected_particle_count() > 0:
 				unconnected_interaction_matrices.push_back(matrix)
 				continue
-		
+
 			if !matrix.is_fully_connected(true):
 				continue
-			
+
 			var connection_matrix: ConnectionMatrix = matrix.get_connection_matrix()
 			connection_matrix.reindex()
-			
+
 			if completed_state_connection_matrices.any(
 				func(compare_matrix: ConnectionMatrix) -> bool:
 					return compare_matrix.is_duplicate(connection_matrix)
 			):
 				continue
-			
+
 			if is_matrix_colourless(matrix):
 				continue
 				
@@ -380,7 +380,7 @@ func connect_next_interaction(
 	interaction: Array, unconnected_interaction_matrix: InteractionMatrix, unconnected_particles: Array, interaction_count_left: int,
 	current_point: int, current_particle: ParticleData.Particle
 ) -> Array[InteractionMatrix]:
-	
+
 	var connected_matrices: Array[InteractionMatrix] = []
 	var extra_particles: Array = interaction.duplicate()
 	extra_particles.erase(current_particle)

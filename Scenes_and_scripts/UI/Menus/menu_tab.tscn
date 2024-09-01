@@ -30,15 +30,15 @@ expand_margin_bottom = 10.0
 [sub_resource type="Theme" id="Theme_jad7o"]
 PanelContainer/styles/panel = SubResource("StyleBoxTexture_4ap8b")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_7224u"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wbsis"]
 resource_local_to_scene = true
 shader = ExtResource("5_sq2sq")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_43fbm"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h7kb6"]
 resource_local_to_scene = true
 shader = ExtResource("5_sq2sq")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_848fd"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vkrwj"]
 resource_local_to_scene = true
 shader = ExtResource("5_sq2sq")
 
@@ -56,7 +56,7 @@ texture_margin_bottom = 5.0
 [sub_resource type="Theme" id="Theme_g2x2b"]
 Button/styles/pressed = SubResource("StyleBoxTexture_bauei")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_6dr4r"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hkfyp"]
 resource_local_to_scene = true
 shader = ExtResource("5_sq2sq")
 
@@ -86,7 +86,7 @@ theme_override_constants/separation = 0
 alignment = 1
 
 [node name="TabButton" parent="MovingContainer" instance=ExtResource("2_ofglp")]
-material = SubResource("ShaderMaterial_7224u")
+material = SubResource("ShaderMaterial_wbsis")
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -104,7 +104,7 @@ layout_mode = 2
 theme_override_constants/separation = 1
 
 [node name="Exit" parent="MovingContainer/ContentContainer/HBoxContainer" instance=ExtResource("4_eh4di")]
-material = SubResource("ShaderMaterial_43fbm")
+material = SubResource("ShaderMaterial_h7kb6")
 layout_mode = 2
 theme = ExtResource("8_1y1ot")
 minimum_size = Vector2(26, 26)
@@ -116,7 +116,7 @@ icon_use_parent_material = true
 tooltip = "Exit to menu"
 
 [node name="Mute" parent="MovingContainer/ContentContainer/HBoxContainer" instance=ExtResource("4_eh4di")]
-material = SubResource("ShaderMaterial_848fd")
+material = SubResource("ShaderMaterial_vkrwj")
 layout_mode = 2
 theme = SubResource("Theme_g2x2b")
 script = ExtResource("12_jlkch")
@@ -141,7 +141,7 @@ expand_icon = true
 tooltip = "Palettes"
 
 [node name="ShowLabels" parent="MovingContainer/ContentContainer/HBoxContainer" instance=ExtResource("4_eh4di")]
-material = SubResource("ShaderMaterial_6dr4r")
+material = SubResource("ShaderMaterial_hkfyp")
 layout_mode = 2
 theme = ExtResource("15_ijs5h")
 minimum_size = Vector2(26, 26)
