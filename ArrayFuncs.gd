@@ -28,6 +28,13 @@ static func find_var(array: Array, test_func: Callable, start_index: int = 0) ->
 	
 	return array.size()
 
+static func packed_int_any(array: PackedInt32Array, test_func: Callable) -> bool:
+	for e:int in array:
+		if test_func.call(e):
+			return true
+	
+	return false
+
 static func find_all_var(array: Array, test_func: Callable, start_index: int = 0) -> PackedInt32Array:
 	var found_ids: PackedInt32Array = []
 	

@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://blu0n6lwfysjf"]
+[gd_scene load_steps=29 format=3 uid="uid://blu0n6lwfysjf"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_m8wv1"]
 [ext_resource type="Texture2D" uid="uid://c2myqhjupqo25" path="res://Textures/Background/tile.png" id="2_3tgej"]
@@ -22,7 +22,6 @@
 [ext_resource type="Texture2D" uid="uid://cmknf0gynrux7" path="res://Textures/Buttons/icons/fire.png" id="17_ws57h"]
 [ext_resource type="Texture2D" uid="uid://b3diapu0ec332" path="res://Textures/Buttons/icons/puzzle_piece.png" id="19_fbmws"]
 [ext_resource type="PackedScene" uid="uid://dh4niqtuyy5o3" path="res://popup_button.tscn" id="21_eg5af"]
-[ext_resource type="Texture2D" uid="uid://bxlc5rvpwjq8o" path="res://Textures/Buttons/icons/unmute.png" id="21_lu08p"]
 [ext_resource type="PackedScene" uid="uid://b5pj0lanxu0o6" path="res://Scenes_and_scripts/UI/ColourPicker/palette_menu.tscn" id="22_5omgn"]
 [ext_resource type="Texture2D" uid="uid://co52c2vc04qom" path="res://Textures/Buttons/icons/credit.png" id="23_sgn8e"]
 [ext_resource type="Script" path="res://Scenes_and_scripts/UI/ShaderControl.gd" id="34_pwybq"]
@@ -307,7 +306,6 @@ layout_mode = 2
 size_flags_horizontal = 1
 size_flags_vertical = 1
 toggle_mode = true
-icon = ExtResource("21_lu08p")
 
 [node name="PaletteButton" parent="Center/VBoxContainer/HBoxContainer" instance=ExtResource("21_eg5af")]
 layout_mode = 2

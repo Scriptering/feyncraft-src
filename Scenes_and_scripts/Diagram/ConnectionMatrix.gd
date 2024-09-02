@@ -15,7 +15,7 @@ const state_factor : Dictionary = {
 
 const States : Array[StateLine.State] = StateLine.STATES
 
-@export var connection_matrix : Array = []
+@export var connection_matrix : Array[Array] = []
 @export var state_count: Array[int] = [0, 0, 0]
 @export var matrix_size : int = 0
 @export var last_added_id: int = -1
