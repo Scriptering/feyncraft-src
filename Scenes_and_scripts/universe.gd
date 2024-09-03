@@ -148,7 +148,7 @@ func load_daily() -> void:
 		var set_seed: int = int("%s%s%s"%[date.day, date.month, date.year])
 
 		var daily_problem := ProblemGeneration.setup_new_problem(ProblemGeneration.generate(
-			3, 6, ProblemGeneration.HadronFrequency.Allowed, ProblemGeneration.get_all_particles(),
+			4, 6, ProblemGeneration.HadronFrequency.Allowed, ProblemGeneration.get_all_particles(),
 			set_seed
 		))
 		daily_problem.title = "Daily"

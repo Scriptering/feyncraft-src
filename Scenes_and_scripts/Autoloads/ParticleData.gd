@@ -928,6 +928,9 @@ func anti(particle: ParticleData.Particle) -> ParticleData.Particle:
 	
 	return particle
 
+func is_anti(particle: ParticleData.Particle) -> bool:
+	return particle < 0
+
 func base(particle: ParticleData.Particle) -> ParticleData.Particle:
 	return abs(particle) as ParticleData.Particle
 

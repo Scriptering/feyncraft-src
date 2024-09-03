@@ -10,7 +10,7 @@ const MAX_NEXT_INTERACTION_ATTEMPTS : int = 100
 const MAX_INTERACTION_GENERATION_ATTEMPTS : int = 300
 
 func generate(
-	min_particle_count: int = 3, max_particle_count: int = 6, use_hadrons: HadronFrequency = HadronFrequency.Allowed,
+	min_particle_count: int = 4, max_particle_count: int = 6, use_hadrons: HadronFrequency = HadronFrequency.Allowed,
 	useable_particles: Array[ParticleData.Particle] = get_all_particles(), set_seed: int = Time.get_ticks_usec()
 ) -> Problem:
 	seed(set_seed)

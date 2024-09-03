@@ -74,14 +74,15 @@ func generate_diagrams(
 		return [null]
 	
 	var general_usable_interactions := convert_interactions_to_general(useable_interactions)
-	
 	var useable_particle_interactions : Dictionary = get_useable_particle_interactions(useable_interactions)
-	
 	var base_interaction_matrix := create_base_interaction_matrix(initial_state, final_state)
 	var forbidden_exit_points: Array = get_forbidden_exit_points(base_interaction_matrix)
-
-	var same_hadron_particles := get_shared_elements(get_hadron_particles(initial_state), get_hadron_particles(final_state))
-	var possible_hadron_connections := get_possible_hadron_connections(base_interaction_matrix, same_hadron_particles)
+	var shared_hadron_quarks := get_shared_elements(get_hadron_particles(initial_state), get_hadron_particles(final_state))
+	var hadrons: PackedInt32Array = base_interaction_matrix.find_all_ids(
+		func(id: int) -> bool:
+			return base_interaction_matrix.unconnected_matrix[id].size() > 1
+	)
+	var hadron_connections := get_hadron_connections(base_interaction_matrix, hadrons)
 
 	var degrees_to_check := get_degrees_to_check(
 		min_degree, max_degree, base_interaction_matrix, useable_interactions
@@ -90,16 +91,25 @@ func generate_diagrams(
 	var generated_connection_matrices : Array[ConnectionMatrix] = []
 	
 	for degree:int in degrees_to_check:
-		if print_results:
-			print("degree: " + str(degree) + " " + get_print_time())
-
-		var possible_hadron_connection_count := get_possible_hadron_connection_count(
-			base_interaction_matrix.get_unconnected_state_particle_count(StateLine.State.Both),
-			same_hadron_particles.size(), degree
+		#if print_results:
+			#print("degree: " + str(degree) + " " + get_print_time())
+		
+		var start_time: float = Time.get_ticks_usec()
+		
+		var hadron_connected_matrices := connect_hadrons(
+			base_interaction_matrix,
+			shared_hadron_quarks.size(),
+			hadron_connections,
+			degree
 		)
 		
-		var state_connected_matrices: Array[InteractionMatrix] = generate_unique_state_connected_interaction_matrices(
-			base_interaction_matrix, degree, possible_hadron_connections, possible_hadron_connection_count, useable_particle_interactions
+		print(Time.get_ticks_usec() - start_time)
+		print(hadron_connected_matrices.size())
+		
+		var state_connected_matrices : Array[InteractionMatrix] = []
+		for matrix: InteractionMatrix in hadron_connected_matrices:
+			state_connected_matrices += connect_state_fermions(
+				matrix, degree, useable_particle_interactions
 		)
 		
 		var completed_state_connection_matrices: Array[ConnectionMatrix] = []
@@ -112,19 +122,19 @@ func generate_diagrams(
 			if matrix.get_unconnected_particle_count() > 0:
 				unconnected_interaction_matrices.push_back(matrix)
 				continue
-		
+
 			if !matrix.is_fully_connected(true):
 				continue
-			
+
 			var connection_matrix: ConnectionMatrix = matrix.get_connection_matrix()
 			connection_matrix.reindex()
-			
+
 			if completed_state_connection_matrices.any(
 				func(compare_matrix: ConnectionMatrix) -> bool:
 					return compare_matrix.is_duplicate(connection_matrix)
 			):
 				continue
-			
+
 			if is_matrix_colourless(matrix):
 				continue
 				
@@ -176,6 +186,145 @@ func generate_diagrams(
 	
 	return generated_connection_matrices
 
+func connect_hadrons(
+	base_matrix: InteractionMatrix,
+	max_connections: int,
+	possible_connections: Array[PackedInt32Array],
+	degree: int
+) -> Array[InteractionMatrix]:
+	var unconnected_particle_count: int = base_matrix.get_unconnected_particle_count()
+	
+	var min_connections : int = max(
+		0, ceil((unconnected_particle_count - INTERACTION_SIZE*degree)/2)
+	)
+	
+	var unique_start_indices: PackedInt32Array = []
+	var seen_connections: Array[PackedInt32Array] = []
+	for i:int in possible_connections.size():
+		var connection: PackedInt32Array = possible_connections[i]
+		if connection in seen_connections:
+			continue
+		unique_start_indices.push_back(i)
+		seen_connections.push_back(connection)
+
+	var connected_matrices: Array[InteractionMatrix] = []
+	for connection_count: int in range(min_connections, max_connections + 1):
+		if connection_count == 0:
+			connected_matrices.push_back(base_matrix)
+			continue
+			
+		var count: int = 0
+		for index:int in unique_start_indices:
+			if index > possible_connections.size() - connection_count:
+				break
+
+			connected_matrices += add_next_hadron_connection(
+				base_matrix,
+				possible_connections,
+				index,
+				connection_count,
+				count,
+				unique_start_indices.slice(unique_start_indices.find(index) + 1)
+			)
+			
+	#connected_matrices = connected_matrices.filter(
+		#func(connected_matrix: InteractionMatrix) -> bool:
+			#return !has_disconnected_hadron(connected_matrix)
+	#)
+	
+	return connected_matrices
+
+func add_next_hadron_connection(
+	base_matrix: InteractionMatrix,
+	connections: Array[PackedInt32Array],
+	current_index: int,
+	required_connection_count: int,
+	current_connection_count: int,
+	unique_start_indices: PackedInt32Array
+) -> Array[InteractionMatrix]:
+	var connected_matrix: InteractionMatrix = base_matrix.duplicate(true)
+	
+	var connection: Array = connections[current_index]
+	
+	connected_matrix.insert_connection(connection)
+	
+	if (
+		connected_matrix.unconnected_matrix[connection[0]].is_empty()
+		and connected_matrix.unconnected_matrix[connection[1]].is_empty()
+		and (
+			is_disconnected_hadron(connected_matrix, connection[0])
+			or is_disconnected_hadron(connected_matrix, connection[1])
+		)
+	):
+		return []
+	
+	current_connection_count += 1
+	if current_connection_count == required_connection_count:
+		return [connected_matrix]
+	
+	var next_connected_matrices: Array[InteractionMatrix] = []
+	
+	if unique_start_indices.is_empty() or current_index + 1 != unique_start_indices[0]:
+		next_connected_matrices += add_next_hadron_connection(
+			connected_matrix,
+			connections,
+			current_index + 1,
+			required_connection_count,
+			current_connection_count,
+			unique_start_indices
+		)
+	
+	for next_index: int in unique_start_indices:
+		if next_index > (connections.size() - (required_connection_count - current_connection_count)):
+			break
+		
+		next_connected_matrices += add_next_hadron_connection(
+			connected_matrix,
+			connections,
+			next_index,
+			required_connection_count,
+			current_connection_count,
+			unique_start_indices.slice(unique_start_indices.find(next_index) + 1)
+		)
+	
+	return next_connected_matrices
+
+func has_disconnected_hadron(matrix: InteractionMatrix) -> bool:
+	for state_id: int in matrix.get_state_ids(StateLine.State.Both):
+		if !matrix.unconnected_matrix[state_id].is_empty():
+			continue
+		
+		var reachable_ids: PackedInt32Array = matrix.reach_ids(state_id, [], true)
+		
+		if reachable_ids.size() == matrix.matrix_size:
+			return false
+		
+		if ArrayFuncs.packed_int_any(
+			reachable_ids, 
+			func(id: int) -> bool:
+				return !matrix.unconnected_matrix[id].is_empty()
+		):
+			return false
+		
+		return true
+
+	return false
+
+func is_disconnected_hadron(matrix: InteractionMatrix, state_id: int = -1) -> bool:
+	var reachable_ids: PackedInt32Array = matrix.reach_ids(state_id, [], true)
+	
+	if reachable_ids.size() == matrix.matrix_size:
+		return false
+	
+	if ArrayFuncs.packed_int_any(
+		reachable_ids, 
+		func(id: int) -> bool:
+			return !matrix.unconnected_matrix[id].is_empty()
+	):
+		return false
+	
+	return true
+
 func cut_colourless_matrices(matrices: Array[ConnectionMatrix]) -> Array[ConnectionMatrix]:
 	var valid_matrices: Array[ConnectionMatrix] = []
 	
@@ -204,20 +353,15 @@ func is_matrix_colourless(matrix: ConnectionMatrix) -> bool:
 	
 	return Vision.find_colourless_interactions(zip.front(), zip.back(), vision_matrix, true).size() > 0
 
-func generate_unique_state_connected_interaction_matrices(
-	base_interaction_matrix: InteractionMatrix, degree: int, possible_hadron_connections: Array,
-	possible_hadron_connection_count: Array, useable_particle_interactions: Dictionary
-) -> Array[InteractionMatrix]:
-	
-	var hadron_connected_matrices: Array[InteractionMatrix] = generate_hadron_connected_matrices(
-		base_interaction_matrix, possible_hadron_connections, possible_hadron_connection_count
-	)
-	
-	var state_connected_matrices: Array[InteractionMatrix] = generate_state_connected_interaction_matrices(
-		hadron_connected_matrices, degree, useable_particle_interactions
-	)
-
-	return state_connected_matrices
+#func generate_unique_state_connected_interaction_matrices(
+	#base_interaction_matrix: InteractionMatrix, degree: int, useable_particle_interactions: Dictionary
+#) -> Array[InteractionMatrix]:
+	#
+	#var state_connected_matrices: Array[InteractionMatrix] = generate_state_connected_interaction_matrices(
+		#hadron_connected_matrices, degree, useable_particle_interactions
+	#)
+#
+	#return state_connected_matrices
 
 func generate_hadron_connected_matrices(
 	base_interaction_matrix: InteractionMatrix, possible_hadron_connections: Array, possible_hadron_connection_count: Array
@@ -380,7 +524,7 @@ func connect_next_interaction(
 	interaction: Array, unconnected_interaction_matrix: InteractionMatrix, unconnected_particles: Array, interaction_count_left: int,
 	current_point: int, current_particle: ParticleData.Particle
 ) -> Array[InteractionMatrix]:
-	
+
 	var connected_matrices: Array[InteractionMatrix] = []
 	var extra_particles: Array = interaction.duplicate()
 	extra_particles.erase(current_particle)
@@ -541,7 +685,6 @@ func get_forbidden_exit_points(base_interaction_matrix: InteractionMatrix) -> Ar
 			continue
 
 		forbidden_exit_points[i].resize(interaction.size())
-		
 		
 		for particle_index:int in interaction.size():
 			var particle: ParticleData.Particle = interaction[particle_index]
@@ -1303,8 +1446,6 @@ func generate_unique_interaction_matrices(
 	
 	var generated_matrices : Array[InteractionMatrix] = []
 	
-	print("time start now")
-	print_time()
 	for interaction_matrix:InteractionMatrix in state_connected_matrices:
 		var interaction_sets: Array = generate_interaction_sets(
 			interaction_matrix.get_unconnected_base_particles(),
@@ -1322,8 +1463,6 @@ func generate_unique_interaction_matrices(
 			usable_interactons
 		)
 
-	print("time end now")
-	print_time()
 	var unique_matrices : Array[InteractionMatrix] = []
 
 	for interaction_matrix:InteractionMatrix in generated_matrices:
@@ -1570,7 +1709,8 @@ func get_index_permutations(indices: PackedInt32Array, count: int) -> Array[Pack
 	return unique_permutations
 	
 func get_index_permutations_from_index(
-	indices: PackedInt32Array, count: int, current_index : int) -> Array[PackedInt32Array]:
+	indices: PackedInt32Array, count: int, current_index : int
+) -> Array[PackedInt32Array]:
 	
 	count -= 1
 	
@@ -1599,6 +1739,52 @@ func get_unique_instances(array: Array) -> Array:
 			unique_instances.append(element)
 	
 	return unique_instances
+
+func get_hadron_connections(
+	matrix: InteractionMatrix,
+	hadron_ids: PackedInt32Array
+) -> Array[PackedInt32Array]:
+	var connections: Array[PackedInt32Array] = []
+	
+	for from_id:int in hadron_ids:
+		var from_state: StateLine.State = matrix.get_state_from_id(from_id)
+
+		for to_id:int in hadron_ids:
+			if (
+				from_id == to_id
+				or from_state == matrix.get_state_from_id(to_id)
+			):
+				continue
+			
+			connections += get_hadron_connections_to_id(
+				matrix,
+				from_id,
+				from_state,
+				to_id
+			)
+
+	return connections
+
+func get_hadron_connections_to_id(
+	matrix: InteractionMatrix,
+	from_id: int,
+	from_state: int,
+	to_id: int
+) -> Array[PackedInt32Array]:
+	var connections: Array[PackedInt32Array] = []
+	
+	for from_particle: ParticleData.Particle in get_shared_elements(
+		matrix.unconnected_matrix[from_id], matrix.unconnected_matrix[to_id]
+	):
+		if !is_out_particle(from_particle, from_state):
+			continue
+		
+		connections.push_back(PackedInt32Array([from_id, to_id, from_particle]))
+	
+	return connections
+
+func is_out_particle(particle: ParticleData.Particle, state: StateLine.State) -> bool:
+	return StateLine.state_factor[state] == sign(particle)
 
 func get_possible_hadron_connections(interaction_matrix: InteractionMatrix, same_hadron_particles: Array) -> Array:
 	var unique_same_hadron_particles := get_unique_instances(same_hadron_particles)
@@ -1639,8 +1825,13 @@ func get_possible_hadron_connection_count(
 	if same_hadron_particles_count == 0:
 		return [0]
 	
-	var possible_hadron_connection_count := range(
-		max(ceil((unconnected_state_particle_count - INTERACTION_SIZE*degree)/2), 0),
+	var possible_hadron_connection_count : Array = range(
+		max(
+			ceil(
+				(unconnected_state_particle_count - INTERACTION_SIZE*degree)/2
+			)
+			, 0
+		),
 		same_hadron_particles_count + 1
 	)
 	

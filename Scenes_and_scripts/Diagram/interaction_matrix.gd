@@ -48,9 +48,6 @@ func connect_asymmetric_interactions(
 	
 	unconnected_matrix[to_id].erase(to_particle)
 	unconnected_particle_count[get_state_from_id(to_id)] -= 1
-
-func insert_connection(connection: Array) -> void:
-	connect_interactions(connection[Connection.from_id], connection[Connection.to_id], connection[Connection.particle])
 	
 func disconnect_interactions(
 	from_id: int, to_id: int, particle: int = ParticleData.PARTICLE.none, bidirectional: bool = false, reverse: bool = false
@@ -200,23 +197,18 @@ func clear_connection_matrix() -> void:
 		for j:int in matrix_size:
 			connection_matrix[i][j].clear()
 
-func reduce_to_base_particles() -> void:
-	unconnected_matrix = unconnected_matrix.map(
-		func(interaction:Array) -> Array:
-			return interaction.map(
-				func(particle:ParticleData.Particle) -> ParticleData.Particle:
-					return abs(particle)
-	))
-
-	connection_matrix = connection_matrix.map(
-		func(interaction:Array) -> Array:
-			return interaction.map(
-				func(connection:Array) -> Array:
-					return connection.map(
-						func(particle:ParticleData.Particle) -> ParticleData.Particle:
-							return abs(particle)
+func reduce_to_base_particles() -> void:	
+	for i:int in matrix_size:
+		unconnected_matrix[i] = unconnected_matrix[i].map(
+			func(particle: ParticleData.Particle) -> ParticleData.Particle:
+				return ParticleData.base(particle)
+		)
+		
+		for j:int in matrix_size:
+			connection_matrix[i][j] = connection_matrix[i][j].map(
+				func(particle: ParticleData.Particle) -> ParticleData.Particle:
+					return ParticleData.base(particle)
 			)
-	))
 
 func get_combined_matrix(new_matrix:Variant) -> void:
 	if !new_matrix is InteractionMatrix:

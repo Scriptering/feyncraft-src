@@ -351,7 +351,6 @@ func update_colour(valid_diagram: DrawingMatrix) -> void:
 			convert_path_colours(colour_path_colours, current_vision),
 			colour_matrix
 		)
-	print(Time.get_ticks_usec() - time)
 
 func update_path_vision(valid_diagram: DrawingMatrix) -> void:
 	var vision_matrix: DrawingMatrix = Vision.generate_vision_matrix(current_vision, valid_diagram)
