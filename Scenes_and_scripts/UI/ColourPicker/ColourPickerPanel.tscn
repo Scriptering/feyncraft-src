@@ -17,13 +17,13 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u3xo3"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_dklir"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cc1rd"]
 resource_local_to_scene = true
 shader = ExtResource("6_kwlog")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7k5dl"]
 
-[node name="ColourPickerPanel" type="Control" node_paths=PackedStringArray("colour_picker", "title_label", "GrabAreas")]
+[node name="ColourPickerPanel" type="Control" node_paths=PackedStringArray("colour_picker", "title_label", "grab_area")]
 material = ExtResource("1_xotca")
 layout_mode = 3
 anchors_preset = 15
@@ -37,13 +37,15 @@ mouse_filter = 2
 script = ExtResource("2_5qwg5")
 colour_picker = NodePath("PanelContainer/VBoxContainer/PanelContainer/MarginContainer/ColorPicker")
 title_label = NodePath("PanelContainer/VBoxContainer/Header/VBoxSeperator/Label")
-GrabAreas = [NodePath("PanelContainer")]
+grab_area = NodePath("PanelContainer")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 use_parent_material = true
 layout_mode = 2
 offset_right = 139.0
 offset_bottom = 183.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
 use_parent_material = true
@@ -151,7 +153,7 @@ patch_margin_right = 5
 patch_margin_bottom = 5
 
 [node name="ColourSampler" parent="PanelContainer/VBoxContainer" instance=ExtResource("5_8vrca")]
-material = SubResource("ShaderMaterial_dklir")
+material = SubResource("ShaderMaterial_cc1rd")
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_7k5dl")
 

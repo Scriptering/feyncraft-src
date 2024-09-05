@@ -16,7 +16,8 @@ signal diagram_finger_pressed(index: int)
 signal diagram_mouse_pressed()
 
 signal grabbable_object_clicked(obj: Node)
-signal deletable_object_clicked(obh: Node)
+signal deletable_object_clicked(obj: Node)
+signal deletable_object_hover_changed(obj: Node, hovered: bool)
 
 signal show_disabled
 signal hide_disabled

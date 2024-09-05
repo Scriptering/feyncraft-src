@@ -123,6 +123,27 @@ func _gui_input(event: InputEvent) -> void:
 	):
 		EventBus.diagram_mouse_pressed.emit()
 		check_particle_line_deleted(event.position)
+	#elif(
+		#event is InputEventMouseMotion
+		#and event.button_index == MOUSE_BUTTON_LEFT
+	#):
+		#update_deletion_alphas(event.position)
+
+#func update_deletion_alphas(pos: Vector2) -> void:
+	#if StateManager.state != BaseState.State.Deleting:
+		#return
+	#
+	#var deletion_alpha: float = 0.9
+	#
+	#for interaction:Interaction in get_interactions():
+		#if interaction.hovering:
+			#interaction.set_shader_params(deletion_alpha)
+			#return
+	#
+	#for particle_line:ParticleLine in get_particle_lines():
+		#if particle_line.is_hovered(pos + global_position - particle_line.global_position):
+			#particle_line.set_interaction_alpha(deletion_alpha)
+			#return
 
 func check_particle_line_deleted(pos: Vector2) -> void:
 	if StateManager.state != BaseState.State.Deleting:
@@ -409,7 +430,11 @@ func move_stateline(stateline: StateLine) -> void:
 		interaction.position.x = stateline.position.x
 		
 		for particle_line in interaction.connected_lines:
-			particle_line.points[particle_line.get_point_at_position(interaction_position)].x = int(stateline.position.x)
+			var point: ParticleLine.Point = particle_line.get_point_at_position(interaction_position)
+			particle_line.set_point(
+				point,
+				Vector2i(int(stateline.position.x), particle_line.points[point].y)
+			)
 			particle_line.queue_update()
 		
 		interaction.queue_update()
@@ -474,10 +499,7 @@ func connect_particle_line(
 		particle_line.connect_interaction(to_connect_interaction, point)
 
 func is_line_placement_valid(particle_line: ParticleLine) -> bool:
-	if (
-		particle_line.points[ParticleLine.Point.Start]
-		== particle_line.points[ParticleLine.Point.End]
-	):
+	if particle_line.line_vector.is_zero_approx():
 		return false
 	
 	for comparison_particle_line:ParticleLine in get_particle_lines():
@@ -590,7 +612,7 @@ func remove_lonely_interactions(interactions: Array[Interaction] = get_interacti
 func split_line(line_to_split: ParticleLine, splitting_interaction: Interaction) -> ParticleLine:
 	var new_start_point: Vector2 = line_to_split.points[ParticleLine.Point.Start]
 	
-	line_to_split.points[ParticleLine.Point.Start] = splitting_interaction.positioni()
+	line_to_split.set_point(ParticleLine.Point.Start, splitting_interaction.positioni())
 	
 	var new_particle_line := draw_particle_line(
 		new_start_point, splitting_interaction.positioni(), line_to_split.base_particle
@@ -665,8 +687,8 @@ func can_rejoin_lines(line1: ParticleLine, line2: ParticleLine) -> bool:
 		return false
 
 	if (
-		line1.line_vector.normalized() == line2.line_vector.normalized() or
-		line1.line_vector.normalized() == -line2.line_vector.normalized()
+		line1.line_vector_norm == line2.line_vector_norm or
+		line1.line_vector_norm == -line2.line_vector_norm
 	):
 		return true
 	
@@ -686,7 +708,7 @@ func rejoin_lines(line_to_extend: ParticleLine, line_to_delete: ParticleLine) ->
 	else:
 		point_to_move_to = ParticleLine.Point.Start
 	
-	line_to_extend.points[point_to_move] = line_to_delete.points[point_to_move_to]
+	line_to_extend.set_point(point_to_move, line_to_delete.points[point_to_move_to])
 	line_to_extend.connected_interactions[point_to_move] = line_to_delete.connected_interactions[point_to_move_to]
 	line_to_extend.connected_interactions[point_to_move].connect_line(line_to_extend)
 	
@@ -939,12 +961,12 @@ func draw_particle_line(
 	var particle_line : ParticleLine = create_particle_line()
 	particle_line.init(self)
 	
-	particle_line.points[particle_line.Point.Start] = start_position
+	particle_line.set_point(particle_line.Point.Start, start_position)
 	
 	if end_position == Vector2i.ZERO:
-		particle_line.points[particle_line.Point.End] = crosshair.positioni()
+		particle_line.set_point(particle_line.Point.End, crosshair.positioni())
 	else:
-		particle_line.points[particle_line.Point.End] = end_position
+		particle_line.set_point(particle_line.Point.End, end_position)
 	
 	particle_line.base_particle = base_particle
 	particle_line.show_labels = show_line_labels

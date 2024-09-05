@@ -4,7 +4,7 @@ class_name InteractionInformation
 signal closed_button_pressed
 
 enum Tab {QuantumNumbers, Other}
-enum OtherProperties {Degree, Dimensionality, ColourlessGluon, NeutralPhoton, Colour, InvalidInteraction}
+enum OtherProperties {Degree, Dimensionality, ColourlessGluon, NeutralPhoton, ShadelessZ, NoHInvalid, Colour, InvalidInteraction}
 
 @onready var data_containers : Array[GridContainer] = [
 	$"PanelContainer/TabContainer/Quantum Numbers/Quantum Numbers",
@@ -19,7 +19,7 @@ var valid_icon := preload("res://Scenes_and_scripts/UI/Info/valid.tscn")
 
 #1 charge, 2 lepton num., 3 e. num, 4 mu num., 5 tau num., 6 quark num., 7 up num., 8 down num., 9 charm num., 10 strange num., 11 top num., 12 bottom num., 13 colour
 var property_names := [['charge', 'lepton num.', 'electron num.', 'muon num.', 'tau num.', 'baryon num.', 'up num.', 'down num.', 'charm num.', 'strange num.', 'top num.', 'bottom num.', 'bright num.', 'dark num.'],
-['degree', 'dimensionality', 'colourless gluon?', 'neutral photon?', 'colour', 'interaction invalid']]
+['degree', 'dimensionality', 'colourless gluon?', 'photon from neutral?', "Z from shadeless?", "H-less process valid?", 'colour', 'interaction invalid']]
 
 func _ready() -> void:
 	super._ready()
@@ -34,6 +34,9 @@ func build_table() -> void:
 	clear_table()
 	build_quantum_number_tab()
 	build_other_tab()
+
+func get_bool_str(b: bool) -> String:
+	return "Yes" if b else "No"
 
 func clear_table() -> void:
 	for container in data_containers:
@@ -61,37 +64,41 @@ func fraction_to_string(fraction: float) -> String:
 	return str(int(round(fraction*3)))+'/3'
 
 func build_other_tab() -> void:
+	var particles := ConnectedInteraction.connected_particles
+	
 	add_label(data_containers[Tab.Other], property_names[Tab.Other][OtherProperties.Degree])
 	add_label(data_containers[Tab.Other], "= "+ str(ConnectedInteraction.degree))
 	add_label(data_containers[Tab.Other], '')
 	
 	add_label(data_containers[Tab.Other], property_names[Tab.Other][OtherProperties.Dimensionality])
-	add_label(data_containers[Tab.Other], "= "+ str(ConnectedInteraction.dimensionality) +
-		(" ( <= 4 ) " if ConnectedInteraction.is_dimensionality_valid() else ' ( > 4 ) '))
-	add_invalid(data_containers[Tab.Other], ConnectedInteraction.is_dimensionality_valid())
+	add_label(data_containers[Tab.Other], "= "+ str(ConnectedInteraction.get_dimensionality(particles)) +
+		(" ( <= 4 ) " if ConnectedInteraction.is_dimensionality_valid(particles) else ' ( > 4 ) '))
+	add_invalid(data_containers[Tab.Other], ConnectedInteraction.is_dimensionality_valid(particles))
+	
 	
 	if ConnectedInteraction.has_base_particle_connected(ParticleData.Particle.gluon):
 		add_label(data_containers[Tab.Other], property_names[Tab.Other][OtherProperties.ColourlessGluon])
-		var colourless_gluon: bool = ConnectedInteraction.has_colourless_gluon() or !ConnectedInteraction.valid_colourless
-		add_label(
-			data_containers[Tab.Other],
-			'  Yes  ' if colourless_gluon else '  No  ')
+		var colourless_gluon: bool = ConnectedInteraction.has_colourless_gluon(particles) or !ConnectedInteraction.valid_colourless
+		add_label(data_containers[Tab.Other], "  %s  "%[get_bool_str(colourless_gluon)])
 		add_invalid(data_containers[Tab.Other], !colourless_gluon)
 	
 	if ConnectedInteraction.has_base_particle_connected(ParticleData.Particle.photon):
+		var neutral_photon: bool = ConnectedInteraction.has_neutral_photon(particles)
 		add_label(data_containers[Tab.Other], property_names[Tab.Other][OtherProperties.NeutralPhoton])
-		add_label(data_containers[Tab.Other], '  Yes  ' if ConnectedInteraction.has_neutral_photon() else '  No  ')
-		add_invalid(data_containers[Tab.Other], !ConnectedInteraction.has_neutral_photon())
-	
-	if (
-		ConnectedInteraction.get_invalid_quantum_numbers().size() == 0 and
-		!ConnectedInteraction.has_colourless_gluon() and !ConnectedInteraction.has_neutral_photon() and
-		!ConnectedInteraction.is_interaction_in_list() and
-		ConnectedInteraction.connected_lines.size() >= Interaction.INTERACTION_SIZE_MINIMUM
-	):
-		add_label(data_containers[Tab.Other], property_names[Tab.Other][OtherProperties.InvalidInteraction])
-		add_label(data_containers[Tab.Other], '')
-		add_invalid(data_containers[Tab.Other], false)
+		add_label(data_containers[Tab.Other], "  %s  "%[get_bool_str(neutral_photon)])
+		add_invalid(data_containers[Tab.Other], !neutral_photon)
+		
+	if ConnectedInteraction.has_base_particle_connected(ParticleData.Particle.H):
+		var is_no_H_valid: bool = ConnectedInteraction.is_no_H_valid(particles)
+		add_label(data_containers[Tab.Other], property_names[Tab.Other][OtherProperties.NoHInvalid])
+		add_label(data_containers[Tab.Other], "  %s  "%[get_bool_str(is_no_H_valid)])
+		add_invalid(data_containers[Tab.Other], is_no_H_valid)
+
+	elif ConnectedInteraction.has_base_particle_connected(ParticleData.Particle.Z):
+		var neutral_Z: bool = ConnectedInteraction.has_shadeless_Z(particles)
+		add_label(data_containers[Tab.Other], property_names[Tab.Other][OtherProperties.ShadelessZ])
+		add_label(data_containers[Tab.Other], "  %s  "%[get_bool_str(neutral_Z)])
+		add_invalid(data_containers[Tab.Other], !neutral_Z)
 
 func add_label(container: GridContainer, text: String) -> void:
 	var label := Label.new()
