@@ -97,6 +97,13 @@ func find_all_unconnected_state_particle(particle: ParticleData.Particle, state:
 func is_hadron(id: int) -> bool:
 	return unconnected_matrix[id].size() > 1
 
+func has_unconnected_particles() -> bool:
+	return (
+		unconnected_particle_count[StateLine.State.Initial]
+		+ unconnected_particle_count[StateLine.State.Final]
+		+ unconnected_particle_count[StateLine.State.None]
+	)
+
 func get_unconnected_particles() -> Array:
 	var unconnected_particles : Array = []
 	for interaction:Array in unconnected_matrix:

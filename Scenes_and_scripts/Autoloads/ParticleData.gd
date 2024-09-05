@@ -966,3 +966,6 @@ func has_colour(particle: ParticleData.Particle) -> bool:
 
 func has_shade(particle: ParticleData.Particle) -> bool:
 	return base(particle) in SHADED_PARTICLES
+
+func is_fermion(particle: ParticleData.Particle) -> bool:
+	return base(particle) in FERMIONS
