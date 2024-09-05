@@ -449,6 +449,7 @@ var INTERACTION_STRENGTHS: Array = [
 		[ALPHA_W],
 		[ALPHA_W],
 		[ALPHA_W],
+		[ALPHA_W],
 		[ALPHA_W*ALPHA_W],
 		[ALPHA_W*ALPHA_W],
 		[ALPHA_W*ALPHA_W],
@@ -466,6 +467,7 @@ var INTERACTION_STRENGTHS: Array = [
 		[ALPHA_W*PARTICLE_MASSES[Particle.muon_neutrino]/PARTICLE_MASSES[Particle.H]],
 		[ALPHA_W*PARTICLE_MASSES[Particle.tau_neutrino]/PARTICLE_MASSES[Particle.H]],
 		[ALPHA_W*PARTICLE_MASSES[Particle.Z]/PARTICLE_MASSES[Particle.H]],
+		[ALPHA_W*PARTICLE_MASSES[Particle.H]/PARTICLE_MASSES[Particle.H]],
 		[(ALPHA_W * PARTICLE_MASSES[Particle.Z]/PARTICLE_MASSES[Particle.H])**2],
 		[(ALPHA_W * PARTICLE_MASSES[Particle.W]/PARTICLE_MASSES[Particle.H])**2],
 		[ALPHA_W**2]
@@ -936,3 +938,31 @@ func base(particle: ParticleData.Particle) -> ParticleData.Particle:
 
 func base_hadron(hadron: ParticleData.Hadron) -> ParticleData.Hadron:
 	return abs(hadron) as ParticleData.Hadron
+
+func base_particles(particles: Array[ParticleData.Particle]) -> Array[ParticleData.Particle]:
+	var based_particles := particles
+	for i:int in based_particles.size():
+		based_particles[i] = base(particles[i])
+	
+	return based_particles
+
+func dimensionality(particle: ParticleData.Particle) -> float:
+	if base(particle) in BOSONS:
+		return BOSON_DIMENSIONALITY
+	
+	return FERMION_DIMENSIONALITY
+
+func quantum_numbers(particle: ParticleData.Particle) -> Array[float]:
+	return QUANTUM_NUMBERS[base(particle)]
+
+func quantum_number(particle: ParticleData.Particle, quantum_number: QuantumNumber) -> float:
+	return QUANTUM_NUMBERS[base(particle)][quantum_number]
+
+func has_charge(particle: ParticleData.Particle) -> bool:
+	return anti(particle) * quantum_number(base(particle), QuantumNumber.charge) != 0
+
+func has_colour(particle: ParticleData.Particle) -> bool:
+	return base(particle) in COLOUR_PARTICLES
+
+func has_shade(particle: ParticleData.Particle) -> bool:
+	return base(particle) in SHADED_PARTICLES

@@ -32,8 +32,9 @@ var crosshair: Crosshair
 
 var points : Array[Vector2i] = [Vector2i.LEFT, Vector2i.LEFT] : set = _set_points
 var prev_points : Array[Vector2i] = [Vector2i(0, 0), Vector2i(0, 0)]
-var line_vector : Vector2 = Vector2.ZERO:
-	get: return points[Point.End] - points[Point.Start]
+var line_vector: Vector2 = Vector2.ZERO
+var line_vector_length: float = 0
+var line_vector_norm: Vector2 = Vector2.ZERO
 
 var base_particle := ParticleData.Particle.none
 var particle := ParticleData.Particle.none : get = _get_particle
@@ -86,6 +87,9 @@ func _ready() -> void:
 	has_colour = base_particle in ParticleData.COLOUR_PARTICLES
 	has_shade = base_particle in ParticleData.SHADED_PARTICLES
 	quantum_numbers = ParticleData.QUANTUM_NUMBERS[base_particle]
+	
+	set_line_vector()
+	
 	set_dimensionality()
 	set_line_width()
 
@@ -104,10 +108,16 @@ func init(diagram: MainDiagram) -> void:
 	Final = diagram.StateLines[StateLine.State.Final]
 	crosshair = diagram.crosshair
 
+func set_point(point: Point, pos: Vector2i) -> void:
+	move(point, pos)
+
 func _set_points(new_points: Array[Vector2i]) -> void:
 	points = new_points
+	set_line_vector()
+
 	set_anti()
 	set_left_and_right_points()
+	queue_update()
 
 func _get_particle() -> ParticleData.Particle:
 	return (anti * base_particle) as ParticleData.Particle
@@ -117,6 +127,11 @@ func _get_quantum_numbers() -> Array:
 	for quantum_number:ParticleData.QuantumNumber in ParticleData.QuantumNumber.values():
 		quantum_numbers_temp.append(anti*quantum_numbers[quantum_number])
 	return quantum_numbers_temp
+
+func set_line_vector() -> void:
+	line_vector = points[Point.End] - points[Point.Start]
+	line_vector_length = line_vector.length()
+	line_vector_norm = line_vector.normalized()
 
 func get_quantum_number(quantum_number: ParticleData.QuantumNumber) -> float:
 	return anti * ParticleData.QUANTUM_NUMBERS[base_particle][quantum_number]
@@ -200,10 +215,10 @@ func is_position_on_line(test_position: Vector2i) -> bool:
 	if test_position in points:
 		return false
 	
-	if !ArrayFuncs.is_vec_zero_approx(split_vector.normalized() - line_vector.normalized()):
+	if !ArrayFuncs.is_vec_zero_approx(split_vector.normalized() - line_vector_norm):
 		return false
 
-	if split_vector.length() >= line_vector.length():
+	if split_vector.length() >= line_vector_length:
 		return false
 	
 	return true
@@ -255,7 +270,10 @@ func update() -> void:
 
 func move(point:Point, to_position: Vector2i) -> void:
 	points[point] = to_position
+	set_line_vector()
+	
 	set_anti()
+	set_left_and_right_points()
 	queue_update()
 
 func move_line() -> void:
@@ -265,21 +283,21 @@ func move_line() -> void:
 	LineJointStart.points[Point.End] = (
 		Vector2(points[Point.Start])
 		+ line_joint_start_length
-		* self.line_vector.normalized() 
+		* line_vector_norm
 	)
 	
 	if base_particle == ParticleData.Particle.gluon:
-		var number_of_gluon_loops : int = floor((self.line_vector.length() - line_joint_start_length - line_joint_end_length) / gluon_loop_length)
+		var number_of_gluon_loops : int = floor((line_vector_length - line_joint_start_length - line_joint_end_length) / gluon_loop_length)
 		
 		LineJointEnd.points[Point.Start] = (
 			LineJointStart.points[Point.End] +
-			gluon_loop_length * number_of_gluon_loops * self.line_vector.normalized()
+			gluon_loop_length * number_of_gluon_loops * line_vector_norm
 		)
 	else:
 		LineJointEnd.points[Point.Start] = (
 			Vector2(points[Point.End])
 			- line_joint_end_length
-			* self.line_vector.normalized()
+			* line_vector_norm
 		)
 	
 	LineMiddle.points[Point.Start] = LineJointStart.points[Point.End]
@@ -309,8 +327,8 @@ func get_arrow_visiblity() -> bool:
 	return true
 
 func move_arrow() -> void:
-	Arrow.position = Vector2(points[Point.Start]) + self.line_vector / 2
-	Arrow.rotation = self.line_vector.angle()
+	Arrow.position = Vector2(points[Point.Start]) + line_vector / 2
+	Arrow.rotation = line_vector.angle()
 
 func move_text() -> void:
 	match get_on_state_line():
@@ -337,7 +355,7 @@ func move_text() -> void:
 	
 	Text.position = (
 		(Vector2(points[right_point]) - Vector2(points[left_point])) / 2 + Vector2(points[left_point]) +
-		text_gap * self.line_vector.orthogonal().normalized()
+		text_gap * line_vector.orthogonal().normalized()
 	)
 
 func set_text_visiblity() -> void:
@@ -390,8 +408,8 @@ func is_overlapping(particle_line: ParticleLine) -> bool:
 		return false
 	
 	if !(
-		particle_line.line_vector.normalized() == line_vector.normalized()
-		|| particle_line.line_vector.normalized() == -line_vector.normalized()
+		particle_line.line_vector_norm == line_vector_norm
+		|| particle_line.line_vector_norm == -line_vector_norm
 	):
 		return false
 	
@@ -401,14 +419,14 @@ func is_overlapping(particle_line: ParticleLine) -> bool:
 	)
 
 func is_hovered(pos: Vector2) -> bool:
-	var v := line_vector.normalized();
+	var v := line_vector_norm;
 	var m := pos - Vector2(points[Point.Start]);
 
 	var lambda := m.x*v.x + m.y*v.y
 	var rho :=   -m.x*v.y + m.y*v.x
 
 
-	if lambda < 0 or lambda > line_vector.length():
+	if lambda < 0 or lambda > line_vector_length:
 		return false
 	
 	if rho > click_area_width or rho < -click_area_width:
