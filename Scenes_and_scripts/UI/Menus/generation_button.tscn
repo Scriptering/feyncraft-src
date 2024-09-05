@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://bgvo11j4kfjdc"]
+[gd_scene load_steps=23 format=3 uid="uid://bgvo11j4kfjdc"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_h3eo1"]
 [ext_resource type="Script" path="res://Scenes_and_scripts/UI/Menus/generation_button.gd" id="2_plgpl"]
@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://dvx430022t0ua" path="res://Textures/Buttons/icons/next.png" id="7_dlb5i"]
 [ext_resource type="Texture2D" uid="uid://bf4xxweukjvsb" path="res://Textures/Buttons/icons/interaction.png" id="8_8ns2c"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes_and_scripts/UI/Buttons/panelButton.tscn" id="8_ihypl"]
+[ext_resource type="Theme" uid="uid://cfmbhoq8cuoge" path="res://Resources/Themes/ProjectTheme.tres" id="11_cnrrw"]
 [ext_resource type="Texture2D" uid="uid://ikybt5yg3l6m" path="res://Textures/Buttons/icons/Generate.png" id="17_gy2j5"]
 [ext_resource type="Script" path="res://Scenes_and_scripts/UI/Menus/PullOutTab.gd" id="25_jtb01"]
 [ext_resource type="Texture2D" uid="uid://tql14gtq05lf" path="res://Textures/UI/Information/invalid.png" id="26_mv20u"]
@@ -39,7 +40,7 @@ texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 expand_margin_left = 15.0
 
-[node name="GenerationButton" type="Control" node_paths=PackedStringArray("EM_check", "strong_check", "weak_check", "electroweak_check", "SaveStates", "Generate", "ViewDiagrams", "MinDegree", "MaxDegree", "Equation", "NoStatesToSave", "StatesSaved", "NoDiagramsFound", "GenerationCompleted", "ContentContainer", "TabButton", "MovingContainer")]
+[node name="GenerationButton" type="Control" node_paths=PackedStringArray("EM_check", "strong_check", "weak_check", "electroweak_check", "SaveStates", "Generate", "ViewDiagrams", "MinDegree", "MaxDegree", "Equation", "NoStatesToSave", "StatesSaved", "NoDiagramsFound", "GenerationCompleted", "FindSlider", "ContentContainer", "TabButton", "MovingContainer")]
 material = ExtResource("1_h3eo1")
 layout_mode = 3
 anchors_preset = 0
@@ -53,11 +54,12 @@ Generate = NodePath("MovingContainer/MovingContainer/PanelContainer/VBoxContaine
 ViewDiagrams = NodePath("MovingContainer/MovingContainer/PanelContainer/VBoxContainer/HBoxContainer/View")
 MinDegree = NodePath("MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/PanelContainer/DegreeContainer/MinDegree")
 MaxDegree = NodePath("MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/PanelContainer/DegreeContainer/MaxDegree")
-Equation = NodePath("MovingContainer/MovingContainer/PanelContainer/VBoxContainer/Equation")
+Equation = NodePath("MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/Equation")
 NoStatesToSave = NodePath("MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/NoStatesToSave")
 StatesSaved = NodePath("MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/StatesSaved")
 NoDiagramsFound = NodePath("MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/NoDiagramsFound")
 GenerationCompleted = NodePath("MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/GenerationSuccess")
+FindSlider = NodePath("MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/PanelContainer2/FindSlider/VBoxContainer/Find")
 ContentContainer = NodePath("MovingContainer/MovingContainer/PanelContainer")
 TabButton = NodePath("MovingContainer/MovingContainer/Tab")
 MovingContainer = NodePath("MovingContainer")
@@ -180,7 +182,7 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_4t00w")
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_constants/separation = 5
+theme_override_constants/separation = 2
 alignment = 2
 
 [node name="OptionsContainer" type="VBoxContainer" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer"]
@@ -277,7 +279,65 @@ alignment = 1
 
 [node name="ButtonSoundComponent" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/electro_weak" instance=ExtResource("6_aanob")]
 
-[node name="Equation" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer" instance=ExtResource("4_ovcff")]
+[node name="PanelContainer2" type="PanelContainer" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer"]
+use_parent_material = true
+layout_mode = 2
+
+[node name="FindSlider" type="VBoxContainer" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/PanelContainer2"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="Label" type="Label" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/PanelContainer2/FindSlider"]
+use_parent_material = true
+layout_mode = 2
+mouse_filter = 1
+text = "FIND"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/PanelContainer2/FindSlider"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="Find" type="HSlider" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/PanelContainer2/FindSlider/VBoxContainer"]
+use_parent_material = true
+custom_minimum_size = Vector2(102, 2.08165e-12)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("11_cnrrw")
+theme_override_constants/grabber_offset = -6
+max_value = 2.0
+tick_count = 3
+ticks_on_borders = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/PanelContainer2/FindSlider/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = -6
+
+[node name="All" type="Label" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/PanelContainer2/FindSlider/VBoxContainer/HBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "All"
+horizontal_alignment = 1
+
+[node name="Lowest Order" type="Label" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/PanelContainer2/FindSlider/VBoxContainer/HBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = " Lowest order"
+horizontal_alignment = 1
+
+[node name="One" type="Label" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/PanelContainer2/FindSlider/VBoxContainer/HBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = " One"
+horizontal_alignment = 1
+
+[node name="Equation" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer" instance=ExtResource("4_ovcff")]
 custom_minimum_size = Vector2(120, 21)
 layout_mode = 2
 

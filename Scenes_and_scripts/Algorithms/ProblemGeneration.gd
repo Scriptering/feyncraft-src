@@ -41,13 +41,16 @@ func generate(
 		
 		print("States found: %susec"%[round(Time.get_ticks_usec() - time)] )
 		
-		if SolutionGeneration.generate_diagrams(
+		var solution: ConnectionMatrix = SolutionGeneration.generate_diagrams(
 			state_interactions[StateLine.State.Initial],
 			state_interactions[StateLine.State.Final],
 			0, 8,
 			SolutionGeneration.get_useable_interactions_from_particles(useable_particles),
 			SolutionGeneration.Find.One
-		) != [null]:
+		).front()
+		
+		if solution:
+			problem.degree = solution.state_count[StateLine.State.None]
 			break
 	
 	problem.state_interactions = state_interactions

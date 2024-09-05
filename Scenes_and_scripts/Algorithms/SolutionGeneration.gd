@@ -5,7 +5,7 @@ enum Shade {Bright, Dark, None}
 const SHADED_PARTICLES := [ParticleData.BRIGHT_PARTICLES, ParticleData.DARK_PARTICLES, ParticleData.SHADED_PARTICLES]
 const INTERACTION_SIZE = 3.0
 
-enum Find {All, One, LowestOrder}
+enum Find {All, LowestOrder, One}
 
 enum INDEX {unconnected, connected, ID = 0, TYPE, START = 0, END, INTERACTION = 0, CONNECTION_COUNT, CONNECTION_PARTICLES = 1}
 enum {
@@ -44,6 +44,12 @@ var print_times := false
 
 var generated_matrix: InteractionMatrix
 
+var find_one: bool = false
+var found_one: bool = false
+var found_matrix: ConnectionMatrix
+var g_degree: int
+var g_useable_particle_interactions: Dictionary = {}
+
 var find: Find = Find.All
 
 func get_useable_interactions_from_particles(allowed_particles: Array) -> Array:
@@ -65,6 +71,8 @@ func generate_diagrams(
 ) -> Array[ConnectionMatrix]:
 	
 	find = p_find
+	find_one = find == Find.One
+	found_one = false
 	
 	start_time = Time.get_ticks_usec()
 	var print_results : bool = false
@@ -79,6 +87,7 @@ func generate_diagrams(
 	
 	var general_usable_interactions := convert_interactions_to_general(useable_interactions)
 	var useable_particle_interactions : Dictionary = get_useable_particle_interactions(useable_interactions)
+	g_useable_particle_interactions = useable_particle_interactions
 	var base_interaction_matrix := create_base_interaction_matrix(initial_state, final_state)
 	var forbidden_exit_points: Array = get_forbidden_exit_points(base_interaction_matrix)
 	var shared_hadron_quarks := get_shared_elements(get_hadron_particles(initial_state), get_hadron_particles(final_state))
@@ -95,18 +104,26 @@ func generate_diagrams(
 	var generated_connection_matrices : Array[ConnectionMatrix] = []
 	
 	for degree:int in degrees_to_check:
+		if find == Find.LowestOrder and !generated_connection_matrices.is_empty():
+			break
+		
+		g_degree = degree
 		#if print_results:
 			#print("degree: " + str(degree) + " " + get_print_time())
 		
 		var start_time: float = Time.get_ticks_usec()
 		var time: float = start_time
 		
+		print(g_useable_particle_interactions)
 		var hadron_connected_matrices := connect_hadrons(
 			base_interaction_matrix,
 			shared_hadron_quarks.size(),
 			hadron_connections,
 			degree
 		)
+		
+		if found_one:
+			return [found_matrix]
 		
 		print(Time.get_ticks_usec() - time)
 		time = Time.get_ticks_usec()
@@ -117,6 +134,9 @@ func generate_diagrams(
 				matrix, degree, useable_particle_interactions
 			))
 		hadron_connected_matrices.clear()
+		
+		if found_one:
+			return [found_matrix]
 		
 		print(Time.get_ticks_usec() - time)
 		time = Time.get_ticks_usec()
@@ -203,6 +223,12 @@ func connect_hadrons(
 	possible_connections: Array[PackedInt32Array],
 	degree: int
 ) -> Array[InteractionMatrix]:
+	
+	print(g_useable_particle_interactions)
+	
+	if possible_connections.is_empty():
+		return [base_matrix]
+	
 	var unconnected_particle_count: int = base_matrix.get_unconnected_particle_count()
 	
 	var min_connections : int = max(
@@ -269,8 +295,19 @@ func add_next_hadron_connection(
 	):
 		return []
 	
+	if found_one:
+		return []
+	
 	current_connection_count += 1
 	if current_connection_count == required_connection_count:
+		if find_one:
+			print(g_useable_particle_interactions)
+			connect_state_fermions(
+				connected_matrix.duplicate(true),
+				g_degree,
+				g_useable_particle_interactions
+			)
+		
 		return [connected_matrix]
 	
 	var next_connected_matrices: Array[InteractionMatrix] = []
@@ -492,6 +529,9 @@ func connect_fermion_from_point(
 	useable_particle_interactions: Dictionary, is_entry_point: bool = false
 ) -> Array[InteractionMatrix]:
 	
+	if found_one:
+		return []
+	
 	var further_matrices: Array[InteractionMatrix] = []
 	
 	if interaction_count_left == 0:
@@ -521,6 +561,14 @@ func connect_fermion_from_point(
 		
 		if next_fermion_index == matrix.unconnected_matrix[next_point].size():
 			connected_matrices.push_back(matrix)
+			
+			if find_one:
+				if is_matrix_complete(matrix):
+					found_one = true
+					found_matrix = matrix
+					return []
+				#else do further matrix connections
+			
 			continue
 		
 		connected_matrices.append_array(connect_fermion_from_point(

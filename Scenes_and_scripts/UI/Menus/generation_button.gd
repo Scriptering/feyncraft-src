@@ -20,6 +20,7 @@ var GeneratedDiagramViewer: MiniDiagramViewer
 @export var StatesSaved: HBoxContainer
 @export var NoDiagramsFound: HBoxContainer
 @export var GenerationCompleted: HBoxContainer
+@export var FindSlider: HSlider
 
 @onready var feedback_containers: Array[HBoxContainer] = [NoStatesToSave, StatesSaved, NoDiagramsFound, GenerationCompleted]
 
@@ -98,7 +99,8 @@ func generate(checks: Array[bool]) -> void:
 	var generated_diagrams: Array[ConnectionMatrix] = (
 		SolutionGeneration.generate_diagrams(
 			InitialState, FinalState, min_degree, max_degree,
-			SolutionGeneration.get_useable_interactions_from_particles(useable_particles)
+			SolutionGeneration.get_useable_interactions_from_particles(useable_particles),
+			int(FindSlider.value)
 		)
 	)
 	
