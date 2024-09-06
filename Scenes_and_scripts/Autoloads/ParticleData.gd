@@ -975,3 +975,6 @@ func is_boson(particle: ParticleData.Particle) -> bool:
 
 func is_general(particle: ParticleData.Particle) -> bool:
 	return base(particle) in GENERAL_PARTICLES
+
+func is_particle(particleA: ParticleData.Particle, particleB: ParticleData.Particle) -> bool:
+	return base(particleA) == particleB

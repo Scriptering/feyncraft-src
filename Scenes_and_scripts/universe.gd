@@ -94,7 +94,7 @@ func enter_level(args: Array = [Mode.Sandbox]) -> void:
 	Globals.in_main_menu = false
 	Level.current_mode = args[0]
 
-func exit_level(args: Array = []) -> void:
+func exit_level(_args: Array = []) -> void:
 	Level.exit()
 
 func enter_main_menu(_args: Array = []) -> void:

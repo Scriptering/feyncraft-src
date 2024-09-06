@@ -183,7 +183,7 @@ func move_connected_particle_lines(interaction:Interaction) -> void:
 	for particle_line:ParticleLine in interaction.connected_lines:
 		particle_line.move(particle_line.get_connected_point(interaction), interaction.positioni())
 
-func _crosshair_moved(new_position: Vector2i, old_position: Vector2i) -> void:
+func _crosshair_moved(new_position: Vector2i, _old_position: Vector2i) -> void:
 	if (
 		StateManager.state != BaseState.State.Placing
 		&& StateManager.state != BaseState.State.Drawing
@@ -355,7 +355,6 @@ func generate_drawing_matrix_from_diagram(get_only_valid: bool = false) -> Drawi
 func update_colour(valid_diagram: DrawingMatrix) -> void:
 	var colour_matrix: DrawingMatrix = Vision.generate_vision_matrix(Globals.Vision.Colour, valid_diagram)
 	
-	var time := Time.get_ticks_usec()
 	var zip: Array = Vision.generate_vision_paths(Globals.Vision.Colour, colour_matrix, true)
 	
 	if zip == []:
