@@ -6,6 +6,10 @@ extends ConnectionMatrix
 @export var state_line_positions : Array[int] = [0, 20]
 @export var decorations : Array[Decoration.Decor] = []
 
+func _init(connection_matrix: ConnectionMatrix = null) -> void:
+	if connection_matrix:
+		initialise_from_connection_matrix(connection_matrix)
+
 func initialise_from_connection_matrix(from_connection_matrix: ConnectionMatrix) -> void:
 	connection_matrix = from_connection_matrix.connection_matrix.duplicate(true)
 	state_count = from_connection_matrix.state_count.duplicate()

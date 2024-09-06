@@ -393,12 +393,8 @@ func is_matrix_colourless(matrix: ConnectionMatrix) -> bool:
 	if !has_gluon:
 		return false
 	
-	var drawing_matrix := DrawingMatrix.new()
-	drawing_matrix.initialise_from_connection_matrix(matrix)
-	
-	var vision_matrix : DrawingMatrix = Vision.generate_colour_matrix(drawing_matrix)
+	var vision_matrix : DrawingMatrix = Vision.generate_colour_matrix(DrawingMatrix.new(matrix))
 	var zip: Array = Vision.generate_colour_paths(vision_matrix, true)
-	
 	return Vision.find_colourless_interactions(zip.front(), zip.back(), vision_matrix, true).size() > 0
 
 func generate_hadron_connected_matrices(
