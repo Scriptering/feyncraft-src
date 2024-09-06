@@ -29,13 +29,32 @@ func connect_interactions(
 ) -> void:
 	super.connect_interactions(from_id, to_id, particle, bidirectional, reverse)
 	
-	if particle in unconnected_matrix[from_id]:
-		unconnected_matrix[from_id].erase(particle)
-		unconnected_particle_count[get_state_from_id(from_id)] -= 1
+	erase_unconnected_particle(from_id, particle)
+	erase_unconnected_particle(to_id, particle)
+
+func connect_interactions_no_remove(
+	from_id: int,
+	to_id: int,
+	particle: ParticleData.Particle,
+	remove_from: bool = false,
+	remove_to: bool = false
+) -> void:
+	super.connect_interactions(from_id, to_id, particle)
 	
-	if particle in unconnected_matrix[to_id]:
-		unconnected_matrix[to_id].erase(particle)
-		unconnected_particle_count[get_state_from_id(to_id)] -= 1
+	if remove_from:
+		erase_unconnected_particle(from_id, particle)
+	
+	if remove_to:
+		erase_unconnected_particle(to_id, particle)
+
+func add_unconnected_particle(id:int, particle: ParticleData.Particle) -> void:
+	unconnected_matrix[id].append(particle)
+	unconnected_particle_count[get_state_from_id(id)] += 1
+
+func erase_unconnected_particle(id: int, particle: ParticleData.Particle) -> void:
+	if particle in unconnected_matrix[id]:
+		unconnected_matrix[id].erase(particle)
+		unconnected_particle_count[get_state_from_id(id)] -= 1
 
 func connect_asymmetric_interactions(
 	from_id: int, to_id: int, from_particle: ParticleData.Particle, to_particle: ParticleData.Particle,
@@ -43,23 +62,18 @@ func connect_asymmetric_interactions(
 ) -> void:
 	super.connect_interactions(from_id, to_id, connection_particle, false, reverse)
 	
-	unconnected_matrix[from_id].erase(from_particle)
-	unconnected_particle_count[get_state_from_id(from_id)] -= 1
-	
-	unconnected_matrix[to_id].erase(to_particle)
-	unconnected_particle_count[get_state_from_id(to_id)] -= 1
+	erase_unconnected_particle(from_id, from_particle)
+	erase_unconnected_particle(to_id, to_particle)
 	
 func disconnect_interactions(
 	from_id: int, to_id: int, particle: int = ParticleData.PARTICLE.none, bidirectional: bool = false, reverse: bool = false
 ) -> void:
 	super.disconnect_interactions(from_id, to_id, particle, bidirectional, reverse)
-
-	unconnected_matrix[from_id].append(particle)
-	unconnected_particle_count[get_state_from_id(from_id)] += 1
+	
+	add_unconnected_particle(from_id, particle)
 
 	if bidirectional:
-		unconnected_matrix[to_id].append(particle)
-		unconnected_particle_count[get_state_from_id(to_id)] += 1
+		add_unconnected_particle(to_id, particle)
 
 func remove_connection(connection: Array) -> void:
 	disconnect_interactions(connection[Connection.from_id], connection[Connection.to_id], connection[Connection.particle])

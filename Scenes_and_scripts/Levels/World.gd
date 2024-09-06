@@ -76,15 +76,15 @@ func init(state_manager: Node) -> void:
 
 	Diagram.action.connect(_diagram_action_taken)
 	
-	#var diagrams: Array[ConnectionMatrix] = SolutionGeneration.generate_diagrams(
-		#[[-14, 15], [-14, 15], [-14, 15]],
-		#[[-14, 15], [-14, 15], [-14, 15]],
-		#1,
-		#2,
-		#SolutionGeneration.get_useable_interactions_from_particles(
-			#ProblemGeneration.get_useable_particles_from_interaction_checks([true, true, true, true]),
-		#)
-	#)
+	var diagrams: Array[ConnectionMatrix] = SolutionGeneration.generate_diagrams(
+		[[ParticleData.Particle.electron], [ParticleData.Particle.anti_electron]],
+		[[ParticleData.Particle.electron], [ParticleData.Particle.anti_electron]],
+		4,
+		4,
+		SolutionGeneration.get_useable_interactions_from_particles(
+			ProblemGeneration.get_useable_particles_from_interaction_checks([true, true, true, true]),
+		)
+	)
 
 func _ready() -> void:
 	Diagram.show_line_labels = !StatsManager.stats.hide_labels
