@@ -306,9 +306,7 @@ func connect_state_fermions(base_matrix: InteractionMatrix) -> Array[Interaction
 					connect_fermion_from_id(
 						fermion,
 						id,
-						interaction_matrix,
-						g_degree - interaction_matrix.degree,
-						true
+						interaction_matrix
 					)
 				)
 			
@@ -737,90 +735,64 @@ func get_next_particle(interaction: PackedInt32Array) -> ParticleData.Particle:
 func connect_fermion_from_id(
 	fermion: ParticleData.Particle,
 	from_id: int,
-	base_matrix: InteractionMatrix,
-	interaction_count: int,
-	is_entry_point: bool = false
+	base_matrix: InteractionMatrix
 ) -> Array[InteractionMatrix]:
 	
 	if found_one:
 		return []
+
+	if is_disconnected(base_matrix):
+		return []
+	
+	var interaction_count: int = g_degree - base_matrix.degree
+	if interaction_count == 0:
+		if !find_one:
+			return [base_matrix]
+		
+		if is_complete(base_matrix):
+			var connection_matrix := base_matrix.get_connection_matrix()
+			if !is_matrix_colourless(connection_matrix):
+				found_one = true
+				found_matrix = connection_matrix
+			return []
+		else:
+			connect_matrix(base_matrix)
+
+	var unconnected_particles: PackedInt32Array = base_matrix.get_unconnected_particles()
+	
+	if unconnected_particles.find(fermion) == unconnected_particles.size():
+		breakpoint
+	
+	unconnected_particles.remove_at(unconnected_particles.find(fermion))
 	
 	var connected_matrices: Array[InteractionMatrix] = []
-	var unconnected_particles: PackedInt32Array = base_matrix.get_unconnected_particles()
-	unconnected_particles.erase(unconnected_particles.find(fermion))
-	
-	if !is_entry_point:
-		var can_connect := is_connection_number_possible(
-			unconnected_particles.size() - 2, interaction_count
-		)
-		
-		if can_connect:
-			connected_matrices.append_array(
-				connect_particle_to_ids(
-					fermion,
-					from_id,
-					base_matrix,
-					base_matrix.get_state_ids(StateLine.State.Both)
-				)
-			)
-	
-	if interaction_count == 0:
-		if find_one:
-			if is_disconnected(base_matrix):
-				return []
-			
-			if is_complete(base_matrix):
-				var connection_matrix := base_matrix.get_connection_matrix()
-				if !is_matrix_colourless(connection_matrix):
-					found_one = true
-					found_matrix = connection_matrix
-					return []
-			else:
-				connect_matrix(base_matrix)
-		
-		return connected_matrices
-	
 	for interaction:PackedInt32Array in g_particle_interactions[fermion]:
-		var next_fermion: ParticleData.Particle = ArrayFuncs.packed_int_get_first(
-			interaction, ParticleData.is_fermion
-		)
-		var boson: ParticleData.Particle = ArrayFuncs.packed_int_get_first(
-			interaction, ParticleData.is_boson
-		)
-
-		var can_connect_boson := (
-			is_connection_number_possible(unconnected_particles.size() - 3, interaction_count - 1)
-			and has_connection_particle(unconnected_particles, boson)
-		)
-		var can_leave_boson := is_connection_number_possible(
-			unconnected_particles.size() - 1, interaction_count - 1
+		var interaction_connected_matrices := get_interaction_connected_matrices(
+			interaction,
+			base_matrix,
+			fermion,
+			from_id,
+			unconnected_particles
 		)
 		
-		if !can_connect_boson and !can_leave_boson:
-			continue
-		
-		var to_id := base_matrix.matrix_size
-		
-		var fermion_connected_matrix := add_interaction(
-			interaction, base_matrix, fermion, from_id, 1
-		)
-		
-		var boson_connected_matrices: Array[InteractionMatrix] = []
-		if can_connect_boson:
-			boson_connected_matrices.append_array(
-				connect_particle_to_ids(boson, to_id, fermion_connected_matrix)
+		var new_id: int = base_matrix.matrix_size
+		for matrix:InteractionMatrix in interaction_connected_matrices:
+			var next_particle: ParticleData.Particle = get_next_particle(
+				matrix.unconnected_matrix[new_id]
 			)
-		
-		if can_leave_boson:
-			boson_connected_matrices.push_back(fermion_connected_matrix)
-		
-		for matrix:InteractionMatrix in boson_connected_matrices:
+			
+			if (
+				next_particle == ParticleData.Particle.none
+				or !ParticleData.is_fermion(next_particle)
+			):
+				connected_matrices.push_back(matrix)
+				continue
+			
 			connected_matrices.append_array(
 				connect_fermion_from_id(
-					next_fermion as ParticleData.Particle,
-					to_id,
-					matrix,
-					interaction_count - 1
+					next_particle,
+					new_id,
+					matrix
 				)
 			)
 	
