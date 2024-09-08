@@ -98,8 +98,11 @@ func generate(checks: Array[bool]) -> void:
 	
 	var generated_diagrams: Array[ConnectionMatrix] = (
 		SolutionGeneration.generate_diagrams(
-			InitialState, FinalState, min_degree, max_degree,
-			SolutionGeneration.get_useable_interactions_from_particles(useable_particles),
+			InitialState,
+			FinalState,
+			min_degree,
+			max_degree,
+			useable_particles,
 			int(FindSlider.value)
 		)
 	)

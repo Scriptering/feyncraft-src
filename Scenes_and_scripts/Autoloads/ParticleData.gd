@@ -640,46 +640,46 @@ func set_interaction_strength_limits() -> void:
 
 var PARTICLE_INTERACTIONS : Dictionary = {
 	Particle.photon : [
-		[Particle.bright_quark, Particle.bright_quark],
-		[Particle.dark_quark, Particle.dark_quark],
-		[Particle.lepton, Particle.lepton],
-		[Particle.W, Particle.W],
-		[Particle.W, Particle.W, Particle.photon],
-		[Particle.W, Particle.W, Particle.Z]
+		[-Particle.bright_quark, Particle.bright_quark],
+		[-Particle.dark_quark, Particle.dark_quark],
+		[-Particle.lepton, Particle.lepton],
+		[-Particle.W, Particle.W],
+		[-Particle.W, Particle.W, Particle.photon],
+		[-Particle.W, Particle.W, Particle.Z]
 	],
 	Particle.gluon : [
-		[Particle.bright_quark, Particle.bright_quark],
-		[Particle.dark_quark, Particle.dark_quark],
+		[-Particle.bright_quark, Particle.bright_quark],
+		[-Particle.dark_quark, Particle.dark_quark],
 		[Particle.gluon, Particle.gluon],
 		[Particle.gluon, Particle.gluon, Particle.gluon]
 	],
 	Particle.Z : [
-		[Particle.bright_quark, Particle.bright_quark],
-		[Particle.dark_quark, Particle.dark_quark],
-		[Particle.lepton, Particle.lepton],
-		[Particle.lepton_neutrino, Particle.lepton_neutrino],
-		[Particle.W, Particle.W],
-		[Particle.W, Particle.W, Particle.Z],
-		[Particle.W, Particle.W, Particle.photon],
+		[-Particle.bright_quark, Particle.bright_quark],
+		[-Particle.dark_quark, Particle.dark_quark],
+		[-Particle.lepton, Particle.lepton],
+		[-Particle.lepton_neutrino, Particle.lepton_neutrino],
+		[-Particle.W, Particle.W],
+		[-Particle.W, Particle.W, Particle.Z],
+		[-Particle.W, Particle.W, Particle.photon],
 		[Particle.H, Particle.Z],
 		[Particle.H, Particle.H, Particle.Z],
 	],
 	Particle.H : [
-		[Particle.bright_quark, Particle.bright_quark],
-		[Particle.dark_quark, Particle.dark_quark],
-		[Particle.lepton, Particle.lepton],
-		[Particle.lepton_neutrino, Particle.lepton_neutrino],
+		[-Particle.bright_quark, Particle.bright_quark],
+		[-Particle.dark_quark, Particle.dark_quark],
+		[-Particle.lepton, Particle.lepton],
+		[-Particle.lepton_neutrino, Particle.lepton_neutrino],
 		[Particle.Z, Particle.Z],
 		[Particle.H, Particle.H, Particle.H],
 		[Particle.H, Particle.Z, Particle.Z],
-		[Particle.H, Particle.W, Particle.W]
+		[Particle.H, -Particle.W, Particle.W]
 	],
 	Particle.W : [
-		[Particle.lepton, Particle.lepton_neutrino],
-		[Particle.bright_quark, Particle.dark_quark],
+		[-Particle.lepton, Particle.lepton_neutrino],
+		[-Particle.bright_quark, Particle.dark_quark],
 		[Particle.W, Particle.Z],
 		[Particle.W, Particle.photon],
-		[Particle.W, Particle.W, Particle.W],
+		[-Particle.W, Particle.W, Particle.W],
 		[Particle.W, Particle.Z, Particle.Z],
 		[Particle.W, Particle.photon, Particle.photon],
 		[Particle.W, Particle.Z, Particle.photon],
@@ -955,8 +955,8 @@ func dimensionality(particle: ParticleData.Particle) -> float:
 func quantum_numbers(particle: ParticleData.Particle) -> Array[float]:
 	return QUANTUM_NUMBERS[base(particle)]
 
-func quantum_number(particle: ParticleData.Particle, quantum_number: QuantumNumber) -> float:
-	return QUANTUM_NUMBERS[base(particle)][quantum_number]
+func quantum_number(particle: ParticleData.Particle, p_quantum_number: QuantumNumber) -> float:
+	return sign(particle) * QUANTUM_NUMBERS[base(particle)][p_quantum_number]
 
 func has_charge(particle: ParticleData.Particle) -> bool:
 	return anti(particle) * quantum_number(base(particle), QuantumNumber.charge) != 0

@@ -5,6 +5,7 @@ enum {UNCONNECTED, CONNECTED}
 
 @export var unconnected_matrix: Array = []
 @export var unconnected_particle_count: PackedInt32Array = [0, 0, 0]
+@export var degree: int = 0
 
 func add_interaction(
 	interaction_state : StateLine.State = StateLine.State.None,
@@ -17,12 +18,15 @@ func add_interaction(
 func add_unconnected_interaction(
 	unconnected_particles: Array = [],
 	interaction_state: StateLine.State = StateLine.State.None,
-	id : int = calculate_new_interaction_id(interaction_state)
+	id : int = calculate_new_interaction_id(interaction_state),
+	interaction_size : int = 0
 ) -> void:
 	super.add_interaction(interaction_state, id)
 	
 	unconnected_matrix.insert(id, unconnected_particles)
 	unconnected_particle_count[interaction_state] += unconnected_particles.size()
+	
+	degree += interaction_size
 
 func connect_interactions(
 	from_id: int, to_id: int, particle: int = ParticleData.Particle.none, bidirectional: bool = false, reverse: bool = false
@@ -69,7 +73,7 @@ func disconnect_interactions(
 	from_id: int, to_id: int, particle: int = ParticleData.PARTICLE.none, bidirectional: bool = false, reverse: bool = false
 ) -> void:
 	super.disconnect_interactions(from_id, to_id, particle, bidirectional, reverse)
-	
+	 
 	add_unconnected_particle(from_id, particle)
 
 	if bidirectional:

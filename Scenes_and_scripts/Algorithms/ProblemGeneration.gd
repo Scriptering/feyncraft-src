@@ -45,7 +45,7 @@ func generate(
 			state_interactions[StateLine.State.Initial],
 			state_interactions[StateLine.State.Final],
 			0, 8,
-			SolutionGeneration.get_useable_interactions_from_particles(useable_particles),
+			useable_particles,
 			SolutionGeneration.Find.One
 		).front()
 		
@@ -380,7 +380,7 @@ func setup_new_problem(problem: Problem) -> Problem:
 		problem.state_interactions[StateLine.State.Initial],
 		problem.state_interactions[StateLine.State.Final],
 		min_degree, max_degree,
-		SolutionGeneration.get_useable_interactions_from_particles(problem.allowed_particles),
+		problem.allowed_particles,
 		find
 	)
 	
