@@ -414,6 +414,9 @@ func is_no_H_valid(particles := connected_particles) -> bool:
 			return particle_line.particle != ParticleData.Particle.H
 	)
 	
+	if no_H_lines.size() == 1 and no_H_lines[0].particle == ParticleData.Particle.Z:
+		return false
+	
 	return validate(no_H_lines)
 	
 func is_interaction_in_list(particles := connected_particles) -> bool:
