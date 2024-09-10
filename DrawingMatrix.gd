@@ -67,8 +67,14 @@ func is_duplicate(comparison_matrix: Variant) -> bool:
 
 func make_drawable() -> void:
 	split_hadrons()
+	seperate_self_connections()
 	seperate_double_connections()
-#	reorder_hadrons()
+
+func seperate_self_connections() -> void:
+	for i:int in matrix_size:
+		if !are_interactions_connected(i, i):
+			continue
+		divert_connection(i, i)
 
 func seperate_double_connections() -> void:
 	for i:int in matrix_size:

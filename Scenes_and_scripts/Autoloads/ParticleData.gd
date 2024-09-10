@@ -670,6 +670,7 @@ var PARTICLE_INTERACTIONS : Dictionary = {
 		[-Particle.lepton, Particle.lepton],
 		[-Particle.lepton_neutrino, Particle.lepton_neutrino],
 		[Particle.Z, Particle.Z],
+		[Particle.H, Particle.H],
 		[Particle.H, Particle.H, Particle.H],
 		[Particle.H, Particle.Z, Particle.Z],
 		[Particle.H, -Particle.W, Particle.W]
@@ -978,3 +979,12 @@ func is_general(particle: ParticleData.Particle) -> bool:
 
 func is_particle(particleA: ParticleData.Particle, particleB: ParticleData.Particle) -> bool:
 	return base(particleA) == particleB
+
+func general_can_convert(
+	from_particle: ParticleData.Particle,
+	to_particle: ParticleData.Particle
+) -> bool:
+	return (
+		is_general(from_particle) 
+		and base(to_particle) in GENERAL_CONVERSION[base(from_particle)]
+	)

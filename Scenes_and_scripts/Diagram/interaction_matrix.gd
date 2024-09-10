@@ -41,9 +41,10 @@ func connect_interactions_no_remove(
 	to_id: int,
 	particle: ParticleData.Particle,
 	remove_from: bool = false,
-	remove_to: bool = false
+	remove_to: bool = false,
+	reverse: bool = false
 ) -> void:
-	super.connect_interactions(from_id, to_id, particle)
+	super.connect_interactions(from_id, to_id, particle, false, reverse)
 	
 	if remove_from:
 		erase_unconnected_particle(from_id, particle)
@@ -75,8 +76,22 @@ func disconnect_interactions(
 	super.disconnect_interactions(from_id, to_id, particle, bidirectional, reverse)
 	 
 	add_unconnected_particle(from_id, particle)
+	add_unconnected_particle(to_id, particle)
 
-	if bidirectional:
+func disconnect_interactions_no_add(
+	from_id: int,
+	to_id: int,
+	particle: int = ParticleData.PARTICLE.none,
+	add_from: bool = false,
+	add_to: bool = false,
+	reverse: bool = false,
+) -> void:
+	super.disconnect_interactions(from_id, to_id, particle, false, reverse)
+	 
+	if add_from:
+		add_unconnected_particle(from_id, particle)
+	
+	if add_to:
 		add_unconnected_particle(to_id, particle)
 
 func remove_connection(connection: Array) -> void:

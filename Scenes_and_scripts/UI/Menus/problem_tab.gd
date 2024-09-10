@@ -136,8 +136,9 @@ func generate_solution() -> ConnectionMatrix:
 			current_problem.degree,
 			current_problem.degree,
 			current_problem.allowed_particles,
-			SolutionGeneration.Find.LowestOrder
-	).pick_random())
+			SolutionGeneration.Find.One
+		)
+	).front()
 
 func is_submission_duplicate(submission: DrawingMatrix) -> bool:
 	var reduced_submission: ConnectionMatrix = submission.reduce_to_connection_matrix()

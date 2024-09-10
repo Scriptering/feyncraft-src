@@ -215,7 +215,8 @@ layout_mode = 2
 texture = ExtResource("26_mv20u")
 stretch_mode = 2
 
-[node name="Label" type="Label" parent="MovingContainer/LoadTimeWarning/MovingContainer/PanelContainer/VBoxContainer/NoStatesToSave"]
+[node name="WarningLabel" type="Label" parent="MovingContainer/LoadTimeWarning/MovingContainer/PanelContainer/VBoxContainer/NoStatesToSave"]
+unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
 text = "Warning: May take a while

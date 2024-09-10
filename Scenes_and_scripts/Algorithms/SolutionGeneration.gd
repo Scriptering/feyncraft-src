@@ -70,9 +70,12 @@ func generate_diagrams(
 		if found_one:
 			return [found_matrix]
 		
+		
 		var state_fermion_connected_matrices : Array[InteractionMatrix] = []
 		for matrix:InteractionMatrix in hadron_connected_matrices:
-			state_fermion_connected_matrices.append_array(connect_state_fermions(matrix))
+			state_fermion_connected_matrices.append_array(
+				connect_state_fermions(convert_interaction_matrix_to_in_out(matrix))
+			)
 		hadron_connected_matrices.clear()
 		
 		if found_one:
@@ -80,10 +83,10 @@ func generate_diagrams(
 		
 		var connected_matrices: Array[InteractionMatrix] = []
 		for matrix:InteractionMatrix in state_fermion_connected_matrices:
-			if is_complete(matrix):
-				connected_matrices.push_back(matrix)
+			if is_matrix_colourless(matrix) or is_disconnected(matrix):
 				continue
-			elif is_disconnected(matrix):
+			elif is_complete(matrix):
+				connected_matrices.push_back(matrix)
 				continue
 			
 			connected_matrices.append_array(connect_matrix(matrix))
@@ -110,6 +113,10 @@ func is_matrix_complete(matrix: InteractionMatrix) -> bool:
 		and matrix.is_fully_connected(true)
 		and !is_matrix_colourless(matrix)
 	)
+
+func shuffle_particle_interactions() -> void:
+	for particle:ParticleData.Particle in g_particle_interactions.keys():
+		g_particle_interactions[particle].shuffle()
 
 func connect_hadrons(
 	base_matrix: InteractionMatrix,
@@ -188,7 +195,9 @@ func add_next_hadron_connection(
 	current_connection_count += 1
 	if current_connection_count == required_connection_count:
 		if find_one:
-			connect_state_fermions(connected_matrix.duplicate(true)	)
+			connect_state_fermions(connected_matrix)
+			if found_one:
+				return []
 		
 		return [connected_matrix]
 	
@@ -288,16 +297,29 @@ func generate_hadron_connected_matrices(
 	return hadron_connected_matrices
 
 func connect_state_fermions(base_matrix: InteractionMatrix) -> Array[InteractionMatrix]:
-	var in_out_matrix: InteractionMatrix = convert_interaction_matrix_to_in_out(base_matrix)
-	
-	var fermion_entry_states : Array = base_matrix.get_entry_states().map(
+	var fermion_entry_states : Array = base_matrix.unconnected_matrix.map(
 		func(state: Array) -> Array:
-			return state.filter(ParticleData.is_fermion).map(ParticleData.base)
+			return state.filter(
+				func(particle: ParticleData.Particle) -> bool:
+					return ParticleData.is_fermion(particle) and particle > 0
+			).map(ParticleData.base)
+	)
+	var fermion_entry_ids : PackedInt32Array = ArrayFuncs.find_all_var(
+		fermion_entry_states, func(state: Array) -> bool: return !state.is_empty()
 	)
 	
-	var connected_interaction_matrices: Array[InteractionMatrix] = [in_out_matrix]
+	if fermion_entry_ids.is_empty():
+		if find_one:
+			connect_matrix(base_matrix)
+		else:
+			return [base_matrix]
+	
+	if found_one:
+		return []
+	
+	var connected_interaction_matrices: Array[InteractionMatrix] = [base_matrix]
 
-	for id:int in fermion_entry_states.size():
+	for id:int in fermion_entry_ids:
 		for fermion:ParticleData.Particle in fermion_entry_states[id]:
 			var fermion_connected_matrices: Array[InteractionMatrix] = []
 			
@@ -315,11 +337,29 @@ func connect_state_fermions(base_matrix: InteractionMatrix) -> Array[Interaction
 	return connected_interaction_matrices
 
 func connect_matrix(base_matrix: InteractionMatrix) -> Array[InteractionMatrix]:
-	
 	var connected_matrices: Array[InteractionMatrix] = []
-	
 	var to_connect_matrices: Array[InteractionMatrix] = [base_matrix]
-	for from_id:int in base_matrix.matrix_size:
+	
+	var entry_ids: PackedInt32Array = base_matrix.find_all_unconnected(
+		func(particle: ParticleData.Particle) -> bool:
+			return particle >= 0
+	)
+	
+	if entry_ids.is_empty():
+		if find_one:
+			if is_disconnected(base_matrix) or is_matrix_colourless(base_matrix):
+				return []
+			elif is_complete(base_matrix):
+				found_one = true
+				found_matrix = base_matrix.get_connection_matrix()
+				return []
+		else:
+			return [base_matrix]
+	
+	if found_one:
+		return []
+	
+	for from_id:int in entry_ids:
 		var further_matrices: Array[InteractionMatrix] = []
 		for matrix:InteractionMatrix in to_connect_matrices:
 			if (
@@ -364,6 +404,9 @@ func connect_particle_from_id(
 ) -> Array[InteractionMatrix]:
 	if found_one:
 		return []
+	
+	if find_one:
+		shuffle_particle_interactions()
 
 	var unconnected_particles: PackedInt32Array = base_matrix.get_unconnected_particles()
 	unconnected_particles.remove_at(unconnected_particles.find(particle))
@@ -396,6 +439,9 @@ func get_interaction_connected_matrices(
 	var interaction_degree: int = 1 if interaction.size() == 2 else 2
 	var interaction_count: int = g_degree - base_matrix.degree
 	
+	#if interaction == PackedInt32Array([3, 3]):
+		#breakpoint
+	
 	if interaction_degree > interaction_count:
 		return []
 	
@@ -410,12 +456,12 @@ func get_interaction_connected_matrices(
 			add_interaction(interaction, base_matrix, from_particle, from_id, interaction_degree)
 		)
 
-	if !ArrayFuncs.packed_int_any(
-		interaction,
-		func(particle: ParticleData.Particle) -> bool:
-			return has_connection_particle(unconnected_particles, particle)
-	):
-		return interaction_connected_matrices
+	#if !ArrayFuncs.packed_int_any(
+		#interaction,
+		#func(particle: ParticleData.Particle) -> bool:
+			#return has_connection_particle(unconnected_particles, particle)
+	#):
+		#return interaction_connected_matrices
 	
 	var new_id: int = base_matrix.matrix_size
 	
@@ -482,10 +528,17 @@ func connect_matrix_from_id(
 		var further_matrices: Array[InteractionMatrix] = []
 		
 		for matrix:InteractionMatrix in to_connect_matrices:
+			if found_one:
+				return []
+			
 			var next_particle := get_next_particle(matrix.unconnected_matrix[from_id])
 			
 			if next_particle == ParticleData.Particle.none:
-				connected_matrices.push_back(matrix)
+				if find_one:
+					connect_matrix(matrix)
+				else:
+					connected_matrices.push_back(matrix)
+
 				continue
 			
 			further_matrices.append_array(
@@ -523,29 +576,34 @@ func add_interaction(
 	)
 	return particle_connected_matrix
 
-func connect_1_particle(
-	particle:ParticleData.Particle,
-	interaction:PackedInt32Array,
-	base_matrix:InteractionMatrix,
-	unconnected_particles:PackedInt32Array,
-	interaction_count:int,
-	from_particle:ParticleData.Particle,
-	from_id:int,
-	degree:int
-) -> Array[InteractionMatrix]:
-	var unconnected_particle_count: int = unconnected_particles.size()
-	
-	var can_connect := is_connection_number_possible(
-		unconnected_particle_count - 1, interaction_count
-	) and has_connection_particle(unconnected_particles, particle)
-	
-	if !can_connect:
-		return []
+func is_connection_possible(
+	unconnected_particles: PackedInt32Array,
+	connection_particles: PackedInt32Array,
+	interaction_size: int,
+	interaction_count: int
+) -> bool:
+	return (
+		is_connection_number_possible(
+			unconnected_particles.size() + interaction_size - 2*connection_particles.size(),
+			interaction_count
+		) and has_connection_particles(
+			unconnected_particles, connection_particles
+		)
+	)
 
-	var new_id: int = base_matrix.matrix_size
-	var particle_connected_matrix := add_interaction(interaction, base_matrix, from_particle, from_id, degree)
-	
-	return connect_particle_to_ids(particle, new_id, particle_connected_matrix)
+func is_self_connection_possible(
+	particleA: ParticleData.Particle,
+	particleB: ParticleData.Particle,
+	unconnected_particle_count: int,
+	interaction_count
+) -> bool:
+	return (
+		is_connection_particle(particleA, particleB)
+		and is_connection_number_possible(
+			unconnected_particle_count - 2,
+			interaction_count
+		)
+	)
 
 func connect_3interaction(
 	interaction:PackedInt32Array,
@@ -557,28 +615,38 @@ func connect_3interaction(
 	degree:int
 ) -> Array[InteractionMatrix]:
 	var unconnected_particle_count: int = unconnected_particles.size()
+	var interaction_size: int = interaction.size()
 	
 	var particleA: ParticleData.Particle = interaction[0] as ParticleData.Particle
 	var particleB: ParticleData.Particle = interaction[1] as ParticleData.Particle
 	var is_same_particle: bool = particleA == particleB
 	
-	var can_connect_A := is_connection_number_possible(
-		unconnected_particle_count, interaction_count
-	) and has_connection_particle(unconnected_particles, particleA)
+	var can_connect_A := is_connection_possible(
+		unconnected_particles, [particleA], interaction_size, interaction_count
+	)
 	
 	var can_connect_B := (
 		!is_same_particle
-		and is_connection_number_possible(
-			unconnected_particle_count, interaction_count
+		and is_connection_possible(
+			unconnected_particles, [particleB], interaction_size, interaction_count
 		)
-		and has_connection_particle(unconnected_particles, particleB)
 	)
 	
-	var can_connect_both := is_connection_number_possible(
-			unconnected_particle_count - 2, interaction_count
-	) and has_connection_particles(unconnected_particles, interaction)
+	var can_connect_both := is_connection_possible(
+		unconnected_particles, interaction, interaction_size, interaction_count
+	)
+	
+	var can_self_connect := (
+		is_connection_particle(particleA, particleB)
+		and is_connection_number_possible(unconnected_particles.size(), interaction_count)
+	)
 
-	if !can_connect_A and !can_connect_B and !can_connect_both:
+	if !(
+		can_connect_A
+		or can_connect_B
+		or can_connect_both
+		or can_self_connect
+	):
 		return []
 	
 	var new_id: int = base_matrix.matrix_size
@@ -600,6 +668,11 @@ func connect_3interaction(
 			connect_2_particles_to_ids(particleA, particleB, new_id, particle_connected_matrix)
 		)
 	
+	if can_self_connect:
+		connected_matrices.push_back(
+			self_connect(particleA, particleB, new_id, particle_connected_matrix)
+		)
+	
 	return connected_matrices
 
 func connect_4interaction(
@@ -612,54 +685,86 @@ func connect_4interaction(
 	degree:int
 ) -> Array[InteractionMatrix]:
 	var unconnected_particle_count: int = unconnected_particles.size()
+	var interaction_size: int = interaction.size()
 	
 	var particleA: ParticleData.Particle = interaction[0] as ParticleData.Particle
 	var particleB: ParticleData.Particle = interaction[1] as ParticleData.Particle
 	var particleC: ParticleData.Particle = interaction[2] as ParticleData.Particle
 	
-	var is_AB_same_particle: bool = particleA == particleB
-	var is_BC_same_particle: bool = particleB == particleC
-	var is_AC_same_particle: bool = particleA == particleC
+	var is_AB_same_particle := particleA == particleB
+	var is_BC_same_particle := particleB == particleC
+	var is_AC_same_particle := particleA == particleC
+	var is_same_particle := (is_AB_same_particle and is_AC_same_particle)
 	
-	var can_connect_A := (
-		is_connection_number_possible(unconnected_particle_count + 1, interaction_count)
-		and has_connection_particle(unconnected_particles, particleA)
+	var is_AB_connection_particle := is_AB_same_particle or is_connection_particle(particleA, particleB)
+	var is_BC_connection_particle := is_BC_same_particle or is_connection_particle(particleB, particleC)
+	var is_AC_connection_particle := is_AC_same_particle or is_connection_particle(particleA, particleC)
+	
+	var can_connect_A := is_connection_possible(
+		unconnected_particles, [particleA], interaction_size, interaction_count
 	)
-	
+
 	var can_connect_B := (
 		!is_AB_same_particle
-		and is_connection_number_possible(unconnected_particle_count + 1, interaction_count)
-		and has_connection_particle(unconnected_particles, particleB)
+		and is_connection_possible(
+			unconnected_particles, [particleB], interaction_size, interaction_count
+		)
 	)
 	
 	var can_connect_C := (
 		!is_AC_same_particle
 		and !is_BC_same_particle
-		and is_connection_number_possible(unconnected_particle_count + 1, interaction_count)
-		and has_connection_particle(unconnected_particles, particleB)
+		and is_connection_possible(
+			unconnected_particles, [particleC], interaction_size, interaction_count
+		)
 	)
 	
-	var can_connect_AB := (
-		is_connection_number_possible(unconnected_particle_count - 1, interaction_count)
-		and has_connection_particles(unconnected_particles, [particleA, particleB])
+	var can_connect_AB := is_connection_possible(
+		unconnected_particles, [particleA, particleB], interaction_size, interaction_count
 	)
-
+	
 	var can_connect_BC := (
-		!(is_AB_same_particle and is_AC_same_particle)
-		and is_connection_number_possible(unconnected_particle_count - 1, interaction_count)
-		and has_connection_particles(unconnected_particles, [particleB, particleC])
+		!is_same_particle
+		and is_connection_possible(
+			unconnected_particles, [particleB, particleC], interaction_size, interaction_count
+		)
 	)
 	
 	var can_connect_AC := (
-		!(is_AB_same_particle and is_AC_same_particle)
-		and is_connection_number_possible(unconnected_particle_count - 1, interaction_count)
-		and has_connection_particles(unconnected_particles, [particleA, particleC])
+		!is_same_particle
+		and is_connection_possible(
+			unconnected_particles, [particleA, particleC], interaction_size, interaction_count
+		)
 	)
 	
 	var can_connect_ABC := (
-		is_connection_number_possible(unconnected_particle_count - 3, interaction_count)
-		and has_connection_particles(unconnected_particles, interaction)
+		is_connection_possible(
+			unconnected_particles, interaction, interaction_size, interaction_count
+		)
 	)
+	
+	var can_self_connect_AB := (
+		is_AB_connection_particle
+		and is_connection_number_possible(unconnected_particle_count + 1, interaction_count)
+	)
+	
+	var can_self_connect_BC := (
+		!is_same_particle
+		and is_BC_connection_particle
+		and is_connection_number_possible(unconnected_particle_count + 1, interaction_count)
+	)
+	
+	var can_self_connect_AC := (
+		!is_same_particle
+		and is_AC_connection_particle
+		and is_connection_number_possible(unconnected_particle_count + 1, interaction_count)
+	)
+	
+	var can_self_connect_ABC := (
+		(is_AB_connection_particle or is_AB_connection_particle or is_AC_connection_particle)
+		and is_connection_number_possible(unconnected_particle_count - 1, interaction_count)
+	)
+	
 
 	if !(
 		can_connect_A
@@ -669,6 +774,10 @@ func connect_4interaction(
 		or can_connect_BC
 		or can_connect_AC
 		or can_connect_ABC
+		or can_self_connect_AB
+		or can_self_connect_BC
+		or can_self_connect_AC
+		or can_self_connect_ABC
 	):
 		return []
 	
@@ -680,27 +789,23 @@ func connect_4interaction(
 		connected_matrices.append_array(
 			connect_particle_to_ids(particleA, new_id, particle_connected_matrix)
 		)
-	
 	if can_connect_B:
 		connected_matrices.append_array(
 			connect_particle_to_ids(particleB, new_id, particle_connected_matrix)
 		)
-	
 	if can_connect_C:
 		connected_matrices.append_array(
 			connect_particle_to_ids(particleC, new_id, particle_connected_matrix)
 		)
-		
+
 	if can_connect_AB:
 		connected_matrices.append_array(
 			connect_2_particles_to_ids(particleA, particleB, new_id, particle_connected_matrix)
 		)
-
 	if can_connect_BC:
 		connected_matrices.append_array(
 			connect_2_particles_to_ids(particleB, particleC, new_id, particle_connected_matrix)
 		)
-	
 	if can_connect_AC:
 		connected_matrices.append_array(
 			connect_2_particles_to_ids(particleA, particleC, new_id, particle_connected_matrix)
@@ -709,6 +814,33 @@ func connect_4interaction(
 	if can_connect_ABC :
 		connected_matrices.append_array(
 			connect_3_particles_to_ids(particleA, particleB, particleC, new_id, particle_connected_matrix)
+		)
+	
+	if can_self_connect_AB:
+		connected_matrices.push_back(
+			self_connect(particleA, particleB, new_id, particle_connected_matrix)
+		)
+	if can_self_connect_BC:
+		connected_matrices.push_back(
+			self_connect(particleB, particleC, new_id, particle_connected_matrix)
+		)
+	if can_self_connect_AC:
+		connected_matrices.push_back(
+			self_connect(particleA, particleC, new_id, particle_connected_matrix)
+		)
+	
+	if can_self_connect_ABC:
+		connected_matrices.append_array(
+			self_connect_ABC(
+				particleA,
+				particleB,
+				particleC,
+				is_AB_connection_particle,
+				is_BC_connection_particle,
+				is_AC_connection_particle,
+				new_id,
+				particle_connected_matrix
+			)
 		)
 	
 	return connected_matrices
@@ -740,27 +872,16 @@ func connect_fermion_from_id(
 	
 	if found_one:
 		return []
+	
+	if find_one:
+		shuffle_particle_interactions()
 
 	if is_disconnected(base_matrix):
 		return []
-	
-	var interaction_count: int = g_degree - base_matrix.degree
-	if interaction_count == 0:
-		if !find_one:
-			return [base_matrix]
-		
-		if is_complete(base_matrix):
-			var connection_matrix := base_matrix.get_connection_matrix()
-			if !is_matrix_colourless(connection_matrix):
-				found_one = true
-				found_matrix = connection_matrix
-			return []
-		else:
-			connect_matrix(base_matrix)
 
 	var unconnected_particles: PackedInt32Array = base_matrix.get_unconnected_particles()
 	
-	if unconnected_particles.find(fermion) == unconnected_particles.size():
+	if unconnected_particles.find(fermion) == -1:
 		breakpoint
 	
 	unconnected_particles.remove_at(unconnected_particles.find(fermion))
@@ -777,15 +898,21 @@ func connect_fermion_from_id(
 		
 		var new_id: int = base_matrix.matrix_size
 		for matrix:InteractionMatrix in interaction_connected_matrices:
+			if found_one:
+				return []
+			
 			var next_particle: ParticleData.Particle = get_next_particle(
 				matrix.unconnected_matrix[new_id]
 			)
-			
+
 			if (
 				next_particle == ParticleData.Particle.none
 				or !ParticleData.is_fermion(next_particle)
 			):
-				connected_matrices.push_back(matrix)
+				if find_one:
+					connect_state_fermions(matrix)
+				else:
+					connected_matrices.push_back(matrix)
 				continue
 			
 			connected_matrices.append_array(
@@ -797,6 +924,41 @@ func connect_fermion_from_id(
 			)
 	
 	return connected_matrices
+
+func convert_general_path_from_id(
+	from_id: int,
+	general_particle: ParticleData.Particle,
+	fermion: ParticleData.Particle,
+	matrix: InteractionMatrix,
+	reverse: bool
+) -> void:
+	
+	var connected_ids := matrix.get_connected_ids(
+		from_id,
+		false,
+		general_particle,
+		reverse
+	)
+	
+	if connected_ids.is_empty():
+		return
+	
+	var next_id: int = connected_ids[0]
+	
+	matrix.disconnect_interactions_no_add(
+		from_id, next_id, general_particle, false, false, reverse
+	)
+	matrix.connect_interactions_no_remove(
+		from_id, next_id, fermion, false, false, reverse
+	)
+	
+	convert_general_path_from_id(
+		next_id,
+		general_particle,
+		fermion,
+		matrix,
+		reverse
+	)
 
 func connect_particle_to_ids(
 	particle: ParticleData.Particle,
@@ -851,9 +1013,19 @@ func connect_particle_to_id(
 		to_id,
 		from_particle,
 		to_particle,
-		abs(to_particle),
+		ParticleData.base(to_particle),
 		from_particle < 0
 	)
+	
+	if ParticleData.general_can_convert(from_particle, to_particle):
+		convert_general_path_from_id(
+			from_id,
+			from_particle,
+			to_particle,
+			connected_matrix,
+			from_particle > 0
+		)
+	
 	return connected_matrix
 
 func connect_2_particles_to_ids(
@@ -1007,6 +1179,52 @@ func connect_3_particles_to_ids(
 	
 	return connected_matrices
 
+func self_connect(
+	particleA:ParticleData.Particle,
+	particleB:ParticleData.Particle,
+	id:int,
+	base_matrix:InteractionMatrix
+) -> InteractionMatrix:
+	return connect_particle_to_id(particleA, particleB, id, id, base_matrix)
+
+func self_connect_ABC(
+	particleA:ParticleData.Particle,
+	particleB:ParticleData.Particle,
+	particleC:ParticleData.Particle,
+	is_AB_connection_particle:bool,
+	is_BC_connection_particle:bool,
+	is_AC_connection_particle:bool,
+	id:int,
+	base_matrix:InteractionMatrix,
+	to_ids: PackedInt32Array = range(base_matrix.matrix_size)
+) -> Array[InteractionMatrix]:
+
+	var connected_matrices: Array[InteractionMatrix] = []
+	
+	if is_AB_connection_particle:
+		for matrix:InteractionMatrix in connect_particle_to_ids(
+			particleA, id, base_matrix, to_ids
+		):
+			connected_matrices.push_back(
+				self_connect(particleB, particleC, id, matrix)
+			)
+	elif is_AC_connection_particle:
+		for matrix:InteractionMatrix in connect_particle_to_ids(
+			particleB, id, base_matrix, to_ids
+		):
+			connected_matrices.push_back(
+				self_connect(particleA, particleC, id, matrix)
+			)
+	elif is_BC_connection_particle:
+		for matrix:InteractionMatrix in connect_particle_to_ids(
+			particleA, id, base_matrix, to_ids
+		):
+			connected_matrices.push_back(
+				self_connect(particleB, particleC, id, matrix)
+			)
+	
+	return connected_matrices
+
 func has_connection_particle(
 	to_particles: PackedInt32Array,
 	from_particle: ParticleData.Particle
@@ -1046,10 +1264,7 @@ func is_connection_particle(
 	if from_particle == -to_particle:
 		return true
 	
-	return (
-		ParticleData.is_general(from_particle) 
-		and abs(to_particle) in ParticleData.GENERAL_CONVERSION[abs(from_particle)]
-	)
+	return ParticleData.general_can_convert(from_particle, to_particle)
 
 func get_useable_particle_interactions(useable_particles: Array) -> Dictionary:
 	var useable_particle_interactions: Dictionary = {}
@@ -1326,15 +1541,15 @@ func get_hadron_connections_to_id(
 func is_out_particle(particle: ParticleData.Particle, state: StateLine.State) -> bool:
 	return StateLine.state_factor[state] == sign(particle)
 
-func interaction_size(interaction: Array) -> int:
-	return 1 + int(interaction.size() == 4)
-
 func is_connection_number_possible(unconnected_particle_count : int, interaction_count : int) -> bool:
 	if unconnected_particle_count == 0:
 		return interaction_count == 0
 	
 	if interaction_count == 1:
-		return unconnected_particle_count == INTERACTION_SIZE
+		return (
+			unconnected_particle_count == INTERACTION_SIZE
+			or unconnected_particle_count == 1
+		)
 
 	return unconnected_particle_count <= interaction_count * INTERACTION_SIZE
 

@@ -1,6 +1,6 @@
 extends PullOutTab
 
-const MAX_DEGREE: int = 8
+const MAX_DEGREE: int = 10
 
 var Initial: StateLine
 var Final: StateLine
@@ -199,15 +199,23 @@ func update_load_time_warning() -> void:
 		SolutionGeneration.Find.One:
 			LoadTimeWarning.push_in()
 		SolutionGeneration.Find.LowestOrder:
-			if min_degree < 6:
-				LoadTimeWarning.push_in()
-			else:
-				LoadTimeWarning.pull_out()
+			show_warning(min_degree)
 		SolutionGeneration.Find.All:
-			if max_degree < 6:
-				LoadTimeWarning.push_in()
-			else:
-				LoadTimeWarning.pull_out()
+			show_warning(max_degree)
+
+func show_warning(degree: int) -> void:
+	if degree <= 5:
+		LoadTimeWarning.push_in()
+		return
+	
+	if degree <= 7:
+		%WarningLabel.text = "Warning: May take a while"
+	elif degree <= 9:
+		%WarningLabel.text = "Warning: Don't do this"
+	elif degree == 10:
+		%WarningLabel.text = "Don't say I didn't warn you"
+	
+	LoadTimeWarning.pull_out()
 
 func _on_min_degree_value_changed(value: float) -> void:
 	MaxDegree.value = max(value, MaxDegree.value)
