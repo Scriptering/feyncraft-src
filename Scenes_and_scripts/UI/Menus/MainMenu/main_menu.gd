@@ -37,3 +37,4 @@ func _on_daily_pressed() -> void:
 func set_daily_counter() -> void:
 	var streak: int = StatsManager.stats.daily_streak
 	daily.text = "Daily%s"%[" %s"%[streak] if streak > 0 else ""]
+	daily.hide_icon = streak == 0

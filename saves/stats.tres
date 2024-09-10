@@ -1,12 +1,12 @@
-[gd_resource type="Resource" script_class="PlayerStats" load_steps=3 format=3]
+[gd_resource type="Resource" script_class="PlayerStats" load_steps=3 format=3 uid="uid://dr1lt51kx5mjw"]
 
 [ext_resource type="Script" path="res://PlayerStats.gd" id="1_ab2pe"]
-[ext_resource type="Resource" path="res://saves/Palettes/Custom/143.tres" id="1_ku1jl"]
+[ext_resource type="Resource" uid="uid://i0gswa7oaher" path="res://saves/Palettes/Default/teastain.tres" id="1_epglp"]
 
 [resource]
 script = ExtResource("1_ab2pe")
 daily_streak = 0
-palette = ExtResource("1_ku1jl")
+palette = ExtResource("1_epglp")
 last_daily_completed_date = {}
 muted = true
 hide_labels = false

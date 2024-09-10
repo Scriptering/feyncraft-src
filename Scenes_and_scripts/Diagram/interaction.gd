@@ -377,7 +377,7 @@ func has_colourless_gluon(particles := connected_particles) -> bool:
 		return false
 	
 	return !particles.all(
-		func(particle) -> bool:
+		func(particle: ParticleData.Particle) -> bool:
 			return ParticleData.has_colour(particle)
 	)
 
@@ -410,7 +410,7 @@ func is_no_H_valid(particles := connected_particles) -> bool:
 		return true
 
 	var no_H_lines : Array[ParticleLine] = connected_lines.filter(
-		func(particle_line) -> bool:
+		func(particle_line: ParticleLine) -> bool:
 			return particle_line.particle != ParticleData.Particle.H
 	)
 	

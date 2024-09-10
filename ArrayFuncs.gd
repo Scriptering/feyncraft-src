@@ -35,6 +35,22 @@ static func packed_int_any(array: PackedInt32Array, test_func: Callable) -> bool
 	
 	return false
 
+static func packed_int_filter(array: PackedInt32Array, test_func: Callable) -> PackedInt32Array:
+	var filtered_array: PackedInt32Array = []
+	for e:int in array:
+		if test_func.call(e):
+			filtered_array.push_back(e)
+	
+	return filtered_array
+
+static func packed_int_get_first(array: PackedInt32Array, test_func: Callable) -> int:
+	for e:int in array:
+		if test_func.call(e):
+			return e
+	
+	printerr("Not found")
+	return -1
+
 static func find_all_var(array: Array, test_func: Callable, start_index: int = 0) -> PackedInt32Array:
 	var found_ids: PackedInt32Array = []
 	

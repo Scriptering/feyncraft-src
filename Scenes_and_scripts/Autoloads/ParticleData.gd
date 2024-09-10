@@ -640,150 +640,151 @@ func set_interaction_strength_limits() -> void:
 
 var PARTICLE_INTERACTIONS : Dictionary = {
 	Particle.photon : [
-		[Particle.photon, Particle.bright_quark, Particle.bright_quark],
-		[Particle.photon, Particle.dark_quark, Particle.dark_quark],
-		[Particle.photon, Particle.lepton, Particle.lepton],
-		[Particle.photon, Particle.W, Particle.W],
-		[Particle.photon, Particle.W, Particle.W, Particle.photon],
-		[Particle.photon, Particle.W, Particle.W, Particle.Z]
+		[-Particle.bright_quark, Particle.bright_quark],
+		[-Particle.dark_quark, Particle.dark_quark],
+		[-Particle.lepton, Particle.lepton],
+		[-Particle.W, Particle.W],
+		[-Particle.W, Particle.W, Particle.photon],
+		[-Particle.W, Particle.W, Particle.Z]
 	],
 	Particle.gluon : [
-		[Particle.gluon, Particle.bright_quark, Particle.bright_quark],
-		[Particle.gluon, Particle.dark_quark, Particle.dark_quark],
-		[Particle.gluon, Particle.gluon, Particle.gluon],
-		[Particle.gluon, Particle.gluon, Particle.gluon, Particle.gluon]
+		[-Particle.bright_quark, Particle.bright_quark],
+		[-Particle.dark_quark, Particle.dark_quark],
+		[Particle.gluon, Particle.gluon],
+		[Particle.gluon, Particle.gluon, Particle.gluon]
 	],
 	Particle.Z : [
-		[Particle.Z, Particle.bright_quark, Particle.bright_quark],
-		[Particle.Z, Particle.dark_quark, Particle.dark_quark],
-		[Particle.Z, Particle.lepton, Particle.lepton],
-		[Particle.Z, Particle.lepton_neutrino, Particle.lepton_neutrino],
-		[Particle.Z, Particle.W, Particle.W],
-		[Particle.Z, Particle.W, Particle.W, Particle.Z],
-		[Particle.Z, Particle.W, Particle.W, Particle.photon],
-		[Particle.Z, Particle.H, Particle.Z],
-		[Particle.Z, Particle.H, Particle.H, Particle.Z],
+		[-Particle.bright_quark, Particle.bright_quark],
+		[-Particle.dark_quark, Particle.dark_quark],
+		[-Particle.lepton, Particle.lepton],
+		[-Particle.lepton_neutrino, Particle.lepton_neutrino],
+		[-Particle.W, Particle.W],
+		[-Particle.W, Particle.W, Particle.Z],
+		[-Particle.W, Particle.W, Particle.photon],
+		[Particle.H, Particle.Z],
+		[Particle.H, Particle.H, Particle.Z],
 	],
 	Particle.H : [
-		[Particle.H, Particle.bright_quark, Particle.bright_quark],
-		[Particle.H, Particle.dark_quark, Particle.dark_quark],
-		[Particle.H, Particle.lepton, Particle.lepton],
-		[Particle.H, Particle.lepton_neutrino, Particle.lepton_neutrino],
+		[-Particle.bright_quark, Particle.bright_quark],
+		[-Particle.dark_quark, Particle.dark_quark],
+		[-Particle.lepton, Particle.lepton],
+		[-Particle.lepton_neutrino, Particle.lepton_neutrino],
+		[Particle.Z, Particle.Z],
+		[Particle.H, Particle.H],
+		[Particle.H, Particle.H, Particle.H],
 		[Particle.H, Particle.Z, Particle.Z],
-		[Particle.H, Particle.H, Particle.H, Particle.H],
-		[Particle.H, Particle.H, Particle.Z, Particle.Z],
-		[Particle.H, Particle.H, Particle.W, Particle.W]
+		[Particle.H, -Particle.W, Particle.W]
 	],
 	Particle.W : [
-		[Particle.W, Particle.lepton, Particle.lepton_neutrino],
-		[Particle.W, Particle.bright_quark, Particle.dark_quark],
-		[Particle.W, Particle.W, Particle.Z],
-		[Particle.W, Particle.W, Particle.photon],
-		[Particle.W, Particle.W, Particle.W, Particle.W],
-		[Particle.W, Particle.W, Particle.Z, Particle.Z],
-		[Particle.W, Particle.W, Particle.photon, Particle.photon],
-		[Particle.W, Particle.W, Particle.Z, Particle.photon],
-		[Particle.W, Particle.H, Particle.H, Particle.W]
+		[-Particle.lepton, Particle.lepton_neutrino],
+		[-Particle.bright_quark, Particle.dark_quark],
+		[Particle.W, Particle.Z],
+		[Particle.W, Particle.photon],
+		[-Particle.W, Particle.W, Particle.W],
+		[Particle.W, Particle.Z, Particle.Z],
+		[Particle.W, Particle.photon, Particle.photon],
+		[Particle.W, Particle.Z, Particle.photon],
+		[Particle.H, Particle.H, Particle.W]
 	],
 	Particle.lepton : [
-		[Particle.lepton, Particle.lepton, Particle.photon],
-		[Particle.lepton, Particle.lepton, Particle.Z],
-		[Particle.lepton, Particle.lepton, Particle.H],
-		[Particle.lepton, Particle.lepton_neutrino, Particle.W],
+		[Particle.lepton, Particle.photon],
+		[Particle.lepton, Particle.Z],
+		[Particle.lepton, Particle.H],
+		[Particle.lepton_neutrino, Particle.W],
 	],
 	Particle.electron : [
-		[Particle.electron, Particle.electron, Particle.photon],
-		[Particle.electron, Particle.electron, Particle.Z],
-		[Particle.electron, Particle.electron, Particle.H],
-		[Particle.electron, Particle.electron_neutrino, Particle.W],
+		[Particle.electron, Particle.photon],
+		[Particle.electron, Particle.Z],
+		[Particle.electron, Particle.H],
+		[Particle.electron_neutrino, Particle.W],
 	],
 	Particle.muon : [
-		[Particle.muon, Particle.muon, Particle.photon],
-		[Particle.muon, Particle.muon, Particle.Z],
-		[Particle.muon, Particle.muon, Particle.H],
-		[Particle.muon, Particle.muon_neutrino, Particle.W],
+		[Particle.muon, Particle.photon],
+		[Particle.muon, Particle.Z],
+		[Particle.muon, Particle.H],
+		[Particle.muon_neutrino, Particle.W],
 	],
 	Particle.tau : [
-		[Particle.tau, Particle.tau, Particle.photon],
-		[Particle.tau, Particle.tau, Particle.Z],
-		[Particle.tau, Particle.tau, Particle.H],
-		[Particle.tau, Particle.tau_neutrino, Particle.W],
+		[Particle.tau, Particle.photon],
+		[Particle.tau, Particle.Z],
+		[Particle.tau, Particle.H],
+		[Particle.tau_neutrino, Particle.W],
 	],
 	Particle.lepton_neutrino : [
-		[Particle.lepton_neutrino, Particle.lepton_neutrino, Particle.Z],
-		[Particle.lepton_neutrino, Particle.lepton_neutrino, Particle.H],
-		[Particle.lepton_neutrino, Particle.lepton, -Particle.W],
+		[Particle.lepton_neutrino, Particle.Z],
+		[Particle.lepton_neutrino, Particle.H],
+		[Particle.lepton, -Particle.W],
 	],
 	Particle.electron_neutrino : [
-		[Particle.electron_neutrino, Particle.electron_neutrino, Particle.Z],
-		[Particle.electron_neutrino, Particle.electron_neutrino, Particle.H],
-		[Particle.electron_neutrino, Particle.electron, -Particle.W],
+		[Particle.electron_neutrino, Particle.Z],
+		[Particle.electron_neutrino, Particle.H],
+		[Particle.electron, -Particle.W],
 	],
 	Particle.muon_neutrino : [
-		[Particle.muon_neutrino, Particle.muon_neutrino, Particle.Z],
-		[Particle.muon_neutrino, Particle.muon_neutrino, Particle.H],
-		[Particle.muon_neutrino, Particle.muon, -Particle.W],
+		[Particle.muon_neutrino, Particle.Z],
+		[Particle.muon_neutrino, Particle.H],
+		[Particle.muon, -Particle.W],
 	],
 	Particle.tau_neutrino : [
-		[Particle.tau_neutrino, Particle.tau_neutrino, Particle.Z],
-		[Particle.tau_neutrino, Particle.tau_neutrino, Particle.H],
-		[Particle.tau_neutrino, Particle.tau, -Particle.W],
+		[Particle.tau_neutrino, Particle.Z],
+		[Particle.tau_neutrino, Particle.H],
+		[Particle.tau, -Particle.W],
 	],
 	Particle.bright_quark : [
-		[Particle.bright_quark, Particle.bright_quark, Particle.photon],
-		[Particle.bright_quark, Particle.bright_quark, Particle.gluon],
-		[Particle.bright_quark, Particle.bright_quark, Particle.Z],
-		[Particle.bright_quark, Particle.bright_quark, Particle.H],
-		[Particle.bright_quark, Particle.dark_quark, -Particle.W],
+		[Particle.bright_quark, Particle.photon],
+		[Particle.bright_quark, Particle.gluon],
+		[Particle.bright_quark, Particle.Z],
+		[Particle.bright_quark, Particle.H],
+		[Particle.dark_quark, -Particle.W],
 	],
 	Particle.up : [
-		[Particle.up, Particle.up, Particle.photon],
-		[Particle.up, Particle.up, Particle.gluon],
-		[Particle.up, Particle.up, Particle.Z],
-		[Particle.up, Particle.up, Particle.H],
-		[Particle.up, Particle.dark_quark, -Particle.W],
+		[Particle.up, Particle.photon],
+		[Particle.up, Particle.gluon],
+		[Particle.up, Particle.Z],
+		[Particle.up, Particle.H],
+		[Particle.dark_quark, -Particle.W],
 	],
 	Particle.charm : [
-		[Particle.charm, Particle.charm, Particle.photon],
-		[Particle.charm, Particle.charm, Particle.gluon],
-		[Particle.charm, Particle.charm, Particle.Z],
-		[Particle.charm, Particle.charm, Particle.H],
-		[Particle.charm, Particle.dark_quark, -Particle.W],
+		[Particle.charm, Particle.photon],
+		[Particle.charm, Particle.gluon],
+		[Particle.charm, Particle.Z],
+		[Particle.charm, Particle.H],
+		[Particle.dark_quark, -Particle.W],
 	],
 	Particle.top : [
-		[Particle.top, Particle.top, Particle.photon],
-		[Particle.top, Particle.top, Particle.gluon],
-		[Particle.top, Particle.top, Particle.Z],
-		[Particle.top, Particle.top, Particle.H],
-		[Particle.top, Particle.dark_quark, -Particle.W],
+		[Particle.top, Particle.photon],
+		[Particle.top, Particle.gluon],
+		[Particle.top, Particle.Z],
+		[Particle.top, Particle.H],
+		[Particle.dark_quark, -Particle.W],
 	],
 	Particle.dark_quark : [
-		[Particle.dark_quark, Particle.dark_quark, Particle.photon],
-		[Particle.dark_quark, Particle.dark_quark, Particle.gluon],
-		[Particle.dark_quark, Particle.dark_quark, Particle.Z],
-		[Particle.dark_quark, Particle.dark_quark, Particle.H],
-		[Particle.dark_quark, Particle.bright_quark, Particle.W],
+		[Particle.dark_quark, Particle.photon],
+		[Particle.dark_quark, Particle.gluon],
+		[Particle.dark_quark, Particle.Z],
+		[Particle.dark_quark, Particle.H],
+		[Particle.bright_quark, Particle.W],
 	],
 	Particle.down : [
-		[Particle.down, Particle.down, Particle.photon],
-		[Particle.down, Particle.down, Particle.gluon],
-		[Particle.down, Particle.down, Particle.Z],
-		[Particle.down, Particle.down, Particle.H],
-		[Particle.down, Particle.bright_quark, Particle.W],
+		[Particle.down, Particle.photon],
+		[Particle.down, Particle.gluon],
+		[Particle.down, Particle.Z],
+		[Particle.down, Particle.H],
+		[Particle.bright_quark, Particle.W],
 	],
 	Particle.strange : [
-		[Particle.strange, Particle.strange, Particle.photon],
-		[Particle.strange, Particle.strange, Particle.gluon],
-		[Particle.strange, Particle.strange, Particle.Z],
-		[Particle.strange, Particle.strange, Particle.H],
-		[Particle.strange, Particle.bright_quark, Particle.W],
+		[Particle.strange, Particle.photon],
+		[Particle.strange, Particle.gluon],
+		[Particle.strange, Particle.Z],
+		[Particle.strange, Particle.H],
+		[Particle.bright_quark, Particle.W],
 	],
 	Particle.bottom : [
-		[Particle.bottom, Particle.bottom, Particle.photon],
-		[Particle.bottom, Particle.bottom, Particle.gluon],
-		[Particle.bottom, Particle.bottom, Particle.Z],
-		[Particle.bottom, Particle.bottom, Particle.H],
-		[Particle.bottom, Particle.bright_quark, Particle.W],
+		[Particle.bottom, Particle.photon],
+		[Particle.bottom, Particle.gluon],
+		[Particle.bottom, Particle.Z],
+		[Particle.bottom, Particle.H],
+		[Particle.bright_quark, Particle.W],
 	]
 }
 
@@ -955,8 +956,8 @@ func dimensionality(particle: ParticleData.Particle) -> float:
 func quantum_numbers(particle: ParticleData.Particle) -> Array[float]:
 	return QUANTUM_NUMBERS[base(particle)]
 
-func quantum_number(particle: ParticleData.Particle, quantum_number: QuantumNumber) -> float:
-	return QUANTUM_NUMBERS[base(particle)][quantum_number]
+func quantum_number(particle: ParticleData.Particle, p_quantum_number: QuantumNumber) -> float:
+	return sign(particle) * QUANTUM_NUMBERS[base(particle)][p_quantum_number]
 
 func has_charge(particle: ParticleData.Particle) -> bool:
 	return anti(particle) * quantum_number(base(particle), QuantumNumber.charge) != 0
@@ -965,4 +966,25 @@ func has_colour(particle: ParticleData.Particle) -> bool:
 	return base(particle) in COLOUR_PARTICLES
 
 func has_shade(particle: ParticleData.Particle) -> bool:
-	return base(particle) in SHADED_PARTICLES
+	return base(particle) not in UNSHADED_PARTICLES
+
+func is_fermion(particle: ParticleData.Particle) -> bool:
+	return !is_boson(particle)
+
+func is_boson(particle: ParticleData.Particle) -> bool:
+	return base(particle) in BOSONS
+
+func is_general(particle: ParticleData.Particle) -> bool:
+	return base(particle) in GENERAL_PARTICLES
+
+func is_particle(particleA: ParticleData.Particle, particleB: ParticleData.Particle) -> bool:
+	return base(particleA) == particleB
+
+func general_can_convert(
+	from_particle: ParticleData.Particle,
+	to_particle: ParticleData.Particle
+) -> bool:
+	return (
+		is_general(from_particle) 
+		and base(to_particle) in GENERAL_CONVERSION[base(from_particle)]
+	)

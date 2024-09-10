@@ -1,5 +1,7 @@
 extends PullOutTab
 
+const MAX_DEGREE: int = 10
+
 var Initial: StateLine
 var Final: StateLine
 var GeneratedDiagramViewer: MiniDiagramViewer
@@ -20,6 +22,8 @@ var GeneratedDiagramViewer: MiniDiagramViewer
 @export var StatesSaved: HBoxContainer
 @export var NoDiagramsFound: HBoxContainer
 @export var GenerationCompleted: HBoxContainer
+@export var FindSlider: HSlider
+@export var LoadTimeWarning: PullOutTab
 
 @onready var feedback_containers: Array[HBoxContainer] = [NoStatesToSave, StatesSaved, NoDiagramsFound, GenerationCompleted]
 
@@ -42,6 +46,8 @@ var max_degree: int:
 func _ready() -> void:
 	super._ready()
 	
+	MinDegree.max_value = MAX_DEGREE
+	MaxDegree.max_value = MAX_DEGREE
 	can_generate = !(InitialState == [] and FinalState == [])
 	
 	self.can_generate = can_generate
@@ -97,8 +103,12 @@ func generate(checks: Array[bool]) -> void:
 	
 	var generated_diagrams: Array[ConnectionMatrix] = (
 		SolutionGeneration.generate_diagrams(
-			InitialState, FinalState, min_degree, max_degree,
-			SolutionGeneration.get_useable_interactions_from_particles(useable_particles)
+			InitialState,
+			FinalState,
+			min_degree,
+			max_degree,
+			useable_particles,
+			int(FindSlider.value)
 		)
 	)
 	
@@ -180,12 +190,44 @@ func _on_electro_weak_toggled(button_pressed: bool) -> void:
 	EM_check.button_pressed = true
 	weak_check.button_pressed = true
 
+func update_load_time_warning() -> void:
+	var min_degree: int = MinDegree.value
+	var max_degree: int = MaxDegree.value
+	var find: SolutionGeneration.Find = int(FindSlider.value)
+	
+	match find:
+		SolutionGeneration.Find.One:
+			LoadTimeWarning.push_in()
+		SolutionGeneration.Find.LowestOrder:
+			show_warning(min_degree)
+		SolutionGeneration.Find.All:
+			show_warning(max_degree)
+
+func show_warning(degree: int) -> void:
+	if degree <= 5:
+		LoadTimeWarning.push_in()
+		return
+	
+	if degree <= 7:
+		%WarningLabel.text = "Warning: May take a while"
+	elif degree <= 9:
+		%WarningLabel.text = "Warning: Don't do this"
+	elif degree == 10:
+		%WarningLabel.text = "Don't say I didn't warn you"
+	
+	LoadTimeWarning.pull_out()
+
 func _on_min_degree_value_changed(value: float) -> void:
 	MaxDegree.value = max(value, MaxDegree.value)
+	update_load_time_warning()
 
 func _on_max_degree_value_changed(value: float) -> void:
 	MinDegree.value = min(value, MinDegree.value)
+	update_load_time_warning()
 
 func _on_submit_feedback_push_in_finished() -> void:
 	for feedback_container in feedback_containers:
 		feedback_container.hide()
+
+func _on_find_value_changed(value: float) -> void:
+	update_load_time_warning()

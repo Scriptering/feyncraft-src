@@ -6,6 +6,10 @@ extends ConnectionMatrix
 @export var state_line_positions : Array[int] = [0, 20]
 @export var decorations : Array[Decoration.Decor] = []
 
+func _init(_connection_matrix: ConnectionMatrix = null) -> void:
+	if _connection_matrix:
+		initialise_from_connection_matrix(_connection_matrix)
+
 func initialise_from_connection_matrix(from_connection_matrix: ConnectionMatrix) -> void:
 	connection_matrix = from_connection_matrix.connection_matrix.duplicate(true)
 	state_count = from_connection_matrix.state_count.duplicate()
@@ -63,8 +67,14 @@ func is_duplicate(comparison_matrix: Variant) -> bool:
 
 func make_drawable() -> void:
 	split_hadrons()
+	seperate_self_connections()
 	seperate_double_connections()
-#	reorder_hadrons()
+
+func seperate_self_connections() -> void:
+	for i:int in matrix_size:
+		if !are_interactions_connected(i, i):
+			continue
+		divert_connection(i, i)
 
 func seperate_double_connections() -> void:
 	for i:int in matrix_size:

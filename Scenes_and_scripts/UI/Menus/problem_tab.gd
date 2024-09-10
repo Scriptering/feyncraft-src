@@ -129,13 +129,16 @@ func submit_diagram() -> void:
 	diagram_submitted.emit()
 
 func generate_solution() -> ConnectionMatrix:
-	var useable_interactions: Array = SolutionGeneration.get_useable_interactions_from_particles(current_problem.allowed_particles)
-	
-	return(SolutionGeneration.generate_diagrams(
-		current_problem.state_interactions[StateLine.State.Initial], current_problem.state_interactions[StateLine.State.Final],
-		current_problem.degree, current_problem.degree, useable_interactions,
-		SolutionGeneration.Find.LowestOrder
-	).pick_random())
+	return(
+		SolutionGeneration.generate_diagrams(
+			current_problem.state_interactions[StateLine.State.Initial],
+			current_problem.state_interactions[StateLine.State.Final],
+			current_problem.degree,
+			current_problem.degree,
+			current_problem.allowed_particles,
+			SolutionGeneration.Find.One
+		)
+	).front()
 
 func is_submission_duplicate(submission: DrawingMatrix) -> bool:
 	var reduced_submission: ConnectionMatrix = submission.reduce_to_connection_matrix()

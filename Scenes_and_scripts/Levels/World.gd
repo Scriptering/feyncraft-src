@@ -76,15 +76,14 @@ func init(state_manager: Node) -> void:
 
 	Diagram.action.connect(_diagram_action_taken)
 	
-	#var diagrams: Array[ConnectionMatrix] = SolutionGeneration.generate_diagrams(
-		#[[-14, 15], [-14, 15], [-14, 15]],
-		#[[-14, 15], [-14, 15], [-14, 15]],
-		#1,
-		#2,
-		#SolutionGeneration.get_useable_interactions_from_particles(
-			#ProblemGeneration.get_useable_particles_from_interaction_checks([true, true, true, true]),
-		#)
-	#)
+	var diagrams: Array[ConnectionMatrix] = SolutionGeneration.generate_diagrams(
+		[[ParticleData.Particle.anti_up, ParticleData.Particle.up], [ParticleData.Particle.anti_up, ParticleData.Particle.up]],
+		[[ParticleData.Particle.anti_up, ParticleData.Particle.up], [ParticleData.Particle.anti_up, ParticleData.Particle.up]],
+		2,
+		4,
+		ProblemGeneration.get_useable_particles_from_interaction_checks([true, true, true, true]),
+		SolutionGeneration.Find.One
+	)
 
 func _ready() -> void:
 	Diagram.show_line_labels = !StatsManager.stats.hide_labels
@@ -148,7 +147,7 @@ func enter_problem_creation() -> void:
 				creating_problem.state_interactions[StateLine.State.Initial],
 				creating_problem.state_interactions[StateLine.State.Final],
 				creating_problem.degree, creating_problem.degree,
-				SolutionGeneration.get_useable_interactions_from_particles(creating_problem.allowed_particles),
+				creating_problem.allowed_particles,
 				SolutionGeneration.Find.One
 			).front()
 			
