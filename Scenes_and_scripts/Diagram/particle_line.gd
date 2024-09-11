@@ -133,9 +133,6 @@ func set_line_vector() -> void:
 	line_vector_length = line_vector.length()
 	line_vector_norm = line_vector.normalized()
 
-func get_quantum_number(quantum_number: ParticleData.QuantumNumber) -> float:
-	return anti * ParticleData.QUANTUM_NUMBERS[base_particle][quantum_number]
-
 func _set_anti(new_value: int) -> void:
 	anti = new_value
 

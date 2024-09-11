@@ -262,12 +262,6 @@ func validate(particle_lines := connected_lines) -> bool:
 	if get_invalid_quantum_numbers(particles, particle_lines).size() > 0:
 		return false
 	
-	if (
-		!is_interaction_in_list(particles)
-		and particles.size() >= INTERACTION_SIZE_MINIMUM
-	):
-		return false
-	
 	return true
 
 func has_weak(particles := connected_particles) -> bool:
@@ -334,7 +328,7 @@ func get_side_quantum_sum(side: Interaction.Side, particle_lines := connected_li
 			if line_is_W_0 and quantum_number == ParticleData.QuantumNumber.charge:
 				continue
 			
-			sum += particle_line.get_quantum_number(quantum_number)
+			sum += ParticleData.quantum_number(particle_line.particle, quantum_number)
 
 		quantum_sum.append(sum)
 

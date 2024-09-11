@@ -77,10 +77,10 @@ func init(state_manager: Node) -> void:
 	Diagram.action.connect(_diagram_action_taken)
 	
 	var diagrams: Array[ConnectionMatrix] = SolutionGeneration.generate_diagrams(
-		[[ParticleData.Particle.anti_up, ParticleData.Particle.up], [ParticleData.Particle.anti_up, ParticleData.Particle.up]],
-		[[ParticleData.Particle.anti_up, ParticleData.Particle.up], [ParticleData.Particle.anti_up, ParticleData.Particle.up]],
+		[[18, 18, 19], [-19, 14], [-4]],
+		[[-18, 19], [-20, 18], [14, 14, 18]],
 		2,
-		4,
+		5,
 		ProblemGeneration.get_useable_particles_from_interaction_checks([true, true, true, true]),
 		SolutionGeneration.Find.One
 	)
