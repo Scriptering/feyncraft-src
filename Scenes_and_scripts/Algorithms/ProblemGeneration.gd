@@ -380,11 +380,11 @@ func get_next_state_particles(
 		)[0]
 		
 		if !solution:
-			print("solution not found")
-			print(state_particles)
+			#print("solution not found")
+			#print(state_particles)
 			return []
-		print("solution found")
-		print(state_particles)
+		#print("solution found")
+		#print(state_particles)
 		return state_particles
 	
 	var state := rand_state()
