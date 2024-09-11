@@ -142,19 +142,23 @@ func show_feedback() -> void:
 	Feedback.pull_out()
 
 func _on_save_pressed() -> void:
-	InitialState = Initial.get_state_interactions()
-	FinalState = Final.get_state_interactions()
+	var initial_state: Array = Initial.get_state_interactions()
+	var final_state: Array = Final.get_state_interactions()
 	
-	if InitialState.size() == 0 and FinalState.size() == 0:
-		self.can_generate = false
+	if initial_state.is_empty() and final_state.is_empty():
 		NoStatesToSave.show()
-	else:
-		self.can_generate = true
-		StatesSaved.show()
-		set_checks(InitialState + FinalState)
-		
-		for state:StateLine.State in StateLine.STATES:
-			Equation.load_state_symbols(state, [InitialState, FinalState][state])
+		show_feedback()
+		return
+
+	InitialState = initial_state
+	FinalState = final_state
+
+	self.can_generate = true
+	StatesSaved.show()
+	set_checks(InitialState + FinalState)
+	
+	for state:StateLine.State in StateLine.STATES:
+		Equation.load_state_symbols(state, [InitialState, FinalState][state])
 		
 	show_feedback()
 
