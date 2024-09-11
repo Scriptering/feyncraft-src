@@ -92,28 +92,28 @@ enum QuantumNumber {charge, lepton, electron, muon, tau, quark, up, down, charm,
 
 enum Force {electromagnetic, strong, weak, electroweak}
 
-const QUANTUM_NUMBERS : Array[Array] = [
-[0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-[0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-[-1.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1],
-[-1.0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-[-1.0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1], 
-[-1.0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-[-1.0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-[0.0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-[0.0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-[0.0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-[0.0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-[2.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 0, 0, 1, 0],
-[2.0/3, 0, 0, 0, 0, 1.0/3, 1, 0, 0, 0, 0, 0, 1, 0],
-[2.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 1, 0, 0, 0, 1, 0],
-[2.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 1, 0, 1, 0],
-[-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 0, 0, 0, 1],
-[-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 1, 0, 0, 0, 0, 0, 1],
-[-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 1, 0, 0, 0, 1],
-[-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 0, 1, 0, 1]
+var QUANTUM_NUMBERS : Array[PackedFloat32Array] = [
+PackedFloat32Array([0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), 
+PackedFloat32Array([0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+PackedFloat32Array([0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+PackedFloat32Array([0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+PackedFloat32Array([-1.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1]),
+PackedFloat32Array([-1.0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]),
+PackedFloat32Array([-1.0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]), 
+PackedFloat32Array([-1.0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]),
+PackedFloat32Array([-1.0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1]),
+PackedFloat32Array([0.0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0]),
+PackedFloat32Array([0.0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0]),
+PackedFloat32Array([0.0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0]),
+PackedFloat32Array([0.0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0]),
+PackedFloat32Array([2.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 0, 0, 1, 0]),
+PackedFloat32Array([2.0/3, 0, 0, 0, 0, 1.0/3, 1, 0, 0, 0, 0, 0, 1, 0]),
+PackedFloat32Array([2.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 1, 0, 0, 0, 1, 0]),
+PackedFloat32Array([2.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 1, 0, 1, 0]),
+PackedFloat32Array([-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 0, 0, 0, 1]),
+PackedFloat32Array([-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 1, 0, 0, 0, 0, 0, 1]),
+PackedFloat32Array([-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 1, 0, 0, 0, 1]),
+PackedFloat32Array([-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 0, 1, 0, 1])
 ]
 
 const WEAK_QUANTUM_NUMBERS : Array[QuantumNumber] = [
@@ -953,7 +953,7 @@ func dimensionality(particle: ParticleData.Particle) -> float:
 	
 	return FERMION_DIMENSIONALITY
 
-func quantum_numbers(particle: ParticleData.Particle) -> Array[float]:
+func quantum_numbers(particle: ParticleData.Particle) -> PackedFloat32Array:
 	return QUANTUM_NUMBERS[base(particle)]
 
 func quantum_number(particle: ParticleData.Particle, p_quantum_number: QuantumNumber) -> float:

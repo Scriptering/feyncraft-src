@@ -56,8 +56,10 @@ func generate_diagrams(
 		
 		var hadron_connected_matrices := connect_hadrons(base_matrix)
 		
-		if found_one:
-			return [found_matrix]
+		if find_one:
+			if found_one:
+				return [found_matrix]
+			continue
 		
 		var state_fermion_connected_matrices : Array[InteractionMatrix] = []
 		for matrix:InteractionMatrix in hadron_connected_matrices:
@@ -65,10 +67,7 @@ func generate_diagrams(
 				connect_state_fermions(matrix)
 			)
 		hadron_connected_matrices.clear()
-		
-		if found_one:
-			return [found_matrix]
-		
+
 		var connected_matrices: Array[InteractionMatrix] = []
 		for matrix:InteractionMatrix in state_fermion_connected_matrices:
 			if is_matrix_colourless(matrix) or is_disconnected(matrix):
@@ -78,10 +77,7 @@ func generate_diagrams(
 				continue
 			
 			connected_matrices.append_array(connect_matrix(matrix))
-		
-		if found_one:
-			return [found_matrix]
-		
+
 		generated_connection_matrices.append_array(
 			get_connection_matrices(connected_matrices).filter(
 				func(matrix:ConnectionMatrix) -> bool:
@@ -92,6 +88,9 @@ func generate_diagrams(
 		if find == Find.LowestOrder and !generated_connection_matrices.is_empty():
 			return generated_connection_matrices
 	
+	if generated_connection_matrices.is_empty():
+		return [null]
+		
 	return generated_connection_matrices
 
 func is_matrix_complete(matrix: InteractionMatrix) -> bool:
@@ -105,12 +104,16 @@ func shuffle_particle_interactions() -> void:
 	for particle:ParticleData.Particle in g_particle_interactions.keys():
 		g_particle_interactions[particle].shuffle()
 
-func connect_hadrons(base_matrix: InteractionMatrix) -> Array[InteractionMatrix]:
-	var hadron_ids := ArrayFuncs.packed_int_filter(
-		base_matrix.get_state_ids(StateLine.State.Initial),
-		base_matrix.is_hadron
+func get_hadron_ids(matrix: InteractionMatrix) -> PackedInt32Array:
+	return ArrayFuncs.packed_int_filter(
+		matrix.get_state_ids(StateLine.State.Initial),
+		matrix.is_hadron
 	)
-	
+
+func connect_hadrons(
+	base_matrix: InteractionMatrix,
+	hadron_ids: PackedInt32Array = get_hadron_ids(base_matrix)
+) -> Array[InteractionMatrix]:
 	var to_ids := ArrayFuncs.packed_int_filter(
 		base_matrix.get_state_ids(StateLine.State.Final),
 		base_matrix.is_hadron
@@ -119,17 +122,15 @@ func connect_hadrons(base_matrix: InteractionMatrix) -> Array[InteractionMatrix]
 	if hadron_ids.is_empty():
 		if find_one:
 			connect_state_fermions(base_matrix)
+			return []
 		else:
 			return [base_matrix]
 	
-	if found_one:
-		return []
-	
 	var connected_matrices: Array[InteractionMatrix] = [base_matrix]
 	for id:int in hadron_ids:
-		var hadron_connected_matrices : Array[InteractionMatrix] = connected_matrices
+		var hadron_connected_matrices : Array[InteractionMatrix] = []
 		
-		for matrix:InteractionMatrix in hadron_connected_matrices:
+		for matrix:InteractionMatrix in connected_matrices:
 			var hadron: PackedInt32Array = matrix.unconnected_matrix[id]
 			
 			var unconnected_particles: PackedInt32Array = []
@@ -138,6 +139,13 @@ func connect_hadrons(base_matrix: InteractionMatrix) -> Array[InteractionMatrix]
 				unconnected_particles.append_array(particles)
 			
 			var further_matrices: Array[InteractionMatrix] = []
+			
+			var can_leave_all := is_connection_number_possible(
+				matrix.get_unconnected_particle_count(), g_degree
+			)
+			
+			if can_leave_all:
+				further_matrices.push_back(matrix)
 			
 			if hadron.size() == 2:
 				further_matrices.append_array(
@@ -169,26 +177,30 @@ func connect_hadrons(base_matrix: InteractionMatrix) -> Array[InteractionMatrix]
 						false
 					)
 				)
-				
-			hadron_connected_matrices.append_array(
-				further_matrices.filter(
-					func(matrix:InteractionMatrix) -> bool:
-						return !is_disconnected_hadron(matrix, id)
-			)
+			
+			further_matrices = further_matrices.filter(
+				func(matrix:InteractionMatrix) -> bool:
+					return !is_disconnected_id(matrix, id)
 			)
 			
 			if find_one:
 				for further_matrix:InteractionMatrix in further_matrices:
-					connect_hadrons(further_matrix)
+					connect_hadrons(further_matrix, hadron_ids.slice(1))
 					if found_one:
 						return []
+				continue
+
+			hadron_connected_matrices.append_array(further_matrices)
+		
+		if find_one:
+			return []
 			
 		connected_matrices.assign(hadron_connected_matrices)
 
 	return connected_matrices
 
-func is_disconnected_hadron(matrix: InteractionMatrix, state_id: int = -1) -> bool:
-	var reachable_ids: PackedInt32Array = matrix.reach_ids(state_id, [], true)
+func is_disconnected_id(matrix: InteractionMatrix, id: int) -> bool:
+	var reachable_ids: PackedInt32Array = matrix.reach_ids(id, [], true)
 	
 	if reachable_ids.size() == matrix.matrix_size:
 		return false
@@ -243,6 +255,10 @@ func connect_state_fermions(base_matrix: InteractionMatrix) -> Array[Interaction
 			var fermion_connected_matrices: Array[InteractionMatrix] = []
 			
 			for interaction_matrix:InteractionMatrix in connected_interaction_matrices:
+				if fermion not in interaction_matrix.unconnected_matrix[id]:
+					fermion_connected_matrices.push_back(interaction_matrix)
+					continue
+				
 				fermion_connected_matrices.append_array(
 					connect_fermion_from_id(
 						fermion,
@@ -251,6 +267,10 @@ func connect_state_fermions(base_matrix: InteractionMatrix) -> Array[Interaction
 					)
 				)
 			
+			fermion_connected_matrices = fermion_connected_matrices.filter(
+				func(matrix: InteractionMatrix) -> bool:
+					return !is_disconnected_id(matrix, id)
+			)
 			connected_interaction_matrices.assign(fermion_connected_matrices)
 
 	return connected_interaction_matrices
@@ -292,7 +312,9 @@ func connect_matrix(base_matrix: InteractionMatrix) -> Array[InteractionMatrix]:
 		
 		to_connect_matrices.clear()
 		for matrix:InteractionMatrix in further_matrices:
-			if is_complete(matrix):
+			if is_disconnected_id(matrix, from_id):
+				continue
+			elif is_complete(matrix):
 				connected_matrices.push_back(matrix)
 			else:
 				to_connect_matrices.push_back(matrix)
@@ -476,6 +498,10 @@ func add_interaction(
 	degree: int
 ) -> InteractionMatrix:
 	var particle_connected_matrix := base_matrix.duplicate(true)
+	
+	if particle == ParticleData.Particle.none:
+		return particle_connected_matrix
+	
 	particle_connected_matrix.add_unconnected_interaction(
 		interaction,
 		StateLine.State.None,
@@ -564,12 +590,7 @@ func connect_3interaction(
 	):
 		return []
 	
-	var particle_connected_matrix : InteractionMatrix
-	if particle == ParticleData.Particle.none:
-		particle_connected_matrix = base_matrix
-	else:
-		particle_connected_matrix = add_interaction(interaction, base_matrix, particle, from_id, degree)
-
+	var particle_connected_matrix : InteractionMatrix = add_interaction(interaction, base_matrix, particle, from_id, degree)
 	var connected_matrices: Array[InteractionMatrix] = []
 	if can_connect_A:
 		connected_matrices.append_array(
@@ -706,11 +727,7 @@ func connect_4interaction(
 		return []
 	
 	
-	var particle_connected_matrix : InteractionMatrix
-	if particle == ParticleData.Particle.none:
-		particle_connected_matrix = base_matrix
-	else:
-		particle_connected_matrix = add_interaction(interaction, base_matrix, particle, from_id, degree)
+	var particle_connected_matrix := add_interaction(interaction, base_matrix, particle, from_id, degree)
 	
 	var connected_matrices: Array[InteractionMatrix] = []
 	if can_connect_A:
@@ -935,6 +952,7 @@ func connect_particle_to_id(
 	base_matrix: InteractionMatrix
 ) -> InteractionMatrix:
 
+
 	var connected_matrix: InteractionMatrix = base_matrix.duplicate(true)
 	connected_matrix.connect_asymmetric_interactions(
 		from_id,
@@ -1011,7 +1029,7 @@ func connect_2_particles_to_ids(
 					from_id,
 					particleA_connected_matrix,
 					to_ids.slice(to_ids.find(to_idA)),
-					to_particle_indexA + 1
+					to_particle_indexA
 				)
 			)
 		
@@ -1040,7 +1058,10 @@ func connect_3_particles_to_ids(
 			):
 				connected_matrices.append_array(
 					connect_particle_to_ids(
-						particleC, from_id, particleA_connected_matrix, to_ids
+						particleC,
+						from_id,
+						particleA_connected_matrix,
+						to_ids
 					)
 				)
 		
@@ -1052,7 +1073,11 @@ func connect_3_particles_to_ids(
 		):
 			connected_matrices.append_array(
 				connect_2_particles_to_ids(
-					particleB, particleC, from_id, particleA_connected_matrix
+					particleB,
+					particleC,
+					from_id,
+					particleA_connected_matrix,
+					to_ids
 				)
 			)
 		
@@ -1060,11 +1085,15 @@ func connect_3_particles_to_ids(
 	
 	elif (particleB != particleC):
 		for particleC_connected_matrix in connect_particle_to_ids(
-			particleC, from_id, base_matrix
+			particleC, from_id, base_matrix, to_ids
 		):
 			connected_matrices.append_array(
 				connect_2_particles_to_ids(
-					particleA, particleB, from_id, particleC_connected_matrix
+					particleA,
+					particleB,
+					from_id,
+					particleC_connected_matrix,
+					to_ids
 				)
 			)
 		
@@ -1101,7 +1130,7 @@ func connect_3_particles_to_ids(
 					from_id,
 					particleA_connected_matrix,
 					to_ids.slice(to_ids.find(to_idA)),
-					to_particle_indexA + 1
+					to_particle_indexA
 				)
 			)
 	
