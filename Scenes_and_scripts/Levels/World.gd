@@ -76,14 +76,14 @@ func init(state_manager: Node) -> void:
 
 	Diagram.action.connect(_diagram_action_taken)
 	
-	var diagrams: Array[ConnectionMatrix] = SolutionGeneration.generate_diagrams(
-		[[18, 18, 19], [-19, 14], [-4]],
-		[[-18, 19], [-20, 18], [14, 14, 18]],
-		2,
-		5,
-		ProblemGeneration.get_useable_particles_from_interaction_checks([true, true, true, true]),
-		SolutionGeneration.Find.One
-	)
+	#var diagrams: Array[ConnectionMatrix] = SolutionGeneration.generate_diagrams(
+		#[[18, 18, 19], [-19, 14], [-4]],
+		#[[-18, 19], [-20, 18], [14, 14, 18]],
+		#2,
+		#5,
+		#ProblemGeneration.get_useable_particles_from_interaction_checks([true, true, true, true]),
+		#SolutionGeneration.Find.One
+	#)
 
 func _ready() -> void:
 	Diagram.show_line_labels = !StatsManager.stats.hide_labels
