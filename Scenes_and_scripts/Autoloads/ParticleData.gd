@@ -987,4 +987,5 @@ func general_can_convert(
 	return (
 		is_general(from_particle) 
 		and base(to_particle) in GENERAL_CONVERSION[base(from_particle)]
+		and sign(to_particle) != sign(from_particle)
 	)

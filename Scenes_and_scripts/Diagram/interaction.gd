@@ -223,8 +223,6 @@ func should_request_deletion() -> bool:
 func move(to_position: Vector2i) -> void:
 	has_moved = true
 	position = to_position
-	
-	validate()
 
 func has_particle_connected(particle: ParticleData.Particle) -> bool:
 	return particle in connected_particles
@@ -273,10 +271,10 @@ func get_invalid_quantum_numbers(
 ) -> Array[ParticleData.QuantumNumber]:
 	
 	var is_weak: bool = has_weak(particles)
-	var has_W_0: bool = particle_lines.any(
-		func(particle_line: ParticleLine) -> bool:
-			return particle_line.line_vector.x == 0 and particle_line.base_particle == ParticleData.Particle.W
-	)
+	#var has_W_0: bool = particle_lines.any(
+		#func(particle_line: ParticleLine) -> bool:
+			#return particle_line.line_vector.x == 0 and particle_line.base_particle == ParticleData.Particle.W
+	#)
 	var invalid_quantum_numbers: Array[ParticleData.QuantumNumber] = []
 	var before_quantum_sum : Array[float] = get_side_quantum_sum(Side.Before, particle_lines)
 	var after_quantum_sum : Array[float] = get_side_quantum_sum(Side.After, particle_lines)
@@ -285,12 +283,16 @@ func get_invalid_quantum_numbers(
 		var quantum_number_difference := before_quantum_sum[quantum_number] - after_quantum_sum[quantum_number]
 		var quantum_numbers_equal := is_zero_approx(quantum_number_difference)
 		
-		if !quantum_numbers_equal:
-			if has_W_0 and quantum_number == ParticleData.QuantumNumber.charge and abs(quantum_number_difference) == 1:
-				continue
-			
-			if !is_weak or quantum_number not in ParticleData.WEAK_QUANTUM_NUMBERS:
-				invalid_quantum_numbers.append(quantum_number)
+		if quantum_numbers_equal:
+			continue
+
+		#if has_W_0 and quantum_number == ParticleData.QuantumNumber.charge and abs(quantum_number_difference) == 1:
+			#continue
+		
+		if is_weak and quantum_number in ParticleData.WEAK_QUANTUM_NUMBERS:
+			continue
+		
+		invalid_quantum_numbers.append(quantum_number)
 	
 	return invalid_quantum_numbers
 
@@ -323,11 +325,11 @@ func get_side_quantum_sum(side: Interaction.Side, particle_lines := connected_li
 	for quantum_number:ParticleData.QuantumNumber in ParticleData.QuantumNumber.values():
 		var sum: float = 0
 		for particle_line:ParticleLine in side_connected_lines:
-			var line_is_W_0: bool = particle_line.line_vector.x == 0 and particle_line.base_particle == ParticleData.Particle.W
-			
-			if line_is_W_0 and quantum_number == ParticleData.QuantumNumber.charge:
-				continue
-			
+			#var line_is_W_0: bool = particle_line.line_vector.x == 0 and particle_line.base_particle == ParticleData.Particle.W
+			#
+			#if line_is_W_0 and quantum_number == ParticleData.QuantumNumber.charge:
+				#continue
+			#
 			sum += ParticleData.quantum_number(particle_line.particle, quantum_number)
 
 		quantum_sum.append(sum)
@@ -370,7 +372,10 @@ func has_colourless_gluon(particles := connected_particles) -> bool:
 	if ParticleData.Particle.gluon not in particles:
 		return false
 	
-	return !particles.all(
+	var no_gluon_particles := particles.duplicate()
+	no_gluon_particles.erase(ParticleData.Particle.gluon)
+	
+	return !no_gluon_particles.any(
 		func(particle: ParticleData.Particle) -> bool:
 			return ParticleData.has_colour(particle)
 	)

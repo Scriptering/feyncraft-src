@@ -12,6 +12,7 @@ var found_one: bool = false
 var found_matrix: ConnectionMatrix
 var g_degree: int
 var g_particle_interactions: Dictionary = {}
+var g_allow_tadpoles: bool
 
 var find: Find = Find.All
 
@@ -21,12 +22,15 @@ func generate_diagrams(
 	min_degree: int,
 	max_degree: int,
 	useable_particles: PackedInt32Array,
-	p_find: Find = Find.All
+	p_find: Find = Find.All,
+	allow_tadpoles: bool = false
 ) -> Array[ConnectionMatrix]:
 	
 	find = p_find
 	find_one = find == Find.One
 	found_one = false
+	
+	g_allow_tadpoles = allow_tadpoles
 	
 	start_time = Time.get_ticks_usec()
 	var print_results : bool = false
@@ -92,13 +96,6 @@ func generate_diagrams(
 		return [null]
 		
 	return generated_connection_matrices
-
-func is_matrix_complete(matrix: InteractionMatrix) -> bool:
-	return (
-		!matrix.has_unconnected_particles()
-		and matrix.is_fully_connected(true)
-		and !is_matrix_colourless(matrix)
-	)
 
 func shuffle_particle_interactions() -> void:
 	for particle:ParticleData.Particle in g_particle_interactions.keys():
@@ -199,20 +196,34 @@ func connect_hadrons(
 
 	return connected_matrices
 
+func is_tadpole_connection(from_id: int, to_id: int, matrix: InteractionMatrix) -> bool:
+	return ArrayFuncs.packed_int_all(
+		matrix.reach_ids(to_id, [from_id], true),
+		func(id: int) -> bool:
+			return (
+				matrix.unconnected_matrix[id].is_empty()
+				and matrix.get_state_from_id(id) == StateLine.State.None 
+			)
+	)
+
 func is_disconnected_id(matrix: InteractionMatrix, id: int) -> bool:
 	var reachable_ids: PackedInt32Array = matrix.reach_ids(id, [], true)
 	
 	if reachable_ids.size() == matrix.matrix_size:
 		return false
 	
-	if ArrayFuncs.packed_int_any(
+	return ArrayFuncs.packed_int_all(
 		reachable_ids, 
-		func(id: int) -> bool:
-			return !matrix.unconnected_matrix[id].is_empty()
-	):
-		return false
-	
-	return true
+		func(jd: int) -> bool:
+			return matrix.unconnected_matrix[jd].is_empty()
+	)
+
+func is_entry_fermion(particle: ParticleData.Particle) -> bool:
+	return (
+		particle > 0
+		and ParticleData.is_fermion(particle)
+		and !ParticleData.is_general(particle)
+	)
 
 func is_matrix_colourless(matrix: ConnectionMatrix) -> bool:
 	var has_gluon: bool = !matrix.find_first_id(
@@ -230,10 +241,7 @@ func is_matrix_colourless(matrix: ConnectionMatrix) -> bool:
 func connect_state_fermions(base_matrix: InteractionMatrix) -> Array[InteractionMatrix]:
 	var fermion_entry_states : Array = base_matrix.unconnected_matrix.map(
 		func(state: Array) -> Array:
-			return state.filter(
-				func(particle: ParticleData.Particle) -> bool:
-					return ParticleData.is_fermion(particle) and particle > 0
-			).map(ParticleData.base)
+			return state.filter(is_entry_fermion)
 	)
 	var fermion_entry_ids : PackedInt32Array = ArrayFuncs.find_all_var(
 		fermion_entry_states, func(state: Array) -> bool: return !state.is_empty()
@@ -363,9 +371,18 @@ func connect_particle_from_id(
 			unconnected_particles,
 		)
 		
+		if interaction_connected_matrices.is_empty():
+			continue
+		
 		for matrix:InteractionMatrix in interaction_connected_matrices:
 			connected_matrices.append_array(
 				connect_matrix_from_id(matrix, base_matrix.matrix_size)
+			)
+			
+		if !g_allow_tadpoles:
+			interaction_connected_matrices = interaction_connected_matrices.filter(
+				func(matrix: InteractionMatrix) -> bool:
+					return !is_tadpole_connection(from_id, matrix.matrix_size - 1, matrix)
 			)
 	
 	return connected_matrices
@@ -406,7 +423,9 @@ func get_interaction_connected_matrices(
 				from_particle,
 				from_id,
 				new_id,
-				interaction_degree
+				interaction_degree,
+				range(base_matrix.matrix_size),
+				g_allow_tadpoles
 			)
 		)
 	else:
@@ -419,7 +438,9 @@ func get_interaction_connected_matrices(
 				from_particle,
 				from_id,
 				new_id,
-				interaction_degree
+				interaction_degree,
+				range(base_matrix.matrix_size),
+				g_allow_tadpoles
 			)
 		)
 		
@@ -454,6 +475,19 @@ func connect_matrix_from_id(
 				return []
 		
 		return [base_matrix]
+
+	if base_matrix.unconnected_matrix[from_id].is_empty():
+		return [base_matrix]
+	
+	if base_matrix.degree > 0 and !g_allow_tadpoles and !ArrayFuncs.packed_int_any(
+		range(base_matrix.matrix_size),
+		func(id: int) -> bool:
+			return (
+				id != from_id
+				and base_matrix.unconnected_matrix[id].is_empty()
+			)
+	):
+		return []
 
 	var connected_matrices: Array[InteractionMatrix] = []
 	var to_connect_matrices: Array[InteractionMatrix] = [base_matrix]
@@ -1200,9 +1234,9 @@ func has_connection_particles(
 	has_particles.resize(from_particles.size())
 	has_particles.fill(false)
 	
-	for particle: ParticleData.Particle in to_particles:
+	for to_particle: ParticleData.Particle in to_particles:
 		for i:int in from_particles.size():
-			if !has_particles[i] and is_connection_particle(particle, from_particles[i]):
+			if !has_particles[i] and is_connection_particle(from_particles[i], to_particle):
 				has_particles[i] = true
 				break
 		

@@ -1,10 +1,9 @@
-[gd_scene load_steps=13 format=3 uid="uid://dh7y3g5jhluwj"]
+[gd_scene load_steps=12 format=3 uid="uid://dh7y3g5jhluwj"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_calm3"]
 [ext_resource type="Script" path="res://Scenes_and_scripts/UI/Menus/export_tab.gd" id="2_00o4x"]
 [ext_resource type="PackedScene" uid="uid://c842ueypoq88x" path="res://Scenes_and_scripts/UI/Buttons/pull_out_tab_button_left.tscn" id="3_n7eiy"]
 [ext_resource type="Texture2D" uid="uid://qxw17ji0dvra" path="res://Textures/Buttons/icons/share.png" id="4_q7ddc"]
-[ext_resource type="Theme" uid="uid://cfmbhoq8cuoge" path="res://Resources/Themes/ProjectTheme.tres" id="5_fm0dq"]
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="6_37pnp"]
 [ext_resource type="Texture2D" uid="uid://cdknipqtlfaia" path="res://Textures/Interactions/blob.png" id="7_exnkd"]
 [ext_resource type="PackedScene" uid="uid://cv1hcrp0bkj2o" path="res://Scenes_and_scripts/Diagram/decoration.tscn" id="7_ri02b"]
@@ -13,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes_and_scripts/UI/Buttons/panelButton.tscn" id="11_lyp7y"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_c3dkk"]
+content_margin_right = 4.0
 texture = ExtResource("6_37pnp")
 texture_margin_left = 6.0
 texture_margin_top = 6.0
@@ -53,7 +53,6 @@ icon_use_parent_material = true
 use_parent_material = true
 layout_mode = 2
 mouse_filter = 2
-theme = ExtResource("5_fm0dq")
 theme_override_styles/panel = SubResource("StyleBoxTexture_c3dkk")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MovingContainer/ContentContainer"]

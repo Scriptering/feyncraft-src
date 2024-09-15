@@ -46,7 +46,6 @@ func init() -> void:
 	for colour_button:ColourButton in ColourButtonDict.values():
 		colour_button.colour_changed.connect(_on_colour_button_colour_changed)
 	
-	ClearButton.visible = palette.advanced_colours
 	set_buttons_disabled(!palette.is_custom)
 	update_button_colours(false)
 	set_custom_button_visibility()
@@ -101,7 +100,7 @@ func set_custom_button_visibility() -> void:
 	DeleteButton.visible = palette.is_custom
 	UploadButton.visible = palette.is_custom
 	Shuffle.visible = palette.is_custom
-	ClearButton.visible = palette.is_custom
+	ClearButton.visible = palette.is_custom and palette.advanced_colours
 
 func update_custom_palette() -> void:
 	if palette.advanced_colours:

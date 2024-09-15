@@ -59,7 +59,7 @@ func build_quantum_number_tab() -> void:
 
 func fraction_to_string(fraction: float) -> String:
 	if is_integer(fraction):
-		return str(fraction)
+		return str(round(fraction))
 	
 	return str(int(round(fraction*3)))+'/3'
 

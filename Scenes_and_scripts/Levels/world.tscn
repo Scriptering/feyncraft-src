@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://c7n4o6dbkwilh"]
+[gd_scene load_steps=36 format=3 uid="uid://c7n4o6dbkwilh"]
 
 [ext_resource type="Script" path="res://Scenes_and_scripts/Levels/World.gd" id="1"]
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_6ope2"]
@@ -17,7 +17,6 @@
 [ext_resource type="Script" path="res://Scenes_and_scripts/Diagram/main_diagram.gd" id="17_23v64"]
 [ext_resource type="PackedScene" uid="uid://bbkvwth6ke1is" path="res://Scenes_and_scripts/UI/Menus/problem_tab.tscn" id="20_uaeg6"]
 [ext_resource type="PackedScene" uid="uid://bgvo11j4kfjdc" path="res://Scenes_and_scripts/UI/Menus/generation_button.tscn" id="22_u64s1"]
-[ext_resource type="Texture2D" uid="uid://bvc8sakoqg037" path="res://Textures/Background/background_border.png" id="23_ebvm0"]
 [ext_resource type="PackedScene" uid="uid://deuhqxgq1bveq" path="res://Scenes_and_scripts/UI/Menus/PuzzleUI.tscn" id="23_v0dtx"]
 [ext_resource type="PackedScene" uid="uid://wgw4km4uc7fh" path="res://Scenes_and_scripts/UI/Menus/menu_tab.tscn" id="24_f5s2a"]
 [ext_resource type="PackedScene" uid="uid://ds2iet11sv3ty" path="res://Scenes_and_scripts/UI/Buttons/particle_buttons.tscn" id="24_lunb1"]
@@ -256,17 +255,6 @@ use_parent_material = true
 use_parent_material = true
 anchors_preset = 0
 
-[node name="GridOutline" type="NinePatchRect" parent="."]
-z_index = 10
-use_parent_material = true
-offset_right = 640.0
-offset_bottom = 360.0
-texture = ExtResource("23_ebvm0")
-patch_margin_left = 15
-patch_margin_top = 15
-patch_margin_right = 15
-patch_margin_bottom = 15
-
 [node name="PullOutTabs" type="Node2D" parent="."]
 z_index = 3
 use_parent_material = true
@@ -278,33 +266,33 @@ offset_right = 2.0
 offset_bottom = -41.0
 
 [node name="VisionButton" parent="PullOutTabs" instance=ExtResource("3_hqsoq")]
-offset_left = 612.0
-offset_top = 45.0
-offset_right = 634.0
-offset_bottom = 105.0
+offset_left = 615.0
+offset_top = 39.0
+offset_right = 637.0
+offset_bottom = 99.0
 
 [node name="ParticleButtons" parent="PullOutTabs" instance=ExtResource("24_lunb1")]
 anchors_preset = 7
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 159.0
+offset_left = 163.0
 offset_top = 340.0
-offset_right = 159.0
+offset_right = 163.0
 offset_bottom = 340.0
 grow_vertical = 0
 size_flags_horizontal = 4
 
 [node name="PuzzleUI" parent="PullOutTabs" instance=ExtResource("23_v0dtx")]
-offset_left = -143.0
-offset_top = 159.0
-offset_right = -143.0
-offset_bottom = 159.0
+offset_left = -145.0
+offset_top = 96.0
+offset_right = -145.0
+offset_bottom = 96.0
 
 [node name="GenerationButton" parent="PullOutTabs" instance=ExtResource("22_u64s1")]
 offset_left = -144.0
-offset_top = 59.0
+offset_top = 51.0
 offset_right = -144.0
-offset_bottom = 59.0
+offset_bottom = 51.0
 
 [node name="ProblemTab" parent="PullOutTabs" instance=ExtResource("20_uaeg6")]
 use_parent_material = true
@@ -314,9 +302,9 @@ offset_right = 157.0
 offset_bottom = -26.0
 
 [node name="MenuTab" parent="PullOutTabs" instance=ExtResource("24_f5s2a")]
-offset_left = 515.0
+offset_left = 500.0
 offset_top = 339.0
-offset_right = 515.0
+offset_right = 500.0
 offset_bottom = 339.0
 
 [node name="HealthTab" parent="PullOutTabs" instance=ExtResource("31_f28gh")]
@@ -328,10 +316,10 @@ move_direction = 3
 
 [node name="ExportTab" parent="PullOutTabs" instance=ExtResource("27_jfab7")]
 z_index = 1
-offset_left = 613.0
-offset_top = 134.0
-offset_right = 613.0
-offset_bottom = 134.0
+offset_left = 616.0
+offset_top = 133.0
+offset_right = 616.0
+offset_bottom = 133.0
 
 [node name="FloatingMenus" type="CanvasLayer" parent="."]
 follow_viewport_enabled = true

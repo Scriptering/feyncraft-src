@@ -1,8 +1,7 @@
-[gd_scene load_steps=29 format=3 uid="uid://cv6hlxtiukmtc"]
+[gd_scene load_steps=28 format=3 uid="uid://cv6hlxtiukmtc"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_3f45t"]
 [ext_resource type="Script" path="res://Scenes_and_scripts/UI/VisionButtons/vision_buttons.gd" id="1_hjucs"]
-[ext_resource type="Theme" uid="uid://cfmbhoq8cuoge" path="res://Resources/Themes/ProjectTheme.tres" id="1_osu77"]
 [ext_resource type="PackedScene" uid="uid://c842ueypoq88x" path="res://Scenes_and_scripts/UI/Buttons/pull_out_tab_button_left.tscn" id="3_08n6d"]
 [ext_resource type="Texture2D" uid="uid://c7jti5gp87fni" path="res://Textures/UI/Information/InfoBox.png" id="4_hck84"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes_and_scripts/UI/Buttons/panelButton.tscn" id="5_tinf7"]
@@ -66,13 +65,13 @@ Button/styles/hover = SubResource("StyleBoxTexture_uqo3x")
 Button/styles/normal = SubResource("StyleBoxTexture_4ascm")
 Button/styles/pressed = SubResource("StyleBoxTexture_sf6a1")
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_800hr"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_vtf2m"]
 allow_unpress = true
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_h3qtm"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_b5icu"]
 allow_unpress = true
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_p4kvd"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_b4wby"]
 allow_unpress = true
 
 [sub_resource type="Animation" id="Animation_2er6j"]
@@ -123,7 +122,7 @@ script = ExtResource("1_hjucs")
 ContentContainer = NodePath("MovingContainer/Tab/ButtonContainer")
 TabButton = NodePath("MovingContainer/TabButton")
 MovingContainer = NodePath("MovingContainer")
-moving_container_margins = Vector2(6, 2.08165e-12)
+moving_container_margins = Vector2(8, 0)
 
 [node name="MovingContainer" type="HBoxContainer" parent="."]
 use_parent_material = true
@@ -141,7 +140,6 @@ expand_icon = true
 [node name="Tab" type="PanelContainer" parent="MovingContainer"]
 use_parent_material = true
 layout_mode = 2
-theme = ExtResource("1_osu77")
 theme_override_styles/panel = SubResource("StyleBoxTexture_ei2kr")
 
 [node name="ButtonContainer" type="VBoxContainer" parent="MovingContainer/Tab"]
@@ -155,7 +153,7 @@ layout_mode = 2
 theme = SubResource("Theme_fuyn4")
 minimum_size = Vector2(26, 26)
 toggle_mode = true
-button_group = SubResource("ButtonGroup_800hr")
+button_group = SubResource("ButtonGroup_vtf2m")
 icon = ExtResource("6_v7snu")
 expand_icon = true
 
@@ -164,7 +162,7 @@ layout_mode = 2
 theme = SubResource("Theme_fuyn4")
 minimum_size = Vector2(26, 26)
 toggle_mode = true
-button_group = SubResource("ButtonGroup_h3qtm")
+button_group = SubResource("ButtonGroup_b5icu")
 icon = ExtResource("6_63enc")
 expand_icon = true
 
@@ -173,7 +171,7 @@ layout_mode = 2
 theme = SubResource("Theme_fuyn4")
 minimum_size = Vector2(26, 26)
 toggle_mode = true
-button_group = SubResource("ButtonGroup_p4kvd")
+button_group = SubResource("ButtonGroup_b4wby")
 icon = ExtResource("7_nx8nj")
 expand_icon = true
 
