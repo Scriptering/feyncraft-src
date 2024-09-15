@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://bgvo11j4kfjdc"]
+[gd_scene load_steps=23 format=3 uid="uid://bgvo11j4kfjdc"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_h3eo1"]
 [ext_resource type="Script" path="res://Scenes_and_scripts/UI/Menus/generation_button.gd" id="2_plgpl"]
@@ -15,7 +15,6 @@
 [ext_resource type="Texture2D" uid="uid://dvx430022t0ua" path="res://Textures/Buttons/icons/next.png" id="7_dlb5i"]
 [ext_resource type="Texture2D" uid="uid://bf4xxweukjvsb" path="res://Textures/Buttons/icons/interaction.png" id="8_8ns2c"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes_and_scripts/UI/Buttons/panelButton.tscn" id="8_ihypl"]
-[ext_resource type="Theme" uid="uid://cfmbhoq8cuoge" path="res://Resources/Themes/ProjectTheme.tres" id="11_cnrrw"]
 [ext_resource type="Texture2D" uid="uid://ikybt5yg3l6m" path="res://Textures/Buttons/icons/Generate.png" id="17_gy2j5"]
 [ext_resource type="Script" path="res://Scenes_and_scripts/UI/Menus/PullOutTab.gd" id="25_jtb01"]
 [ext_resource type="Texture2D" uid="uid://tql14gtq05lf" path="res://Textures/UI/Information/invalid.png" id="26_mv20u"]
@@ -39,6 +38,7 @@ texture_margin_bottom = 6.0
 expand_margin_bottom = 30.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4t00w"]
+content_margin_left = 3.0
 content_margin_top = 4.0
 content_margin_bottom = 4.0
 texture = ExtResource("3_82pmn")
@@ -87,10 +87,10 @@ offset_right = 167.0
 use_parent_material = true
 layout_mode = 3
 anchors_preset = 0
-offset_left = -152.0
-offset_top = 166.0
-offset_right = -152.0
-offset_bottom = 166.0
+offset_left = -153.0
+offset_top = 190.0
+offset_right = -153.0
+offset_bottom = 190.0
 script = ExtResource("25_jtb01")
 ContentContainer = NodePath("MovingContainer/PanelContainer")
 MovingContainer = NodePath("MovingContainer")
@@ -338,6 +338,15 @@ alignment = 1
 
 [node name="ButtonSoundComponent" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/electro_weak" instance=ExtResource("6_aanob")]
 
+[node name="Tadpoles" type="CheckButton" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer"]
+unique_name_in_owner = true
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Allow Tadpoles"
+
+[node name="ButtonSoundComponent" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/Tadpoles" instance=ExtResource("6_aanob")]
+
 [node name="PanelContainer2" type="PanelContainer" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer"]
 use_parent_material = true
 layout_mode = 2
@@ -345,7 +354,7 @@ layout_mode = 2
 [node name="FindSlider" type="VBoxContainer" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/PanelContainer2"]
 use_parent_material = true
 layout_mode = 2
-theme_override_constants/separation = 1
+theme_override_constants/separation = 0
 
 [node name="Label" type="Label" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/PanelContainer2/FindSlider"]
 use_parent_material = true
@@ -357,15 +366,13 @@ horizontal_alignment = 1
 [node name="VBoxContainer" type="VBoxContainer" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/PanelContainer2/FindSlider"]
 use_parent_material = true
 layout_mode = 2
-theme_override_constants/separation = 3
+theme_override_constants/separation = 4
 
 [node name="Find" type="HSlider" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/PanelContainer2/FindSlider/VBoxContainer"]
 use_parent_material = true
-custom_minimum_size = Vector2(102, 2.08165e-12)
+custom_minimum_size = Vector2(115, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-theme = ExtResource("11_cnrrw")
-theme_override_constants/grabber_offset = -6
 max_value = 2.0
 tick_count = 3
 ticks_on_borders = true
@@ -373,14 +380,13 @@ ticks_on_borders = true
 [node name="HBoxContainer" type="HBoxContainer" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/PanelContainer2/FindSlider/VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
-theme_override_constants/separation = -6
+alignment = 1
 
 [node name="All" type="Label" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/PanelContainer2/FindSlider/VBoxContainer/HBoxContainer"]
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
-text = "All"
-horizontal_alignment = 1
+text = "  All"
 
 [node name="Lowest Order" type="Label" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/PanelContainer2/FindSlider/VBoxContainer/HBoxContainer"]
 use_parent_material = true
@@ -393,8 +399,8 @@ horizontal_alignment = 1
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
-text = " One"
-horizontal_alignment = 1
+text = " One "
+horizontal_alignment = 2
 
 [node name="Equation" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer" instance=ExtResource("4_ovcff")]
 custom_minimum_size = Vector2(120, 21)

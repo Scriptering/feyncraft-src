@@ -6,6 +6,7 @@ var Initial: StateLine
 var Final: StateLine
 var GeneratedDiagramViewer: MiniDiagramViewer
 
+@export_group("Children")
 @export var InitialState : Array
 @export var FinalState : Array
 @export var EM_check : CheckButton
@@ -108,7 +109,8 @@ func generate(checks: Array[bool]) -> void:
 			min_degree,
 			max_degree,
 			useable_particles,
-			int(FindSlider.value)
+			int(FindSlider.value),
+			%Tadpoles.button_pressed
 		)
 	)
 	
@@ -195,11 +197,7 @@ func _on_electro_weak_toggled(button_pressed: bool) -> void:
 	weak_check.button_pressed = true
 
 func update_load_time_warning() -> void:
-	var min_degree: int = MinDegree.value
-	var max_degree: int = MaxDegree.value
-	var find: SolutionGeneration.Find = int(FindSlider.value)
-	
-	match find:
+	match int(FindSlider.value):
 		SolutionGeneration.Find.One:
 			LoadTimeWarning.push_in()
 		SolutionGeneration.Find.LowestOrder:
@@ -233,5 +231,5 @@ func _on_submit_feedback_push_in_finished() -> void:
 	for feedback_container in feedback_containers:
 		feedback_container.hide()
 
-func _on_find_value_changed(value: float) -> void:
+func _on_find_value_changed(_value: float) -> void:
 	update_load_time_warning()

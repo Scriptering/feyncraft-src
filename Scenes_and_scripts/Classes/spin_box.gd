@@ -8,6 +8,8 @@ func _ready() -> void:
 	
 	value_changed.connect(_on_value_changed)
 	
+	line_edit.selecting_enabled = false
+	
 	line_edit.focus_entered.connect(_on_focus_entered)
 	line_edit.focus_exited.connect(_on_focus_exited)
 	

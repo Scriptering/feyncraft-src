@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="PlayerStats" load_steps=3 format=3 uid="uid://bxp5ri456s7xh"]
+[gd_resource type="Resource" script_class="PlayerStats" load_steps=3 format=3 uid="uid://da5krurwn3ex6"]
 
 [ext_resource type="Script" path="res://PlayerStats.gd" id="1_ab2pe"]
 [ext_resource type="Resource" uid="uid://i0gswa7oaher" path="res://saves/Palettes/Default/teastain.tres" id="1_epglp"]

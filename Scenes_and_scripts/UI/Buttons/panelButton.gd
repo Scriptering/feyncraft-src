@@ -107,7 +107,6 @@ func _set_button_disabled(new_value: bool) -> void:
 	$Button.disabled = new_value
 	
 	if is_inside_tree() and disabled:
-		await get_tree().process_frame
 		self.button_pressed = false
 		_on_button_button_up()
 
@@ -245,8 +244,6 @@ func play_sound(button_pressed_state: bool) -> void:
 func _on_visibility_changed() -> void:
 	if !is_inside_tree():
 		return
-	
-	await get_tree().process_frame
 	
 	if button_pressed:
 		set_content_margins(ButtonState[PRESSED])

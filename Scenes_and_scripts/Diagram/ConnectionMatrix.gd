@@ -276,15 +276,14 @@ func is_fully_connected(bidirectional: bool = false) -> bool:
 	
 	return reach_ids(start_id, reached_ids, bidirectional).size() == matrix_size
 
-func reach_ids(id: int, reached_ids: PackedInt32Array, bidirectional: bool) -> PackedInt32Array:
-	reached_ids.push_back(id)
+func reach_ids(from_id: int, reached_ids: PackedInt32Array, bidirectional: bool) -> PackedInt32Array:
+	reached_ids.push_back(from_id)
 	
-	for jd in matrix_size:
-		if jd in reached_ids:
+	for to_id in get_connected_ids(from_id, bidirectional):
+		if to_id in reached_ids:
 			continue
 		
-		if are_interactions_connected(id, jd, bidirectional):
-			reached_ids = reach_ids(jd, reached_ids, bidirectional)
+		reached_ids = reach_ids(to_id, reached_ids, bidirectional)
 		
 	return reached_ids
 

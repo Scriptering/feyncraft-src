@@ -81,9 +81,6 @@ func create_hadron_joint(drawing_matrix: DrawingMatrix, hadron_ids: PackedInt32A
 
 func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 	super.draw_diagram(drawing_matrix)
-	
-	await get_tree().process_frame
-
 	show_interaction_dots(drawing_matrix)
 
 	for split_hadron:PackedInt32Array in drawing_matrix.split_hadron_ids:

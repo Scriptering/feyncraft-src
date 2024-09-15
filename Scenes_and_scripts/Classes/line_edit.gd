@@ -8,6 +8,7 @@ func _ready() -> void:
 	focus_entered.connect(_on_focus_entered)
 	focus_exited.connect(_on_focus_exited)
 	
+	selecting_enabled = false
 	caret_blink = true
 
 func _input(_event: InputEvent) -> void:

@@ -35,8 +35,6 @@ func create_picker_panel() -> void:
 			$Button.button_pressed = false
 	)
 	
-	await get_tree().process_frame
-	
 	EventBus.add_floating_menu.emit(picker_panel)
 
 func _on_button_toggled(toggled_on: bool) -> void:

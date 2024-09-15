@@ -18,7 +18,8 @@ signal closed
 @export var resave_button : PanelButton
 @export var title_label: Label
 @export var mini_diagram: MiniDiagram
-@export var index_label: Label
+@export var max_index_label: Label
+@export var index: SpinBox
 @export var left: PanelButton
 @export var right: PanelButton
 
@@ -32,8 +33,7 @@ var current_index: int = 0:
 			diagrams[current_index] = get_drawing_matrix(current_index)
 			mini_diagram.draw_diagram(diagrams[current_index])
 
-		update_index()
-		update_resave_button()
+		update()
 
 func _ready() -> void:
 	super._ready()
@@ -78,32 +78,37 @@ func toggle_visible() -> void:
 	self.current_index = 0
 
 func update_index() -> void:
+	index.set_value_no_signal(self.current_index + 1)
 	update_index_label()
 	left.disabled = current_index == 0
 	right.disabled = current_index == diagrams.size() - 1
 
+func update_max_index() -> void:
+	index.max_value = diagrams.size()
+
 func store_diagram(matrix: Variant) -> void:
 	diagrams.push_back(matrix)
 	self.current_index = current_index
-	update_index()
-	update_diagram_visibility()
-	update_delete_button()
+	update()
 
 func store_diagrams(matrices: Array) -> void:
 	clear()
 	
-	for matrix:Variant in matrices:
-		diagrams.push_back(matrix)
+	diagrams.append_array(matrices)
 	
 	self.current_index = 0
+	update()
+
+func update() -> void:
 	update_index()
+	update_max_index()
 	update_diagram_visibility()
 	update_delete_button()
 
 func update_index_label() -> void:
 	var label_index: int = current_index + 1 if diagrams.size() != 0 else 0
 	
-	index_label.text = str(label_index) + "/" + str(diagrams.size())
+	max_index_label.text = "/" + str(diagrams.size())
 
 func update_diagram_visibility() -> void:
 	mini_diagram.visible = diagrams.size() > 0
@@ -123,12 +128,7 @@ func remove_diagram(index: int = current_index) -> void:
 	diagram_deleted.emit(index)
 	
 	self.current_index = clamp(current_index, 0, diagrams.size()-1)
-	
-	await get_tree().process_frame
-	
-	update_index_label()
-	update_delete_button()
-	update_diagram_visibility()
+	update()
 
 func get_diagram_count() -> int:
 	return diagrams.size()
@@ -150,11 +150,8 @@ func resave_diagram(new_diagram: DrawingMatrix) -> void:
 	diagrams.insert(current_index, new_diagram)
 	
 	mini_diagram.draw_diagram(get_drawing_matrix(current_index))
-	
 	diagram_resaved.emit(current_index)
-	
-	await get_tree().process_frame
-	
-	update_index_label()
-	update_delete_button()
-	update_diagram_visibility()
+	update()
+
+func _on_index_value_changed(value: float) -> void:
+	self.current_index = max(0, value - 1)
