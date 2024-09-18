@@ -85,6 +85,7 @@ enum Hadron {
 	anti_omega_minus = -omega_minus,
 	anti_D_0 = -D_0,
 	anti_B_0 = -B_0,
+	anti_kaon_0 = -kaon_0,
 	Invalid = 100
 }
 
@@ -525,7 +526,8 @@ var HADRON_QUARK_CONTENT : Dictionary = {
 	Hadron.pion_0:[[Particle.down,Particle.anti_down], [Particle.up, Particle.anti_up]],
 	Hadron.kaon_plus:[[Particle.anti_strange, Particle.up]],
 	Hadron.kaon_minus:[[Particle.strange, Particle.anti_up]],
-	Hadron.kaon_0:[[Particle.down, Particle.anti_strange], [Particle.anti_down, Particle.strange]],
+	Hadron.kaon_0:[[Particle.down, Particle.anti_strange]],
+	Hadron.anti_kaon_0:[[Particle.anti_down, Particle.strange]],
 	Hadron.Invalid:[]
 }
 
@@ -569,6 +571,7 @@ const HADRON_NAMES : Dictionary = {
 	Hadron.kaon_plus:"kaon_plus",
 	Hadron.kaon_minus:"kaon_minus",
 	Hadron.kaon_0:"kaon_0",
+	Hadron.anti_kaon_0:"kaon_0_anti",
 	Hadron.Invalid:"Invalid"
 }
 
@@ -869,6 +872,7 @@ const export_hadron_dict : Dictionary = {
 	Hadron.kaon_plus:"K^{+}",
 	Hadron.kaon_minus:"K^{-}",
 	Hadron.kaon_0:"K^{0}",
+	Hadron.anti_kaon_0:"\\overline K^{0}",
 	Hadron.Invalid:"Invalid"
 }
 

@@ -30,9 +30,6 @@ func input(_event: InputEvent) -> State:
 func process(_delta: float) -> State:
 	return State.Null
 
-func physics_process(_delta: float) -> State:
-	return State.Null
-
 func is_hovering(group: String) -> bool:
 	for groupee in get_tree().get_nodes_in_group(group):
 		if groupee.is_hovered():

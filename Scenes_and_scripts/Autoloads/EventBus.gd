@@ -19,12 +19,17 @@ signal grabbable_object_clicked(obj: Node)
 signal deletable_object_clicked(obj: Node)
 signal deletable_object_hover_changed(obj: Node, hovered: bool)
 
+signal problem_modified(problem_item: PanelContainer)
+signal problem_set_played(problem_set: ProblemSet, index: int)
+
 signal show_disabled
 signal hide_disabled
+signal change_cursor
+
 signal draw_diagram
 signal draw_raw_diagram
+
 signal add_floating_menu
-signal change_cursor
 signal save_files
 signal change_palette(palette: ImageTexture)
 signal show_feedback(feedback: String)
@@ -32,8 +37,6 @@ signal diagram_submitted(diagram: DrawingMatrix, submissions: Array[DrawingMatri
 signal signal_enter_game
 signal signal_change_scene(scene: Globals.Scene, args: Array)
 signal signal_exit_game(mode: int, created_problem: Problem)
-signal signal_problem_modified(problem_item: PanelContainer)
-signal signal_problem_set_played(problem_set: ProblemSet, index: int)
 signal toggle_scene
 
 func enter_game(
@@ -58,9 +61,3 @@ func exit_game(mode: int, problem: Problem = null) -> void:
 
 func change_scene(scene: Globals.Scene, args: Array = []) -> void:
 	signal_change_scene.emit(scene, args)
-
-func problem_modified(problem_item: PanelContainer) -> void:
-	signal_problem_modified.emit(problem_item)
-
-func problem_set_played(problem_set: ProblemSet, index: int) -> void:
-	signal_problem_set_played.emit(problem_set, index)

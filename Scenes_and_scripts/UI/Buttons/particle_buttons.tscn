@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://ds2iet11sv3ty"]
+[gd_scene load_steps=32 format=3 uid="uid://ds2iet11sv3ty"]
 
 [ext_resource type="Script" path="res://Scenes_and_scripts/UI/Buttons/particle_buttons.gd" id="1_magdw"]
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_w6xjt"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://bmpdc76qeiktv" path="res://Textures/Buttons/icons/Particles/electron_neutrino.png" id="12_j0i5o"]
 [ext_resource type="Texture2D" uid="uid://c8dt0yi25ikvr" path="res://Textures/Buttons/icons/Particles/muon_neutrino.png" id="13_4cq0t"]
 [ext_resource type="Texture2D" uid="uid://djuy5p44a12di" path="res://Textures/Buttons/icons/Particles/tau_neutrino.png" id="14_xneog"]
+[ext_resource type="Script" path="res://Scenes_and_scripts/UI/ParticleContainer.gd" id="16_fs7vr"]
 [ext_resource type="Texture2D" uid="uid://dibw2wrvs7yqv" path="res://Textures/Buttons/icons/Particles/gluon.png" id="16_jkhhj"]
 [ext_resource type="Texture2D" uid="uid://ba4s7btayo8o5" path="res://Textures/Buttons/icons/Particles/W.png" id="17_75xcd"]
 [ext_resource type="Texture2D" uid="uid://bo2ht1pncufjh" path="res://Textures/Buttons/icons/Particles/Z.png" id="18_vc2ix"]
@@ -41,6 +42,9 @@ texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 expand_margin_bottom = 40.0
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_w5br7"]
+content_margin_left = 5.0
+
 [node name="ParticleButtons" type="Control"]
 material = ExtResource("1_w6xjt")
 use_parent_material = true
@@ -48,6 +52,8 @@ layout_mode = 3
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
+offset_left = -320.0
+offset_right = -320.0
 grow_horizontal = 2
 theme = SubResource("Theme_nl1g0")
 script = ExtResource("1_magdw")
@@ -55,16 +61,15 @@ script = ExtResource("1_magdw")
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 use_parent_material = true
 layout_mode = 0
-offset_right = 314.0
-offset_bottom = 86.0
+offset_right = 300.0
 theme_override_constants/separation = 2
 alignment = 1
 
 [node name="Leptons" type="Control" parent="HBoxContainer" node_paths=PackedStringArray("ContentContainer", "TabButton", "MovingContainer")]
 use_parent_material = true
-custom_minimum_size = Vector2(79, 2.08165e-12)
+custom_minimum_size = Vector2(107, 0)
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 6
 size_flags_vertical = 0
 script = ExtResource("5_hlykg")
 ContentContainer = NodePath("MovingContainer/Tab/Leptons")
@@ -75,13 +80,14 @@ move_direction = 1
 
 [node name="MovingContainer" type="VBoxContainer" parent="HBoxContainer/Leptons"]
 use_parent_material = true
+custom_minimum_size = Vector2(79, 0)
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -39.5
-offset_right = 39.5
-offset_bottom = 110.0
+offset_left = -52.5
+offset_right = 53.5
+offset_bottom = 77.0
 grow_horizontal = 2
 theme_override_constants/separation = 0
 
@@ -93,51 +99,80 @@ size_flags_horizontal = 4
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_right = 5
 TabText = "LEPTONS"
-TabMinimumSize = Vector2(61, 2.08165e-12)
-icon_use_parent_material = true
+TabMinimumSize = Vector2(61, 19)
+expand_icon = true
 
 [node name="Tab" type="PanelContainer" parent="HBoxContainer/Leptons/MovingContainer"]
 use_parent_material = true
 layout_mode = 2
+size_flags_horizontal = 4
 size_flags_vertical = 8
 theme_override_styles/panel = SubResource("StyleBoxTexture_4juqm")
 
-[node name="Leptons" type="HFlowContainer" parent="HBoxContainer/Leptons/MovingContainer/Tab"]
+[node name="Leptons" type="GridContainer" parent="HBoxContainer/Leptons/MovingContainer/Tab"]
+unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
 theme_override_constants/h_separation = -1
 theme_override_constants/v_separation = -2
-alignment = 1
+columns = 4
+script = ExtResource("16_fs7vr")
 
 [node name="electron" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
 particle = 6
 icon = ExtResource("9_chxfj")
 
 [node name="muon" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
 layout_mode = 2
+size_flags_vertical = 0
 particle = 7
 icon = ExtResource("10_81gre")
 
 [node name="tau" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
 layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
 particle = 8
 icon = ExtResource("11_iujs7")
 
+[node name="lepton" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_w5br7")
+particle = 5
+minimum_size = Vector2(23, 26)
+icon = ExtResource("26_q00hp")
+
 [node name="electron_neutrino" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
 particle = 10
 icon = ExtResource("12_j0i5o")
 
 [node name="muon_neutrino" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
 layout_mode = 2
+size_flags_vertical = 8
 particle = 11
 icon = ExtResource("13_4cq0t")
 
 [node name="tau_neutrino" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
 layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
 particle = 12
 icon = ExtResource("14_xneog")
+
+[node name="lepton_neutrino" parent="HBoxContainer/Leptons/MovingContainer/Tab/Leptons" instance=ExtResource("7_omtgh")]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_w5br7")
+particle = 9
+minimum_size = Vector2(23, 26)
+icon = ExtResource("28_wg0lb")
 
 [node name="Bosons" type="Control" parent="HBoxContainer" node_paths=PackedStringArray("ContentContainer", "TabButton", "MovingContainer")]
 use_parent_material = true
@@ -177,6 +212,7 @@ layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_4juqm")
 
 [node name="Bosons" type="HFlowContainer" parent="HBoxContainer/Bosons/MovingContainer/Tab"]
+unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
 theme_override_constants/h_separation = -1
@@ -208,10 +244,10 @@ icon = ExtResource("19_j61dh")
 
 [node name="Quarks" type="Control" parent="HBoxContainer" node_paths=PackedStringArray("ContentContainer", "TabButton", "MovingContainer")]
 use_parent_material = true
-custom_minimum_size = Vector2(79, 2.08165e-12)
+custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
 script = ExtResource("5_hlykg")
-ContentContainer = NodePath("MovingContainer/Tab/Quarks")
+ContentContainer = NodePath("../Leptons/MovingContainer/Tab/Leptons")
 TabButton = NodePath("MovingContainer/PullOutTabButtonUp")
 MovingContainer = NodePath("MovingContainer")
 moving_container_margins = Vector2(0, 6)
@@ -219,13 +255,14 @@ move_direction = 1
 
 [node name="MovingContainer" type="VBoxContainer" parent="HBoxContainer/Quarks"]
 use_parent_material = true
+custom_minimum_size = Vector2(79, 0)
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -39.5
-offset_right = 39.5
-offset_bottom = 116.0
+offset_left = -55.0
+offset_right = 51.0
+offset_bottom = 77.0
 grow_horizontal = 2
 theme_override_constants/separation = 0
 
@@ -241,14 +278,20 @@ TabMinimumSize = Vector2(61, 2.08165e-12)
 [node name="Tab" type="PanelContainer" parent="HBoxContainer/Quarks/MovingContainer"]
 use_parent_material = true
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxTexture_4juqm")
 
-[node name="Quarks" type="HFlowContainer" parent="HBoxContainer/Quarks/MovingContainer/Tab"]
+[node name="Quarks" type="GridContainer" parent="HBoxContainer/Quarks/MovingContainer/Tab"]
+unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
 theme_override_constants/h_separation = -1
 theme_override_constants/v_separation = -2
-alignment = 1
+columns = 4
+script = ExtResource("16_fs7vr")
 
 [node name="up" parent="HBoxContainer/Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
 layout_mode = 2
@@ -265,6 +308,12 @@ layout_mode = 2
 particle = 16
 icon = ExtResource("22_5sekh")
 
+[node name="bright_quark" parent="HBoxContainer/Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_w5br7")
+particle = 13
+icon = ExtResource("27_cgwg8")
+
 [node name="down" parent="HBoxContainer/Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
 layout_mode = 2
 particle = 18
@@ -280,61 +329,8 @@ layout_mode = 2
 particle = 20
 icon = ExtResource("25_r3qmv")
 
-[node name="General" type="Control" parent="HBoxContainer" node_paths=PackedStringArray("ContentContainer", "TabButton", "MovingContainer")]
-use_parent_material = true
-custom_minimum_size = Vector2(71, 2.08165e-12)
+[node name="dark_quark" parent="HBoxContainer/Quarks/MovingContainer/Tab/Quarks" instance=ExtResource("7_omtgh")]
 layout_mode = 2
-script = ExtResource("5_hlykg")
-ContentContainer = NodePath("MovingContainer/Tab/General")
-TabButton = NodePath("MovingContainer/PullOutTabButtonUp")
-MovingContainer = NodePath("MovingContainer")
-moving_container_margins = Vector2(0, 6)
-move_direction = 1
-
-[node name="MovingContainer" type="VBoxContainer" parent="HBoxContainer/General"]
-use_parent_material = true
-layout_mode = 1
-offset_right = 71.0
-offset_bottom = 116.0
-theme_override_constants/separation = 0
-
-[node name="PullOutTabButtonUp" parent="HBoxContainer/General/MovingContainer" instance=ExtResource("8_uancy")]
-use_parent_material = true
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_right = 5
-TabText = "GENERAL"
-TabMinimumSize = Vector2(61, 2.08165e-12)
-
-[node name="Tab" type="PanelContainer" parent="HBoxContainer/General/MovingContainer"]
-use_parent_material = true
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_4juqm")
-
-[node name="General" type="HFlowContainer" parent="HBoxContainer/General/MovingContainer/Tab"]
-use_parent_material = true
-layout_mode = 2
-theme_override_constants/h_separation = 0
-theme_override_constants/v_separation = -2
-alignment = 1
-
-[node name="lepton" parent="HBoxContainer/General/MovingContainer/Tab/General" instance=ExtResource("7_omtgh")]
-layout_mode = 2
-particle = 5
-icon = ExtResource("26_q00hp")
-
-[node name="bright_quark" parent="HBoxContainer/General/MovingContainer/Tab/General" instance=ExtResource("7_omtgh")]
-layout_mode = 2
-particle = 13
-icon = ExtResource("27_cgwg8")
-
-[node name="lepton_neutrino" parent="HBoxContainer/General/MovingContainer/Tab/General" instance=ExtResource("7_omtgh")]
-layout_mode = 2
-particle = 9
-icon = ExtResource("28_wg0lb")
-
-[node name="dark_quark" parent="HBoxContainer/General/MovingContainer/Tab/General" instance=ExtResource("7_omtgh")]
-layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_w5br7")
 particle = 17
 icon = ExtResource("29_vjhit")

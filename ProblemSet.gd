@@ -32,3 +32,8 @@ func previous_problem() -> Problem:
 func next_problem() -> Problem:
 	self.current_index += 1
 	return self.current_problem
+
+func prepare_for_export() -> void:
+	highest_index_reached = 0
+	current_index = 0
+	is_custom = false

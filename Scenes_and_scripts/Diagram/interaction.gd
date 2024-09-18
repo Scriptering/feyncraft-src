@@ -251,6 +251,9 @@ func validate(particle_lines := connected_lines) -> bool:
 	
 	if has_colourless_gluon(particles):
 		return false
+	
+	if has_massless_H(particles):
+		return false
 
 	if has_shadeless_Z(particles):
 		return false
@@ -371,14 +374,8 @@ func has_neutral_photon(particles := connected_particles) -> bool:
 func has_colourless_gluon(particles := connected_particles) -> bool:
 	if ParticleData.Particle.gluon not in particles:
 		return false
-	
-	var no_gluon_particles := particles.duplicate()
-	no_gluon_particles.erase(ParticleData.Particle.gluon)
-	
-	return !no_gluon_particles.any(
-		func(particle: ParticleData.Particle) -> bool:
-			return ParticleData.has_colour(particle)
-	)
+
+	return !particles.all(ParticleData.has_colour)
 
 func has_shadeless_Z(particles := connected_particles) -> bool:
 	if ParticleData.Particle.Z not in particles:
@@ -404,6 +401,17 @@ func has_shadeless_Z(particles := connected_particles) -> bool:
 	
 	return true
 
+func has_massless_H(particles := connected_particles) -> bool:
+	if ParticleData.Particle.H not in particles:
+		return false
+	
+	return particles.any(
+		func(particle: ParticleData.Particle) -> bool:
+			return is_zero_approx(ParticleData.PARTICLE_MASSES[
+				ParticleData.base(particle)
+			])
+	)
+
 func is_no_H_valid(particles := connected_particles) -> bool:
 	if ParticleData.Particle.H not in particles:
 		return true
@@ -417,20 +425,6 @@ func is_no_H_valid(particles := connected_particles) -> bool:
 		return false
 	
 	return validate(no_H_lines)
-	
-func is_interaction_in_list(particles := connected_particles) -> bool:
-	var base_particles := ParticleData.base_particles(particles)
-	base_particles.sort()
-	
-	return (
-		ParticleData.INTERACTIONS.any(
-			func(interaction_type: Array) -> bool:
-				return base_particles in interaction_type
-	) or
-		ParticleData.GENERAL_INTERACTIONS.any(
-			func(interaction_type: Array) -> bool:
-				return base_particles in interaction_type
-	))
 
 func positioni() -> Vector2i:
 	return position

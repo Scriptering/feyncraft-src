@@ -22,17 +22,13 @@ texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 expand_margin_left = 20.0
 
-[node name="PuzzleUI" type="Control" node_paths=PackedStringArray("EMCheck", "StrongCheck", "WeakCheck", "ElectroweakCheck", "HadronFrequencySlider", "MinParticleCount", "MaxParticleCount", "ContentContainer", "TabButton", "MovingContainer") groups=["buttons", "no_place"]]
+[node name="PuzzleUI" type="Control" node_paths=PackedStringArray("HadronFrequencySlider", "MinParticleCount", "MaxParticleCount", "ContentContainer", "TabButton", "MovingContainer") groups=["buttons", "no_place"]]
 self_modulate = Color(1, 1, 1, 0)
 material = ExtResource("1_bvq6l")
 use_parent_material = true
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_0a0xk")
-EMCheck = NodePath("HBoxContainer/ContentContainer/OptionsContainer/GridContainer/electromagnetic")
-StrongCheck = NodePath("HBoxContainer/ContentContainer/OptionsContainer/GridContainer/strong")
-WeakCheck = NodePath("HBoxContainer/ContentContainer/OptionsContainer/GridContainer/weak")
-ElectroweakCheck = NodePath("HBoxContainer/ContentContainer/OptionsContainer/GridContainer/electro_weak")
 HadronFrequencySlider = NodePath("HBoxContainer/ContentContainer/OptionsContainer/PanelContainer/HadronSlider/VBoxContainer/HadronFrequency")
 MinParticleCount = NodePath("HBoxContainer/ContentContainer/OptionsContainer/StateParticleCountContainer/VBoxContainer/DegreeContainer/MinParticleCount")
 MaxParticleCount = NodePath("HBoxContainer/ContentContainer/OptionsContainer/StateParticleCountContainer/VBoxContainer/DegreeContainer/MaxParticleCount")
@@ -121,37 +117,41 @@ theme_override_constants/h_separation = 1
 theme_override_constants/v_separation = 1
 columns = 2
 
-[node name="electromagnetic" type="CheckButton" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer"]
+[node name="electromagnetic_check" type="CheckButton" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer"]
+unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
 button_pressed = true
 text = "EM"
 
-[node name="ButtonSoundComponent" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer/electromagnetic" instance=ExtResource("8_f0h1v")]
+[node name="ButtonSoundComponent" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer/electromagnetic_check" instance=ExtResource("8_f0h1v")]
 
-[node name="strong" type="CheckButton" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer"]
+[node name="strong_check" type="CheckButton" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer"]
+unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
 button_pressed = true
 text = "STRONG"
 
-[node name="ButtonSoundComponent" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer/strong" instance=ExtResource("8_f0h1v")]
+[node name="ButtonSoundComponent" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer/strong_check" instance=ExtResource("8_f0h1v")]
 
-[node name="weak" type="CheckButton" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer"]
+[node name="weak_check" type="CheckButton" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer"]
+unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
 button_pressed = true
 text = "WEAK"
 
-[node name="ButtonSoundComponent" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer/weak" instance=ExtResource("8_f0h1v")]
+[node name="ButtonSoundComponent" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer/weak_check" instance=ExtResource("8_f0h1v")]
 
-[node name="electro_weak" type="CheckButton" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer"]
+[node name="electroweak_check" type="CheckButton" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer"]
+unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
 button_pressed = true
 text = "E. WEAK"
 
-[node name="ButtonSoundComponent" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer/electro_weak" instance=ExtResource("8_f0h1v")]
+[node name="ButtonSoundComponent" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer/electroweak_check" instance=ExtResource("8_f0h1v")]
 
 [node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/ContentContainer/OptionsContainer"]
 use_parent_material = true
@@ -219,3 +219,6 @@ icon_use_parent_material = true
 
 [connection signal="value_changed" from="HBoxContainer/ContentContainer/OptionsContainer/StateParticleCountContainer/VBoxContainer/DegreeContainer/MinParticleCount" to="." method="_on_min_particle_count_value_changed"]
 [connection signal="value_changed" from="HBoxContainer/ContentContainer/OptionsContainer/StateParticleCountContainer/VBoxContainer/DegreeContainer/MaxParticleCount" to="." method="_on_max_particle_count_value_changed"]
+[connection signal="toggled" from="HBoxContainer/ContentContainer/OptionsContainer/GridContainer/electromagnetic_check" to="." method="_on_electromagnetic_toggled"]
+[connection signal="toggled" from="HBoxContainer/ContentContainer/OptionsContainer/GridContainer/weak_check" to="." method="_on_weak_toggled"]
+[connection signal="toggled" from="HBoxContainer/ContentContainer/OptionsContainer/GridContainer/electroweak_check" to="." method="_on_electro_weak_toggled"]

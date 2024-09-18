@@ -1,21 +1,12 @@
-[gd_scene load_steps=9 format=3 uid="uid://b22nw60juoc6k"]
+[gd_scene load_steps=8 format=3 uid="uid://b22nw60juoc6k"]
 
 [ext_resource type="Script" path="res://Scenes_and_scripts/Diagram/particle_line.gd" id="1_4fl17"]
 [ext_resource type="Material" uid="uid://c07rj23b21qlt" path="res://Resources/Shaders/particle_line.tres" id="1_hvik3"]
 [ext_resource type="Texture2D" uid="uid://b8glr5vnlacpl" path="res://Textures/ParticlesAndLines/gluon_end.png" id="3_6ete1"]
 [ext_resource type="Texture2D" uid="uid://c1joju14fxw1n" path="res://Textures/ParticlesAndLines/Particle.png" id="4_wgcwh"]
 [ext_resource type="Texture2D" uid="uid://dya0nescxtd67" path="res://Textures/ParticlesAndLines/arrow.png" id="5_chfwe"]
-[ext_resource type="Shader" path="res://Resources/Shaders/outline_palette_swap.gdshader" id="5_eb883"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_vwugj"]
-shader = ExtResource("5_eb883")
-shader_parameter/line_color = Color(0, 0, 0, 1)
-shader_parameter/line_thickness = 1.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_224gy"]
-shader = ExtResource("5_eb883")
-shader_parameter/line_color = Color(0, 0, 0, 1)
-shader_parameter/line_thickness = 1.0
+[ext_resource type="Material" uid="uid://dc4rnoi735twf" path="res://Resources/Shaders/outline_palette_swap.tres" id="7_uu68m"]
+[ext_resource type="Texture2D" uid="uid://8kn7xcu1lwig" path="res://Textures/ParticlesAndLines/down.png" id="8_rtga5"]
 
 [node name="particle" type="Node2D" groups=["lines"]]
 material = ExtResource("1_hvik3")
@@ -50,16 +41,17 @@ texture_mode = 1
 antialiased = true
 
 [node name="arrow" type="Sprite2D" parent="."]
-material = SubResource("ShaderMaterial_vwugj")
+material = ExtResource("7_uu68m")
 position = Vector2(52, 2.08165e-12)
 texture = ExtResource("5_chfwe")
 offset = Vector2(-4, 0)
 
 [node name="text" type="Sprite2D" parent="."]
 z_index = 1
-material = SubResource("ShaderMaterial_224gy")
+material = ExtResource("7_uu68m")
 scale = Vector2(1.5, 1.5)
+texture = ExtResource("8_rtga5")
 
 [node name="spareText" type="Sprite2D" parent="."]
-material = SubResource("ShaderMaterial_224gy")
+material = ExtResource("7_uu68m")
 scale = Vector2(1.5, 1.5)

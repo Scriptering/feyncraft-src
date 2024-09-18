@@ -4,9 +4,9 @@
 [ext_resource type="Script" path="res://Scenes_and_scripts/UI/ProblemSelection/problem_list.gd" id="2_ycbub"]
 [ext_resource type="FontFile" uid="uid://cgts3h57wry82" path="res://Textures/Fonts/numbers_font.ttf" id="3_4ro32"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes_and_scripts/UI/Buttons/panelButton.tscn" id="3_tav84"]
-[ext_resource type="Texture2D" uid="uid://ci1qrp3pyqm6h" path="res://Textures/Buttons/icons/close.png" id="4_4uwns"]
+[ext_resource type="Texture2D" uid="uid://c3nrennubqoow" path="res://Textures/Buttons/icons/back.png" id="4_jpxs4"]
 [ext_resource type="Texture2D" uid="uid://1qi6lr05g0vt" path="res://Textures/Buttons/icons/add.png" id="5_6tky2"]
-[ext_resource type="Texture2D" uid="uid://cgfs1pdopjbh" path="res://Textures/Buttons/icons/close_hover.png" id="5_d4fym"]
+[ext_resource type="Texture2D" uid="uid://d254b7d0ncxnp" path="res://Textures/Buttons/icons/back_hover.png" id="5_p8e5x"]
 [ext_resource type="PackedScene" uid="uid://cmafkxyj8ko4d" path="res://Scenes_and_scripts/UI/PanelItemList.tscn" id="7_weip1"]
 [ext_resource type="PackedScene" uid="uid://dorw3vr2amuy3" path="res://Scenes_and_scripts/Components/button_sound_component.tscn" id="8_ttb8b"]
 
@@ -66,8 +66,8 @@ custom_minimum_size = Vector2(10, 14)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
-texture_normal = ExtResource("4_4uwns")
-texture_hover = ExtResource("5_d4fym")
+texture_normal = ExtResource("4_jpxs4")
+texture_hover = ExtResource("5_p8e5x")
 stretch_mode = 5
 
 [node name="ButtonSoundComponent" parent="VBoxContainer/Header/Close" instance=ExtResource("8_ttb8b")]

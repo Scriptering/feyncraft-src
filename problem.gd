@@ -43,6 +43,12 @@ func is_submission_solution(submission: DrawingMatrix) -> bool:
 func get_state_interaction(state: StateLine.State) -> Array:
 	return state_interactions[state]
 
+func is_default() -> bool:
+	return (
+		state_interactions.front().is_empty()
+		and state_interactions.back().is_empty()
+	)
+
 func get_sorted_states(states: Array) -> Array:
 	return states.map(func(interactions:Array) -> Array:
 		return interactions.map(func(state_interaction: Array) -> ParticleData.Hadron:

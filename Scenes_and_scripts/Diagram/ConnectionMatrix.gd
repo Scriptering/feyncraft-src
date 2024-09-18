@@ -56,27 +56,16 @@ func connect_interactions(
 		connection_matrix[to_id][from_id].append(abs(particle))
 
 func swap_ids(id1: int, id2: int) -> void:
-	var id1_forward_connections: Array = get_connections(id1)
-	var id2_forward_connections: Array = get_connections(id2)
-	var id1_reverse_connections: Array = get_connections(id1, true)
-	var id2_reverse_connections: Array = get_connections(id2, true)
+	for id:int in matrix_size:
+		var temp_connections: Array = connection_matrix[id][id1]
+		
+		connection_matrix[id][id1] = connection_matrix[id][id2]
+		connection_matrix[id][id2] = temp_connections
 	
-	for connection:Array in id1_forward_connections:
-		remove_connection(connection)
-		insert_connection([id2, connection[Connection.to_id], connection[Connection.particle]])
-
-	for connection:Array in id2_forward_connections:
-		remove_connection(connection)
-		insert_connection([id1, connection[Connection.to_id], connection[Connection.particle]])
-
-	for connection:Array in id1_reverse_connections:
-		remove_connection(connection)
-		insert_connection([connection[Connection.from_id], id2, connection[Connection.particle]])
-
-	for connection:Array in id2_reverse_connections:
-		remove_connection(connection)
-		insert_connection([connection[Connection.from_id], id1, connection[Connection.particle]])
+	var temp_connections: Array = connection_matrix[id1]
 	
+	connection_matrix[id1] = connection_matrix[id2]
+	connection_matrix[id2] = temp_connections
 
 func insert_connection(connection: Array) -> void:
 	connect_interactions(connection[Connection.from_id], connection[Connection.to_id], connection[Connection.particle])

@@ -53,26 +53,35 @@ func load_problem_set(_problem_set: ProblemSet, p_problem_set_file_path: String)
 	
 	update_index_labels()
 
-func add_problem(problem: Problem, is_custom: bool = false) -> void:
-	var problem_select: PanelContainer = ProblemSelector.instantiate()
+func create_problem_item() -> PanelContainer:
+	var problem_item: PanelContainer = ProblemSelector.instantiate()
 	
-	problem_select.move.connect(_problem_moved)
-	problem_select.deleted.connect(_problem_deleted)
-	problem_select.play.connect(_problem_played)
-	problem_select.modify.connect(_problem_modified)
-	problem_select.modification_finished.connect(_problem_modification_finished)
+	problem_item.move.connect(_problem_moved)
+	problem_item.deleted.connect(_problem_deleted)
+	problem_item.play.connect(_problem_played)
+	problem_item.modify.connect(_problem_modified)
+	problem_item.modification_finished.connect(_problem_modification_finished)
 	
-	problem_container.add_item(problem_select)
+	return problem_item
+
+func add_problem(
+	problem: Problem,
+	is_custom: bool = false,
+	problem_item: PanelContainer = create_problem_item()
+) -> PanelContainer:
+	problem_container.add_item(problem_item)
 	
-	problem_select.toggle_edit_visiblity(problem_set.is_custom)
+	problem_item.toggle_edit_visiblity(problem_set.is_custom)
 	
-	problem_select.load_problem(problem)
-	problem_select.index = get_problem_items().size()-1
+	problem_item.load_problem(problem)
+	problem_item.index = get_problem_items().size()-1
 	
-	problem_select.toggle_completed(!problem_set.is_custom and problem_select.index < problem_set.highest_index_reached)
-	problem_select.toggle_play_disabled(!problem_set.is_custom and problem_select.index > problem_set.highest_index_reached)
+	problem_item.toggle_completed(!problem_set.is_custom and problem_item.index < problem_set.highest_index_reached)
+	problem_item.toggle_play_disabled(!problem_set.is_custom and problem_item.index > problem_set.highest_index_reached)
 	
 	update()
+	
+	return problem_item
 
 func update() -> void:
 	update_index_labels()
@@ -113,22 +122,29 @@ func _problem_deleted(problem_select: PanelContainer) -> void:
 	delete_problem(problem_select)
 
 func create_problem() -> void:
-	var problem: Problem = Problem.new()
-	problem_set.problems.push_back(problem)
-	add_problem(problem, true)
+	var new_problem := Problem.new()
+	problem_set.problems.push_back(new_problem)
+	EventBus.problem_modified.emit(add_problem(new_problem, true))
 
 func _on_add_problem_pressed() -> void:
 	create_problem()
 
 func _problem_played(problem: Problem) -> void:
-	EventBus.problem_set_played(problem_set, problem_set.problems.find(problem))
+	EventBus.problem_set_played.emit(problem_set, problem_set.problems.find(problem))
 
 func _problem_modified(problem_item: PanelContainer) -> void:
-	EventBus.problem_modified(problem_item)
+	EventBus.problem_modified.emit(problem_item)
 
-func _problem_modification_finished(problem_item: PanelContainer) -> void:
-	problem_set.problems[get_problem_items().find(problem_item)] = problem_item.problem
-	save()
+func _problem_modification_finished(
+	problem_item: PanelContainer,
+	completed: bool
+) -> void:
+	if completed:
+		problem_set.problems[get_problem_items().find(problem_item)] = problem_item.problem
+		save()
+	
+	elif problem_item.is_empty():
+		delete_problem(problem_item)
 
 func save() -> void:
 	ResourceSaver.save(problem_set, problem_set_file)

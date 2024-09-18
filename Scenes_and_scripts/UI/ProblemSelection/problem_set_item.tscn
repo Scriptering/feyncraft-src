@@ -61,6 +61,7 @@ icon_use_parent_material = true
 tooltip = "Resume"
 
 [node name="View" parent="VBoxContainer/HBoxContainer/HBoxContainer/HBoxContainer" instance=ExtResource("4_dol4y")]
+unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 1
 minimum_size = Vector2(22, 22)

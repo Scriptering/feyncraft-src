@@ -17,7 +17,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u3xo3"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_t42o5"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m4ce6"]
 resource_local_to_scene = true
 shader = ExtResource("6_kwlog")
 
@@ -153,7 +153,7 @@ patch_margin_right = 5
 patch_margin_bottom = 5
 
 [node name="ColourSampler" parent="PanelContainer/VBoxContainer" instance=ExtResource("5_8vrca")]
-material = SubResource("ShaderMaterial_t42o5")
+material = SubResource("ShaderMaterial_m4ce6")
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_7k5dl")
 

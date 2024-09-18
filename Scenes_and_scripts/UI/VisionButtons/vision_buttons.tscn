@@ -65,13 +65,13 @@ Button/styles/hover = SubResource("StyleBoxTexture_uqo3x")
 Button/styles/normal = SubResource("StyleBoxTexture_4ascm")
 Button/styles/pressed = SubResource("StyleBoxTexture_sf6a1")
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_vtf2m"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_xmdgp"]
 allow_unpress = true
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_b5icu"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_mg2ns"]
 allow_unpress = true
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_b4wby"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_hwiyv"]
 allow_unpress = true
 
 [sub_resource type="Animation" id="Animation_2er6j"]
@@ -134,7 +134,7 @@ theme_override_constants/separation = 0
 [node name="TabButton" parent="MovingContainer" instance=ExtResource("3_08n6d")]
 layout_mode = 2
 TabIcon = ExtResource("10_qooab")
-TabMinimumSize = Vector2(2.08165e-12, 22)
+TabMinimumSize = Vector2(0, 24)
 expand_icon = true
 
 [node name="Tab" type="PanelContainer" parent="MovingContainer"]
@@ -153,7 +153,7 @@ layout_mode = 2
 theme = SubResource("Theme_fuyn4")
 minimum_size = Vector2(26, 26)
 toggle_mode = true
-button_group = SubResource("ButtonGroup_vtf2m")
+button_group = SubResource("ButtonGroup_xmdgp")
 icon = ExtResource("6_v7snu")
 expand_icon = true
 
@@ -162,7 +162,7 @@ layout_mode = 2
 theme = SubResource("Theme_fuyn4")
 minimum_size = Vector2(26, 26)
 toggle_mode = true
-button_group = SubResource("ButtonGroup_b5icu")
+button_group = SubResource("ButtonGroup_mg2ns")
 icon = ExtResource("6_63enc")
 expand_icon = true
 
@@ -171,7 +171,7 @@ layout_mode = 2
 theme = SubResource("Theme_fuyn4")
 minimum_size = Vector2(26, 26)
 toggle_mode = true
-button_group = SubResource("ButtonGroup_b4wby")
+button_group = SubResource("ButtonGroup_hwiyv")
 icon = ExtResource("7_nx8nj")
 expand_icon = true
 

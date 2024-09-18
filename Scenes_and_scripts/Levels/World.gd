@@ -27,6 +27,7 @@ var current_problem: Problem = null
 var creating_problem: Problem = null
 var problem_set: ProblemSet
 var problem_history: Array[Problem] = []
+var start_problem := Problem.new()
 
 var creation_info : GrabbableControl = null
 
@@ -76,13 +77,29 @@ func init(state_manager: Node) -> void:
 
 	Diagram.action.connect(_diagram_action_taken)
 	
-	#var diagrams: Array[ConnectionMatrix] = SolutionGeneration.generate_diagrams(
-		#[[ParticleData.Particle.gluon], [ParticleData.Particle.gluon]],
-		#[[ParticleData.Particle.gluon], [ParticleData.Particle.gluon]],
-		#2,
-		#2,
-		#ProblemGeneration.get_useable_particles_from_interaction_checks([true, true, true, true])
-	#)
+	if !OS.has_feature("standalone"):
+		start_problem.state_interactions = [
+			[
+				[ParticleData.Particle.up, ParticleData.Particle.anti_strange],
+				[ParticleData.Particle.anti_up, ParticleData.Particle.strange]
+			],
+			[
+				[ParticleData.Particle.charm, ParticleData.Particle.anti_charm]
+			]
+			
+		]
+		start_problem.allowed_particles = ProblemGeneration.get_useable_particles_from_interaction_checks(
+			[false, true, true, false]
+		)
+		start_problem = ProblemGeneration.setup_new_problem(start_problem)
+	
+		var diagrams: Array[ConnectionMatrix] = SolutionGeneration.generate_diagrams(
+			[[ParticleData.Particle.up], [ParticleData.Particle.anti_up]],
+			[[ParticleData.Particle.gluon], [ParticleData.Particle.gluon]],
+			4,
+			4,
+			ProblemGeneration.get_useable_particles_from_interaction_checks([false, true, false, false])
+		)
 
 func _ready() -> void:
 	Diagram.show_line_labels = !StatsManager.stats.hide_labels
@@ -127,7 +144,7 @@ func exit_particle_selection() -> void:
 
 func enter_sandbox() -> void:
 	ProblemTab._enter_sandbox()
-	load_problem(Problem.new())
+	load_problem(start_problem)
 
 	Diagram.clear_diagram()
 	Diagram.set_title_editable(false)

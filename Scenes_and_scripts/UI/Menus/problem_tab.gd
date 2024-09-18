@@ -76,13 +76,15 @@ func check_submission(submission: DrawingMatrix) -> bool:
 	for child in $MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer.get_children():
 		child.hide()
 	
+	var is_valid: bool = true
+	
 	if Diagram.get_degree() != current_problem.degree:
 		IncorrectOrder.show()
-		return false
+		is_valid = false
 
 	if is_submission_duplicate(submission):
 		DiagramDuplicate.show()
-		return false
+		is_valid = false
 	
 	if !(
 		Diagram.is_valid() and 
@@ -91,14 +93,19 @@ func check_submission(submission: DrawingMatrix) -> bool:
 		
 	):
 		DiagramIncorrect.show()
-		return false
+		is_valid = false
 	
-	if !current_problem.is_being_modified and !current_problem.is_submission_solution(submission):
+	if !(current_problem.is_being_modified
+		or current_problem.is_submission_solution(submission)
+		or !current_problem.custom_solutions
+	):
 		DiagramNotCustomSolution.show()
-		return false
+		is_valid = false
 	
-	DiagramSubmitted.show()
-	return true
+	if is_valid:
+		DiagramSubmitted.show()
+	
+	return is_valid
 
 func update_view_submission_button() -> void:
 	$MovingContainer/VBoxContainer/Tab/HBoxContainer/ViewSubmissions.disabled = submitted_diagrams.size() == 0
