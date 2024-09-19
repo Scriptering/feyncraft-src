@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProblemSet" load_steps=9 format=3 uid="uid://bbc3d2wx6ja00"]
+[gd_resource type="Resource" script_class="ProblemSet" load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://problem.gd" id="1_781bl"]
 [ext_resource type="Script" path="res://DrawingMatrix.gd" id="2_6p663"]

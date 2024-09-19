@@ -62,10 +62,5 @@ func _process(delta: float) -> void:
 	if new_state != BaseState.State.Null:
 		change_state(new_state)
 
-func _physics_process(delta: float) -> void:
-	var new_state := current_state.physics_process(delta)
-	if new_state != BaseState.State.Null:
-		change_state(new_state)
-
 func crosshair_moved(current_position: Vector2, old_position: Vector2) -> void:
 	current_state.crosshair_moved(current_position, old_position)

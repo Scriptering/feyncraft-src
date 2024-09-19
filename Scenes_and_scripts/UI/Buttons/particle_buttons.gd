@@ -7,24 +7,16 @@ var particle_buttons: Array[PanelButton] = []
 
 var particle_button_group: ButtonGroup
 
-@onready var Leptons := $HBoxContainer/Leptons/MovingContainer/Tab/Leptons
-@onready var Bosons := $HBoxContainer/Bosons/MovingContainer/Tab/Bosons
-@onready var Quarks := $HBoxContainer/Quarks/MovingContainer/Tab/Quarks
-@onready var General := $HBoxContainer/General/MovingContainer/Tab/General
-
-@onready var ParticleButtonCategories : Array = [
-	Leptons, Bosons, Quarks, General
-]
-
-@onready var ParticleControls : Array = [
-	$HBoxContainer/Leptons, $HBoxContainer/Bosons, $HBoxContainer/Quarks, $HBoxContainer/General
+@onready var ParticleButtonCategories : Array[Container] = [
+	%Leptons, %Bosons, %Quarks
 ]
 
 func _ready() -> void:
-	for particle_button_category:Control in ParticleButtonCategories:
-		for particle_button:PanelButton in particle_button_category.get_children():
-			particle_buttons.append(particle_button)
-			particle_button.connect("on_pressed", Callable(self, "on_particle_button_pressed"))
+	for particle_button_category:Container in ParticleButtonCategories:
+		for child:Control in particle_button_category.get_children():
+			if child is PanelButton:
+				particle_buttons.append(child)
+				child.on_pressed.connect(on_particle_button_pressed)
 		
 	add_buttons_to_button_group()
 
@@ -73,6 +65,9 @@ func enter_particle_selection(problem: Problem) -> void:
 func exit_particle_selection() -> void:
 	add_buttons_to_button_group()
 
+func is_button_visible(button: PanelButton) -> bool:
+	return button.visible
+
 func get_toggled_particles(toggled: bool) -> Array[ParticleData.Particle]:
 	var toggled_particles: Array[ParticleData.Particle] = []
 	
@@ -82,12 +77,17 @@ func get_toggled_particles(toggled: bool) -> Array[ParticleData.Particle]:
 	
 	return toggled_particles
 
+func has_visible_button(container: Container) -> bool:
+	for child:Control in container.get_children():
+		if child is PanelButton and child.visible:
+			return true
+	
+	return false
+
 func toggle_button_group_visibility() -> void:
-	for i:int in ParticleButtonCategories.size():
-		ParticleControls[i].visible = ParticleButtonCategories[i].get_children().any(
-			func(button: PanelButton) -> bool:
-				return button.visible
-		)
+	$HBoxContainer/Leptons.visible = has_visible_button(%Leptons)
+	$HBoxContainer/Bosons.visible = has_visible_button(%Bosons)
+	$HBoxContainer/Quarks.visible = has_visible_button(%Quarks)
 
 func load_problem(problem: Problem) -> void:
 	if problem.allowed_particles.size() > 0:

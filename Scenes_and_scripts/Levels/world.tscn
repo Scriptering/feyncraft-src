@@ -266,19 +266,19 @@ offset_right = 2.0
 offset_bottom = -41.0
 
 [node name="VisionButton" parent="PullOutTabs" instance=ExtResource("3_hqsoq")]
-offset_left = 615.0
+offset_left = 613.0
 offset_top = 39.0
-offset_right = 637.0
+offset_right = 635.0
 offset_bottom = 99.0
 
 [node name="ParticleButtons" parent="PullOutTabs" instance=ExtResource("24_lunb1")]
 anchors_preset = 7
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 163.0
-offset_top = 340.0
-offset_right = 163.0
-offset_bottom = 340.0
+offset_left = 171.0
+offset_top = 339.0
+offset_right = 171.0
+offset_bottom = 339.0
 grow_vertical = 0
 size_flags_horizontal = 4
 
@@ -316,9 +316,9 @@ move_direction = 3
 
 [node name="ExportTab" parent="PullOutTabs" instance=ExtResource("27_jfab7")]
 z_index = 1
-offset_left = 616.0
+offset_left = 614.0
 offset_top = 133.0
-offset_right = 616.0
+offset_right = 614.0
 offset_bottom = 133.0
 
 [node name="FloatingMenus" type="CanvasLayer" parent="."]
@@ -340,6 +340,7 @@ offset_left = 316.0
 offset_top = 160.0
 offset_right = 316.0
 offset_bottom = 160.0
+allow_resaving = true
 title = "Generated Diagrams"
 BigDiagram = NodePath("../../Diagram")
 
@@ -395,7 +396,7 @@ Press next after trying this out."
 [node name="ParticleSelection" type="Node" parent="Tutorial/Steps" node_paths=PackedStringArray("FocusObjects")]
 script = ExtResource("31_t51na")
 text = "These are your particles. To select one to draw, first press the category to open it, then press on a particle button. Then press next."
-FocusObjects = [NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Bosons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/General/MovingContainer")]
+FocusObjects = [NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Bosons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer"), null]
 
 [node name="Diagram" type="Node" parent="Tutorial/Steps" node_paths=PackedStringArray("FocusObjects")]
 script = ExtResource("31_t51na")
@@ -404,7 +405,7 @@ text = "Particles can only be drawn within the diagram area, on and between the 
 Particles are drawn by clicking and dragging.
 
 Try drawing some particles, then press next."
-FocusObjects = [NodePath("../../../Diagram"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/General/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Bosons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer")]
+FocusObjects = [NodePath("../../../Diagram"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer"), null, NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Bosons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer")]
 
 [node name="Interactions" type="Node" parent="Tutorial/Steps" node_paths=PackedStringArray("FocusObjects")]
 script = ExtResource("31_t51na")
@@ -421,7 +422,7 @@ You can also delete lines and interactions by holding X and clicking.
 Press next when ready.
 
 "
-FocusObjects = [NodePath("../../../Diagram"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/General/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Bosons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer")]
+FocusObjects = [NodePath("../../../Diagram"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer"), null, NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Bosons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer")]
 DiagramFilePath = "res://saves/Diagrams/interactions.tres"
 
 [node name="InteractionInformation" type="Node" parent="Tutorial/Steps" node_paths=PackedStringArray("FocusObjects")]
@@ -429,7 +430,7 @@ script = ExtResource("31_t51na")
 text = "Invalid interactions are marked in red, to find out why, you can press on (any) interaction to see more information.
 
 Press next when ready."
-FocusObjects = [NodePath("../../../Diagram"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/General/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Bosons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer")]
+FocusObjects = [NodePath("../../../Diagram"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Leptons/MovingContainer"), null, NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Bosons/MovingContainer"), NodePath("../../../PullOutTabs/ParticleButtons/HBoxContainer/Quarks/MovingContainer")]
 DiagramFilePath = "res://saves/Diagrams/invalid_interactions.tres"
 
 [node name="ProblemTab" type="Node" parent="Tutorial/Steps" node_paths=PackedStringArray("FocusObjects")]

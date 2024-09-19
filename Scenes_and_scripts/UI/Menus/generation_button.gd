@@ -9,10 +9,6 @@ var GeneratedDiagramViewer: MiniDiagramViewer
 @export_group("Children")
 @export var InitialState : Array
 @export var FinalState : Array
-@export var EM_check : CheckButton
-@export var strong_check: CheckButton
-@export var weak_check: CheckButton
-@export var electroweak_check: CheckButton
 @export var SaveStates: PanelButton
 @export var Generate: PanelButton
 @export var ViewDiagrams: PanelButton
@@ -74,30 +70,16 @@ func set_checks(state_interactions : Array) -> void:
 		particles += state_interaction
 	
 	if ParticleData.Particle.photon in particles:
-		EM_check.button_pressed = true
+		%EM_check.button_pressed = true
 	if ParticleData.Particle.gluon in particles:
-		strong_check.button_pressed = true
+		%strong_check.button_pressed = true
 	if ParticleData.Particle.W in particles or ParticleData.Particle.anti_W in particles:
-		weak_check.button_pressed = true
+		%weak_check.button_pressed = true
 	if ParticleData.Particle.H in particles or ParticleData.Particle.Z in particles:
-		set_electroweak_check(true)
+		%electroweak_check.button_pressed = true
 
 func _diagram_deleted(_index: int) -> void:
 	update_view_button()
-
-func _on_electroweak_toggled(button_pressed: bool) -> void:
-	set_electroweak_check(button_pressed)
-
-func electroweak_type_button_pressed(button_pressed: bool) -> void:
-	set_electroweak_check(EM_check.button_pressed and weak_check.button_pressed)
-
-func set_electroweak_check(new_value: bool) -> void:
-	if electroweak_check.button_pressed != new_value:
-		electroweak_check.button_pressed = new_value
-	
-	if new_value:
-		EM_check.button_pressed = true
-		weak_check.button_pressed = true
 
 func generate(checks: Array[bool]) -> void:
 	var useable_particles: Array[ParticleData.Particle] = ProblemGeneration.get_useable_particles_from_interaction_checks(checks)
@@ -125,17 +107,14 @@ func generate(checks: Array[bool]) -> void:
 	show_feedback()
 	update_view_button()
 
-func _on_em_toggled(button_pressed: bool) -> void:
-	electroweak_type_button_pressed(button_pressed)
-
 func _on_generate_pressed() -> void:
 	if !can_generate: return
 	
 	var checks: Array[bool] = [
-		EM_check.button_pressed,
-		strong_check.button_pressed,
-		weak_check.button_pressed,
-		electroweak_check.button_pressed
+		%electromagnetic_check.button_pressed,
+		%strong_check.button_pressed,
+		%weak_check.button_pressed,
+		%electroweak_check.button_pressed
 	]
 	
 	generate(checks)
@@ -172,29 +151,17 @@ func _on_view_pressed() -> void:
 	toggle_diagram_viewer()
 
 func _on_electromagnetic_toggled(button_pressed: bool) -> void:
-	if button_pressed:
-		return
-	
-	if weak_check.button_pressed:
-		return
-	
-	electroweak_check.button_pressed = false
+	if !button_pressed:
+		%electroweak_check.button_pressed = false
 	
 func _on_weak_toggled(button_pressed: bool) -> void:
-	if button_pressed:
-		return
-	
-	if EM_check.button_pressed:
-		return
-	
-	electroweak_check.button_pressed = false
+	if !button_pressed:
+		%electroweak_check.button_pressed = false
 
 func _on_electro_weak_toggled(button_pressed: bool) -> void:
-	if !button_pressed:
-		return
-	
-	EM_check.button_pressed = true
-	weak_check.button_pressed = true
+	if button_pressed:
+		%electromagnetic_check.button_pressed = true
+		%weak_check.button_pressed = true
 
 func update_load_time_warning() -> void:
 	match int(FindSlider.value):

@@ -9,7 +9,7 @@ var print_times := false
 
 var find_one: bool = false
 var found_one: bool = false
-var found_matrix: ConnectionMatrix
+var found_matrix: ConnectionMatrix = null
 var g_degree: int
 var g_particle_interactions: Dictionary = {}
 var g_allow_tadpoles: bool
@@ -44,6 +44,14 @@ func generate_diagrams(
 		return [null]
 	
 	g_particle_interactions = get_useable_particle_interactions(useable_particles)
+	
+	for state_interaction:Array in (initial_state + final_state):
+		if state_interaction.any(
+			func(particle: ParticleData.Particle) -> bool:
+				return ParticleData.base(particle) not in g_particle_interactions.keys()
+		):
+			return [null]
+	
 	var base_interaction_matrix := create_base_interaction_matrix(initial_state, final_state)
 	var degrees_to_check := get_degrees_to_check(
 		min_degree, max_degree, base_interaction_matrix
@@ -73,6 +81,7 @@ func generate_diagrams(
 		hadron_connected_matrices.clear()
 
 		var connected_matrices: Array[InteractionMatrix] = []
+		
 		for matrix:InteractionMatrix in state_fermion_connected_matrices:
 			if is_matrix_colourless(matrix) or is_disconnected(matrix):
 				continue
@@ -316,7 +325,9 @@ func connect_matrix(base_matrix: InteractionMatrix) -> Array[InteractionMatrix]:
 				further_matrices.push_back(matrix)
 				continue
 
-			further_matrices.append_array(connect_matrix_from_id(matrix, from_id))
+			further_matrices.append_array(
+				connect_matrix_from_id(matrix, from_id, [])
+			)
 		
 		to_connect_matrices.clear()
 		for matrix:InteractionMatrix in further_matrices:
@@ -354,15 +365,18 @@ func connect_particle_from_id(
 	if found_one:
 		return []
 	
+	var particle_interactions: Array = g_particle_interactions[particle]
+	
 	if find_one:
-		shuffle_particle_interactions()
+		particle_interactions = g_particle_interactions[particle].duplicate(true)
+		particle_interactions.shuffle()
 
 	var unconnected_particles: PackedInt32Array = base_matrix.get_unconnected_particles()
 	unconnected_particles.remove_at(unconnected_particles.find(particle))
 	
 	var connected_matrices : Array[InteractionMatrix] = []
 
-	for interaction:PackedInt32Array in g_particle_interactions[particle]:
+	for interaction:PackedInt32Array in particle_interactions:
 		var interaction_connected_matrices := get_interaction_connected_matrices(
 			interaction,
 			base_matrix,
@@ -374,18 +388,106 @@ func connect_particle_from_id(
 		if interaction_connected_matrices.is_empty():
 			continue
 		
+		if find_one:
+			interaction_connected_matrices.shuffle()
+		
+		var further_connected_matrices : Array[InteractionMatrix] = []
 		for matrix:InteractionMatrix in interaction_connected_matrices:
+			further_connected_matrices.append_array(
+				connect_matrix_from_id(matrix, base_matrix.matrix_size, interaction)
+			)
+		
+		if further_connected_matrices.is_empty():
+			continue
+		
+		if interaction.size() == 2 and interaction[0] == interaction[1]:
 			connected_matrices.append_array(
-				connect_matrix_from_id(matrix, base_matrix.matrix_size)
-			)
-			
-		if !g_allow_tadpoles:
-			interaction_connected_matrices = interaction_connected_matrices.filter(
-				func(matrix: InteractionMatrix) -> bool:
-					return !is_tadpole_connection(from_id, matrix.matrix_size - 1, matrix)
-			)
+				get_distinguishable_matrices(
+					interaction,
+					further_connected_matrices,
+					from_id,
+					base_matrix.matrix_size
+				)
+				)
+		else:
+			connected_matrices.append_array(further_connected_matrices)
 	
 	return connected_matrices
+
+func is_swapped_matrix_duplicate(
+	matrix:InteractionMatrix,
+	matrices:Array[InteractionMatrix],
+	swap_ids:PackedInt32Array
+) -> bool:
+	var swapped_matrix : InteractionMatrix = matrix.duplicate(true)
+	swapped_matrix.swap_ids(swap_ids[0], swap_ids[1])
+	
+	return matrices.any(
+		func(matrixB: InteractionMatrix) -> bool:
+			return swapped_matrix.is_duplicate_interaction_matrix(matrixB)
+	)
+
+func get_distinguishable_matrices(
+	interaction: PackedInt32Array,
+	matrices: Array[InteractionMatrix],
+	prev_id: int,
+	from_id: int
+) -> Array[InteractionMatrix]:
+	if matrices.size() == 1:
+		return matrices
+	
+	var distinguished_matrices: Array[InteractionMatrix] = []
+	var questionable_matrices: Array[InteractionMatrix] = []
+	if interaction.size() == 2:
+		for matrixA:InteractionMatrix in matrices:
+			if !matrixA.unconnected_matrix[from_id].is_empty():
+				distinguished_matrices.push_back(matrixA)
+				continue
+			
+			var to_idsA := matrixA.get_connected_ids(from_id, true)
+			
+			if to_idsA.size() != 3:
+				distinguished_matrices.push_back(matrixA)
+				continue
+			
+			to_idsA.sort()
+			to_idsA.remove_at(to_idsA.find(prev_id))
+			
+			if ArrayFuncs.packed_int_any(
+				to_idsA,
+				func(id:int) -> bool:
+					return (
+						matrixA.get_state_from_id(id) != StateLine.State.None
+						or !matrixA.unconnected_matrix[id].is_empty()
+					)
+			):
+				distinguished_matrices.push_back(matrixA)
+				continue
+			
+			if questionable_matrices.is_empty():
+				questionable_matrices.push_back(matrixA)
+				continue
+				
+			if !questionable_matrices.any(
+				func(matrixB: InteractionMatrix) -> bool:
+					return matrixB.particle_count == matrixA.particle_count
+			):
+				distinguished_matrices.push_back(matrixA)
+				continue
+			
+			if is_swapped_matrix_duplicate(
+				matrixA,
+				questionable_matrices,
+				to_idsA
+			):
+				continue
+			
+			questionable_matrices.push_back(matrixA)
+		
+		distinguished_matrices.append_array(questionable_matrices)
+		return distinguished_matrices
+	
+	return matrices
 
 func get_interaction_connected_matrices(
 	interaction:PackedInt32Array,
@@ -440,7 +542,7 @@ func get_interaction_connected_matrices(
 				new_id,
 				interaction_degree,
 				range(base_matrix.matrix_size),
-				g_allow_tadpoles
+				true
 			)
 		)
 		
@@ -458,7 +560,8 @@ func is_complete(matrix: InteractionMatrix) -> bool:
 
 func connect_matrix_from_id(
 	base_matrix: InteractionMatrix,
-	from_id: int
+	from_id: int,
+	interaction: PackedInt32Array
 ) -> Array[InteractionMatrix]:
 	if found_one:
 		return []
@@ -479,13 +582,18 @@ func connect_matrix_from_id(
 	if base_matrix.unconnected_matrix[from_id].is_empty():
 		return [base_matrix]
 	
-	if base_matrix.degree > 0 and !g_allow_tadpoles and !ArrayFuncs.packed_int_any(
-		range(base_matrix.matrix_size),
-		func(id: int) -> bool:
-			return (
-				id != from_id
-				and base_matrix.unconnected_matrix[id].is_empty()
-			)
+	if (
+		base_matrix.degree > 0
+		and !g_allow_tadpoles
+		and interaction.size() != 3
+		and ArrayFuncs.packed_int_all(
+			range(base_matrix.matrix_size),
+			func(id: int) -> bool:
+				return (
+					from_id == id
+					or base_matrix.unconnected_matrix[id].is_empty()
+				)
+				)
 	):
 		return []
 
@@ -852,21 +960,21 @@ func connect_fermion_from_id(
 	if found_one:
 		return []
 	
+	var particle_interactions: Array = g_particle_interactions[fermion]
+	
 	if find_one:
-		shuffle_particle_interactions()
+		particle_interactions = g_particle_interactions[fermion].duplicate(true)
+		particle_interactions.shuffle()
 
 	if is_disconnected(base_matrix):
 		return []
 
 	var unconnected_particles: PackedInt32Array = base_matrix.get_unconnected_particles()
 	
-	if unconnected_particles.find(fermion) == -1:
-		breakpoint
-	
 	unconnected_particles.remove_at(unconnected_particles.find(fermion))
 	
 	var connected_matrices: Array[InteractionMatrix] = []
-	for interaction:PackedInt32Array in g_particle_interactions[fermion]:
+	for interaction:PackedInt32Array in particle_interactions:
 		var interaction_connected_matrices := get_interaction_connected_matrices(
 			interaction,
 			base_matrix,
@@ -874,6 +982,9 @@ func connect_fermion_from_id(
 			from_id,
 			unconnected_particles
 		)
+		
+		if find_one:
+			interaction_connected_matrices.shuffle()
 		
 		var new_id: int = base_matrix.matrix_size
 		for matrix:InteractionMatrix in interaction_connected_matrices:
@@ -1315,31 +1426,6 @@ func get_degrees_to_check(
 			degrees_to_check.append(degree)
 
 	return degrees_to_check
-
-func convert_interaction_to_general(interaction: Array) -> Array:
-	return interaction.map(
-		func(particle:ParticleData.Particle) -> ParticleData.Particle:
-			return (
-				(sign(particle) * ParticleData.GENERAL_CONVERSION[ParticleData.base(particle)])
-				if ParticleData.base(particle) not in ParticleData.GENERAL_PARTICLES else particle
-			)
-	)
-	
-func convert_interactions_to_general(interactions: Array) -> Array:
-	var converted_interactions : Array = interactions.map(convert_interaction_to_general)
-	
-	var general_interactions : Array = []
-	for i:int in interactions.size():
-		var converted_interaction: Array = converted_interactions[i]
-		var base_interaction: Array = interactions[i]
-		
-		if converted_interaction not in interactions:
-			general_interactions.push_back(base_interaction)
-
-		elif converted_interaction not in general_interactions:
-			general_interactions.push_back(converted_interaction)
-
-	return general_interactions
 
 func get_print_time() -> String:
 	return "time: " + str(Time.get_ticks_usec() - start_time) + " usec"

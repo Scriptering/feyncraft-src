@@ -129,8 +129,8 @@ func is_inside_crosshair_area(pos: Vector2) -> bool:
 	return (
 		try_position.x < clamp_right + (2 * grid_size)
 		&& try_position.x > clamp_left - (2 * grid_size)
-		&& try_position.y < clamp_down + (1.5 * grid_size)
-		&& try_position.y > clamp_up - (1.5 * grid_size)
+		&& try_position.y < clamp_down + grid_size
+		&& try_position.y > clamp_up - grid_size
 	)
 
 func move(try_position: Vector2) -> void:

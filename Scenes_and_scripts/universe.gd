@@ -52,8 +52,8 @@ func _ready() -> void:
 	remove_child(Level)
 	
 	EventBus.signal_change_scene.connect(change_scene)
-	EventBus.signal_problem_modified.connect(_on_problem_modified)
-	EventBus.signal_problem_set_played.connect(_on_problem_set_played)
+	EventBus.problem_modified.connect(_on_problem_modified)
+	EventBus.problem_set_played.connect(_on_problem_set_played)
 	EventBus.add_floating_menu.connect(add_floating_menu)
 	
 	StateManager.init(MainMenu.Diagram)
@@ -97,9 +97,12 @@ func enter_level(args: Array = [Mode.Sandbox]) -> void:
 func exit_level(_args: Array = []) -> void:
 	Level.exit()
 
-func enter_main_menu(_args: Array = []) -> void:
+func enter_main_menu(args: Array = []) -> void:
 	Globals.in_main_menu = true
-	modifying_problem_item = null
+	
+	if modifying_problem_item:
+		modifying_problem_item.finish_modification(!args.is_empty() and args[0])
+		modifying_problem_item = null
 	
 	EventBus.save_files.emit()
 
@@ -111,9 +114,7 @@ func _on_main_menu_tutorial_pressed() -> void:
 
 func _on_world_problem_submitted() -> void:
 	modifying_problem_item.problem = Level.creating_problem
-	modifying_problem_item.finish_modification()
-
-	change_scene(Scene.MainMenu)
+	change_scene(Scene.MainMenu, [true])
 
 func _on_problem_modified(problem_item: PanelContainer) -> void:
 	modifying_problem_item = problem_item

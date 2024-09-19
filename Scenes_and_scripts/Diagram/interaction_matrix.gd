@@ -6,6 +6,7 @@ enum {UNCONNECTED, CONNECTED}
 @export var unconnected_matrix: Array = []
 @export var unconnected_particle_count: PackedInt32Array = [0, 0, 0]
 @export var degree: int = 0
+@export var particle_count: int = 0
 
 func add_interaction(
 	interaction_state : StateLine.State = StateLine.State.None,
@@ -33,6 +34,8 @@ func connect_interactions(
 ) -> void:
 	super.connect_interactions(from_id, to_id, particle, bidirectional, reverse)
 	
+	particle_count += particle
+	
 	erase_unconnected_particle(from_id, particle)
 	erase_unconnected_particle(to_id, particle)
 
@@ -46,6 +49,8 @@ func connect_interactions_no_remove(
 ) -> void:
 	super.connect_interactions(from_id, to_id, particle, false, reverse)
 	
+	particle_count += particle
+
 	if remove_from:
 		erase_unconnected_particle(from_id, particle)
 	
@@ -65,6 +70,8 @@ func connect_asymmetric_interactions(
 	from_id: int, to_id: int, from_particle: ParticleData.Particle, to_particle: ParticleData.Particle,
 	connection_particle: ParticleData.Particle, reverse: bool = false
 ) -> void:
+	particle_count += from_particle
+	
 	super.connect_interactions(from_id, to_id, connection_particle, false, reverse)
 	
 	erase_unconnected_particle(from_id, from_particle)
@@ -298,27 +305,23 @@ func has_same_unconnected_matrix(comparison_matrix: InteractionMatrix) -> bool:
 	return true
 
 func has_same_connection_matrix(comparison_matrix: InteractionMatrix) -> bool:
-	if connection_matrix == comparison_matrix.connection_matrix:
-		return true
-	
-	if connection_matrix.size() != comparison_matrix.connection_matrix.size():
+	if matrix_size != comparison_matrix.matrix_size:
 		return false
 	
-	if connection_matrix.any(
-		func(interaction:Array) -> bool:
-			return interaction not in comparison_matrix.connection_matrix
-	):
-		return false
-	
-	if comparison_matrix.connection_matrix.any(
-		func(interaction:Array) -> bool:
-			return interaction not in connection_matrix
-	):
-		return false
-	
+	for i:int in matrix_size:
+		for j:int in matrix_size:
+			if (
+				get_sorted_connection_particles(i, j, false, true)
+				!= comparison_matrix.get_sorted_connection_particles(i, j, false, true)
+			):
+				return false
+			
 	return true
 
 func is_duplicate_interaction_matrix(compare_interaction_matrix: InteractionMatrix) -> bool:
+	if compare_interaction_matrix.particle_count != particle_count:
+		return false
+	
 	if !has_same_unconnected_matrix(compare_interaction_matrix):
 		return false
 	
@@ -326,5 +329,3 @@ func is_duplicate_interaction_matrix(compare_interaction_matrix: InteractionMatr
 		return false
 	
 	return true
-	
-	

@@ -48,15 +48,11 @@ texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 expand_margin_left = 15.0
 
-[node name="GenerationButton" type="Control" node_paths=PackedStringArray("EM_check", "strong_check", "weak_check", "electroweak_check", "SaveStates", "Generate", "ViewDiagrams", "MinDegree", "MaxDegree", "Equation", "NoStatesToSave", "StatesSaved", "NoDiagramsFound", "GenerationCompleted", "FindSlider", "LoadTimeWarning", "ContentContainer", "TabButton", "MovingContainer")]
+[node name="GenerationButton" type="Control" node_paths=PackedStringArray("SaveStates", "Generate", "ViewDiagrams", "MinDegree", "MaxDegree", "Equation", "NoStatesToSave", "StatesSaved", "NoDiagramsFound", "GenerationCompleted", "FindSlider", "LoadTimeWarning", "ContentContainer", "TabButton", "MovingContainer")]
 material = ExtResource("1_h3eo1")
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("2_plgpl")
-EM_check = NodePath("MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/electromagnetic")
-strong_check = NodePath("MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/strong")
-weak_check = NodePath("MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/weak")
-electroweak_check = NodePath("MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/electro_weak")
 SaveStates = NodePath("MovingContainer/MovingContainer/PanelContainer/VBoxContainer/HBoxContainer/Save")
 Generate = NodePath("MovingContainer/MovingContainer/PanelContainer/VBoxContainer/HBoxContainer/Generate")
 ViewDiagrams = NodePath("MovingContainer/MovingContainer/PanelContainer/VBoxContainer/HBoxContainer/View")
@@ -302,41 +298,45 @@ theme_override_constants/h_separation = 1
 theme_override_constants/v_separation = 1
 columns = 2
 
-[node name="electromagnetic" type="CheckButton" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer"]
+[node name="electromagnetic_check" type="CheckButton" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer"]
+unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
 button_pressed = true
 text = "EM"
 alignment = 1
 
-[node name="ButtonSoundComponent" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/electromagnetic" instance=ExtResource("6_aanob")]
+[node name="ButtonSoundComponent" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/electromagnetic_check" instance=ExtResource("6_aanob")]
 
-[node name="strong" type="CheckButton" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer"]
+[node name="strong_check" type="CheckButton" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer"]
+unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
 button_pressed = true
 text = "STRONG"
 alignment = 1
 
-[node name="ButtonSoundComponent" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/strong" instance=ExtResource("6_aanob")]
+[node name="ButtonSoundComponent" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/strong_check" instance=ExtResource("6_aanob")]
 
-[node name="weak" type="CheckButton" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer"]
+[node name="weak_check" type="CheckButton" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer"]
+unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
 button_pressed = true
 text = "WEAK"
 alignment = 1
 
-[node name="ButtonSoundComponent" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/weak" instance=ExtResource("6_aanob")]
+[node name="ButtonSoundComponent" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/weak_check" instance=ExtResource("6_aanob")]
 
-[node name="electro_weak" type="CheckButton" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer"]
+[node name="electroweak_check" type="CheckButton" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer"]
+unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
 button_pressed = true
 text = "E. WEAK"
 alignment = 1
 
-[node name="ButtonSoundComponent" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/electro_weak" instance=ExtResource("6_aanob")]
+[node name="ButtonSoundComponent" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/electroweak_check" instance=ExtResource("6_aanob")]
 
 [node name="Tadpoles" type="CheckButton" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer"]
 unique_name_in_owner = true
@@ -451,9 +451,9 @@ icon_use_parent_material = true
 [connection signal="push_in_finished" from="MovingContainer/LoadTimeWarning" to="." method="_on_submit_feedback_push_in_finished"]
 [connection signal="value_changed" from="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/PanelContainer/DegreeContainer/MinDegree" to="." method="_on_min_degree_value_changed"]
 [connection signal="value_changed" from="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/PanelContainer/DegreeContainer/MaxDegree" to="." method="_on_max_degree_value_changed"]
-[connection signal="toggled" from="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/electromagnetic" to="." method="_on_electromagnetic_toggled"]
-[connection signal="toggled" from="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/weak" to="." method="_on_weak_toggled"]
-[connection signal="toggled" from="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/electro_weak" to="." method="_on_electro_weak_toggled"]
+[connection signal="toggled" from="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/electromagnetic_check" to="." method="_on_electromagnetic_toggled"]
+[connection signal="toggled" from="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/weak_check" to="." method="_on_weak_toggled"]
+[connection signal="toggled" from="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/electroweak_check" to="." method="_on_electro_weak_toggled"]
 [connection signal="value_changed" from="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/PanelContainer2/FindSlider/VBoxContainer/Find" to="." method="_on_find_value_changed"]
 [connection signal="pressed" from="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/HBoxContainer/Save" to="." method="_on_save_pressed"]
 [connection signal="pressed" from="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/HBoxContainer/Generate" to="." method="_on_generate_pressed"]

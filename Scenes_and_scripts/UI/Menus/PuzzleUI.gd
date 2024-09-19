@@ -2,14 +2,10 @@ extends PullOutTab
 
 enum HadronFrequency {Always, Allowed, Never}
 
-@export var MINIMUM_PARTICLE_COUNT: int = 4
+@export var MINIMUM_PARTICLE_COUNT: int = 2
 @export var MAXIMUM_PARTICLE_COUNT: int = 8
 @export var STARTING_MAX_PARTICLE_COUNT: int = 6
 
-@export var EMCheck: CheckButton
-@export var StrongCheck: CheckButton
-@export var WeakCheck: CheckButton
-@export var ElectroweakCheck: CheckButton
 @export var HadronFrequencySlider: HSlider
 @export var MinParticleCount: SpinBox
 @export var MaxParticleCount: SpinBox
@@ -48,8 +44,21 @@ func _on_max_particle_count_value_changed(value: float) -> void:
 
 func get_checks() -> Array[bool]:
 	return [
-		EMCheck.button_pressed,
-		StrongCheck.button_pressed,
-		WeakCheck.button_pressed,
-		ElectroweakCheck.button_pressed
+		%electromagnetic_check.button_pressed,
+		%strong_check.button_pressed,
+		%weak_check.button_pressed,
+		%electroweak_check.button_pressed
 	]
+
+func _on_electromagnetic_toggled(button_pressed: bool) -> void:
+	if !button_pressed:
+		%electroweak_check.button_pressed = false
+	
+func _on_weak_toggled(button_pressed: bool) -> void:
+	if !button_pressed:
+		%electroweak_check.button_pressed = false
+
+func _on_electro_weak_toggled(button_pressed: bool) -> void:
+	if button_pressed:
+		%electromagnetic_check.button_pressed = true
+		%weak_check.button_pressed = true

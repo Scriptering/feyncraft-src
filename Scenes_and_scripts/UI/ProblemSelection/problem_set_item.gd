@@ -20,6 +20,15 @@ func _ready() -> void:
 	update()
 
 func toggle_edit_visibility(can_edit: bool, can_delete: bool = can_edit) -> void:
+	if can_edit:
+		%View.icon = load("res://Textures/Buttons/icons/hammer.png")
+		%View.icon_use_parent_material = true
+		%View.expand_icon = true
+	else:
+		%View.icon = load("res://Textures/Buttons/eye/eye_open.png")
+		%View.icon_use_parent_material = false
+		%View.expand_icon = false
+	
 	delete.visible = can_delete
 	title.editable = can_edit
 	upload.visible = can_edit
@@ -68,4 +77,9 @@ func _on_title_text_submitted(new_text: String) -> void:
 	save()
 
 func _on_upload_pressed() -> void:
-	ClipBoard.copy(FileManager.get_resource_save_data(problem_set))
+	var to_share_problem_set : ProblemSet = problem_set.duplicate(true)
+	to_share_problem_set.prepare_for_export()
+	
+	ClipBoard.copy(
+		FileManager.get_resource_save_data(to_share_problem_set)
+	)

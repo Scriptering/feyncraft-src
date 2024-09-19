@@ -12,9 +12,9 @@ signal move
 signal deleted
 signal modify
 signal play
-signal modification_finished(problem_item: PanelContainer)
+signal modification_finished(problem_item: PanelContainer, completed: bool)
 
-var problem: Problem
+var problem := Problem.new()
 var index: int: set = _set_index
 
 func _set_index(new_value: int) -> void:
@@ -27,6 +27,7 @@ func _set_index(new_value: int) -> void:
 	
 func update() -> void:
 	play_button.disabled = is_empty()
+	equation.load_problem(problem)
 
 func toggle_play_disabled(toggle: bool) -> void:
 	play_button.disabled = toggle
@@ -65,7 +66,6 @@ func is_empty() -> bool:
 			return state_interaction.size() == 0
 	)
 
-func finish_modification() -> void:
-	equation.load_problem(problem)
-	modification_finished.emit(self)
+func finish_modification(completed: bool) -> void:
+	modification_finished.emit(self, completed)
 	update()

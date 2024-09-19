@@ -22,7 +22,7 @@ func _ready() -> void:
 	vision_button_group.pressed.connect(_vision_button_toggled)
 
 func _physics_process(delta: float) -> void:
-	if 1-(delta/avg_seconds_per_blink) < randf():
+	if 1-(delta*60/avg_seconds_per_blink) < randf():
 		blink()
 		
 func blink() -> void:

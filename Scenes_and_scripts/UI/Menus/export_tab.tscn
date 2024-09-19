@@ -46,7 +46,8 @@ theme_override_constants/separation = 0
 [node name="TabButton" parent="MovingContainer" instance=ExtResource("3_n7eiy")]
 layout_mode = 2
 TabIcon = ExtResource("4_q7ddc")
-TabMinimumSize = Vector2(25, 23)
+TabMinimumSize = Vector2(25, 24)
+expand_icon = true
 icon_use_parent_material = true
 
 [node name="ContentContainer" type="PanelContainer" parent="MovingContainer"]

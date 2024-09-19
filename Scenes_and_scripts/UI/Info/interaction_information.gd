@@ -4,7 +4,7 @@ class_name InteractionInformation
 signal closed_button_pressed
 
 enum Tab {QuantumNumbers, Other}
-enum OtherProperties {Degree, Dimensionality, ColourlessGluon, NeutralPhoton, ShadelessZ, NoHInvalid, Colour, InvalidInteraction}
+enum OtherProperties {Degree, Dimensionality, ColourlessGluon, NeutralPhoton, MasslessH, ShadelessZ, NoHInvalid, Colour, InvalidInteraction}
 
 @onready var data_containers : Array[GridContainer] = [
 	$"PanelContainer/TabContainer/Quantum Numbers/Quantum Numbers",
@@ -19,7 +19,7 @@ var valid_icon := preload("res://Scenes_and_scripts/UI/Info/valid.tscn")
 
 #1 charge, 2 lepton num., 3 e. num, 4 mu num., 5 tau num., 6 quark num., 7 up num., 8 down num., 9 charm num., 10 strange num., 11 top num., 12 bottom num., 13 colour
 var property_names := [['charge', 'lepton num.', 'electron num.', 'muon num.', 'tau num.', 'baryon num.', 'up num.', 'down num.', 'charm num.', 'strange num.', 'top num.', 'bottom num.', 'bright num.', 'dark num.'],
-['degree', 'dimensionality', 'colourless gluon?', 'photon from neutral?', "Z from shadeless?", "H-less process valid?", 'colour', 'interaction invalid']]
+['degree', 'dimensionality', 'colourless gluon?', 'photon from neutral?', "Higgs from massless?", "Z from shadeless?", "H-less process valid?", 'colour', 'interaction invalid']]
 
 func _ready() -> void:
 	super._ready()
@@ -89,7 +89,13 @@ func build_other_tab() -> void:
 		add_invalid(data_containers[Tab.Other], !neutral_photon)
 		
 	if ConnectedInteraction.has_base_particle_connected(ParticleData.Particle.H):
+		var massless_H: bool = ConnectedInteraction.has_massless_H(particles)
 		var is_no_H_valid: bool = ConnectedInteraction.is_no_H_valid(particles)
+		
+		add_label(data_containers[Tab.Other], property_names[Tab.Other][OtherProperties.MasslessH])
+		add_label(data_containers[Tab.Other], "  %s  "%[get_bool_str(massless_H)])
+		add_invalid(data_containers[Tab.Other], !massless_H)
+		
 		add_label(data_containers[Tab.Other], property_names[Tab.Other][OtherProperties.NoHInvalid])
 		add_label(data_containers[Tab.Other], "  %s  "%[get_bool_str(is_no_H_valid)])
 		add_invalid(data_containers[Tab.Other], is_no_H_valid)

@@ -154,4 +154,7 @@ func resave_diagram(new_diagram: DrawingMatrix) -> void:
 	update()
 
 func _on_index_value_changed(value: float) -> void:
+	if current_index == value - 1:
+		return
+
 	self.current_index = max(0, value - 1)

@@ -30,8 +30,6 @@ var show_line_labels: bool = true:
 
 var hovering: bool = false
 
-var vision_update_queued: bool = false
-
 var crosshair_above_interactions: bool = false
 
 const MASS_PRECISION: float = 1e-4
@@ -109,7 +107,8 @@ func init(state_manager: Node) -> void:
 	crosshair.init(self, StateLines, grid_size)
 	
 func _process(_delta: float) -> void:
-	flush_update_queue()
+	if update_queued:
+		flush_update_queue()
 
 func _gui_input(event: InputEvent) -> void:
 	if Globals.is_on_mobile():
@@ -123,27 +122,6 @@ func _gui_input(event: InputEvent) -> void:
 	):
 		EventBus.diagram_mouse_pressed.emit()
 		check_particle_line_deleted(event.position)
-	#elif(
-		#event is InputEventMouseMotion
-		#and event.button_index == MOUSE_BUTTON_LEFT
-	#):
-		#update_deletion_alphas(event.position)
-
-#func update_deletion_alphas(pos: Vector2) -> void:
-	#if StateManager.state != BaseState.State.Deleting:
-		#return
-	#
-	#var deletion_alpha: float = 0.9
-	#
-	#for interaction:Interaction in get_interactions():
-		#if interaction.hovering:
-			#interaction.set_shader_params(deletion_alpha)
-			#return
-	#
-	#for particle_line:ParticleLine in get_particle_lines():
-		#if particle_line.is_hovered(pos + global_position - particle_line.global_position):
-			#particle_line.set_interaction_alpha(deletion_alpha)
-			#return
 
 func check_particle_line_deleted(pos: Vector2) -> void:
 	if StateManager.state != BaseState.State.Deleting:
@@ -170,12 +148,9 @@ func flush_update_queue() -> void:
 			state_line.update_queued = false
 			state_line.update()
 
-	if vision_update_queued:
-		vision_update_queued = false
-		update_vision()
-
 	if update_queued:
 		current_diagram = generate_drawing_matrix_from_diagram()
+		update_vision()
 		action.emit()
 		update_queued = false
 
@@ -216,7 +191,6 @@ func move_interaction(interaction: Interaction, to_position: Vector2i) -> void:
 	
 	queue_stateline_update(old_state)
 	queue_stateline_update(new_state)
-	queue_vision_update()
 	queue_update()
 
 func position_stateline(pos: Vector2i) -> StateLine.State:
@@ -406,11 +380,16 @@ func update_vision() -> void:
 
 func vision_button_toggled(_vision: Globals.Vision, toggle: bool) -> void:
 	if toggle:
-		queue_vision_update()
+		queue_update()
 	else:
 		clear_vision_lines()
 
 func move_stateline(stateline: StateLine) -> void:
+	var to_x_position: int = snapped(get_local_mouse_position().x - DiagramArea.position.x, grid_size)
+	
+	if to_x_position == stateline.position.x:
+		return
+	
 	var non_state_interactions : Array[Interaction] = []
 	var state_interactions : Array[Interaction] = []
 	var interaction_x_positions : Array[int] = []
@@ -437,6 +416,8 @@ func move_stateline(stateline: StateLine) -> void:
 			particle_line.queue_update()
 		
 		interaction.queue_update()
+	
+	queue_update()
 
 func get_movable_state_line_position(state: StateLine.State, interaction_x_positions: Array) -> int:
 	var test_position : int = snapped(get_local_mouse_position().x - DiagramArea.position.x, grid_size)
@@ -556,9 +537,6 @@ func get_hadron_joints() -> Array[HadronJoint]:
 	
 	return hadron_joints
 
-func queue_vision_update() -> void:
-	vision_update_queued = true
-
 func update_particle_lines() -> void:
 	for particle_line:ParticleLine in get_particle_lines():
 		particle_line.queue_update()
@@ -580,7 +558,6 @@ func delete_line(particle_line: ParticleLine) -> void:
 	
 	check_rejoin_lines(particle_line.connected_interactions)
 	
-	queue_vision_update()
 	queue_update()
 
 func _interaction_deleted(interaction: Interaction) -> void:
@@ -599,7 +576,6 @@ func delete_interaction(interaction: Interaction) -> void:
 		delete_line(particle_line)
 	
 	disconnect_interaction_from_stateline(interaction, get_state_by_position(interaction.positioni()))
-	queue_vision_update()
 	queue_update()
 
 func remove_lonely_interactions(interactions: Array[Interaction] = get_interactions()) -> void:
@@ -635,7 +611,6 @@ func split_line(line_to_split: ParticleLine, splitting_interaction: Interaction)
 	
 	line_to_split.queue_update()
 	new_particle_line.queue_update()
-	queue_vision_update()
 	queue_update()
 	
 	return new_particle_line
@@ -714,7 +689,6 @@ func rejoin_lines(line_to_extend: ParticleLine, line_to_delete: ParticleLine) ->
 	line_to_delete.queue_free()
 	disconnect_line(line_to_delete)
 	line_to_extend.queue_update()
-	queue_vision_update()
 	queue_update()
 
 func connect_interaction(interaction:Interaction) -> void:
@@ -779,7 +753,8 @@ func start_drawing(start_position: Vector2i) -> void:
 	)
 
 func transfer_interaction_connections(from_interaction:Interaction, to_interaction:Interaction) -> void:
-	for particle_line:ParticleLine in from_interaction.connected_lines:
+	for i:int in from_interaction.connected_lines.size():
+		var particle_line: ParticleLine = from_interaction.connected_lines.front()
 		connect_particle_line(
 			particle_line,
 			particle_line.get_connected_point(from_interaction),
@@ -1028,7 +1003,6 @@ func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 		)
 	
 	line_diagram_actions = true
-	queue_vision_update()
 	queue_update()
 
 func undo() -> void:
@@ -1106,7 +1080,7 @@ func draw_history() -> void:
 func is_valid() -> bool:
 	return get_interactions().all(
 		func(interaction: Interaction) -> bool: 
-			return interaction.valid
+			return interaction.valid and interaction.valid_colourless
 	)
 
 func get_current_diagram() -> DrawingMatrix:
