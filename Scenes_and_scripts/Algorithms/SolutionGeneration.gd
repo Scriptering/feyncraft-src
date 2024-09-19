@@ -325,7 +325,9 @@ func connect_matrix(base_matrix: InteractionMatrix) -> Array[InteractionMatrix]:
 				further_matrices.push_back(matrix)
 				continue
 
-			further_matrices.append_array(connect_matrix_from_id(matrix, from_id))
+			further_matrices.append_array(
+				connect_matrix_from_id(matrix, from_id, [])
+			)
 		
 		to_connect_matrices.clear()
 		for matrix:InteractionMatrix in further_matrices:
@@ -392,7 +394,7 @@ func connect_particle_from_id(
 		var further_connected_matrices : Array[InteractionMatrix] = []
 		for matrix:InteractionMatrix in interaction_connected_matrices:
 			further_connected_matrices.append_array(
-				connect_matrix_from_id(matrix, base_matrix.matrix_size)
+				connect_matrix_from_id(matrix, base_matrix.matrix_size, interaction)
 			)
 		
 		if further_connected_matrices.is_empty():
@@ -486,37 +488,6 @@ func get_distinguishable_matrices(
 		return distinguished_matrices
 	
 	return matrices
-	#
-	#var particleA: ParticleData.Particle = interaction[0]
-	#var particleB: ParticleData.Particle = interaction[1]
-	#var particleC: ParticleData.Particle = interaction[2]
-	#
-	#if particleA == particleB and particleA == particleC:
-		#var A_removed := interaction.duplicate()
-	#
-	#for matrixA:InteractionMatrix in matrices:
-		#if distinguished_matrices.is_empty():
-			#distinguished_matrices.push_back(matrixA)
-			#continue
-		#
-		#var to_idsA := matrixA.get_connected_ids(from_id, true)
-		#to_idsA.sort()
-		#
-		#if prev_id in to_idsA:
-			#to_idsA.remove_at(to_idsA.find(prev_id))
-		#
-		#var swapped_matrix : InteractionMatrix = matrixA.duplicate(true)
-		#swapped_matrix.swap_ids(to_idsA[0], to_idsA[1])
-		#
-		#if distinguished_matrices.any(
-			#func(matrixB: InteractionMatrix) -> bool:
-				#return swapped_matrix.is_duplicate_interaction_matrix(matrixB)
-		#):
-			#continue
-		#
-		#distinguished_matrices.push_back(matrixA)
-	#
-	#return distinguished_matrices
 
 func get_interaction_connected_matrices(
 	interaction:PackedInt32Array,
@@ -571,7 +542,7 @@ func get_interaction_connected_matrices(
 				new_id,
 				interaction_degree,
 				range(base_matrix.matrix_size),
-				g_allow_tadpoles
+				true
 			)
 		)
 		
@@ -589,7 +560,8 @@ func is_complete(matrix: InteractionMatrix) -> bool:
 
 func connect_matrix_from_id(
 	base_matrix: InteractionMatrix,
-	from_id: int
+	from_id: int,
+	interaction: PackedInt32Array
 ) -> Array[InteractionMatrix]:
 	if found_one:
 		return []
@@ -610,13 +582,18 @@ func connect_matrix_from_id(
 	if base_matrix.unconnected_matrix[from_id].is_empty():
 		return [base_matrix]
 	
-	if base_matrix.degree > 0 and !g_allow_tadpoles and ArrayFuncs.packed_int_all(
-		range(base_matrix.matrix_size),
-		func(id: int) -> bool:
-			return (
-				from_id == id
-				or base_matrix.unconnected_matrix[id].is_empty()
-			)
+	if (
+		base_matrix.degree > 0
+		and !g_allow_tadpoles
+		and interaction.size() != 3
+		and ArrayFuncs.packed_int_all(
+			range(base_matrix.matrix_size),
+			func(id: int) -> bool:
+				return (
+					from_id == id
+					or base_matrix.unconnected_matrix[id].is_empty()
+				)
+				)
 	):
 		return []
 

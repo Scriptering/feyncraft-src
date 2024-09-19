@@ -1,16 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://bk8xjrcxummfx"]
+[gd_scene load_steps=7 format=3 uid="uid://bk8xjrcxummfx"]
 
 [ext_resource type="Material" uid="uid://c07rj23b21qlt" path="res://Resources/Shaders/particle_line.tres" id="1_7ufhl"]
 [ext_resource type="Script" path="res://Scenes_and_scripts/UI/MiniDiagram/mini_particle_line.gd" id="2_qpvw1"]
 [ext_resource type="Texture2D" uid="uid://b8glr5vnlacpl" path="res://Textures/ParticlesAndLines/gluon_end.png" id="3_q8adg"]
 [ext_resource type="Texture2D" uid="uid://0j7y2hp7whj6" path="res://Textures/ParticlesAndLines/Lines/loop.png" id="4_fqt85"]
 [ext_resource type="Texture2D" uid="uid://dya0nescxtd67" path="res://Textures/ParticlesAndLines/arrow.png" id="5_6iohf"]
-[ext_resource type="Shader" path="res://Resources/Shaders/outline_palette_swap.gdshader" id="7_4nxu3"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_bhl6k"]
-shader = ExtResource("7_4nxu3")
-shader_parameter/line_color = Color(0, 0, 0, 1)
-shader_parameter/line_thickness = 1.0
+[ext_resource type="Material" uid="uid://dc4rnoi735twf" path="res://Resources/Shaders/outline_palette_swap.tres" id="6_qvh1t"]
 
 [node name="MiniParticleLine" type="Node2D"]
 material = ExtResource("1_7ufhl")
@@ -46,9 +41,10 @@ texture = ExtResource("5_6iohf")
 offset = Vector2(-4, 0)
 
 [node name="text" type="Sprite2D" parent="."]
-material = SubResource("ShaderMaterial_bhl6k")
+z_index = 1
+material = ExtResource("6_qvh1t")
 scale = Vector2(0.75, 0.75)
 
 [node name="spareText" type="Sprite2D" parent="."]
-material = SubResource("ShaderMaterial_bhl6k")
+material = ExtResource("6_qvh1t")
 scale = Vector2(0.75, 0.75)
