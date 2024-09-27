@@ -84,19 +84,6 @@ layout_mode = 2
 size_flags_horizontal = 6
 theme_override_constants/separation = -1
 
-[node name="Delete" parent="VBoxContainer/HBoxContainer/HBoxContainer" instance=ExtResource("5_q5mq7")]
-material = null
-layout_mode = 2
-mouse_filter = 1
-minimum_size = Vector2(22, 22)
-action_mode = 1
-icon = ExtResource("8_fllxr")
-expand_icon = true
-icon_use_parent_material = true
-
-[node name="Tooltip" parent="VBoxContainer/HBoxContainer/HBoxContainer/Delete" instance=ExtResource("7_ck8xq")]
-tooltip = "Delete"
-
 [node name="Modify" parent="VBoxContainer/HBoxContainer/HBoxContainer" instance=ExtResource("5_q5mq7")]
 material = null
 layout_mode = 2
@@ -110,6 +97,19 @@ icon_use_parent_material = true
 [node name="Tooltip" parent="VBoxContainer/HBoxContainer/HBoxContainer/Modify" instance=ExtResource("7_ck8xq")]
 tooltip = "Modify"
 
+[node name="Delete" parent="VBoxContainer/HBoxContainer/HBoxContainer" instance=ExtResource("5_q5mq7")]
+material = null
+layout_mode = 2
+mouse_filter = 1
+minimum_size = Vector2(22, 22)
+action_mode = 1
+icon = ExtResource("8_fllxr")
+expand_icon = true
+icon_use_parent_material = true
+
+[node name="Tooltip" parent="VBoxContainer/HBoxContainer/HBoxContainer/Delete" instance=ExtResource("7_ck8xq")]
+tooltip = "Delete"
+
 [node name="UpDown" parent="VBoxContainer/HBoxContainer" instance=ExtResource("11_fpwea")]
 layout_mode = 2
 
@@ -120,8 +120,8 @@ layout_mode = 2
 size_flags_horizontal = 4
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/HBoxContainer2/Play" to="." method="_on_play_pressed"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/HBoxContainer/Delete" to="." method="_on_delete_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/HBoxContainer/Modify" to="." method="_on_modify_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/HBoxContainer/Delete" to="." method="_on_delete_pressed"]
 [connection signal="down_pressed" from="VBoxContainer/HBoxContainer/UpDown" to="." method="_on_down_pressed"]
 [connection signal="up_pressed" from="VBoxContainer/HBoxContainer/UpDown" to="." method="_on_up_pressed"]
 

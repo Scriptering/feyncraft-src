@@ -24,3 +24,6 @@ func destroy_popup() -> void:
 func close_popup() -> void:
 	button_pressed = false
 	destroy_popup()
+
+func get_popup() -> Node:
+	return popup 

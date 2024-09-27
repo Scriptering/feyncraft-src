@@ -70,7 +70,7 @@ theme_override_constants/separation = 0
 [node name="Label" type="Label" parent="HBoxContainer/ContentContainer/OptionsContainer/StateParticleCountContainer/VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
-text = "No. STATE PARTICLES"
+text = "No. state particles"
 horizontal_alignment = 1
 vertical_alignment = 2
 
@@ -130,8 +130,9 @@ text = "EM"
 unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
+theme_override_constants/h_separation = 2
 button_pressed = true
-text = "STRONG"
+text = "strong"
 
 [node name="ButtonSoundComponent" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer/strong_check" instance=ExtResource("8_f0h1v")]
 
@@ -140,7 +141,7 @@ unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
 button_pressed = true
-text = "WEAK"
+text = "weak"
 
 [node name="ButtonSoundComponent" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer/weak_check" instance=ExtResource("8_f0h1v")]
 
@@ -148,8 +149,9 @@ text = "WEAK"
 unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
+theme_override_constants/h_separation = 2
 button_pressed = true
-text = "E. WEAK"
+text = "E. weak"
 
 [node name="ButtonSoundComponent" parent="HBoxContainer/ContentContainer/OptionsContainer/GridContainer/electroweak_check" instance=ExtResource("8_f0h1v")]
 
@@ -166,7 +168,7 @@ theme_override_constants/separation = 0
 use_parent_material = true
 layout_mode = 2
 mouse_filter = 1
-text = "HADRON FREQUENCY"
+text = "hadron frequency"
 horizontal_alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ContentContainer/OptionsContainer/PanelContainer/HadronSlider"]

@@ -8,5 +8,5 @@ script = ExtResource("1_ab2pe")
 daily_streak = 0
 palette = ExtResource("1_epglp")
 last_daily_completed_date = {}
-muted = false
+muted = true
 hide_labels = false

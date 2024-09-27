@@ -2,7 +2,7 @@ extends Node
 class_name Tooltip
 
 @export var offset: Vector2 = Vector2(15, 15)
-@export var show_delay: float = 0.25
+@export var show_delay: float = 0.4
 @export var hide_delay: float = -1
 @export var manual_placement: bool = false
 

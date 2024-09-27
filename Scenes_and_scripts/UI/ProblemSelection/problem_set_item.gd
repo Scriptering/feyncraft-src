@@ -8,7 +8,6 @@ signal play
 @export var delete:PanelButton
 @export var upload:PanelButton
 @export var index_label: Label
-@export var completed:TextureRect
 @export var play_button:PanelButton
 
 var problem_set: ProblemSet
@@ -47,7 +46,7 @@ func update() -> void:
 	
 	play_button.disabled = no_problems
 	upload.disabled = no_problems
-	completed.visible = (
+	%Completed.visible = (
 		!no_problems and problem_set.highest_index_reached >= problem_set.problems.size()
 	)
 	

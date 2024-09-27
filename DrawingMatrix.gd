@@ -44,6 +44,63 @@ func add_full_interaction(
 		id
 	)
 
+func anti_factor(b: bool) -> int:
+	if b:
+		return +1
+	return -1
+
+func sort_state_ids(id1: int, id2: int) -> bool:
+	var state1 := get_state_from_id(id1)
+	var state2 := get_state_from_id(id2)
+	
+	if state1 != state2:
+		return state1 < state2
+	
+	var y1 := normalised_interaction_positions[id1].y
+	var y2 := normalised_interaction_positions[id2].y
+	
+	if state1 == StateLine.State.None:
+		return y1 < y2
+	
+	var connected_id1 : int = get_connected_ids(id1, true)[0]
+	var connected_id2 : int = get_connected_ids(id2, true)[0]
+	
+	var particle1: ParticleData.Particle = (
+		get_connection_particles(id1, connected_id1, true)[0]
+	) * StateLine.state_factor[state1] * anti_factor(
+		are_interactions_connected(id1, connected_id1)
+	)
+
+	var particle2: ParticleData.Particle = (
+		get_connection_particles(id2, connected_id2, true)[0]
+	) * StateLine.state_factor[state2] * anti_factor(
+		are_interactions_connected(id2, connected_id2)
+	)
+
+	if ParticleData.base(particle1) != ParticleData.base(particle2):
+		return ParticleData.base(particle1) < ParticleData.base(particle2) 
+	
+	if particle1 != particle2:
+		return particle1 < particle2
+	
+	return y1 < y2
+
+func reorder_state_ids() -> void:
+	var swapped_ids: PackedInt32Array = []
+	var reindex_ids : Array = range(get_state_count(StateLine.State.Both))
+	reindex_ids.sort_custom(sort_state_ids)
+	
+	for state_id:int in get_state_count(StateLine.State.Both):
+		if state_id in swapped_ids or reindex_ids[state_id] in swapped_ids:
+			continue
+
+		swap_ids(state_id, reindex_ids[state_id])
+		
+		swapped_ids.push_back(state_id)
+		swapped_ids.push_back(reindex_ids[state_id])
+	
+	return
+
 func add_interaction_position(position: Vector2i, grid_size: int, id: int = normalised_interaction_positions.size()) -> void:
 	normalised_interaction_positions.insert(id, position/grid_size)
 
@@ -131,15 +188,27 @@ func split_hadrons() -> void:
 		
 		split_hadron(to_split_hadron_id)
 
-func reach_ids(id: int, reached_ids: PackedInt32Array, bidirectional: bool) -> PackedInt32Array:
+func reach_ids(
+	id: int,
+	reached_ids: PackedInt32Array,
+	bidirectional: bool,
+	first_forbidden_ids: PackedInt32Array = [],
+	forbid_ids: bool = true
+) -> PackedInt32Array:
 	reached_ids.push_back(id)
 	
 	for jd in matrix_size:
+		if forbid_ids and jd in first_forbidden_ids:
+			continue
+		
 		if jd in reached_ids:
 			continue
 		
 		if are_interactions_connected(id, jd, bidirectional) or are_ids_in_same_hadron(id, jd):
 			reached_ids = reach_ids(jd, reached_ids, bidirectional)
+		
+		if reached_ids.size() == matrix_size:
+			return reached_ids
 		
 	return reached_ids
 

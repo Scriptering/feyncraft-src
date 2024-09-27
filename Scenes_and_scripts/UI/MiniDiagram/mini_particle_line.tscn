@@ -41,7 +41,6 @@ texture = ExtResource("5_6iohf")
 offset = Vector2(-4, 0)
 
 [node name="text" type="Sprite2D" parent="."]
-z_index = 1
 material = ExtResource("6_qvh1t")
 scale = Vector2(0.75, 0.75)
 

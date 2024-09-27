@@ -104,6 +104,8 @@ func enter_main_menu(args: Array = []) -> void:
 		modifying_problem_item.finish_modification(!args.is_empty() and args[0])
 		modifying_problem_item = null
 	
+	MainMenu.update()
+	
 	EventBus.save_files.emit()
 
 func _on_main_menu_sandbox_pressed() -> void:

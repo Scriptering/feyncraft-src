@@ -47,6 +47,7 @@ func init(big_diagram: MainDiagram) -> void:
 
 func _on_load_pressed() -> void:
 	EventBus.draw_diagram.emit(get_drawing_matrix(current_index))
+	update_resave_button()
 
 func _on_left_pressed() -> void:
 	self.current_index -= 1
@@ -72,16 +73,24 @@ func _on_right_pressed() -> void:
 
 func clear() -> void:
 	diagrams.clear()
+	current_index = 0
+	
+	update()
 
 func toggle_visible() -> void:
 	visible = !visible
 	self.current_index = 0
 
 func update_index() -> void:
-	index.set_value_no_signal(self.current_index + 1)
+	if diagrams.size() == 0:
+		index.min_value = 0
+		index.set_value_no_signal(0)
+	else:
+		index.min_value = 1
+		index.set_value_no_signal(current_index + 1)
 	update_index_label()
 	left.disabled = current_index == 0
-	right.disabled = current_index == diagrams.size() - 1
+	right.disabled = current_index == diagrams.size() - 1 or diagrams.size() == 0
 
 func update_max_index() -> void:
 	index.max_value = diagrams.size()
@@ -104,10 +113,9 @@ func update() -> void:
 	update_max_index()
 	update_diagram_visibility()
 	update_delete_button()
+	update_resave_button()
 
 func update_index_label() -> void:
-	var label_index: int = current_index + 1 if diagrams.size() != 0 else 0
-	
 	max_index_label.text = "/" + str(diagrams.size())
 
 func update_diagram_visibility() -> void:
@@ -117,7 +125,14 @@ func update_resave_button(drawn_diagram: DrawingMatrix = BigDiagram.get_current_
 	if !visible or !allow_resaving:
 		return
 	
-	resave_button.disabled = diagrams.size() == 0 || !drawn_diagram.is_duplicate(diagrams[current_index])
+	if diagrams.size() == 0:
+		resave_button.disabled = true
+		return
+	
+	var reordered_diagram: DrawingMatrix = diagrams[current_index]
+	reordered_diagram.reorder_state_ids()
+	
+	resave_button.disabled = !drawn_diagram.is_duplicate(reordered_diagram)
 
 func update_delete_button() -> void:
 	delete_button.disabled = diagrams.size() == 0

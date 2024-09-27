@@ -259,20 +259,29 @@ func get_connection_particles(
 func is_fully_connected(bidirectional: bool = false) -> bool:
 	if matrix_size == 0:
 		return true
-	
-	var reached_ids : PackedInt32Array = []
-	var start_id: int = 0
-	
-	return reach_ids(start_id, reached_ids, bidirectional).size() == matrix_size
 
-func reach_ids(from_id: int, reached_ids: PackedInt32Array, bidirectional: bool) -> PackedInt32Array:
+	return reach_ids(0, [], bidirectional).size() == matrix_size
+
+func reach_ids(
+	from_id: int,
+	reached_ids: PackedInt32Array,
+	bidirectional: bool,
+	first_forbidden_ids: PackedInt32Array = [],
+	forbid_ids: bool = true
+) -> PackedInt32Array:
 	reached_ids.push_back(from_id)
 	
 	for to_id in get_connected_ids(from_id, bidirectional):
+		if forbid_ids and to_id in first_forbidden_ids:
+			continue
+		
 		if to_id in reached_ids:
 			continue
 		
 		reached_ids = reach_ids(to_id, reached_ids, bidirectional)
+
+		if reached_ids.size() == matrix_size:
+			return reached_ids
 		
 	return reached_ids
 
@@ -575,7 +584,6 @@ func generate_reindex_dictionary() -> Dictionary:
 
 func reindex() -> void:
 	var reindex_dictionary : Dictionary = generate_reindex_dictionary()
-	
 	var reindexed_connection_matrix : Array = connection_matrix.duplicate(true)
 	
 	for i:int in matrix_size:

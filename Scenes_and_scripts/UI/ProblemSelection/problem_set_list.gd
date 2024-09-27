@@ -83,7 +83,7 @@ func _problem_set_viewed(problem_set_item: PanelContainer) -> void:
 	enter_problem_set.emit(problem_set_item.problem_set, problem_set_item.file_path)
 
 func _problem_set_resumed(problem_set: ProblemSet) -> void:
-	EventBus.signal_problem_set_played.emit(
+	EventBus.problem_set_played.emit(
 		problem_set, 
 		min(problem_set.highest_index_reached, problem_set.problems.size()-1)
 	)
