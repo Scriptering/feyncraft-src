@@ -732,3 +732,15 @@ func get_reduced_matrix(particle_test_function: Callable) -> ConnectionMatrix:
 			reduced_matrix.remove_connection(connection)
 	
 	return reduced_matrix
+
+func get_force_count(force: Globals.Force) -> int:
+	if force == Globals.Force.none:
+		return get_state_count(StateLine.State.None)
+	
+	var force_count: int = 0
+	for id:int in get_state_ids(StateLine.State.None):
+		var connected_particles := get_connected_particles(id, true)
+		if force == ParticleData.get_interaction_force(connected_particles):
+			force_count += ParticleData.degree(connected_particles)
+	
+	return force_count

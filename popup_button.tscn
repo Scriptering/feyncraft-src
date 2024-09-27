@@ -8,10 +8,22 @@
 theme = ExtResource("2_odcuo")
 script = ExtResource("2_4n0vk")
 popup_scene = null
+persistant = false
 toggle_mode = true
 
 [node name="Button" parent="." index="0"]
 toggle_mode = true
 
+[node name="ContentContainer" parent="." index="1"]
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
 [node name="HBoxContainer" parent="ContentContainer" index="0"]
 theme_override_constants/separation = 3
+
+[node name="ButtonIcon" parent="ContentContainer/HBoxContainer" index="1"]
+visible = true
+
+[connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]

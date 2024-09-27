@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://d1wi0j2bloshm"]
+[gd_scene load_steps=17 format=3 uid="uid://d1wi0j2bloshm"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_kdew8"]
 [ext_resource type="Script" path="res://Scenes_and_scripts/UI/MiniDiagram/fitlers.gd" id="2_y2pcd"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://bf4xxweukjvsb" path="res://Textures/Buttons/icons/interaction.png" id="10_w4uen"]
 [ext_resource type="ButtonGroup" uid="uid://c5g7mphj6s5eu" path="res://Scenes_and_scripts/UI/MiniDiagram/filter_buttongroup.tres" id="12_2uh3g"]
 [ext_resource type="Theme" uid="uid://c7hk3afo5tria" path="res://Resources/Themes/toggle_button.tres" id="12_xk2d7"]
+[ext_resource type="Texture2D" uid="uid://bt1qr2mxq14l8" path="res://Textures/Buttons/icons/restart.png" id="14_re8nr"]
 [ext_resource type="Texture2D" uid="uid://bcu6ptkd3fwfe" path="res://Textures/Buttons/icons/submit.png" id="14_txu2q"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sh7ch"]
@@ -48,6 +49,7 @@ grow_vertical = 2
 use_parent_material = true
 layout_mode = 2
 mouse_filter = 2
+theme_override_constants/separation = 2
 
 [node name="Header" type="PanelContainer" parent="PanelContainer/VBoxContainer"]
 use_parent_material = true
@@ -90,14 +92,22 @@ stretch_mode = 5
 
 [node name="ButtonSoundComponent" parent="PanelContainer/VBoxContainer/Header/Close" instance=ExtResource("6_vvbva")]
 
-[node name="DegreeContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="PanelContainer/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/PanelContainer"]
+use_parent_material = true
+layout_mode = 2
+
+[node name="DegreeContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 2
 alignment = 1
 
-[node name="MinDegree" type="SpinBox" parent="PanelContainer/VBoxContainer/DegreeContainer"]
+[node name="MinDegree" type="SpinBox" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/DegreeContainer"]
 unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
@@ -107,7 +117,7 @@ alignment = 2
 select_all_on_focus = true
 script = ExtResource("8_qd2ko")
 
-[node name="TextureRect2" type="TextureRect" parent="PanelContainer/VBoxContainer/DegreeContainer"]
+[node name="TextureRect2" type="TextureRect" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/DegreeContainer"]
 use_parent_material = true
 custom_minimum_size = Vector2(15, 2.08165e-12)
 layout_mode = 2
@@ -116,7 +126,7 @@ texture = ExtResource("9_pq1vi")
 expand_mode = 5
 stretch_mode = 5
 
-[node name="MaxDegree" type="SpinBox" parent="PanelContainer/VBoxContainer/DegreeContainer"]
+[node name="MaxDegree" type="SpinBox" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/DegreeContainer"]
 unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
@@ -127,14 +137,14 @@ alignment = 2
 select_all_on_focus = true
 script = ExtResource("8_qd2ko")
 
-[node name="TextureRect" type="TextureRect" parent="PanelContainer/VBoxContainer/DegreeContainer"]
+[node name="TextureRect" type="TextureRect" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/DegreeContainer"]
 use_parent_material = true
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("10_w4uen")
 stretch_mode = 5
 
-[node name="GridContainer" type="GridContainer" parent="PanelContainer/VBoxContainer"]
+[node name="GridContainer" type="GridContainer" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
 mouse_filter = 2
@@ -142,7 +152,7 @@ theme_override_constants/h_separation = 1
 theme_override_constants/v_separation = 1
 columns = 2
 
-[node name="EM" parent="PanelContainer/VBoxContainer/GridContainer" instance=ExtResource("7_mylet")]
+[node name="EM" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/GridContainer" instance=ExtResource("7_mylet")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -152,7 +162,7 @@ toggle_mode = true
 button_group = ExtResource("12_2uh3g")
 text = "EM"
 
-[node name="Strong" parent="PanelContainer/VBoxContainer/GridContainer" instance=ExtResource("7_mylet")]
+[node name="Strong" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/GridContainer" instance=ExtResource("7_mylet")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -162,7 +172,7 @@ toggle_mode = true
 button_group = ExtResource("12_2uh3g")
 text = "strong"
 
-[node name="Weak" parent="PanelContainer/VBoxContainer/GridContainer" instance=ExtResource("7_mylet")]
+[node name="Weak" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/GridContainer" instance=ExtResource("7_mylet")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -172,7 +182,7 @@ toggle_mode = true
 button_group = ExtResource("12_2uh3g")
 text = "weak"
 
-[node name="Electroweak" parent="PanelContainer/VBoxContainer/GridContainer" instance=ExtResource("7_mylet")]
+[node name="Electroweak" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/GridContainer" instance=ExtResource("7_mylet")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -182,18 +192,38 @@ toggle_mode = true
 button_group = ExtResource("12_2uh3g")
 text = "E. weak"
 
-[node name="Set" parent="PanelContainer/VBoxContainer" instance=ExtResource("7_mylet")]
+[node name="only_4_vertex" type="CheckButton" parent="PanelContainer/VBoxContainer"]
+use_parent_material = true
 layout_mode = 2
-minimum_size = Vector2(40, 24)
+text = "Only with 4-vertex"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+alignment = 1
+
+[node name="Reset" parent="PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("7_mylet")]
+layout_mode = 2
+size_flags_horizontal = 3
+minimum_size = Vector2(0, 24)
+icon = ExtResource("14_re8nr")
+expand_icon = true
+icon_use_parent_material = true
+
+[node name="Set" parent="PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("7_mylet")]
+layout_mode = 2
+size_flags_horizontal = 3
+minimum_size = Vector2(0, 24)
 icon = ExtResource("14_txu2q")
 expand_icon = true
 icon_use_parent_material = true
 
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Header/Close" to="." method="_on_close_pressed"]
-[connection signal="value_changed" from="PanelContainer/VBoxContainer/DegreeContainer/MinDegree" to="." method="_on_min_degree_value_changed"]
-[connection signal="value_changed" from="PanelContainer/VBoxContainer/DegreeContainer/MaxDegree" to="." method="_on_max_degree_value_changed"]
-[connection signal="pressed" from="PanelContainer/VBoxContainer/GridContainer/EM" to="." method="_on_em_pressed"]
-[connection signal="pressed" from="PanelContainer/VBoxContainer/GridContainer/Strong" to="." method="_on_strong_pressed"]
-[connection signal="pressed" from="PanelContainer/VBoxContainer/GridContainer/Weak" to="." method="_on_weak_pressed"]
-[connection signal="pressed" from="PanelContainer/VBoxContainer/GridContainer/Electroweak" to="." method="_on_electroweak_pressed"]
-[connection signal="pressed" from="PanelContainer/VBoxContainer/Set" to="." method="_on_set_pressed"]
+[connection signal="value_changed" from="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/DegreeContainer/MinDegree" to="." method="_on_min_degree_value_changed"]
+[connection signal="value_changed" from="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/DegreeContainer/MaxDegree" to="." method="_on_max_degree_value_changed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/GridContainer/EM" to="." method="_on_em_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/GridContainer/Strong" to="." method="_on_strong_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/GridContainer/Weak" to="." method="_on_weak_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/GridContainer/Electroweak" to="." method="_on_electroweak_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer/Reset" to="." method="_on_reset_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer/Set" to="." method="_on_set_pressed"]
