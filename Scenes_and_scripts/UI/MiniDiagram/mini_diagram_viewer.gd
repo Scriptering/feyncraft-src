@@ -137,7 +137,7 @@ func update_resave_button(drawn_diagram: DrawingMatrix = BigDiagram.get_current_
 		resave_button.disabled = true
 		return
 	
-	var reordered_diagram: DrawingMatrix = filtered_diagrams[current_index]
+	var reordered_diagram: DrawingMatrix = filtered_diagrams[current_index].duplicate(true)
 	reordered_diagram.reorder_state_ids()
 	
 	resave_button.disabled = !drawn_diagram.is_duplicate(reordered_diagram)
@@ -191,6 +191,12 @@ func filter_diagram(diagram: ConnectionMatrix) -> bool:
 	var filter_ranges : Array[Vector2i] = filters["degree_ranges"]
 		
 	for i:int in filter_ranges.size():
+		if (
+			filter_ranges[i].x == 0
+			and filter_ranges[i].y == 0
+		):
+			continue
+		
 		var diagram_force_count: int = diagram.get_force_count(i)
 		if (
 			diagram_force_count < filter_ranges[i].x
