@@ -20,7 +20,7 @@
 content_margin_top = 1.0
 content_margin_bottom = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_w4sno"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_6rkdt"]
 
 [node name="PaletteItem" type="PanelContainer" node_paths=PackedStringArray("UseButton", "MoreColoursButton", "MoreColoursContainer", "ClearButton", "DeleteButton", "UploadButton", "Title", "Shuffle", "PrimaryColourButton", "GridColourButton", "SecondaryColourButton", "TextColourButton", "GridShadowColourButton", "ActiveColourButton", "DisabledColourButton", "Shadow1ColourButton", "Shadow2ColourButton")]
 material = ExtResource("1_ablgk")
@@ -68,7 +68,7 @@ mouse_filter = 1
 theme = ExtResource("14_ylj5d")
 minimum_size = Vector2(22, 22)
 toggle_mode = true
-button_group = SubResource("ButtonGroup_w4sno")
+button_group = SubResource("ButtonGroup_6rkdt")
 icon = ExtResource("6_5d7ij")
 
 [node name="Tooltip" parent="VBoxContainer/HBoxContainer/HBoxContainer/View" instance=ExtResource("8_pa48w")]
