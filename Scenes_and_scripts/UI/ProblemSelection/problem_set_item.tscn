@@ -17,7 +17,7 @@
 content_margin_top = 1.0
 content_margin_bottom = 1.0
 
-[node name="ProblemSetItem" type="PanelContainer" node_paths=PackedStringArray("title", "delete", "upload", "index_label", "completed", "play_button")]
+[node name="ProblemSetItem" type="PanelContainer" node_paths=PackedStringArray("title", "delete", "upload", "index_label", "play_button")]
 material = ExtResource("1_b04gi")
 offset_right = 300.0
 offset_bottom = 29.0
@@ -27,7 +27,6 @@ title = NodePath("VBoxContainer/HBoxContainer/HBoxContainer/Title")
 delete = NodePath("VBoxContainer/HBoxContainer/HBoxContainer2/Delete")
 upload = NodePath("VBoxContainer/HBoxContainer/HBoxContainer2/Upload")
 index_label = NodePath("VBoxContainer/HBoxContainer/HBoxContainer3/IndexLabel")
-completed = NodePath("VBoxContainer/HBoxContainer/HBoxContainer3/Completed")
 play_button = NodePath("VBoxContainer/HBoxContainer/HBoxContainer/HBoxContainer/Play")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
@@ -97,7 +96,12 @@ label_settings = ExtResource("5_iu731")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Completed" type="TextureRect" parent="VBoxContainer/HBoxContainer/HBoxContainer3"]
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/HBoxContainer/HBoxContainer3"]
+custom_minimum_size = Vector2(7, 0)
+layout_mode = 2
+
+[node name="Completed" type="TextureRect" parent="VBoxContainer/HBoxContainer/HBoxContainer3/CenterContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(7, 2.08165e-12)
 layout_mode = 2
 size_flags_vertical = 4
@@ -113,18 +117,6 @@ size_flags_horizontal = 8
 theme_override_constants/separation = 0
 alignment = 2
 
-[node name="Delete" parent="VBoxContainer/HBoxContainer/HBoxContainer2" instance=ExtResource("4_dol4y")]
-layout_mode = 2
-mouse_filter = 1
-minimum_size = Vector2(22, 22)
-action_mode = 1
-icon = ExtResource("7_dyt28")
-expand_icon = true
-icon_use_parent_material = true
-
-[node name="Tooltip" parent="VBoxContainer/HBoxContainer/HBoxContainer2/Delete" instance=ExtResource("6_plt5e")]
-tooltip = "Delete"
-
 [node name="Upload" parent="VBoxContainer/HBoxContainer/HBoxContainer2" instance=ExtResource("4_dol4y")]
 layout_mode = 2
 mouse_filter = 1
@@ -137,6 +129,18 @@ icon_use_parent_material = true
 [node name="Tooltip" parent="VBoxContainer/HBoxContainer/HBoxContainer2/Upload" instance=ExtResource("6_plt5e")]
 tooltip = "Share"
 
+[node name="Delete" parent="VBoxContainer/HBoxContainer/HBoxContainer2" instance=ExtResource("4_dol4y")]
+layout_mode = 2
+mouse_filter = 1
+minimum_size = Vector2(22, 22)
+action_mode = 1
+icon = ExtResource("7_dyt28")
+expand_icon = true
+icon_use_parent_material = true
+
+[node name="Tooltip" parent="VBoxContainer/HBoxContainer/HBoxContainer2/Delete" instance=ExtResource("6_plt5e")]
+tooltip = "Delete"
+
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
 use_parent_material = true
 custom_minimum_size = Vector2(150, 0)
@@ -146,5 +150,5 @@ size_flags_horizontal = 4
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/HBoxContainer/HBoxContainer/Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/HBoxContainer/HBoxContainer/View" to="." method="_on_view_pressed"]
 [connection signal="text_submitted" from="VBoxContainer/HBoxContainer/HBoxContainer/Title" to="." method="_on_title_text_submitted"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/HBoxContainer2/Delete" to="." method="_on_delete_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/HBoxContainer2/Upload" to="." method="_on_upload_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/HBoxContainer2/Delete" to="." method="_on_delete_pressed"]

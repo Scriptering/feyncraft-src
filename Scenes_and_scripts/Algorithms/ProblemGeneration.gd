@@ -25,7 +25,6 @@ func generate(
 ) -> Problem:
 	
 	seed(set_seed)
-	#seed(3642403)
 	
 	if !useable_particles.any(
 		func(particle: ParticleData.Particle) -> bool:
@@ -41,37 +40,6 @@ func generate(
 	var state_particles : Array[Array] = get_state_particles(
 		min_particle_count, max_particle_count, useable_state_interactions, use_hadrons
 	)
-	
-	#var state_interactions : Array
-	#
-	#
-	#
-	#for _interaction_generation_attempt in MAX_INTERACTION_GENERATION_ATTEMPTS:
-		#print("problem generation started")
-		#var time: float = Time.get_ticks_usec()
-		#
-		#for _attempt in MAX_INTERACTION_GENERATION_ATTEMPTS:
-			#state_interactions = generate_state_interactions(min_particle_count, max_particle_count, useable_state_interactions, use_hadrons)
-			#
-			#if are_state_interactions_valid(state_interactions):
-				#break
-#
-		#if state_interactions == []:
-			#break
-		#
-		#print("States found: %susec"%[round(Time.get_ticks_usec() - time)] )
-		#
-		#var solutions: Array[ConnectionMatrix] = SolutionGeneration.generate_diagrams(
-			#state_interactions[StateLine.State.Initial],
-			#state_interactions[StateLine.State.Final],
-			#0, 8,
-			#useable_particles,
-			#SolutionGeneration.Find.One
-		#)
-		#
-		#if !solutions.is_empty():
-			#problem.degree = solutions.front().state_count[StateLine.State.None]
-			#break
 	
 	problem.state_interactions = state_particles
 	problem.allowed_particles = useable_particles

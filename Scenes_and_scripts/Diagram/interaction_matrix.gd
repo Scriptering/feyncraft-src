@@ -304,6 +304,16 @@ func has_same_unconnected_matrix(comparison_matrix: InteractionMatrix) -> bool:
 	
 	return true
 
+func get_interaction_size(id: int) -> int:
+	return unconnected_matrix[id].size() + get_connected_count(id, true)
+
+func get_unconnected_ids() -> PackedInt32Array:
+	return ArrayFuncs.packed_int_filter(
+		range(matrix_size),
+		func(id:int) -> bool:
+			return !unconnected_matrix[id].is_empty()
+	)
+
 func has_same_connection_matrix(comparison_matrix: InteractionMatrix) -> bool:
 	if matrix_size != comparison_matrix.matrix_size:
 		return false
@@ -319,9 +329,6 @@ func has_same_connection_matrix(comparison_matrix: InteractionMatrix) -> bool:
 	return true
 
 func is_duplicate_interaction_matrix(compare_interaction_matrix: InteractionMatrix) -> bool:
-	if compare_interaction_matrix.particle_count != particle_count:
-		return false
-	
 	if !has_same_unconnected_matrix(compare_interaction_matrix):
 		return false
 	

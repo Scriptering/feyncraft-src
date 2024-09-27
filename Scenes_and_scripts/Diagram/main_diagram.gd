@@ -267,8 +267,8 @@ func sort_drawing_interactions(interaction1: Interaction, interaction2: Interact
 	var particle1: ParticleData.Particle = interaction1.connected_particles.front()
 	var particle2: ParticleData.Particle = interaction2.connected_particles.front()
 	
-	if abs(particle1) != abs(particle2):
-		return abs(particle1) < abs(particle2) 
+	if ParticleData.base(particle1) != ParticleData.base(particle2):
+		return ParticleData.base(particle1) < ParticleData.base(particle2) 
 	
 	if particle1 != particle2:
 		return particle1 < particle2

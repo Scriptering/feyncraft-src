@@ -25,7 +25,10 @@ var grid_centre: int:
 		)
 
 func clear_diagram() -> void:
-	return
+	for interaction:Node in get_interactions():
+		interaction.free()
+	for particle_line:Node in get_particle_lines():
+		particle_line.free()
 
 func draw_raw_diagram(connection_matrix : ConnectionMatrix) -> void:
 	if connection_matrix == null:

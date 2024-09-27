@@ -54,6 +54,10 @@ func _set_current_mode(new_value: int) -> void:
 
 	previous_mode = current_mode
 	current_mode = new_value
+	
+	$FloatingMenus/GeneratedDiagrams.hide()
+	$FloatingMenus/SubmittedDiagrams.hide()
+	
 	mode_enter_funcs[current_mode].call()
 	set_tab_visibility()
 
@@ -77,29 +81,29 @@ func init(state_manager: Node) -> void:
 
 	Diagram.action.connect(_diagram_action_taken)
 	
-	if !OS.has_feature("standalone"):
-		start_problem.state_interactions = [
-			[
-				[ParticleData.Particle.up, ParticleData.Particle.anti_strange],
-				[ParticleData.Particle.anti_up, ParticleData.Particle.strange]
-			],
-			[
-				[ParticleData.Particle.charm, ParticleData.Particle.anti_charm]
-			]
-			
-		]
-		start_problem.allowed_particles = ProblemGeneration.get_useable_particles_from_interaction_checks(
-			[false, true, true, false]
-		)
-		start_problem = ProblemGeneration.setup_new_problem(start_problem)
-	
-		var diagrams: Array[ConnectionMatrix] = SolutionGeneration.generate_diagrams(
-			[[ParticleData.Particle.up], [ParticleData.Particle.anti_up]],
-			[[ParticleData.Particle.gluon], [ParticleData.Particle.gluon]],
-			4,
-			4,
-			ProblemGeneration.get_useable_particles_from_interaction_checks([false, true, false, false])
-		)
+	#if !OS.has_feature("standalone"):
+		#start_problem.state_interactions = [
+			#[
+				#[ParticleData.Particle.up, ParticleData.Particle.anti_strange],
+				#[ParticleData.Particle.anti_up, ParticleData.Particle.strange]
+			#],
+			#[
+				#[ParticleData.Particle.charm, ParticleData.Particle.anti_charm]
+			#]
+			#
+		#]
+		#start_problem.allowed_particles = ProblemGeneration.get_useable_particles_from_interaction_checks(
+			#[false, true, true, false]
+		#)
+		#start_problem = ProblemGeneration.setup_new_problem(start_problem)
+	#
+		#var diagrams: Array[ConnectionMatrix] = SolutionGeneration.generate_diagrams(
+			#[[ParticleData.Particle.up], [ParticleData.Particle.anti_up]],
+			#[[ParticleData.Particle.gluon], [ParticleData.Particle.gluon]],
+			#4,
+			#4,
+			#ProblemGeneration.get_useable_particles_from_interaction_checks([false, true, false, false])
+		#)
 
 func _ready() -> void:
 	Diagram.show_line_labels = !StatsManager.stats.hide_labels

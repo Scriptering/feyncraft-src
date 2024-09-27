@@ -38,3 +38,7 @@ func set_daily_counter() -> void:
 	var streak: int = StatsManager.stats.daily_streak
 	daily.text = "Daily%s"%[" %s"%[streak] if streak > 0 else ""]
 	daily.hide_icon = streak == 0
+
+func update() -> void:
+	if is_instance_valid(%Problems.get_popup()):
+		%Problems.get_popup().update()

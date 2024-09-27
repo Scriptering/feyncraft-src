@@ -273,6 +273,7 @@ icon = ExtResource("17_ws57h")
 expand_icon = true
 
 [node name="Problems" parent="Center/VBoxContainer/GridContainer" instance=ExtResource("21_eg5af")]
+unique_name_in_owner = true
 layout_mode = 2
 popup_scene = ExtResource("8_oursg")
 icon_text_seperation = 4

@@ -283,15 +283,15 @@ grow_vertical = 0
 size_flags_horizontal = 4
 
 [node name="PuzzleUI" parent="PullOutTabs" instance=ExtResource("23_v0dtx")]
-offset_left = -145.0
+offset_left = -143.0
 offset_top = 96.0
-offset_right = -145.0
+offset_right = -143.0
 offset_bottom = 96.0
 
 [node name="GenerationButton" parent="PullOutTabs" instance=ExtResource("22_u64s1")]
-offset_left = -144.0
+offset_left = -153.0
 offset_top = 51.0
-offset_right = -144.0
+offset_right = -153.0
 offset_bottom = 51.0
 
 [node name="ProblemTab" parent="PullOutTabs" instance=ExtResource("20_uaeg6")]

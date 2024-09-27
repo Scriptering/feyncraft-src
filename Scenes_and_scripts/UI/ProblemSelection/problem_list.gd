@@ -51,7 +51,7 @@ func load_problem_set(_problem_set: ProblemSet, p_problem_set_file_path: String)
 	
 	add_button.visible = problem_set.is_custom
 	
-	update_index_labels()
+	update()
 
 func create_problem_item() -> PanelContainer:
 	var problem_item: PanelContainer = ProblemSelector.instantiate()
@@ -78,8 +78,6 @@ func add_problem(
 	
 	problem_item.toggle_completed(!problem_set.is_custom and problem_item.index < problem_set.highest_index_reached)
 	problem_item.toggle_play_disabled(!problem_set.is_custom and problem_item.index > problem_set.highest_index_reached)
-	
-	update()
 	
 	return problem_item
 
@@ -125,6 +123,7 @@ func create_problem() -> void:
 	var new_problem := Problem.new()
 	problem_set.problems.push_back(new_problem)
 	EventBus.problem_modified.emit(add_problem(new_problem, true))
+	update()
 
 func _on_add_problem_pressed() -> void:
 	create_problem()

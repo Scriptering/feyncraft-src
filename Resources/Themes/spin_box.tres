@@ -5,3 +5,4 @@
 [resource]
 default_font = ExtResource("1_ysn0y")
 default_font_size = 16
+LineEdit/constants/minimum_character_width = 3

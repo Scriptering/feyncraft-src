@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://c5scpc4iadf17"]
+[gd_scene load_steps=13 format=3 uid="uid://c5scpc4iadf17"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_j0xio"]
 [ext_resource type="Script" path="res://Scenes_and_scripts/UI/ProblemSelection/creation_information.gd" id="2_sqpln"]
@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://rtdlfrcuvhi8" path="res://Scenes_and_scripts/UI/ProblemSelection/problem_creation_info.tscn" id="5_224cs"]
 [ext_resource type="PackedScene" uid="uid://bvn4ssrvphh28" path="res://Scenes_and_scripts/UI/ProblemSelection/solution_creation_info.tscn" id="6_jjee5"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes_and_scripts/UI/Buttons/panelButton.tscn" id="7_6pjgy"]
-[ext_resource type="Texture2D" uid="uid://c3nrennubqoow" path="res://Textures/Buttons/icons/back.png" id="8_ge0ea"]
 [ext_resource type="PackedScene" uid="uid://c338whou4al23" path="res://Scenes_and_scripts/UI/Tooltip.tscn" id="9_x33sa"]
 [ext_resource type="Texture2D" uid="uid://bcu6ptkd3fwfe" path="res://Textures/Buttons/icons/submit.png" id="10_ls4ur"]
 [ext_resource type="Texture2D" uid="uid://dvx430022t0ua" path="res://Textures/Buttons/icons/next.png" id="11_jrrib"]
@@ -126,8 +125,9 @@ alignment = 1
 [node name="PrevStep" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("7_6pjgy")]
 layout_mode = 2
 minimum_size = Vector2(24, 21)
-icon = ExtResource("8_ge0ea")
+icon = ExtResource("11_jrrib")
 icon_use_parent_material = true
+flip_icon_h = true
 
 [node name="Tooltip" parent="PanelContainer/VBoxContainer/Buttons/PrevStep" instance=ExtResource("9_x33sa")]
 tooltip = "Previous Step"

@@ -70,7 +70,7 @@ func set_checks(state_interactions : Array) -> void:
 		particles += state_interaction
 	
 	if ParticleData.Particle.photon in particles:
-		%EM_check.button_pressed = true
+		%electromagnetic_check.button_pressed = true
 	if ParticleData.Particle.gluon in particles:
 		%strong_check.button_pressed = true
 	if ParticleData.Particle.W in particles or ParticleData.Particle.anti_W in particles:
@@ -92,11 +92,13 @@ func generate(checks: Array[bool]) -> void:
 			max_degree,
 			useable_particles,
 			int(FindSlider.value),
-			%Tadpoles.button_pressed
+			%Tadpoles.button_pressed,
+			%SelfEnergy.button_pressed
 		)
 	)
 	
 	if generated_diagrams == [null]:
+		GeneratedDiagramViewer.clear()
 		NoDiagramsFound.show()
 	else:
 		GenerationCompleted.show()

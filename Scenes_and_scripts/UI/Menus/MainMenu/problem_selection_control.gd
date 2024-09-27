@@ -7,7 +7,6 @@ func reload() -> void:
 	$ProblemSelection/ProblemSetList.load_problem_sets()
 	$ProblemSelection/ProblemList.reload()
 
-
 @onready var ProblemSetList := $ProblemSelection/ProblemSetList
 @onready var ProblemList := $ProblemSelection/ProblemList
 @onready var tab_container:= $ProblemSelection
@@ -29,7 +28,6 @@ func _on_problem_set_list_close() -> void:
 func _on_problem_list_problem_deleted() -> void:
 	ProblemSetList.update()
 
-func _on_tree_entered() -> void:
-	await get_tree().process_frame
-	
-	reload()
+func update() -> void:
+	ProblemSetList.update()
+	ProblemList.update()

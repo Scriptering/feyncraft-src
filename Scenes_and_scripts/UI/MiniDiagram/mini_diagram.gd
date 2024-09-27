@@ -20,22 +20,24 @@ func generate_drawing_matrix_from_diagram() -> DrawingMatrix:
 
 func clear_diagram() -> void:
 	for interaction:MiniInteraction in get_interactions():
-		interaction.queue_free()
+		interaction.free()
 	
 	for particle_line:MiniParticleLine in get_particle_lines():
-		particle_line.queue_free()
+		particle_line.free()
 	
 	for hadron_joint:MiniHadronJoint in get_hadron_joints():
-		hadron_joint.queue_free()
+		hadron_joint.free()
 
 func show_interaction_dots(drawing_matrix: DrawingMatrix) -> void:
 	for id:int in drawing_matrix.get_state_ids(StateLine.State.Both):
-		Interactions.get_child(id).show_dot(1)
+		Interactions.get_child(id).show_state_dot()
 	
 	for id:int in drawing_matrix.get_state_ids(StateLine.State.None):
 		var connected_count: int = drawing_matrix.get_connected_count(id, true)
 		
-		if connected_count == 3:
+		if connected_count < 3:
+			Interactions.get_child(id).show_dot(0)
+		elif connected_count == 3:
 			Interactions.get_child(id).show_dot(1)
 		elif connected_count > 3:
 			Interactions.get_child(id).show_dot(2)
@@ -85,10 +87,6 @@ func create_hadron_joint(drawing_matrix: DrawingMatrix, hadron_ids: PackedInt32A
 
 func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 	super.draw_diagram(drawing_matrix)
-	
-	await get_tree().process_frame
-	await get_tree().process_frame
-	
 	show_interaction_dots(drawing_matrix)
 
 	for split_hadron:PackedInt32Array in drawing_matrix.split_hadron_ids:

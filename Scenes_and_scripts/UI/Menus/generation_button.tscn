@@ -84,9 +84,9 @@ use_parent_material = true
 layout_mode = 3
 anchors_preset = 0
 offset_left = -153.0
-offset_top = 190.0
+offset_top = 195.0
 offset_right = -153.0
-offset_bottom = 190.0
+offset_bottom = 195.0
 script = ExtResource("25_jtb01")
 ContentContainer = NodePath("MovingContainer/PanelContainer")
 MovingContainer = NodePath("MovingContainer")
@@ -258,6 +258,7 @@ alignment = 1
 [node name="MinDegree" type="SpinBox" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/PanelContainer/DegreeContainer"]
 use_parent_material = true
 layout_mode = 2
+size_flags_horizontal = 3
 theme = ExtResource("6_5iseb")
 min_value = 1.0
 max_value = 6.0
@@ -277,6 +278,7 @@ stretch_mode = 5
 [node name="MaxDegree" type="SpinBox" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/PanelContainer/DegreeContainer"]
 use_parent_material = true
 layout_mode = 2
+size_flags_horizontal = 3
 theme = ExtResource("6_5iseb")
 min_value = 1.0
 max_value = 6.0
@@ -313,7 +315,7 @@ unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
 button_pressed = true
-text = "STRONG"
+text = "strong"
 alignment = 1
 
 [node name="ButtonSoundComponent" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/strong_check" instance=ExtResource("6_aanob")]
@@ -323,7 +325,7 @@ unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
 button_pressed = true
-text = "WEAK"
+text = "weak"
 alignment = 1
 
 [node name="ButtonSoundComponent" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/weak_check" instance=ExtResource("6_aanob")]
@@ -333,19 +335,31 @@ unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
 button_pressed = true
-text = "E. WEAK"
+text = "E. weak"
 alignment = 1
 
 [node name="ButtonSoundComponent" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/electroweak_check" instance=ExtResource("6_aanob")]
 
-[node name="Tadpoles" type="CheckButton" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer"]
+[node name="Tadpoles" type="CheckButton" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer"]
 unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 4
-text = "Allow Tadpoles"
+theme_override_constants/h_separation = 1
+text = "tadpoles"
 
-[node name="ButtonSoundComponent" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/Tadpoles" instance=ExtResource("6_aanob")]
+[node name="ButtonSoundComponent" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/Tadpoles" instance=ExtResource("6_aanob")]
+
+[node name="SelfEnergy" type="CheckButton" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer"]
+unique_name_in_owner = true
+use_parent_material = true
+custom_minimum_size = Vector2(73, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "self-
+energy"
+
+[node name="ButtonSoundComponent" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/SelfEnergy" instance=ExtResource("6_aanob")]
 
 [node name="PanelContainer2" type="PanelContainer" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer"]
 use_parent_material = true

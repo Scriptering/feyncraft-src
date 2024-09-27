@@ -4,6 +4,7 @@ extends Node
 
 enum Scene {Level, MainMenu}
 enum Vision {Colour, Shade, Strength, None}
+enum Force {EM, strong, weak, electroweak, none}
 
 var in_main_menu: bool = true
 var load_mode: int = Mode.Sandbox

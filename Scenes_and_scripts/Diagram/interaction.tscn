@@ -208,10 +208,9 @@ texture = ExtResource("4_0yoxg")
 [node name="Ball" type="AnimatedSprite2D" parent="."]
 use_parent_material = true
 sprite_frames = SubResource("3")
-animation = &"blob_invalid"
+animation = &"normal_valid"
 
 [node name="Dot" type="AnimatedSprite2D" parent="."]
-visible = false
 z_index = 1
 use_parent_material = true
 sprite_frames = SubResource("11")

@@ -12,7 +12,6 @@ offset = Vector2(0.5, 0.5)
 script = ExtResource("2_v8q76")
 
 [node name="Dot" type="Sprite2D" parent="."]
-z_index = 1
 use_parent_material = true
 texture = ExtResource("4_l8g2o")
 offset = Vector2(0.5, 0.5)

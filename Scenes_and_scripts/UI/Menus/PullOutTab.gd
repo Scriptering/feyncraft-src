@@ -56,10 +56,8 @@ func pull_out() -> void:
 	tween.tween_property(MovingContainer, "position", get_pull_out_position(), time_to_pull_out)
 
 func readjust() -> void:
-	if !tab_out:
-		return
-	
-	MovingContainer.position = get_pull_out_position()
+	if tab_out:
+		MovingContainer.position = get_pull_out_position()
 
 func close() -> void:
 	if !tab_out:
