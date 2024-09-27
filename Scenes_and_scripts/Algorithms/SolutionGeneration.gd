@@ -482,7 +482,19 @@ func get_3_distinguishable_matrices(
 		var matrix := matrices[i]
 		var to_remove_ids: PackedInt32Array = [to_remove_id]
 		if to_remove_particle != ParticleData.Particle.none:
-			to_remove_ids.push_back(matrix.get_connected_ids(from_id, true, to_remove_particle)[0])
+			if ParticleData.is_anti(to_remove_particle):
+				to_remove_ids.push_back(
+					matrix.get_connected_ids(
+						from_id,
+						false,
+						ParticleData.base(to_remove_particle),
+						true
+					)[0]
+				)
+			else:
+				to_remove_ids.push_back(
+					matrix.get_connected_ids(from_id, true, to_remove_particle)[0]
+				)
 		
 		if is_distinguishable(
 			matrix,

@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://dcpcxfh7umytq"]
+[gd_scene load_steps=28 format=3 uid="uid://dcpcxfh7umytq"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_gc6j6"]
 [ext_resource type="FontFile" uid="uid://cgts3h57wry82" path="res://Textures/Fonts/numbers_font.ttf" id="3_tcy0d"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://bm3ag65nskhpk" path="res://Textures/UI/MiniDiagram/arrow_left.png" id="8_g4oap"]
 [ext_resource type="PackedScene" uid="uid://dh4niqtuyy5o3" path="res://popup_button.tscn" id="8_nxlr3"]
 [ext_resource type="Texture2D" uid="uid://cb6lapmtgwimd" path="res://Textures/UI/MiniDiagram/arrow_right.png" id="9_4bpdd"]
+[ext_resource type="Script" path="res://Scenes_and_scripts/UI/MiniDiagram/filter_button.gd" id="9_twqwp"]
 [ext_resource type="Texture2D" uid="uid://bvdr8f7dmjpmi" path="res://Textures/Buttons/icons/upload.png" id="9_ulpnp"]
 [ext_resource type="Texture2D" uid="uid://uvh8kqauex4e" path="res://Textures/Buttons/icons/filter.png" id="9_wppln"]
 [ext_resource type="PackedScene" uid="uid://d1wi0j2bloshm" path="res://Scenes_and_scripts/UI/MiniDiagram/fitlers.tscn" id="9_wtadq"]
@@ -153,16 +154,18 @@ layout_mode = 2
 use_parent_material = true
 layout_mode = 2
 mouse_filter = 2
+theme_override_constants/separation = 2
 alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer"]
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
-alignment = 1
 
 [node name="Filter" parent="PanelContainer/VBoxContainer/HBoxContainer/HBoxContainer" instance=ExtResource("8_nxlr3")]
+unique_name_in_owner = true
 layout_mode = 2
+script = ExtResource("9_twqwp")
 popup_scene = ExtResource("9_wtadq")
 minimum_size = Vector2(23, 23)
 icon = ExtResource("9_wppln")
@@ -187,7 +190,6 @@ icon_use_parent_material = true
 tooltip = "Load Diagram"
 
 [node name="Resave" parent="PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("6_r8qrn")]
-visible = false
 layout_mode = 2
 mouse_filter = 1
 minimum_size = Vector2(24, 25)
@@ -220,7 +222,7 @@ use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 1
-alignment = 1
+alignment = 2
 
 [node name="Index" type="SpinBox" parent="PanelContainer/VBoxContainer/HBoxContainer/IndexContainer"]
 use_parent_material = true
@@ -236,12 +238,14 @@ script = ExtResource("17_icxsr")
 
 [node name="MaxIndex" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/IndexContainer"]
 use_parent_material = true
+custom_minimum_size = Vector2(16, 0)
 layout_mode = 2
 text = "/10"
 label_settings = ExtResource("12_4hjgk")
 vertical_alignment = 1
 
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Header/Close" to="." method="_on_close_pressed"]
+[connection signal="filters_submitted" from="PanelContainer/VBoxContainer/HBoxContainer/HBoxContainer/Filter" to="." method="_on_filter_filters_submitted"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer/Left" to="." method="_on_left_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer/Load" to="." method="_on_load_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer/Resave" to="." method="_on_resave_pressed"]

@@ -1166,3 +1166,25 @@ func general_can_convert(
 		and base(to_particle) in GENERAL_CONVERSION[base(from_particle)]
 		and sign(to_particle) != sign(from_particle)
 	)
+
+func get_interaction_force(interaction: PackedInt32Array) -> Globals.Force:
+	if Particle.gluon in interaction:
+		return Globals.Force.strong
+	
+	if Particle.Z in interaction or Particle.H in interaction:
+		return Globals.Force.electroweak
+	
+	if Particle.photon in interaction:
+		if Particle.W in interaction or Particle.anti_W in interaction:
+			return Globals.Force.electroweak
+		return Globals.Force.EM
+	
+	return Globals.Force.weak
+
+func degree(interaction: PackedInt32Array) -> int:
+	if interaction.size() <= 2:
+		return 0
+	elif interaction.size() == 3:
+		return 1
+	else:
+		return 2

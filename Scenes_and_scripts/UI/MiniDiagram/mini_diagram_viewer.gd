@@ -24,14 +24,16 @@ signal closed
 @export var right: PanelButton
 
 var diagrams: Array[Variant] = []
+var filtered_diagrams : Array[Variant] = []
+
 var current_index: int = 0:
 	set(new_value):
-		var clamped_value : int = clamp(new_value, 0, max(0, diagrams.size() - 1))
+		var clamped_value : int = clamp(new_value, 0, max(0, filtered_diagrams.size() - 1))
 		current_index = clamped_value
 		
-		if diagrams.size() != 0:
-			diagrams[current_index] = get_drawing_matrix(current_index)
-			mini_diagram.draw_diagram(diagrams[current_index])
+		if filtered_diagrams.size() != 0:
+			filtered_diagrams[current_index] = get_drawing_matrix(current_index)
+			mini_diagram.draw_diagram(filtered_diagrams[current_index])
 
 		update()
 
@@ -39,7 +41,6 @@ func _ready() -> void:
 	super._ready()
 	
 	resave_button.visible = allow_resaving
-	
 	BigDiagram.action.connect(update_resave_button)
 
 func init(big_diagram: MainDiagram) -> void:
@@ -54,7 +55,7 @@ func _on_left_pressed() -> void:
 	update_index_label()
 
 func get_drawing_matrix(index: int) -> DrawingMatrix:
-	var matrix: Variant = diagrams[index]
+	var matrix: Variant = filtered_diagrams[index]
 	
 	if matrix is DrawingMatrix:
 		return matrix
@@ -73,7 +74,10 @@ func _on_right_pressed() -> void:
 
 func clear() -> void:
 	diagrams.clear()
+	filtered_diagrams.clear()
 	current_index = 0
+	
+	%Filter.reset()
 	
 	update()
 
@@ -82,7 +86,7 @@ func toggle_visible() -> void:
 	self.current_index = 0
 
 func update_index() -> void:
-	if diagrams.size() == 0:
+	if filtered_diagrams.size() == 0:
 		index.min_value = 0
 		index.set_value_no_signal(0)
 	else:
@@ -90,13 +94,16 @@ func update_index() -> void:
 		index.set_value_no_signal(current_index + 1)
 	update_index_label()
 	left.disabled = current_index == 0
-	right.disabled = current_index == diagrams.size() - 1 or diagrams.size() == 0
+	right.disabled = current_index == filtered_diagrams.size() - 1 or filtered_diagrams.size() == 0
 
 func update_max_index() -> void:
-	index.max_value = diagrams.size()
+	index.max_value = filtered_diagrams.size()
 
 func store_diagram(matrix: Variant) -> void:
 	diagrams.push_back(matrix)
+	
+	filter_diagrams()
+	
 	self.current_index = current_index
 	update()
 
@@ -104,6 +111,7 @@ func store_diagrams(matrices: Array) -> void:
 	clear()
 	
 	diagrams.append_array(matrices)
+	filtered_diagrams = diagrams
 	
 	self.current_index = 0
 	update()
@@ -116,20 +124,20 @@ func update() -> void:
 	update_resave_button()
 
 func update_index_label() -> void:
-	max_index_label.text = "/" + str(diagrams.size())
+	max_index_label.text = "/" + str(filtered_diagrams.size())
 
 func update_diagram_visibility() -> void:
-	mini_diagram.visible = diagrams.size() > 0
+	mini_diagram.visible = filtered_diagrams.size() > 0
 
 func update_resave_button(drawn_diagram: DrawingMatrix = BigDiagram.get_current_diagram()) -> void:
 	if !visible or !allow_resaving:
 		return
 	
-	if diagrams.size() == 0:
+	if filtered_diagrams.size() == 0:
 		resave_button.disabled = true
 		return
 	
-	var reordered_diagram: DrawingMatrix = diagrams[current_index]
+	var reordered_diagram: DrawingMatrix = filtered_diagrams[current_index]
 	reordered_diagram.reorder_state_ids()
 	
 	resave_button.disabled = !drawn_diagram.is_duplicate(reordered_diagram)
@@ -138,11 +146,13 @@ func update_delete_button() -> void:
 	delete_button.disabled = diagrams.size() == 0
 
 func remove_diagram(index: int = current_index) -> void:
-	diagrams.remove_at(index)
+	var diagram: Variant = filtered_diagrams[index]
 	
+	diagrams.erase(diagram)
+	filtered_diagrams.erase(diagram)
 	diagram_deleted.emit(index)
 	
-	self.current_index = clamp(current_index, 0, diagrams.size()-1)
+	self.current_index = clamp(current_index, 0, filtered_diagrams.size()-1)
 	update()
 
 func get_diagram_count() -> int:
@@ -161,8 +171,10 @@ func _on_resave_pressed() -> void:
 		resave_diagram(new_diagram)
 
 func resave_diagram(new_diagram: DrawingMatrix) -> void:
-	diagrams.remove_at(current_index)
-	diagrams.insert(current_index, new_diagram)
+	var diagram: Variant = filtered_diagrams[current_index]
+	
+	filtered_diagrams[current_index] = new_diagram
+	diagrams[diagrams.find(diagram)] = new_diagram
 	
 	mini_diagram.draw_diagram(get_drawing_matrix(current_index))
 	diagram_resaved.emit(current_index)
@@ -173,3 +185,34 @@ func _on_index_value_changed(value: float) -> void:
 		return
 
 	self.current_index = max(0, value - 1)
+
+func filter_diagram(diagram: ConnectionMatrix) -> bool:
+	var filters: Dictionary = %Filter.filters
+	var filter_ranges : Array[Vector2i] = filters["degree_ranges"]
+		
+	for i:int in filter_ranges.size():
+		var diagram_force_count: int = diagram.get_force_count(i)
+		if (
+			diagram_force_count < filter_ranges[i].x
+			or diagram_force_count > filter_ranges[i].y
+		):
+			return false
+	
+	if filters["only_4_vertex"] and ArrayFuncs.packed_int_all(
+		diagram.get_state_ids(StateLine.State.None),
+		func(id: int) -> bool:
+			return ParticleData.degree(
+				diagram.get_connected_particles(id, true)
+			) <= 1
+	):
+		return false
+	
+	return true
+
+func filter_diagrams() -> void:
+	filtered_diagrams = diagrams.filter(filter_diagram)
+	current_index = current_index
+
+func _on_filter_filters_submitted() -> void:
+	filter_diagrams()
+	update()
