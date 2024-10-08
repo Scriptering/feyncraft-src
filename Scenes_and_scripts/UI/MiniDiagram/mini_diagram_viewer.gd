@@ -140,7 +140,10 @@ func update_resave_button(drawn_diagram: DrawingMatrix = BigDiagram.get_current_
 	var reordered_diagram: DrawingMatrix = filtered_diagrams[current_index].duplicate(true)
 	reordered_diagram.reorder_state_ids()
 	
-	resave_button.disabled = !drawn_diagram.is_duplicate(reordered_diagram)
+	var reordered_drawn_diagram: DrawingMatrix = drawn_diagram.duplicate(true)
+	reordered_drawn_diagram.reorder_state_ids()
+	
+	resave_button.disabled = !reordered_drawn_diagram.is_duplicate(reordered_diagram)
 
 func update_delete_button() -> void:
 	delete_button.disabled = diagrams.size() == 0
@@ -165,10 +168,7 @@ func _on_close_pressed() -> void:
 	closed.emit()
 
 func _on_resave_pressed() -> void:
-	var new_diagram: DrawingMatrix = BigDiagram.generate_drawing_matrix_from_diagram()
-	
-	if new_diagram.is_duplicate(get_drawing_matrix(current_index)):
-		resave_diagram(new_diagram)
+	resave_diagram(BigDiagram.generate_drawing_matrix_from_diagram())
 
 func resave_diagram(new_diagram: DrawingMatrix) -> void:
 	var diagram: Variant = filtered_diagrams[current_index]

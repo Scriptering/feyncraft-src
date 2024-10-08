@@ -120,6 +120,9 @@ func _on_world_problem_submitted() -> void:
 
 func _on_problem_modified(problem_item: PanelContainer) -> void:
 	modifying_problem_item = problem_item
+	
+	modifying_problem_item.tree_exiting.connect(_on_problem_item_tree_exiting)
+	
 	var modifying_problem: Problem = modifying_problem_item.problem
 	
 	Level.creating_problem = modifying_problem.duplicate(true)
@@ -200,3 +203,6 @@ func should_reset_daily_streak() -> bool:
 
 func _on_using_touchscreen_changed(using_touchscreen: bool) -> void:
 	$ControlsLayer/Cursor.visible = !using_touchscreen
+
+func _on_problem_item_tree_exiting() -> void:
+	return

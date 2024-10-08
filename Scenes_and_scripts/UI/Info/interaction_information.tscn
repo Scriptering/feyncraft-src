@@ -1,11 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://ckbxxbpei0gui"]
+[gd_scene load_steps=13 format=3 uid="uid://ckbxxbpei0gui"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_ivc2f"]
 [ext_resource type="Script" path="res://Scenes_and_scripts/UI/Info/interaction_information.gd" id="2_64w2u"]
 [ext_resource type="Texture2D" uid="uid://byprdtpeldk57" path="res://Textures/Buttons/X_button_normal.png" id="3_82uvy"]
 [ext_resource type="Texture2D" uid="uid://dkay3mveblu0j" path="res://Textures/UI/Information/informationTile.png" id="3_cr600"]
 [ext_resource type="Texture2D" uid="uid://x7kuuopqw4yl" path="res://Textures/Buttons/X_button_highlight.png" id="4_sw30l"]
-[ext_resource type="Material" uid="uid://dc4rnoi735twf" path="res://Resources/Shaders/outline_palette_swap.tres" id="4_vwqnr"]
 [ext_resource type="PackedScene" uid="uid://dorw3vr2amuy3" path="res://Scenes_and_scripts/Components/button_sound_component.tscn" id="9_vl7rp"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_erdcx"]
@@ -13,6 +12,81 @@
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bjjr6"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7oyg1"]
+
+[sub_resource type="Shader" id="Shader_k1an3"]
+code = "shader_type canvas_item;
+
+global uniform sampler2D colour_scheme: filter_nearest;
+uniform vec4 color : source_color = vec4(1.0);
+uniform float width : hint_range(0, 10) = 1.0;
+uniform int pattern : hint_range(0, 2) = 0; // diamond, circle, square
+uniform bool inside = false;
+uniform bool add_margins = true; // only useful when inside is false
+
+void vertex() {
+	if (add_margins) {
+		VERTEX += (UV * 2.0 - 1.0) * width;
+	}
+}
+
+bool hasContraryNeighbour(vec2 uv, vec2 texture_pixel_size, sampler2D texture) {
+	for (float i = -ceil(width); i <= ceil(width); i++) {
+		float x = abs(i) > width ? width * sign(i) : i;
+		float offset;
+
+		if (pattern == 0) {
+			offset = width - abs(x);
+		} else if (pattern == 1) {
+			offset = floor(sqrt(pow(width + 0.5, 2) - x * x));
+		} else if (pattern == 2) {
+			offset = width;
+		}
+
+		for (float j = -ceil(offset); j <= ceil(offset); j++) {
+			float y = abs(j) > offset ? offset * sign(j) : j;
+			vec2 xy = uv + texture_pixel_size * vec2(x, y);
+
+			if ((xy != clamp(xy, vec2(0.0), vec2(1.0)) || texture(texture, xy).a <= 0.0) == inside) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+void fragment() {
+	vec2 uv = UV;
+
+	if (add_margins) {
+		vec2 texture_pixel_size = vec2(1.0) / (vec2(1.0) / TEXTURE_PIXEL_SIZE + vec2(width * 2.0));
+
+		uv = (uv - texture_pixel_size * width) * TEXTURE_PIXEL_SIZE / texture_pixel_size;
+
+		if (uv != clamp(uv, vec2(0.0), vec2(1.0))) {
+			COLOR.a = 0.0;
+		} else {
+			COLOR = texture(TEXTURE, uv);
+		}
+	} else {
+		COLOR = texture(TEXTURE, uv);
+	}
+
+	if ((COLOR.a > 0.0) == inside && hasContraryNeighbour(uv, TEXTURE_PIXEL_SIZE, TEXTURE)) {
+		COLOR.rgb = inside ? mix(COLOR.rgb, color.rgb, color.a) : color.rgb;
+		COLOR.a += (1.0 - COLOR.a) * color.a;
+	}
+	COLOR = vec4(texture(colour_scheme, vec2(COLOR.r, COLOR.g)).rgb, COLOR.a);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hsgce"]
+shader = SubResource("Shader_k1an3")
+shader_parameter/color = Color(0, 0, 0, 1)
+shader_parameter/width = 1.0
+shader_parameter/pattern = 1
+shader_parameter/inside = false
+shader_parameter/add_margins = false
 
 [sub_resource type="LabelSettings" id="LabelSettings_40jpi"]
 
@@ -156,7 +230,7 @@ size_flags_vertical = 0
 mouse_filter = 2
 
 [node name="Number" type="Label" parent="PanelContainer/NumberContainer"]
-material = ExtResource("4_vwqnr")
+material = SubResource("ShaderMaterial_hsgce")
 layout_mode = 2
 text = "1"
 label_settings = SubResource("LabelSettings_40jpi")

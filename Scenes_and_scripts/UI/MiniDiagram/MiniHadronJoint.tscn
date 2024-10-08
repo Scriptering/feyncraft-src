@@ -14,6 +14,7 @@ use_parent_material = true
 offset_right = 5.0
 offset_bottom = 5.0
 texture = ExtResource("3_iy8ti")
+draw_center = false
 region_rect = Rect2(2.08165e-12, 2.08165e-12, 5, 5)
 patch_margin_left = 1
 patch_margin_top = 1
@@ -23,4 +24,5 @@ metadata/_edit_use_anchors_ = true
 
 [node name="HadronSprite" type="Sprite2D" parent="."]
 use_parent_material = true
+position = Vector2(0, 2)
 scale = Vector2(0.75, 0.75)

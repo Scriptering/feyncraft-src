@@ -19,7 +19,6 @@ var GeneratedDiagramViewer: MiniDiagramViewer
 @export var StatesSaved: HBoxContainer
 @export var NoDiagramsFound: HBoxContainer
 @export var GenerationCompleted: HBoxContainer
-@export var FindSlider: HSlider
 @export var LoadTimeWarning: PullOutTab
 
 @onready var feedback_containers: Array[HBoxContainer] = [NoStatesToSave, StatesSaved, NoDiagramsFound, GenerationCompleted]
@@ -27,6 +26,8 @@ var GeneratedDiagramViewer: MiniDiagramViewer
 enum {INVALID}
 
 @onready var Feedback: PullOutTab = $MovingContainer/SubmitFeedback
+
+var prev_self_energy: bool = false
 
 var can_generate : bool = false : set = _set_can_generate
 var min_degree: int:
@@ -66,8 +67,19 @@ func update_view_button() -> void:
 
 func set_checks(state_interactions : Array) -> void:
 	var particles : Array = []
+	var has_hadron: bool = false
 	for state_interaction:Array in state_interactions:
 		particles += state_interaction
+		
+		if state_interaction.size() > 1:
+			has_hadron = true
+	
+	if has_hadron:
+		%SelfEnergy.button_pressed = true
+		%SelfEnergy.disabled = true
+	else:
+		%SelfEnergy.button_pressed = prev_self_energy
+		%SelfEnergy.disabled = false
 	
 	if ParticleData.Particle.photon in particles:
 		%electromagnetic_check.button_pressed = true
@@ -91,7 +103,7 @@ func generate(checks: Array[bool]) -> void:
 			min_degree,
 			max_degree,
 			useable_particles,
-			int(FindSlider.value),
+			int(%Find.value),
 			%Tadpoles.button_pressed,
 			%SelfEnergy.button_pressed
 		)
@@ -166,7 +178,7 @@ func _on_electro_weak_toggled(button_pressed: bool) -> void:
 		%weak_check.button_pressed = true
 
 func update_load_time_warning() -> void:
-	match int(FindSlider.value):
+	match int(%Find.value):
 		SolutionGeneration.Find.One:
 			LoadTimeWarning.push_in()
 		SolutionGeneration.Find.LowestOrder:
@@ -202,3 +214,6 @@ func _on_submit_feedback_push_in_finished() -> void:
 
 func _on_find_value_changed(_value: float) -> void:
 	update_load_time_warning()
+	
+func _on_self_energy_pressed() -> void:
+	prev_self_energy = %SelfEnergy.button_pressed

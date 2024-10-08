@@ -66,3 +66,12 @@ static func find_all_var(array: Array, test_func: Callable, start_index: int = 0
 			found_ids.push_back(i)
 
 	return found_ids
+
+static func packed_int_max(array: PackedInt32Array) -> int:
+	var x: int = array[0]
+	
+	for e:int in array:
+		if e > x:
+			x = e
+			
+	return x

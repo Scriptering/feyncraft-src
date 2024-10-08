@@ -107,6 +107,10 @@ func init(state_manager: Node) -> void:
 	crosshair.init(self, StateLines, grid_size)
 	
 func _process(_delta: float) -> void:
+	for stateline:StateLine in StateLines:
+		if stateline.grabbed:
+			move_stateline(stateline)
+	
 	if update_queued:
 		flush_update_queue()
 
@@ -164,10 +168,6 @@ func _crosshair_moved(new_position: Vector2i, _old_position: Vector2i) -> void:
 		&& StateManager.state != BaseState.State.Drawing
 	):
 		return
-	
-	for stateline:StateLine in StateLines:
-		if stateline.grabbed:
-			move_stateline(stateline)
 	
 	for interaction:Interaction in get_interactions():
 		if interaction.grabbed:
@@ -241,12 +241,18 @@ func convert_path_colours(path_colours: Array, vision: Globals.Vision) -> Array[
 	return path_colors
 
 func update_colourless_interactions(
-	paths: Array[PackedInt32Array], path_colours: Array, diagram: DrawingMatrix, is_vision_matrix: bool = false
+	path_data: Vision.PathData,
+	diagram: DrawingMatrix,
+	is_vision_matrix: bool = false
 ) -> void:
-	if paths.size() == 0:
+	if path_data.is_empty():
 		return
 
-	var colourless_interactions: PackedInt32Array = Vision.find_colourless_interactions(paths, path_colours, diagram, is_vision_matrix)
+	var colourless_interactions := Vision.find_colourless_interactions(
+		path_data,
+		diagram,
+		is_vision_matrix
+	)
 	
 	for id:int in range(diagram.matrix_size):
 		get_interaction_from_matrix_id(id, diagram).valid_colourless = id not in colourless_interactions
@@ -327,39 +333,34 @@ func generate_drawing_matrix_from_diagram(get_only_valid: bool = false) -> Drawi
 	return generated_matrix
 
 func update_colour(valid_diagram: DrawingMatrix) -> void:
-	var colour_matrix: DrawingMatrix = Vision.generate_vision_matrix(Globals.Vision.Colour, valid_diagram)
+	var colour_matrix := Vision.generate_vision_matrix(Globals.Vision.Colour, valid_diagram)
 	
-	var zip: Array = Vision.generate_vision_paths(Globals.Vision.Colour, colour_matrix, true)
+	var path_data := Vision.generate_vision_paths(Globals.Vision.Colour, colour_matrix, true)
 	
-	if zip == []:
+	if path_data.is_empty():
 		return
 	
-	var colour_paths: Array[PackedInt32Array] = zip.front()
-	var colour_path_colours: Array = zip.back()
-	
-	update_colourless_interactions(colour_paths, colour_path_colours, colour_matrix, true)
+	update_colourless_interactions(path_data, colour_matrix, true)
 	
 	if current_vision == Globals.Vision.Colour:
 		draw_vision_lines(
-			colour_paths,
-			convert_path_colours(colour_path_colours, current_vision),
+			path_data.paths,
+			convert_path_colours(path_data.path_colours, current_vision),
 			colour_matrix
 		)
 
 func update_path_vision(valid_diagram: DrawingMatrix) -> void:
 	var vision_matrix: DrawingMatrix = Vision.generate_vision_matrix(current_vision, valid_diagram)
-	var zip : Array = Vision.generate_vision_paths(current_vision, vision_matrix, true)
+	var path_data := Vision.generate_vision_paths(current_vision, vision_matrix, true)
 	
-	if zip == []:
-		return
-	
-	var paths : Array[PackedInt32Array] = zip.front()
-	var path_colours : Array = zip.back()
-	
-	if paths.size() == 0:
+	if path_data.is_empty():
 		return
 
-	draw_vision_lines(paths, convert_path_colours(path_colours,current_vision), vision_matrix)
+	draw_vision_lines(
+		path_data.paths,
+		convert_path_colours(path_data.path_colours, current_vision),
+		vision_matrix
+	)
 
 func update_vision() -> void:
 	if freeze_vision:
@@ -402,6 +403,14 @@ func move_stateline(stateline: StateLine) -> void:
 			state_interactions.push_back(interaction)
 	
 	stateline.position.x = get_movable_state_line_position(stateline.state, interaction_x_positions)
+	
+	if stateline.state == StateLine.State.Initial:
+		crosshair.clamp_left = stateline.position.x
+	else:
+		crosshair.clamp_right = stateline.position.x
+	
+	for hadron_joint:HadronJoint in stateline.joints:
+		hadron_joint.position.x = stateline.position.x
 	
 	for interaction:Interaction in state_interactions:
 		var interaction_position: Vector2 = interaction.position

@@ -238,8 +238,11 @@ func is_matrix_colourless(matrix: ConnectionMatrix) -> bool:
 		return false
 	
 	var vision_matrix : DrawingMatrix = Vision.generate_colour_matrix(DrawingMatrix.new(matrix))
-	var zip: Array = Vision.generate_colour_paths(vision_matrix, true)
-	return Vision.find_colourless_interactions(zip.front(), zip.back(), vision_matrix, true).size() > 0
+	return Vision.find_colourless_interactions(
+		Vision.generate_colour_paths(vision_matrix, true),
+		vision_matrix,
+		true
+	).size() > 0
 
 func connect_state_fermions(base_matrix: InteractionMatrix) -> Array[InteractionMatrix]:
 	var fermion_entry_states : Array = base_matrix.unconnected_matrix.map(
@@ -628,6 +631,9 @@ func get_interaction_connected_matrices(
 	return interaction_connected_matrices
 
 func is_disconnected(matrix: InteractionMatrix) -> bool:
+	if is_complete(matrix):
+		return !matrix.is_fully_connected(true)
+	
 	return (
 		matrix.degree > 0
 		and matrix.get_unconnected_state_particle_count(StateLine.State.None) == 0

@@ -16,6 +16,8 @@ var g_useable_particles : PackedInt32Array = []
 
 var chance_of_hadrons: float = 0.4
 
+var total_tries: int = 0
+
 func generate(
 	min_particle_count: int = 4,
 	max_particle_count: int = 5,
@@ -24,7 +26,10 @@ func generate(
 	set_seed: int = Time.get_ticks_usec()
 ) -> Problem:
 	
+	#set_seed = 31607767
 	seed(set_seed)
+	
+	total_tries = 0
 	
 	if !useable_particles.any(
 		func(particle: ParticleData.Particle) -> bool:
@@ -45,6 +50,8 @@ func generate(
 	problem.allowed_particles = useable_particles
 	
 	print("problem found")
+	
+	print(total_tries)
 	
 	return problem
 
@@ -167,7 +174,6 @@ func is_lone_hadron_decay(state_interactions: Array) -> bool:
 	quarks.sort()
 
 	return hadron == quarks
-
 
 func get_all_particles() -> Array[ParticleData.Particle]:
 	var all_particles: Array[ParticleData.Particle] = []
@@ -335,6 +341,7 @@ func get_next_state_particles(
 ) -> Array[Array]:
 	
 	if particle_count == 0:
+		total_tries += 1
 		if !are_state_interactions_valid(state_particles):
 			return []
 		
@@ -503,11 +510,7 @@ func is_quantum_number_difference_possible(
 		var can_be_different: bool = W_count != 0 and quantum_number in ParticleData.WEAK_QUANTUM_NUMBERS
 		
 		var difference_allowed: int = particle_count
-		if (
-			quantum_number == ParticleData.QuantumNumber.electron
-			or quantum_number == ParticleData.QuantumNumber.muon
-			or quantum_number == ParticleData.QuantumNumber.tau
-		):
+		if hadron_count > 0 and ParticleData.is_quark_quantum_number(quantum_number):
 			difference_allowed += 2 * hadron_count
 
 		if abs(quantum_number_difference[quantum_number]) > difference_allowed + int(can_be_different) * abs(W_count):
