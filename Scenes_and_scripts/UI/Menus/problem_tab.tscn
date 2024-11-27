@@ -306,6 +306,7 @@ tooltip = "Submit solution"
 layout_mode = 2
 minimum_size = Vector2(26, 24)
 disabled = true
+action_mode = 1
 icon = ExtResource("16_leqlk")
 icon_use_parent_material = true
 

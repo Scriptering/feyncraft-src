@@ -582,7 +582,18 @@ func generate_reindex_dictionary() -> Dictionary:
 	
 	return reindex_dictionary
 
+func reorder_directionless_connections() -> void:
+	for id:int in matrix_size - 1:
+		for jd:int in range(id + 1, matrix_size):
+			var connection_particles: Array = get_connection_particles(jd, id)
+			for particle: ParticleData.Particle in connection_particles:
+				if !ParticleData.has_shade(particle):
+					disconnect_interactions(jd, id, particle)
+					connect_interactions(id, jd, particle)
+
 func reindex() -> void:
+	reorder_directionless_connections()
+	
 	var reindex_dictionary : Dictionary = generate_reindex_dictionary()
 	var reindexed_connection_matrix : Array = connection_matrix.duplicate(true)
 	
@@ -733,14 +744,19 @@ func get_reduced_matrix(particle_test_function: Callable) -> ConnectionMatrix:
 	
 	return reduced_matrix
 
-func get_force_count(force: Globals.Force) -> int:
-	if force == Globals.Force.none:
-		return get_state_count(StateLine.State.None)
-	
-	var force_count: int = 0
-	for id:int in get_state_ids(StateLine.State.None):
-		var connected_particles := get_connected_particles(id, true)
-		if force == ParticleData.get_interaction_force(connected_particles):
-			force_count += ParticleData.degree(connected_particles)
+func get_force_count() -> PackedInt32Array:
+	var force_count: PackedInt32Array = []
+	force_count.resize(Globals.Force.size())
+	force_count.fill(0)
+	   
+	for force:Globals.Force in Globals.Force.values():
+		if force == Globals.Force.none:
+			force_count[force] == get_state_count(StateLine.State.None)
+			continue
+		
+		for id:int in get_state_ids(StateLine.State.None):
+			force_count[force] += int(ParticleData.is_interaction_force(
+				get_connected_particles(id, true), force
+			))
 	
 	return force_count

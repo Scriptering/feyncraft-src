@@ -576,11 +576,12 @@ func get_vision_vectors(vision: Globals.Vision) -> PackedVector2Array:
 func _on_mouse_area_button_button_down() -> void:
 	has_moved = false
 	
-	mouse_pressed.emit()
+	mouse_pressed.emit(self)
 	EventBus.grabbable_object_clicked.emit(self)
 	EventBus.deletable_object_clicked.emit(self)
 
 func _on_touch_screen_button_pressed() -> void:
-	finger_pressed.emit()
+	EventBus.message.emit("interaction input")
+	finger_pressed.emit(self)
 	EventBus.grabbable_object_clicked.emit(self)
 	EventBus.deletable_object_clicked.emit(self)

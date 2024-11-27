@@ -70,7 +70,7 @@ position = Vector2(40, 296)
 texture = ExtResource("34_w3m6h")
 
 [node name="Decoration" parent="TileEasterEgg" instance=ExtResource("33_8ahpc")]
-z_index = 0
+z_index = 2
 use_parent_material = true
 custom_minimum_size = Vector2(18, 18)
 offset_left = 31.0

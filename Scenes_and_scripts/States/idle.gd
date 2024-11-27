@@ -28,20 +28,23 @@ func process(_delta: float) -> State:
 		Diagram.redo()
 	elif Input.is_action_just_pressed("undo"):
 		Diagram.undo()
-	elif Input.is_action_just_pressed("click"):
-		$minimum_press_timer.start()
-		EventBus.change_cursor.emit(Globals.Cursor.press)
-	elif !Input.is_action_pressed("click") and $minimum_press_timer.is_stopped():
-		EventBus.change_cursor.emit(Globals.Cursor.default)
-	
+	elif !Globals.is_on_mobile():
+		if Input.is_action_just_pressed("click"):
+			$minimum_press_timer.start()
+			EventBus.change_cursor.emit(Globals.Cursor.press)
+		elif !Input.is_action_pressed("click") and $minimum_press_timer.is_stopped():
+			EventBus.change_cursor.emit(Globals.Cursor.default)
+
 	return State.Null
 
 func _on_diagram_finger_pressed(_index: int) -> void:
 	if can_draw():
+		EventBus.message.emit("start finger drawing")
 		change_state.emit(self, State.Drawing)
 
 func _on_diagram_mouse_pressed() -> void:
 	if can_draw():
+		EventBus.message.emit("start mouse drawing")
 		change_state.emit(self, State.Drawing)
 
 func can_draw() -> bool:

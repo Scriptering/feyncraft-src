@@ -1177,6 +1177,19 @@ func general_can_convert(
 		and sign(to_particle) != sign(from_particle)
 	)
 
+func is_interaction_force(interaction: PackedInt32Array, force: Globals.Force) -> bool:
+	match force:
+		Globals.Force.strong:
+			return Particle.gluon in interaction
+		Globals.Force.EM:
+			return Particle.photon in interaction
+		Globals.Force.electroweak:
+			return Particle.Z in interaction or Particle.H in interaction
+		Globals.Force.weak:
+			return Particle.W in interaction or Particle.anti_W in interaction
+	
+	return false
+
 func get_interaction_force(interaction: PackedInt32Array) -> Globals.Force:
 	if Particle.gluon in interaction:
 		return Globals.Force.strong

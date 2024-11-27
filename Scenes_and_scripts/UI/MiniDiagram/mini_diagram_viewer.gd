@@ -189,18 +189,12 @@ func _on_index_value_changed(value: float) -> void:
 func filter_diagram(diagram: ConnectionMatrix) -> bool:
 	var filters: Dictionary = %Filter.filters
 	var filter_ranges : Array[Vector2i] = filters["degree_ranges"]
+	var force_count: PackedInt32Array = diagram.get_force_count()
 		
-	for i:int in filter_ranges.size():
+	for force:Globals.Force in Globals.Force.values():
 		if (
-			filter_ranges[i].x == 0
-			and filter_ranges[i].y == 0
-		):
-			continue
-		
-		var diagram_force_count: int = diagram.get_force_count(i)
-		if (
-			diagram_force_count < filter_ranges[i].x
-			or diagram_force_count > filter_ranges[i].y
+			force_count[force] < filter_ranges[force].x
+			or force_count[force] > filter_ranges[force].y
 		):
 			return false
 	

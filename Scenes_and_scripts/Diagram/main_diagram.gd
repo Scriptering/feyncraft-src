@@ -43,11 +43,17 @@ var diagram_added_to_history: bool = false
 var update_queued: bool = true
 var mouse_inside_diagram: bool = false
 
+var crosshair_mobile_event_handled: bool = false
+
 func _ready() -> void:
 	crosshair.moved_and_rested.connect(_crosshair_moved)
 	crosshair.moved.connect(_crosshair_moved)
 	EventBus.draw_raw_diagram.connect(draw_raw_diagram)
 	EventBus.draw_diagram.connect(draw_diagram)
+	EventBus.crosshair_mobile_event_handled.connect(
+		func() -> void:
+			crosshair_mobile_event_handled = true
+	)
 	
 	self.mouse_entered.connect(EventBus.diagram_mouse_entered.emit)
 	self.mouse_exited.connect(EventBus.diagram_mouse_exited.emit)
@@ -562,9 +568,7 @@ func delete_line(particle_line: ParticleLine) -> void:
 	particle_line.queue_free()
 	
 	disconnect_line(particle_line)
-	
 	remove_lonely_interactions(particle_line.connected_interactions)
-	
 	check_rejoin_lines(particle_line.connected_interactions)
 	
 	queue_update()
@@ -578,7 +582,6 @@ func _particle_line_deleted(particle_line: ParticleLine) -> void:
 	delete_line(particle_line)
 
 func delete_interaction(interaction: Interaction) -> void:
-
 	interaction.queue_free()
 	var connected_lines : Array[ParticleLine] = interaction.connected_lines.duplicate()
 	for particle_line:ParticleLine in connected_lines:
@@ -841,12 +844,13 @@ func place_interaction(interaction_position: Vector2, interaction: Node = Intera
 	
 	connect_interaction_to_stateline(interaction, get_state_by_position(interaction_position))
 
-func _interaction_finger_pressed() -> void:
-	await crosshair._input
+func _interaction_finger_pressed(interaction:Interaction) -> void:
+	crosshair.move(interaction.position)
 	EventBus.diagram_finger_pressed.emit(0)
 
-func _interaction_mouse_pressed() -> void:
-	EventBus.diagram_mouse_pressed.emit()
+func _interaction_mouse_pressed(interaction:Interaction) -> void:
+	if (!Globals.is_on_mobile()):
+		EventBus.diagram_mouse_pressed.emit()
 
 func draw_interaction(
 	interaction_position: Vector2, interaction: Interaction = InteractionInstance.instantiate()
@@ -996,6 +1000,7 @@ func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 		place_interaction(drawing_matrix.get_interaction_positions()[i] * grid_size, interaction)
 		if !drawing_matrix.decorations.is_empty():
 			interaction.decor = drawing_matrix.decorations[i]
+		interaction.queue_update()
 		
 	for particle_line:ParticleLine in super.draw_diagram_particles(drawing_matrix):
 		ParticleLines.add_child(particle_line)
@@ -1010,8 +1015,10 @@ func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 			ParticleLine.Point.End,
 			get_interaction_at_position(particle_line.points[ParticleLine.Point.End])
 		)
+		particle_line.queue_update()
 	
 	line_diagram_actions = true
+	flush_update_queue()
 	queue_update()
 
 func undo() -> void:
@@ -1019,16 +1026,12 @@ func undo() -> void:
 		return
 	
 	move_backward_in_history()
-	
-	await get_tree().process_frame
 
 func redo() -> void:
 	if !is_inside_tree():
 		return
 	
 	move_forward_in_history()
-	
-	await get_tree().process_frame
 
 func add_diagram_to_history(clear_future: bool = true, diagram: DrawingMatrix = get_current_diagram()) -> void:
 	if !is_inside_tree():

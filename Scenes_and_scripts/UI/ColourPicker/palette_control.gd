@@ -32,7 +32,7 @@ func get_custom_file_path() -> String:
 func load_palettes() -> void:
 	var seasonal_palette: String = get_seasonal_palette()
 	if seasonal_palette != '':
-		load_palette(palette_folder() + "Seasonal/" + seasonal_palette + '.tres')
+		load_palette("res://saves/Palettes/Seasonal/" + seasonal_palette + '.tres')
 
 	for file_path in FileManager.get_files_in_folder(get_custom_file_path()):
 		load_palette(file_path)

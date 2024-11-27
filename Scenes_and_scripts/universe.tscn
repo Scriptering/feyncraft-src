@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cnc7r7d27yn5c"]
+[gd_scene load_steps=19 format=3 uid="uid://cnc7r7d27yn5c"]
 
 [ext_resource type="Script" path="res://Scenes_and_scripts/universe.gd" id="1_f3b25"]
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_fbm6y"]
@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://n2w0tydjaa33" path="res://Textures/Buttons/cut_touch_button_pressed.png" id="13_gqnb4"]
 [ext_resource type="Script" path="res://Scenes_and_scripts/fps.gd" id="14_jxbry"]
 [ext_resource type="Script" path="res://Scenes_and_scripts/global_feedback.gd" id="14_x4syi"]
+[ext_resource type="Script" path="res://Scenes_and_scripts/event_bus_listener.gd" id="18_b4xyr"]
 
 [node name="Universe" type="Node2D"]
 material = ExtResource("1_fbm6y")
@@ -148,6 +149,14 @@ size_flags_horizontal = 4
 [node name="Label" type="Label" parent="CanvasLayer/GlobalFeedback/PanelContainer/HBoxContainer"]
 use_parent_material = true
 layout_mode = 2
+
+[node name="EventBusListener" type="VBoxContainer" parent="."]
+offset_left = 284.0
+offset_top = 117.0
+offset_right = 324.0
+offset_bottom = 157.0
+script = ExtResource("18_b4xyr")
+max_messages = 10
 
 [connection signal="tree_exited" from="." to="." method="_on_tree_exited"]
 [connection signal="daily_pressed" from="MainMenu" to="." method="_on_main_menu_daily_pressed"]

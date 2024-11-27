@@ -42,12 +42,15 @@ var fingers_inside_crosshair_area: Array[bool] = [
 
 func _input(event: InputEvent) -> void:
 	if Globals.is_on_mobile():
+		EventBus.crosshair_mobile_event_handled.emit()
 		handle_mobile_event(event)
 
 	elif event is InputEventMouseMotion or event is InputEventMouseButton:
 		handle_mouse_event(event)
 
 func handle_mouse_event(event: InputEvent) -> void:
+	EventBus.crosshair_mobile_event_handled.emit()
+	
 	var mouse_position: Vector2 = get_parent().get_local_mouse_position()
 	
 	var in_crosshair_area:bool = is_inside_crosshair_area(mouse_position)
@@ -150,10 +153,9 @@ func move(try_position: Vector2) -> void:
 	
 	if is_try_position_valid(try_position):
 		position = try_position
-		if position != old_position:
-			move_timer.start()
-			moved.emit(position, old_position)
-			EventBus.crosshair_moved.emit(global_position, old_global_position)
+		move_timer.start()
+		moved.emit(position, old_position)
+		EventBus.crosshair_moved.emit(global_position, old_global_position)
 		old_position = position
 		old_global_position = global_position
 

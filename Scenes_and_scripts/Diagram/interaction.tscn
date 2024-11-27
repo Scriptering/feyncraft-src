@@ -240,6 +240,7 @@ flat = true
 
 [node name="TouchScreenButton" type="TouchScreenButton" parent="."]
 shape = SubResource("RectangleShape2D_aagi4")
+visibility_mode = 1
 script = ExtResource("19_hvdnj")
 
 [connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]

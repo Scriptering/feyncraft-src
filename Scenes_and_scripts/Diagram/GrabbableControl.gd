@@ -33,7 +33,7 @@ func _grab_area_gui_input(event: InputEvent) -> void:
 		return
 	
 	if is_event_clicked_on(event):
-		get_viewport().set_input_as_handled()
+		#get_viewport().set_input_as_handled()
 		grab_area_clicked.emit(self)
 		EventBus.grabbable_object_clicked.emit(self)
 

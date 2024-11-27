@@ -43,7 +43,6 @@ func _ready() -> void:
 		if !FileAccess.file_exists("user://saves/ProblemSets/Default/electromagnetic.tres"):
 			create_default_problem_sets()
 	
-	
 	if should_reset_daily_streak():
 		StatsManager.stats.daily_streak = 0
 	daily_problem_set.end_reached.connect(_on_daily_completed)

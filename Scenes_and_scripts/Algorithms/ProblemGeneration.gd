@@ -15,6 +15,7 @@ const g_max_degree: int = 5
 var g_useable_particles : PackedInt32Array = []
 
 var chance_of_hadrons: float = 0.4
+var general_particle_chance: float = 0.3
 
 var total_tries: int = 0
 
@@ -26,8 +27,9 @@ func generate(
 	set_seed: int = Time.get_ticks_usec()
 ) -> Problem:
 	
-	#set_seed = 31607767
+	#set_seed = 61266740
 	seed(set_seed)
+	print(set_seed)
 	
 	total_tries = 0
 	
@@ -41,9 +43,15 @@ func generate(
 
 	var problem := Problem.new()
 
-	var useable_state_interactions := get_useable_state_interactions(use_hadrons, useable_particles)
+	var useable_state_interactions := get_useable_state_interactions(
+		use_hadrons,
+		useable_particles
+	)
 	var state_particles : Array[Array] = get_state_particles(
-		min_particle_count, max_particle_count, useable_state_interactions, use_hadrons
+		min_particle_count,
+		max_particle_count,
+		useable_state_interactions,
+		use_hadrons
 	)
 	
 	problem.state_interactions = state_particles
@@ -313,6 +321,24 @@ func get_state_particles(
 	
 	if hadron_count == 0:
 		useable_state_particles = useable_state_particles.filter(is_not_hadron)
+	
+	var use_general_particles : bool = (
+		hadron_count == 0
+		&& (randf() < general_particle_chance)
+	)
+	
+	useable_state_particles = useable_state_particles.filter(
+		func(state_particle: Array) -> bool:
+			var particle: ParticleData.Particle = state_particle[0]
+			return (
+				state_particle.size() > 1
+				|| ParticleData.is_boson(particle)
+				|| (
+					ParticleData.is_general(state_particle[0])
+					== use_general_particles
+				)
+			)
+	)
 	
 	useable_state_particles.shuffle()
 	

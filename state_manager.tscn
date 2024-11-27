@@ -1,46 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://bgsq45ojvnmr8"]
-
-[ext_resource type="Script" path="res://Scenes_and_scripts/States/idle.gd" id="1_x5js1"]
-[ext_resource type="Script" path="res://Scenes_and_scripts/States/drawing.gd" id="3_c00fs"]
-
-[sub_resource type="GDScript" id="GDScript_3lf1w"]
-script/source = "extends Node
-
-@export var current_state: BaseState
-
-signal change_cursor(new_cursor: Cursor.CursorState)
-
-func _ready() -> void:
-	enter_new_state(current_state)
-
-func _process(delta: float) -> void:
-	current_state.process(delta)
-
-func _input(event: InputEvent) -> void:
-	current_state.input(event)
-
-func enter_new_state(new_state: BaseState) -> void:
-	new_state.enter()
-	new_state.entered.emit()
-	new_state.change_cursor.connect(func(new_cursor:Cursor.CursorState) -> void: change_cursor.emit(new_cursor))
-	new_state.change_state.connect(func(new_state:BaseState) -> void: change_state(new_state))
-
-func exit_current_state() -> void:
-	current_state.exit()
-	current_state.exited.emit()
-	current_state.change_cursor.disconnect(func(new_cursor:Cursor.CursorState) -> void: change_cursor.emit(new_cursor))
-	current_state.change_state.disconnect(func(new_state:BaseState) -> void: change_state(new_state))
-
-func change_state(new_state: BaseState) -> void:
-	exit_current_state()
-	enter_new_state(new_state)
-"
+[gd_scene format=3 uid="uid://kdirur5to66o"]
 
 [node name="StateManager" type="Node"]
-script = SubResource("GDScript_3lf1w")
 
 [node name="Idle" type="Node" parent="."]
-script = ExtResource("1_x5js1")
 
 [node name="Drawing" type="Node" parent="."]
-script = ExtResource("3_c00fs")
