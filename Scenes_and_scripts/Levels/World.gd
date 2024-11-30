@@ -29,6 +29,8 @@ var problem_set: ProblemSet
 var problem_history: Array[Problem] = []
 var start_problem := Problem.new()
 
+var passed: bool = false
+
 var creation_info : GrabbableControl = null
 
 var mode_enter_funcs : Dictionary = {
@@ -80,30 +82,6 @@ func init(state_manager: Node) -> void:
 	initialised.emit()
 
 	Diagram.action.connect(_diagram_action_taken)
-	
-	#if !OS.has_feature("standalone"):
-		#start_problem.state_interactions = [
-			#[
-				#[ParticleData.Particle.up, ParticleData.Particle.anti_strange],
-				#[ParticleData.Particle.anti_up, ParticleData.Particle.strange]
-			#],
-			#[
-				#[ParticleData.Particle.charm, ParticleData.Particle.anti_charm]
-			#]
-			#
-		#]
-		#start_problem.allowed_particles = ProblemGeneration.get_useable_particles_from_interaction_checks(
-			#[false, true, true, false]
-		#)
-		#start_problem = ProblemGeneration.setup_new_problem(start_problem)
-	#
-		#var diagrams: Array[ConnectionMatrix] = SolutionGeneration.generate_diagrams(
-			#[[ParticleData.Particle.up], [ParticleData.Particle.anti_up]],
-			#[[ParticleData.Particle.gluon], [ParticleData.Particle.gluon]],
-			#4,
-			#4,
-			#ProblemGeneration.get_useable_particles_from_interaction_checks([false, true, false, false])
-		#)
 
 func _ready() -> void:
 	Diagram.show_line_labels = !StatsManager.stats.hide_labels
@@ -220,12 +198,17 @@ func _on_next_problem_pressed() -> void:
 			ProblemTab.set_next_problem_disabled(problem_set.current_index >= problem_set.highest_index_reached)
 			save_problem_set.emit()
 		Mode.Sandbox:
+			ProblemTab.set_next_problem_disabled(true)
 			var new_problem: Problem = generate_new_problem()
 
 			if !new_problem:
 				return
 
 			load_problem(new_problem)
+			
+			await get_tree().process_frame
+			
+			ProblemTab.set_next_problem_disabled(false)
 
 	Diagram.clear_diagram()
 	ProblemTab.set_prev_problem_disabled(problem_history.size() == 0)
@@ -248,7 +231,30 @@ func _on_prev_problem_pressed() -> void:
 	
 	Diagram.clear_diagram()
 
+func get_set_problem() -> Problem:
+	start_problem.state_interactions = [
+		[
+			[ParticleData.Particle.up, ParticleData.Particle.down, ParticleData.Particle.down],
+		],
+		[
+			[ParticleData.Particle.up, ParticleData.Particle.up, ParticleData.Particle.down],
+			[ParticleData.Particle.electron],
+			[ParticleData.Particle.anti_electron_neutrino]
+		]
+		
+	]
+	start_problem.allowed_particles = ProblemGeneration.get_useable_particles_from_interaction_checks(
+		[true, true, true, true]
+	)
+	start_problem = ProblemGeneration.setup_new_problem(start_problem)
+	
+	return start_problem
+
 func generate_new_problem() -> Problem:
+	if !passed:
+		passed = true;
+		return get_set_problem()
+	
 	return ProblemGeneration.setup_new_problem(ProblemGeneration.generate(
 		PuzzleOptions.min_particle_count, PuzzleOptions.max_particle_count, PuzzleOptions.hadron_frequency,
 		ProblemGeneration.get_useable_particles_from_interaction_checks(PuzzleOptions.get_checks())
@@ -264,10 +270,19 @@ func exit_current_mode() -> void:
 func _on_tutorial_info_finish_pressed() -> void:
 	EventBus.signal_change_scene.emit(Globals.Scene.MainMenu)
 
-func _on_export_tab_export_pressed(join_paths: bool, draw_internal_labels: bool, draw_external_labels: bool) -> void:
-	var exporter:= DrawingMatrixExporter.new(
-		Diagram.get_current_diagram()
-	)
+func _on_export_tab_export_pressed(
+	join_paths: bool,
+	draw_internal_labels: bool,
+	draw_external_labels: bool,
+	as_matrix: bool
+) -> void:
+	var diagram: DrawingMatrix = Diagram.get_current_diagram()
+	
+	if as_matrix:
+		ClipBoard.copy(FileManager.get_resource_save_data(diagram))
+		return
+	
+	var exporter:= DrawingMatrixExporter.new(diagram)
 
 	exporter.join_paths = join_paths
 	exporter.draw_internal_labels = draw_internal_labels
@@ -429,3 +444,11 @@ func _on_problem_tab_diagram_submitted() -> void:
 func _on_problem_tab_diagram_deleted() -> void:
 	if current_mode == Mode.SolutionCreation:
 		creation_info.toggle_no_custom_solutions(ProblemTab.submitted_diagrams.is_empty())
+
+func _on_export_tab_download_pressed() -> void:
+	var diagram: DrawingMatrix = str_to_var(ClipBoard.paste())
+	
+	if diagram:
+		Diagram.draw_diagram(diagram)
+	else:
+		EventBus.show_feedback.emit("Load invalid.")

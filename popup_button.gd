@@ -50,8 +50,8 @@ func close_popup() -> void:
 func get_popup() -> Node:
 	return popup 
 
-func _on_tree_exiting() -> void:
-	if popup:
+func _notification(what):
+	if what == NOTIFICATION_PREDELETE:
 		destroy_popup()
 
 func _on_hidden() -> void:

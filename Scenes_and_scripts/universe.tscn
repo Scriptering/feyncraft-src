@@ -149,6 +149,13 @@ size_flags_horizontal = 4
 use_parent_material = true
 layout_mode = 2
 
+[node name="EventBusListener" type="VBoxContainer" parent="."]
+visible = false
+offset_left = 284.0
+offset_top = 117.0
+offset_right = 324.0
+offset_bottom = 157.0
+
 [connection signal="tree_exited" from="." to="." method="_on_tree_exited"]
 [connection signal="daily_pressed" from="MainMenu" to="." method="_on_main_menu_daily_pressed"]
 [connection signal="sandbox_pressed" from="MainMenu" to="." method="_on_main_menu_sandbox_pressed"]

@@ -29,6 +29,11 @@ func reload() -> void:
 		problem_item.toggle_completed(!problem_set.is_custom and problem_item.index < problem_set.highest_index_reached)
 		problem_item.toggle_play_disabled(!problem_set.is_custom and problem_item.index > problem_set.highest_index_reached)
 
+func set_completed() -> void:
+	for problem_item:PanelContainer in get_problem_items():
+		problem_item.toggle_completed(!problem_set.is_custom and problem_item.index < problem_set.highest_index_reached)
+		problem_item.toggle_play_disabled(!problem_set.is_custom and problem_item.index > problem_set.highest_index_reached)
+
 func get_problem_items() -> Array:
 	return problem_container.get_items().filter(
 		func(child:PanelContainer) -> bool:
@@ -86,6 +91,8 @@ func update() -> void:
 	
 	for problem_item:PanelContainer in get_problem_items():
 		problem_item.update()
+	
+	set_completed()
 
 func update_index_labels() -> void:
 	var index: int = 0

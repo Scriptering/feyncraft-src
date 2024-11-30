@@ -12,21 +12,6 @@ func init(diagram: MiniDiagram) -> void:
 	Initial = diagram.StateLines[StateLine.State.Initial]
 	Final = diagram.StateLines[StateLine.State.Final]
 	
-func show_dot(dot_count: int) -> void:
-	match dot_count:
-		0:
-			$Dot.hide()
-		1:
-			$Dot.show()
-			$Dot.texture = dot
-		2:
-			$Dot.show()
-			$Dot.texture = double_dot
-
-func show_state_dot() -> void:
-	$Dot.show()
-	$Dot.texture = state_dot
-
 func get_on_state_line() -> StateLine.State:
 	if position.x == Initial.position.x and position.x == Final.position.x:
 		return StateLine.State.Both

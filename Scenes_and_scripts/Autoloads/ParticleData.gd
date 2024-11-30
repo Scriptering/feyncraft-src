@@ -94,27 +94,27 @@ enum QuantumNumber {charge, lepton, electron, muon, tau, quark, up, down, charm,
 enum Force {electromagnetic, strong, weak, electroweak}
 
 var QUANTUM_NUMBERS : Array[PackedFloat32Array] = [
-PackedFloat32Array([0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), 
-PackedFloat32Array([0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
-PackedFloat32Array([0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
-PackedFloat32Array([0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
-PackedFloat32Array([-1.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1]),
-PackedFloat32Array([-1.0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]),
-PackedFloat32Array([-1.0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]), 
-PackedFloat32Array([-1.0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]),
-PackedFloat32Array([-1.0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1]),
-PackedFloat32Array([0.0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0]),
-PackedFloat32Array([0.0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0]),
-PackedFloat32Array([0.0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0]),
-PackedFloat32Array([0.0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0]),
-PackedFloat32Array([2.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 0, 0, 1, 0]),
-PackedFloat32Array([2.0/3, 0, 0, 0, 0, 1.0/3, 1, 0, 0, 0, 0, 0, 1, 0]),
-PackedFloat32Array([2.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 1, 0, 0, 0, 1, 0]),
-PackedFloat32Array([2.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 1, 0, 1, 0]),
-PackedFloat32Array([-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 0, 0, 0, 1]),
-PackedFloat32Array([-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 1, 0, 0, 0, 0, 0, 1]),
-PackedFloat32Array([-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 1, 0, 0, 0, 1]),
-PackedFloat32Array([-1.0/3, 0, 0, 0, 0, 1.0/3, 0, 0, 0, 0, 0, 1, 0, 1])
+PackedFloat32Array([0.0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), 
+PackedFloat32Array([0.0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+PackedFloat32Array([0.0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+PackedFloat32Array([0.0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+PackedFloat32Array([-1.0,   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1]),
+PackedFloat32Array([-1.0,   1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]),
+PackedFloat32Array([-1.0,   1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]), 
+PackedFloat32Array([-1.0,   1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]),
+PackedFloat32Array([-1.0,   1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1]),
+PackedFloat32Array([0.0,    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0]),
+PackedFloat32Array([0.0,    1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0]),
+PackedFloat32Array([0.0,    1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0]),
+PackedFloat32Array([0.0,    1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0]),
+PackedFloat32Array([2.0/3,  0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0]),
+PackedFloat32Array([2.0/3,  0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0]),
+PackedFloat32Array([2.0/3,  0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0]),
+PackedFloat32Array([2.0/3,  0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0]),
+PackedFloat32Array([-1.0/3, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1]),
+PackedFloat32Array([-1.0/3, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1]),
+PackedFloat32Array([-1.0/3, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1]),
+PackedFloat32Array([-1.0/3, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1])
 ]
 
 const WEAK_QUANTUM_NUMBERS : Array[QuantumNumber] = [
@@ -1136,6 +1136,16 @@ func quantum_numbers(particle: ParticleData.Particle) -> PackedFloat32Array:
 func quantum_number(particle: ParticleData.Particle, p_quantum_number: QuantumNumber) -> float:
 	return sign(particle) * QUANTUM_NUMBERS[base(particle)][p_quantum_number]
 
+func is_quark_quantum_number(q_num: ParticleData.QuantumNumber) -> bool:
+	return (
+		q_num == QuantumNumber.up
+		or q_num == QuantumNumber.down
+		or q_num == QuantumNumber.charm
+		or q_num == QuantumNumber.strange
+		or q_num == QuantumNumber.top
+		or q_num == QuantumNumber.bottom
+	)
+
 func has_charge(particle: ParticleData.Particle) -> bool:
 	return anti(particle) * quantum_number(base(particle), QuantumNumber.charge) != 0
 
@@ -1166,6 +1176,19 @@ func general_can_convert(
 		and base(to_particle) in GENERAL_CONVERSION[base(from_particle)]
 		and sign(to_particle) != sign(from_particle)
 	)
+
+func is_interaction_force(interaction: PackedInt32Array, force: Globals.Force) -> bool:
+	match force:
+		Globals.Force.strong:
+			return Particle.gluon in interaction
+		Globals.Force.EM:
+			return Particle.photon in interaction
+		Globals.Force.electroweak:
+			return Particle.Z in interaction or Particle.H in interaction
+		Globals.Force.weak:
+			return Particle.W in interaction or Particle.anti_W in interaction
+	
+	return false
 
 func get_interaction_force(interaction: PackedInt32Array) -> Globals.Force:
 	if Particle.gluon in interaction:

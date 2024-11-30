@@ -15,6 +15,9 @@ const g_max_degree: int = 5
 var g_useable_particles : PackedInt32Array = []
 
 var chance_of_hadrons: float = 0.4
+var general_particle_chance: float = 0.3
+
+var total_tries: int = 0
 
 func generate(
 	min_particle_count: int = 4,
@@ -24,7 +27,11 @@ func generate(
 	set_seed: int = Time.get_ticks_usec()
 ) -> Problem:
 	
+	#set_seed = 61266740
 	seed(set_seed)
+	print(set_seed)
+	
+	total_tries = 0
 	
 	if !useable_particles.any(
 		func(particle: ParticleData.Particle) -> bool:
@@ -36,15 +43,23 @@ func generate(
 
 	var problem := Problem.new()
 
-	var useable_state_interactions := get_useable_state_interactions(use_hadrons, useable_particles)
+	var useable_state_interactions := get_useable_state_interactions(
+		use_hadrons,
+		useable_particles
+	)
 	var state_particles : Array[Array] = get_state_particles(
-		min_particle_count, max_particle_count, useable_state_interactions, use_hadrons
+		min_particle_count,
+		max_particle_count,
+		useable_state_interactions,
+		use_hadrons
 	)
 	
 	problem.state_interactions = state_particles
 	problem.allowed_particles = useable_particles
 	
 	print("problem found")
+	
+	print(total_tries)
 	
 	return problem
 
@@ -168,15 +183,11 @@ func is_lone_hadron_decay(state_interactions: Array) -> bool:
 
 	return hadron == quarks
 
-
 func get_all_particles() -> Array[ParticleData.Particle]:
 	var all_particles: Array[ParticleData.Particle] = []
 	
 	for particle:ParticleData.Particle in ParticleData.Particle.values():
 		if particle == ParticleData.Particle.none:
-			continue
-		
-		if base_particle(particle) in ParticleData.GENERAL_PARTICLES:
 			continue
 		
 		all_particles.push_back(particle)
@@ -308,6 +319,24 @@ func get_state_particles(
 	if hadron_count == 0:
 		useable_state_particles = useable_state_particles.filter(is_not_hadron)
 	
+	var use_general_particles : bool = (
+		hadron_count == 0
+		&& (randf() < general_particle_chance)
+	)
+	
+	useable_state_particles = useable_state_particles.filter(
+		func(state_particle: Array) -> bool:
+			var particle: ParticleData.Particle = state_particle[0]
+			return (
+				state_particle.size() > 1
+				|| ParticleData.is_boson(particle)
+				|| (
+					ParticleData.is_general(state_particle[0])
+					== use_general_particles
+				)
+			)
+	)
+	
 	useable_state_particles.shuffle()
 	
 	var state_particles: Array[Array] = [[], []]
@@ -335,6 +364,7 @@ func get_next_state_particles(
 ) -> Array[Array]:
 	
 	if particle_count == 0:
+		total_tries += 1
 		if !are_state_interactions_valid(state_particles):
 			return []
 		
@@ -503,11 +533,7 @@ func is_quantum_number_difference_possible(
 		var can_be_different: bool = W_count != 0 and quantum_number in ParticleData.WEAK_QUANTUM_NUMBERS
 		
 		var difference_allowed: int = particle_count
-		if (
-			quantum_number == ParticleData.QuantumNumber.electron
-			or quantum_number == ParticleData.QuantumNumber.muon
-			or quantum_number == ParticleData.QuantumNumber.tau
-		):
+		if hadron_count > 0 and ParticleData.is_quark_quantum_number(quantum_number):
 			difference_allowed += 2 * hadron_count
 
 		if abs(quantum_number_difference[quantum_number]) > difference_allowed + int(can_be_different) * abs(W_count):

@@ -70,7 +70,7 @@ position = Vector2(40, 296)
 texture = ExtResource("34_w3m6h")
 
 [node name="Decoration" parent="TileEasterEgg" instance=ExtResource("33_8ahpc")]
-z_index = 0
+z_index = 2
 use_parent_material = true
 custom_minimum_size = Vector2(18, 18)
 offset_left = 31.0
@@ -242,6 +242,7 @@ position = Vector2(-160, -48)
 grid_margin = 0
 
 [node name="ParticleLines" type="Node2D" parent="Diagram/DiagramArea"]
+y_sort_enabled = true
 use_parent_material = true
 
 [node name="VisionLines" type="Control" parent="Diagram/DiagramArea"]
@@ -267,9 +268,9 @@ offset_bottom = -41.0
 
 [node name="VisionButton" parent="PullOutTabs" instance=ExtResource("3_hqsoq")]
 offset_left = 613.0
-offset_top = 39.0
+offset_top = 18.0
 offset_right = 635.0
-offset_bottom = 99.0
+offset_bottom = 78.0
 
 [node name="ParticleButtons" parent="PullOutTabs" instance=ExtResource("24_lunb1")]
 anchors_preset = 7
@@ -301,12 +302,6 @@ offset_top = -26.0
 offset_right = 157.0
 offset_bottom = -26.0
 
-[node name="MenuTab" parent="PullOutTabs" instance=ExtResource("24_f5s2a")]
-offset_left = 500.0
-offset_top = 339.0
-offset_right = 500.0
-offset_bottom = 339.0
-
 [node name="HealthTab" parent="PullOutTabs" instance=ExtResource("31_f28gh")]
 offset_left = 501.0
 offset_top = -39.0
@@ -314,12 +309,18 @@ offset_right = 501.0
 offset_bottom = -39.0
 move_direction = 3
 
+[node name="MenuTab" parent="PullOutTabs" instance=ExtResource("24_f5s2a")]
+offset_left = 500.0
+offset_top = 339.0
+offset_right = 500.0
+offset_bottom = 339.0
+
 [node name="ExportTab" parent="PullOutTabs" instance=ExtResource("27_jfab7")]
 z_index = 1
 offset_left = 614.0
-offset_top = 133.0
+offset_top = 111.0
 offset_right = 614.0
-offset_bottom = 133.0
+offset_bottom = 111.0
 
 [node name="FloatingMenus" type="CanvasLayer" parent="."]
 follow_viewport_enabled = true
@@ -491,6 +492,7 @@ enable_spotlight = false
 [connection signal="prev_problem_pressed" from="PullOutTabs/ProblemTab" to="." method="_on_prev_problem_pressed"]
 [connection signal="exit_pressed" from="PullOutTabs/MenuTab" to="." method="_on_menu_tab_exit_pressed"]
 [connection signal="toggled_line_labels" from="PullOutTabs/MenuTab" to="." method="_on_menu_tab_toggled_line_labels"]
+[connection signal="download_pressed" from="PullOutTabs/ExportTab" to="." method="_on_export_tab_download_pressed"]
 [connection signal="export_pressed" from="PullOutTabs/ExportTab" to="." method="_on_export_tab_export_pressed"]
 [connection signal="finish_pressed" from="Tutorial/TutorialInfo" to="." method="_on_tutorial_info_finish_pressed"]
 [connection signal="next_pressed" from="Tutorial/TutorialInfo" to="Tutorial" method="_on_tutorial_info_next_pressed"]

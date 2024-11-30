@@ -16,7 +16,7 @@ func _ready() -> void:
 	super._ready()
 	
 	EventBus.crosshair_area_mouse_entered.connect(_crosshair_area_mouse_entered)
-	EventBus.crosshair_area_mouse_exited.connect(_crosshair_area_mouse_entered)
+	EventBus.crosshair_area_mouse_exited.connect(_crosshair_area_mouse_exited)
 	EventBus.crosshair_area_finger_entered.connect(_crosshair_area_finger_entered)
 	EventBus.crosshair_area_finger_exited.connect(_crosshair_area_finger_exited)
 	EventBus.crosshair_moved.connect(_crosshair_moved)

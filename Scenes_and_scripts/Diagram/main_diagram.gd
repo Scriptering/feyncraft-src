@@ -43,11 +43,17 @@ var diagram_added_to_history: bool = false
 var update_queued: bool = true
 var mouse_inside_diagram: bool = false
 
+var crosshair_mobile_event_handled: bool = false
+
 func _ready() -> void:
 	crosshair.moved_and_rested.connect(_crosshair_moved)
 	crosshair.moved.connect(_crosshair_moved)
 	EventBus.draw_raw_diagram.connect(draw_raw_diagram)
 	EventBus.draw_diagram.connect(draw_diagram)
+	EventBus.crosshair_mobile_event_handled.connect(
+		func() -> void:
+			crosshair_mobile_event_handled = true
+	)
 	
 	self.mouse_entered.connect(EventBus.diagram_mouse_entered.emit)
 	self.mouse_exited.connect(EventBus.diagram_mouse_exited.emit)
@@ -107,6 +113,10 @@ func init(state_manager: Node) -> void:
 	crosshair.init(self, StateLines, grid_size)
 	
 func _process(_delta: float) -> void:
+	for stateline:StateLine in StateLines:
+		if stateline.grabbed:
+			move_stateline(stateline)
+	
 	if update_queued:
 		flush_update_queue()
 
@@ -164,10 +174,6 @@ func _crosshair_moved(new_position: Vector2i, _old_position: Vector2i) -> void:
 		&& StateManager.state != BaseState.State.Drawing
 	):
 		return
-	
-	for stateline:StateLine in StateLines:
-		if stateline.grabbed:
-			move_stateline(stateline)
 	
 	for interaction:Interaction in get_interactions():
 		if interaction.grabbed:
@@ -241,12 +247,18 @@ func convert_path_colours(path_colours: Array, vision: Globals.Vision) -> Array[
 	return path_colors
 
 func update_colourless_interactions(
-	paths: Array[PackedInt32Array], path_colours: Array, diagram: DrawingMatrix, is_vision_matrix: bool = false
+	path_data: Vision.PathData,
+	diagram: DrawingMatrix,
+	is_vision_matrix: bool = false
 ) -> void:
-	if paths.size() == 0:
+	if path_data.is_empty():
 		return
 
-	var colourless_interactions: PackedInt32Array = Vision.find_colourless_interactions(paths, path_colours, diagram, is_vision_matrix)
+	var colourless_interactions := Vision.find_colourless_interactions(
+		path_data,
+		diagram,
+		is_vision_matrix
+	)
 	
 	for id:int in range(diagram.matrix_size):
 		get_interaction_from_matrix_id(id, diagram).valid_colourless = id not in colourless_interactions
@@ -327,39 +339,34 @@ func generate_drawing_matrix_from_diagram(get_only_valid: bool = false) -> Drawi
 	return generated_matrix
 
 func update_colour(valid_diagram: DrawingMatrix) -> void:
-	var colour_matrix: DrawingMatrix = Vision.generate_vision_matrix(Globals.Vision.Colour, valid_diagram)
+	var colour_matrix := Vision.generate_vision_matrix(Globals.Vision.Colour, valid_diagram)
 	
-	var zip: Array = Vision.generate_vision_paths(Globals.Vision.Colour, colour_matrix, true)
+	var path_data := Vision.generate_vision_paths(Globals.Vision.Colour, colour_matrix, true)
 	
-	if zip == []:
+	if path_data.is_empty():
 		return
 	
-	var colour_paths: Array[PackedInt32Array] = zip.front()
-	var colour_path_colours: Array = zip.back()
-	
-	update_colourless_interactions(colour_paths, colour_path_colours, colour_matrix, true)
+	update_colourless_interactions(path_data, colour_matrix, true)
 	
 	if current_vision == Globals.Vision.Colour:
 		draw_vision_lines(
-			colour_paths,
-			convert_path_colours(colour_path_colours, current_vision),
+			path_data.paths,
+			convert_path_colours(path_data.path_colours, current_vision),
 			colour_matrix
 		)
 
 func update_path_vision(valid_diagram: DrawingMatrix) -> void:
 	var vision_matrix: DrawingMatrix = Vision.generate_vision_matrix(current_vision, valid_diagram)
-	var zip : Array = Vision.generate_vision_paths(current_vision, vision_matrix, true)
+	var path_data := Vision.generate_vision_paths(current_vision, vision_matrix, true)
 	
-	if zip == []:
-		return
-	
-	var paths : Array[PackedInt32Array] = zip.front()
-	var path_colours : Array = zip.back()
-	
-	if paths.size() == 0:
+	if path_data.is_empty():
 		return
 
-	draw_vision_lines(paths, convert_path_colours(path_colours,current_vision), vision_matrix)
+	draw_vision_lines(
+		path_data.paths,
+		convert_path_colours(path_data.path_colours, current_vision),
+		vision_matrix
+	)
 
 func update_vision() -> void:
 	if freeze_vision:
@@ -402,6 +409,14 @@ func move_stateline(stateline: StateLine) -> void:
 			state_interactions.push_back(interaction)
 	
 	stateline.position.x = get_movable_state_line_position(stateline.state, interaction_x_positions)
+	
+	if stateline.state == StateLine.State.Initial:
+		crosshair.clamp_left = stateline.position.x
+	else:
+		crosshair.clamp_right = stateline.position.x
+	
+	for hadron_joint:HadronJoint in stateline.joints:
+		hadron_joint.position.x = stateline.position.x
 	
 	for interaction:Interaction in state_interactions:
 		var interaction_position: Vector2 = interaction.position
@@ -553,9 +568,7 @@ func delete_line(particle_line: ParticleLine) -> void:
 	particle_line.queue_free()
 	
 	disconnect_line(particle_line)
-	
 	remove_lonely_interactions(particle_line.connected_interactions)
-	
 	check_rejoin_lines(particle_line.connected_interactions)
 	
 	queue_update()
@@ -569,7 +582,6 @@ func _particle_line_deleted(particle_line: ParticleLine) -> void:
 	delete_line(particle_line)
 
 func delete_interaction(interaction: Interaction) -> void:
-
 	interaction.queue_free()
 	var connected_lines : Array[ParticleLine] = interaction.connected_lines.duplicate()
 	for particle_line:ParticleLine in connected_lines:
@@ -832,12 +844,13 @@ func place_interaction(interaction_position: Vector2, interaction: Node = Intera
 	
 	connect_interaction_to_stateline(interaction, get_state_by_position(interaction_position))
 
-func _interaction_finger_pressed() -> void:
-	await crosshair._input
+func _interaction_finger_pressed(interaction:Interaction) -> void:
+	crosshair.move(interaction.position)
 	EventBus.diagram_finger_pressed.emit(0)
 
-func _interaction_mouse_pressed() -> void:
-	EventBus.diagram_mouse_pressed.emit()
+func _interaction_mouse_pressed(interaction:Interaction) -> void:
+	if (!Globals.is_on_mobile()):
+		EventBus.diagram_mouse_pressed.emit()
 
 func draw_interaction(
 	interaction_position: Vector2, interaction: Interaction = InteractionInstance.instantiate()
@@ -987,6 +1000,7 @@ func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 		place_interaction(drawing_matrix.get_interaction_positions()[i] * grid_size, interaction)
 		if !drawing_matrix.decorations.is_empty():
 			interaction.decor = drawing_matrix.decorations[i]
+		interaction.queue_update()
 		
 	for particle_line:ParticleLine in super.draw_diagram_particles(drawing_matrix):
 		ParticleLines.add_child(particle_line)
@@ -1001,8 +1015,10 @@ func draw_diagram(drawing_matrix: DrawingMatrix) -> void:
 			ParticleLine.Point.End,
 			get_interaction_at_position(particle_line.points[ParticleLine.Point.End])
 		)
+		particle_line.queue_update()
 	
 	line_diagram_actions = true
+	flush_update_queue()
 	queue_update()
 
 func undo() -> void:
@@ -1010,16 +1026,12 @@ func undo() -> void:
 		return
 	
 	move_backward_in_history()
-	
-	await get_tree().process_frame
 
 func redo() -> void:
 	if !is_inside_tree():
 		return
 	
 	move_forward_in_history()
-	
-	await get_tree().process_frame
 
 func add_diagram_to_history(clear_future: bool = true, diagram: DrawingMatrix = get_current_diagram()) -> void:
 	if !is_inside_tree():

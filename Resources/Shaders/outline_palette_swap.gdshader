@@ -62,4 +62,3 @@ void fragment() {
 	}
 	COLOR = vec4(texture(colour_scheme, vec2(COLOR.r, COLOR.g)).rgb, COLOR.a);
 }
-

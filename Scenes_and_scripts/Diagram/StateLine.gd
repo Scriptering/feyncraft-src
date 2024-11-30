@@ -20,12 +20,9 @@ const STATES : Array[State] = [State.Initial, State.Final]
 
 var hadrons : Array[QuarkGroup] = []
 var joints : Array[HadronJoint] = []
-var old_quark_groups: Array = [[]]
-var old_position_x: int
 var update_queued: bool = true
 
 var connected_interactions: Array[Interaction] = []
-
 var connected_lone_particles : Array[ParticleData.Particle] : get = _get_connected_lone_particles
 
 func _ready() -> void:
@@ -58,12 +55,8 @@ func update() -> void:
 	var connected_lines := get_connected_lines()
 	if connected_lines.size() == 0:
 		return
-	var quark_groups := get_quark_groups(connected_lines)
 
-	if quark_groups != old_quark_groups or position.x != old_position_x:
-		old_quark_groups = quark_groups.duplicate(true)
-		old_position_x = int(position.x)
-		update_hadrons(quark_groups)
+	update_hadrons(get_quark_groups(connected_lines))
 
 func get_quark_groups(connected_lines: Array = get_connected_lines()) -> Array:
 	return group_connected_quarks(sort_connected_lines(connected_lines))

@@ -86,7 +86,11 @@ func generate_diagrams(
 		var connected_matrices: Array[InteractionMatrix] = []
 		
 		for matrix:InteractionMatrix in state_fermion_connected_matrices:
-			if is_matrix_colourless(matrix) or is_disconnected(matrix):
+			if (
+				is_matrix_colourless(matrix)
+				or is_disconnected(matrix)
+				or has_state_fermion(matrix)
+			):
 				continue
 			elif is_complete(matrix):
 				connected_matrices.push_back(matrix)
@@ -108,6 +112,16 @@ func generate_diagrams(
 		return [null]
 		
 	return generated_connection_matrices
+
+func has_state_fermion(matrix: InteractionMatrix) -> bool:
+	return matrix.unconnected_matrix.any(
+		func(interaction:Array) -> bool:
+			return interaction.any(
+				func(particle:ParticleData.Particle) -> bool:
+					return ParticleData.is_fermion(particle) && !ParticleData.is_general(particle)
+			)
+	)
+		
 
 func shuffle_particle_interactions() -> void:
 	for particle:ParticleData.Particle in g_particle_interactions.keys():
@@ -238,8 +252,11 @@ func is_matrix_colourless(matrix: ConnectionMatrix) -> bool:
 		return false
 	
 	var vision_matrix : DrawingMatrix = Vision.generate_colour_matrix(DrawingMatrix.new(matrix))
-	var zip: Array = Vision.generate_colour_paths(vision_matrix, true)
-	return Vision.find_colourless_interactions(zip.front(), zip.back(), vision_matrix, true).size() > 0
+	return Vision.find_colourless_interactions(
+		Vision.generate_colour_paths(vision_matrix, true),
+		vision_matrix,
+		true
+	).size() > 0
 
 func connect_state_fermions(base_matrix: InteractionMatrix) -> Array[InteractionMatrix]:
 	var fermion_entry_states : Array = base_matrix.unconnected_matrix.map(
@@ -251,6 +268,9 @@ func connect_state_fermions(base_matrix: InteractionMatrix) -> Array[Interaction
 	)
 	
 	if fermion_entry_ids.is_empty():
+		if has_state_fermion(base_matrix):
+			return []
+		
 		if find_one:
 			connect_matrix(base_matrix)
 		else:
@@ -628,6 +648,9 @@ func get_interaction_connected_matrices(
 	return interaction_connected_matrices
 
 func is_disconnected(matrix: InteractionMatrix) -> bool:
+	if is_complete(matrix):
+		return !matrix.is_fully_connected(true)
+	
 	return (
 		matrix.degree > 0
 		and matrix.get_unconnected_state_particle_count(StateLine.State.None) == 0
