@@ -190,9 +190,6 @@ func get_all_particles() -> Array[ParticleData.Particle]:
 		if particle == ParticleData.Particle.none:
 			continue
 		
-		if base_particle(particle) in ParticleData.GENERAL_PARTICLES:
-			continue
-		
 		all_particles.push_back(particle)
 	
 	return all_particles

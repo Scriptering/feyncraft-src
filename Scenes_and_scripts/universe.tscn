@@ -151,6 +151,7 @@ use_parent_material = true
 layout_mode = 2
 
 [node name="EventBusListener" type="VBoxContainer" parent="."]
+visible = false
 offset_left = 284.0
 offset_top = 117.0
 offset_right = 324.0
