@@ -1,10 +1,9 @@
-[gd_resource type="Theme" load_steps=71 format=4 uid="uid://cfmbhoq8cuoge"]
+[gd_resource type="Theme" load_steps=70 format=4 uid="uid://cfmbhoq8cuoge"]
 
 [ext_resource type="Texture2D" uid="uid://bcwpdy0lmenue" path="res://Textures/Buttons/square_disabled.png" id="2_8m3bx"]
 [ext_resource type="Texture2D" uid="uid://bo1u07jlygktr" path="res://Textures/Buttons/square_hover.png" id="3_4f0vn"]
 [ext_resource type="Texture2D" uid="uid://s14bo7fcdam0" path="res://Textures/Buttons/square_normal.png" id="4_vxayc"]
 [ext_resource type="Texture2D" uid="uid://brb0ytbpqclrn" path="res://Textures/Buttons/square_pressed.png" id="5_1inkr"]
-[ext_resource type="Texture2D" uid="uid://dhchjt1tdb76c" path="res://Textures/UI/infobox_disabled.png" id="7_k0xni"]
 [ext_resource type="StyleBox" uid="uid://bg5qcafjkkumw" path="res://Scenes_and_scripts/UI/panel_hover.tres" id="7_lmo8n"]
 [ext_resource type="StyleBox" uid="uid://cysejl4e52vsv" path="res://Textures/panel.tres" id="7_umh78"]
 [ext_resource type="Texture2D" uid="uid://vgda0rr6udn6" path="res://Textures/UI/h_seperator.png" id="8_iqovw"]
@@ -76,7 +75,6 @@ texture_margin_right = 5.0
 texture_margin_bottom = 5.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lpvun"]
-texture = ExtResource("7_k0xni")
 texture_margin_left = 6.0
 texture_margin_top = 6.0
 texture_margin_right = 6.0
