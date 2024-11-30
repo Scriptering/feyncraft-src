@@ -40,7 +40,7 @@ func get_hadron_interactions() -> Array:
 	)
 
 func get_hadron_seperation() -> float:
-	return interaction_ys[-1] - interaction_ys[0]
+	return abs(interaction_ys[-1] - interaction_ys[0])
 
 func place_label() -> void:
 	HadronLabel.texture = ParticleData.get_hadron_texture(hadron)
@@ -50,4 +50,4 @@ func place_label() -> void:
 	else:
 		HadronLabel.position.x = label_seperation
 	
-	HadronLabel.position.y += get_hadron_seperation()/2
+	HadronLabel.position.y += get_hadron_seperation() / 1.5

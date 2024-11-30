@@ -72,7 +72,7 @@ tooltip = "View Problems"
 
 [node name="Title" type="LineEdit" parent="VBoxContainer/HBoxContainer/HBoxContainer"]
 use_parent_material = true
-custom_minimum_size = Vector2(80, 22)
+custom_minimum_size = Vector2(100, 22)
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_fonts/font = ExtResource("4_lkw13")
@@ -83,9 +83,9 @@ script = ExtResource("4_ylu82")
 [node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/HBoxContainer"]
 use_parent_material = true
 layout_mode = 2
-size_flags_horizontal = 6
+size_flags_horizontal = 3
 theme_override_constants/separation = 0
-alignment = 2
+alignment = 1
 
 [node name="IndexLabel" type="Label" parent="VBoxContainer/HBoxContainer/HBoxContainer3"]
 use_parent_material = true

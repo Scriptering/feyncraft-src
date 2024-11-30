@@ -39,6 +39,10 @@ signal signal_change_scene(scene: Globals.Scene, args: Array)
 signal signal_exit_game(mode: int, created_problem: Problem)
 signal toggle_scene
 
+signal message(message: String)
+
+signal crosshair_mobile_event_handled()
+
 func enter_game(
 	mode: int, problem_set: ProblemSet = null, problem: Problem = null, creating_problem_set_file: String = ''
 ) -> void:

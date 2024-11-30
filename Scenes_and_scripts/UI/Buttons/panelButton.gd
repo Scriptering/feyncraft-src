@@ -62,7 +62,7 @@ func _ready() -> void:
 	previous_button_pressed = button_pressed
 	set_content_margins(ButtonState[int(button_pressed)])
 	
-	visibility_changed.connect(_on_visibility_changed)
+	$Button.visibility_changed.connect(_on_button_visibility_changed)
 	
 	$Button.mouse_entered.connect(
 		func() -> void:
@@ -208,7 +208,10 @@ func _on_button_button_up() -> void:
 	button_up.emit()
 
 func _on_button_theme_changed() -> void:
-	set_content_margins(ButtonState[NORMAL])
+	if button_pressed and toggle_mode:
+		set_content_margins(ButtonState[PRESSED])
+	else:
+		set_content_margins(ButtonState[NORMAL])
 
 func get_button() -> Button:
 	return $Button
@@ -241,11 +244,8 @@ func play_sound(button_pressed_state: bool) -> void:
 	elif $Button.button_group.get_pressed_button() == null:
 		SOUNDBUS.button_up()
 
-func _on_visibility_changed() -> void:
-	if !is_inside_tree():
-		return
-	
-	if button_pressed:
+func _on_button_visibility_changed() -> void:
+	if button_pressed and toggle_mode:
 		set_content_margins(ButtonState[PRESSED])
 	else:
 		set_content_margins(ButtonState[NORMAL])

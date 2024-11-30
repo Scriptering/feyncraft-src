@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bgvo11j4kfjdc"]
+[gd_scene load_steps=24 format=3 uid="uid://bgvo11j4kfjdc"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_h3eo1"]
 [ext_resource type="Script" path="res://Scenes_and_scripts/UI/Menus/generation_button.gd" id="2_plgpl"]
@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://dvx430022t0ua" path="res://Textures/Buttons/icons/next.png" id="7_dlb5i"]
 [ext_resource type="Texture2D" uid="uid://bf4xxweukjvsb" path="res://Textures/Buttons/icons/interaction.png" id="8_8ns2c"]
 [ext_resource type="PackedScene" uid="uid://c4lyyfxwvqyfk" path="res://Scenes_and_scripts/UI/Buttons/panelButton.tscn" id="8_ihypl"]
+[ext_resource type="PackedScene" uid="uid://fkpapaw65twf" path="res://Scenes_and_scripts/disabled_component.tscn" id="11_pjis3"]
 [ext_resource type="Texture2D" uid="uid://ikybt5yg3l6m" path="res://Textures/Buttons/icons/Generate.png" id="17_gy2j5"]
 [ext_resource type="Script" path="res://Scenes_and_scripts/UI/Menus/PullOutTab.gd" id="25_jtb01"]
 [ext_resource type="Texture2D" uid="uid://tql14gtq05lf" path="res://Textures/UI/Information/invalid.png" id="26_mv20u"]
@@ -48,7 +49,7 @@ texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 expand_margin_left = 15.0
 
-[node name="GenerationButton" type="Control" node_paths=PackedStringArray("SaveStates", "Generate", "ViewDiagrams", "MinDegree", "MaxDegree", "Equation", "NoStatesToSave", "StatesSaved", "NoDiagramsFound", "GenerationCompleted", "FindSlider", "LoadTimeWarning", "ContentContainer", "TabButton", "MovingContainer")]
+[node name="GenerationButton" type="Control" node_paths=PackedStringArray("SaveStates", "Generate", "ViewDiagrams", "MinDegree", "MaxDegree", "Equation", "NoStatesToSave", "StatesSaved", "NoDiagramsFound", "GenerationCompleted", "LoadTimeWarning", "ContentContainer", "TabButton", "MovingContainer")]
 material = ExtResource("1_h3eo1")
 layout_mode = 3
 anchors_preset = 0
@@ -63,7 +64,6 @@ NoStatesToSave = NodePath("MovingContainer/SubmitFeedback/MovingContainer/PanelC
 StatesSaved = NodePath("MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/StatesSaved")
 NoDiagramsFound = NodePath("MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/NoDiagramsFound")
 GenerationCompleted = NodePath("MovingContainer/SubmitFeedback/MovingContainer/PanelContainer/VBoxContainer/GenerationSuccess")
-FindSlider = NodePath("MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/PanelContainer2/FindSlider/VBoxContainer/Find")
 LoadTimeWarning = NodePath("MovingContainer/LoadTimeWarning")
 ContentContainer = NodePath("MovingContainer/MovingContainer/PanelContainer")
 TabButton = NodePath("MovingContainer/MovingContainer/Tab")
@@ -310,6 +310,8 @@ alignment = 1
 
 [node name="ButtonSoundComponent" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/electromagnetic_check" instance=ExtResource("6_aanob")]
 
+[node name="DisabledComponent" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/electromagnetic_check" instance=ExtResource("11_pjis3")]
+
 [node name="strong_check" type="CheckButton" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer"]
 unique_name_in_owner = true
 use_parent_material = true
@@ -320,6 +322,8 @@ alignment = 1
 
 [node name="ButtonSoundComponent" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/strong_check" instance=ExtResource("6_aanob")]
 
+[node name="DisabledComponent" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/strong_check" instance=ExtResource("11_pjis3")]
+
 [node name="weak_check" type="CheckButton" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer"]
 unique_name_in_owner = true
 use_parent_material = true
@@ -329,6 +333,8 @@ text = "weak"
 alignment = 1
 
 [node name="ButtonSoundComponent" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/weak_check" instance=ExtResource("6_aanob")]
+
+[node name="DisabledComponent" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/weak_check" instance=ExtResource("11_pjis3")]
 
 [node name="electroweak_check" type="CheckButton" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer"]
 unique_name_in_owner = true
@@ -361,6 +367,8 @@ energy"
 
 [node name="ButtonSoundComponent" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/SelfEnergy" instance=ExtResource("6_aanob")]
 
+[node name="DisabledComponent" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/SelfEnergy" instance=ExtResource("11_pjis3")]
+
 [node name="PanelContainer2" type="PanelContainer" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer"]
 use_parent_material = true
 layout_mode = 2
@@ -383,6 +391,7 @@ layout_mode = 2
 theme_override_constants/separation = 4
 
 [node name="Find" type="HSlider" parent="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/PanelContainer2/FindSlider/VBoxContainer"]
+unique_name_in_owner = true
 use_parent_material = true
 custom_minimum_size = Vector2(115, 0)
 layout_mode = 2
@@ -468,6 +477,7 @@ icon_use_parent_material = true
 [connection signal="toggled" from="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/electromagnetic_check" to="." method="_on_electromagnetic_toggled"]
 [connection signal="toggled" from="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/weak_check" to="." method="_on_weak_toggled"]
 [connection signal="toggled" from="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/electroweak_check" to="." method="_on_electro_weak_toggled"]
+[connection signal="pressed" from="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/GridContainer/SelfEnergy" to="." method="_on_self_energy_pressed"]
 [connection signal="value_changed" from="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/OptionsContainer/PanelContainer2/FindSlider/VBoxContainer/Find" to="." method="_on_find_value_changed"]
 [connection signal="pressed" from="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/HBoxContainer/Save" to="." method="_on_save_pressed"]
 [connection signal="pressed" from="MovingContainer/MovingContainer/PanelContainer/VBoxContainer/HBoxContainer/Generate" to="." method="_on_generate_pressed"]

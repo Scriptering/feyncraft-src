@@ -70,6 +70,9 @@ button=""
 common/snap_controls_to_pixels=false
 fonts/dynamic_fonts/use_oversampling=false
 theme/custom="res://Resources/Themes/ProjectTheme.tres"
+theme/default_font_antialiasing=0
+theme/default_font_hinting=0
+theme/default_font_subpixel_positioning=0
 common/drop_mouse_on_gui_input_disabled=true
 
 [importer_defaults]

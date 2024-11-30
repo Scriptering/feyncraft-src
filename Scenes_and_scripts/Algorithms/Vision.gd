@@ -17,7 +17,39 @@ const shades: Array[Shade] = [Shade.Bright, Shade.Dark]
 const INVALID := -1
 const INVALID_PATH: Array[PackedInt32Array] = [[INVALID]]
 
-static func generate_vision_paths(vision: Globals.Vision, diagram: DrawingMatrix, is_vision_matrix: bool = false) -> Array:
+class PathData:
+	func _init(
+		_paths: Array[PackedInt32Array] = [],
+		_path_colours: PackedInt32Array = [],
+		_forced_colour_path_ids: PackedInt32Array = [],
+		_unique_colour_ids: PackedInt32Array = []
+	) -> void:
+		
+		paths = _paths
+		path_colours = _path_colours
+		forced_colour_path_ids = _forced_colour_path_ids
+		unique_colour_ids = _unique_colour_ids
+		
+		if path_colours.is_empty():
+			unique_colour_ids.resize(paths.size())
+			unique_colour_ids.fill(-1)
+			
+			path_colours.resize(paths.size())
+			path_colours.fill(Colour.None)
+	
+	func is_empty() -> bool:
+		return paths.is_empty()
+	
+	var paths: Array[PackedInt32Array] = []
+	var path_colours: PackedInt32Array = []
+	var forced_colour_path_ids: PackedInt32Array = []
+	var unique_colour_ids: PackedInt32Array = []
+
+static func generate_vision_paths(
+	vision: Globals.Vision,
+	diagram: DrawingMatrix,
+	is_vision_matrix: bool = false
+) -> PathData:
 	match vision:
 		Globals.Vision.Colour:
 			return generate_colour_paths(diagram, is_vision_matrix)
@@ -25,9 +57,13 @@ static func generate_vision_paths(vision: Globals.Vision, diagram: DrawingMatrix
 		Globals.Vision.Shade:
 			return generate_shade_paths(diagram)
 	
-	return []
+	return PathData.new()
 
-static func generate_vision_matrix(vision: Globals.Vision, diagram: DrawingMatrix, shade: Shade = Shade.Both) -> DrawingMatrix:
+static func generate_vision_matrix(
+	vision: Globals.Vision,
+	diagram: DrawingMatrix,
+	shade: Shade = Shade.Both
+) -> DrawingMatrix:
 	var vision_matrix: DrawingMatrix
 	
 	match vision:
@@ -72,7 +108,7 @@ static func generate_shade_matrix(shade: Shade, diagram: DrawingMatrix) -> Drawi
 	
 	return shade_matrix
 
-static func generate_shade_paths(diagram: DrawingMatrix) -> Array:
+static func generate_shade_paths(diagram: DrawingMatrix) -> PathData:
 	var paths: Array[PackedInt32Array] = []
 	var path_colours: Array[Shade] = []
 	
@@ -90,35 +126,46 @@ static func generate_shade_paths(diagram: DrawingMatrix) -> Array:
 			path_colours.push_back(shade)
 	
 	if paths.size() == 0:
-		return []
+		return PathData.new()
 	
-	return [paths, path_colours]
+	return PathData.new(paths, path_colours, [])
 
-static func generate_colour_paths(drawing_matrix: DrawingMatrix, is_vision_matrix: bool = false) -> Array:
+static func generate_colour_paths(
+	drawing_matrix: DrawingMatrix,
+	is_vision_matrix: bool = false
+) -> PathData:
 	var colour_matrix: DrawingMatrix = drawing_matrix if is_vision_matrix else generate_vision_matrix(Globals.Vision.Colour, drawing_matrix)
 	
 	if colour_matrix.is_empty():
-		return []
+		return PathData.new()
 	
 	var path_finder := PathFinder.new(colour_matrix)
 	path_finder.set_get_next_point_function(pick_next_colour_point)
 	var paths: Array[PackedInt32Array] = path_finder.generate_paths()
 	
 	if paths.size() == 0:
-		return []
-	
-	var path_colours: Array[Colour] = generate_path_colours(paths, colour_matrix)
-	
-	return [paths, path_colours]
+		return PathData.new()
+
+	return generate_path_colours(paths, colour_matrix)
 
 static func find_colourless_interactions(
-	paths: Array[PackedInt32Array], path_colours: Array[Colour], drawing_matrix: DrawingMatrix, is_vision_matrix: bool = false
+	path_data: PathData,
+	drawing_matrix: DrawingMatrix,
+	is_vision_matrix: bool = false
 ) -> PackedInt32Array:
 	var colourless_interactions: PackedInt32Array = []
 	var colour_matrix: DrawingMatrix = drawing_matrix if is_vision_matrix else generate_vision_matrix(Globals.Vision.Colour, drawing_matrix)
 	
-	colourless_interactions.append_array(find_colourless_group_interactions(paths, colour_matrix))
-	colourless_interactions.append_array(find_colourless_hadron_interactions(paths, path_colours, colour_matrix, colourless_interactions))
+	colourless_interactions.append_array(
+		find_colourless_group_interactions(path_data.paths, colour_matrix)
+	)
+	colourless_interactions.append_array(
+		find_colourless_hadron_interactions(
+			path_data,
+			colour_matrix,
+			colourless_interactions
+		)
+	)
 	
 	return colourless_interactions
 
@@ -130,7 +177,8 @@ static func path_has_repeated_point(path: PackedInt32Array) -> bool:
 	return false
 
 static func find_colourless_hadron_interactions(
-	paths: Array[PackedInt32Array], path_colours: Array[Colour], vision_matrix: DrawingMatrix,
+	path_data: PathData,
+	vision_matrix: DrawingMatrix,
 	colourless_group_interactions: PackedInt32Array = []
 ) -> PackedInt32Array:
 	
@@ -138,7 +186,7 @@ static func find_colourless_hadron_interactions(
 	var hadrons : Array = vision_matrix.split_hadron_ids
 	hadrons = hadrons.filter(
 		func(hadron: PackedInt32Array) -> bool:
-			return is_hadron_in_paths(hadron, paths)
+			return is_hadron_in_paths(hadron, path_data.paths)
 	)
 	
 	if hadrons.size() == 0:
@@ -155,7 +203,12 @@ static func find_colourless_hadron_interactions(
 	
 	for hadron:PackedInt32Array in hadrons:
 		var colourless_hadron_interaction: int = find_colourless_hadron_interaction(
-			hadron, ArrayFuncs.flatten(hadrons), quark_paths, paths, path_colours, vision_matrix, colourless_group_interactions
+			hadron, 
+			ArrayFuncs.flatten(hadrons),
+			quark_paths,
+			path_data,
+			vision_matrix,
+			colourless_group_interactions
 		)
 		
 		if colourless_hadron_interaction == NOT_FOUND:
@@ -177,9 +230,20 @@ static func get_quark_path_gluon_points(
 
 	return gluon_points
 
+static func get_all_paths_from_id(id: int, paths: Array[PackedInt32Array]) -> PackedInt32Array:
+	return ArrayFuncs.find_all_var(
+		paths,
+		func(path: PackedInt32Array) -> bool:
+			return id in path
+	)
+
 static func find_colourless_hadron_interaction(
-	hadron: PackedInt32Array, hadron_ids: PackedInt32Array, quark_paths: Array[PackedInt32Array], paths: Array[PackedInt32Array],
-	path_colours: Array[Colour], vision_matrix: DrawingMatrix, _colourless_group_interactions: PackedInt32Array = [],
+	hadron: PackedInt32Array,
+	hadron_ids: PackedInt32Array,
+	quark_paths: Array[PackedInt32Array],
+	path_data: PathData,
+	vision_matrix: DrawingMatrix,
+	_colourless_group_interactions: PackedInt32Array = [],
 ) -> int:
 	
 	var gluon_ids: PackedInt32Array = []
@@ -187,16 +251,33 @@ static func find_colourless_hadron_interaction(
 	
 	for hadron_point:int in hadron:
 		var quark_path_id: int = get_path_from_id(hadron_point, quark_paths)
+		var quark_path: PackedInt32Array = quark_paths[quark_path_id]
 		
 		if quark_path_id in counted_quark_paths:
 			continue
 		
 		counted_quark_paths.push_back(quark_path_id)
 		
-		if get_colour_from_id(hadron_point, path_colours, paths) != get_colour_from_id(quark_paths[quark_path_id][-1], path_colours, paths):
+		if (
+			get_colour_from_id(quark_path[0], path_data)
+			!= get_colour_from_id(quark_path[-1], path_data)
+		):
 			return NOT_FOUND
 		
-		if quark_paths[quark_path_id][0] not in hadron_ids or quark_paths[quark_path_id][-1] not in hadron_ids:
+		if !(quark_path[0] in hadron_ids and quark_path[-1] in hadron_ids):
+			return NOT_FOUND
+		
+		var path_idA: int = get_path_from_id(quark_path[0], path_data.paths)
+		var path_idB: int = get_path_from_id(quark_path[-1], path_data.paths)
+		
+		if !ArrayFuncs.packed_int_any(
+			path_data.paths[path_idA],
+			func(id: int) -> bool:
+				return id in path_data.paths[path_idB]
+		):
+			return NOT_FOUND
+		
+		if path_data.unique_colour_ids[path_idA] != path_data.unique_colour_ids[path_idB]:
 			return NOT_FOUND
 		
 		gluon_ids.append_array(get_quark_path_gluon_points(quark_paths[quark_path_id], vision_matrix))
@@ -258,81 +339,91 @@ static func find_colourless_group_interaction(path: PackedInt32Array, vision_mat
 
 	return test_point
 
-static func generate_path_colours(paths: Array[PackedInt32Array], colour_matrix: DrawingMatrix) -> Array[Colour]:
-	var path_colours: Array[Colour] = []
-	path_colours.resize(paths.size())
-	path_colours.fill(Colour.None)
+static func generate_path_colours(
+	paths: Array[PackedInt32Array],
+	colour_matrix: DrawingMatrix
+) -> PathData:
 	
-	path_colours = colour_hadrons(path_colours, paths, colour_matrix)
-	path_colours = colour_other_paths(path_colours)
+	var path_data := PathData.new(paths)
+	
+	path_data = colour_hadrons(path_data, colour_matrix)
+	path_data = colour_other_paths(path_data)
 
-	return path_colours
+	return path_data
 
-static func colour_other_paths(path_colours: Array[Colour]) -> Array[Colour]:
-	for path_id in range(path_colours.size()):
-		if path_colours[path_id] != Colour.None:
+static func colour_other_paths(path_data: PathData) -> PathData:
+	for path_id in range(path_data.path_colours.size()):
+		if path_data.path_colours[path_id] != Colour.None:
 			continue
 		
-		path_colours[path_id] = get_least_used_colour(path_colours)
+		path_data.path_colours[path_id] = get_least_used_colour(path_data.path_colours)
 	
-	return path_colours
+	return path_data
 
-static func is_hadron_restricted(hadron: PackedInt32Array, path_colours: Array[Colour], paths: Array[PackedInt32Array]) -> bool:
-	return get_hadron_colours(hadron, path_colours, paths).count(Colour.None) == 1
-	
-#	return (
-#		get_hadron_colours(hadron, path_colours, paths).any(func(colour: Colour) -> bool: return colour != Colour.None) and
-#		get_hadron_colours(hadron, path_colours, paths).any(func(colour: Colour) -> bool: return colour == Colour.None)
-#	)
+static func is_hadron_restricted(
+	hadron: PackedInt32Array,
+	path_data: PathData
+) -> bool:
+	return get_hadron_colours(hadron, path_data).count(Colour.None) == 1
 
-static func colour_hadron(hadron: PackedInt32Array, path_colours: Array[Colour], paths: Array[PackedInt32Array]) -> Array[Colour]:
+static func colour_hadron(
+	hadron: PackedInt32Array,
+	path_data: PathData
+) -> PathData:
 	if hadron.size() == 2:
-		path_colours = colour_meson(hadron, path_colours, paths)
+		path_data = colour_meson(hadron, path_data)
 	else:
-		path_colours = colour_baryon(hadron, path_colours, paths)
+		path_data = colour_baryon(hadron, path_data)
 	
-	return path_colours
+	return path_data
 
-static func is_hadron_in_paths(hadron: PackedInt32Array, paths: Array[PackedInt32Array]) -> bool:
+static func is_hadron_in_paths(
+	hadron: PackedInt32Array,
+	paths: Array[PackedInt32Array]
+) -> bool:
 	for hadron_id in hadron:
 		if get_path_from_id(hadron_id, paths) == paths.size():
 			return false
 	
 	return true
 
-static func colour_hadrons(path_colours: Array[Colour], paths: Array[PackedInt32Array], colour_matrix: DrawingMatrix) -> Array[Colour]:
+static func colour_hadrons(
+	path_data: PathData,
+	colour_matrix: DrawingMatrix
+) -> PathData:
 	var entry_baryons: Array = colour_matrix.get_entry_baryons()
 	var exit_baryons: Array = colour_matrix.get_exit_baryons()
 	var mesons: Array = colour_matrix.get_mesons()
 	var hadrons: Array = entry_baryons + exit_baryons + mesons
 	hadrons = hadrons.filter(
 		func(hadron: PackedInt32Array) -> bool:
-			return is_hadron_in_paths(hadron, paths)
+			return is_hadron_in_paths(hadron, path_data.paths)
 	)
 	
 	for hadron:PackedInt32Array in hadrons:
-		path_colours = colour_hadron(hadron, path_colours, paths)
+		path_data = colour_hadron(hadron, path_data)
 		
 		for i:int in range(MAX_RESTRICTED_HADRON_COUNT):
 			var restricted_hadron_index : int = (
 				ArrayFuncs.find_var(
 					hadrons,
 					func(test_hadron: PackedInt32Array) -> bool:
-						return is_hadron_restricted(test_hadron, path_colours, paths)
+						return is_hadron_restricted(test_hadron, path_data)
 			))
 			
 			if restricted_hadron_index == hadrons.size():
 				break
 			
-			colour_hadron(hadrons[restricted_hadron_index], path_colours, paths)
+			colour_hadron(hadrons[restricted_hadron_index], path_data)
 		
-		if !path_colours.any(
+		if !ArrayFuncs.packed_int_any(
+			path_data.path_colours,
 			func(colour: Colour) -> bool:
 				return colour == Colour.None
 		):
 			break
 	
-	return path_colours
+	return path_data
 
 static func get_path_from_id(id:int, paths: Array[PackedInt32Array]) -> int:
 	return ArrayFuncs.find_var(
@@ -341,30 +432,55 @@ static func get_path_from_id(id:int, paths: Array[PackedInt32Array]) -> int:
 			return id in path
 	)
 
-static func get_colour_from_id(id: int, path_colours: Array[Colour], paths: Array[PackedInt32Array]) -> Colour:
-	return path_colours[get_path_from_id(id, paths)]
+static func get_colour_from_id(id: int, path_data: PathData) -> Colour:
+	return path_data.path_colours[get_path_from_id(id, path_data.paths)]
 
-static func get_hadron_colours(hadron: Array, path_colours: Array[Colour], paths: Array[PackedInt32Array]) -> Array[Colour]:
+static func get_hadron_colours(hadron: Array, path_data: PathData) -> Array[Colour]:
 	var hadron_colours: Array[Colour] = []
 	
 	for hadron_point:int in hadron:
-		hadron_colours.push_back(get_colour_from_id(hadron_point, path_colours, paths))
+		hadron_colours.push_back(get_colour_from_id(hadron_point, path_data))
 	
 	return hadron_colours
 
-static func colour_baryon(baryon: Array, path_colours: Array[Colour], paths: Array[PackedInt32Array]) -> Array[Colour]:
-	var used_colours: Array[Colour] = get_hadron_colours(baryon, path_colours, paths)
+static func no_colour_count(colours: Array[Colour]) -> int:
+	var count: int = 0
+	for colour:Colour in colours:
+		count += int(colour == Colour.None)
+	return count
+
+static func colour_baryon(baryon: Array, path_data: PathData) -> PathData:
+	var used_colours := get_hadron_colours(baryon, path_data)
+	
+	if no_colour_count(used_colours) == 3:
+		var unique_id: int = ArrayFuncs.packed_int_max(path_data.unique_colour_ids) + 1
+		for baryon_point:int in baryon:
+			var path_id: int = get_path_from_id(baryon_point, path_data.paths)
+			path_data.unique_colour_ids[path_id] = unique_id
+	elif no_colour_count(used_colours) == 1:
+		var colour_ids := ArrayFuncs.find_all_var(
+			used_colours, func(colour:Colour) -> bool: return colour != Colour.None
+		)
+		var no_colour_id: int = used_colours.find(Colour.None)
+		
+		if (
+			path_data.unique_colour_ids[get_path_from_id(baryon[colour_ids[0]], path_data.paths)]
+			== path_data.unique_colour_ids[get_path_from_id(baryon[colour_ids[1]], path_data.paths)]
+		):
+			path_data.unique_colour_ids[get_path_from_id(baryon[no_colour_id], path_data.paths)] = (
+				path_data.unique_colour_ids[get_path_from_id(baryon[colour_ids[0]], path_data.paths)]
+			)
+		
 	
 	if !used_colours.any(
 		func(colour: Colour) -> bool: 
 			return colour == Colour.None
 	):
-		return path_colours
+		return path_data
 	
 	for baryon_point:int in baryon:
-		if get_colour_from_id(baryon_point, path_colours, paths) != Colour.None:
+		if get_colour_from_id(baryon_point, path_data) != Colour.None:
 			continue
-		
 		var next_colour: Colour = colours[
 			ArrayFuncs.find_var(
 				colours,
@@ -373,9 +489,9 @@ static func colour_baryon(baryon: Array, path_colours: Array[Colour], paths: Arr
 		)]
 		
 		used_colours[baryon.find(baryon_point)] = next_colour
-		path_colours[get_path_from_id(baryon_point, paths)] = next_colour
+		path_data.path_colours[get_path_from_id(baryon_point, path_data.paths)] = next_colour
 
-	return path_colours
+	return path_data
 
 static func get_least_used_colour(path_colours: Array[Colour]) -> Colour:
 	var least_used_colour: Colour = Colour.Red
@@ -388,22 +504,41 @@ static func get_least_used_colour(path_colours: Array[Colour]) -> Colour:
 	
 	return least_used_colour
 
-static func colour_meson(meson: Array, path_colours: Array[Colour], paths: Array[PackedInt32Array]) -> Array[Colour]:
-	var meson_colours: Array[Colour] = get_hadron_colours(meson, path_colours, paths)
-	
+static func colour_meson(meson: Array, path_data: PathData) -> PathData:
+	var meson_colours := get_hadron_colours(meson, path_data)
+	if no_colour_count(meson_colours) == 2:
+		var unique_id: int = ArrayFuncs.packed_int_max(path_data.unique_colour_ids) + 1
+		for meson_point:int in meson:
+			var path_id: int = get_path_from_id(meson_point, path_data.paths)
+			path_data.unique_colour_ids[path_id] = unique_id
+	elif no_colour_count(meson_colours) == 1:
+		var no_colour_id: int = meson_colours.find(Colour.None)
+		
+		path_data.unique_colour_ids[get_path_from_id(meson[no_colour_id], path_data.paths)] = (
+			path_data.unique_colour_ids[get_path_from_id(meson[(no_colour_id + 1) % 2], path_data.paths)]
+		)
+
 	for i:int in meson.size():
 		if meson_colours[i] == Colour.None:
 			continue
 		
-		path_colours[get_path_from_id(meson[(i + 1) % meson.size()], paths)] = meson_colours[i]
+		var path_id := get_path_from_id(
+			meson[(i + 1) % meson.size()],
+			path_data.paths
+		)
 		
-		return path_colours
+		path_data.path_colours[path_id] = meson_colours[i]
+		
+		return path_data
 	
-	var meson_colour: Colour = get_least_used_colour(path_colours)
+	var meson_colour: Colour = get_least_used_colour(path_data.path_colours)
 	for meson_point:int in meson:
-		path_colours[get_path_from_id(meson_point, paths)] = meson_colour
+		var path_id: int = get_path_from_id(meson_point, path_data.paths)
+		
+		path_data.path_colours[path_id] = meson_colour
+		path_data.forced_colour_path_ids.push_back(path_id)
 
-	return path_colours
+	return path_data
 
 static func generate_colour_matrix(drawing_matrix: DrawingMatrix) -> DrawingMatrix:
 	var colour_matrix : DrawingMatrix = drawing_matrix.get_reduced_matrix(

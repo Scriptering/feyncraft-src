@@ -27,20 +27,36 @@ func clear_diagram() -> void:
 	
 	for hadron_joint:MiniHadronJoint in get_hadron_joints():
 		hadron_joint.free()
+	
+	for interaction_dot:Sprite2D in $DiagramArea/InteractionDots.get_children():
+		interaction_dot.free()
 
 func show_interaction_dots(drawing_matrix: DrawingMatrix) -> void:
-	for id:int in drawing_matrix.get_state_ids(StateLine.State.Both):
-		Interactions.get_child(id).show_state_dot()
-	
-	for id:int in drawing_matrix.get_state_ids(StateLine.State.None):
-		var connected_count: int = drawing_matrix.get_connected_count(id, true)
+	for id:int in drawing_matrix.matrix_size:
+		var interaction:MiniInteraction = $DiagramArea/Interactions.get_child(id)
 		
-		if connected_count < 3:
-			Interactions.get_child(id).show_dot(0)
-		elif connected_count == 3:
-			Interactions.get_child(id).show_dot(1)
-		elif connected_count > 3:
-			Interactions.get_child(id).show_dot(2)
+		if drawing_matrix.get_state_from_id(id) == StateLine.State.None:
+			var connected_count: int = drawing_matrix.get_connected_count(id, true)
+			
+			if connected_count < 3:
+				continue
+			
+			var dot := Sprite2D.new()
+			dot.offset = Vector2(0.5, 0.5)
+			dot.position = interaction.position
+			
+			if connected_count == 3:
+				dot.texture = load("res://Textures/UI/MiniDiagram/mini_interaction_dot.png")
+			elif connected_count > 3:
+				dot.texture = load("res://Textures/Interactions/mini_interaction_double_dot.png")
+			$DiagramArea/InteractionDots.add_child(dot)
+		
+		else:
+			var dot := Sprite2D.new()
+			dot.offset = Vector2(0.5, 0.5)
+			dot.position = interaction.position
+			dot.texture = load("res://Textures/Interactions/mini_interaction_state_dot.png")
+			$DiagramArea/InteractionDots.add_child(dot)
 
 func find_hadron(quarks: Array) -> ParticleData.Hadron:
 	for hadron:ParticleData.Hadron in ParticleData.HADRON_QUARK_CONTENT:

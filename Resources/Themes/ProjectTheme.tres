@@ -74,7 +74,11 @@ texture_margin_top = 6.0
 texture_margin_right = 5.0
 texture_margin_bottom = 5.0
 
-[sub_resource type="StyleBoxEmpty" id="34"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lpvun"]
+texture_margin_left = 6.0
+texture_margin_top = 6.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
 
 [sub_resource type="StyleBoxEmpty" id="35"]
 
@@ -718,8 +722,10 @@ Button/styles/hover = SubResource("StyleBoxTexture_g7eks")
 Button/styles/normal = SubResource("StyleBoxTexture_5xekb")
 Button/styles/pressed = SubResource("StyleBoxTexture_l2sol")
 CheckButton/icons/checked = ExtResource("8_lb8ym")
+CheckButton/icons/checked_disabled = ExtResource("8_lb8ym")
 CheckButton/icons/unchecked = ExtResource("9_yjmwd")
-CheckButton/styles/disabled = SubResource("34")
+CheckButton/icons/unchecked_disabled = ExtResource("9_yjmwd")
+CheckButton/styles/disabled = SubResource("StyleBoxTexture_lpvun")
 CheckButton/styles/focus = SubResource("35")
 CheckButton/styles/hover = ExtResource("7_lmo8n")
 CheckButton/styles/hover_pressed = ExtResource("7_lmo8n")

@@ -11,7 +11,7 @@ var decorations: Array[Decoration.Decor]
 var fermion_paths: Array[PackedInt32Array]
 
 const xscale:float = .25
-const yscale:float = .25
+const yscale:float = .3
 const scale: Vector2 = Vector2(xscale, yscale)
 
 func _init(_matrix: DrawingMatrix) -> void:
@@ -24,9 +24,8 @@ func _init(_matrix: DrawingMatrix) -> void:
 func generate_export() -> String:
 
 	var export_string : String = "\\begin{tikzpicture}\n\\begin{feynman}\n"
-	export_string += "\\def\\xscale{%s}\n\\def\\yscale{%s}\n" % [
-		xscale, yscale
-	]
+	export_string += "\\def\\xscale{%s} %%change to stretch in x\n"%[xscale]
+	export_string += "\\def\\yscale{%s} %%change to stretch in y\n"%[yscale]
 	
 	var diagram_string : String = get_diagram_string()
 	
@@ -51,20 +50,25 @@ func generate_export() -> String:
 func get_diagram_string() -> String:
 	var diagram_string := "\\diagram* {\n"
 	
-	diagram_string += get_fermion_string()
+	var fermion_string: String = get_fermion_string()
+	diagram_string += fermion_string
 	
 	var boson_matrix := matrix.get_reduced_matrix(
 		func(particle : ParticleData.Particle) -> bool:
 			return !(particle in ParticleData.FERMIONS)
 	)
 	
+	var has_passed: bool = false
 	for id:int in boson_matrix.matrix_size:
 		if is_bend_interaction(id):
 			continue
 		
 		var connected_ids: PackedInt32Array = boson_matrix.get_connected_ids(id)
 		for i:int in connected_ids.size():
-			diagram_string += ",\n"
+			if has_passed or !fermion_string.is_empty():
+				diagram_string += ",\n"
+			has_passed = true
+
 			var to_id: int = connected_ids[i]
 			var particle : ParticleData.Particle = boson_matrix.get_connection_particles(id, to_id).front()
 			
@@ -110,9 +114,18 @@ func get_fermion_path_string(path: PackedInt32Array) -> String:
 			from_id, to_id
 		).front()
 		
+		if is_bend_interaction(from_id):
+			continue
+		
 		var connection_string := get_connection_string(from_id, to_id, particle)
 		
-		if i < path.size() - 2:
+		if (
+			to_id != path[-1]
+			and !(
+				is_bend_interaction(to_id)
+				and matrix.get_bend_path(from_id, to_id)[-1] == path[-1] 
+			)
+		):
 			connection_string = connection_string.rsplit(' ', true, 1)[0] + ' '
 		
 		fermion_path_string += connection_string
@@ -215,7 +228,7 @@ func get_bend_connection_string(
 	var in_angle : float = in_vec.angle()
 	
 	return (
-		"(i%s) -- [%sout = %s, in = %s%s] (i%s)"%[
+		"(i%s) -- [%s, out = %s, in = %s%s] (i%s)"%[
 			from_id,
 			get_line_string([from_id, mid_id], particle),
 			round(rad_to_deg(out_angle)),
@@ -228,32 +241,38 @@ func get_bend_connection_string(
 func edge_label(particle: ParticleData.Particle) -> String:
 	return "\\(%s\\)"%[ParticleData.export_particle_dict[particle]]
 
-func get_3loop_string(path: Array[int], particle: ParticleData.Particle) -> String:
+func get_3loop_string(
+	path: Array[int],
+	particle: ParticleData.Particle,
+	has_label: bool
+	) -> String:
 	var out_vec: Vector2 = Vector2(positions[path[1]])*scale - Vector2(positions[path[0]])*scale
 	var in_vec: Vector2 = Vector2(positions[path[2]])*scale - Vector2(positions[path[0]])*scale
 	var out_angle : float = rad_to_deg(out_vec.angle())
 	var in_angle : float = rad_to_deg(in_vec.angle())
 	var min_distance : float = max(out_vec.length(), in_vec.length())
-	return "i%s -- [%sout = %s, in = %s, loop, min distance = %scm, edge label = %s] i%s"%[
+	return "i%s -- [%s, out = %s, in = %s, loop, min distance = %scm,%s] i%s"%[
 		path[0],
 		get_line_string(path, particle),
 		round(out_angle),
 		round(in_angle),
 		round(min_distance) * 1.5,
-		edge_label(particle),
+		", edge label = %s"%[edge_label(particle)] if has_label else "",
 		path[0]
 	]
 
-func get_4loop_string(path: Array[int], particle: ParticleData.Particle) -> String:
-	return "(i%s) -- [%shalf left, edge label = %s] (i%s)"%[
+func get_4loop_string(
+	path: Array[int],
+	particle: ParticleData.Particle,
+	has_label: bool
+	) -> String:
+	return "(i%s) -- [%s, half left, edge label = %s] (i%s)"%[
 		path[0],
 		get_line_string(path, particle),
-		edge_label(particle),
+		", edge label = %s"%[edge_label(particle)] if has_label else "",
 		path[2]
-	] + " -- [half left, edge label = %s] (i%s)"%[
-		path[2],
+	] + " -- [%s, half left] (i%s)"%[
 		get_line_string(path, particle),
-		edge_label(particle),
 		path[0]
 	]
 
@@ -263,18 +282,20 @@ func get_bend_string(from_id: int, first_bend_id: int, particle: ParticleData.Pa
 	while bend_path.size() > (4 + int(bend_path.front() == bend_path.back())):
 		bend_path.remove_at(randi_range(1, bend_path.size()-2))
 	
+	var has_label: bool = has_edge_label(from_id, bend_path[-1], particle)
+	
 	if bend_path.front() == bend_path.back():
 		if bend_path.size() == 4:
-			return get_3loop_string(bend_path, particle)
+			return get_3loop_string(bend_path, particle, has_label)
 		elif bend_path.size() == 5:
-			return get_4loop_string(bend_path, particle)
+			return get_4loop_string(bend_path, particle, has_label)
 	
 	return get_bend_connection_string(
 		from_id,
 		bend_path[randi_range(1, bend_path.size()-2)],
 		bend_path[-1],
 		particle,
-		has_edge_label(from_id, bend_path[-1], particle)
+		has_label
 	)
 
 func has_external_label(id: int) -> bool:
@@ -322,7 +343,7 @@ func has_edge_label(from_id: int, to_id: int, particle: ParticleData.Particle) -
 
 func get_line_string(segment_ids: Array[int], particle: ParticleData.Particle) -> String:
 	if !(particle in ParticleData.FERMIONS) || segment_ids.any(has_fermion_arrow):
-		return "%s, "%[ParticleData.export_line_dict[particle]]
+		return "%s"%[ParticleData.export_line_dict[particle]]
 
 	return ""
 
@@ -340,7 +361,7 @@ func get_direct_connection_string(from_id:int, to_id:int,particle:ParticleData.P
 	connection_string += "(i%s) -- [%s%s] (i%s)" % [
 		from_id,
 		get_line_string([from_id], particle),
-		"edge label = %s"%edge_label(particle) if has_label else "",
+		", edge label = %s"%edge_label(particle) if has_label else "",
 		to_id
 	]
 	
@@ -391,13 +412,13 @@ func get_hadron_string(hadron_ids:PackedInt32Array,) -> String:
 	var from_position:String = "south west" if on_left else "north east"
 	var to_position:String = "north west" if on_left else "south east"
 	
-	hadron_string += "\\draw [decoration={brace}, decorate] (i%s.%s) -- (i%s.%s)\n"%[
+	hadron_string += "\\draw [decoration={brace}, decorate] (i%s.%s) -- (i%s.%s)"%[
 		from_id, from_position, to_id, to_position
 	]
 	
 	var particles:Array = get_hadron_particles(hadron_ids)
 	
-	hadron_string += "\tnode [pos=0.5, %s] {\\(%s\\)};\n"%[
+	hadron_string += " node [pos=0.5, %s] {\\(%s\\)};\n"%[
 		label_position, ParticleData.export_hadron_dict[ParticleData.find_hadron(particles)]
 	]
 	
