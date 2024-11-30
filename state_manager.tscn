@@ -1,7 +1,0 @@
-[gd_scene format=3 uid="uid://kdirur5to66o"]
-
-[node name="StateManager" type="Node"]
-
-[node name="Idle" type="Node" parent="."]
-
-[node name="Drawing" type="Node" parent="."]
