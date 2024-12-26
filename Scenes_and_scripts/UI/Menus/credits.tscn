@@ -101,7 +101,7 @@ theme_override_constants/v_separation = 2
 columns = 2
 
 [node name="GodotIcon" type="TextureButton" parent="PanelContainer/VBoxContainer/GridContainer"]
-custom_minimum_size = Vector2(2.08165e-12, 26)
+custom_minimum_size = Vector2(26, 26)
 layout_mode = 2
 texture_normal = ExtResource("4_84af4")
 ignore_texture_size = true
