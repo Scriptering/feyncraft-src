@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://bhi4xq3qdbt4d"]
+[gd_scene load_steps=38 format=3 uid="uid://bhi4xq3qdbt4d"]
 
 [ext_resource type="Texture2D" uid="uid://dujsq82ocy6bp" path="res://Textures/Interactions/Interaction.png" id="1"]
 [ext_resource type="Material" uid="uid://clhuw6cdr2tdj" path="res://Resources/Shaders/interaction.tres" id="1_151mx"]
@@ -18,6 +18,7 @@
 [ext_resource type="Material" uid="uid://dc4rnoi735twf" path="res://Resources/Shaders/outline_palette_swap.tres" id="8_kmrm7"]
 [ext_resource type="PackedScene" uid="uid://dorw3vr2amuy3" path="res://Scenes_and_scripts/Components/button_sound_component.tscn" id="9_b7d5g"]
 [ext_resource type="Texture2D" uid="uid://dr5u8gty4wev3" path="res://Textures/Interactions/dot_decor_highlight.png" id="12_td0bq"]
+[ext_resource type="FontVariation" uid="uid://jg507qhg14bj" path="res://Textures/Fonts/numbers.tres" id="18_cmbg2"]
 [ext_resource type="Script" path="res://Scenes_and_scripts/UI/Buttons/touch_screen_button.gd" id="19_hvdnj"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bw375"]
@@ -185,7 +186,9 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="LabelSettings" id="LabelSettings_q6um2"]
+[sub_resource type="LabelSettings" id="LabelSettings_hhkv1"]
+font = ExtResource("18_cmbg2")
+font_size = 18
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aagi4"]
 size = Vector2(18, 18)
@@ -225,7 +228,7 @@ offset_right = 22.0
 offset_bottom = 7.0
 theme_override_font_sizes/font_size = 11
 text = "1"
-label_settings = SubResource("LabelSettings_q6um2")
+label_settings = SubResource("LabelSettings_hhkv1")
 vertical_alignment = 1
 
 [node name="ButtonSoundComponent" parent="." instance=ExtResource("9_b7d5g")]
