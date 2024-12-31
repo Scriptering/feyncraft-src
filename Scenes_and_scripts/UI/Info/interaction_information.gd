@@ -75,7 +75,6 @@ func build_other_tab() -> void:
 		(" ( <= 4 ) " if ConnectedInteraction.is_dimensionality_valid(particles) else ' ( > 4 ) '))
 	add_invalid(data_containers[Tab.Other], ConnectedInteraction.is_dimensionality_valid(particles))
 	
-	
 	if ConnectedInteraction.has_base_particle_connected(ParticleData.Particle.gluon):
 		add_label(data_containers[Tab.Other], property_names[Tab.Other][OtherProperties.ColourlessGluon])
 		var colourless_gluon: bool = ConnectedInteraction.has_colourless_gluon(particles) or !ConnectedInteraction.valid_colourless
@@ -110,6 +109,7 @@ func add_label(container: GridContainer, text: String) -> void:
 	var label := Label.new()
 	label.text = text
 	label.use_parent_material = true
+	
 	
 	if container.get_child_count()%container.columns != 0:
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

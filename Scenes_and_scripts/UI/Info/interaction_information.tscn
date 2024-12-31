@@ -1,9 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://ckbxxbpei0gui"]
+[gd_scene load_steps=14 format=3 uid="uid://ckbxxbpei0gui"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_ivc2f"]
 [ext_resource type="Script" path="res://Scenes_and_scripts/UI/Info/interaction_information.gd" id="2_64w2u"]
 [ext_resource type="Texture2D" uid="uid://byprdtpeldk57" path="res://Textures/Buttons/X_button_normal.png" id="3_82uvy"]
 [ext_resource type="Texture2D" uid="uid://dkay3mveblu0j" path="res://Textures/UI/Information/informationTile.png" id="3_cr600"]
+[ext_resource type="FontVariation" uid="uid://jg507qhg14bj" path="res://Textures/Fonts/numbers.tres" id="4_ly7x4"]
 [ext_resource type="Texture2D" uid="uid://x7kuuopqw4yl" path="res://Textures/Buttons/X_button_highlight.png" id="4_sw30l"]
 [ext_resource type="PackedScene" uid="uid://dorw3vr2amuy3" path="res://Scenes_and_scripts/Components/button_sound_component.tscn" id="9_vl7rp"]
 
@@ -88,7 +89,9 @@ shader_parameter/pattern = 1
 shader_parameter/inside = false
 shader_parameter/add_margins = false
 
-[sub_resource type="LabelSettings" id="LabelSettings_40jpi"]
+[sub_resource type="LabelSettings" id="LabelSettings_pdifg"]
+font = ExtResource("4_ly7x4")
+font_size = 18
 
 [node name="InteractionInformation" type="Control" node_paths=PackedStringArray("grab_area") groups=["grabbable"]]
 z_index = 6
@@ -233,7 +236,7 @@ mouse_filter = 2
 material = SubResource("ShaderMaterial_hsgce")
 layout_mode = 2
 text = "1"
-label_settings = SubResource("LabelSettings_40jpi")
+label_settings = SubResource("LabelSettings_pdifg")
 horizontal_alignment = 2
 vertical_alignment = 2
 
