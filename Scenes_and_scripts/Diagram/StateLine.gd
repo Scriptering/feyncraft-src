@@ -54,6 +54,7 @@ func queue_update() -> void:
 func update() -> void:
 	var connected_lines := get_connected_lines()
 	if connected_lines.size() == 0:
+		clear_hadrons()
 		return
 
 	update_hadrons(get_quark_groups(connected_lines))
