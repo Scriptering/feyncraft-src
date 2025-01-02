@@ -713,6 +713,7 @@ var PARTICLE_INTERACTIONS : Dictionary = {
 		[-Particle.lepton_neutrino, Particle.lepton_neutrino],
 		[Particle.Z, Particle.Z],
 		[Particle.H, Particle.H],
+		[-Particle.W, Particle.W],
 		[Particle.H, Particle.H, Particle.H],
 		[Particle.H, Particle.Z, Particle.Z],
 		[Particle.H, -Particle.W, Particle.W]
@@ -722,6 +723,7 @@ var PARTICLE_INTERACTIONS : Dictionary = {
 		[-Particle.bright_quark, Particle.dark_quark],
 		[Particle.W, Particle.Z],
 		[Particle.W, Particle.photon],
+		[Particle.W, Particle.H],
 		[-Particle.W, Particle.W, Particle.W],
 		[Particle.W, Particle.Z, Particle.Z],
 		[Particle.W, Particle.photon, Particle.photon],
