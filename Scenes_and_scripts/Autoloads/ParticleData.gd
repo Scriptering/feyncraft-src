@@ -645,6 +645,41 @@ func set_interaction_strength_limits() -> void:
 #9 lepton_neutrino, 10 electron_neutrino, 11 muon_neutrino, 12 tau_neutrino,
 #13 bright_quark, 14 up, 15 charm, 16 top, 17 dark_quark, 18 down, 19 strange, 20 bottom,
 
+var _PARTICLE_INTERACTIONS : Dictionary = {
+	Particle.photon : [],
+	Particle.gluon : [],
+	Particle.Z : [
+		[Particle.H, Particle.Z],
+		[Particle.H, Particle.H, Particle.Z],
+	],
+	Particle.H : [
+		[Particle.Z, Particle.Z],
+		[Particle.H, Particle.H],
+		[Particle.H, Particle.H, Particle.H],
+		[Particle.H, Particle.Z, Particle.Z],
+	],
+	Particle.W : [],
+	Particle.lepton : [],
+	Particle.electron : [
+		[Particle.electron, Particle.Z],
+		[Particle.electron, Particle.H],
+	],
+	Particle.muon : [],
+	Particle.tau : [],
+	Particle.lepton_neutrino : [],
+	Particle.electron_neutrino : [],
+	Particle.muon_neutrino : [],
+	Particle.tau_neutrino : [],
+	Particle.bright_quark : [],
+	Particle.up : [],
+	Particle.charm : [],
+	Particle.top : [],
+	Particle.dark_quark : [],
+	Particle.down : [],
+	Particle.strange : [],
+	Particle.bottom : []
+}
+
 var PARTICLE_INTERACTIONS : Dictionary = {
 	Particle.photon : [
 		[-Particle.bright_quark, Particle.bright_quark],
