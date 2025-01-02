@@ -377,6 +377,12 @@ func update_vision() -> void:
 	if get_interactions().size() == 0:
 		return
 	
+	if get_interactions().any(
+		func(interaction:Interaction) -> bool:
+			return !interaction.valid
+	):
+		return
+	
 	var valid_diagram: DrawingMatrix = generate_drawing_matrix_from_diagram(true)
 	
 	update_colour(valid_diagram)

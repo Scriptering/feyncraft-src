@@ -331,10 +331,7 @@ func connect_matrix(base_matrix: InteractionMatrix) -> Array[InteractionMatrix]:
 	
 	if found_one:
 		return []
-	
-	##TODO
-	#if base_matrix.connection_matrix.size() == 6 && base_matrix.get_unconnected_particles() == [ParticleData.Particle.H, ParticleData.Particle.Z]:
-		#1 == 1
+
 		
 	for from_id:int in entry_ids:
 		var further_matrices: Array[InteractionMatrix] = []
@@ -1436,7 +1433,7 @@ func connect_3_particles_to_ids(
 					connect_particle_to_ids(
 						particleC,
 						from_id,
-						particleA_connected_matrix,
+						particle_AB_connected_matrix,
 						to_ids
 					)
 				)
