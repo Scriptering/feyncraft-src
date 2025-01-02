@@ -316,6 +316,8 @@ func connect_matrix(base_matrix: InteractionMatrix) -> Array[InteractionMatrix]:
 			return particle >= 0
 	)
 	
+	#if base_matrix.get_unconnected_particle_count() == 2
+	
 	if entry_ids.is_empty():
 		if find_one:
 			if is_disconnected(base_matrix) or is_matrix_colourless(base_matrix):
@@ -330,9 +332,14 @@ func connect_matrix(base_matrix: InteractionMatrix) -> Array[InteractionMatrix]:
 	if found_one:
 		return []
 	
+	##TODO
+	#if base_matrix.connection_matrix.size() == 6 && base_matrix.get_unconnected_particles() == [ParticleData.Particle.H, ParticleData.Particle.Z]:
+		#1 == 1
+		
 	for from_id:int in entry_ids:
 		var further_matrices: Array[InteractionMatrix] = []
 		for matrix:InteractionMatrix in to_connect_matrices:
+			
 			if (
 				matrix.unconnected_matrix[from_id].is_empty()
 				or get_next_particle(matrix.unconnected_matrix[from_id]) == ParticleData.Particle.none
@@ -1529,7 +1536,7 @@ func self_connect_ABC(
 	
 	if is_AB_connection_particle:
 		for matrix:InteractionMatrix in connect_particle_to_ids(
-			particleA, id, base_matrix, to_ids
+			particleC, id, base_matrix, to_ids
 		):
 			connected_matrices.push_back(
 				self_connect(particleB, particleC, id, matrix)
