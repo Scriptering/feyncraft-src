@@ -541,7 +541,7 @@ func is_quantum_number_difference_possible(
 		
 	return true
 
-func setup_new_problem(problem: Problem) -> Problem:
+func setup_new_problem(problem: Problem, creation_args: Dictionary = {}) -> Problem:
 	if !problem:
 		return null
 	
@@ -554,12 +554,16 @@ func setup_new_problem(problem: Problem) -> Problem:
 	var min_degree: int = problem.degree if problem.custom_degree else 1
 	var max_degree: int = problem.degree if problem.custom_degree else 6
 	
-	var find: int = SolutionGeneration.Find.One if problem.state_interactions.any(
+	var has_hadron : bool = problem.state_interactions.any(
 		func(state_interaction: Array) -> bool:
 			return state_interaction.any(
 				func(interaction: Array) -> bool:
 					return interaction.size() > 1
-	)) else SolutionGeneration.Find.LowestOrder
+	))
+	
+	var in_creation : bool = !creation_args.is_empty()
+	
+	var find : SolutionGeneration.Find = SolutionGeneration.Find.LowestOrder if (!has_hadron || in_creation) else SolutionGeneration.Find.One
 	
 	var generated_solutions: Array[ConnectionMatrix] = SolutionGeneration.generate_diagrams(
 		problem.state_interactions[StateLine.State.Initial],
@@ -573,7 +577,14 @@ func setup_new_problem(problem: Problem) -> Problem:
 		return null
 	
 	problem.degree = generated_solutions.front().state_count[StateLine.State.None]
-	problem.solution_count = calculate_solution_count(problem.degree, generated_solutions.size())
+	
+	if in_creation:
+		creation_args["total_solution_count"] = generated_solutions.size()
+	
+	if problem.custom_solution_count:
+		problem.solution_count = min(problem.solution_count, generated_solutions.size())
+	else:
+		problem.solution_count = calculate_solution_count(problem.degree, generated_solutions.size())
 	
 	return problem
 
