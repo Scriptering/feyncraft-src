@@ -265,6 +265,7 @@ func exit_current_mode() -> void:
 		mode_exit_funcs[current_mode].call()
 
 func _on_tutorial_info_finish_pressed() -> void:
+	exit_tutorial()
 	EventBus.signal_change_scene.emit(Globals.Scene.MainMenu)
 
 func _on_export_tab_export_pressed(
