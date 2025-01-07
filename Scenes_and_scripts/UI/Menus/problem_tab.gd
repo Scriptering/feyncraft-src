@@ -136,16 +136,27 @@ func submit_diagram() -> void:
 	diagram_submitted.emit()
 
 func generate_solution() -> ConnectionMatrix:
-	return(
-		SolutionGeneration.generate_diagrams(
+	var MAXIMUM_UNIQUE_ATTEMPTS : int = 25
+	
+	var solution: DrawingMatrix
+	
+	for i:int in MAXIMUM_UNIQUE_ATTEMPTS:
+		solution = DrawingMatrix.new(SolutionGeneration.generate_diagrams(
 			current_problem.state_interactions[StateLine.State.Initial],
 			current_problem.state_interactions[StateLine.State.Final],
 			current_problem.degree,
 			current_problem.degree,
 			current_problem.allowed_particles,
 			SolutionGeneration.Find.One
-		)
-	).front()
+		)[0])
+		
+		if !submitted_diagrams.any(
+			func(submitted_diagram:DrawingMatrix) -> bool:
+				return submitted_diagram.is_duplicate(solution)
+		):
+			return solution
+	
+	return solution
 
 func is_submission_duplicate(submission: DrawingMatrix) -> bool:
 	var reduced_submission: ConnectionMatrix = submission.reduce_to_connection_matrix()
@@ -189,10 +200,24 @@ func set_prev_problem_disabled(disable: bool) -> void:
 
 func set_next_problem_disabled(disable: bool) -> void:
 	NextProblem.disabled = disable
+
+func get_unique_custom_solution() -> DrawingMatrix:
+	var unique_solutions : Array[DrawingMatrix] = current_problem.solutions.filter(
+		func(solution: DrawingMatrix) -> bool:
+			return !submitted_diagrams.any(
+				func(submitted_diagram:DrawingMatrix) -> bool:
+					return submitted_diagram.is_duplicate(solution)
+			)
+	)
+	
+	return unique_solutions.pick_random() if !unique_solutions.is_empty() else current_problem.solutions.pick_random()
 	
 func _on_solution_pressed() -> void:
 	if current_problem.custom_solutions and !current_problem.is_being_modified:
-		EventBus.draw_diagram.emit(current_problem.solutions.pick_random())
+		if submitted_diagrams.size() >= current_problem.solution_count:
+			EventBus.draw_diagram.emit(current_problem.solutions.pick_random())
+		else:
+			EventBus.draw_diagram.emit(get_unique_custom_solution())
 	else:
 		EventBus.draw_raw_diagram.emit(generate_solution())
 

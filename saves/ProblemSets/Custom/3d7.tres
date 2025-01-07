@@ -1,0 +1,62 @@
+[gd_resource type="Resource" script_class="ProblemSet" load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://problem.gd" id="1_k5fuc"]
+[ext_resource type="Script" path="res://ProblemSet.gd" id="2_cankm"]
+[ext_resource type="Script" path="res://DrawingMatrix.gd" id="2_wvfca"]
+
+[sub_resource type="Resource" id="Resource_vmfu3"]
+script = ExtResource("2_wvfca")
+split_hadron_ids = []
+normalised_interaction_positions = Array[Vector2i]([Vector2i(0, 4), Vector2i(0, 11), Vector2i(20, 4), Vector2i(20, 11), Vector2i(10, 4), Vector2i(10, 11)])
+state_line_positions = Array[int]([0, 20])
+decorations = Array[int]([0, 0, 0, 0, 0, 0])
+connection_matrix = Array[Array]([[[], [], [], [], [6], []], [[], [], [], [], [], [6]], [[], [], [], [], [], []], [[], [], [], [], [], []], [[], [], [6], [], [], [0]], [[], [], [], [6], [], []]])
+state_count = Array[int]([2, 2, 2])
+matrix_size = 6
+last_added_id = 5
+
+[sub_resource type="Resource" id="Resource_r61ty"]
+script = ExtResource("2_wvfca")
+split_hadron_ids = []
+normalised_interaction_positions = Array[Vector2i]([Vector2i(0, 4), Vector2i(0, 11), Vector2i(20, 4), Vector2i(20, 11), Vector2i(10, 4), Vector2i(10, 11)])
+state_line_positions = Array[int]([0, 20])
+decorations = Array[int]([0, 0, 0, 0, 0, 0])
+connection_matrix = Array[Array]([[[], [], [], [], [6], []], [[], [], [], [], [], [6]], [[], [], [], [], [], []], [[], [], [], [], [], []], [[], [], [6], [], [], [2]], [[], [], [], [6], [], []]])
+state_count = Array[int]([2, 2, 2])
+matrix_size = 6
+last_added_id = 5
+
+[sub_resource type="Resource" id="Resource_m2n1a"]
+script = ExtResource("2_wvfca")
+split_hadron_ids = []
+normalised_interaction_positions = Array[Vector2i]([Vector2i(0, 4), Vector2i(0, 11), Vector2i(20, 4), Vector2i(20, 11), Vector2i(10, 4), Vector2i(10, 11)])
+state_line_positions = Array[int]([0, 20])
+decorations = Array[int]([0, 0, 0, 0, 0, 0])
+connection_matrix = Array[Array]([[[], [], [], [], [6], []], [[], [], [], [], [], [6]], [[], [], [], [], [], []], [[], [], [], [], [], []], [[], [], [6], [], [], [3]], [[], [], [], [6], [], []]])
+state_count = Array[int]([2, 2, 2])
+matrix_size = 6
+last_added_id = 5
+
+[sub_resource type="Resource" id="Resource_ys1nh"]
+script = ExtResource("1_k5fuc")
+custom_solutions = true
+allow_other_solutions = false
+custom_solution_count = false
+custom_degree = false
+limited_particles = false
+hide_unavailable_particles = false
+title = ""
+solutions = Array[ExtResource("2_wvfca")]([SubResource("Resource_vmfu3"), SubResource("Resource_r61ty"), SubResource("Resource_m2n1a")])
+allowed_particles = Array[int]([6, 7, 8, 5, 10, 11, 12, 9, 0, 1, 4, 2, 3, 14, 15, 16, 13, 18, 19, 20, 17])
+state_interactions = [[[6], [6]], [[6], [6]]]
+degree = 2
+solution_count = 3
+
+[resource]
+script = ExtResource("2_cankm")
+title = "Custom"
+problems = Array[ExtResource("1_k5fuc")]([SubResource("Resource_ys1nh")])
+highest_index_reached = 0
+current_index = 0
+is_custom = true
+is_default = false
