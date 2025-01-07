@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://blu0n6lwfysjf"]
+[gd_scene load_steps=29 format=3 uid="uid://blu0n6lwfysjf"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_m8wv1"]
 [ext_resource type="Texture2D" uid="uid://c2myqhjupqo25" path="res://Textures/Background/tile.png" id="2_3tgej"]
@@ -23,6 +23,7 @@
 [ext_resource type="PackedScene" uid="uid://dh4niqtuyy5o3" path="res://popup_button.tscn" id="21_eg5af"]
 [ext_resource type="PackedScene" uid="uid://b5pj0lanxu0o6" path="res://Scenes_and_scripts/UI/ColourPicker/palette_menu.tscn" id="22_5omgn"]
 [ext_resource type="Texture2D" uid="uid://co52c2vc04qom" path="res://Textures/Buttons/icons/credit.png" id="23_sgn8e"]
+[ext_resource type="Script" path="res://Scenes_and_scripts/UI/Menus/MainMenu/version.gd" id="26_t4s4o"]
 [ext_resource type="Script" path="res://Scenes_and_scripts/UI/ShaderControl.gd" id="34_pwybq"]
 [ext_resource type="PackedScene" uid="uid://dutuwg10y2hwq" path="res://Scenes_and_scripts/UI/Menus/credits.tscn" id="36_o748n"]
 
@@ -315,6 +316,13 @@ icon_use_parent_material = true
 script = ExtResource("34_pwybq")
 
 [node name="FloatingMenus" type="CanvasLayer" parent="."]
+
+[node name="Version" type="Label" parent="."]
+offset_left = 599.0
+offset_top = 342.0
+offset_right = 639.0
+offset_bottom = 346.0
+script = ExtResource("26_t4s4o")
 
 [connection signal="pressed" from="Center/VBoxContainer/GridContainer/Tutorial" to="." method="_on_tutorial_pressed"]
 [connection signal="pressed" from="Center/VBoxContainer/GridContainer/Sandbox" to="." method="_on_sandbox_pressed"]

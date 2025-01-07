@@ -248,9 +248,9 @@ func get_set_problem() -> Problem:
 	return start_problem
 
 func generate_new_problem() -> Problem:
-	if !passed && !OS.has_feature("standalone"):
-		passed = true;
-		return get_set_problem()
+	#if !passed && !OS.has_feature("standalone"):
+		#passed = true;
+		#return get_set_problem()
 	
 	return ProblemGeneration.setup_new_problem(ProblemGeneration.generate(
 		PuzzleOptions.min_particle_count, PuzzleOptions.max_particle_count, PuzzleOptions.hadron_frequency,
