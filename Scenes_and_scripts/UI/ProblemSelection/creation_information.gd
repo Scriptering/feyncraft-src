@@ -110,8 +110,11 @@ func get_custom_solutions() -> bool:
 func get_allow_other_solutions() -> bool:
 	return solution_creation.allow_other_solutions
 
-func get_custom_solution_count() -> int:
+func get_has_custom_solution_count() -> bool:
 	return solution_creation.custom_solution_count
+
+func get_custom_solution_count() -> int:
+	return solution_creation.solution_count
 
 func get_custom_degree() -> bool:
 	return problem_creation.custom_degree

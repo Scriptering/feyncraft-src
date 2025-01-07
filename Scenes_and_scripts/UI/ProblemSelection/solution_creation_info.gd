@@ -3,7 +3,7 @@ extends InfoPanel
 var custom_solutions: bool = false
 var allow_other_solutions: bool = false
 var custom_solution_count: bool = false
-var solution_count: bool = false
+var solution_count: int = 4
 
 @onready var solution_count_spinbox: SpinBox = %SolutionCount
 

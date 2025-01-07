@@ -396,7 +396,7 @@ func _on_creation_info_submit() -> void:
 
 	creating_problem.custom_solutions = creation_info.get_custom_solutions()
 	creating_problem.allow_other_solutions = creation_info.get_allow_other_solutions()
-	creating_problem.custom_solution_count = creation_info.get_custom_solution_count()
+	creating_problem.custom_solution_count = creation_info.get_has_custom_solution_count()
 
 	if creating_problem.custom_solutions:
 		creating_problem.solutions = ProblemTab.submitted_diagrams.duplicate(true)

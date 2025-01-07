@@ -573,7 +573,11 @@ func setup_new_problem(problem: Problem) -> Problem:
 		return null
 	
 	problem.degree = generated_solutions.front().state_count[StateLine.State.None]
-	problem.solution_count = calculate_solution_count(problem.degree, generated_solutions.size())
+	
+	if problem.custom_solution_count:
+		problem.solution_count = min(problem.solution_count, generated_solutions.size())
+	else:
+		problem.solution_count = calculate_solution_count(problem.degree, generated_solutions.size())
 	
 	return problem
 
