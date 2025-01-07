@@ -3,7 +3,7 @@ extends PullOutTab
 enum HadronFrequency {Always, Allowed, Never}
 
 @export var MINIMUM_PARTICLE_COUNT: int = 2
-@export var MAXIMUM_PARTICLE_COUNT: int = 8
+@export var MAXIMUM_PARTICLE_COUNT: int = 6
 @export var STARTING_MAX_PARTICLE_COUNT: int = 6
 
 @export var HadronFrequencySlider: HSlider
