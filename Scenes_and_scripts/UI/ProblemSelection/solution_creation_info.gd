@@ -5,7 +5,13 @@ var allow_other_solutions: bool = false
 var custom_solution_count: bool = false
 var solution_count: int = 4
 
+signal custom_solutions_toggled(toggled: bool)
+signal allow_other_solutions_toggled(toggled: bool)
+
 @onready var solution_count_spinbox: SpinBox = %SolutionCount
+
+func set_max_solution_count(max_solution_count: int) -> void:
+	solution_count_spinbox.max_value = min(6, max_solution_count)
 
 func update_no_custom_solutions(no_solutions: bool) -> void:
 	var toggle: bool = no_solutions and custom_solutions
@@ -14,9 +20,13 @@ func update_no_custom_solutions(no_solutions: bool) -> void:
 func _on_custom_solutions_toggled(button_pressed: bool) -> void:
 	%AllowOtherSolutions.visible = button_pressed
 	custom_solutions = button_pressed
+	
+	custom_solutions_toggled.emit(button_pressed)
 
 func _on_allow_other_solutions_toggled(toggled_on: bool) -> void:
 	allow_other_solutions = toggled_on
+	
+	allow_other_solutions_toggled.emit(toggled_on)
 
 func _on_custom_solution_count_toggled(toggled_on: bool) -> void:
 	%SolutionCountContainer.visible = toggled_on

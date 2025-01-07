@@ -357,7 +357,9 @@ func set_problem_creation() -> void:
 		creating_problem.state_interactions = drawn_states
 
 func problem_creation_to_solution_creation() -> void:
-	if !ProblemGeneration.setup_new_problem(creating_problem):
+	var creation_args: Dictionary = {"total_solution_count" : 0}
+	
+	if !ProblemGeneration.setup_new_problem(creating_problem, creation_args):
 		creation_info.no_solutions_found()
 		return
 	
@@ -369,7 +371,8 @@ func problem_creation_to_solution_creation() -> void:
 			)
 	)
 	
-	creation_info.toggle_no_custom_solutions(creating_problem.solutions.is_empty())
+	creation_info.set_max_solution_count(creation_args["total_solution_count"])
+	creation_info.update_solution_creation(ProblemTab.submitted_diagrams.size())
 
 	current_mode = Mode.SolutionCreation
 	creation_info.change_mode(current_mode)
@@ -439,11 +442,11 @@ func _on_diagram_title_submitted(title: String) -> void:
 
 func _on_problem_tab_diagram_submitted() -> void:
 	if current_mode == Mode.SolutionCreation:
-		creation_info.toggle_no_custom_solutions(false)
+		creation_info.update_solution_creation(ProblemTab.submitted_diagrams.size())
 
 func _on_problem_tab_diagram_deleted() -> void:
 	if current_mode == Mode.SolutionCreation:
-		creation_info.toggle_no_custom_solutions(ProblemTab.submitted_diagrams.is_empty())
+		creation_info.update_solution_creation(ProblemTab.submitted_diagrams.size())
 
 func _on_export_tab_download_pressed() -> void:
 	var diagram: DrawingMatrix = str_to_var(ClipBoard.paste())

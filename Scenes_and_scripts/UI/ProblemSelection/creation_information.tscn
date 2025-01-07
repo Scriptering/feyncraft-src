@@ -152,6 +152,8 @@ icon_use_parent_material = true
 tooltip = "Next Step"
 
 [connection signal="toggle_all" from="PanelContainer/VBoxContainer/TabContainer/ParticleSelectionInfo" to="." method="_on_particle_selection_info_toggle_all"]
+[connection signal="allow_other_solutions_toggled" from="PanelContainer/VBoxContainer/TabContainer/SolutionCreationInfo" to="." method="_on_solution_creation_info_allow_other_solutions_toggled"]
+[connection signal="custom_solutions_toggled" from="PanelContainer/VBoxContainer/TabContainer/SolutionCreationInfo" to="." method="_on_solution_creation_info_custom_solutions_toggled"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Buttons/PrevStep" to="." method="_on_prev_step_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Buttons/Submit" to="." method="_on_submit_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Buttons/NextStep" to="." method="_on_next_step_pressed"]

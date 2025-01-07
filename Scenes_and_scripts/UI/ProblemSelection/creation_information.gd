@@ -14,6 +14,8 @@ var active_modes: Array[int] = [
 var problem: Problem
 
 var no_custom_solutions: bool = false
+var total_solution_count : int = 0
+var submitted_diagram_count : int = 0
 
 @export_group("Children")
 @export var tab_container:TabContainer
@@ -24,8 +26,6 @@ var no_custom_solutions: bool = false
 @export var submit:PanelButton
 @export var next_button:PanelButton
 @export var prev_button:PanelButton
-
-var submitted_diagrams: Array[DrawingMatrix] = []
 
 func _ready() -> void:
 	super()
@@ -66,6 +66,29 @@ func no_particles() -> void:
 func _on_particle_selection_info_toggle_all(toggle: bool) -> void:
 	toggle_all.emit(toggle)
 
+func update_solution_creation(_submitted_diagram_count: int) -> void:
+	submitted_diagram_count = _submitted_diagram_count
+	no_custom_solutions = submitted_diagram_count == 0
+	
+	if solution_creation.custom_solutions:
+		solution_creation.update_no_custom_solutions(no_custom_solutions)
+		submit.disabled = (
+			no_custom_solutions
+		)
+		
+		if solution_creation.allow_other_solutions:
+			solution_creation.set_max_solution_count(total_solution_count)
+		else:
+			solution_creation.set_max_solution_count(submitted_diagram_count)
+	else:
+		solution_creation.update_no_custom_solutions(false)
+		solution_creation.set_max_solution_count(total_solution_count)
+	
+
+func set_max_solution_count(max_solution_count: int) -> void:
+	total_solution_count = max_solution_count
+	solution_creation.set_max_solution_count(max_solution_count)
+
 func update_problem_creation(
 	quantum_numbers_matching: bool,
 	has_particles: bool,
@@ -82,18 +105,6 @@ func update_problem_creation(
 	problem_creation.toggle_invalid_quantum_numbers(!quantum_numbers_matching)
 	problem_creation.toggle_no_particles(!has_particles)
 	problem_creation.toggle_energy_not_conserved(!energy_is_conserved)
-
-func update_no_custom_solutions() -> void:
-	if problem.custom_solutions:
-		solution_creation.update_no_custom_solutions(no_custom_solutions)
-		submit.disabled = no_custom_solutions
-	else:
-		solution_creation.update_no_custom_solutions(false)
-		submit.disabled = false
-
-func toggle_no_custom_solutions(toggle: bool) -> void:
-	no_custom_solutions = toggle
-	update_no_custom_solutions()
 
 func _on_prev_step_pressed() -> void:
 	prev_pressed.emit()
@@ -124,3 +135,9 @@ func get_degree() -> int:
 
 func get_hide_unavailable_particles() -> bool:
 	return particle_selection.hide_unavailable_particles
+
+func _on_solution_creation_info_custom_solutions_toggled(toggled: bool) -> void:
+	update_solution_creation(submitted_diagram_count)
+
+func _on_solution_creation_info_allow_other_solutions_toggled(toggled: bool) -> void:
+	update_solution_creation(submitted_diagram_count)

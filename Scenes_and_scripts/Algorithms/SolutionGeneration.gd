@@ -1636,7 +1636,7 @@ func get_useable_particle_interactions(useable_particles: Array) -> Dictionary:
 	if !(
 		ParticleData.Particle.bright_quark in useable_particles
 		or ParticleData.Particle.dark_quark in useable_particles
-	):
+	) and ParticleData.Particle.W in useable_particles:
 		useable_particle_interactions[ParticleData.Particle.W].append_array(
 			ParticleData.general_quark_W_replacements.filter(
 				interaction_in_particles.bind(useable_particles)
