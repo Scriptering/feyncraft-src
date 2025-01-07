@@ -96,11 +96,18 @@ particle_line_scene = ExtResource("7_sgp8p")
 
 [node name="TitleContainer" type="PanelContainer" parent="Diagram"]
 use_parent_material = true
-layout_mode = 0
-offset_left = 174.0
-offset_top = -18.0
-offset_right = 270.0
-offset_bottom = 2.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -51.5
+offset_top = -146.0
+offset_right = 51.5
+offset_bottom = -126.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_o3sii")
 
 [node name="Title" type="LineEdit" parent="Diagram/TitleContainer"]
