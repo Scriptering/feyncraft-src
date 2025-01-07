@@ -187,7 +187,8 @@ func _on_problem_set_end_reached() -> void:
 	EventBus.signal_change_scene.emit(Globals.Scene.MainMenu)
 
 func _on_next_problem_pressed() -> void:
-	problem_history.push_back(current_problem)
+	if !current_problem.is_default():
+		problem_history.push_back(current_problem)
 
 	match current_mode:
 		Mode.Tutorial:
@@ -202,6 +203,8 @@ func _on_next_problem_pressed() -> void:
 			var new_problem: Problem = generate_new_problem()
 
 			if !new_problem:
+				problem_history.pop_back()
+				ProblemTab.set_next_problem_disabled(false)
 				return
 
 			load_problem(new_problem)
