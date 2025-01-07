@@ -82,15 +82,17 @@ func change_step(step: BaseTutorialStep) -> void:
 	else:
 		toggle_spotlight(false)
 	
-	if current_step == get_steps().back():
+	var steps : Array[BaseTutorialStep] = get_steps()
+	
+	TutorialInfo.show_next()
+	TutorialInfo.show_prev()
+	TutorialInfo.hide_finish()
+	
+	if current_step == steps.back():
 		TutorialInfo.hide_next()
 		TutorialInfo.show_finish()
-	elif current_step == get_steps().front():
+	elif current_step == steps.front():
 		TutorialInfo.hide_prev()
-	else:
-		TutorialInfo.show_prev()
-		TutorialInfo.show_next()
-		TutorialInfo.hide_finish()
 	
 	TutorialInfo.set_text(step.text)
 

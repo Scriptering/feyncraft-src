@@ -63,6 +63,7 @@ autowrap_mode = 2
 [node name="Buttons" type="HBoxContainer" parent="TutorialPanel/VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
+size_flags_vertical = 10
 alignment = 1
 
 [node name="PrevStep" parent="TutorialPanel/VBoxContainer/Buttons" instance=ExtResource("4_3eia6")]
