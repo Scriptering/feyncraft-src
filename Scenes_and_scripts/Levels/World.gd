@@ -234,14 +234,11 @@ func _on_prev_problem_pressed() -> void:
 func get_set_problem() -> Problem:
 	start_problem.state_interactions = [
 		[
-			[ParticleData.Particle.up, ParticleData.Particle.down, ParticleData.Particle.down],
+			[ParticleData.Particle.gluon], [ParticleData.Particle.anti_bright_quark],
 		],
 		[
-			[ParticleData.Particle.up, ParticleData.Particle.up, ParticleData.Particle.down],
-			[ParticleData.Particle.electron],
-			[ParticleData.Particle.anti_electron_neutrino]
+			[ParticleData.Particle.gluon], [ParticleData.Particle.anti_bright_quark],
 		]
-		
 	]
 	start_problem.allowed_particles = ProblemGeneration.get_useable_particles_from_interaction_checks(
 		[true, true, true, true]
@@ -251,9 +248,9 @@ func get_set_problem() -> Problem:
 	return start_problem
 
 func generate_new_problem() -> Problem:
-	#if !passed:
-		#passed = true;
-		#return get_set_problem()
+	if !passed && !OS.has_feature("standalone"):
+		passed = true;
+		return get_set_problem()
 	
 	return ProblemGeneration.setup_new_problem(ProblemGeneration.generate(
 		PuzzleOptions.min_particle_count, PuzzleOptions.max_particle_count, PuzzleOptions.hadron_frequency,

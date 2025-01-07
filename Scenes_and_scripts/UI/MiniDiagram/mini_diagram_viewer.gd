@@ -130,10 +130,7 @@ func update_diagram_visibility() -> void:
 	mini_diagram.visible = filtered_diagrams.size() > 0
 
 func update_resave_button(drawn_diagram: DrawingMatrix = BigDiagram.get_current_diagram()) -> void:
-	if !visible or !allow_resaving:
-		return
-	
-	if filtered_diagrams.size() == 0:
+	if !allow_resaving or filtered_diagrams.size() == 0:
 		resave_button.disabled = true
 		return
 	
