@@ -72,6 +72,7 @@ enum Hadron {
 	kaon_plus,
 	kaon_minus,
 	kaon_0,
+	upsilon,
 	anti_proton = -proton,
 	anti_neutron = -neutron,
 	anti_delta_plusPlus = -delta_plus_plus,
@@ -387,7 +388,8 @@ var PARTICLE_MASSES: Dictionary = {
 	Hadron.pion_0: 134.9768,
 	Hadron.kaon_plus: 493.677,
 	Hadron.kaon_minus: 493.677,
-	Hadron.kaon_0: 497.611
+	Hadron.kaon_0: 497.611,
+	Hadron.upsilon: 9.46030e6
 }
 
 const MIN_INTERACTION_STRENGTH: float = 1e-3
@@ -524,6 +526,7 @@ var HADRON_QUARK_CONTENT : Dictionary = {
 	Hadron.kaon_minus:[[Particle.strange, Particle.anti_up]],
 	Hadron.kaon_0:[[Particle.down, Particle.anti_strange]],
 	Hadron.anti_kaon_0:[[Particle.anti_down, Particle.strange]],
+	Hadron.upsilon:[[Particle.bottom, Particle.anti_bottom]],
 	Hadron.Invalid:[]
 }
 
@@ -569,6 +572,7 @@ const HADRON_NAMES : Dictionary = {
 	Hadron.kaon_minus:"kaon_minus",
 	Hadron.kaon_0:"kaon_0",
 	Hadron.anti_kaon_0:"kaon_0_anti",
+	Hadron.upsilon:"upsilon",
 	Hadron.Invalid:"Invalid"
 }
 
@@ -1075,6 +1079,8 @@ const export_hadron_dict : Dictionary = {
 	Hadron.kaon_minus:"K^{-}",
 	Hadron.kaon_0:"K^{0}",
 	Hadron.anti_kaon_0:"\\overline K^{0}",
+	Hadron.phi:"\\Phi",
+	Hadron.upsilon:"\\Upsilon",
 	Hadron.Invalid:"Invalid"
 }
 
