@@ -496,6 +496,12 @@ func drop() -> void:
 
 func get_interaction_index() -> Array[int]:
 	var sorted_connected_base_particles := self.connected_base_particles.duplicate(true)
+	
+	for i:int in sorted_connected_base_particles.size():
+		var particle: ParticleData.Particle = sorted_connected_base_particles[i]
+		if ParticleData.is_general(particle):
+			sorted_connected_base_particles[i] = ParticleData.convert_particle(particle)
+	
 	sorted_connected_base_particles.sort()
 	
 	for i:int in range(ParticleData.INTERACTIONS.size()):

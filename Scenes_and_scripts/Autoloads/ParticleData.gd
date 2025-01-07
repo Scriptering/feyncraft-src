@@ -1202,6 +1202,11 @@ func is_general(particle: ParticleData.Particle) -> bool:
 func is_particle(particleA: ParticleData.Particle, particleB: ParticleData.Particle) -> bool:
 	return base(particleA) == particleB
 
+func convert_particle(particle: ParticleData.Particle) -> ParticleData.Particle:
+	if base(particle) in GENERAL_CONVERSION.keys():
+		return sign(particle) * GENERAL_CONVERSION[base(particle)][-1]
+	return particle
+
 func general_can_convert(
 	from_particle: ParticleData.Particle,
 	to_particle: ParticleData.Particle
