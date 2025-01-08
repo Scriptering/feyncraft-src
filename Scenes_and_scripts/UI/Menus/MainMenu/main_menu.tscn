@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://blu0n6lwfysjf"]
+[gd_scene load_steps=39 format=3 uid="uid://blu0n6lwfysjf"]
 
 [ext_resource type="Material" uid="uid://b863l3lxgsu55" path="res://Resources/Shaders/palette_swap_material.tres" id="1_m8wv1"]
 [ext_resource type="Texture2D" uid="uid://c2myqhjupqo25" path="res://Textures/Background/tile.png" id="2_3tgej"]
@@ -24,6 +24,9 @@
 [ext_resource type="PackedScene" uid="uid://b5pj0lanxu0o6" path="res://Scenes_and_scripts/UI/ColourPicker/palette_menu.tscn" id="22_5omgn"]
 [ext_resource type="Texture2D" uid="uid://co52c2vc04qom" path="res://Textures/Buttons/icons/credit.png" id="23_sgn8e"]
 [ext_resource type="Script" path="res://Scenes_and_scripts/UI/Menus/MainMenu/version.gd" id="26_t4s4o"]
+[ext_resource type="PackedScene" uid="uid://ci6krwrinwo62" path="res://Scenes_and_scripts/UI/Menus/welcome_message.tscn" id="27_88oj4"]
+[ext_resource type="StyleBox" uid="uid://dvu7f5h7snggp" path="res://Scenes_and_scripts/UI/Menus/panelContainer.tres" id="27_v56ot"]
+[ext_resource type="FontVariation" uid="uid://jg507qhg14bj" path="res://Textures/Fonts/numbers.tres" id="28_uih8x"]
 [ext_resource type="Script" path="res://Scenes_and_scripts/UI/ShaderControl.gd" id="34_pwybq"]
 [ext_resource type="PackedScene" uid="uid://dutuwg10y2hwq" path="res://Scenes_and_scripts/UI/Menus/credits.tscn" id="36_o748n"]
 
@@ -39,6 +42,20 @@ expand_margin_right = 1.0
 expand_margin_bottom = 1.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5kca2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tnlor"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5wcmi"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1r851"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fn00e"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c2la6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1wee3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1xwkl"]
 
 [node name="MainMenu" type="Node2D"]
 material = ExtResource("1_m8wv1")
@@ -317,16 +334,61 @@ script = ExtResource("34_pwybq")
 
 [node name="FloatingMenus" type="CanvasLayer" parent="."]
 
-[node name="Version" type="Label" parent="."]
-offset_left = 599.0
-offset_top = 342.0
-offset_right = 639.0
-offset_bottom = 346.0
+[node name="WelcomeMessage" parent="FloatingMenus" instance=ExtResource("27_88oj4")]
+visible = false
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 321.0
+offset_top = 174.0
+offset_right = 321.0
+offset_bottom = 174.0
+grow_horizontal = 1
+grow_vertical = 1
+size_flags_horizontal = 4
+size_flags_vertical = 4
+message_id = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Version" type="PanelContainer" parent="."]
+use_parent_material = true
+offset_left = 593.0
+offset_top = 335.0
+offset_right = 605.0
+offset_bottom = 347.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_tnlor")
 script = ExtResource("26_t4s4o")
+
+[node name="Button" type="Button" parent="Version"]
+use_parent_material = true
+custom_minimum_size = Vector2(40, 20)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_fonts/font = ExtResource("28_uih8x")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5wcmi")
+theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_1r851")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_fn00e")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_c2la6")
+theme_override_styles/hover_pressed = ExtResource("27_v56ot")
+theme_override_styles/hover_mirrored = ExtResource("27_v56ot")
+theme_override_styles/hover = ExtResource("27_v56ot")
+theme_override_styles/pressed_mirrored = ExtResource("27_v56ot")
+theme_override_styles/pressed = ExtResource("27_v56ot")
+theme_override_styles/normal_mirrored = SubResource("StyleBoxEmpty_1wee3")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1xwkl")
+text = "v1.02"
+
+[node name="Label" type="Label" parent="Version"]
+visible = false
+layout_mode = 2
 
 [connection signal="pressed" from="Center/VBoxContainer/GridContainer/Tutorial" to="." method="_on_tutorial_pressed"]
 [connection signal="pressed" from="Center/VBoxContainer/GridContainer/Sandbox" to="." method="_on_sandbox_pressed"]
 [connection signal="pressed" from="Center/VBoxContainer/GridContainer/Daily" to="." method="_on_daily_pressed"]
+[connection signal="clicked_on" from="Version" to="." method="_on_version_clicked_on"]
+[connection signal="pressed" from="Version/Button" to="Version" method="_on_button_pressed"]
 
 [editable path="Diagram/DiagramArea/Initial"]
 [editable path="Diagram/DiagramArea/Final"]
