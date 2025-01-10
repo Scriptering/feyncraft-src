@@ -101,11 +101,19 @@ func get_available_points(current_point: int, path: PackedInt32Array, matrix: Dr
 			continue
 		
 		var is_previous_point: bool = available_point == path[-2]
+		
+		var connection_particle: ParticleData.Particle = matrix.get_connection_particles(
+			current_point, available_point, true
+		)[0]
+		var is_deadend: bool = matrix.get_connected_count(available_point) == 0
+		
 		var is_u_turn_gluon: bool = (
-			current_point == path[1] and 
-			available_point == path[0] and 
-			matrix.get_state_from_id(path[0]) == StateLine.State.None and
-			!matrix.is_lonely_extreme_point(path[0])
+			connection_particle == ParticleData.Particle.gluon and
+			matrix.get_state_from_id(available_point) == StateLine.State.None and
+			is_deadend and
+			current_point == path[1] and
+			available_point == path[0] and
+			!matrix.is_lonely_extreme_point(available_point)
 		)
 		
 		if is_previous_point or is_u_turn_gluon:
@@ -126,10 +134,26 @@ func generate_path(
 		path.push_back(current_point)
 		
 		if current_point in end_points and step != 0:
+			if start_point != current_point:
+				return path
+			
+			if matrix.get_connected_count(current_point) == 0:
+				return path
+			
+			if (
+				matrix.get_connected_count(current_point) == 1
+				and matrix.get_connected_ids(current_point)[0] == path[-2]
+			):
+				return path
+		
+		if (
+			current_point in end_points
+			and matrix.get_connected_count(current_point) == 0
+		):
 			return path
 		
 		var available_points: PackedInt32Array = get_available_points(current_point, path, matrix)
-		var next_point: int = get_next_point.call(current_point, available_points, matrix)
+		var next_point: int = get_next_point.call(current_point, available_points, matrix, path)
 		
 		if next_point == NOT_FOUND:
 			return []
