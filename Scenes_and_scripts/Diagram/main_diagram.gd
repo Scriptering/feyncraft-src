@@ -262,8 +262,11 @@ func update_colourless_interactions(
 		is_vision_matrix
 	)
 	
-	for id:int in range(diagram.matrix_size):
-		get_interaction_from_matrix_id(id, diagram).valid_colourless = id not in colourless_interactions
+	for id:int in diagram.matrix_size:
+		get_interaction_from_matrix_id(id, diagram).valid_colourless = true
+	
+	for id:int in colourless_interactions:
+		get_interaction_from_matrix_id(id, diagram).valid_colourless = false
 
 func sort_drawing_interactions(interaction1: Interaction, interaction2: Interaction) -> bool:
 	var state1: StateLine.State = position_stateline(interaction1.positioni())
@@ -353,7 +356,7 @@ func update_colour(valid_diagram: DrawingMatrix, keep_paths: bool = false) -> vo
 	if path_data.is_empty():
 		return
 	
-	update_colourless_interactions(path_data, colour_matrix, true)
+	update_colourless_interactions(path_data, current_diagram, true)
 	
 	if current_vision == Globals.Vision.Colour:
 		draw_vision_lines(

@@ -62,7 +62,6 @@ func generate_state_paths() -> Array[PackedInt32Array]:
 	return paths
 
 func generate_loops(matrix: DrawingMatrix = connections.duplicate(true)) -> Array[PackedInt32Array]:
-	
 	var paths: Array[PackedInt32Array] = []
 	
 	for _loop in range(MAX_LOOP_COUNT):

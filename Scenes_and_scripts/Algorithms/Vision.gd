@@ -148,7 +148,7 @@ static func generate_colour_paths(
 
 	return generate_path_colours(paths, colour_matrix)
 
-static func find_colourless_interactions(
+static func _find_colourless_interactions(
 	path_data: PathData,
 	drawing_matrix: DrawingMatrix,
 	is_vision_matrix: bool = false
@@ -167,6 +167,74 @@ static func find_colourless_interactions(
 		)
 	)
 	
+	return colourless_interactions
+
+static func find_colourless_interactions(
+	path_data: PathData,
+	drawing_matrix: DrawingMatrix,
+	is_vision_matrix: bool = false
+) -> PackedInt32Array:
+	
+	var colour_matrix : DrawingMatrix = drawing_matrix.get_reduced_matrix(
+		func(particle: ParticleData.Particle) -> bool:
+			return particle in ParticleData.COLOUR_PARTICLES
+	)
+	colour_matrix.rejoin_hadrons(true)
+	
+	var colourless_interactions: PackedInt32Array = []
+	var gluon_connections: Array = get_gluon_connections(colour_matrix)
+	for gluon_connection: Array in gluon_connections:
+		colourless_interactions += is_colourless_gluon(
+			gluon_connection,
+			colour_matrix,
+			path_data
+		)
+	
+	colourless_interactions = ArrayFuncs.packed_int_filter(
+		colourless_interactions,
+		colour_matrix.is_bend_id,
+		true
+	)
+	
+	return colourless_interactions
+
+static func is_colour_exit(id: int, colour_matrix: DrawingMatrix) -> bool:
+	if colour_matrix.is_lonely_extreme_point(id):
+		return true
+	
+	if colour_matrix.is_extreme_point(id) && !colour_matrix.is_hadron(id):
+		return true
+	
+	return false
+
+static func is_colourless_gluon(
+	gluon_connection: Array,
+	colour_matrix: DrawingMatrix,
+	path_data: PathData
+) -> PackedInt32Array:
+	
+
+	var reached_ids_1 := colour_matrix.reach_ids(gluon_connection[0], [], true, [gluon_connection[1]])
+	var reached_ids_2 := colour_matrix.reach_ids(gluon_connection[1], [], true, [gluon_connection[0]])
+	
+	for id:int in reached_ids_1:
+		if id in reached_ids_2:
+			return []
+		
+	var colourless_interactions: PackedInt32Array = []
+	
+	if !ArrayFuncs.packed_int_any(
+		reached_ids_1,
+		is_colour_exit.bind(colour_matrix)
+	):
+		colourless_interactions.push_back(gluon_connection[0])
+	
+	if !ArrayFuncs.packed_int_any(
+		reached_ids_2,
+		is_colour_exit.bind(colour_matrix)
+	):
+		colourless_interactions.push_back(gluon_connection[1])
+
 	return colourless_interactions
 
 static func path_has_repeated_point(path: PackedInt32Array) -> bool:
@@ -540,18 +608,22 @@ static func colour_meson(meson: Array, path_data: PathData) -> PathData:
 
 	return path_data
 
-static func generate_colour_matrix(drawing_matrix: DrawingMatrix) -> DrawingMatrix:
-	var colour_matrix : DrawingMatrix = drawing_matrix.get_reduced_matrix(
-		func(particle: ParticleData.Particle) -> bool:
-			return particle in ParticleData.COLOUR_PARTICLES
-	)
-	
+static func get_gluon_connections(colour_matrix: DrawingMatrix) -> Array:
 	var gluon_connections: Array = []
 	for id:int in colour_matrix.matrix_size:
 		for connected_id:int in colour_matrix.get_connected_ids(id):
 			if colour_matrix.get_connection_particles(id, connected_id).front() == ParticleData.Particle.gluon:
 				gluon_connections.push_back([connected_id, id, ParticleData.Particle.gluon])
 	
+	return gluon_connections
+
+static func generate_colour_matrix(drawing_matrix: DrawingMatrix) -> DrawingMatrix:
+	var colour_matrix : DrawingMatrix = drawing_matrix.get_reduced_matrix(
+		func(particle: ParticleData.Particle) -> bool:
+			return particle in ParticleData.COLOUR_PARTICLES
+	)
+	
+	var gluon_connections: Array = get_gluon_connections(colour_matrix)
 	for gluon_connection:Array in gluon_connections:
 		colour_matrix.insert_connection(gluon_connection)
 	

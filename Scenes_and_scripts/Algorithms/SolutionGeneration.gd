@@ -251,10 +251,12 @@ func is_matrix_colourless(matrix: ConnectionMatrix) -> bool:
 	if !has_gluon:
 		return false
 	
-	var vision_matrix : DrawingMatrix = Vision.generate_colour_matrix(DrawingMatrix.new(matrix))
+	var drawing_matrix: DrawingMatrix = DrawingMatrix.new(matrix)
+	var path_data: Vision.PathData = Vision.generate_colour_paths(drawing_matrix)
+	
 	return Vision.find_colourless_interactions(
-		Vision.generate_colour_paths(vision_matrix, true),
-		vision_matrix,
+		path_data,
+		drawing_matrix,
 		true
 	).size() > 0
 
