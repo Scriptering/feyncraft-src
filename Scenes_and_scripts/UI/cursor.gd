@@ -45,6 +45,7 @@ func _ready() -> void:
 	Heart.offset = Scale * normal_heart_offset
 	
 	EventBus.change_cursor.connect(change_cursor)
+	EventBus.toggle_cursor_heart.connect(_set_glowing)
 	EventBus.show_disabled.connect(_show_disabled)
 	EventBus.hide_disabled.connect(_hide_disabled)
 

@@ -25,6 +25,7 @@ signal problem_set_played(problem_set: ProblemSet, index: int)
 signal show_disabled
 signal hide_disabled
 signal change_cursor
+signal toggle_cursor_heart(toggle: bool)
 
 signal draw_diagram
 signal draw_raw_diagram

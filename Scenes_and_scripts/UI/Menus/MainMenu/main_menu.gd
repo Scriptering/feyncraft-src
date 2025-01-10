@@ -9,9 +9,14 @@ var placing: bool = false
 
 @onready var Diagram: MainDiagram = $Diagram
 @onready var daily:PanelButton = $Center/VBoxContainer/GridContainer/Daily
+@onready var welcome_message:GrabbableControl = $FloatingMenus/WelcomeMessage
 
 func _ready() -> void:
 	EventBus.signal_exit_game.connect(_on_exit_game)
+	
+	if StatsManager.stats.last_seen_message_id != welcome_message.message_id:
+		welcome_message.show()
+		StatsManager.stats.last_seen_message_id = welcome_message.message_id
 
 func init(state_manager: Node) -> void:
 	$Diagram.init(state_manager)
@@ -42,3 +47,6 @@ func set_daily_counter() -> void:
 func update() -> void:
 	if is_instance_valid(%Problems.get_popup()):
 		%Problems.get_popup().update()
+
+func _on_version_clicked_on() -> void:
+	welcome_message.show()
