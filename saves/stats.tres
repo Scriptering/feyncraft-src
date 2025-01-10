@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="PlayerStats" load_steps=3 format=3 uid="uid://cx038rfavjaoc"]
+[gd_resource type="Resource" script_class="PlayerStats" load_steps=3 format=3]
 
-[ext_resource type="Resource" uid="uid://i0gswa7oaher" path="res://saves/Palettes/Default/teastain.tres" id="1_6w2jc"]
+[ext_resource type="Resource" path="res://saves/Palettes/Default/teastain.tres" id="1_6w2jc"]
 [ext_resource type="Script" path="res://PlayerStats.gd" id="1_ab2pe"]
 
 [resource]
