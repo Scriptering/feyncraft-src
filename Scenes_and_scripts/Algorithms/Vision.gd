@@ -557,11 +557,18 @@ static func generate_colour_matrix(drawing_matrix: DrawingMatrix) -> DrawingMatr
 	
 	return colour_matrix
 
-static func pick_next_colour_point(current_point: int, available_points: PackedInt32Array, connections: DrawingMatrix) -> int:
+static func pick_next_colour_point(
+	current_point: int,
+	available_points: PackedInt32Array,
+	connections: DrawingMatrix,
+	path: PackedInt32Array
+) -> int:
+	
 	var gluon_points: PackedInt32Array = []
 	
 	if available_points.size() == 0:
 		return NOT_FOUND
+	#return available_points[randi() % available_points.size()]
 
 	for available_point:int in available_points:
 		if ParticleData.Particle.gluon in connections.get_connection_particles(current_point, available_point, false, true):
@@ -569,6 +576,10 @@ static func pick_next_colour_point(current_point: int, available_points: PackedI
 	
 	if gluon_points.size() == 0:
 		return available_points[randi() % available_points.size()]
+	
+	#if path[0] in available_points:
+		#if randf() < .5:
+			#return path[0]
 	
 	var most_connections: int = 0
 	var highest_connection_gluon_point: int = -1

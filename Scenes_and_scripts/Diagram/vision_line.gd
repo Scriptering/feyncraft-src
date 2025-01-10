@@ -28,3 +28,10 @@ func create_arrows() -> void:
 		arrow.rotation = (points[i+1] - points[i]).angle()
 
 		add_child(arrow)
+	
+	if closed:
+		var arrow : Sprite2D = Arrow.instantiate()
+		arrow.position = points[-1] + (points[0] - points[-1])/2
+		arrow.rotation = (points[0] - points[-1]).angle()
+
+		add_child(arrow)

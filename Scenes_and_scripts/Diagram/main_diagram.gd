@@ -23,6 +23,7 @@ var StateManager: Node
 
 var drawing_particle: ParticleData.Particle = ParticleData.Particle.none
 var current_vision: Globals.Vision = Globals.Vision.None
+var current_path_data: Vision.PathData
 
 var line_diagram_actions: bool = true
 var show_line_labels: bool = true:
@@ -160,6 +161,7 @@ func flush_update_queue() -> void:
 
 	if update_queued:
 		current_diagram = generate_drawing_matrix_from_diagram()
+		
 		update_vision()
 		action.emit()
 		update_queued = false
@@ -338,11 +340,16 @@ func generate_drawing_matrix_from_diagram(get_only_valid: bool = false) -> Drawi
 	
 	return generated_matrix
 
-func update_colour(valid_diagram: DrawingMatrix) -> void:
+func update_colour(valid_diagram: DrawingMatrix, keep_paths: bool = false) -> void:
 	var colour_matrix := Vision.generate_vision_matrix(Globals.Vision.Colour, valid_diagram)
 	
-	var path_data := Vision.generate_vision_paths(Globals.Vision.Colour, colour_matrix, true)
-	
+	var path_data: Vision.PathData
+	if keep_paths:
+		path_data = current_path_data
+	else:
+		path_data = Vision.generate_vision_paths(Globals.Vision.Colour, colour_matrix, true)
+		current_path_data = path_data
+		
 	if path_data.is_empty():
 		return
 	
@@ -368,7 +375,7 @@ func update_path_vision(valid_diagram: DrawingMatrix) -> void:
 		vision_matrix
 	)
 
-func update_vision() -> void:
+func update_vision(keep_paths: bool = false) -> void:
 	if freeze_vision:
 		return
 	
@@ -385,7 +392,7 @@ func update_vision() -> void:
 	
 	var valid_diagram: DrawingMatrix = generate_drawing_matrix_from_diagram(true)
 	
-	update_colour(valid_diagram)
+	update_colour(valid_diagram, keep_paths)
 	
 	if current_vision in [Globals.Vision.Shade]:
 		update_path_vision(valid_diagram)
@@ -1268,7 +1275,7 @@ func draw_vision_line(points: PackedVector2Array, path_colour: Color) -> void:
 	
 	vision_line.closed = is_loop
 	if is_loop:
-		points.remove_at(-1)
+		points.remove_at(points.size() - 1)
 	
 	vision_line.points = points
 	vision_line.colour = path_colour
@@ -1278,6 +1285,8 @@ func draw_vision_line(points: PackedVector2Array, path_colour: Color) -> void:
 func draw_vision_lines(
 	paths: Array[PackedInt32Array], path_colours: Array[Color], vision_matrix: DrawingMatrix
 ) -> void:
+	#if paths.size() == 3:
+		#breakpoint
 	for i:int in range(paths.size()):
 		draw_vision_line(calculate_vision_line_points(paths[i], vision_matrix), path_colours[i])
 
