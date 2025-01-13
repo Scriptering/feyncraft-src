@@ -14,7 +14,10 @@ var placing: bool = false
 func _ready() -> void:
 	EventBus.signal_exit_game.connect(_on_exit_game)
 	
-	if StatsManager.stats.last_seen_message_id != welcome_message.message_id:
+	if (
+		StatsManager.stats.last_seen_message_id != welcome_message.message_id
+		and StatsManager.stats.last_seen_message_id != 0
+	):
 		welcome_message.show()
 		StatsManager.stats.last_seen_message_id = welcome_message.message_id
 

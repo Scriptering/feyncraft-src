@@ -70,6 +70,8 @@ func swap_ids(id1: int, id2: int) -> void:
 func insert_connection(connection: Array) -> void:
 	connect_interactions(connection[Connection.from_id], connection[Connection.to_id], connection[Connection.particle])
 
+
+
 func disconnect_interactions(
 	from_id: int, to_id: int, particle: int = ParticleData.Particle.none, bidirectional: bool = false, reverse: bool = false
 ) -> void:
@@ -255,6 +257,9 @@ func get_connection_particles(
 		return connection_particles + directionless_particles
 	
 	return connection_particles
+
+func is_hadron(id: int) -> bool:
+	return get_state_from_id(id) != StateLine.State.None and get_connected_count(id, true) > 1
 
 func is_fully_connected(bidirectional: bool = false) -> bool:
 	if matrix_size == 0:

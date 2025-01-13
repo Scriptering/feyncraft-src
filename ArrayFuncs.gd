@@ -42,10 +42,14 @@ static func packed_int_any(array: PackedInt32Array, test_func: Callable) -> bool
 	
 	return false
 
-static func packed_int_filter(array: PackedInt32Array, test_func: Callable) -> PackedInt32Array:
+static func packed_int_filter(
+	array: PackedInt32Array,
+	test_func: Callable,
+	flip: bool = false
+) -> PackedInt32Array:
 	var filtered_array: PackedInt32Array = []
 	for e:int in array:
-		if test_func.call(e):
+		if test_func.call(e) != flip:
 			filtered_array.push_back(e)
 	
 	return filtered_array
