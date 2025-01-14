@@ -450,7 +450,8 @@ func _on_problem_tab_diagram_deleted() -> void:
 		creation_info.update_solution_creation(ProblemTab.submitted_diagrams.size())
 
 func _on_export_tab_download_pressed() -> void:
-	var diagram: DrawingMatrix = str_to_var(ClipBoard.paste())
+	var pasted_text: String = await ClipBoard.paste()
+	var diagram: DrawingMatrix = str_to_var(pasted_text)
 	
 	if diagram:
 		Diagram.draw_diagram(diagram)

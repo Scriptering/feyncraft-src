@@ -14,7 +14,8 @@ const INVALID_PATH: Array[PackedInt32Array] = [[INVALID]]
 var get_next_point: Callable = func(
 	_current_point: int,
 	available_points: Array[int],
-	_matrix: DrawingMatrix
+	_matrix: DrawingMatrix,
+	_path: PackedInt32Array
 	) -> int:
 		return available_points[randi() % available_points.size()]
 
