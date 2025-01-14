@@ -127,7 +127,8 @@ func _on_add_button_pressed() -> void:
 	create_new_problem_set()
 
 func _on_load_button_pressed() -> void:
-	var problem_set: ProblemSet = str_to_var(ClipBoard.paste())
+	var pasted_text: String = await ClipBoard.paste()
+	var problem_set: ProblemSet = str_to_var(pasted_text)
 	if problem_set:
 		create_new_problem_set(problem_set)
 	else:

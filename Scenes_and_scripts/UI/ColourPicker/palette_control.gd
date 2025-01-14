@@ -123,7 +123,8 @@ func _on_add_button_pressed() -> void:
 	create_new_palette_item()
 
 func _on_load_button_pressed() -> void:
-	var palette: Palette = str_to_var(ClipBoard.paste())
+	var pasted_text: String = await ClipBoard.paste()
+	var palette: Palette = str_to_var(pasted_text)
 	if palette:
 		create_new_palette_item(palette)
 	else:
