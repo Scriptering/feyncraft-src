@@ -9,6 +9,8 @@ const MASS_PRECISION: float = 1e-4
 const MAX_NEXT_INTERACTION_ATTEMPTS : int = 100
 const MAX_INTERACTION_GENERATION_ATTEMPTS : int = 300
 
+const MAX_INITIAL_STATE_PARTICLE_COUNT : int = 2
+
 const g_min_degree: int = 2
 const g_max_degree: int = 5
 
@@ -54,6 +56,12 @@ func generate(
 		use_hadrons
 	)
 	
+	print("end")
+	print(state_particles[0].size())
+	
+	#while state_particles[StateLine.State.Initial].size() > MAX_INITIAL_STATE_PARTICLE_COUNT:
+		#move_initial_state_interaction(state_particles)
+	#
 	problem.state_interactions = state_particles
 	problem.allowed_particles = useable_particles
 	
@@ -62,6 +70,11 @@ func generate(
 	print(total_tries)
 	
 	return problem
+
+#func move_initial_state_interaction(state_interactions: Array) -> Array:
+	#var interaction : Array = state_interactions[StateLine.State.Initial].pick_random()
+	#
+	
 
 func are_state_interactions_valid(state_interactions: Array) -> bool:
 	if state_interactions.is_empty():
@@ -385,11 +398,19 @@ func get_next_state_particles(
 		#print(state_particles)
 		return state_particles
 	
-	var state := rand_state()
+	var state : StateLine.State
+	
+	print(state_particles[StateLine.State.Initial].size())
+	
 	if state_particles[StateLine.State.Initial].is_empty():
 		state = StateLine.State.Initial
+	elif state_particles[StateLine.State.Initial].size() >= MAX_INITIAL_STATE_PARTICLE_COUNT:
+		print("maxed out")
+		state = StateLine.State.Final
 	elif state_particles[StateLine.State.Final].is_empty():
 		state = StateLine.State.Final
+	else:
+		state = rand_state()
 	
 	var next_useable_state_particles := useable_state_particles.duplicate(true)
 	next_useable_state_particles.shuffle()
