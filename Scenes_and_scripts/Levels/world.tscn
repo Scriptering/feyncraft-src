@@ -274,6 +274,7 @@ offset_right = 2.0
 offset_bottom = -41.0
 
 [node name="VisionButton" parent="PullOutTabs" instance=ExtResource("3_hqsoq")]
+z_index = -1
 offset_left = 613.0
 offset_top = 18.0
 offset_right = 635.0
