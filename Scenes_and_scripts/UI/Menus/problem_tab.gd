@@ -138,21 +138,21 @@ func submit_diagram() -> void:
 func generate_solution() -> ConnectionMatrix:
 	var MAXIMUM_UNIQUE_ATTEMPTS : int = 25
 	
-	var solution: DrawingMatrix
+	var solution: ConnectionMatrix
 	
 	for i:int in MAXIMUM_UNIQUE_ATTEMPTS:
-		solution = DrawingMatrix.new(SolutionGeneration.generate_diagrams(
+		solution = SolutionGeneration.generate_diagrams(
 			current_problem.state_interactions[StateLine.State.Initial],
 			current_problem.state_interactions[StateLine.State.Final],
 			current_problem.degree,
 			current_problem.degree,
 			current_problem.allowed_particles,
 			SolutionGeneration.Find.One
-		)[0])
+		)[0]
 		
 		if !submitted_diagrams.any(
 			func(submitted_diagram:DrawingMatrix) -> bool:
-				return submitted_diagram.is_duplicate(solution)
+				return submitted_diagram.reduce_to_connection_matrix().is_duplicate(solution)
 		):
 			return solution
 	
