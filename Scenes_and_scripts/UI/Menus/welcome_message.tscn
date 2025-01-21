@@ -20,6 +20,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("2_j0e76")
+message_id = 103
 grab_area = NodePath("PanelContainer")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
@@ -60,7 +61,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 8
 theme_override_fonts/font = ExtResource("3_oq22i")
 theme_override_font_sizes/font_size = 16
-text = "Good Luck!"
+text = "Oops!"
 
 [node name="HSeparator" type="HSeparator" parent="PanelContainer/VBoxContainer/Header/VBoxSeperator"]
 use_parent_material = true
@@ -82,12 +83,12 @@ stretch_mode = 5
 [node name="Label" type="Label" parent="PanelContainer/VBoxContainer"]
 use_parent_material = true
 layout_mode = 2
-text = "Back fixing a few left-over bugs.
-
-Good luck to everyone with exams!
-
+text = "Hadron solution generation should
+now be fixed!
+Also copy and pasting is now through a popup as it wasn't working on some devices.
 "
 horizontal_alignment = 1
+autowrap_mode = 2
 
 [node name="Dog" type="TextureRect" parent="PanelContainer/VBoxContainer"]
 custom_minimum_size = Vector2(90, 42)

@@ -91,7 +91,7 @@ shader_parameter/add_margins = false
 
 [sub_resource type="LabelSettings" id="LabelSettings_pdifg"]
 font = ExtResource("4_ly7x4")
-font_size = 18
+font_size = 17
 
 [node name="InteractionInformation" type="Control" node_paths=PackedStringArray("grab_area") groups=["grabbable"]]
 z_index = 6
