@@ -188,7 +188,7 @@ animations = [{
 
 [sub_resource type="LabelSettings" id="LabelSettings_hhkv1"]
 font = ExtResource("18_cmbg2")
-font_size = 18
+font_size = 17
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aagi4"]
 size = Vector2(18, 18)
@@ -220,13 +220,11 @@ use_parent_material = true
 sprite_frames = SubResource("11")
 
 [node name="InfoNumberLabel" type="Label" parent="."]
-visible = false
 material = ExtResource("8_kmrm7")
 offset_left = 7.0
 offset_top = -5.0
 offset_right = 22.0
 offset_bottom = 7.0
-theme_override_font_sizes/font_size = 11
 text = "1"
 label_settings = SubResource("LabelSettings_hhkv1")
 vertical_alignment = 1

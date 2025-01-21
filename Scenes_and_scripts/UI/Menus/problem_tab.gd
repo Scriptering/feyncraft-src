@@ -148,7 +148,7 @@ func generate_solution() -> ConnectionMatrix:
 			current_problem.degree,
 			current_problem.allowed_particles,
 			SolutionGeneration.Find.One
-		)[0]
+		).pick_random()
 		
 		if !submitted_diagrams.any(
 			func(submitted_diagram:DrawingMatrix) -> bool:
